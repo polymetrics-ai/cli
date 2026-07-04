@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/mappings",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "id_fixture",
+        "source": {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "type": "type_fixture",
+          "_links": {
+            "schema": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        },
+        "target": {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "type": "type_fixture",
+          "_links": {
+            "schema": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        },
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

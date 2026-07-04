@@ -1,23 +1,28 @@
 {
   "name": "luma",
-  "display_name": "lu.ma",
-  "description": "Reads lu.ma events, event guests, and event hosts through the Luma public REST API.",
+  "display_name": "Luma",
+  "description": "Reads and writes the documented Luma public API for events, calendars, guests, contacts, tags, coupons, ticket types, memberships, webhooks, and organization resources.",
   "integration_type": "api",
-  "docs_url": "https://docs.lu.ma/reference/getting-started",
+  "docs_url": "https://docs.luma.com/reference/getting-started-with-your-api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 200
   },
   "risk": {
-    "read": "external lu.ma API read of calendar events, guests, and hosts",
-    "approval": "none; read-only"
+    "read": "external Luma public API read of calendar, event, guest, contact, tag, coupon, ticket, membership, webhook, and organization data",
+    "write": "live Luma API mutations can create, update, invite, tag, cancel, transfer, or delete event/calendar/member/webhook data and may send guest invitations",
+    "approval": "reverse ETL writes require plan, preview, approval token, and destructive confirmation for delete/cancel/invite/transfer operations"
   }
 }

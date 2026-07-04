@@ -1,0 +1,14 @@
+{
+  "record": {
+    "event_id": "fixture_event_id",
+    "calendar_id": "fixture_calendar_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organizations/events/transfer-calendar",
+    "body": {
+      "event_id": "fixture_event_id",
+      "calendar_id": "fixture_calendar_id"
+    }
+  }
+}

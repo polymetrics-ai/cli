@@ -1,0 +1,26 @@
+{
+  "record": {
+    "name": "fixture",
+    "description": "fixture",
+    "timelineTitleTemplate": "fixture",
+    "timelineDescriptionTemplate": "fixture",
+    "defaultWeight": 1.23,
+    "icon": "phone_out"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/deal_activities",
+    "body": {
+      "name": "fixture",
+      "description": "fixture",
+      "timelineTitleTemplate": "fixture",
+      "timelineDescriptionTemplate": "fixture",
+      "defaultWeight": 1.23,
+      "icon": "phone_out"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

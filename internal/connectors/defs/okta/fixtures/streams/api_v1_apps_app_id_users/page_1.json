@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/users",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "credentials": {
+          "password": {
+            "value": "value_fixture"
+          },
+          "userName": "user_name_fixture"
+        },
+        "externalId": "external_id_fixture",
+        "id": "id_fixture",
+        "lastSync": "2026-01-01T00:00:00Z",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "passwordChanged": "fixture",
+        "profile": {},
+        "scope": "USER",
+        "status": "ACTIVE",
+        "statusChanged": "2026-01-01T00:00:00Z",
+        "syncState": "DISABLED",
+        "_embedded": {},
+        "_links": {
+          "app": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "group": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "user": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/deal_flows/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "dealFlow": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "description": "fixture",
+        "displayOrder": 1,
+        "defaultAcquisitionChannel": "fixture",
+        "defaultAcquisitionSource": "fixture",
+        "defaultDealOwner": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "affiliate": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "partnership": {
+          "id": "id_fixture",
+          "displayName": "fixture"
+        },
+        "acquirer": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "dealStages": [
+          {
+            "id": "id_fixture",
+            "name": "fixture",
+            "description": "fixture",
+            "displayOrder": 1,
+            "stage": "fixture",
+            "weight": 1.23,
+            "trigger": "fixture",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "deletedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

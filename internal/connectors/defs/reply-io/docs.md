@@ -1,89 +1,35 @@
 # Overview
 
-Reply.io is a wave2 fan-out declarative-HTTP migration. It reads Reply.io people, campaigns,
-tasks, and email accounts through the Reply.io REST API (`GET https://api.reply.io/v1/...`). This
-bundle targets capability parity with `internal/connectors/reply-io` (the hand-written connector it
-migrates); the legacy package stays registered and unchanged until wave6's registry flip.
+Reply.io is a declarative HTTP bundle for the legacy Reply.io v1 API used by the existing Go connector and the current Reply.io v3 API published at docs.reply.io. The legacy Go package still emits four v1 streams (people, campaigns, tasks, and email accounts) through `X-Api-Key`; this bundle preserves those streams under `/v1/...` paths. The current v3 OpenAPI file (`https://docs.reply.io/api-reference/bundled.yaml`, last fetched for this pass on 2026-07-04) adds 81 documented GET streams and 189 write actions.
+
+The legacy package remains registered and unchanged until the wave6 registry flip.
 
 ## Auth setup
 
-Provide a Reply.io API key via the `api_key` secret; it is sent as the `X-Api-Key` header
-(`api_key_header` auth mode), matching legacy's `connsdk.APIKeyHeader("X-Api-Key", key, "")`
-exactly, and is never logged. `base_url` defaults to `https://api.reply.io/v1` (legacy's
-`defaultBaseURL`) and can be overridden for tests or proxies.
+Provide `api_key` as a secret for legacy v1 reads. It is sent as `X-Api-Key`, matching `internal/connectors/reply-io`.
 
-Note: Reply.io's own public documentation (`docs.reply.io`) describes a `Authorization: Bearer
-<api_key>` header for its current (v3) API, but this bundle intentionally follows legacy's
-`X-Api-Key` header instead, per this migration's ground-truth rule (legacy behavior takes priority
-over documentation for accepted-input parity) — legacy targets an older/different API version and
-this bundle migrates that exact behavior, not the current public docs.
+Provide `bearer_token` as a secret for current v3 streams and writes. The v3 docs require `Authorization: Bearer <api key>`; when `bearer_token` is present, the engine selects bearer auth for the whole runtime. Both secrets are marked `x-secret: true`.
+
+`base_url` defaults to `https://api.reply.io`. Legacy streams include `/v1` in their paths; v3 streams and writes include `/v3` in their paths. Path parameters such as `id`, `sequence_id`, and `contact_id` are declared as config fields for v3 read streams and as record fields for write actions.
 
 ## Streams notes
 
-All four streams (`people`, `campaigns`, `tasks`, `email_accounts`) return a bare JSON array
-(`records.path: ""`). Pagination is `page_number` (`page`/`limit`, static `page_size: 100` matching
-legacy's `defaultPageSize`) with the identical short-page stop rule legacy's own
-`connsdk.PageNumberPaginator` implements — an exact parity match, not an approximation.
+The four legacy streams remain first in `streams.json` and retain their legacy root-array projection plus the static `stream` marker computed field. Their page-number pagination remains `page`/`limit` with page size 100, matching legacy defaults and existing two-page people fixtures.
 
-Legacy applies four optional config-driven filters (`updated_after`, `created_after`, `email`,
-`status`) uniformly to every stream's request. This bundle reproduces that exact behavior via the
-opt-in optional-query dialect (`query.<param>.omit_when_absent: true`) declared identically on each
-of the four streams' own `query` block (`base.query` has no `query` field in the engine dialect — a
-declared `HTTPBase` field only supports `url`/`user_agent`/`headers`/`auth`/`pagination`/`check`/
-`error_map`/`rate_limit` — so the shared filter set is duplicated per-stream rather than declared
-once at the base level), so each filter is sent only when its corresponding config value is set,
-and omitted entirely otherwise.
+Every current documented v3 GET operation that is not marked coming-soon in the OpenAPI becomes a stream. Paginated v3 list endpoints use `offset_limit` with `top`/`skip` when both parameters are documented. Endpoints returning an `items` envelope read `records.path: items`; root arrays read `records.path: ""`; detail-style object responses use root-object extraction. New v3 streams use `projection: passthrough` with permissive schemas so fields from the vendor response are preserved.
 
-Every stream stamps a static-literal `stream` marker field (`"people"`/`"campaigns"`/`"tasks"`/
-`"email_accounts"`) via `computed_fields`, matching legacy's own `out["stream"] = stream` line in
-`mapRecord`. All four streams publish `updated_at` as `x-cursor-field` on their schema (matching
-legacy's own descriptive `CursorFields: []string{"updated_at"}` in `Catalog()`, never wired to any
-filter there either) — but Reply.io's list endpoints expose no server-side incremental filter
-parameter and legacy's own `harvest` never applies one, so `streams.json` deliberately declares
-**no `incremental` block at all** on any of the four streams. This matters at the catalog level, not
-just at read time: the engine's `DerivedSyncModes` flips on `incremental_append`/
-`incremental_append_deduped` whenever a stream's `StreamSpec.Incremental` is non-nil, independent of
-whether that block actually carries a `request_param`/`client_filtered` filter — a bare
-`cursor_field`-only `incremental` block is sufficient by itself to advertise incremental sync modes
-this connector cannot honor (a caller selecting `incremental_append` would silently get every record
-replayed on every sync). Declaring `x-cursor-field` on the schema (catalog metadata only, matching
-legacy's descriptive `CursorFields`) while omitting `streams.json`'s `incremental` block entirely
-(no sync-mode advertisement) is the correct, exact-parity shape — identical to this wave's sibling
-`recurly` bundle, which hit the same non-incremental-legacy situation and made the same choice. Every
-read is a full paginated sweep, matching legacy's true read behavior (no `request_param`/
-`start_config_key`/`client_filtered` declared, and no `incremental` block to trigger sync-mode
-derivation).
+Optional v3 query filters beyond pagination are intentionally not declared. The conformance harness synthesizes every declared spec property, so broad optional filters would be sent with synthetic values in fixture replays; this bundle models the endpoint and pagination contract without pretending to validate every optional query combination.
 
 ## Write actions & risks
 
-None. `capabilities.write` is `false` and this bundle ships no `writes.json`, matching legacy's
-`Write` returning `connectors.ErrUnsupportedOperation`.
+`writes.json` contains 189 v3 actions for JSON-object or empty-body POST/PUT/PATCH/DELETE operations that the engine can express. Delete actions are marked destructive and idempotent for 404. Each action has a record schema for path/body fields, a fixture under `fixtures/writes/`, and a per-action risk string naming the external mutation.
+
+Excluded write surfaces are listed in `api_surface.json`: multipart/binary uploads, root-array body operations, required-query mutations, credential-bearing connectivity tests, coming-soon endpoints, and semantic POST-body reads/reports.
 
 ## Known limits
 
-- **Legacy's multi-candidate records-path search is narrowed to a single fixed path.** Legacy's
-  `recordsAt` helper tries a sequence of candidate body paths (the stream's own declared path,
-  then `data`, `items`, `records`, `results`, then the bare root array) and uses whichever first
-  yields a non-empty list — a defensive accommodation for Reply.io endpoints whose exact envelope
-  shape was unconfirmed at legacy-authoring time. The engine's `records.path` names exactly one
-  fixed path per stream; this bundle declares `""` (bare root array), the FIRST candidate legacy's
-  own search tries (since `streamEndpoint.recordsPath` is empty for every stream in legacy, its
-  candidate list begins with `""` before falling through to `data`/`items`/etc.). If Reply.io's real
-  API wraps records in one of the fallback envelope keys instead of returning a bare array, this
-  bundle would need updating to that confirmed shape — documented here as a scope narrowing, not
-  a silent divergence, since legacy itself never confirmed which shape is authoritative.
-- **Legacy's `id` fallback chain is narrowed to the raw `id` field only.** Legacy synthesizes a
-  missing `id` from `first(out, "id", "uuid", "email", "name")` when the raw record has no `id`
-  field at all. The `computed_fields` dialect has no OR-fallback primitive across multiple record
-  paths, so this bundle relies on schema projection copying `id` directly when present; a record
-  legacy would have back-filled from `uuid`/`email`/`name` would instead surface with a missing
-  `id` here. Documented scope narrowing (identical narrowing class as this wave's
-  retailexpress-by-maropost bundle).
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy exposes `page_size` (1-100,
-  default 100) and `max_pages` (0/all/unlimited or a positive integer cap) as config-driven
-  overrides. The engine's `page_number` paginator has no config-driven page-size or
-  request-count-cap knob (mirrors this wave's aha/referralhero/rentcast precedent); `page_size`/
-  `max_pages` are therefore not declared in `spec.json`, and this bundle sends Reply.io's own
-  default (`limit=100`) as a static pagination-block value.
-- Full Reply.io API surface (contact lists, custom fields, blacklist rules, sequences, templates,
-  webhooks) is out of scope for this wave; see `api_surface.json`'s `excluded` entries.
+- **Auth is selected bundle-wide.** Reply v1 uses `X-Api-Key`; Reply v3 uses Bearer auth. The engine cannot choose auth per stream or per action. Supplying `bearer_token` selects v3 auth for the runtime; omitting it keeps legacy v1 auth.
+- **V3 write schemas are permissive.** The OpenAPI contains large nested request schemas. This pass models path fields and top-level object body fields, but does not recursively validate every nested property. The write plan/preview/approval flow remains required before execution.
+- **Root-array, multipart, and required-query writes are blocked by dialect gaps.** The write engine builds object bodies and has no per-action query or multipart/body-array mode, so those operations are excluded and tracked in quarantine.
+- **Semantic POST-body reads are excluded.** The read engine currently ignores `stream.body`, so filter/report endpoints that are reads expressed as POST bodies cannot be modeled as streams without a hook or engine support.
+- **Legacy defensive fallback mapping is narrowed.** Legacy can synthesize missing ids from alternate fields and try multiple response envelopes. The declarative streams use fixed record paths and schemas; v3 streams use passthrough projection to avoid dropping vendor fields.

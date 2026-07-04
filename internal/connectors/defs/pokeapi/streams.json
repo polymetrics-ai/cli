@@ -3,7 +3,9 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "none" }
+      {
+        "mode": "none"
+      }
     ],
     "pagination": {
       "type": "offset_limit",
@@ -12,16 +14,29 @@
       "page_size": 100,
       "max_pages": 3
     },
-    "check": { "method": "GET", "path": "/pokemon", "query": { "limit": "1", "offset": "0" } },
+    "check": {
+      "method": "GET",
+      "path": "/pokemon",
+      "query": {
+        "limit": "1",
+        "offset": "0"
+      }
+    },
     "error_map": [
-      { "status": 429, "class": "rate_limited", "hint": "pokeapi rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "pokeapi returned a rate-limit response; retry later or lower request concurrency"
+      }
     ]
   },
   "streams": [
     {
       "name": "pokemon",
       "path": "/pokemon",
-      "records": { "path": "results" },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "id": "{{ record.url | last_path_segment }}"
       },
@@ -30,7 +45,9 @@
     {
       "name": "types",
       "path": "/type",
-      "records": { "path": "results" },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "id": "{{ record.url | last_path_segment }}"
       },
@@ -39,7 +56,9 @@
     {
       "name": "abilities",
       "path": "/ability",
-      "records": { "path": "results" },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "id": "{{ record.url | last_path_segment }}"
       },
@@ -48,11 +67,1088 @@
     {
       "name": "moves",
       "path": "/move",
-      "records": { "path": "results" },
+      "records": {
+        "path": "results"
+      },
       "computed_fields": {
         "id": "{{ record.url | last_path_segment }}"
       },
       "schema": "schemas/moves.json"
+    },
+    {
+      "name": "berries",
+      "path": "/berry",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/berries.json"
+    },
+    {
+      "name": "berry_firmnesses",
+      "path": "/berry-firmness",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/berry_firmnesses.json"
+    },
+    {
+      "name": "berry_flavors",
+      "path": "/berry-flavor",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/berry_flavors.json"
+    },
+    {
+      "name": "contest_types",
+      "path": "/contest-type",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/contest_types.json"
+    },
+    {
+      "name": "contest_effects",
+      "path": "/contest-effect",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/contest_effects.json"
+    },
+    {
+      "name": "super_contest_effects",
+      "path": "/super-contest-effect",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/super_contest_effects.json"
+    },
+    {
+      "name": "encounter_methods",
+      "path": "/encounter-method",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/encounter_methods.json"
+    },
+    {
+      "name": "encounter_conditions",
+      "path": "/encounter-condition",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/encounter_conditions.json"
+    },
+    {
+      "name": "encounter_condition_values",
+      "path": "/encounter-condition-value",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/encounter_condition_values.json"
+    },
+    {
+      "name": "evolution_chains",
+      "path": "/evolution-chain",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/evolution_chains.json"
+    },
+    {
+      "name": "evolution_triggers",
+      "path": "/evolution-trigger",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/evolution_triggers.json"
+    },
+    {
+      "name": "generations",
+      "path": "/generation",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/generations.json"
+    },
+    {
+      "name": "pokedexes",
+      "path": "/pokedex",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokedexes.json"
+    },
+    {
+      "name": "versions",
+      "path": "/version",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/versions.json"
+    },
+    {
+      "name": "version_groups",
+      "path": "/version-group",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/version_groups.json"
+    },
+    {
+      "name": "items",
+      "path": "/item",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/items.json"
+    },
+    {
+      "name": "item_attributes",
+      "path": "/item-attribute",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/item_attributes.json"
+    },
+    {
+      "name": "item_categories",
+      "path": "/item-category",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/item_categories.json"
+    },
+    {
+      "name": "item_fling_effects",
+      "path": "/item-fling-effect",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/item_fling_effects.json"
+    },
+    {
+      "name": "item_pockets",
+      "path": "/item-pocket",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/item_pockets.json"
+    },
+    {
+      "name": "locations",
+      "path": "/location",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "location_areas",
+      "path": "/location-area",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/location_areas.json"
+    },
+    {
+      "name": "pal_park_areas",
+      "path": "/pal-park-area",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pal_park_areas.json"
+    },
+    {
+      "name": "regions",
+      "path": "/region",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/regions.json"
+    },
+    {
+      "name": "machines",
+      "path": "/machine",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/machines.json"
+    },
+    {
+      "name": "move_ailments",
+      "path": "/move-ailment",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/move_ailments.json"
+    },
+    {
+      "name": "move_battle_styles",
+      "path": "/move-battle-style",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/move_battle_styles.json"
+    },
+    {
+      "name": "move_categories",
+      "path": "/move-category",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/move_categories.json"
+    },
+    {
+      "name": "move_damage_classes",
+      "path": "/move-damage-class",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/move_damage_classes.json"
+    },
+    {
+      "name": "move_learn_methods",
+      "path": "/move-learn-method",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/move_learn_methods.json"
+    },
+    {
+      "name": "move_targets",
+      "path": "/move-target",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/move_targets.json"
+    },
+    {
+      "name": "characteristics",
+      "path": "/characteristic",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/characteristics.json"
+    },
+    {
+      "name": "egg_groups",
+      "path": "/egg-group",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/egg_groups.json"
+    },
+    {
+      "name": "genders",
+      "path": "/gender",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/genders.json"
+    },
+    {
+      "name": "growth_rates",
+      "path": "/growth-rate",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/growth_rates.json"
+    },
+    {
+      "name": "natures",
+      "path": "/nature",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/natures.json"
+    },
+    {
+      "name": "pokeathlon_stats",
+      "path": "/pokeathlon-stat",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokeathlon_stats.json"
+    },
+    {
+      "name": "pokemon_colors",
+      "path": "/pokemon-color",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokemon_colors.json"
+    },
+    {
+      "name": "pokemon_forms",
+      "path": "/pokemon-form",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokemon_forms.json"
+    },
+    {
+      "name": "pokemon_habitats",
+      "path": "/pokemon-habitat",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokemon_habitats.json"
+    },
+    {
+      "name": "pokemon_shapes",
+      "path": "/pokemon-shape",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokemon_shapes.json"
+    },
+    {
+      "name": "pokemon_species",
+      "path": "/pokemon-species",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokemon_species.json"
+    },
+    {
+      "name": "stats",
+      "path": "/stat",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/stats.json"
+    },
+    {
+      "name": "languages",
+      "path": "/language",
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.url | last_path_segment }}"
+      },
+      "schema": "schemas/languages.json"
+    },
+    {
+      "name": "pokemon_detail",
+      "path": "/pokemon/{{ config.pokemon_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokemon_detail.json"
+    },
+    {
+      "name": "types_detail",
+      "path": "/type/{{ config.type_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/types_detail.json"
+    },
+    {
+      "name": "abilities_detail",
+      "path": "/ability/{{ config.ability_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/abilities_detail.json"
+    },
+    {
+      "name": "moves_detail",
+      "path": "/move/{{ config.move_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/moves_detail.json"
+    },
+    {
+      "name": "berries_detail",
+      "path": "/berry/{{ config.berry_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/berries_detail.json"
+    },
+    {
+      "name": "berry_firmnesses_detail",
+      "path": "/berry-firmness/{{ config.berry_firmness_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/berry_firmnesses_detail.json"
+    },
+    {
+      "name": "berry_flavors_detail",
+      "path": "/berry-flavor/{{ config.berry_flavor_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/berry_flavors_detail.json"
+    },
+    {
+      "name": "contest_types_detail",
+      "path": "/contest-type/{{ config.contest_type_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contest_types_detail.json"
+    },
+    {
+      "name": "contest_effects_detail",
+      "path": "/contest-effect/{{ config.contest_effect_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contest_effects_detail.json"
+    },
+    {
+      "name": "super_contest_effects_detail",
+      "path": "/super-contest-effect/{{ config.super_contest_effect_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/super_contest_effects_detail.json"
+    },
+    {
+      "name": "encounter_methods_detail",
+      "path": "/encounter-method/{{ config.encounter_method_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/encounter_methods_detail.json"
+    },
+    {
+      "name": "encounter_conditions_detail",
+      "path": "/encounter-condition/{{ config.encounter_condition_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/encounter_conditions_detail.json"
+    },
+    {
+      "name": "encounter_condition_values_detail",
+      "path": "/encounter-condition-value/{{ config.encounter_condition_value_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/encounter_condition_values_detail.json"
+    },
+    {
+      "name": "evolution_chains_detail",
+      "path": "/evolution-chain/{{ config.evolution_chain_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/evolution_chains_detail.json"
+    },
+    {
+      "name": "evolution_triggers_detail",
+      "path": "/evolution-trigger/{{ config.evolution_trigger_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/evolution_triggers_detail.json"
+    },
+    {
+      "name": "generations_detail",
+      "path": "/generation/{{ config.generation_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/generations_detail.json"
+    },
+    {
+      "name": "pokedexes_detail",
+      "path": "/pokedex/{{ config.pokedex_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokedexes_detail.json"
+    },
+    {
+      "name": "versions_detail",
+      "path": "/version/{{ config.version_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/versions_detail.json"
+    },
+    {
+      "name": "version_groups_detail",
+      "path": "/version-group/{{ config.version_group_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/version_groups_detail.json"
+    },
+    {
+      "name": "items_detail",
+      "path": "/item/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/items_detail.json"
+    },
+    {
+      "name": "item_attributes_detail",
+      "path": "/item-attribute/{{ config.item_attribute_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/item_attributes_detail.json"
+    },
+    {
+      "name": "item_categories_detail",
+      "path": "/item-category/{{ config.item_category_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/item_categories_detail.json"
+    },
+    {
+      "name": "item_fling_effects_detail",
+      "path": "/item-fling-effect/{{ config.item_fling_effect_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/item_fling_effects_detail.json"
+    },
+    {
+      "name": "item_pockets_detail",
+      "path": "/item-pocket/{{ config.item_pocket_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/item_pockets_detail.json"
+    },
+    {
+      "name": "locations_detail",
+      "path": "/location/{{ config.location_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/locations_detail.json"
+    },
+    {
+      "name": "location_areas_detail",
+      "path": "/location-area/{{ config.location_area_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/location_areas_detail.json"
+    },
+    {
+      "name": "pal_park_areas_detail",
+      "path": "/pal-park-area/{{ config.pal_park_area_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pal_park_areas_detail.json"
+    },
+    {
+      "name": "regions_detail",
+      "path": "/region/{{ config.region_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/regions_detail.json"
+    },
+    {
+      "name": "machines_detail",
+      "path": "/machine/{{ config.machine_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/machines_detail.json"
+    },
+    {
+      "name": "move_ailments_detail",
+      "path": "/move-ailment/{{ config.move_ailment_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/move_ailments_detail.json"
+    },
+    {
+      "name": "move_battle_styles_detail",
+      "path": "/move-battle-style/{{ config.move_battle_style_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/move_battle_styles_detail.json"
+    },
+    {
+      "name": "move_categories_detail",
+      "path": "/move-category/{{ config.move_category_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/move_categories_detail.json"
+    },
+    {
+      "name": "move_damage_classes_detail",
+      "path": "/move-damage-class/{{ config.move_damage_class_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/move_damage_classes_detail.json"
+    },
+    {
+      "name": "move_learn_methods_detail",
+      "path": "/move-learn-method/{{ config.move_learn_method_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/move_learn_methods_detail.json"
+    },
+    {
+      "name": "move_targets_detail",
+      "path": "/move-target/{{ config.move_target_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/move_targets_detail.json"
+    },
+    {
+      "name": "characteristics_detail",
+      "path": "/characteristic/{{ config.characteristic_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/characteristics_detail.json"
+    },
+    {
+      "name": "egg_groups_detail",
+      "path": "/egg-group/{{ config.egg_group_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/egg_groups_detail.json"
+    },
+    {
+      "name": "genders_detail",
+      "path": "/gender/{{ config.gender_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/genders_detail.json"
+    },
+    {
+      "name": "growth_rates_detail",
+      "path": "/growth-rate/{{ config.growth_rate_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/growth_rates_detail.json"
+    },
+    {
+      "name": "natures_detail",
+      "path": "/nature/{{ config.nature_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/natures_detail.json"
+    },
+    {
+      "name": "pokeathlon_stats_detail",
+      "path": "/pokeathlon-stat/{{ config.pokeathlon_stat_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokeathlon_stats_detail.json"
+    },
+    {
+      "name": "pokemon_colors_detail",
+      "path": "/pokemon-color/{{ config.pokemon_color_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokemon_colors_detail.json"
+    },
+    {
+      "name": "pokemon_forms_detail",
+      "path": "/pokemon-form/{{ config.pokemon_form_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokemon_forms_detail.json"
+    },
+    {
+      "name": "pokemon_habitats_detail",
+      "path": "/pokemon-habitat/{{ config.pokemon_habitat_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokemon_habitats_detail.json"
+    },
+    {
+      "name": "pokemon_shapes_detail",
+      "path": "/pokemon-shape/{{ config.pokemon_shape_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokemon_shapes_detail.json"
+    },
+    {
+      "name": "pokemon_species_detail",
+      "path": "/pokemon-species/{{ config.pokemon_species_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pokemon_species_detail.json"
+    },
+    {
+      "name": "stats_detail",
+      "path": "/stat/{{ config.stat_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/stats_detail.json"
+    },
+    {
+      "name": "languages_detail",
+      "path": "/language/{{ config.language_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/languages_detail.json"
+    },
+    {
+      "name": "pokemon_location_areas",
+      "path": "/pokemon/{{ config.pokemon_id }}/encounters",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.location_area.url | last_path_segment }}"
+      },
+      "schema": "schemas/pokemon_location_areas.json"
     }
   ]
 }

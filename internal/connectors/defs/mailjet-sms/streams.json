@@ -18,7 +18,10 @@
       "path": "/sms",
       "query": {
         "FromTS": { "template": "{{ config.start_date }}", "omit_when_absent": true },
-        "ToTS": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+        "ToTS": { "template": "{{ config.end_date }}", "omit_when_absent": true },
+        "StatusCode": { "template": "{{ config.status_code }}", "omit_when_absent": true },
+        "To": { "template": "{{ config.recipient }}", "omit_when_absent": true },
+        "IDs": { "template": "{{ config.sms_ids }}", "omit_when_absent": true }
       },
       "records": { "path": "Data" },
       "pagination": {
@@ -39,8 +42,38 @@
     {
       "name": "sms_count",
       "path": "/sms/count",
+      "query": {
+        "FromTS": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "ToTS": { "template": "{{ config.end_date }}", "omit_when_absent": true },
+        "StatusCode": { "template": "{{ config.status_code }}", "omit_when_absent": true },
+        "To": { "template": "{{ config.recipient }}", "omit_when_absent": true }
+      },
       "records": { "path": ".", "single_object": true },
       "schema": "schemas/sms_count.json"
+    },
+    {
+      "name": "sms_message",
+      "path": "/sms/{{ config.sms_id }}",
+      "records": { "path": "Data" },
+      "computed_fields": {
+        "status_code": "{{ record.Status.Code }}",
+        "status_name": "{{ record.Status.Name }}",
+        "status_description": "{{ record.Status.Description }}",
+        "cost_value": "{{ record.Cost.Value }}",
+        "cost_currency": "{{ record.Cost.Currency }}"
+      },
+      "schema": "schemas/sms_message.json"
+    },
+    {
+      "name": "sms_export",
+      "path": "/sms/export/{{ config.export_job_id }}",
+      "records": { "path": ".", "single_object": true },
+      "computed_fields": {
+        "status_code": "{{ record.Status.Code }}",
+        "status_name": "{{ record.Status.Name }}",
+        "status_description": "{{ record.Status.Description }}"
+      },
+      "schema": "schemas/sms_export.json"
     }
   ]
 }

@@ -1,9 +1,9 @@
 # Overview
 
-noCRM is a wave2 fan-out declarative-HTTP migration of `internal/connectors/nocrm` (the
-hand-written legacy connector this bundle migrates; the legacy package stays registered and
-unchanged until wave6's registry flip). It reads noCRM.io leads, pipelines, users, teams, and
-prospecting lists through the noCRM REST API v2 (`https://api.nocrm.io/api/v2`). Read-only.
+noCRM is a Pass B declarative-HTTP bundle for the noCRM API v2. It keeps the legacy read streams
+from `internal/connectors/nocrm` and expands the documented API surface with additional noCRM CRM
+object streams and declarative write actions where the current JSON/form write dialect can model
+the documented request shape.
 
 ## Auth setup
 
@@ -27,13 +27,16 @@ styles for the same effective account.
 
 ## Streams notes
 
-All 5 streams (`leads`, `pipelines`, `users`, `teams`, `prospecting_lists`) share the same shape:
-`GET` against the noCRM list endpoint, records extracted from the response's top-level JSON array
-(`records.path: ""`), primary key `["id"]`. No stream declares an `incremental` block — legacy
-never implements `InitialState`/exposes a cursor field for any of these 5 objects
-(`nocrm/streams.go`'s doc comment: "the API supports only full_refresh syncs so no incremental
-cursor field is published"), so every sync (fresh or resumed) reads the full, unfiltered
-collection, matching legacy exactly.
+Streams use `GET` against noCRM list or detail endpoints, with records extracted from either the
+top-level JSON array or a single top-level JSON object. The legacy streams remain `leads`,
+`pipelines`, `users`, `teams`, and `prospecting_lists`; Pass B adds documented reads for steps,
+client folders, categories, predefined tags, fields, activities, lead subresources, post-sales
+tasks, current prospecting-list endpoints, users/teams detail, webhooks, and webhook events.
+
+No stream declares an `incremental` block — legacy never implements `InitialState` or exposes a
+cursor field for noCRM objects (`nocrm/streams.go`'s doc comment: "the API supports only
+full_refresh syncs so no incremental cursor field is published"), so every sync reads the full
+configured collection.
 
 Pagination is `offset_limit` (`offset`/`limit` query params, `page_size: 100` matching legacy's
 `nocrmDefaultPageSize`/`nocrmMaxPageSize`, both fixed at 100). The engine's `OffsetPaginator`
@@ -51,14 +54,27 @@ duplicated, dropped, or reordered either way.
 
 ## Write actions & risks
 
-None. Legacy `nocrm` is read-only (`Write` returns `connectors.ErrUnsupportedOperation`);
-`metadata.json` declares `capabilities.write: false` and this bundle ships no `writes.json`.
+`writes.json` declares noCRM write actions for documented object-body POST/PUT/DELETE mutations:
+client folders, categories, predefined tags, fields, leads, lead comments, lead email-template
+sends, post-sales template creation, prospecting lists and prospects, users, teams, and webhooks.
+Delete-style actions are marked destructive where they remove or disable CRM/admin state.
+
+Every write is a live external noCRM mutation and must go through the normal plan/preview/approval
+flow before execution. The write schemas intentionally validate required path/body fields and keep
+the remaining noCRM-specific payload fields server-validated by noCRM.
 
 ## Known limits
 
-- Full noCRM API surface (activities, calls, custom fields, webhooks, tags) is out of scope for
-  wave2; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability
-  expansion"}` entries. Only the 5 legacy-parity streams are implemented.
+- **Partner-key write endpoints are not modeled.** Partner activation/revocation, email-signature,
+  and call-logging endpoints require an `X-API-PARTNER-KEY` header per request. `writes.json` has no
+  per-action header field, and adding the header at `base.headers` would incorrectly require a
+  partner key for ordinary reads and unrelated writes.
+- **Two write shapes are engine gaps.** Post-sales task updates send documented fields as query
+  parameters, but write actions have no query dialect. Full prospect-row replacement requires a
+  bare JSON array body, while the write dialect can construct object or form bodies only.
+- **Binary and GET-mutating endpoints are excluded.** Attachment upload is multipart/binary, and
+  the simplified noCRM API performs mutations through GET requests; neither is exposed as a stream
+  or declarative write action.
 - **`X-TOTAL-COUNT` early-stop header is not modeled** (see "Streams notes" above): the engine's
   `offset_limit` paginator has no body/header-driven stop signal beyond the short-page rule. In
   the worst case (a final page exactly `page_size` records long) this bundle issues one extra,

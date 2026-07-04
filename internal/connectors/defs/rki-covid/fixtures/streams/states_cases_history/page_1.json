@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/states/history/cases",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "HH": {
+          "id": 2,
+          "name": "Hamburg",
+          "history": [
+            {
+              "date": "2021-01-01T00:00:00.000Z",
+              "cases": 10
+            }
+          ]
+        }
+      }
+    }
+  }
+}

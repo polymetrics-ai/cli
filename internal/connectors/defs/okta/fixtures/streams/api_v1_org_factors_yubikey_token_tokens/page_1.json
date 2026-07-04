@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/org/factors/yubikey_token/tokens",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "id": "id_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "lastVerified": "2026-01-01T00:00:00Z",
+        "profile": {},
+        "status": "BLOCKED",
+        "_embedded": {},
+        "_links": {
+          "verify": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

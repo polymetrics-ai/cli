@@ -48,6 +48,164 @@
       "path": "/prospecting_lists",
       "records": { "path": "" },
       "schema": "schemas/prospecting_lists.json"
+    },
+    {
+      "name": "steps",
+      "path": "/steps",
+      "records": { "path": "" },
+      "schema": "schemas/steps.json"
+    },
+    {
+      "name": "step",
+      "path": "/steps/{{ config.step_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/step.json"
+    },
+    {
+      "name": "client_folders",
+      "path": "/clients",
+      "records": { "path": "" },
+      "schema": "schemas/client_folders.json"
+    },
+    {
+      "name": "client_folder",
+      "path": "/clients/{{ config.client_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/client_folder.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "records": { "path": "" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "predefined_tags",
+      "path": "/predefined_tags",
+      "records": { "path": "" },
+      "schema": "schemas/predefined_tags.json"
+    },
+    {
+      "name": "fields",
+      "path": "/fields",
+      "records": { "path": "" },
+      "schema": "schemas/fields.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "records": { "path": "" },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "lead",
+      "path": "/leads/{{ config.lead_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/lead.json"
+    },
+    {
+      "name": "unassigned_leads",
+      "path": "/leads/unassigned",
+      "records": { "path": "" },
+      "schema": "schemas/unassigned_leads.json"
+    },
+    {
+      "name": "lead_comments",
+      "path": "/leads/{{ config.lead_id }}/comments",
+      "records": { "path": "" },
+      "schema": "schemas/lead_comments.json"
+    },
+    {
+      "name": "lead_duplicates",
+      "path": "/leads/{{ config.lead_id }}/duplicates",
+      "records": { "path": "" },
+      "schema": "schemas/lead_duplicates.json"
+    },
+    {
+      "name": "lead_attachments",
+      "path": "/leads/{{ config.lead_id }}/attachments",
+      "records": { "path": "" },
+      "schema": "schemas/lead_attachments.json"
+    },
+    {
+      "name": "lead_attachment",
+      "path": "/leads/{{ config.lead_id }}/attachments/{{ config.attachment_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/lead_attachment.json"
+    },
+    {
+      "name": "lead_action_histories",
+      "path": "/leads/{{ config.lead_id }}/action_histories",
+      "records": { "path": "" },
+      "schema": "schemas/lead_action_histories.json"
+    },
+    {
+      "name": "post_sales_tasks",
+      "path": "/follow_ups",
+      "records": { "path": "" },
+      "schema": "schemas/post_sales_tasks.json"
+    },
+    {
+      "name": "spreadsheets",
+      "path": "/spreadsheets",
+      "records": { "path": "" },
+      "schema": "schemas/spreadsheets.json"
+    },
+    {
+      "name": "spreadsheet",
+      "path": "/spreadsheets/{{ config.prospecting_list_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/spreadsheet.json"
+    },
+    {
+      "name": "prospects",
+      "path": "/rows",
+      "records": { "path": "" },
+      "schema": "schemas/prospects.json"
+    },
+    {
+      "name": "prospects_called",
+      "path": "/rows/called_from",
+      "records": { "path": "" },
+      "schema": "schemas/prospects_called.json"
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/user.json"
+    },
+    {
+      "name": "team",
+      "path": "/teams/{{ config.team_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "webhook_events",
+      "path": "/webhook_events",
+      "records": { "path": "" },
+      "schema": "schemas/webhook_events.json"
+    },
+    {
+      "name": "webhook_event",
+      "path": "/webhook_events/{{ config.webhook_event_id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhook_event.json"
     }
   ]
 }

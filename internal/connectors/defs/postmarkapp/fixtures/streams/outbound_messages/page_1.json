@@ -21,20 +21,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture1@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 1",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-2",
@@ -45,20 +35,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture2@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 2",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-3",
@@ -69,20 +49,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture3@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 3",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-4",
@@ -93,20 +63,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture4@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 4",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-5",
@@ -117,20 +77,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture5@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 5",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-6",
@@ -141,20 +91,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture6@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 6",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-7",
@@ -165,20 +105,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture7@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 7",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-8",
@@ -189,20 +119,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture8@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 8",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-9",
@@ -213,20 +133,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture9@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 9",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-10",
@@ -237,20 +147,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture10@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 10",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-11",
@@ -261,20 +161,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture11@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 11",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-12",
@@ -285,20 +175,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture12@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 12",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-13",
@@ -309,20 +189,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture13@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 13",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-14",
@@ -333,20 +203,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture14@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 14",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-15",
@@ -357,20 +217,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture15@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 15",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-16",
@@ -381,20 +231,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture16@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 16",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-17",
@@ -405,20 +245,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture17@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 17",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-18",
@@ -429,20 +259,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture18@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 18",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-19",
@@ -453,20 +273,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture19@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 19",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-20",
@@ -477,20 +287,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture20@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 20",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-21",
@@ -501,20 +301,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture21@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 21",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-22",
@@ -525,20 +315,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture22@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 22",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-23",
@@ -549,20 +329,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture23@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 23",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-24",
@@ -573,20 +343,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture24@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 24",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-25",
@@ -597,20 +357,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture25@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 25",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-26",
@@ -621,20 +371,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture26@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 26",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-27",
@@ -645,20 +385,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture27@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 27",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-28",
@@ -669,20 +399,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture28@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 28",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-29",
@@ -693,20 +413,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture29@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 29",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-30",
@@ -717,20 +427,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture30@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 30",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-31",
@@ -741,20 +441,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture31@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 31",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-32",
@@ -765,20 +455,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture32@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 32",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-33",
@@ -789,20 +469,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture33@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 33",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-34",
@@ -813,20 +483,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture34@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 34",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-35",
@@ -837,20 +497,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture35@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 35",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-36",
@@ -861,20 +511,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture36@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 36",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-37",
@@ -885,20 +525,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture37@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 37",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-38",
@@ -909,20 +539,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture38@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 38",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-39",
@@ -933,20 +553,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture39@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 39",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-40",
@@ -957,20 +567,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture40@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 40",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-41",
@@ -981,20 +581,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture41@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 41",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-42",
@@ -1005,20 +595,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture42@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 42",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-43",
@@ -1029,20 +609,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture43@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 43",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-44",
@@ -1053,20 +623,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture44@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 44",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-45",
@@ -1077,20 +637,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture45@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 45",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-46",
@@ -1101,20 +651,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture46@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 46",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-47",
@@ -1125,20 +665,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture47@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 47",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-48",
@@ -1149,20 +679,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture48@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 48",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-49",
@@ -1173,20 +693,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture49@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 49",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-50",
@@ -1197,20 +707,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture50@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 50",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-51",
@@ -1221,20 +721,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture51@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 51",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-52",
@@ -1245,20 +735,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture52@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 52",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-53",
@@ -1269,20 +749,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture53@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 53",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-54",
@@ -1293,20 +763,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture54@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 54",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-55",
@@ -1317,20 +777,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture55@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 55",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-56",
@@ -1341,20 +791,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture56@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 56",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-57",
@@ -1365,20 +805,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture57@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 57",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-58",
@@ -1389,20 +819,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture58@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 58",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-59",
@@ -1413,20 +833,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture59@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 59",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-60",
@@ -1437,20 +847,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture60@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 60",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-61",
@@ -1461,20 +861,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture61@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 61",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-62",
@@ -1485,20 +875,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture62@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 62",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-63",
@@ -1509,20 +889,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture63@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 63",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-64",
@@ -1533,20 +903,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture64@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 64",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-65",
@@ -1557,20 +917,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture65@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 65",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-66",
@@ -1581,20 +931,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture66@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 66",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-67",
@@ -1605,20 +945,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture67@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 67",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-68",
@@ -1629,20 +959,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture68@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 68",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-69",
@@ -1653,20 +973,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture69@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 69",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-70",
@@ -1677,20 +987,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture70@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 70",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-71",
@@ -1701,20 +1001,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture71@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 71",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-72",
@@ -1725,20 +1015,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture72@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 72",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-73",
@@ -1749,20 +1029,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture73@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 73",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-74",
@@ -1773,20 +1043,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture74@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 74",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-75",
@@ -1797,20 +1057,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture75@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 75",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-76",
@@ -1821,20 +1071,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture76@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 76",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-77",
@@ -1845,20 +1085,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture77@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 77",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-78",
@@ -1869,20 +1099,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture78@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 78",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-79",
@@ -1893,20 +1113,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture79@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 79",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-80",
@@ -1917,20 +1127,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture80@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 80",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-81",
@@ -1941,20 +1141,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture81@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 81",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-82",
@@ -1965,20 +1155,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture82@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 82",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-83",
@@ -1989,20 +1169,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture83@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 83",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-84",
@@ -2013,20 +1183,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture84@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 84",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-85",
@@ -2037,20 +1197,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture85@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 85",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-86",
@@ -2061,20 +1211,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture86@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 86",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-87",
@@ -2085,20 +1225,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture87@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 87",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-88",
@@ -2109,20 +1239,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture88@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 88",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-89",
@@ -2133,20 +1253,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture89@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 89",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-90",
@@ -2157,20 +1267,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture90@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 90",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-91",
@@ -2181,20 +1281,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture91@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 91",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-92",
@@ -2205,20 +1295,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture92@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 92",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-93",
@@ -2229,20 +1309,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture93@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 93",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-94",
@@ -2253,20 +1323,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture94@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 94",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-95",
@@ -2277,20 +1337,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture95@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 95",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-96",
@@ -2301,20 +1351,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture96@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 96",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-97",
@@ -2325,20 +1365,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture97@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 97",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-98",
@@ -2349,20 +1379,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture98@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 98",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-99",
@@ -2373,20 +1393,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture99@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 99",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         },
         {
           "MessageID": "msg-fixture-100",
@@ -2397,20 +1407,10 @@
               "Name": null
             }
           ],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": [
-            "fixture100@example.com"
-          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 100",
           "ReceivedAt": "2026-01-01T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "Status": "Sent"
         }
       ]
     }

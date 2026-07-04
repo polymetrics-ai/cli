@@ -1,0 +1,14 @@
+{
+  "record": {
+    "group_id": "synthetic-conformance-value",
+    "owner_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/groups/synthetic-conformance-value/owners/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

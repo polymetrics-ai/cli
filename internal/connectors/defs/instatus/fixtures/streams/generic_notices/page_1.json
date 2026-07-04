@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/synthetic-conformance-value/generic-notices",
+    "query": {
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "generic_notice_fixture_1",
+        "name": "Fixture generic_notice_fixture_1",
+        "message": "Fixture notice"
+      }
+    ]
+  }
+}

@@ -1,16 +1,1028 @@
 {
   "api": "Piwik / Matomo Reporting API (index.php?module=API)",
   "docs": "https://developer.matomo.org/api-reference/reporting-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams (SitesManager.getAllSites, Live.getLastVisitsDetails, Actions.getPageUrls, Goals.getGoals) only; the full Matomo Reporting API method surface (hundreds of report methods across VisitsSummary, Referrers, DevicesDetection, Goals conversions, custom segments, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion grounded in Matomo Reporting API documentation and the public API.getReportMetadata inventory: all documented analytics report Module.action methods returned by the metadata API are modeled as JSON streams, alongside the legacy SitesManager/Live/Actions/Goals streams and selected documented site-list/detail reads. Matomo also exposes per-installation plugin/admin RPC methods through the same GET endpoint; management mutations, binary graph/report exports, bulk wrappers, and helper lookups are enumerated as typed exclusions rather than writes because this bundle is read-only and the declarative write dialect only models POST/PUT/PATCH/DELETE endpoints.",
   "endpoints": [
-    { "method": "GET", "path": "/index.php?method=SitesManager.getAllSites", "covered_by": { "stream": "sites" } },
-    { "method": "GET", "path": "/index.php?method=Live.getLastVisitsDetails", "covered_by": { "stream": "visits" } },
-    { "method": "GET", "path": "/index.php?method=Actions.getPageUrls", "covered_by": { "stream": "actions" } },
-    { "method": "GET", "path": "/index.php?method=Goals.getGoals", "covered_by": { "stream": "goals" } },
-    { "method": "GET", "path": "/index.php?method=VisitsSummary.get", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/index.php?method=Referrers.getAll", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/index.php?method=Goals.get", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/index.php?method=SitesManager.addSite", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getAllSites",
+      "covered_by": {
+        "stream": "sites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Live.getLastVisitsDetails",
+      "covered_by": {
+        "stream": "visits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getPageUrls",
+      "covered_by": {
+        "stream": "actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.getGoals",
+      "covered_by": {
+        "stream": "goals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=API.getReportMetadata",
+      "covered_by": {
+        "stream": "report_metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Live.getCounters",
+      "covered_by": {
+        "stream": "live_counters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getSiteFromId",
+      "covered_by": {
+        "stream": "site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getSitesWithAtLeastViewAccess",
+      "covered_by": {
+        "stream": "sites_manager_sites_with_at_least_view_access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getSitesWithViewAccess",
+      "covered_by": {
+        "stream": "sites_manager_sites_with_view_access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getSitesWithAdminAccess",
+      "covered_by": {
+        "stream": "sites_manager_sites_with_admin_access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.get",
+      "covered_by": {
+        "stream": "actions_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getDownloads",
+      "covered_by": {
+        "stream": "actions_downloads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getEntryPageTitles",
+      "covered_by": {
+        "stream": "actions_entry_page_titles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getEntryPageUrls",
+      "covered_by": {
+        "stream": "actions_entry_page_urls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getExitPageTitles",
+      "covered_by": {
+        "stream": "actions_exit_page_titles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getExitPageUrls",
+      "covered_by": {
+        "stream": "actions_exit_page_urls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getOutlinks",
+      "covered_by": {
+        "stream": "actions_outlinks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getPageTitles",
+      "covered_by": {
+        "stream": "actions_page_titles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getPageTitlesFollowingSiteSearch",
+      "covered_by": {
+        "stream": "actions_page_titles_following_site_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getPageUrlsFollowingSiteSearch",
+      "covered_by": {
+        "stream": "actions_page_urls_following_site_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getSiteSearchCategories",
+      "covered_by": {
+        "stream": "actions_site_search_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getSiteSearchKeywords",
+      "covered_by": {
+        "stream": "actions_site_search_keywords"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getSiteSearchNoResultKeywords",
+      "covered_by": {
+        "stream": "actions_site_search_no_result_keywords"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Contents.getContentNames",
+      "covered_by": {
+        "stream": "contents_content_names"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Contents.getContentPieces",
+      "covered_by": {
+        "stream": "contents_content_pieces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=CustomDimensions.getCustomDimension",
+      "covered_by": {
+        "stream": "custom_dimensions_custom_dimension"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=CustomVariables.getCustomVariables",
+      "covered_by": {
+        "stream": "custom_variables_custom_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicePlugins.getPlugin",
+      "covered_by": {
+        "stream": "device_plugins_plugin"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getBrand",
+      "covered_by": {
+        "stream": "devices_detection_brand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getBrowserEngines",
+      "covered_by": {
+        "stream": "devices_detection_browser_engines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getBrowserVersions",
+      "covered_by": {
+        "stream": "devices_detection_browser_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getBrowsers",
+      "covered_by": {
+        "stream": "devices_detection_browsers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getModel",
+      "covered_by": {
+        "stream": "devices_detection_model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getOsFamilies",
+      "covered_by": {
+        "stream": "devices_detection_os_families"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getOsVersions",
+      "covered_by": {
+        "stream": "devices_detection_os_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=DevicesDetection.getType",
+      "covered_by": {
+        "stream": "devices_detection_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Events.getAction",
+      "covered_by": {
+        "stream": "events_action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Events.getCategory",
+      "covered_by": {
+        "stream": "events_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Events.getName",
+      "covered_by": {
+        "stream": "events_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.get",
+      "covered_by": {
+        "stream": "goals_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.getDaysToConversion",
+      "covered_by": {
+        "stream": "goals_days_to_conversion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.getItemsCategory",
+      "covered_by": {
+        "stream": "goals_items_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.getItemsName",
+      "covered_by": {
+        "stream": "goals_items_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.getItemsSku",
+      "covered_by": {
+        "stream": "goals_items_sku"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.getVisitsUntilConversion",
+      "covered_by": {
+        "stream": "goals_visits_until_conversion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getContent",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getGroup",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getId",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getKeyword",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_keyword"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getMedium",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_medium"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getName",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getPlacement",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_placement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getSource",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MarketingCampaignsReporting.getSourceMedium",
+      "covered_by": {
+        "stream": "marketing_campaigns_reporting_source_medium"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MultiChannelConversionAttribution.getChannelAttribution",
+      "covered_by": {
+        "stream": "multi_channel_conversion_attribution_channel_attribution"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MultiSites.getAll",
+      "covered_by": {
+        "stream": "multi_sites_all"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=MultiSites.getOne",
+      "covered_by": {
+        "stream": "multi_sites_one"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=PagePerformance.get",
+      "covered_by": {
+        "stream": "page_performance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.get",
+      "covered_by": {
+        "stream": "referrers_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getAIAssistants",
+      "covered_by": {
+        "stream": "referrers_ai_assistants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getAll",
+      "covered_by": {
+        "stream": "referrers_all"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getKeywords",
+      "covered_by": {
+        "stream": "referrers_keywords"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getReferrerType",
+      "covered_by": {
+        "stream": "referrers_referrer_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getSearchEngines",
+      "covered_by": {
+        "stream": "referrers_search_engines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getSocials",
+      "covered_by": {
+        "stream": "referrers_socials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getWebsites",
+      "covered_by": {
+        "stream": "referrers_websites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Resolution.getConfiguration",
+      "covered_by": {
+        "stream": "resolution_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Resolution.getResolution",
+      "covered_by": {
+        "stream": "resolution_resolution"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SearchEngineKeywordsPerformance.getCrawlingOverviewBing",
+      "covered_by": {
+        "stream": "search_engine_keywords_performance_crawling_overview_bing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SearchEngineKeywordsPerformance.getKeywords",
+      "covered_by": {
+        "stream": "search_engine_keywords_performance_keywords"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SearchEngineKeywordsPerformance.getKeywordsBing",
+      "covered_by": {
+        "stream": "search_engine_keywords_performance_keywords_bing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SearchEngineKeywordsPerformance.getKeywordsGoogleImage",
+      "covered_by": {
+        "stream": "search_engine_keywords_performance_keywords_google_image"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SearchEngineKeywordsPerformance.getKeywordsGoogleVideo",
+      "covered_by": {
+        "stream": "search_engine_keywords_performance_keywords_google_video"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SearchEngineKeywordsPerformance.getKeywordsGoogleWeb",
+      "covered_by": {
+        "stream": "search_engine_keywords_performance_keywords_google_web"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SearchEngineKeywordsPerformance.getKeywordsImported",
+      "covered_by": {
+        "stream": "search_engine_keywords_performance_keywords_imported"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UserCountry.getCity",
+      "covered_by": {
+        "stream": "user_country_city"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UserCountry.getContinent",
+      "covered_by": {
+        "stream": "user_country_continent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UserCountry.getCountry",
+      "covered_by": {
+        "stream": "user_country_country"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UserCountry.getRegion",
+      "covered_by": {
+        "stream": "user_country_region"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UserId.getUsers",
+      "covered_by": {
+        "stream": "user_id_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UserLanguage.getLanguage",
+      "covered_by": {
+        "stream": "user_language_language"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UserLanguage.getLanguageCode",
+      "covered_by": {
+        "stream": "user_language_language_code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersFlow.getUsersFlowPretty",
+      "covered_by": {
+        "stream": "users_flow_users_flow_pretty"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitFrequency.get",
+      "covered_by": {
+        "stream": "visit_frequency"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitTime.getByDayOfWeek",
+      "covered_by": {
+        "stream": "visit_time_by_day_of_week"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitTime.getVisitInformationPerLocalTime",
+      "covered_by": {
+        "stream": "visit_time_visit_information_per_local_time"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitTime.getVisitInformationPerServerTime",
+      "covered_by": {
+        "stream": "visit_time_visit_information_per_server_time"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitorInterest.getNumberOfVisitsByDaysSinceLast",
+      "covered_by": {
+        "stream": "visitor_interest_number_of_visits_by_days_since_last"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitorInterest.getNumberOfVisitsByVisitCount",
+      "covered_by": {
+        "stream": "visitor_interest_number_of_visits_by_visit_count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitorInterest.getNumberOfVisitsPerPage",
+      "covered_by": {
+        "stream": "visitor_interest_number_of_visits_per_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitorInterest.getNumberOfVisitsPerVisitDuration",
+      "covered_by": {
+        "stream": "visitor_interest_number_of_visits_per_visit_duration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=VisitsSummary.get",
+      "covered_by": {
+        "stream": "visits_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=API.getMetadata",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-report metadata lookup keyed by apiModule/apiAction; the report_metadata stream covers the full report metadata collection returned by API.getReportMetadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=API.getProcessedReport",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "generic wrapper for the same report datasets covered by the direct Module.action report streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=API.getRowEvolution",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "time-series lookup requires a caller-selected report row label/idSubtable; no documented endpoint yields a stable finite row-id list for this generic method"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=API.getBulkRequest",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "bulk wrapper around ordinary Reporting API calls already modeled as individual streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/index.php?method=API.getBulkRequest",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "POST bulk wrapper around ordinary Reporting API calls already modeled as individual streams, not a write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=API.getMatomoVersion",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "server version probe, not a syncable record collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=ImageGraph.get",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a generated PNG chart image rather than JSON records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getPageUrl",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-row detail report for a caller-supplied URL/title; the corresponding Actions list stream covers the report rows and this generic detail form has no discoverable id list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getPageTitle",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-row detail report for a caller-supplied URL/title; the corresponding Actions list stream covers the report rows and this generic detail form has no discoverable id list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getDownload",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-row detail report for a caller-supplied URL/title; the corresponding Actions list stream covers the report rows and this generic detail form has no discoverable id list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Actions.getOutlink",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-row detail report for a caller-supplied URL/title; the corresponding Actions list stream covers the report rows and this generic detail form has no discoverable id list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getKeywordsFromSearchEngineId",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "subtable/detail report keyed by idSubtable or another caller-selected row id; no standalone documented list of those ids exists for a safe full-refresh stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getUrlsFromWebsiteId",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "subtable/detail report keyed by idSubtable or another caller-selected row id; no standalone documented list of those ids exists for a safe full-refresh stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Referrers.getUrlsForSocial",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "subtable/detail report keyed by idSubtable or another caller-selected row id; no standalone documented list of those ids exists for a safe full-refresh stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Events.getActionFromCategoryId",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "subtable/detail report keyed by idSubtable or another caller-selected row id; no standalone documented list of those ids exists for a safe full-refresh stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Events.getNameFromActionId",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "subtable/detail report keyed by idSubtable or another caller-selected row id; no standalone documented list of those ids exists for a safe full-refresh stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getSitesIdFromSiteUrl",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lookup/configuration helper rather than an object collection with stable JSON record identity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getCurrencyList",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lookup/configuration helper rather than an object collection with stable JSON record identity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getTimezonesList",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lookup/configuration helper rather than an object collection with stable JSON record identity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getExcludedIpsGlobal",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lookup/configuration helper rather than an object collection with stable JSON record identity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.getExcludedQueryParametersGlobal",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lookup/configuration helper rather than an object collection with stable JSON record identity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.addSite",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Matomo management RPC mutates website configuration through GET-style method calls; this read-only bundle only models JSON report reads and does not expose GET mutations as writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.updateSite",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Matomo management RPC mutates website configuration through GET-style method calls; this read-only bundle only models JSON report reads and does not expose GET mutations as writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.deleteSite",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Matomo management RPC mutates website configuration through GET-style method calls; this read-only bundle only models JSON report reads and does not expose GET mutations as writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.addSiteAliasUrls",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Matomo management RPC mutates website configuration through GET-style method calls; this read-only bundle only models JSON report reads and does not expose GET mutations as writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.setGlobalExcludedIps",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Matomo management RPC mutates website configuration through GET-style method calls; this read-only bundle only models JSON report reads and does not expose GET mutations as writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=SitesManager.setGlobalExcludedQueryParameters",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Matomo management RPC mutates website configuration through GET-style method calls; this read-only bundle only models JSON report reads and does not expose GET mutations as writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.addGoal",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "goal configuration mutation exposed through Matomo RPC query methods; not a POST/PUT/PATCH/DELETE write endpoint and not safe as reverse ETL"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.updateGoal",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "goal configuration mutation exposed through Matomo RPC query methods; not a POST/PUT/PATCH/DELETE write endpoint and not safe as reverse ETL"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=Goals.deleteGoal",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "goal configuration mutation exposed through Matomo RPC query methods; not a POST/PUT/PATCH/DELETE write endpoint and not safe as reverse ETL"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.getUsers",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "user and permission administration reads require account-level administrative privileges and are outside the analytics/reporting token surface this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.getUser",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "user and permission administration reads require account-level administrative privileges and are outside the analytics/reporting token surface this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.getUserByEmail",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "user and permission administration reads require account-level administrative privileges and are outside the analytics/reporting token surface this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.getUsersWithSiteAccess",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "user and permission administration reads require account-level administrative privileges and are outside the analytics/reporting token surface this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.getSitesAccessFromUser",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "user and permission administration reads require account-level administrative privileges and are outside the analytics/reporting token surface this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.getUsersAccessFromSite",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "user and permission administration reads require account-level administrative privileges and are outside the analytics/reporting token surface this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.getUsersSitesFromAccess",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "user and permission administration reads require account-level administrative privileges and are outside the analytics/reporting token surface this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.addUser",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "user or permission administration mutation exposed through Matomo RPC query methods; never a reverse-ETL write for this analytics connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.updateUser",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "user or permission administration mutation exposed through Matomo RPC query methods; never a reverse-ETL write for this analytics connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.deleteUser",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "user or permission administration mutation exposed through Matomo RPC query methods; never a reverse-ETL write for this analytics connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=UsersManager.setUserAccess",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "user or permission administration mutation exposed through Matomo RPC query methods; never a reverse-ETL write for this analytics connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=ScheduledReports.getReports",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "scheduled email-report configuration requires report-admin privileges and is not analytics event data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=ScheduledReports.generateReport",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "generated report export can be PDF/HTML/CSV rather than JSON records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=ScheduledReports.sendReport",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "scheduled report delivery/configuration mutation is an administrative side effect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=ScheduledReports.addReport",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "scheduled report delivery/configuration mutation is an administrative side effect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=ScheduledReports.updateReport",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "scheduled report delivery/configuration mutation is an administrative side effect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/index.php?method=ScheduledReports.deleteReport",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "scheduled report delivery/configuration mutation is an administrative side effect"
+      }
+    }
   ]
 }

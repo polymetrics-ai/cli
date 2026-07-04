@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/service-catalog/shared-fields/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": {
+        "id": "retrieve_shared_fields_data",
+        "name": "Fixture retrieve_shared_fields_data",
+        "subject": "Fixture retrieve_shared_fields_data",
+        "description": "Fixture retrieve_shared_fields_data record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

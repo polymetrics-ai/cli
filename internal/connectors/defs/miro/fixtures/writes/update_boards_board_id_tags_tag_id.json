@@ -1,0 +1,20 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "tag_id": "synthetic-conformance-value",
+    "fillColor": "red",
+    "title": "title_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/boards/synthetic-conformance-value/tags/synthetic-conformance-value",
+    "body": {
+      "fillColor": "red",
+      "title": "title_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

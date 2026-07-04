@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/tasks/synthetic-conformance-value/comments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "comments": {
+        "id": "id_fixture",
+        "taskId": "task_id_fixture",
+        "comment": "fixture",
+        "commentHtml": "<p>Fixture</p>",
+        "createdBy": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "taggedUsers": [
+          {
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com"
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1
+    }
+  }
+}

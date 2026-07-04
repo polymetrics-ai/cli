@@ -1,0 +1,24 @@
+{
+  "record": {
+    "grantedScopes": [
+      "granted_scope_fixture"
+    ],
+    "properties": {},
+    "type": "type_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/api/v1/api-services",
+    "body": {
+      "grantedScopes": [
+        "granted_scope_fixture"
+      ],
+      "properties": {},
+      "type": "type_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

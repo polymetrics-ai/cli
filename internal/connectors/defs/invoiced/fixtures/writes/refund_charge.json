@@ -1,0 +1,20 @@
+{
+  "record": {
+    "charge_id": 123,
+    "amount": 50
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/charges/123/refunds",
+    "body": {
+      "amount": 50
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

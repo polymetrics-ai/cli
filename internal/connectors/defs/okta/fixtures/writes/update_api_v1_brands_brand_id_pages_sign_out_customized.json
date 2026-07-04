@@ -1,0 +1,19 @@
+{
+  "record": {
+    "brand_id": "synthetic-conformance-value",
+    "type": "EXTERNALLY_HOSTED",
+    "url": "https://example.invalid/fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/brands/synthetic-conformance-value/pages/sign-out/customized",
+    "body": {
+      "type": "EXTERNALLY_HOSTED",
+      "url": "https://example.invalid/fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

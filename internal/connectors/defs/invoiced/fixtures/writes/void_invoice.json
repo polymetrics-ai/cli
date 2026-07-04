@@ -1,0 +1,16 @@
+{
+  "record": {
+    "invoice_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/123/void"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 123,
+    "curated": "ok"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/reviews/123",
+    "body": {
+      "curated": "ok"
+    }
+  }
+}

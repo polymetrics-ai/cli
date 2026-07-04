@@ -1,0 +1,138 @@
+{
+  "record": {
+    "model": "model_fixture",
+    "from_checkpoint": {
+      "type": "type_fixture",
+      "repo": "repo_fixture",
+      "revision": "revision_fixture",
+      "token": "fixture"
+    },
+    "training_file": "training_file_fixture",
+    "validation_file": "validation_file_fixture",
+    "hyperparameters": {
+      "batch_size": 1,
+      "learning_rate": 1.25,
+      "n_epochs": 1,
+      "warmup_ratio": 1.25,
+      "weight_decay": 1.25,
+      "packing": true,
+      "max_grad_norm": 1.25,
+      "context_length": 1,
+      "lora": true,
+      "lora_r": 1,
+      "lora_alpha": 1,
+      "lora_dropout": 1.25
+    },
+    "method": {
+      "type": "type_fixture",
+      "supervised": {
+        "hyperparameters": {
+          "batch_size": 1,
+          "learning_rate": 1.25,
+          "n_epochs": 1,
+          "warmup_ratio": 1.25,
+          "weight_decay": 1.25,
+          "packing": true,
+          "max_grad_norm": 1.25,
+          "context_length": 1,
+          "lora": true,
+          "lora_r": 1,
+          "lora_alpha": 1,
+          "lora_dropout": 1.25
+        }
+      }
+    },
+    "integrations": [
+      {
+        "type": "type_fixture",
+        "wandb": {
+          "project": "project_fixture",
+          "name": "name_fixture",
+          "entity": "entity_fixture",
+          "tags": [
+            "tag_fixture"
+          ],
+          "api_key": "fixture"
+        }
+      }
+    ],
+    "seed": 1,
+    "suffix": "suffix_fixture",
+    "tags": [
+      "tag_fixture"
+    ],
+    "extra_body": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/fine_tuning/jobs",
+    "body": {
+      "model": "model_fixture",
+      "from_checkpoint": {
+        "type": "type_fixture",
+        "repo": "repo_fixture",
+        "revision": "revision_fixture",
+        "token": "fixture"
+      },
+      "training_file": "training_file_fixture",
+      "validation_file": "validation_file_fixture",
+      "hyperparameters": {
+        "batch_size": 1,
+        "learning_rate": 1.25,
+        "n_epochs": 1,
+        "warmup_ratio": 1.25,
+        "weight_decay": 1.25,
+        "packing": true,
+        "max_grad_norm": 1.25,
+        "context_length": 1,
+        "lora": true,
+        "lora_r": 1,
+        "lora_alpha": 1,
+        "lora_dropout": 1.25
+      },
+      "method": {
+        "type": "type_fixture",
+        "supervised": {
+          "hyperparameters": {
+            "batch_size": 1,
+            "learning_rate": 1.25,
+            "n_epochs": 1,
+            "warmup_ratio": 1.25,
+            "weight_decay": 1.25,
+            "packing": true,
+            "max_grad_norm": 1.25,
+            "context_length": 1,
+            "lora": true,
+            "lora_r": 1,
+            "lora_alpha": 1,
+            "lora_dropout": 1.25
+          }
+        }
+      },
+      "integrations": [
+        {
+          "type": "type_fixture",
+          "wandb": {
+            "project": "project_fixture",
+            "name": "name_fixture",
+            "entity": "entity_fixture",
+            "tags": [
+              "tag_fixture"
+            ],
+            "api_key": "fixture"
+          }
+        }
+      ],
+      "seed": 1,
+      "suffix": "suffix_fixture",
+      "tags": [
+        "tag_fixture"
+      ],
+      "extra_body": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

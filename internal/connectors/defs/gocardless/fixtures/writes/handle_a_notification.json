@@ -1,0 +1,21 @@
+{
+  "record": {
+    "customer_notification_id": "customer_notification_id_fixture",
+    "customer_notifications": {
+      "description": "Synthetic handle_a_notification fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customer_notifications/customer_notification_id_fixture/actions/handle",
+    "body": {
+      "customer_notifications": {
+        "description": "Synthetic handle_a_notification fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

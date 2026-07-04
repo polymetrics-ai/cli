@@ -1,0 +1,10 @@
+{
+  "record": {
+    "spreadsheet_id": "234",
+    "id": "123"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/spreadsheets/234/rows/123"
+  }
+}

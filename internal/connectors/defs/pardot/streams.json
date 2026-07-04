@@ -6,49 +6,1055 @@
       "Pardot-Business-Unit-Id": "{{ config.business_unit_id }}"
     },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
       "type": "next_url",
       "next_url_path": "nextPageUrl"
     },
-    "check": { "method": "GET", "path": "/api/v5/objects/prospects", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/api/v5/objects/prospects",
+      "query": {
+        "limit": "1",
+        "fields": "id,email"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "pardot access_token is missing, invalid, or expired; re-issue an OAuth access token and re-run pm credentials add pardot" },
-      { "status": 403, "hint": "pardot business_unit_id or credentials lack access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "pardot rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "pardot access_token is missing, invalid, or expired; re-issue an OAuth access token and re-run pm credentials add pardot"
+      },
+      {
+        "status": 403,
+        "hint": "pardot business_unit_id or credentials lack access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "pardot rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "prospects",
       "path": "/api/v5/objects/prospects",
-      "query": { "limit": "200" },
-      "records": { "path": "values" },
+      "query": {
+        "limit": "200",
+        "fields": "id,email,firstName,lastName,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/prospects.json",
       "incremental": {
         "cursor_field": "updatedAt"
+      }
+    },
+    {
+      "name": "prospect",
+      "path": "/api/v5/objects/prospects/{{ config.id }}",
+      "query": {
+        "fields": "id,email,firstName,lastName,createdAt,updatedAt"
       },
-      "schema": "schemas/prospects.json"
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/prospect.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
     },
     {
       "name": "campaigns",
       "path": "/api/v5/objects/campaigns",
-      "query": { "limit": "200" },
-      "records": { "path": "values" },
+      "query": {
+        "limit": "200",
+        "fields": "id,name,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/campaigns.json",
       "incremental": {
         "cursor_field": "updatedAt"
+      }
+    },
+    {
+      "name": "campaign",
+      "path": "/api/v5/objects/campaigns/{{ config.id }}",
+      "query": {
+        "fields": "id,name,createdAt,updatedAt"
       },
-      "schema": "schemas/campaigns.json"
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/campaign.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
     },
     {
       "name": "lists",
       "path": "/api/v5/objects/lists",
-      "query": { "limit": "200" },
-      "records": { "path": "values" },
+      "query": {
+        "limit": "200",
+        "fields": "id,name,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/lists.json",
       "incremental": {
         "cursor_field": "updatedAt"
+      }
+    },
+    {
+      "name": "list",
+      "path": "/api/v5/objects/lists/{{ config.id }}",
+      "query": {
+        "fields": "id,name,createdAt,updatedAt"
       },
-      "schema": "schemas/lists.json"
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/list.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/api/v5/objects/users",
+      "query": {
+        "limit": "200",
+        "fields": "id,email,firstName,lastName,username,jobTitle,role,roleName,salesforceId,isDeleted,createdAt,updatedAt,createdById,updatedById,tagReplacementLanguage"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user",
+      "path": "/api/v5/objects/users/{{ config.id }}",
+      "query": {
+        "fields": "id,email,firstName,lastName,username,jobTitle,role,roleName,salesforceId,isDeleted,createdAt,updatedAt,createdById,updatedById,tagReplacementLanguage"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/user.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/api/v5/objects/custom-fields",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,fieldId,type,isRecordMultipleResponses,salesforceId,isUseValues,isRequired,isAnalyticsSynced,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/custom_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "custom_field",
+      "path": "/api/v5/objects/custom-fields/{{ config.id }}",
+      "query": {
+        "fields": "id,name,fieldId,type,isRecordMultipleResponses,salesforceId,isUseValues,isRequired,isAnalyticsSynced,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/custom_field.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "custom_redirects",
+      "path": "/api/v5/objects/custom-redirects",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,campaignId,destinationUrl,folderId,trackerDomainId,createdAt,updatedAt,createdById,updatedById,isDeleted"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/custom_redirects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "custom_redirect",
+      "path": "/api/v5/objects/custom-redirects/{{ config.id }}",
+      "query": {
+        "fields": "id,name,campaignId,destinationUrl,folderId,trackerDomainId,createdAt,updatedAt,createdById,updatedById,isDeleted"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/custom_redirect.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "dynamic_contents",
+      "path": "/api/v5/objects/dynamic-contents",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,basedOnProspectApiFieldId,baseContent,folderId,trackerDomainId,embedCode,embedUrl,basedOn,tagReplacementLanguage,createdAt,updatedAt,isDeleted,createdById,updatedById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/dynamic_contents.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "dynamic_content",
+      "path": "/api/v5/objects/dynamic-contents/{{ config.id }}",
+      "query": {
+        "fields": "id,name,basedOnProspectApiFieldId,baseContent,folderId,trackerDomainId,embedCode,embedUrl,basedOn,tagReplacementLanguage,createdAt,updatedAt,isDeleted,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/dynamic_content.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "emails",
+      "path": "/api/v5/objects/emails",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,campaignId,prospectId,subject,emailTemplateId,trackerDomainId,folderId,clientType,createdById,listEmailId,sentAt,type,salesforceCmsId"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/emails.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "email",
+      "path": "/api/v5/objects/emails/{{ config.id }}",
+      "query": {
+        "fields": "id,name,campaignId,prospectId,subject,emailTemplateId,trackerDomainId,folderId,clientType,createdById,listEmailId,sentAt,type,salesforceCmsId"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/email.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "email_templates",
+      "path": "/api/v5/objects/email-templates",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,subject,isOneToOneEmail,isAutoResponderEmail,isDripEmail,isListEmail,trackerDomainId,folderId,type,campaignId,isDeleted,createdAt,updatedAt,createdById,updatedById,tagReplacementLanguage"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/email_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "email_template",
+      "path": "/api/v5/objects/email-templates/{{ config.id }}",
+      "query": {
+        "fields": "id,name,subject,isOneToOneEmail,isAutoResponderEmail,isDripEmail,isListEmail,trackerDomainId,folderId,type,campaignId,isDeleted,createdAt,updatedAt,createdById,updatedById,tagReplacementLanguage"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/email_template.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_emails",
+      "path": "/api/v5/objects/list-emails",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,campaignId,subject,emailTemplateId,trackerDomainId,folderId,isPaused,isSent,isDeleted,clientType,createdById,updatedById,createdAt,updatedAt,sentAt,isOperational,type"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/list_emails.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_email",
+      "path": "/api/v5/objects/list-emails/{{ config.id }}",
+      "query": {
+        "fields": "id,name,campaignId,subject,emailTemplateId,trackerDomainId,folderId,isPaused,isSent,isDeleted,clientType,createdById,updatedById,createdAt,updatedAt,sentAt,isOperational,type"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/list_email.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_email_stats",
+      "path": "/api/v5/objects/list-emails/{{ config.id }}/stats",
+      "query": {
+        "fields": "id,name,campaignId,subject,emailTemplateId,trackerDomainId,folderId,isPaused,isSent,isDeleted,clientType,createdById,updatedById,createdAt,updatedAt,sentAt,isOperational,type"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/list_email_stats.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "files",
+      "path": "/api/v5/objects/files",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,folderId,campaignId,vanityUrlPath,trackerDomainId,salesforceId,url,size,bitlyIsPersonalized,bitlyShortUrl,vanityUrl,isTracked,createdAt,updatedAt,createdById,updatedById,salesforceCmsId"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/files.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "file",
+      "path": "/api/v5/objects/files/{{ config.id }}",
+      "query": {
+        "fields": "id,name,folderId,campaignId,vanityUrlPath,trackerDomainId,salesforceId,url,size,bitlyIsPersonalized,bitlyShortUrl,vanityUrl,isTracked,createdAt,updatedAt,createdById,updatedById,salesforceCmsId"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/file.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "folders",
+      "path": "/api/v5/objects/folders",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,parentFolderId,path,usePermissions,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/folders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "folder",
+      "path": "/api/v5/objects/folders/{{ config.id }}",
+      "query": {
+        "fields": "id,name,parentFolderId,path,usePermissions,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/folder.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "folder_contents",
+      "path": "/api/v5/objects/folder-contents",
+      "query": {
+        "limit": "200",
+        "fields": "id,folderId,folderRef,objectType,objectId,objectName,objectRef,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/folder_contents.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "folder_content",
+      "path": "/api/v5/objects/folder-contents/{{ config.id }}",
+      "query": {
+        "fields": "id,folderId,folderRef,objectType,objectId,objectName,objectRef,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/folder_content.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "forms",
+      "path": "/api/v5/objects/forms",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,campaignId,layoutTemplateId,folderId,trackerDomainId,createdAt,updatedAt,createdById,updatedById,embedCode,isDeleted,isUseRedirectLocation,salesforceCmsId,salesforceId,url"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/forms.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "form",
+      "path": "/api/v5/objects/forms/{{ config.id }}",
+      "query": {
+        "fields": "id,name,campaignId,layoutTemplateId,folderId,trackerDomainId,createdAt,updatedAt,createdById,updatedById,embedCode,isDeleted,isUseRedirectLocation,salesforceCmsId,salesforceId,url"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/form.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "form_fields",
+      "path": "/api/v5/objects/form-fields",
+      "query": {
+        "limit": "200",
+        "fields": "id,formId,prospectApiFieldId,type,dataFormat,label,description,errorMessage,cssClasses,isRequired,isAlwaysDisplay,isMaintainInitialValue,isDoNotPrefill,sortOrder,hasDependents,hasProgressives,hasValues,createdById,updatedById,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/form_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "form_field",
+      "path": "/api/v5/objects/form-fields/{{ config.id }}",
+      "query": {
+        "fields": "id,formId,prospectApiFieldId,type,dataFormat,label,description,errorMessage,cssClasses,isRequired,isAlwaysDisplay,isMaintainInitialValue,isDoNotPrefill,sortOrder,hasDependents,hasProgressives,hasValues,createdById,updatedById,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/form_field.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "form_handlers",
+      "path": "/api/v5/objects/form-handlers",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,folderId,campaignId,trackerDomainId,isDataForwarded,isCookieless,salesforceId,embedCode,createdAt,createdById,updatedAt,updatedById,isDeleted"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/form_handlers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "form_handler",
+      "path": "/api/v5/objects/form-handlers/{{ config.id }}",
+      "query": {
+        "fields": "id,name,folderId,campaignId,trackerDomainId,isDataForwarded,isCookieless,salesforceId,embedCode,createdAt,createdById,updatedAt,updatedById,isDeleted"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/form_handler.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "form_handler_fields",
+      "path": "/api/v5/objects/form-handler-fields",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,formHandlerId,prospectApiFieldId,fieldLabel,dataFormat,isRequired,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/form_handler_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "form_handler_field",
+      "path": "/api/v5/objects/form-handler-fields/{{ config.id }}",
+      "query": {
+        "fields": "id,name,formHandlerId,prospectApiFieldId,fieldLabel,dataFormat,isRequired,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/form_handler_field.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "landing_pages",
+      "path": "/api/v5/objects/landing-pages",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,campaignId,folderId,formId,layoutTemplateId,title,description,isDoNotIndex,vanityUrlPath,redirectLocation,trackerDomainId,archiveDate,createdAt,updatedAt,createdById,updatedById,isDeleted,salesforceCmsId"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/landing_pages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "landing_page",
+      "path": "/api/v5/objects/landing-pages/{{ config.id }}",
+      "query": {
+        "fields": "id,name,campaignId,folderId,formId,layoutTemplateId,title,description,isDoNotIndex,vanityUrlPath,redirectLocation,trackerDomainId,archiveDate,createdAt,updatedAt,createdById,updatedById,isDeleted,salesforceCmsId"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/landing_page.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "layout_templates",
+      "path": "/api/v5/objects/layout-templates",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,layoutContent,formContent,isIncludeDefaultCss,folderId,isDeleted,createdAt,updatedAt,createdById,updatedById,siteSearchContent"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/layout_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "layout_template",
+      "path": "/api/v5/objects/layout-templates/{{ config.id }}",
+      "query": {
+        "fields": "id,name,layoutContent,formContent,isIncludeDefaultCss,folderId,isDeleted,createdAt,updatedAt,createdById,updatedById,siteSearchContent"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/layout_template.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_memberships",
+      "path": "/api/v5/objects/list-memberships",
+      "query": {
+        "limit": "200",
+        "fields": "id,createdAt,updatedAt,createdById,updatedById,isDeleted,optedOut,listId,prospectId"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/list_memberships.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_membership",
+      "path": "/api/v5/objects/list-memberships/{{ config.id }}",
+      "query": {
+        "fields": "id,createdAt,updatedAt,createdById,updatedById,isDeleted,optedOut,listId,prospectId"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/list_membership.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "opportunities",
+      "path": "/api/v5/objects/opportunities",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,campaignId,closedAt,createdAt,createdById,updatedAt,updatedById,value,probability,stage,status,isDeleted"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/opportunities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "opportunity",
+      "path": "/api/v5/objects/opportunities/{{ config.id }}",
+      "query": {
+        "fields": "id,name,campaignId,closedAt,createdAt,createdById,updatedAt,updatedById,value,probability,stage,status,isDeleted"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/opportunity.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "prospect_accounts",
+      "path": "/api/v5/objects/prospect-accounts",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,salesforceId,isDeleted,annualRevenue,billingCity,billingCountry,billingState,billingZip,phone,website,createdAt,updatedAt,createdById,updatedById,assignedToId"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/prospect_accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "prospect_account",
+      "path": "/api/v5/objects/prospect-accounts/{{ config.id }}",
+      "query": {
+        "fields": "id,name,salesforceId,isDeleted,annualRevenue,billingCity,billingCountry,billingState,billingZip,phone,website,createdAt,updatedAt,createdById,updatedById,assignedToId"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/prospect_account.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "tags",
+      "path": "/api/v5/objects/tags",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,objectCount,createdById,updatedById,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/tags.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tag",
+      "path": "/api/v5/objects/tags/{{ config.id }}",
+      "query": {
+        "fields": "id,name,objectCount,createdById,updatedById,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/tag.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "tagged_objects",
+      "path": "/api/v5/objects/tagged-objects",
+      "query": {
+        "limit": "200",
+        "fields": "id,tagId,objectType,objectId,objectName,createdAt,createdById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/tagged_objects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tagged_object",
+      "path": "/api/v5/objects/tagged-objects/{{ config.id }}",
+      "query": {
+        "fields": "id,tagId,objectType,objectId,objectName,createdAt,createdById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/tagged_object.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "tracker_domains",
+      "path": "/api/v5/objects/tracker-domains",
+      "query": {
+        "limit": "200",
+        "fields": "id,domain,isPrimary,isDeleted,defaultCampaignId,httpsStatus,sslStatus,validationStatus,validatedAt,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/tracker_domains.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tracker_domain",
+      "path": "/api/v5/objects/tracker-domains/{{ config.id }}",
+      "query": {
+        "fields": "id,domain,isPrimary,isDeleted,defaultCampaignId,httpsStatus,sslStatus,validationStatus,validatedAt,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/tracker_domain.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "visitors",
+      "path": "/api/v5/objects/visitors",
+      "query": {
+        "limit": "200",
+        "fields": "id,campaignParameter,contentParameter,createdAt,doNotSell,hostname,ipAddress,mediumParameter,pageViewCount,prospectId,campaignId,sourceParameter,termParameter,updatedAt,isIdentified"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/visitors.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "visitor",
+      "path": "/api/v5/objects/visitors/{{ config.id }}",
+      "query": {
+        "fields": "id,campaignParameter,contentParameter,createdAt,doNotSell,hostname,ipAddress,mediumParameter,pageViewCount,prospectId,campaignId,sourceParameter,termParameter,updatedAt,isIdentified"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/visitor.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "visits",
+      "path": "/api/v5/objects/visits",
+      "query": {
+        "limit": "200",
+        "fields": "id,visitorId,prospectId,visitorPageViewCount,firstVisitorPageViewAt,lastVisitorPageViewAt,durationInSeconds,campaignParameter,mediumParameter,sourceParameter,contentParameter,termParameter,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/visits.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "visit",
+      "path": "/api/v5/objects/visits/{{ config.id }}",
+      "query": {
+        "fields": "id,visitorId,prospectId,visitorPageViewCount,firstVisitorPageViewAt,lastVisitorPageViewAt,durationInSeconds,campaignParameter,mediumParameter,sourceParameter,contentParameter,termParameter,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/visit.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "visitor_activities",
+      "path": "/api/v5/objects/visitor-activities",
+      "query": {
+        "limit": "200",
+        "fields": "id,campaignId,createdAt,customRedirectId,details,emailId,emailTemplateId,fileId,formHandlerId,formId,landingPageId,listEmailId,opportunityId,prospectId,typeName,type,updatedAt,visitId,visitorId,visitorPageViewId"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/visitor_activities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "visitor_activity",
+      "path": "/api/v5/objects/visitor-activities/{{ config.id }}",
+      "query": {
+        "fields": "id,campaignId,createdAt,customRedirectId,details,emailId,emailTemplateId,fileId,formHandlerId,formId,landingPageId,listEmailId,opportunityId,prospectId,typeName,type,updatedAt,visitId,visitorId,visitorPageViewId"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/visitor_activity.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "visitor_page_views",
+      "path": "/api/v5/objects/visitor-page-views",
+      "query": {
+        "limit": "200",
+        "fields": "id,url,title,visitorId,campaignId,visitId,durationInSeconds,salesforceId,createdAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/visitor_page_views.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "visitor_page_view",
+      "path": "/api/v5/objects/visitor-page-views/{{ config.id }}",
+      "query": {
+        "fields": "id,url,title,visitorId,campaignId,visitId,durationInSeconds,salesforceId,createdAt"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/visitor_page_view.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "engagement_studio_programs",
+      "path": "/api/v5/objects/engagement-studio-programs",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,folderId,status,isDeleted,salesforceId,description,recipientListIds,suppressionListIds,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/engagement_studio_programs.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "engagement_studio_program",
+      "path": "/api/v5/objects/engagement-studio-programs/{{ config.id }}",
+      "query": {
+        "fields": "id,name,folderId,status,isDeleted,salesforceId,description,recipientListIds,suppressionListIds,createdAt,updatedAt,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/engagement_studio_program.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "lifecycle_stages",
+      "path": "/api/v5/objects/lifecycle-stages",
+      "query": {
+        "limit": "200",
+        "fields": "id,name,matchType,isLocked,position,isDeleted,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/lifecycle_stages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "lifecycle_stage",
+      "path": "/api/v5/objects/lifecycle-stages/{{ config.id }}",
+      "query": {
+        "fields": "id,name,matchType,isLocked,position,isDeleted,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/lifecycle_stage.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "lifecycle_histories",
+      "path": "/api/v5/objects/lifecycle-histories",
+      "query": {
+        "limit": "200",
+        "fields": "id,prospectId,lifecycleStageId,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/lifecycle_histories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "lifecycle_history",
+      "path": "/api/v5/objects/lifecycle-histories/{{ config.id }}",
+      "query": {
+        "fields": "id,prospectId,lifecycleStageId,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/lifecycle_history.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "account",
+      "path": "/api/v5/objects/account",
+      "query": {
+        "fields": "id,company,level,website,pluginCampaignId,addressOne,addressTwo,city,state,zip,territory,country,phone,fax,adminId,createdAt,updatedAt,maximumDailyApiCalls,apiCallsUsed,createdById,updatedById"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/account.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "bulk_actions",
+      "path": "/api/v5/bulk-actions",
+      "query": {
+        "limit": "200",
+        "fields": "id,object,bulkAction,status,origin,count,percentComplete,createdAt,updatedAt,createdById,updatedById,errorCount,errorsRef,fileName,processedCount"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/bulk_actions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bulk_action",
+      "path": "/api/v5/bulk-actions/{{ config.id }}",
+      "query": {
+        "fields": "id,object,bulkAction,status,origin,count,percentComplete,createdAt,updatedAt,createdById,updatedById,errorCount,errorsRef,fileName,processedCount"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/bulk_action.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "imports",
+      "path": "/api/v5/imports",
+      "query": {
+        "limit": "200",
+        "fields": "id,operation,object,status,isExpired,batchesRef,createdAt,updatedAt,createdById,updatedById,createdCount,updatedCount,errorCount,errorRef"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/imports.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "import_job",
+      "path": "/api/v5/imports/{{ config.id }}",
+      "query": {
+        "fields": "id,operation,object,status,isExpired,batchesRef,createdAt,updatedAt,createdById,updatedById,createdCount,updatedCount,errorCount,errorRef"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/import_job.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "external_activities",
+      "path": "/api/v5/external-activities",
+      "query": {
+        "limit": "200",
+        "fields": "id,extension,type,email,value,activityDate,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/external_activities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "external_activity",
+      "path": "/api/v5/external-activities/{{ config.id }}",
+      "query": {
+        "fields": "id,extension,type,email,value,activityDate,createdAt,updatedAt"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/external_activity.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
     }
   ]
 }

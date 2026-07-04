@@ -1,0 +1,18 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "board_member_id": "synthetic-conformance-value",
+    "role": "commenter"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/boards/synthetic-conformance-value/members/synthetic-conformance-value",
+    "body": {
+      "role": "commenter"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

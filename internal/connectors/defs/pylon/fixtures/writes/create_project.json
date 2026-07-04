@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "synthetic-conformance-value",
+    "account_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects",
+    "body": {
+      "name": "synthetic-conformance-value",
+      "account_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

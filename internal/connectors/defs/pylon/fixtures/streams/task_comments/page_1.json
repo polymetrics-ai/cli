@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tasks/synthetic-conformance-value/comments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "created_at": "fixture-task_comments",
+          "updated_at": "fixture-task_comments"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

@@ -3,6 +3,7 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "{{ secrets.api_secret }}", "when": "{{ secrets.api_secret }}" },
       { "mode": "api_key_header", "header": "Authorization", "prefix": "Token token=\"", "value": "{{ secrets.api_key }}\"" }
     ],
     "pagination": {
@@ -37,6 +38,22 @@
         "cursor_field": "created_at"
       },
       "schema": "schemas/responses.json"
+    },
+    {
+      "name": "survey_responses",
+      "path": "/nudges/{{ config.survey_id }}/responses.json",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 500
+      },
+      "incremental": {
+        "cursor_field": "time"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/survey_responses.json"
     }
   ]
 }

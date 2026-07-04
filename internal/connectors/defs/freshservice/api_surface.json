@@ -1,17 +1,3368 @@
 {
   "api": "Freshservice REST API v2",
   "docs": "https://api.freshservice.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (tickets, agents, requesters, assets, problems); Freshservice's write endpoints and other resources (changes, releases, solutions) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from 478 distinct method/path blocks in the official Freshservice API docs. JSON GET list/detail endpoints are streams; dialect-expressible mutations are write actions; export/download helpers are explicitly excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/tickets", "covered_by": { "stream": "tickets" } },
-    { "method": "GET", "path": "/api/v2/agents", "covered_by": { "stream": "agents" } },
-    { "method": "GET", "path": "/api/v2/requesters", "covered_by": { "stream": "requesters" } },
-    { "method": "GET", "path": "/api/v2/assets", "covered_by": { "stream": "assets" } },
-    { "method": "GET", "path": "/api/v2/problems", "covered_by": { "stream": "problems" } },
-    { "method": "POST", "path": "/api/v2/tickets", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/changes", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/releases", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/solutions/categories", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets",
+      "covered_by": {
+        "write": "create_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{id}",
+      "covered_by": {
+        "stream": "view_a_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/filter?query={query}",
+      "covered_by": {
+        "stream": "filter_tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets",
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{id}",
+      "covered_by": {
+        "write": "update_a_ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{id}/move_workspace",
+      "covered_by": {
+        "write": "move_a_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{id}",
+      "covered_by": {
+        "write": "delete_a_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{ticket_id}/attachments/{id}",
+      "covered_by": {
+        "write": "delete_a_ticket_attachment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{id}/restore",
+      "covered_by": {
+        "write": "restore_a_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{parent_id}/create_child_ticket",
+      "covered_by": {
+        "write": "create_child_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ticket_form_fields",
+      "covered_by": {
+        "stream": "view_all_ticket_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{id}/activities",
+      "covered_by": {
+        "stream": "get_ticket_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/time_entries",
+      "covered_by": {
+        "write": "create_ticket_time_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/time_entries/{id}",
+      "covered_by": {
+        "stream": "view_ticket_time_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/time_entries",
+      "covered_by": {
+        "stream": "list_all_ticket_time_entries"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/time_entries/{id}",
+      "covered_by": {
+        "write": "update_ticket_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{ticket_id}/time_entries/{id}",
+      "covered_by": {
+        "write": "delete_ticket_time_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/ticket_fields/sources",
+      "covered_by": {
+        "write": "create_custom_ticket_source"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/service_catalog/items/{display_id}/place_request",
+      "covered_by": {
+        "write": "create_service_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{id}/requested_items",
+      "covered_by": {
+        "stream": "view_req_items_of_sr"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{id}/requested_items/{id}",
+      "covered_by": {
+        "write": "update_req_items_of_sr"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/requested_items",
+      "covered_by": {
+        "write": "add_catalog_item_to_existing_sr"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/approvals",
+      "covered_by": {
+        "write": "create_ticket_approval"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/approvals",
+      "covered_by": {
+        "stream": "list_all_ticket_approvals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/approvals/{id}",
+      "covered_by": {
+        "stream": "view_a_ticket_approval"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/approvals/{id}/remind",
+      "covered_by": {
+        "write": "resend_reminder_ticket_approval"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/approvals/{id}",
+      "covered_by": {
+        "write": "cancel_a_ticket_approval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/approval-groups",
+      "covered_by": {
+        "write": "create_approval_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/approval-groups/{id}",
+      "covered_by": {
+        "write": "update_approval_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/approval-groups",
+      "covered_by": {
+        "stream": "list_all_ticket_approval_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/approval-chain-rule",
+      "covered_by": {
+        "write": "update_service_request_approval_chain_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/promote",
+      "covered_by": {
+        "write": "promote_incident_to_major"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/demote",
+      "covered_by": {
+        "write": "demote_incident_from_major"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{id}/tasks",
+      "covered_by": {
+        "write": "create_ticket_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{id}/tasks",
+      "covered_by": {
+        "stream": "view_all_ticket_tasks"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "update_a_ticket_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "delete_a_ticket_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{id}/csat_response",
+      "covered_by": {
+        "stream": "view_csat_response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{id}/reply",
+      "covered_by": {
+        "write": "create_a_reply"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/notes",
+      "covered_by": {
+        "write": "create_a_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/conversations/{id}",
+      "covered_by": {
+        "write": "update_a_conversations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/conversations/{id}",
+      "covered_by": {
+        "write": "delete_a_conversations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/conversations/{conversation_id}/attachments/{id}",
+      "covered_by": {
+        "write": "delete_a_conversation_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{id}/conversations",
+      "covered_by": {
+        "stream": "list_all_conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/problems",
+      "covered_by": {
+        "write": "create_problem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/problems/{id}",
+      "covered_by": {
+        "stream": "view_a_problem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/problems",
+      "covered_by": {
+        "stream": "problems"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/problems/{id}",
+      "covered_by": {
+        "write": "update_problem_priority"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/problems/{id}/move_workspace",
+      "covered_by": {
+        "write": "move_a_problem"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/problems/{id}",
+      "covered_by": {
+        "write": "delete_a_problem"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/problems/{id}/restore",
+      "covered_by": {
+        "write": "restore_a_problem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/problem_form_fields",
+      "covered_by": {
+        "stream": "view_all_problem_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/problems/{id}/notes",
+      "covered_by": {
+        "write": "create_problem_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/problems/{id}/notes",
+      "covered_by": {
+        "stream": "view_all_problem_notes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/problems/{id}/notes/{id}",
+      "covered_by": {
+        "write": "update_a_problem_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/problems/{id}/notes/{id}",
+      "covered_by": {
+        "write": "delete_a_problem_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/problems/{id}/time_entries",
+      "covered_by": {
+        "write": "create_problem_time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/problems/{id}/time_entries/{id}",
+      "covered_by": {
+        "stream": "view_a_problem_time_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/problems/{id}/time_entries",
+      "covered_by": {
+        "stream": "view_all_problem_time_entries"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/problems/{id}/time_entries/{id}",
+      "covered_by": {
+        "write": "update_problem_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/problems/{id}/time_entries/{id}",
+      "covered_by": {
+        "write": "delete_a_problem_time_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/problems/{id}/tasks",
+      "covered_by": {
+        "write": "create_problem_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/problems/{id}/tasks",
+      "covered_by": {
+        "stream": "view_all_problem_tasks"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/problems/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "update_a_problem_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/problems/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "delete_a_problem_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/changes",
+      "covered_by": {
+        "write": "create_change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{id}",
+      "covered_by": {
+        "stream": "view_a_change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes",
+      "covered_by": {
+        "stream": "view_all_changes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{id}",
+      "covered_by": {
+        "write": "update_change_priority"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/change_form_fields",
+      "covered_by": {
+        "stream": "view_all_change_fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{id}/move_workspace",
+      "covered_by": {
+        "write": "move_a_change"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/changes/{id}",
+      "covered_by": {
+        "write": "delete_a_change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{change_id}/approvals",
+      "covered_by": {
+        "stream": "list_all_change_approvals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{change_id}/approvals/{approval_id}",
+      "covered_by": {
+        "stream": "view_a_change_approval"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{change_id}/approvals/{approval_id}/remind",
+      "covered_by": {
+        "write": "resend_reminder_change_approval"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{change_id}/approvals/{id}",
+      "covered_by": {
+        "write": "cancel_change_approval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/changes/{change_id}/approval-groups",
+      "covered_by": {
+        "write": "create_change_approval_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{change_id}/approval-groups/{id}",
+      "covered_by": {
+        "write": "update_change_approval_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{change_id}/approval-groups",
+      "covered_by": {
+        "stream": "list_all_change_approval_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{change_id}/approval-chain-rule",
+      "covered_by": {
+        "write": "update_approval_chain_rule_change"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/changes/{id}/notes",
+      "covered_by": {
+        "write": "create_change_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{id}/notes",
+      "covered_by": {
+        "stream": "view_all_change_notes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{id}/notes/{id}",
+      "covered_by": {
+        "write": "update_a_change_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/changes/{id}/notes/{id}",
+      "covered_by": {
+        "write": "delete_a_change_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/changes/{id}/time_entries",
+      "covered_by": {
+        "write": "create_time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{id}/time_entries/{id}",
+      "covered_by": {
+        "stream": "view_a_time_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{id}/time_entries",
+      "covered_by": {
+        "stream": "view_all_time_entries"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{id}/time_entries/{id}",
+      "covered_by": {
+        "write": "update_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/changes/{id}/time_entries/{id}",
+      "covered_by": {
+        "write": "delete_a_time_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/changes/{id}/tasks",
+      "covered_by": {
+        "write": "create_change_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{id}/tasks",
+      "covered_by": {
+        "stream": "view_all_change_tasks"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "update_a_change_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/changes/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "delete_a_change_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/releases",
+      "covered_by": {
+        "write": "create_release"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/releases/{id}",
+      "covered_by": {
+        "stream": "view_a_release"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/releases/{id}",
+      "covered_by": {
+        "write": "update_release_priority"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/releases/{id}/move_workspace",
+      "covered_by": {
+        "write": "move_a_release"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/releases/{id}",
+      "covered_by": {
+        "write": "delete_a_release"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/releases?filter_name={filter_name}",
+      "covered_by": {
+        "stream": "filter_releases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/releases",
+      "covered_by": {
+        "stream": "view_all_release"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/releases/{id}/restore",
+      "covered_by": {
+        "write": "restore_a_release"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/release_form_fields",
+      "covered_by": {
+        "stream": "view_all_release_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/releases/{id}/notes",
+      "covered_by": {
+        "write": "create_release_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/releases/{id}/notes",
+      "covered_by": {
+        "stream": "view_all_release_notes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/releases/{id}/notes/{id}",
+      "covered_by": {
+        "write": "update_a_release_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/releases/{id}/notes/{id}",
+      "covered_by": {
+        "write": "delete_a_release_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/releases/{id}/time_entries",
+      "covered_by": {
+        "write": "create_release_time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/releases/{id}/time_entries/{id}",
+      "covered_by": {
+        "stream": "view_a_release_time_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/releases/{id}/time_entries",
+      "covered_by": {
+        "stream": "view_all_release_time_entries"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/releases/{id}/time_entries/{id}",
+      "covered_by": {
+        "write": "update_release_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/releases/{id}/time_entries/{id}",
+      "covered_by": {
+        "write": "delete_a_release_time_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/releases/{id}/tasks",
+      "covered_by": {
+        "write": "create_release_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/releases/{id}/tasks",
+      "covered_by": {
+        "stream": "view_all_release_tasks"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/releases/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "update_a_release_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/releases/{id}/tasks/{id}",
+      "covered_by": {
+        "write": "delete_a_release_task"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/cabs/{id}",
+      "covered_by": {
+        "write": "update_a_cab"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/cabs/{id}",
+      "covered_by": {
+        "write": "delete_a_cab"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/approvals?parent={module}",
+      "covered_by": {
+        "stream": "list_all_approvals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/requesters",
+      "covered_by": {
+        "write": "create_a_requester"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/requesters/{id}",
+      "covered_by": {
+        "stream": "view_a_requester"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/requesters",
+      "covered_by": {
+        "stream": "requesters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/requesters?query={query}",
+      "covered_by": {
+        "stream": "requesters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/requester_fields",
+      "covered_by": {
+        "stream": "list_all_requester_fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/requesters/{id}",
+      "covered_by": {
+        "write": "update_a_requester"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/requesters/{id}",
+      "covered_by": {
+        "write": "deactivate_a_requester"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/requesters/{id}/forget",
+      "covered_by": {
+        "write": "forget_a_requester"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/requesters/{id}/convert_to_agent",
+      "covered_by": {
+        "write": "convert_to_agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/requesters/{id}/merge?secondary_requesters=111,222,333",
+      "covered_by": {
+        "write": "merge_requesters"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/agents",
+      "covered_by": {
+        "write": "create_an_agent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/agents/{id}",
+      "covered_by": {
+        "stream": "view_an_agent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/agents?query={query}",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/agents/{id}",
+      "covered_by": {
+        "write": "update_an_agent"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/agents/{id}",
+      "covered_by": {
+        "write": "delete_an_agent"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/agents/{id}/forget",
+      "covered_by": {
+        "write": "forget_an_agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/agents/{id}/reactivate",
+      "covered_by": {
+        "write": "reactivate_an_agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/agents/{id}/convert_to_requester",
+      "covered_by": {
+        "write": "convert_an_agent_to_requester"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/agent_fields",
+      "covered_by": {
+        "stream": "list_all_agent_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles/{id}",
+      "covered_by": {
+        "stream": "view_a_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles",
+      "covered_by": {
+        "stream": "view_all_role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/groups",
+      "covered_by": {
+        "write": "create_a_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/groups/{id}",
+      "covered_by": {
+        "stream": "view_a_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/groups",
+      "covered_by": {
+        "stream": "view_all_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/groups/{id}",
+      "covered_by": {
+        "write": "update_a_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/groups/{id}",
+      "covered_by": {
+        "write": "delete_a_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/requester_groups",
+      "covered_by": {
+        "write": "create_a_requester_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/requester_groups/{id}",
+      "covered_by": {
+        "stream": "view_a_requester_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/requester_groups",
+      "covered_by": {
+        "stream": "view_all_requester_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/requester_groups/{id}",
+      "covered_by": {
+        "write": "update_a_requester_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/requester_groups/{id}",
+      "covered_by": {
+        "write": "delete_a_requester_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/requester_groups/{id}/members/{requester_id}",
+      "covered_by": {
+        "write": "add_member_to_requester_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/requester_groups/{id}/members/{requester_id}",
+      "covered_by": {
+        "write": "delete_member_from_requester_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/requester_groups/{id}/members",
+      "covered_by": {
+        "stream": "list_members_of_requester_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/locations",
+      "covered_by": {
+        "write": "create_a_location"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/locations/{id}",
+      "covered_by": {
+        "stream": "view_a_location"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/locations",
+      "covered_by": {
+        "stream": "list_all_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/locations?query={query}",
+      "covered_by": {
+        "stream": "filter_locations"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/locations/{id}",
+      "covered_by": {
+        "write": "update_a_location"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/locations/{id}",
+      "covered_by": {
+        "write": "delete_a_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/products",
+      "covered_by": {
+        "write": "create_a_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products/{id}",
+      "covered_by": {
+        "stream": "view_a_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products",
+      "covered_by": {
+        "stream": "view_all_products"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/products/{id}",
+      "covered_by": {
+        "write": "update_a_product"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/products/{id}",
+      "covered_by": {
+        "write": "delete_a_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/vendors",
+      "covered_by": {
+        "write": "create_a_vendor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/vendors/{id}",
+      "covered_by": {
+        "stream": "view_a_vendor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/vendors",
+      "covered_by": {
+        "stream": "view_all_vendors"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/vendors/{id}",
+      "covered_by": {
+        "write": "update_a_vendor"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/vendors/{id}",
+      "covered_by": {
+        "write": "delete_a_vendor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ams/alerts/{id}",
+      "covered_by": {
+        "stream": "view_alert"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ams/alerts?query={query}&order_by={order_by_field}&order_type={desc}&page={page}&per_page={per_page}",
+      "covered_by": {
+        "stream": "filter_alerts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ams/alerts/{id}/logs?start_token={start_token}",
+      "covered_by": {
+        "stream": "view_alert_logs"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/ams/alerts/{id}/acknowledge",
+      "covered_by": {
+        "write": "acknowledge_alert"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/ams/alerts/{id}/resolve",
+      "covered_by": {
+        "write": "resolve_alert"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/ams/alerts/{id}/suppress",
+      "covered_by": {
+        "write": "suppress_alert"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/ams/alerts/{id}/unsuppress",
+      "covered_by": {
+        "write": "unsuppress_alert"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/ams/alerts/{id}",
+      "covered_by": {
+        "write": "delete_alert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/ams/alerts/{id}/notes",
+      "covered_by": {
+        "write": "create_alert_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ams/alerts/{id}/notes?page={page}&per_page={per_page}",
+      "covered_by": {
+        "stream": "view_alert_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ams/alerts/{id}/notes/{note_id}",
+      "covered_by": {
+        "stream": "view_alert_note"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/ams/alerts/{id}/notes/{note_id}",
+      "covered_by": {
+        "write": "update_alert_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/ams/alerts/{id}/notes/{note_id}",
+      "covered_by": {
+        "write": "delete_alert_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/assets",
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/assets",
+      "covered_by": {
+        "write": "create_an_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/assets/{display_id}",
+      "covered_by": {
+        "stream": "view_an_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/assets?search={query}",
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/assets?filter={query}",
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/assets/{display_id}",
+      "covered_by": {
+        "write": "update_an_asset"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/assets/{display_id}",
+      "covered_by": {
+        "write": "delete_an_asset"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/assets/{display_id}/restore",
+      "covered_by": {
+        "write": "restore_an_asset"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/assets/{display_id}/delete_forever",
+      "covered_by": {
+        "write": "delete_forever_an_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/assets/{display_id}/components",
+      "covered_by": {
+        "stream": "list_all_asset_components"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/assets/{display_id}/components",
+      "covered_by": {
+        "write": "create_a_component"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/assets/{display_id}/components/{component_id}",
+      "covered_by": {
+        "write": "update_a_component"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/assets/{display_id}/requests",
+      "covered_by": {
+        "stream": "list_all_asset_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/assets/{display_id}/contracts",
+      "covered_by": {
+        "stream": "list_contracts_of_an_asset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/relationships/bulk-create",
+      "covered_by": {
+        "write": "create_relationships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/relationships/{id}",
+      "covered_by": {
+        "stream": "view_a_relationship"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/relationships",
+      "covered_by": {
+        "stream": "list_relationships"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/relationships?ids={ids}",
+      "covered_by": {
+        "write": "delete_relationships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/relationship_types",
+      "covered_by": {
+        "stream": "list_relationship_types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/purchase_orders",
+      "covered_by": {
+        "write": "create_a_new_purchase_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/purchase_orders",
+      "covered_by": {
+        "stream": "list_all_purchase_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/purchase_orders/{purchase_order_id}",
+      "covered_by": {
+        "stream": "view_a_purchase_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/purchase_orders/{purchase_order_id}",
+      "covered_by": {
+        "write": "update_a_purchase_order"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/purchase_orders/{purchase_order_id}",
+      "covered_by": {
+        "write": "delete_a_purchase_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/asset_types",
+      "covered_by": {
+        "write": "create_an_asset_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/asset_types/{id}",
+      "covered_by": {
+        "stream": "view_an_asset_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/asset_types",
+      "covered_by": {
+        "stream": "list_all_asset_types"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/asset_types/{id}",
+      "covered_by": {
+        "write": "update_an_asset_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/asset_types/{id}",
+      "covered_by": {
+        "write": "delete_an_asset_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/asset_types/{id}/fields",
+      "covered_by": {
+        "stream": "list_asset_type_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/applications",
+      "covered_by": {
+        "write": "create_a_software"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/applications/{id}",
+      "covered_by": {
+        "write": "update_a_software"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/applications/{id}",
+      "covered_by": {
+        "write": "delete_a_software"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/applications",
+      "covered_by": {
+        "write": "delete_multiple_software"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/applications/{id}/users",
+      "covered_by": {
+        "stream": "list_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/applications/{id}/installations",
+      "covered_by": {
+        "stream": "list_installations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contract_types",
+      "covered_by": {
+        "stream": "list_all_contract_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contract_types/{contract_type_id}/fields",
+      "covered_by": {
+        "stream": "list_all_contract_type_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contracts/{contract_id}",
+      "covered_by": {
+        "stream": "view_a_contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contracts",
+      "covered_by": {
+        "stream": "list_all_contracts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/contracts",
+      "covered_by": {
+        "write": "create_a_contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/contracts/{contract_id}",
+      "covered_by": {
+        "write": "update_a_contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/contracts/{contract_id}?operation=submit-for-approval",
+      "covered_by": {
+        "write": "submit_contract_for_approval"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/contracts/{contract_id}?operation=approve",
+      "covered_by": {
+        "write": "approve_contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/contracts/{contract_id}?operation=reject",
+      "covered_by": {
+        "write": "reject_contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contracts/{contract_id}/associated-assets",
+      "covered_by": {
+        "stream": "list_all_associated_assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contracts/{contract_id}/attachments",
+      "covered_by": {
+        "stream": "list_all_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/departments",
+      "covered_by": {
+        "write": "create_a_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/departments/{id}",
+      "covered_by": {
+        "stream": "view_a_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/departments",
+      "covered_by": {
+        "stream": "list_all_departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/departments?query={query}",
+      "covered_by": {
+        "stream": "filter_departments"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/departments/{id}",
+      "covered_by": {
+        "write": "update_a_department"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/departments/{id}",
+      "covered_by": {
+        "write": "delete_a_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/department_fields",
+      "covered_by": {
+        "stream": "list_all_department_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/business_hours/{id}",
+      "covered_by": {
+        "stream": "view_a_business_hour"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/business_hours",
+      "covered_by": {
+        "stream": "list_all_business_hours"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects",
+      "covered_by": {
+        "write": "create_a_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{id}",
+      "covered_by": {
+        "write": "update_a_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{id}",
+      "covered_by": {
+        "stream": "view_a_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects",
+      "covered_by": {
+        "stream": "view_all_projects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{id}",
+      "covered_by": {
+        "write": "delete_a_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{id}/archive",
+      "covered_by": {
+        "write": "archive_a_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{id}/restore",
+      "covered_by": {
+        "write": "restore_a_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/projects/{id}/tasks",
+      "covered_by": {
+        "write": "create_a_project_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/projects/{project_id}/task/{id}",
+      "covered_by": {
+        "write": "update_a_project_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{project_id}/tasks/{id}",
+      "covered_by": {
+        "stream": "view_a_project_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/projects/{id}/tasks",
+      "covered_by": {
+        "stream": "view_all_project_tasks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/projects/{project_id}/tasks/{id}",
+      "covered_by": {
+        "write": "delete_a_project_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects",
+      "covered_by": {
+        "write": "create_a_project_newgen"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/pm/projects/{id}",
+      "covered_by": {
+        "write": "update_a_project_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{id}",
+      "covered_by": {
+        "stream": "view_a_project_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects",
+      "covered_by": {
+        "stream": "view_all_projects_newgen"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{id}",
+      "covered_by": {
+        "write": "delete_a_project_newgen"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects/{id}/archive",
+      "covered_by": {
+        "write": "archive_a_project_newgen"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects/{id}/restore",
+      "covered_by": {
+        "write": "restore_a_project_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/project-fields",
+      "covered_by": {
+        "stream": "view_project_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/project_templates",
+      "covered_by": {
+        "stream": "view_project_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects/{id}/members",
+      "covered_by": {
+        "write": "add_project_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects/{project_id}/{module_name}",
+      "covered_by": {
+        "write": "create_project_associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/{module_name}",
+      "covered_by": {
+        "stream": "view_project_associations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{project_id}/{module_name}/{id}",
+      "covered_by": {
+        "write": "delete_project_association"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{project_id}/attachments/{id}",
+      "covered_by": {
+        "write": "delete_attachment_project_newgen"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects/{id}/tasks",
+      "covered_by": {
+        "write": "create_a_project_task_newgen"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{id}",
+      "covered_by": {
+        "write": "update_a_project_task_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{id}",
+      "covered_by": {
+        "stream": "view_a_project_task_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{id}/tasks",
+      "covered_by": {
+        "stream": "view_all_project_tasks_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{id}/tasks/filter?query={query}",
+      "covered_by": {
+        "stream": "filter_all_project_tasks_newgen"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{id}",
+      "covered_by": {
+        "write": "delete_a_project_task_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/task-types/{type_id}/fields",
+      "covered_by": {
+        "stream": "view_project_task_type_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/task-types",
+      "covered_by": {
+        "stream": "view_project_task_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/task-priorities",
+      "covered_by": {
+        "stream": "view_project_task_priorities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/task-statuses",
+      "covered_by": {
+        "stream": "view_project_task_statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/versions",
+      "covered_by": {
+        "stream": "view_project_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/sprints",
+      "covered_by": {
+        "stream": "view_project_sprints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/memberships",
+      "covered_by": {
+        "stream": "view_project_memberships"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{task_id}/{module_name}",
+      "covered_by": {
+        "write": "create_project_task_associations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{task_id}/{module_name}",
+      "covered_by": {
+        "stream": "view_project_task_associations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{task_id}/{module_name}/{id}",
+      "covered_by": {
+        "write": "delete_project_task_association"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{id}/notes",
+      "covered_by": {
+        "write": "create_note_task_newgen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{id}/notes",
+      "covered_by": {
+        "stream": "view_notes_task_newgen"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{task_id}/notes/{id}",
+      "covered_by": {
+        "write": "update_note_task_newgen"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{task_id}/notes/{id}",
+      "covered_by": {
+        "write": "delete_note_task_newgen"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{task_id}/notes/{note_id}/attachments/{id}",
+      "covered_by": {
+        "write": "delete_attachment_note_task_newgen"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/pm/projects/{project_id}/tasks/{task_id}/attachments/{id}",
+      "covered_by": {
+        "write": "delete_attachment_task_newgen"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/solutions/categories",
+      "covered_by": {
+        "write": "create_solution_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/categories/{id}",
+      "covered_by": {
+        "write": "update_solution_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/categories/{id}",
+      "covered_by": {
+        "stream": "view_solution_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/categories",
+      "covered_by": {
+        "stream": "view_all_solution_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/solutions/categories/{id}",
+      "covered_by": {
+        "write": "delete_solution_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/categories/{category_id}/restore",
+      "covered_by": {
+        "write": "restore_solution_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/solutions/categories/{category_id}/delete_forever",
+      "covered_by": {
+        "write": "delete_forever_solution_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/solutions/folders",
+      "covered_by": {
+        "write": "create_solution_folder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/folders/{id}",
+      "covered_by": {
+        "write": "update_solution_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/folders/{id}",
+      "covered_by": {
+        "stream": "view_solution_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/folders/{id}/sub-folders",
+      "covered_by": {
+        "stream": "view_solution_sub_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/folders",
+      "covered_by": {
+        "stream": "view_all_solution_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/solutions/folders/{id}",
+      "covered_by": {
+        "write": "delete_solution_folder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/folders/{folder_id}/restore",
+      "covered_by": {
+        "write": "restore_solution_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/solutions/folders/{folder_id}/delete_forever",
+      "covered_by": {
+        "write": "delete_forever_solution_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/solutions/articles",
+      "covered_by": {
+        "write": "create_solution_article"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/articles/{id}/send_for_approval",
+      "covered_by": {
+        "write": "send_article_to_approval"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/articles/{id}",
+      "covered_by": {
+        "write": "publish_solution_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/articles/{id}",
+      "covered_by": {
+        "stream": "view_solution_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/articles",
+      "covered_by": {
+        "stream": "view_all_solution_article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/solutions/articles/{id}",
+      "covered_by": {
+        "write": "delete_solution_article"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/articles/{article_id}/restore",
+      "covered_by": {
+        "write": "restore_solution_article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/solutions/articles/{article_id}/delete_forever",
+      "covered_by": {
+        "write": "delete_forever_solution_article"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/solutions/articles/bulk_restore",
+      "covered_by": {
+        "write": "bulk_restore_solution_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/service_catalog/items/{display_id}",
+      "covered_by": {
+        "stream": "view_service_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/service_catalog/items",
+      "covered_by": {
+        "stream": "list_all_service_items"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/service-catalog/items/{service_item_id}",
+      "covered_by": {
+        "write": "update_service_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/service-catalog/items/{service_item_id}",
+      "covered_by": {
+        "write": "delete_a_service_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/service_catalog/categories",
+      "covered_by": {
+        "stream": "list_all_service_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/service-catalog/shared-fields",
+      "covered_by": {
+        "stream": "shared_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/service-catalog/shared-fields",
+      "covered_by": {
+        "write": "create_shared_fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/service-catalog/shared-fields/{id}",
+      "covered_by": {
+        "write": "update_shared_fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/service-catalog/shared-fields/{id}",
+      "covered_by": {
+        "write": "delete_shared_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/service-catalog/shared-fields/{id}",
+      "covered_by": {
+        "stream": "retrieve_shared_fields_data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/service-catalog/shared-fields/{id}/archive",
+      "covered_by": {
+        "write": "archive_shared_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/service-catalog/shared-fields/{id}/unarchive",
+      "covered_by": {
+        "write": "unarchive_shared_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/announcements",
+      "covered_by": {
+        "write": "create_an_announcement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/announcements/{id}",
+      "covered_by": {
+        "stream": "view_an_announcement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/announcements",
+      "covered_by": {
+        "stream": "list_all_announcements"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/announcements/{id}",
+      "covered_by": {
+        "write": "edit_an_announcement"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/announcements/{id}",
+      "covered_by": {
+        "write": "delete_an_announcement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/onboarding_requests/form",
+      "covered_by": {
+        "stream": "onboarding_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/onboarding_requests",
+      "covered_by": {
+        "write": "create_onboarding_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/onboarding_requests/{id}",
+      "covered_by": {
+        "stream": "view_onboarding_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/onboarding_requests",
+      "covered_by": {
+        "stream": "list_all_onboarding_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/onboarding_requests/{id}/tickets",
+      "covered_by": {
+        "stream": "view_onboarding_tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/offboarding_requests/form",
+      "covered_by": {
+        "stream": "offboarding_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/offboarding_requests",
+      "covered_by": {
+        "write": "create_offboarding_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/offboarding_requests/{id}",
+      "covered_by": {
+        "stream": "view_offboarding_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/offboarding_requests",
+      "covered_by": {
+        "stream": "list_all_offboarding_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/offboarding_requests/{id}/tickets",
+      "covered_by": {
+        "stream": "view_offboarding_tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/journeys/configs",
+      "covered_by": {
+        "stream": "journey_configs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/journeys/configs/{id}/data-fields",
+      "covered_by": {
+        "stream": "journey_initiator_config_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/journeys/requests",
+      "covered_by": {
+        "write": "create_journey_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/journeys/requests/{id}",
+      "covered_by": {
+        "stream": "view_journey_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/journeys/requests/view",
+      "covered_by": {
+        "write": "filter_journey_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/journeys/requests",
+      "covered_by": {
+        "stream": "view_all_journey_requests"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/journeys/requests/{id}",
+      "covered_by": {
+        "write": "update_journey_request"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/journeys/requests/{id}/cancel",
+      "covered_by": {
+        "write": "cancel_journey_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/journeys/requests/{id}",
+      "covered_by": {
+        "write": "delete_journey_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/journeys/requests/{id}/activities",
+      "covered_by": {
+        "stream": "view_journey_request_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules",
+      "covered_by": {
+        "write": "create_schedule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}",
+      "covered_by": {
+        "write": "edit_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules?page={page}&per_page={per_page}",
+      "covered_by": {
+        "stream": "view_all_schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules?page={page}&per_page={per_page}&query={schedule_name}",
+      "covered_by": {
+        "stream": "filter_schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}",
+      "covered_by": {
+        "stream": "view_a_schedule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}",
+      "covered_by": {
+        "write": "delete_schedule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/shifts/{shift_id}",
+      "covered_by": {
+        "write": "edit_shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/shifts",
+      "covered_by": {
+        "stream": "view_all_shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/shifts/{shift_id}",
+      "covered_by": {
+        "stream": "view_a_shift"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/shifts/{shift_id}",
+      "covered_by": {
+        "write": "delete_shift"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/shifts/{shift_id}/rosters/override",
+      "covered_by": {
+        "write": "override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events?start_time={date}&end_time={date}&user_id={user_id}",
+      "covered_by": {
+        "stream": "view_calendar_events_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events?start_time={date}&end_time={date}&schedule_id={schedule_id}",
+      "covered_by": {
+        "stream": "view_calendar_events_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events?start_time={date}&end_time={date}&shift_id={shift_id}&schedule_id={schedule_id}",
+      "covered_by": {
+        "stream": "view_calendar_events_shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events?start_time={date}&end_time={date}&shift_id={shift_id}&schedule_id={schedule_id}&user_id={user_id}",
+      "covered_by": {
+        "stream": "view_calendar_events_shift_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events?start_time={date}&end_time={date}&schedule_id={schedule_id}&user_id={user_id}",
+      "covered_by": {
+        "stream": "view_calendar_events_schedule_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?user_id={user_id}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events for a user is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?schedule_id={schedule_id}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events for a schedule is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?shift_id={shift_id}&schedule_id={schedule_id}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events for a shift is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?shift_id={shift_id}&schedule_id={schedule_id}&user_id={user_id}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events of a shift for a user is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?schedule_id={schedule_id}&user_id={user_id}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events of a schedule for a user is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?user_id={user_id}&start_time={date}&end_time={date}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events as an .ical file for a user is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?schedule_id={schedule_id}&start_time={date}&end_time={date}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events as an .ical file for a schedule is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?shift_id={shift_id}&schedule_id={schedule_id}&start_time={date}&end_time={date}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events as an .ical file for a shift is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?shift_id={shift_id}&schedule_id={schedule_id}&user_id={user_id}&start_time={date}&end_time={date}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events as an .ical file of a shift for a user is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/export?schedule_id={schedule_id}&user_id={user_id}&start_time={date}&end_time={date}&export_type={export_type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export oncall calendar events as an .ical file of a schedule for a user is an export/download helper, not a syncable JSON list/detail endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/shift-events/current?schedule_id={schedule_id}",
+      "covered_by": {
+        "stream": "view_who_is_oncall"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/escalation-policies",
+      "covered_by": {
+        "write": "create_ep"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/escalation-policies",
+      "covered_by": {
+        "stream": "view_all_ep"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/escalation-policies/{ep_id}",
+      "covered_by": {
+        "stream": "view_a_ep"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/escalation-policies/{ep_id}",
+      "covered_by": {
+        "write": "delete_ep"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/oncall/ws/{workspace_id}/schedules/{schedule_id}/escalation-policies/reorder",
+      "covered_by": {
+        "write": "reorder_ep"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/objects",
+      "covered_by": {
+        "stream": "list_all_custom_objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/objects/{id}",
+      "covered_by": {
+        "stream": "show_custom_object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/objects/{id}/records",
+      "covered_by": {
+        "write": "create_custom_object_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/objects/{id}/records",
+      "covered_by": {
+        "stream": "list_all_custom_object_records"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/objects/{id}/records/{record_id}",
+      "covered_by": {
+        "write": "put_custom_object_record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/objects/{id}/records/{record_id}",
+      "covered_by": {
+        "write": "delete_custom_object_record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/post-incident-reports/templates",
+      "covered_by": {
+        "write": "create_new_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/post-incident-reports/templates/{id}",
+      "covered_by": {
+        "stream": "get_pir_templates_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/post-incident-reports/templates",
+      "covered_by": {
+        "stream": "get_all_pir_templates"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/post-incident-reports/templates/{id}",
+      "covered_by": {
+        "write": "enable_pir_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/post-incident-reports/templates/{id}/mark-as-primary",
+      "covered_by": {
+        "write": "mark_primary_pir_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/post-incident-reports/templates/{id}/export",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Export the post-incident report template starts an export/download operation rather than a record mutation suitable for reverse ETL."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/post-incident-reports/templates/{id}",
+      "covered_by": {
+        "write": "delete_pir_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sla_policies",
+      "covered_by": {
+        "stream": "list_all_sla"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/canned_response_folders",
+      "covered_by": {
+        "stream": "list_all_canned_response_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/canned_response_folders/{folder_id}",
+      "covered_by": {
+        "stream": "show_canned_response_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/canned_response_folders/{folder_id}/canned_responses",
+      "covered_by": {
+        "stream": "list_all_canned_response_in_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/canned_responses",
+      "covered_by": {
+        "stream": "list_all_canned_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/canned_responses/{id}",
+      "covered_by": {
+        "stream": "show_canned_response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/audit_log/export",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Audit Log Export starts an export/download operation rather than a record mutation suitable for reverse ETL."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/attachments/{id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Download Attachment returns attachment bytes rather than a JSON list/detail payload."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itil_attachments/{id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Download Purchase order and Contracts Attachment returns attachment bytes rather than a JSON list/detail payload."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/communications",
+      "covered_by": {
+        "write": "trigger_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/communications/{communication_id}",
+      "covered_by": {
+        "stream": "retrieve_emails_with_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/communications",
+      "covered_by": {
+        "stream": "retrieve_emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/incidents",
+      "covered_by": {
+        "stream": "view_incidents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents/{id}",
+      "covered_by": {
+        "stream": "view_incident"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents",
+      "covered_by": {
+        "write": "create_incident"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents/{id}",
+      "covered_by": {
+        "write": "update_incident"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents/{id}",
+      "covered_by": {
+        "write": "delete_incident"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents/{incident_id}/updates",
+      "covered_by": {
+        "stream": "view_incident_updates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents/{incident_id}/updates",
+      "covered_by": {
+        "write": "create_incident_update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents/{incident_id}/updates/{id}",
+      "covered_by": {
+        "write": "update_incident_update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/incidents/{incident_id}/updates/{id}",
+      "covered_by": {
+        "write": "delete_incident_update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/incidents/statuses",
+      "covered_by": {
+        "stream": "list_all_incident_statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/maintenances",
+      "covered_by": {
+        "stream": "view_maintenances"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances",
+      "covered_by": {
+        "write": "create_maintenance_from_change"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances/{id}",
+      "covered_by": {
+        "write": "update_maintenance_from_change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances/{id}",
+      "covered_by": {
+        "stream": "view_maintenance_from_change"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances/{id}",
+      "covered_by": {
+        "write": "delete_maintenance_from_change"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances",
+      "covered_by": {
+        "write": "create_maintenance_from_maintenance_window"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances/{id}",
+      "covered_by": {
+        "write": "update_maintenance_from_maintenance_window"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances/{id}",
+      "covered_by": {
+        "stream": "view_maintenance_from_maintenance_window"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances/{id}",
+      "covered_by": {
+        "write": "delete_maintenance_from_maintenance_window"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/maintenances/statuses",
+      "covered_by": {
+        "stream": "list_all_maintenance_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances/{maintenance_id}/updates",
+      "covered_by": {
+        "write": "create_maintenance_update_from_change"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances/{maintenance_id}/updates/{id}",
+      "covered_by": {
+        "write": "update_maintenance_update_from_change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances/{id}/updates",
+      "covered_by": {
+        "stream": "view_maintenance_update_from_change"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/maintenances/{id}/updates/{id}",
+      "covered_by": {
+        "write": "delete_maintenance_update_from_change"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances/{maintenance_id}/updates",
+      "covered_by": {
+        "write": "create_maintenance_update_from_maintenance_window"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances/{maintenance_id}/updates/{id}",
+      "covered_by": {
+        "write": "update_maintenance_update_from_maintenance_window"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances/{id}/updates",
+      "covered_by": {
+        "stream": "view_maintenance_update_from_maintenance_window"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/maintenances/{id}/updates/{id}",
+      "covered_by": {
+        "write": "delete_maintenance_update_from_maintenance_window"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages?workspace_id={workspace_id}",
+      "covered_by": {
+        "stream": "view_status_pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets/{ticket_id}/status/pages/{status_page_id}/publishable-services",
+      "covered_by": {
+        "stream": "identify_publishable_services_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/changes/{change_id}/status/pages/{status_page_id}/publishable-services",
+      "covered_by": {
+        "stream": "identify_publishable_services_change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/maintenance-windows/{maintenance_window_id}/status/pages/{status_page_id}/publishable-services",
+      "covered_by": {
+        "stream": "identify_publishable_services_maintenance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/service-components/{id}",
+      "covered_by": {
+        "stream": "view_service_component"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/service-components",
+      "covered_by": {
+        "stream": "view_service_components"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/subscribers",
+      "covered_by": {
+        "stream": "list_all_subscribers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status/pages/{status_page_id}/subscribers/{subscriber_id}",
+      "covered_by": {
+        "stream": "view_a_subscriber"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/status/pages/{status_page_id}/subscribers",
+      "covered_by": {
+        "write": "create_subscriber"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/status/pages/{status_page_id}/subscribers/{subscriber_id}",
+      "covered_by": {
+        "write": "update_subscriber"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/status/pages/{status_page_id}/subscribers/{subscriber_id}",
+      "covered_by": {
+        "write": "delete_subscriber"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/users/{user_id}/delegation",
+      "covered_by": {
+        "write": "create_delegation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/users/{user_id}/delegation",
+      "covered_by": {
+        "write": "update_delegation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{user_id}/delegation",
+      "covered_by": {
+        "stream": "view_delegation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/users/{user_id}/delegation",
+      "covered_by": {
+        "write": "delete_delegation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/itam/physical-subtypes",
+      "covered_by": {
+        "write": "create_physical_subtype"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/physical-subtypes",
+      "covered_by": {
+        "stream": "view_all_physical_subtypes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/physical-subtypes/{id}",
+      "covered_by": {
+        "stream": "view_a_physical_subtype"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/itam/physical-subtypes/{id}",
+      "covered_by": {
+        "write": "delete_physical_subtype"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/itam/devices",
+      "covered_by": {
+        "write": "create_device"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/devices",
+      "covered_by": {
+        "stream": "view_all_devices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/devices/{id}",
+      "covered_by": {
+        "stream": "view_a_device"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/devices/{id}",
+      "covered_by": {
+        "write": "update_device"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/custom_fields/devices",
+      "covered_by": {
+        "write": "update_custom_field_of_devices"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/itam/devices/{id}",
+      "covered_by": {
+        "write": "delete_device"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/itam/assets",
+      "covered_by": {
+        "write": "create_an_asset_for_freshservice_itam"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/assets",
+      "covered_by": {
+        "stream": "view_all_assets_for_freshservice_itam"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/assets/{id}",
+      "covered_by": {
+        "stream": "view_an_asset_for_freshservice_itam"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/assets",
+      "covered_by": {
+        "write": "update_an_asset_for_freshservice_itam"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/assets/{id}",
+      "covered_by": {
+        "write": "update_an_asset_by_id_for_freshservice_itam"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/itam/assets/{id}",
+      "covered_by": {
+        "write": "delete_an_asset_for_freshservice_itam"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/custom_fields/assets",
+      "covered_by": {
+        "write": "create_or_update_custom_field_of_assets_for_freshservice_itam"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/itam/resources",
+      "covered_by": {
+        "write": "update_cloud_resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/resources",
+      "covered_by": {
+        "stream": "view_all_cloud_resources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/resources/{id}",
+      "covered_by": {
+        "stream": "view_a_cloud_resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/itam/resources/{id}",
+      "covered_by": {
+        "write": "delete_cloud_resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/custom_fields/resources",
+      "covered_by": {
+        "write": "update_custom_field_of_resources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/resource_relationships",
+      "covered_by": {
+        "stream": "view_all_cloud_resource_relationships"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/itam/resource_relationships/{id}",
+      "covered_by": {
+        "write": "delete_cloud_resource_relationship"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/itam/cloud_infrastructures",
+      "covered_by": {
+        "write": "update_cloud_infrastructure"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/cloud_infrastructures",
+      "covered_by": {
+        "stream": "view_all_cloud_infrastructure"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/custom_fields/cloudinfrastructures",
+      "covered_by": {
+        "write": "update_custom_field_of_cloud_infrastructure"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/itam/lifecycle_events",
+      "covered_by": {
+        "write": "update_lifecycle_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/lifecycle_events",
+      "covered_by": {
+        "stream": "view_all_lifecycle_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/itam/lifecycle_events/{id}",
+      "covered_by": {
+        "stream": "view_a_lifecycle_event"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/itam/lifecycle_events/{id}",
+      "covered_by": {
+        "write": "delete_lifecycle_event"
+      }
+    }
   ]
 }

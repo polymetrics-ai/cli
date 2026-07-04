@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/user-roles"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "name": "fixture-user_roles",
+          "slug": "fixture-user_roles"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

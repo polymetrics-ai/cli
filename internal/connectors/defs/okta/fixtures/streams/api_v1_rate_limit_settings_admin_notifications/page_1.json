@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/rate-limit-settings/admin-notifications"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "notificationsEnabled": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "upload_id": "synthetic-conformance-value",
+    "part_ids": [
+      "part_id_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/datasets/uploads/synthetic-conformance-value/complete",
+    "body": {
+      "part_ids": [
+        "part_id_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "job_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/fine_tuning/jobs/synthetic-conformance-value/cancel"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

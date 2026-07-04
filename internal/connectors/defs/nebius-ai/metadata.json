@@ -1,22 +1,25 @@
 {
   "name": "nebius-ai",
   "display_name": "Nebius AI",
-  "description": "Reads Nebius AI Studio models, files, and batch jobs through the OpenAI-compatible Nebius AI Studio REST API.",
+  "description": "Reads and writes Nebius Token Factory OpenAI-compatible API resources, including models, files, fine-tuning, datasets, operations, dedicated endpoints, and inference actions.",
   "integration_type": "api",
-  "docs_url": "https://docs.nebius.com/studio/inference/api-reference",
+  "docs_url": "https://api.tokenfactory.nebius.com/docs",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 20
+    "read_page_size": 20,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Nebius AI Studio API read of model, file, and batch-job metadata"
+    "read": "external Nebius API reads of model, file, fine-tuning, dataset, operation, and dedicated-endpoint metadata",
+    "write": "external Nebius API writes and paid inference/operation side effects",
+    "approval": "required for every write action; destructive deletes require destructive confirmation"
   }
 }

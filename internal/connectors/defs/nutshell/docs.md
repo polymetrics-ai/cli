@@ -1,63 +1,25 @@
 # Overview
 
-Nutshell was quarantined during wave1 for an `ENGINE_GAP`: Nutshell's REST API is genuinely
-0-indexed (legacy's harvest loop `for page := 0; ...` sends `page[page]=0` on the very first
-request, including the health `Check` call itself), and the engine's `page_number` pagination
-could not express a 0-indexed start (a plain Go `int` `StartPage` field could not distinguish an
-explicit `0` from an omitted key, so a declared `"start_page": 0` silently coerced to `1`). This
-gap was closed by the S4 engine mini-wave's `PaginationSpec.StartPage *int` (`"start_page": 0` is
-now distinguishable at the Go layer and honored verbatim) — this bundle is the unblock build using
-that dialect addition. It reads Nutshell CRM accounts, contacts, leads, activities, and users
-through the Nutshell REST API. This bundle migrates `internal/connectors/nutshell` (the
-hand-written connector it replaces at capability parity); the legacy package stays registered and
-unchanged until wave6's registry flip.
+This bundle covers the documented Nutshell REST API surface from the current official developer reference at https://developers.nutshell.com/docs/getting-started. The original legacy-parity streams (accounts, contacts, leads, activities, and users) keep their existing projected schemas and record fields. Pass B adds documented JSON list/detail streams for related CRM resources and write actions for object-body or no-body mutations that the declarative engine can express.
 
 ## Auth setup
 
-Provide a Nutshell account `username` (config) and API token as the `password` secret; both flow
-into HTTP Basic auth (`auth: [{"mode": "basic", ...}]`) exactly as legacy's `connsdk.Basic(username,
-secret)`. The token is never logged.
+Provide a Nutshell account `username` and API token as the `password` secret. Both are sent with HTTP Basic auth. The token is never written to fixtures, docs, or logs.
 
 ## Streams notes
 
-`accounts`, `contacts`, `leads`, and `activities` share the identical shape: `GET` against the
-Nutshell list endpoint, records nested one level under a per-stream envelope key matching the
-stream name (`records.path: "<stream>"`, e.g. `{"accounts": [...]}` — legacy's
-`connsdk.RecordsAt(resp.Body, endpoint.recordsKey)`). Pagination is genuinely 0-indexed
-(`pagination.type: page_number`, `page_param: "page[page]"`, `size_param: "page[limit]"`,
-`start_page: 0`, `page_size: 500` matching legacy's `nutshellDefaultPageSize`/`nutshellMaxPageSize`)
-— the first request sends `page[page]=0`, matching legacy's loop exactly; a page returning fewer
-than `page[limit]` records stops the read (legacy's `len(records) < pageSize` short-page stop).
+`accounts`, `contacts`, `leads`, `activities`, `invoices`, `notes`, `quotes`, and `tasks` use Nutshell's 0-indexed `page[page]` plus `page[limit]` pagination where documented or preserved from the legacy connector. Other reference/detail endpoints use a stream-level `pagination: {"type": "none"}` override.
 
-`users` is legacy's one reference (non-paginated) endpoint (`paginated: false` in
-`nutshellStreamEndpoints`): it is read in a single request with no `page[page]`/`page[limit]` query
-params at all, matching legacy's `harvest` branch that skips setting those params entirely when
-`endpoint.paginated` is false. This bundle expresses that with a stream-level `"pagination":
-{"type": "none"}` override, which replaces the base-level `page_number` spec wholesale for that one
-stream (conventions.md §3: "Stream-level `pagination` replaces the base-level spec **wholesale**").
-
-None of the 5 streams declares an `incremental` block: legacy's `harvest`/`Read` sends no
-server-side filter parameter derived from a cursor or `start_date`-shaped config value at all
-(only the page[page]/page[limit] params above) — per conventions.md §8 rule 2, an `incremental`
-block is only declared when legacy actually sends a server-side filter, which it does not here.
-`x-cursor-field: modifiedTime` is still declared on every schema that legacy publishes a
-`CursorFields` entry for (`accounts`/`contacts`/`leads`/`activities`; `users` has none) for
-catalog/sync-mode-derivation parity even though no request-time filtering happens.
+The five legacy streams continue to project the exact fields emitted by `internal/connectors/nutshell`. Newly added streams use `projection: "passthrough"` with permissive schemas because the current Nutshell OpenAPI blocks are inconsistent for several list endpoints; fixtures preserve the documented envelope names or root-array shape used by each endpoint. Detail streams take optional `*_id` config values such as `account_id`, `lead_id`, and `task_id`.
 
 ## Write actions & risks
 
-None. Nutshell is exposed read-only here (legacy's `Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+`writes.json` includes create/update/lifecycle/delete actions whose request can be represented as a JSON object or no body: account/contact/lead/activity/audience/custom-field/note/product-category/source/tag/task creation or updates, undelete/reopen/watch lifecycle calls, and documented DELETE calls. Delete actions are marked destructive and include 404 missing-ok semantics for idempotent replay behavior.
+
+The write surface mutates live Nutshell CRM data and should be used only through the normal reverse-ETL plan, preview, approval, execute flow.
 
 ## Known limits
 
-- Full Nutshell API surface (tasks, emails, products, custom fields, and any write/mutation
-  endpoints) is out of scope; see `api_surface.json`'s `excluded` entries. Only the 5
-  legacy-parity read streams are implemented.
-- `page_size`'s valid range (1-500) is enforced by the connection spec's description only, matching
-  legacy's `nutshellMaxPageSize` constant; the engine does not itself clamp an out-of-range
-  `page_size` value — an operator-supplied value outside 1-500 is passed through verbatim to the
-  Nutshell API, whose own server-side behavior for an out-of-range `page[limit]` is unspecified
-  here (legacy validated this range in Go before ever making a request; this bundle's declarative
-  `page_size` config has no equivalent runtime bounds-check mechanism in the dialect).
+- JSON Patch endpoints and the lead-installments endpoint require root JSON array request bodies. The current write dialect builds object bodies from records, so these are excluded in `api_surface.json` and recorded as a typed `ENGINE_GAP` in `docs/migration/quarantine.json`.
+- `GET /stagesets/{id}/export` returns CSV rather than JSON records and is excluded as `binary_payload`.
+- The old docs URL `https://app.nutshell.com/rest/` now returns 404; the API base URL remains `https://app.nutshell.com/rest`, while metadata points at the current official developer docs.

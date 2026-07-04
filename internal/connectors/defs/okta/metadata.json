@@ -1,23 +1,25 @@
 {
   "name": "okta",
   "display_name": "Okta",
-  "description": "Reads Okta users, groups, and system log events from the Okta REST APIs.",
+  "description": "Reads and writes documented Okta Admin Management API resources through the Okta REST APIs.",
   "integration_type": "api",
-  "docs_url": "https://developer.okta.com/docs/reference/",
+  "docs_url": "https://developer.okta.com/docs/api/openapi/okta-management/management/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 200
+    "read_page_size": 200,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Okta API read of users, groups, and system log events",
-    "approval": "none; read-only"
+    "read": "external Okta admin API reads across users, groups, logs, apps, policies, authenticators, brands, roles, and related resources",
+    "write": "external Okta admin API mutations including lifecycle, provisioning, credential, policy, app, user, group, and delete operations",
+    "approval": "required for every write action; deletes and lifecycle actions are high risk"
   }
 }

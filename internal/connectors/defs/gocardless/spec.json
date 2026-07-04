@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "GoCardless Connection Specification",
   "type": "object",
-  "required": ["access_token", "base_url"],
+  "required": [
+    "access_token",
+    "base_url"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
@@ -12,7 +15,7 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "GoCardless API base URL. Use https://api.gocardless.com for live or https://api-sandbox.gocardless.com for sandbox. Legacy derives this from a gocardless_environment config value (live/sandbox), but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
+      "description": "GoCardless API base URL. Use https://api.gocardless.com for live or https://api-sandbox.gocardless.com for sandbox. Legacy derives this from gocardless_environment when base_url is absent; this declarative bundle requires the fully-formed URL."
     },
     "gocardless_version": {
       "type": "string",
@@ -22,7 +25,155 @@
     "start_date": {
       "type": "string",
       "format": "date-time",
-      "description": "RFC3339 lower bound; only objects created at or after this time are read on a full sync. Sent as the created_at[gt] query filter."
+      "description": "RFC3339 lower bound for the four legacy incremental list streams. Sent as created_at[gt]."
+    },
+    "balances_creditor_id": {
+      "type": "string",
+      "description": "Balances Creditor Id query value for the matching GoCardless stream."
+    },
+    "bank_account_detail_id": {
+      "type": "string",
+      "description": "Bank Account Detail Id used by GoCardless stream paths."
+    },
+    "bank_account_holder_verification_id": {
+      "type": "string",
+      "description": "Bank Account Holder Verification Id used by GoCardless stream paths."
+    },
+    "bank_authorisation_id": {
+      "type": "string",
+      "description": "Bank Authorisation Id used by GoCardless stream paths."
+    },
+    "billing_request_id": {
+      "type": "string",
+      "description": "Billing Request Id used by GoCardless stream paths."
+    },
+    "billing_request_institutions_country_code": {
+      "type": "string",
+      "description": "Billing Request Institutions Country Code query value for the matching GoCardless stream."
+    },
+    "billing_request_template_id": {
+      "type": "string",
+      "description": "Billing Request Template Id used by GoCardless stream paths."
+    },
+    "block_id": {
+      "type": "string",
+      "description": "Block Id used by GoCardless stream paths."
+    },
+    "creditor_bank_account_id": {
+      "type": "string",
+      "description": "Creditor Bank Account Id used by GoCardless stream paths."
+    },
+    "creditor_id": {
+      "type": "string",
+      "description": "Creditor Id used by GoCardless stream paths."
+    },
+    "customer_bank_account_id": {
+      "type": "string",
+      "description": "Customer Bank Account Id used by GoCardless stream paths."
+    },
+    "customer_bank_account_token_id": {
+      "type": "string",
+      "description": "Customer Bank Account Token Id used by GoCardless stream paths."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Customer Id used by GoCardless stream paths."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Event Id used by GoCardless stream paths."
+    },
+    "export_id": {
+      "type": "string",
+      "description": "Export Id used by GoCardless stream paths."
+    },
+    "funds_availability_amount": {
+      "type": "string",
+      "description": "Funds Availability Amount query value for the matching GoCardless stream."
+    },
+    "gc_key_id": {
+      "type": "string",
+      "description": "Optional Gc-Key-Id public key identifier sent for encrypted bank-account-detail reads; omitted when unset."
+    },
+    "instalment_schedule_id": {
+      "type": "string",
+      "description": "Instalment Schedule Id used by GoCardless stream paths."
+    },
+    "mandate_id": {
+      "type": "string",
+      "description": "Mandate Id used by GoCardless stream paths."
+    },
+    "mandate_import_id": {
+      "type": "string",
+      "description": "Mandate Import Id used by GoCardless stream paths."
+    },
+    "outbound_payment_id": {
+      "type": "string",
+      "description": "Outbound Payment Id used by GoCardless stream paths."
+    },
+    "outbound_payment_import_id": {
+      "type": "string",
+      "description": "Outbound Payment Import Id used by GoCardless stream paths."
+    },
+    "payer_authorisation_id": {
+      "type": "string",
+      "description": "Payer Authorisation Id used by GoCardless stream paths."
+    },
+    "payment_account_id": {
+      "type": "string",
+      "description": "Payment Account Id used by GoCardless stream paths."
+    },
+    "payment_account_transaction_id": {
+      "type": "string",
+      "description": "Payment Account Transaction Id used by GoCardless stream paths."
+    },
+    "payment_account_transactions_value_date_from": {
+      "type": "string",
+      "description": "Payment Account Transactions Value Date From query value for the matching GoCardless stream."
+    },
+    "payment_account_transactions_value_date_to": {
+      "type": "string",
+      "description": "Payment Account Transactions Value Date To query value for the matching GoCardless stream."
+    },
+    "payment_id": {
+      "type": "string",
+      "description": "Payment Id used by GoCardless stream paths."
+    },
+    "payout_id": {
+      "type": "string",
+      "description": "Payout Id used by GoCardless stream paths."
+    },
+    "redirect_flow_id": {
+      "type": "string",
+      "description": "Redirect Flow Id used by GoCardless stream paths."
+    },
+    "refund_id": {
+      "type": "string",
+      "description": "Refund Id used by GoCardless stream paths."
+    },
+    "scheme_identifier_id": {
+      "type": "string",
+      "description": "Scheme Identifier Id used by GoCardless stream paths."
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "Subscription Id used by GoCardless stream paths."
+    },
+    "tax_rate_id": {
+      "type": "string",
+      "description": "Tax Rate Id used by GoCardless stream paths."
+    },
+    "transferred_mandate_id": {
+      "type": "string",
+      "description": "Transferred Mandate Id used by GoCardless stream paths."
+    },
+    "verification_details_creditor_id": {
+      "type": "string",
+      "description": "Verification Details Creditor Id query value for the matching GoCardless stream."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Webhook Id used by GoCardless stream paths."
     }
   }
 }

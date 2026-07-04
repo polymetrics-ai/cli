@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leads/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "leads": [
+        {
+          "id": "1",
+          "name": "Fixture lead",
+          "href": "https://app.nutshell.com/rest/lead/1",
+          "htmlUrl": "https://app.nutshell.com/lead/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture lead",
+          "href": "https://app.nutshell.com/rest/lead/2",
+          "htmlUrl": "https://app.nutshell.com/lead/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

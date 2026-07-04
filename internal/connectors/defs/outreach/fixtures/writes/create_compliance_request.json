@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "compliancerequest",
+      "attributes": {
+        "name": "Fixture Create Compliance Request"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/complianceRequests",
+    "body": {
+      "data": {
+        "type": "compliancerequest",
+        "attributes": {
+          "name": "Fixture Create Compliance Request"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues/synthetic-conformance-value/voice-calls"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "created_at": "fixture-issue_voice_calls"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

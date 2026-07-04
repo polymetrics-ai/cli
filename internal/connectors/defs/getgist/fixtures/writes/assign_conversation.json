@@ -1,0 +1,14 @@
+{
+  "record": {
+    "conversation_id": "conversation_id_fixture_1",
+    "name": "Fixture",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/conversations/conversation_id_fixture_1/assign",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

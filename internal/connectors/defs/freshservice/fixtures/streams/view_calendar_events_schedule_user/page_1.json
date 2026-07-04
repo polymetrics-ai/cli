@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/oncall/shift-events",
+    "query": {
+      "start_time": "synthetic-conformance-value",
+      "end_time": "synthetic-conformance-value",
+      "schedule_id": "synthetic-conformance-value",
+      "user_id": "synthetic-conformance-value",
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "shift_events": [
+        {
+          "id": "view_calendar_events_schedule_user",
+          "name": "Fixture view_calendar_events_schedule_user",
+          "subject": "Fixture view_calendar_events_schedule_user",
+          "description": "Fixture view_calendar_events_schedule_user record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

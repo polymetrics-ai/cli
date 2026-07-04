@@ -1,0 +1,213 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the task."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the task."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the task."
+    },
+    "descriptionHtml": {
+      "type": "string",
+      "description": "The HTML-formatted description of the task."
+    },
+    "priority": {
+      "type": "string",
+      "description": "The priority of the task (low, medium, high, urgent).",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the task (new, in_progress, complete).",
+      "enum": [
+        "new",
+        "in_progress",
+        "complete"
+      ]
+    },
+    "dueDate": {
+      "type": "string",
+      "description": "The due date for the task.",
+      "format": "date-time"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Array of tag strings for categorization.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "completedAt": {
+      "type": "string",
+      "description": "The timestamp when the task was completed.",
+      "format": "date-time"
+    },
+    "assignee": {
+      "type": "object",
+      "description": "The user assigned to this task.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "The user who created this task.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "deal": {
+      "type": "object",
+      "description": "The associated deal.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "dealStage": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "dealActivity": {
+      "type": "object",
+      "description": "The associated deal activity.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "customer": {
+      "type": "object",
+      "description": "The associated customer.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the task.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the task.",
+      "format": "date-time"
+    },
+    "dealId": {
+      "type": "string",
+      "description": "The associated deal ID."
+    },
+    "dealActivityId": {
+      "type": "string",
+      "description": "The associated deal activity ID."
+    },
+    "customerId": {
+      "type": "string",
+      "description": "The associated customer ID."
+    },
+    "contactId": {
+      "type": "string",
+      "description": "The associated contact ID."
+    },
+    "contact": {
+      "type": "object",
+      "description": "The associated contact.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "hasComments": {
+      "type": "boolean",
+      "description": "Whether the task has any comments."
+    },
+    "todoItems": {
+      "type": "array",
+      "description": "Todo items associated with this task.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the todo item."
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the todo item."
+          },
+          "completed": {
+            "type": "boolean",
+            "description": "Whether the todo item is completed."
+          },
+          "completedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The timestamp when the todo item was completed.",
+            "format": "date-time"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "The display order of the todo item."
+          }
+        }
+      }
+    }
+  }
+}

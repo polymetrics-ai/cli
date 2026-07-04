@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/disputes"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "disputes": [
+        { "id": "dispute_fixture_1", "status": "open", "amount": "10.00", "reason": "fixture_reason" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "record": {
+    "enrollmentRpIds": [
+      "enrollment_rp_id_fixture"
+    ],
+    "fulfillmentProvider": "yubico",
+    "userId": "user_id_fixture",
+    "yubicoTransportKeyJWK": {
+      "crv": "P-384",
+      "kid": "kid_fixture",
+      "kty": "EC",
+      "use": "enc",
+      "x": "x_fixture",
+      "y": "y_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webauthn-registration/api/v1/enroll",
+    "body": {
+      "enrollmentRpIds": [
+        "enrollment_rp_id_fixture"
+      ],
+      "fulfillmentProvider": "yubico",
+      "userId": "user_id_fixture",
+      "yubicoTransportKeyJWK": {
+        "crv": "P-384",
+        "kid": "kid_fixture",
+        "kty": "EC",
+        "use": "enc",
+        "x": "x_fixture",
+        "y": "y_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

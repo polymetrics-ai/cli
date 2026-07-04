@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sms/export/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ID": 21315456,
+      "URL": "https://exports.mailjet.example/sms-export-fixture.csv",
+      "Status": {
+        "Code": 3,
+        "Name": "completed",
+        "Description": "Export completed"
+      },
+      "CreationTS": 1767225901,
+      "ExpirationTS": 1767312301
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "meeting_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/meetings/fixture_id"
+  }
+}

@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/api/v3/companies/list", "query": { "page": "2", "limit": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/list",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
   "response": {
     "status": 200,
     "body": {

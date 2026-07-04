@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "flows_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "name",
+    "status",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the flow"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the flow"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the flow",
+      "enum": [
+        "draft",
+        "active",
+        "paused",
+        "archived"
+      ]
+    },
+    "allowRepeatRuns": {
+      "type": "boolean",
+      "description": "Whether customers can run through the flow multiple times"
+    },
+    "blockRepeatsTimeValue": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Time value for blocking repeat runs"
+    },
+    "blockRepeatsTimeUnit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Time unit for blocking repeat runs",
+      "enum": [
+        "minutes",
+        "hours",
+        "days",
+        "weeks"
+      ]
+    },
+    "stepsCount": {
+      "type": "integer",
+      "description": "Number of steps in the flow"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the flow was created",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the flow was last updated",
+      "format": "date-time"
+    },
+    "firstStepId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID of the first step in the flow"
+    },
+    "steps": {
+      "type": "array",
+      "description": "Flow steps with triggers, actions, and connections",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "flowId": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "conditions": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "nextSteps": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}

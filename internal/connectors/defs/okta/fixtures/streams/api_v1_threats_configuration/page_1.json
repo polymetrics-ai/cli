@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/threats/configuration"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "action": "none",
+      "created": "2026-01-01T00:00:00Z",
+      "excludeZones": [
+        "exclude_zone_fixture"
+      ],
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

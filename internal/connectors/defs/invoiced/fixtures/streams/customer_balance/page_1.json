@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers/synthetic-conformance-value/balance",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_outstanding": 470,
+      "past_due": false,
+      "currency": "usd",
+      "timestamp": 1767225600
+    }
+  }
+}

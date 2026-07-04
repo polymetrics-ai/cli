@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/cwo/connections/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "requestingAppInstanceId": "requesting_app_instance_id_fixture",
+      "resourceAppInstanceId": "resource_app_instance_id_fixture",
+      "status": "ACTIVE"
+    }
+  }
+}

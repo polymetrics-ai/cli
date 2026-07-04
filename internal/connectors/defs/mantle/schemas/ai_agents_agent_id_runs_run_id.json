@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ai_agents_agent_id_runs_run_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "agentId",
+    "status",
+    "createdAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the agent run."
+    },
+    "agentId": {
+      "type": "string",
+      "description": "The ID of the agent that was run."
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the run.",
+      "enum": [
+        "pending",
+        "running",
+        "completed",
+        "error"
+      ]
+    },
+    "response": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The agent's natural language response (available when completed)."
+    },
+    "structuredResponse": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The structured response extracted according to the output schema (if provided)."
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Error message if the run failed."
+    },
+    "tokenUsage": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "promptTokens": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "completionTokens": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "totalTokens": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "When the run was created.",
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "When the run completed (null if still running).",
+      "format": "date-time"
+    }
+  }
+}

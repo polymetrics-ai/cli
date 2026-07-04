@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets_id_loops",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "question",
+    "status",
+    "openedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the loop."
+    },
+    "question": {
+      "type": "string",
+      "description": "The question text for this loop."
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the loop.",
+      "enum": [
+        "open",
+        "closed"
+      ]
+    },
+    "categoryId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID of the loop category."
+    },
+    "category": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "openedAt": {
+      "type": "string",
+      "description": "When the loop was opened.",
+      "format": "date-time"
+    },
+    "openedByMessageId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID of the message that opened the loop."
+    },
+    "closedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "When the loop was closed.",
+      "format": "date-time"
+    },
+    "closedByMessageId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID of the message that closed the loop."
+    },
+    "closedReason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Reason for closing the loop."
+    }
+  }
+}

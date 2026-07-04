@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/datasets/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Id": "dataset_fixture_1",
+        "Name": "Fixture Dataset",
+        "Href": "v1pre3/dataset/dataset_fixture_1",
+        "DateCreated": "2026-01-01T00:00:00Z",
+        "DateModified": "2026-01-01T01:00:00Z",
+        "TotalSize": 1000
+      }
+    }
+  }
+}

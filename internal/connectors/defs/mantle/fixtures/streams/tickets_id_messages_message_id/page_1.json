@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/tickets/synthetic-conformance-value/messages/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": {
+        "id": "id_fixture",
+        "actorType": "customer",
+        "agent": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "user": {
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com"
+          }
+        },
+        "contact": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "content": "fixture",
+        "fullContent": "fixture",
+        "contentType": "markdown",
+        "isInternal": true,
+        "messageId": "message_id_fixture",
+        "inReplyToId": "in_reply_to_id_fixture",
+        "referencesIds": [
+          "references_id_fixture"
+        ],
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "attachments": [
+          {
+            "id": "id_fixture",
+            "name": "fixture",
+            "contentType": "fixture",
+            "sizeBytes": 1,
+            "url": "https://example.com/fixture"
+          }
+        ]
+      }
+    }
+  }
+}

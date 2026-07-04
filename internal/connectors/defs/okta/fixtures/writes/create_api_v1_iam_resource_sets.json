@@ -1,0 +1,24 @@
+{
+  "record": {
+    "description": "description_fixture",
+    "label": "label_fixture",
+    "resources": [
+      "resource_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/iam/resource-sets",
+    "body": {
+      "description": "description_fixture",
+      "label": "label_fixture",
+      "resources": [
+        "resource_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

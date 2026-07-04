@@ -1,0 +1,21 @@
+{
+  "record": {
+    "webhook_id": "webhook_id_fixture",
+    "webhooks": {
+      "description": "Synthetic retry_a_webhook fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks/webhook_id_fixture/actions/retry",
+    "body": {
+      "webhooks": {
+        "description": "Synthetic retry_a_webhook fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

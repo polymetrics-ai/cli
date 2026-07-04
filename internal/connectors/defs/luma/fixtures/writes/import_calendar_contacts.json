@@ -1,0 +1,22 @@
+{
+  "record": {
+    "contacts": [
+      {
+        "email": "contact@example.invalid",
+        "name": "Fixture Contact"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/contacts/import",
+    "body": {
+      "contacts": [
+        {
+          "email": "contact@example.invalid",
+          "name": "Fixture Contact"
+        }
+      ]
+    }
+  }
+}

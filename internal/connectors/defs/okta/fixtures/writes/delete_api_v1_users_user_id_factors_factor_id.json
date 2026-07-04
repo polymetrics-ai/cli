@@ -1,0 +1,14 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "factor_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/users/synthetic-conformance-value/factors/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

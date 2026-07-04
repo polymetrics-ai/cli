@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_device",
+    "description": "Fixture create_device record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/itam/devices",
+    "body": {
+      "name": "Fixture create_device",
+      "description": "Fixture create_device record"
+    }
+  }
+}

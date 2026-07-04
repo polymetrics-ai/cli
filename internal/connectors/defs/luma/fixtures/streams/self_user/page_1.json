@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/users/get-self"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "name": "Fixture Name",
+      "avatar_url": "https://example.invalid/image.png",
+      "email": "fixture@example.invalid",
+      "first_name": "Fixture Name",
+      "last_name": "Fixture Name"
+    }
+  }
+}

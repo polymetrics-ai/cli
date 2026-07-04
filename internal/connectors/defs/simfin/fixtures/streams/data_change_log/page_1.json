@@ -1,0 +1,719 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/data-change-log",
+    "query": {
+      "pageNumber": "0",
+      "itemsPerPage": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "changeId": "change_fixture_1",
+          "simId": 111111,
+          "ticker": "FX1",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_2",
+          "simId": 111112,
+          "ticker": "FX2",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_3",
+          "simId": 111113,
+          "ticker": "FX3",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_4",
+          "simId": 111114,
+          "ticker": "FX4",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_5",
+          "simId": 111115,
+          "ticker": "FX5",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_6",
+          "simId": 111116,
+          "ticker": "FX6",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_7",
+          "simId": 111117,
+          "ticker": "FX7",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_8",
+          "simId": 111118,
+          "ticker": "FX8",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_9",
+          "simId": 111119,
+          "ticker": "FX9",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_10",
+          "simId": 111120,
+          "ticker": "FX10",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_11",
+          "simId": 111121,
+          "ticker": "FX11",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_12",
+          "simId": 111122,
+          "ticker": "FX12",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_13",
+          "simId": 111123,
+          "ticker": "FX13",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_14",
+          "simId": 111124,
+          "ticker": "FX14",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_15",
+          "simId": 111125,
+          "ticker": "FX15",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_16",
+          "simId": 111126,
+          "ticker": "FX16",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_17",
+          "simId": 111127,
+          "ticker": "FX17",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_18",
+          "simId": 111128,
+          "ticker": "FX18",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_19",
+          "simId": 111129,
+          "ticker": "FX19",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_20",
+          "simId": 111130,
+          "ticker": "FX20",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_21",
+          "simId": 111131,
+          "ticker": "FX21",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_22",
+          "simId": 111132,
+          "ticker": "FX22",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_23",
+          "simId": 111133,
+          "ticker": "FX23",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_24",
+          "simId": 111134,
+          "ticker": "FX24",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_25",
+          "simId": 111135,
+          "ticker": "FX25",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_26",
+          "simId": 111136,
+          "ticker": "FX26",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_27",
+          "simId": 111137,
+          "ticker": "FX27",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_28",
+          "simId": 111138,
+          "ticker": "FX28",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_29",
+          "simId": 111139,
+          "ticker": "FX29",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_30",
+          "simId": 111140,
+          "ticker": "FX30",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_31",
+          "simId": 111141,
+          "ticker": "FX31",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_32",
+          "simId": 111142,
+          "ticker": "FX32",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_33",
+          "simId": 111143,
+          "ticker": "FX33",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_34",
+          "simId": 111144,
+          "ticker": "FX34",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_35",
+          "simId": 111145,
+          "ticker": "FX35",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_36",
+          "simId": 111146,
+          "ticker": "FX36",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_37",
+          "simId": 111147,
+          "ticker": "FX37",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_38",
+          "simId": 111148,
+          "ticker": "FX38",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_39",
+          "simId": 111149,
+          "ticker": "FX39",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_40",
+          "simId": 111150,
+          "ticker": "FX40",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_41",
+          "simId": 111151,
+          "ticker": "FX41",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_42",
+          "simId": 111152,
+          "ticker": "FX42",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_43",
+          "simId": 111153,
+          "ticker": "FX43",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_44",
+          "simId": 111154,
+          "ticker": "FX44",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_45",
+          "simId": 111155,
+          "ticker": "FX45",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_46",
+          "simId": 111156,
+          "ticker": "FX46",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_47",
+          "simId": 111157,
+          "ticker": "FX47",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_48",
+          "simId": 111158,
+          "ticker": "FX48",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_49",
+          "simId": 111159,
+          "ticker": "FX49",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_50",
+          "simId": 111160,
+          "ticker": "FX50",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_51",
+          "simId": 111161,
+          "ticker": "FX51",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_52",
+          "simId": 111162,
+          "ticker": "FX52",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_53",
+          "simId": 111163,
+          "ticker": "FX53",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_54",
+          "simId": 111164,
+          "ticker": "FX54",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_55",
+          "simId": 111165,
+          "ticker": "FX55",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_56",
+          "simId": 111166,
+          "ticker": "FX56",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_57",
+          "simId": 111167,
+          "ticker": "FX57",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_58",
+          "simId": 111168,
+          "ticker": "FX58",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_59",
+          "simId": 111169,
+          "ticker": "FX59",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_60",
+          "simId": 111170,
+          "ticker": "FX60",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_61",
+          "simId": 111171,
+          "ticker": "FX61",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_62",
+          "simId": 111172,
+          "ticker": "FX62",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_63",
+          "simId": 111173,
+          "ticker": "FX63",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_64",
+          "simId": 111174,
+          "ticker": "FX64",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_65",
+          "simId": 111175,
+          "ticker": "FX65",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_66",
+          "simId": 111176,
+          "ticker": "FX66",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_67",
+          "simId": 111177,
+          "ticker": "FX67",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_68",
+          "simId": 111178,
+          "ticker": "FX68",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_69",
+          "simId": 111179,
+          "ticker": "FX69",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_70",
+          "simId": 111180,
+          "ticker": "FX70",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_71",
+          "simId": 111181,
+          "ticker": "FX71",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_72",
+          "simId": 111182,
+          "ticker": "FX72",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_73",
+          "simId": 111183,
+          "ticker": "FX73",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_74",
+          "simId": 111184,
+          "ticker": "FX74",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_75",
+          "simId": 111185,
+          "ticker": "FX75",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_76",
+          "simId": 111186,
+          "ticker": "FX76",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_77",
+          "simId": 111187,
+          "ticker": "FX77",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_78",
+          "simId": 111188,
+          "ticker": "FX78",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_79",
+          "simId": 111189,
+          "ticker": "FX79",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_80",
+          "simId": 111190,
+          "ticker": "FX80",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_81",
+          "simId": 111191,
+          "ticker": "FX81",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_82",
+          "simId": 111192,
+          "ticker": "FX82",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_83",
+          "simId": 111193,
+          "ticker": "FX83",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_84",
+          "simId": 111194,
+          "ticker": "FX84",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_85",
+          "simId": 111195,
+          "ticker": "FX85",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_86",
+          "simId": 111196,
+          "ticker": "FX86",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_87",
+          "simId": 111197,
+          "ticker": "FX87",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_88",
+          "simId": 111198,
+          "ticker": "FX88",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_89",
+          "simId": 111199,
+          "ticker": "FX89",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_90",
+          "simId": 111200,
+          "ticker": "FX90",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_91",
+          "simId": 111201,
+          "ticker": "FX91",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_92",
+          "simId": 111202,
+          "ticker": "FX92",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_93",
+          "simId": 111203,
+          "ticker": "FX93",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_94",
+          "simId": 111204,
+          "ticker": "FX94",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_95",
+          "simId": 111205,
+          "ticker": "FX95",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_96",
+          "simId": 111206,
+          "ticker": "FX96",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_97",
+          "simId": 111207,
+          "ticker": "FX97",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_98",
+          "simId": 111208,
+          "ticker": "FX98",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_99",
+          "simId": 111209,
+          "ticker": "FX99",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        },
+        {
+          "changeId": "change_fixture_100",
+          "simId": 111210,
+          "ticker": "FX100",
+          "field": "financials",
+          "changedAt": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "pageNumber": 0,
+      "itemsPerPage": 100
+    }
+  }
+}

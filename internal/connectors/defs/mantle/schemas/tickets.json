@@ -1,0 +1,387 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "status",
+    "priority",
+    "createdAt",
+    "updatedAt",
+    "lastMessageAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the ticket."
+    },
+    "subject": {
+      "type": "string",
+      "description": "The subject line of the ticket."
+    },
+    "ticketNumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The formatted ticket number (e.g., \"1001\", \"MYAPP-20251222-1001\")."
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the ticket.",
+      "enum": [
+        "open",
+        "pending",
+        "resolved",
+        "closed"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "description": "The priority level of the ticket.",
+      "enum": [
+        "low",
+        "normal",
+        "high",
+        "urgent"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags associated with the ticket.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "myshopifyDomain": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The customer's myshopify.com domain."
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "channel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "email",
+            "chat"
+          ]
+        }
+      }
+    },
+    "assignedTo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "app": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        }
+      }
+    },
+    "lastMessage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the message."
+        },
+        "actorType": {
+          "type": "string",
+          "description": "The type of actor who sent the message.",
+          "enum": [
+            "customer",
+            "agent",
+            "system"
+          ]
+        },
+        "agent": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "email": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "content": {
+          "type": "string",
+          "description": "The message content (shortened for list views)."
+        },
+        "fullContent": {
+          "type": "string",
+          "description": "The full message content."
+        },
+        "contentType": {
+          "type": "string",
+          "description": "The format of the message content.",
+          "enum": [
+            "markdown",
+            "html",
+            "text"
+          ]
+        },
+        "isInternal": {
+          "type": "boolean",
+          "description": "Whether this is an internal note."
+        },
+        "messageId": {
+          "type": "string",
+          "description": "RFC-5322 Message-ID header for email threading."
+        },
+        "inReplyToId": {
+          "type": "string",
+          "description": "RFC-5322 In-Reply-To header for email threading."
+        },
+        "referencesIds": {
+          "type": "array",
+          "description": "RFC-5322 References header for email threading.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "occurredAt": {
+          "type": "string",
+          "description": "When the message was sent.",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "When the message was created.",
+          "format": "date-time"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contentType": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "sizeBytes": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "url": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "id",
+        "actorType",
+        "content",
+        "contentType",
+        "isInternal",
+        "occurredAt",
+        "createdAt"
+      ]
+    },
+    "messageCount": {
+      "type": "integer",
+      "description": "Total number of messages in the ticket."
+    },
+    "resolvedAt": {
+      "type": "string",
+      "description": "When the ticket was resolved.",
+      "format": "date-time"
+    },
+    "closedAt": {
+      "type": "string",
+      "description": "When the ticket was closed.",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "When the ticket was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "When the ticket was last updated.",
+      "format": "date-time"
+    },
+    "lastMessageAt": {
+      "type": "string",
+      "description": "When the last message was sent in the ticket.",
+      "format": "date-time"
+    },
+    "firstResponseAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "When the agent first sent a public reply.",
+      "format": "date-time"
+    },
+    "sourceType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Where this ticket originated. Polymorphic — see `sourceId` for the related entity id. Tickets created before this field was added have `null`.",
+      "enum": [
+        "widget",
+        "incoming_email",
+        "incoming_slack_message",
+        "cx_agent",
+        "api_client",
+        null
+      ]
+    },
+    "sourceId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Polymorphic id companion to `sourceType` (e.g. Widget id for `widget`, IncomingEmail id for `incoming_email`, IncomingSlackMessage id for `incoming_slack_message`, CXAgent id for `cx_agent`, ApiClient id for `api_client`). May be `null` even when `sourceType` is set (e.g. the internal `/api/support` path uses `api_client` without an ApiClient id)."
+    },
+    "inboxId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The Inbox this ticket belongs to, or `null` if unassigned to an inbox."
+    },
+    "cxEmailAddressId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The CXEmailAddress used as the outbound sender for emails on this ticket, or `null` to fall back to the channel default."
+    }
+  }
+}

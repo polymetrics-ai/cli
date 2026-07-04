@@ -1,0 +1,16 @@
+{
+  "record": {
+    "problem_id": 123,
+    "task_id": 123,
+    "name": "Fixture update_a_problem_task",
+    "description": "Fixture update_a_problem_task record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/problems/123/tasks/123",
+    "body": {
+      "name": "Fixture update_a_problem_task",
+      "description": "Fixture update_a_problem_task record"
+    }
+  }
+}

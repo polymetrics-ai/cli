@@ -1,0 +1,13 @@
+{
+  "record": {
+    "change_id": 123,
+    "status_page_id": 123,
+    "maintenance_id": 123,
+    "name": "Fixture delete_maintenance_from_change",
+    "description": "Fixture delete_maintenance_from_change record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/changes/123/status/pages/123/maintenances/123"
+  }
+}

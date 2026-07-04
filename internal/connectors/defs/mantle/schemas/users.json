@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the user."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the user."
+    },
+    "email": {
+      "type": "string",
+      "description": "The email address of the user."
+    },
+    "roles": {
+      "type": "array",
+      "description": "The roles of the user.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "jobTitle": {
+      "type": "string"
+    }
+  }
+}

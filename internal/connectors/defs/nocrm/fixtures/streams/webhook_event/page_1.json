@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/webhook_events/synthetic-conformance-value" },
+  "response": { "status": 200, "body": { "id": 984, "event": "lead.status.changed.to.won", "has_succeeded": true, "data": { "id": 8113, "title": "Fixture Lead" } } }
+}

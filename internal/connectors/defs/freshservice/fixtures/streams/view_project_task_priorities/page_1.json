@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pm/projects/synthetic-conformance-value/task-priorities",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "task_priorities": [
+        {
+          "id": "view_project_task_priorities",
+          "name": "Fixture view_project_task_priorities",
+          "subject": "Fixture view_project_task_priorities",
+          "description": "Fixture view_project_task_priorities record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

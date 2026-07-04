@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data-tables/synthetic-conformance-value/columns"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "col_fixture_1",
+        "name": "name",
+        "dataTableId": "dt_fixture_1",
+        "type": "string",
+        "index": 0
+      }
+    ]
+  }
+}

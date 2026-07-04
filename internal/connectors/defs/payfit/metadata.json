@@ -1,14 +1,14 @@
 {
   "name": "payfit",
   "display_name": "PayFit",
-  "description": "Reads PayFit employees, contracts, and companies through documented REST endpoints.",
+  "description": "Reads PayFit legacy /v1 resources and current company-scoped PayFit API resources; writes supported JSON customer-key mutations.",
   "integration_type": "api",
   "docs_url": "https://developers.payfit.io/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external PayFit API read of employee, contract, and company HR data"
+    "read": "external PayFit API read of HR, contract, payroll-status, absence, accounting, and document-metadata data",
+    "write": "external PayFit API mutations for collaborator, contract, absence, and health-insurance/provident-fund workflows",
+    "approval": "write actions require explicit reverse-ETL approval; absence cancellation is idempotent-delete modeled"
   }
 }

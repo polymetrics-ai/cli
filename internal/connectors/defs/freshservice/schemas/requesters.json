@@ -2,18 +2,64 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "requesters",
   "type": "object",
-  "x-primary-key": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "x-cursor-field": "updated_at",
-  "required": ["id"],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "integer" },
-    "first_name": { "type": ["string", "null"] },
-    "last_name": { "type": ["string", "null"] },
-    "primary_email": { "type": ["string", "null"] },
-    "job_title": { "type": ["string", "null"] },
-    "department_ids": { "type": ["array", "null"] },
-    "active": { "type": ["boolean", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "id": {
+      "type": "integer"
+    },
+    "first_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "primary_email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "job_title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "department_ids": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "key": "FIXTURE_KEY",
+    "value": "fixture-value",
+    "projectId": "project_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/variables",
+    "body": {
+      "key": "FIXTURE_KEY",
+      "value": "fixture-value",
+      "projectId": "project_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

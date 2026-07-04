@@ -1,0 +1,13 @@
+{
+  "record": {
+    "job_id": "job_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/jobs/job_id_fixture/openings"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

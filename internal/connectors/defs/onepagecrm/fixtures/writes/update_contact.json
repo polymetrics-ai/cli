@@ -1,0 +1,19 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "title": "Fixture Name",
+    "first_name": "Fixture Name",
+    "last_name": "Fixture Name",
+    "job_title": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture_id",
+    "body": {
+      "title": "Fixture Name",
+      "first_name": "Fixture Name",
+      "last_name": "Fixture Name",
+      "job_title": "fixture_value"
+    }
+  }
+}

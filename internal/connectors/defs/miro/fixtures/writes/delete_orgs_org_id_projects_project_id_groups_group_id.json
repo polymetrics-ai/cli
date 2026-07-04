@@ -1,0 +1,15 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "project_id": "synthetic-conformance-value",
+    "group_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/orgs/synthetic-conformance-value/projects/synthetic-conformance-value/groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

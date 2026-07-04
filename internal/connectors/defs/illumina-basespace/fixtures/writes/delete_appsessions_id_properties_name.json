@@ -1,0 +1,16 @@
+{
+  "record": {
+    "appsession_id": "appsession_id_fixture",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1pre3/appsessions/appsession_id_fixture/properties/name_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

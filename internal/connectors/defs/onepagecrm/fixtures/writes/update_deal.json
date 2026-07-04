@@ -1,0 +1,19 @@
+{
+  "record": {
+    "deal_id": "fixture_id",
+    "contact_id": "fixture_value",
+    "owner_id": "fixture_value",
+    "pipeline_id": "fixture_value",
+    "sales_pipeline_id": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/deals/fixture_id",
+    "body": {
+      "contact_id": "fixture_value",
+      "owner_id": "fixture_value",
+      "pipeline_id": "fixture_value",
+      "sales_pipeline_id": "fixture_value"
+    }
+  }
+}

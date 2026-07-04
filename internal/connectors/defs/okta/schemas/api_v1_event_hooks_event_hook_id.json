@@ -1,0 +1,271 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "object",
+          "properties": {
+            "authScheme": {
+              "type": "object",
+              "description": "The authentication scheme used for this request.\n\nTo use Basic Auth for authentication, set `type` to `HEADER`,\n`key` to `Authorization`, and `value` to the Base64-encoded string of \"username:password\". Ensure that you include\nthe scheme (including space) as part of the `value` parameter. For example, `Basic YWRtaW46c3VwZXJzZWNyZXQ=`.",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The name for the authorization header"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The authentication scheme type. Currently only supports `HEADER`.",
+                  "enum": [
+                    "HEADER"
+                  ]
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The header value. This secret key is passed to your external service endpoint for security verification.\nThis property is not returned in the response."
+                }
+              },
+              "additionalProperties": true
+            },
+            "headers": {
+              "type": "array",
+              "description": "Optional list of key/value pairs for headers that can be sent with the request to the external service. For example,\n`X-Other-Header` is an example of an optional header, with a value of `my-header-value`, that you want Okta to pass to your\nexternal service.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "description": "The optional field or header name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "The value for the key"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "method": {
+              "type": "string",
+              "description": "The method of the Okta event hook request"
+            },
+            "uri": {
+              "type": "string",
+              "description": "The external service endpoint called to execute the event hook handler"
+            }
+          },
+          "additionalProperties": true
+        },
+        "type": {
+          "type": "string",
+          "description": "The channel type. Currently supports `HTTP`.",
+          "enum": [
+            "HTTP"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the channel. Currently the only supported version is `1.0.0`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp of the event hook creation",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "The ID of the user who created the event hook"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the event hook"
+    },
+    "events": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "type": "object",
+          "description": "The optional filter defined on a specific event type\n\n> **Note:** Event hook filters is a [self-service Early Access (EA)](/openapi/okta-management/guides/release-lifecycle/#early-access-ea) to enable.\nIf you want to disable this feature, it's recommended to first remove all event filters.",
+          "properties": {
+            "eventFilterMap": {
+              "type": "array",
+              "description": "The object that maps the filter to the event type",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "condition": {
+                    "type": "object",
+                    "properties": {
+                      "expression": {
+                        "type": "string",
+                        "description": "The Okta Expression language statement that filters the event type"
+                      },
+                      "version": {
+                        "type": "string",
+                        "description": "Internal field"
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "event": {
+                    "type": "string",
+                    "description": "The filtered event type"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "type": {
+              "type": "string",
+              "description": "The type of filter. Currently only supports `EXPRESSION_LANGUAGE`"
+            }
+          },
+          "additionalProperties": true
+        },
+        "items": {
+          "type": "array",
+          "description": "The subscribed event types that trigger the event hook. When you register an event hook\nyou need to specify which events you want to subscribe to. To see the list of event types\ncurrently eligible for use in event hooks, use the [Event Types catalog](https://developer.okta.com/docs/reference/api/event-types/#catalog)\nand search with the parameter `event-hook-eligible`.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "description": "The events object type. Currently supports `EVENT_TYPE`.",
+          "enum": [
+            "EVENT_TYPE"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique key for the event hook"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Date of the last event hook update",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name for the event hook"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the event hook",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "verificationStatus": {
+      "type": "string",
+      "description": "Verification status of the event hook. `UNVERIFIED` event hooks won't receive any events.",
+      "enum": [
+        "UNVERIFIED",
+        "VERIFIED"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "deactivate": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "verify": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

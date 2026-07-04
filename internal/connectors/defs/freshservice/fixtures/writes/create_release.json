@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_release",
+    "description": "Fixture create_release record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/releases",
+    "body": {
+      "name": "Fixture create_release",
+      "description": "Fixture create_release record"
+    }
+  }
+}

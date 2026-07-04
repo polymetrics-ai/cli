@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/feature",
+    "query": {
+      "id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ftr_fixture_detail",
+        "name": "Fixture",
+        "lastUpdatedAt": 1760000000000,
+        "kind": "Feature"
+      }
+    ]
+  }
+}

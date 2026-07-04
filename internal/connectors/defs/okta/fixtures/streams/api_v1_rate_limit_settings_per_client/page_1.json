@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/rate-limit-settings/per-client"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "defaultMode": "DISABLE",
+      "useCaseModeOverrides": {
+        "LOGIN_PAGE": "DISABLE",
+        "OAUTH2_AUTHORIZE": "DISABLE",
+        "OIE_APP_INTENT": "DISABLE"
+      }
+    }
+  }
+}

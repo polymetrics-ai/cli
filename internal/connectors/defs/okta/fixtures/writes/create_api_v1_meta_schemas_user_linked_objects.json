@@ -1,0 +1,48 @@
+{
+  "record": {
+    "associated": {
+      "description": "description_fixture",
+      "name": "name_fixture",
+      "title": "title_fixture",
+      "type": "USER"
+    },
+    "primary": {
+      "description": "description_fixture",
+      "name": "name_fixture",
+      "title": "title_fixture",
+      "type": "USER"
+    },
+    "_links": {
+      "self": {
+        "href": "https://example.invalid/fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/meta/schemas/user/linkedObjects",
+    "body": {
+      "associated": {
+        "description": "description_fixture",
+        "name": "name_fixture",
+        "title": "title_fixture",
+        "type": "USER"
+      },
+      "primary": {
+        "description": "description_fixture",
+        "name": "name_fixture",
+        "title": "title_fixture",
+        "type": "USER"
+      },
+      "_links": {
+        "self": {
+          "href": "https://example.invalid/fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

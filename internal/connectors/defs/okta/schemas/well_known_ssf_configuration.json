@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "authorization_schemes": {
+      "type": "array",
+      "description": "An array of JSON objects that specify the authorization scheme properties supported by the transmitter",
+      "items": {
+        "type": "object",
+        "properties": {
+          "spec_urn": {
+            "type": "string",
+            "description": "The URN that describes the specification of the protocol being used",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "configuration_endpoint": {
+      "type": "string",
+      "description": "The URL of the SSF stream configuration endpoint",
+      "format": "uri"
+    },
+    "default_subjects": {
+      "type": "string",
+      "description": "A string that indicates the default behavior of newly created streams",
+      "enum": [
+        "ALL",
+        "NONE"
+      ]
+    },
+    "delivery_methods_supported": {
+      "type": "array",
+      "description": "An array of supported SET delivery methods",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "issuer": {
+      "type": "string",
+      "description": "The issuer used in security event tokens. This value is set as `iss` in the claim."
+    },
+    "jwks_uri": {
+      "type": "string",
+      "description": "The URL of the JSON Web Key Set (JWKS) that contains the signing keys for validating the signatures of security event tokens (SETs)",
+      "format": "uri"
+    },
+    "spec_version": {
+      "type": "string",
+      "description": "The version identifying the implementer's draft or final specification implemented by the transmitter"
+    },
+    "verification_endpoint": {
+      "type": "string",
+      "description": "The URL of the SSF stream verification endpoint",
+      "format": "uri"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "scenario": "scenario_fixture",
+    "data": {
+      "links": {
+        "resource": "PM_fixture_1"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/scenario_simulators/scenario_fixture/actions/run",
+    "body": {
+      "data": {
+        "links": {
+          "resource": "PM_fixture_1"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

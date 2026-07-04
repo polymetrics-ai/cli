@@ -1,57 +1,26 @@
 # Overview
 
-Mantle (`api.heymantle.com`) is a billing/usage platform for Shopify apps. This bundle migrates
-`internal/connectors/mantle` (the hand-written legacy connector) to a declarative Tier-1 bundle at
-capability parity: 2 read-only streams (`customers`, `subscriptions`), no writes.
+Mantle is a billing, CRM, helpdesk, documentation, email, workflow, and analytics API for Shopify apps. This Pass B bundle covers the Mantle Core API documented at https://coreapi.heymantle.dev/ while preserving legacy parity for the original `customers` and `subscriptions` streams.
 
 ## Auth setup
 
-Provide a Mantle API key via the `api_key` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_key>`) and is never logged.
+Provide a Mantle API key via the `api_key` secret. The bundle sends it with Bearer authentication and does not place it in record data, fixtures, or logs.
 
 ## Streams notes
 
-Both streams (`customers`, `subscriptions`) share the same shape: `GET` against the Mantle list
-endpoint, records at their own top-level selector (`customers`/`subscriptions`), primary key
-`["id"]`. Pagination follows Mantle's own `cursor`/`hasNextPage` convention
-(`pagination.type: cursor` with `token_path: cursor` and `stop_path: hasNextPage`): the next page's
-`cursor` query param is read from the response body's own `cursor` field, and pagination stops when
-`hasNextPage` is falsy — matching legacy `harvest`'s
-`hasNext != "true" || strings.TrimSpace(nextCursor) == ""` stop condition (the token-path
-paginator's own absent/empty-token stop check covers the second half of that OR; `stop_path`
-covers the first).
+The bundle declares 133 GET streams. The legacy `customers` and `subscriptions` streams retain the legacy record projection and `take=500` request shape. Newly added streams use passthrough projection so documented response fields are not dropped by a narrow generated schema.
 
-Every request sends `take=500` (matches legacy's default `page_size`) via each stream's static
-`query: {"take": "500"}`; legacy's config-driven `page_size`/`max_pages` overrides are not
-reproduced — the engine's `cursor` pagination type takes no page-size parameter for its own
-stop-condition bookkeeping (unlike `page_number`, whose `PageSize` field doubles as a stop
-threshold, `cursor`'s stop signal is entirely `token_path`/`stop_path`-driven), so this is a
-static-`query`-value deviation only: the STOP condition itself is unaffected by whatever `take`
-value is declared. `max_pages` has no engine equivalent exposed to this bundle beyond the
-`PaginationSpec.MaxPages` static hard-cap field, which this bundle leaves unset (unbounded),
-matching legacy's own default (`mantleMaxPages` returns 0/unbounded unless a caller sets
-`max_pages`).
+Streams with Mantle cursor metadata declare per-stream cursor pagination using `cursor` or `nextCursor` plus `hasNextPage`. Other detail or singleton endpoints explicitly use non-paginated reads so the base cursor paginator is not accidentally applied to one-record responses.
 
-Neither stream declares an `incremental` block: legacy's `mantleStreams()` publishes
-`CursorFields` (`updatedAt`/`createdAt`) for catalog/schema purposes, but `harvest` never sends any
-server-side date filter — every read is a full pull, matching this bundle's omission of a
-`request_param`/`start_config_key` on either stream exactly (`x-cursor-field` is still declared on
-both schemas for downstream dedup/ordering, matching legacy's published `CursorFields`).
-
-Legacy enforces no client-side rate limiting, so this bundle declares no `streams.json`
-`base.rate_limit` either, matching that (lack of) behavior exactly.
+Streams whose documented path or required query needs an ID use optional config properties such as `id`, `app_id`, `page_id`, `resource_id`, and `repository_id`. They are optional at connection-spec level because they are stream-specific; reading the corresponding stream requires setting the relevant value.
 
 ## Write actions & risks
 
-None. Mantle is a read-only source in both legacy and this bundle (`capabilities.write: false`) —
-legacy's own `Write` method is an unconditional `ErrUnsupportedOperation` stub.
+The bundle declares 148 dialect-expressible write actions for documented POST, PUT, PATCH, and DELETE operations. Delete actions are marked destructive and treat 404 as an idempotent missing-ok response when Mantle reports a resource is already gone. Other actions still require the normal write approval path because they mutate Mantle resources or trigger side effects such as email delivery, AI generation, webhooks, workflow runs, uploads, or transcription jobs.
 
 ## Known limits
 
-- `page_size`/`max_pages` are not exposed as config: `streams.json`'s static `query: {"take": "500"}`
-  and the absence of a declared `PaginationSpec.MaxPages` reproduce legacy's DEFAULT values exactly,
-  but neither is runtime-overridable in this bundle the way legacy's `mantlePageSize`/
-  `mantleMaxPages` config parsing allowed. This never changes emitted record DATA for any input
-  legacy itself would accept at its own defaults; it narrows configurability only.
-- The full Mantle API surface (usage events, plans) is out of scope for this wave; see
-  `api_surface.json`'s `excluded` entries.
+- Deprecated Mantle docs endpoints are excluded with category `deprecated` and point to their documented successors where applicable.
+- Webhook event callback payload pages under `/webhooks/<topic>` are excluded as `non_data_endpoint`; they document requests Mantle sends to receivers, not client-callable Mantle API mutations.
+- `POST /v1/attachments` creates a presigned upload URL and is modeled as a write action for that API call only; uploading file bytes to the returned signed URL is outside the Mantle API connector surface.
+- Generated schemas intentionally flatten OpenAPI `allOf` and use broad types for unsupported OpenAPI constructs such as `oneOf`. New streams use passthrough projection so this does not discard documented fields.

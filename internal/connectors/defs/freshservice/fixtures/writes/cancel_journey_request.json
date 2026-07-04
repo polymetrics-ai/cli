@@ -1,0 +1,15 @@
+{
+  "record": {
+    "request_id": 123,
+    "name": "Fixture cancel_journey_request",
+    "description": "Fixture cancel_journey_request record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/journeys/requests/123/cancel",
+    "body": {
+      "name": "Fixture cancel_journey_request",
+      "description": "Fixture cancel_journey_request record"
+    }
+  }
+}

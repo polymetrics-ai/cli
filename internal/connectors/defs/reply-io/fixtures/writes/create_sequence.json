@@ -1,0 +1,28 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "scheduleId": 1,
+    "settings": {},
+    "emailAccounts": [],
+    "linkedInAccounts": [],
+    "steps": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/sequences",
+    "body": {
+      "name": "fixture_name",
+      "scheduleId": 1,
+      "settings": {},
+      "emailAccounts": [],
+      "linkedInAccounts": [],
+      "steps": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

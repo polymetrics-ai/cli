@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "bulkupsertcustomobjects",
+      "attributes": {
+        "name": "Fixture Bulk Upsert Custom Objects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/imports/actions/customObjectBulkUpsert",
+    "body": {
+      "data": {
+        "type": "bulkupsertcustomobjects",
+        "attributes": {
+          "name": "Fixture Bulk Upsert Custom Objects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Groups"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schemas": [
+        "schema_fixture"
+      ],
+      "totalResults": 1.25,
+      "startIndex": 1.25,
+      "itemsPerPage": 1.25,
+      "Resources": [
+        {
+          "schemas": [
+            "schema_fixture"
+          ],
+          "id": "id_fixture",
+          "displayName": "display_name_fixture",
+          "members": [
+            {
+              "value": "value_fixture",
+              "type": "type_fixture",
+              "display": "display_fixture"
+            }
+          ],
+          "meta": {
+            "resourceType": "resource_type_fixture",
+            "location": "location_fixture"
+          }
+        }
+      ]
+    }
+  }
+}

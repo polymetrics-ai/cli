@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/find/123",
+    "query": {
+      "external_source": "imdb_id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture find_by_id",
+      "name": "Fixture find_by_id",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

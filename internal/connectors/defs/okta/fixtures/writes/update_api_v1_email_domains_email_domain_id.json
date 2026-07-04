@@ -1,0 +1,19 @@
+{
+  "record": {
+    "email_domain_id": "synthetic-conformance-value",
+    "displayName": "display_name_fixture",
+    "userName": "user_name_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/email-domains/synthetic-conformance-value",
+    "body": {
+      "displayName": "display_name_fixture",
+      "userName": "user_name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

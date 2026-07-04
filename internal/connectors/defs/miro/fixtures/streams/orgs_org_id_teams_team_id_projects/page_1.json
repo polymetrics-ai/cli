@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/projects",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "type": "project"
+        }
+      ],
+      "type": "cursor-list"
+    }
+  }
+}

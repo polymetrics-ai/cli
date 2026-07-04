@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/itam/cloud_infrastructures",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": [
+        {
+          "id": "view_all_cloud_infrastructure",
+          "name": "Fixture view_all_cloud_infrastructure",
+          "subject": "Fixture view_all_cloud_infrastructure",
+          "description": "Fixture view_all_cloud_infrastructure record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

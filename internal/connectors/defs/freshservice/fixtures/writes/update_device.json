@@ -1,0 +1,15 @@
+{
+  "record": {
+    "device_id": 123,
+    "name": "Fixture update_device",
+    "description": "Fixture update_device record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/itam/devices/123",
+    "body": {
+      "name": "Fixture update_device",
+      "description": "Fixture update_device record"
+    }
+  }
+}

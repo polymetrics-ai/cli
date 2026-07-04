@@ -1,0 +1,22 @@
+{
+  "record": {
+    "ids": [
+      "feedback_fixture"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/feedback",
+    "body": {
+      "ids": [
+        "feedback_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": "not_found"
+    }
+  }
+}

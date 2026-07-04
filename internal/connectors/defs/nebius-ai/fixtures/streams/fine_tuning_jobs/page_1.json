@@ -1,0 +1,94 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/fine_tuning/jobs",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "object_fixture",
+      "data": [
+        {
+          "id": "id_fixture",
+          "created_at": 1,
+          "error": {
+            "code": "code_fixture",
+            "message": "message_fixture",
+            "param": "param_fixture"
+          },
+          "finished_at": 1,
+          "hyperparameters": {
+            "batch_size": 1,
+            "learning_rate": 1.25,
+            "n_epochs": 1,
+            "warmup_ratio": 1.25,
+            "weight_decay": 1.25,
+            "packing": true,
+            "max_grad_norm": 1.25,
+            "context_length": 1,
+            "lora": true,
+            "lora_r": 1,
+            "lora_alpha": 1,
+            "lora_dropout": 1.25
+          },
+          "method": {
+            "type": "type_fixture",
+            "supervised": {
+              "hyperparameters": {
+                "batch_size": 1,
+                "learning_rate": 1.25,
+                "n_epochs": 1,
+                "warmup_ratio": 1.25,
+                "weight_decay": 1.25,
+                "packing": true,
+                "max_grad_norm": 1.25,
+                "context_length": 1,
+                "lora": true,
+                "lora_r": 1,
+                "lora_alpha": 1,
+                "lora_dropout": 1.25
+              }
+            }
+          },
+          "integrations": [
+            {
+              "type": "type_fixture",
+              "wandb": {
+                "project": "project_fixture",
+                "name": "name_fixture",
+                "entity": "entity_fixture",
+                "tags": [
+                  "tag_fixture"
+                ]
+              }
+            }
+          ],
+          "from_checkpoint": {
+            "type": "type_fixture",
+            "repo": "repo_fixture",
+            "revision": "revision_fixture"
+          },
+          "model": "model_fixture",
+          "object": "object_fixture",
+          "organization_id": "organization_id_fixture",
+          "result_files": [
+            "result_file_fixture"
+          ],
+          "seed": 1,
+          "suffix": "suffix_fixture",
+          "status": "validating_files",
+          "trained_tokens": 1,
+          "training_file": "training_file_fixture",
+          "validation_file": "validation_file_fixture",
+          "estimated_finish": 1,
+          "trained_steps": 1,
+          "total_steps": 1
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

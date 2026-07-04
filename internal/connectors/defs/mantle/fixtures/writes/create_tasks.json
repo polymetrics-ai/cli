@@ -1,0 +1,58 @@
+{
+  "record": {
+    "title": "fixture",
+    "description": "fixture",
+    "descriptionHtml": "<p>Fixture</p>",
+    "priority": "low",
+    "status": "new",
+    "dueDate": "2026-01-01T00:00:00Z",
+    "assigneeId": "assignee_id_fixture",
+    "customerId": "customer_id_fixture",
+    "contactId": "contact_id_fixture",
+    "dealId": "deal_id_fixture",
+    "dealActivityId": "deal_activity_id_fixture",
+    "appInstallationId": "app_installation_id_fixture",
+    "tags": [
+      "fixture"
+    ],
+    "todoItems": [
+      {
+        "content": "fixture",
+        "completed": true,
+        "displayOrder": 1
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tasks",
+    "body": {
+      "title": "fixture",
+      "description": "fixture",
+      "descriptionHtml": "<p>Fixture</p>",
+      "priority": "low",
+      "status": "new",
+      "dueDate": "2026-01-01T00:00:00Z",
+      "assigneeId": "assignee_id_fixture",
+      "customerId": "customer_id_fixture",
+      "contactId": "contact_id_fixture",
+      "dealId": "deal_id_fixture",
+      "dealActivityId": "deal_activity_id_fixture",
+      "appInstallationId": "app_installation_id_fixture",
+      "tags": [
+        "fixture"
+      ],
+      "todoItems": [
+        {
+          "content": "fixture",
+          "completed": true,
+          "displayOrder": 1
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

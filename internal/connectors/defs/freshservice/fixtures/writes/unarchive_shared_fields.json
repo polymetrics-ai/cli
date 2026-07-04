@@ -1,0 +1,15 @@
+{
+  "record": {
+    "shared_field_id": 123,
+    "name": "Fixture unarchive_shared_fields",
+    "description": "Fixture unarchive_shared_fields record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/service-catalog/shared-fields/123/unarchive",
+    "body": {
+      "name": "Fixture unarchive_shared_fields",
+      "description": "Fixture unarchive_shared_fields record"
+    }
+  }
+}

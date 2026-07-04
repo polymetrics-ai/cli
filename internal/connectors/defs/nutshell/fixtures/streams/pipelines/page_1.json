@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stagesets"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "1",
+        "name": "Fixture pipelines",
+        "href": "https://app.nutshell.com/rest/pipelines/1",
+        "htmlUrl": "https://app.nutshell.com/pipelines/1",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      },
+      {
+        "id": "2",
+        "name": "Fixture pipelines",
+        "href": "https://app.nutshell.com/rest/pipelines/2",
+        "htmlUrl": "https://app.nutshell.com/pipelines/2",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      }
+    ]
+  }
+}

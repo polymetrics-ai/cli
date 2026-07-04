@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/unsubscribes/variables",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "uvar_fixture_1",
+        "value": "fixture1@example.com",
+        "source": "api",
+        "createdAt": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vaccinations/states",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "HH": {
+          "name": "Hamburg",
+          "administeredVaccinations": 1000,
+          "vaccinated": 900,
+          "delta": 0,
+          "quote": 0.7
+        }
+      }
+    }
+  }
+}

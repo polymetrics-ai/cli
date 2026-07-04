@@ -1,0 +1,22 @@
+{
+  "record": {
+    "employeeId": "fixture_id",
+    "unpaidPeriods": [
+      {}
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employee_unpaid_pay_stubs",
+    "body": {
+      "employeeId": "fixture_id",
+      "unpaidPeriods": [
+        {}
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

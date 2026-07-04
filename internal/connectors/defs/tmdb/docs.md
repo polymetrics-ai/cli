@@ -1,68 +1,63 @@
 # Overview
 
-TMDb is a wave2 fan-out declarative-HTTP migration. It reads popular movies, now-playing movies,
-movie search results, and single-movie details from The Movie Database API
-(`GET https://api.themoviedb.org/3/...`). This bundle targets capability parity with
-`internal/connectors/tmdb` (the hand-written connector it migrates); the legacy package stays
-registered and unchanged until wave6's registry flip.
+TMDb reads catalog, search, trending, account-state, and reference metadata from The Movie Database
+API v3. The four legacy streams (`popular_movies`, `now_playing_movies`, `search_movies`, and
+`movie_details`) keep the hand-written connector's passthrough record behavior.
+
+Pass B reviewed TMDb's official ReadMe OpenAPI 3.1 document
+(`https://developer.themoviedb.org/openapi/tmdb-api.json`) on 2026-07-04. The document contains
+152 operations: 135 GET endpoints, 12 POST endpoints, and 5 DELETE endpoints. This bundle covers
+the GET data surface with streams, except authentication/token probes and a scalar reference-list
+endpoint. POST/DELETE endpoints remain excluded because they mutate user session, account, list, or
+rating state and the connector remains read-only.
 
 ## Auth setup
 
-Provide a TMDb v3 API key via the `api_key` secret; it is sent as the `api_key` query parameter
-(`api_key_query` auth mode), matching legacy's `baseQuery`'s `url.Values{"api_key": {key}}`
-(`tmdb.go:197-207`), and is never logged. An optional `language` config value is applied as the
-`language` query parameter on every request when set (legacy's same conditional
-`if lang := ...; lang != ""` behavior), omitted entirely otherwise.
+Provide a TMDb v3 API key via the `api_key` secret; it is sent as the `api_key` query parameter,
+matching legacy's `baseQuery`. Optional `language` is sent where supported.
+
+Search streams require `query`. `find_by_id` requires `external_source`. Trending streams use
+TMDb's documented `day` time window. Single-ID resources use comma-separated fan-out config keys
+such as `movie_ids`, `series_ids`, `person_ids`, `collection_ids`, `company_ids`, `keyword_ids`,
+`network_ids`, and `review_ids`. Multi-part TV season/episode endpoints use the documented path
+config keys directly, such as `series_id`, `season_number`, and `episode_number`.
 
 ## Streams notes
 
-`popular_movies` and `now_playing_movies` share the identical TMDb list envelope
-(`GET /movie/popular` / `GET /movie/now_playing` returning `{"results":[...],"page":N,
-"total_pages":N,...}`); pagination is `page_number` (`page` param only, no page-size query
-parameter — TMDb's list size is a fixed 20 server-side and legacy's own `PageNumberPaginator`
-construction never set a `SizeParam`, `tmdb.go:123`) starting at page 1, static `page_size: 20`
-matching legacy's `defaultPageSize` short-page stop threshold.
+The legacy streams stay first and preserve their existing request shapes and fixtures:
+`popular_movies`, `now_playing_movies`, and `search_movies` read `results`; `movie_details` reads a
+single object at the response root.
 
-`search_movies` (`GET /search/movie`) shares the same envelope and pagination shape but additionally
-requires the `query` config value, sent as the `query` search-text query parameter — legacy
-requires this and errors if unset (`tmdb.go:93-97`); this bundle's `query` param is a plain
-(non-optional) template, so an unset `query` config hard-errors identically at read time.
+Generated Pass B streams use `projection: "passthrough"` to avoid truncating TMDb response fields.
+Endpoints whose OpenAPI response schema has a `results` array emit one record per result. Detail
+and subresource endpoints that return compound objects emit the response object as a single record,
+preserving arrays such as credits, images, translations, providers, cast, and crew together instead
+of guessing one preferred child array.
 
-`movie_details` (`GET /movie/{movie_id}`) is TMDb's only non-paginated, non-list stream: it returns
-a single movie object directly at the response root, not wrapped in a `results` envelope. This
-bundle declares `records.path: ""` (root-as-single-record, matching legacy's `recordsPath: "."`)
-and a stream-level `pagination: {"type": "none"}` override (legacy's `!spec.paginated` branch,
-`tmdb.go:99-113`, issues exactly one request with no page loop at all). `movie_id` is a required
-path-templated config value scoped to this one stream only (not globally required in `spec.json`,
-since the other three streams never reference it) — an unset `movie_id` hard-errors at read time
-exactly like legacy's `movieDetailPath` (`tmdb.go:178-184`).
-
-None of the four streams declare an `incremental` block: legacy's `Read` never applies a
-cursor-based filter parameter of any kind — every read is either a full paginated sweep or (for
-`movie_details`) a single fixed-resource fetch, matching legacy's true behavior exactly.
-
-Every stream uses `projection: "passthrough"`: legacy's `Read` emits each record verbatim via
-`emit(connectors.Record(rec))` for both the paginated-list branch (`tmdb.go:109`) and the
-`Harvest`-driven branch (`tmdb.go:124`), with no field-building step in either case. Schema-mode
-projection would silently drop any TMDb response field not in the declared list; the schemas here
-document legacy's own known field surface (legacy's `fields(...)` declarations, `tmdb.go:153-156`)
-but do not constrain what is actually emitted.
+Config-key fan-out streams emit nothing when their ID config is empty. When IDs are supplied, the
+engine runs the endpoint once per ID and stamps the parent ID onto each emitted record. These
+fan-out streams carry conformance skip markers because the fixture replay harness does not inject
+the comma-separated ID config.
 
 ## Write actions & risks
 
-None. TMDb is read-only (`capabilities.write` is `false`); this bundle ships no `writes.json`,
-matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
+None. TMDb's documented mutations create/delete sessions, add/remove list items, mark favorites or
+watchlist entries, and add/delete ratings. They require user session/account state and change remote
+user data, so this bundle keeps `capabilities.write: false` and ships no `writes.json`.
 
 ## Known limits
 
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy exposes `page_size` (default
-  20, positive integer) and `max_pages` (0/absent = unbounded, non-negative integer cap) as
-  config-driven overrides (`pageSize`/`maxPages`, `tmdb.go:225-246`), applied to the three paginated
-  streams. The engine's `page_number` paginator has no config-driven page-size or
-  request-count-cap knob (mirrors the aha/thinkific-courses/ticketmaster precedent from this same
-  wave); `page_size`/`max_pages` are therefore not declared in `spec.json`, and this bundle sends
-  TMDb's own default page size (20, matched via the short-page stop threshold) with no page cap.
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path stamps a
-  `fixture: true` marker field with no live-path equivalent (`tmdb.go:190`). This bundle's schemas
-  and fixtures target the live record shape only; the engine's own `internal/connectors/conformance`
-  fixture-replay harness provides the credential-free test affordance this bundle needs.
+- **Authentication/session GET endpoints are excluded.** API-key validation and guest/request token
+  creation are operational auth endpoints, not syncable data streams.
+- **One scalar reference endpoint is excluded.** `/3/configuration/primary_translations` returns
+  translation-code scalars rather than objects; the records dialect does not fan out scalar arrays.
+- **Trending streams model the `day` window.** TMDb also documents `week`, but the current bundle
+  exposes one stable stream per trending endpoint rather than separate time-window fan-out.
+- **Generated subresource streams keep compound responses intact.** For endpoints like credits,
+  images, translations, and watch providers, a single response object may contain multiple arrays.
+  Emitting the whole object avoids silently dropping sibling arrays.
+- **Runtime `page_size`/`max_pages` overrides are not modeled.** Legacy accepts those config keys,
+  but the declarative paginator uses bundle-authored values. TMDb's list endpoints use page-number
+  pagination with fixed server-side page size.
+- **Legacy fixture-only fields are not modeled.** Legacy's fixture path stamps `fixture: true`; the
+  declarative fixture replay harness replaces that test-only behavior.

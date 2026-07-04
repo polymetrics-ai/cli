@@ -1,0 +1,23 @@
+{
+  "record": {
+    "enabled": true,
+    "channel": "synthetic-conformance-value",
+    "show_message_buttons": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/1/notifications/slack",
+    "body": {
+      "enabled": true,
+      "channel": "synthetic-conformance-value",
+      "show_message_buttons": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "record": {
+    "appInstallationId": "app_installation_id_fixture",
+    "customerId": "customer_id_fixture",
+    "dealId": "deal_id_fixture",
+    "comment": "fixture",
+    "commentHtml": "<p>Fixture</p>",
+    "attachments": [
+      {
+        "url": "https://example.com/fixture",
+        "name": "fixture",
+        "contentType": "fixture",
+        "sizeBytes": 1
+      }
+    ],
+    "taggedUsers": [
+      {
+        "id": "id_fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/timeline_comments",
+    "body": {
+      "appInstallationId": "app_installation_id_fixture",
+      "customerId": "customer_id_fixture",
+      "dealId": "deal_id_fixture",
+      "comment": "fixture",
+      "commentHtml": "<p>Fixture</p>",
+      "attachments": [
+        {
+          "url": "https://example.com/fixture",
+          "name": "fixture",
+          "contentType": "fixture",
+          "sizeBytes": 1
+        }
+      ],
+      "taggedUsers": [
+        {
+          "id": "id_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

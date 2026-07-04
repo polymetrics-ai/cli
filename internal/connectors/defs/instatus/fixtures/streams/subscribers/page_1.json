@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/synthetic-conformance-value/subscribers",
+    "query": {
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "subscriber_fixture_1",
+        "name": "Fixture subscriber_fixture_1",
+        "email": "subscriber@example.test"
+      }
+    ]
+  }
+}

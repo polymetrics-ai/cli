@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "info",
+        "warn",
+        "error"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "object": {
+      "type": "string"
+    },
+    "data": {
+      "type": [
+        "object",
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "null"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "message",
+        "metrics"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

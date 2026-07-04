@@ -1,0 +1,910 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the object was created",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique key for the IdP"
+    },
+    "issuerMode": {
+      "type": "string",
+      "description": "Indicates whether Okta uses the original Okta org domain URL or a custom domain URL in the request to the social IdP",
+      "enum": [
+        "CUSTOM_URL",
+        "DYNAMIC",
+        "ORG_URL"
+      ]
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the object was last updated",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique name for the IdP"
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "accountLink": {
+          "type": "object",
+          "description": "Specifies the behavior for linking an IdP user to an existing Okta user",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Specifies the account linking action for an IdP user",
+              "enum": [
+                "AUTO",
+                "DISABLED"
+              ]
+            },
+            "filter": {
+              "type": "object",
+              "description": "Specifies filters on which users are available for account linking by an IdP",
+              "properties": {
+                "groups": {
+                  "type": "object",
+                  "description": "Group memberships used to determine link candidates",
+                  "properties": {
+                    "include": {
+                      "type": "array",
+                      "description": "Specifies the allowlist of Group identifiers to match against. Group memberships are restricted to type `OKTA_GROUP`.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "users": {
+                  "type": "object",
+                  "description": "Filters on which users are available for account linking",
+                  "properties": {
+                    "exclude": {
+                      "type": "array",
+                      "description": "Specifies the blocklist of user identifiers to exclude from account linking",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "excludeAdmins": {
+                      "type": "boolean",
+                      "description": "Specifies whether admin users should be excluded from account linking"
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "maxClockSkew": {
+          "type": "integer",
+          "description": "Maximum allowable clock skew when processing messages from the IdP"
+        },
+        "trustClaims": {
+          "type": "boolean",
+          "description": "Indicates whether to trust authentication claims from the IdP"
+        },
+        "provisioning": {
+          "type": "object",
+          "description": "Specifies the behavior for just-in-time (JIT) provisioning of an IdP user as a new Okta user and their group memberships",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Specifies the user provisioning action during authentication when an IdP user isn't linked to an existing Okta user.\n* To successfully provision a new Okta user, you must enable just-in-time (JIT) provisioning in your org security settings.\n* If the target username isn't unique or the resulting Okta user profile is missing a required profile attribute, JIT provisioning may fail.\n* New Okta users a",
+              "enum": [
+                "AUTO",
+                "DISABLED"
+              ]
+            },
+            "conditions": {
+              "type": "object",
+              "description": "Conditional behaviors for an IdP user during authentication",
+              "properties": {
+                "deprovisioned": {
+                  "type": "object",
+                  "description": "Behavior for a previously deprovisioned IdP user during authentication",
+                  "properties": {
+                    "action": {
+                      "type": "string",
+                      "description": "Specifies the action during authentication when an IdP user is linked to a previously deprovisioned Okta user",
+                      "enum": [
+                        "NONE",
+                        "REACTIVATE"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "suspended": {
+                  "type": "object",
+                  "description": "Behavior for a previously suspended IdP user during authentication",
+                  "properties": {
+                    "action": {
+                      "type": "string",
+                      "description": "Specifies the action during authentication when an IdP user is linked to a previously suspended Okta user",
+                      "enum": [
+                        "NONE",
+                        "UNSUSPEND"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "groups": {
+              "type": "object",
+              "description": "Provisioning settings for a user's group memberships",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "description": "Provisioning action for the IdP user's group memberships\n\n| Enum     | Description                                                                                                                                                       | Existing OKTA_GROUP Memberships                                                                       | Existing APP_GROUP Memberships | Existing BUILT_IN Membership",
+                  "enum": [
+                    "APPEND",
+                    "ASSIGN",
+                    "NONE",
+                    "SYNC"
+                  ]
+                },
+                "assignments": {
+                  "type": "array",
+                  "description": "List of `OKTA_GROUP` group identifiers to add an IdP user as a member with the `ASSIGN` action",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "filter": {
+                  "type": "array",
+                  "description": "Allowlist of `OKTA_GROUP` group identifiers for the `APPEND` or `SYNC` provisioning action",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "sourceAttributeName": {
+                  "type": "string",
+                  "description": "IdP user profile attribute name (case-insensitive) for an array value that contains group memberships"
+                }
+              },
+              "additionalProperties": true
+            },
+            "profileMaster": {
+              "type": "boolean",
+              "description": "Determines if the IdP should act as a source of truth for user profile attributes"
+            }
+          },
+          "additionalProperties": true
+        },
+        "subject": {
+          "type": "object",
+          "description": "Specifies the behavior for establishing, validating, and matching a username for an IdP user",
+          "properties": {
+            "filter": {
+              "type": "string",
+              "description": "Optional [regular expression pattern](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions) used to filter untrusted IdP usernames.\n* As a best security practice, you should define a regular expression pattern to filter untrusted IdP usernames. This is especially important if multiple IdPs are connected to your org. The filter prevents an IdP from issuing an assert"
+            },
+            "matchAttribute": {
+              "type": "string",
+              "description": "Okta user profile attribute for matching a transformed IdP username. Only for matchType `CUSTOM_ATTRIBUTE`.\nThe `matchAttribute` must be a valid Okta user profile attribute of one of the following types:\n* String (with no format or 'email' format only)\n* Integer\n* Number"
+            },
+            "matchType": {
+              "type": "string",
+              "description": "Determines the Okta user profile attribute match conditions for account linking and authentication of the transformed IdP username",
+              "enum": [
+                "CUSTOM_ATTRIBUTE",
+                "EMAIL",
+                "USERNAME",
+                "USERNAME_OR_EMAIL"
+              ]
+            },
+            "userNameTemplate": {
+              "type": "object",
+              "description": "[Okta Expression Language (EL) expression](https://developer.okta.com/docs/reference/okta-expression-language/) to generate or transform a unique username for the IdP user.\n* IdP user profile attributes can be referenced with the `idpuser` prefix such as `idpuser.subjectNameId`.\n* You must define an IdP user profile attribute before it can be referenced in an Okta EL expression. To define an IdP u",
+              "properties": {
+                "template": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "properties": {
+      "type": "object",
+      "description": "The properties in the IdP `properties` object vary depending on the IdP type",
+      "properties": {
+        "aalValue": {
+          "type": "string",
+          "description": "The [authentication assurance level](https://developers.login.gov/oidc/#aal-values) (AAL) value for the Login.gov IdP.\nSee [Add a Login.gov IdP](https://developer.okta.com/docs/guides/add-logingov-idp/). Applies to `LOGINGOV` and `LOGINGOV_SANDBOX` IdP types."
+        },
+        "additionalAmr": {
+          "type": "array",
+          "description": "The additional Assurance Methods References (AMR) values for Smart Card IdPs. Applies to `X509` IdP type.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "sc",
+              "hwk",
+              "pin",
+              "mfa"
+            ]
+          }
+        },
+        "allowDynamicUserMatching": {
+          "type": "boolean",
+          "description": "Enables authenticated users to enroll a Smart Card if the users can't be identified using the configured `matchAttribute`. Applies to `X509` IdP type.\n\n> **Note:** Enrollment requires a PIN if the Smart Card is PIN-protected. And enrollment is also blocked if the X.509 certificate contains restricted attributes (`login`, `email`, `secondEmail`, and configured attributes that are used in multiple i"
+        },
+        "allowUserUpdates": {
+          "type": "boolean",
+          "description": "Enables attribute synchronization from the X.509 certificate to the user's Okta profile. If it's set to `true`, Okta overwrites user profile attributes with values found in the X.509 certificate. Applies to `X509` IdP type.\n\n> **Note:** Some attributes are restricted and won't be updated, including `login`, `email`, `secondEmail`, and configured attributes that are used in multiple identifiers. "
+        },
+        "ialValue": {
+          "type": "string",
+          "description": "The [type of identity verification](https://developers.login.gov/oidc/#ial-values) (IAL) value for the Login.gov IdP.\nSee [Add a Login.gov IdP](https://developer.okta.com/docs/guides/add-logingov-idp/). Applies to `LOGINGOV` and `LOGINGOV_SANDBOX` IdP types."
+        },
+        "idvMetadata": {
+          "type": "object",
+          "description": "Metadata about the IDV vendor. Available only for `IDV_STANDARD` IdPs.",
+          "properties": {
+            "vendorDisplayName": {
+              "type": "string",
+              "description": "The display name of the IDV vendor"
+            },
+            "termsOfUse": {
+              "type": "string",
+              "description": "A URL that links to the terms of use for the IDV vendor"
+            },
+            "privacyPolicy": {
+              "type": "string",
+              "description": "A URL that links to the privacy policy for the IDV vendor"
+            }
+          },
+          "additionalProperties": true
+        },
+        "inquiryTemplateId": {
+          "type": "string",
+          "description": "The ID of the inquiry template from your Persona dashboard. The inquiry template always starts with `itmpl`. Applies to the `IDV_PERSONA` IdP type."
+        }
+      },
+      "additionalProperties": true
+    },
+    "protocol": {
+      "type": "object",
+      "description": "Protocol settings for the [SAML 2.0 Authentication Request Protocol](http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf)",
+      "properties": {
+        "algorithms": {
+          "type": "object",
+          "description": "Settings for signing and verifying SAML messages",
+          "properties": {
+            "request": {
+              "type": "object",
+              "description": "Algorithm settings used to secure an `<AuthnRequest>` message",
+              "properties": {
+                "digest": {
+                  "type": "string",
+                  "description": "XML Digest Algorithm setting for cryptographically hashing `<AuthnRequest>` messages sent to the IdP\n> **Note:**  This property is ignored when you disable request signatures (`scope` set as `NONE`).",
+                  "enum": [
+                    "SHA-1",
+                    "SHA-256"
+                  ]
+                },
+                "signature": {
+                  "type": "object",
+                  "description": "XML digital Signature Algorithm settings for signing `<AuthnRequest>` messages sent to the IdP\n> **Note:**  The `algorithm` property is ignored when you disable request signatures (`scope` set as `NONE`).",
+                  "properties": {
+                    "algorithm": {
+                      "type": "string",
+                      "enum": [
+                        "SHA-1",
+                        "SHA-256"
+                      ]
+                    },
+                    "scope": {
+                      "type": "string",
+                      "description": "Specifies whether to digitally sign authorization requests to the IdP",
+                      "enum": [
+                        "NONE",
+                        "REQUEST"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "response": {
+              "type": "object",
+              "description": "Algorithm settings for verifying `<SAMLResponse>` messages and `<Assertion>` elements from the IdP",
+              "properties": {
+                "signature": {
+                  "type": "object",
+                  "description": "XML digital Signature Algorithm settings for verifying `<SAMLResponse>` messages and `<Assertion>` elements from the IdP",
+                  "properties": {
+                    "algorithm": {
+                      "type": "string",
+                      "enum": [
+                        "SHA-1",
+                        "SHA-256"
+                      ]
+                    },
+                    "scope": {
+                      "type": "string",
+                      "description": "Specifies whether to verify responses from the IdP",
+                      "enum": [
+                        "ANY",
+                        "RESPONSE",
+                        "TOKEN"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "credentials": {
+          "type": "object",
+          "description": "Federation Trust Credentials for verifying assertions from the IdP and signing requests to the IdP",
+          "properties": {
+            "signing": {
+              "type": "object",
+              "description": "Key used for signing requests to the IdP",
+              "properties": {
+                "kid": {
+                  "type": "string",
+                  "description": "IdP key credential reference to the Okta X.509 signature certificate"
+                }
+              },
+              "additionalProperties": true
+            },
+            "trust": {
+              "type": "object",
+              "description": "Federation Trust Credentials for verifying assertions from the IdP",
+              "properties": {
+                "additionalKids": {
+                  "type": "array",
+                  "description": "Additional IdP key credential reference to the Okta X.509 signature certificate",
+                  "items": {
+                    "type": "string",
+                    "description": "IdP key credential reference to the Okta X.509 signature certificate"
+                  }
+                },
+                "audience": {
+                  "type": "string",
+                  "description": "URI that identifies the target Okta IdP instance (SP) for an `<Assertion>`"
+                },
+                "issuer": {
+                  "type": "string",
+                  "description": "URI that identifies the issuer (IdP) of a `<SAMLResponse>` message `<Assertion>` element"
+                },
+                "kid": {
+                  "type": "string",
+                  "description": "IdP key credential reference to the Okta X.509 signature certificate"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "endpoints": {
+          "type": "object",
+          "description": "SAML 2.0 HTTP binding settings for IdP and SP (Okta)",
+          "properties": {
+            "acs": {
+              "type": "object",
+              "description": "Okta's `SPSSODescriptor` endpoint where the IdP sends a `<SAMLResponse>` message",
+              "properties": {
+                "binding": {
+                  "type": "string",
+                  "enum": [
+                    "HTTP-POST",
+                    "HTTP-REDIRECT"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Determines whether to publish an instance-specific (trust) or organization (shared) ACS endpoint in the SAML metadata",
+                  "enum": [
+                    "INSTANCE",
+                    "ORG"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            },
+            "slo": {
+              "type": "object",
+              "description": "IdP's `SingleLogoutService` endpoint where Okta sends a `<LogoutRequest>` message",
+              "properties": {
+                "binding": {
+                  "type": "string",
+                  "enum": [
+                    "HTTP-POST",
+                    "HTTP-REDIRECT"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "description": "URL of the binding-specific IdP endpoint where Okta sends a `<LogoutRequest>`"
+                }
+              },
+              "additionalProperties": true
+            },
+            "sso": {
+              "type": "object",
+              "description": "IdP's `SingleSignOnService` endpoint where Okta sends an `<AuthnRequest>` message",
+              "properties": {
+                "binding": {
+                  "type": "string",
+                  "enum": [
+                    "HTTP-POST",
+                    "HTTP-REDIRECT"
+                  ]
+                },
+                "destination": {
+                  "type": "string",
+                  "description": "URI reference that indicates the address to which the `<AuthnRequest>` message is sent.\nThe `destination` property is required if request signatures are specified. See [SAML 2.0 Request Algorithm object](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/#tag/IdentityProvider/operation/createIdentityProvider!path=protocol/0/algorithms/request&t=request)."
+                },
+                "url": {
+                  "type": "string",
+                  "description": "URL of the binding-specific endpoint to send an `<AuthnRequest>` message to the IdP.\nThe value of `url` defaults to the same value as the `sso` endpoint if omitted during creation of a new IdP instance.\nThe `url` should be the same value as the `Location` attribute for a published binding in the IdP's SAML Metadata `IDPSSODescriptor`."
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "relayState": {
+          "type": "object",
+          "description": "Relay state settings for IdP",
+          "properties": {
+            "format": {
+              "type": "string",
+              "description": "The format used to generate the `relayState` in the SAML request. The `FROM_URL` format is used if this value is null.",
+              "enum": [
+                "FROM_URL",
+                "OPAQUE"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "settings": {
+          "type": "object",
+          "description": "Advanced settings for the SAML 2.0 protocol",
+          "properties": {
+            "honorPersistentNameId": {
+              "type": "boolean",
+              "description": "Determines if the IdP should persist account linking when the incoming assertion NameID format is `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent`"
+            },
+            "nameFormat": {
+              "type": "string",
+              "description": "SAML 2.0 Name Identifier formats",
+              "enum": [
+                "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+                "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+                "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+                "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+              ]
+            },
+            "participateSlo": {
+              "type": "boolean",
+              "description": "Set to `true` to have Okta send a logout request to the upstream IdP when a user signs out of Okta or a downstream app."
+            },
+            "sendApplicationContext": {
+              "type": "boolean",
+              "description": "Determines if the IdP should send the application context as `<OktaAppInstanceId>` and `<OktaAppName>` in the `<saml2p:Extensions>` element of the `<AuthnRequest>` message"
+            }
+          },
+          "additionalProperties": true
+        },
+        "type": {
+          "type": "string",
+          "description": "SAML 2.0 protocol",
+          "enum": [
+            "SAML2"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "The IdP object's `type` property identifies the social or enterprise IdP used for authentication. \nEach IdP uses a specific protocol, therefore the `protocol` object must correspond with the IdP `type`. \nIf the protocol is OAuth 2.0-based, the `protocol` object's `scopes` property must also correspond with the scopes supported by the IdP `type`. \nFor policy actions supported by each IdP type, see ",
+      "enum": [
+        "AMAZON",
+        "APPLE",
+        "DISCORD",
+        "FACEBOOK",
+        "GITHUB",
+        "GITLAB",
+        "GOOGLE",
+        "IDV_CLEAR",
+        "IDV_INCODE",
+        "IDV_PERSONA",
+        "IDV_STANDARD",
+        "LINKEDIN",
+        "LOGINGOV",
+        "LOGINGOV_SANDBOX",
+        "MICROSOFT",
+        "OIDC",
+        "OKTA_INTEGRATION",
+        "PAYPAL",
+        "PAYPAL_SANDBOX",
+        "SALESFORCE",
+        "SAML2",
+        "SPOTIFY",
+        "X509",
+        "XERO",
+        "YAHOO",
+        "YAHOOJP"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "acs": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "authorize": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "clientRedirectUri": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "users": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "deactivate": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "activate": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "keys": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

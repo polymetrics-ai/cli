@@ -10,1111 +10,279 @@
   "response": {
     "status": 200,
     "body": {
-      "succeeded": true,
-      "totalPages": 2,
-      "pageNumber": 1,
       "data": [
         {
-          "id": "emp_fixture_1",
-          "employeeNumber": "EMP001",
-          "firstName": "Fixture1",
-          "lastName": "User",
-          "displayName": "Fixture 1",
-          "email": "fixture1@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_2",
-          "employeeNumber": "EMP002",
-          "firstName": "Fixture2",
-          "lastName": "User",
-          "displayName": "Fixture 2",
-          "email": "fixture2@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_3",
-          "employeeNumber": "EMP003",
-          "firstName": "Fixture3",
-          "lastName": "User",
-          "displayName": "Fixture 3",
-          "email": "fixture3@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_4",
-          "employeeNumber": "EMP004",
-          "firstName": "Fixture4",
-          "lastName": "User",
-          "displayName": "Fixture 4",
-          "email": "fixture4@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_5",
-          "employeeNumber": "EMP005",
-          "firstName": "Fixture5",
-          "lastName": "User",
-          "displayName": "Fixture 5",
-          "email": "fixture5@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_6",
-          "employeeNumber": "EMP006",
-          "firstName": "Fixture6",
-          "lastName": "User",
-          "displayName": "Fixture 6",
-          "email": "fixture6@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_7",
-          "employeeNumber": "EMP007",
-          "firstName": "Fixture7",
-          "lastName": "User",
-          "displayName": "Fixture 7",
-          "email": "fixture7@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_8",
-          "employeeNumber": "EMP008",
-          "firstName": "Fixture8",
-          "lastName": "User",
-          "displayName": "Fixture 8",
-          "email": "fixture8@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_9",
-          "employeeNumber": "EMP009",
-          "firstName": "Fixture9",
-          "lastName": "User",
-          "displayName": "Fixture 9",
-          "email": "fixture9@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_10",
-          "employeeNumber": "EMP010",
-          "firstName": "Fixture10",
-          "lastName": "User",
-          "displayName": "Fixture 10",
-          "email": "fixture10@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_11",
-          "employeeNumber": "EMP011",
-          "firstName": "Fixture11",
-          "lastName": "User",
-          "displayName": "Fixture 11",
-          "email": "fixture11@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_12",
-          "employeeNumber": "EMP012",
-          "firstName": "Fixture12",
-          "lastName": "User",
-          "displayName": "Fixture 12",
-          "email": "fixture12@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_13",
-          "employeeNumber": "EMP013",
-          "firstName": "Fixture13",
-          "lastName": "User",
-          "displayName": "Fixture 13",
-          "email": "fixture13@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_14",
-          "employeeNumber": "EMP014",
-          "firstName": "Fixture14",
-          "lastName": "User",
-          "displayName": "Fixture 14",
-          "email": "fixture14@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_15",
-          "employeeNumber": "EMP015",
-          "firstName": "Fixture15",
-          "lastName": "User",
-          "displayName": "Fixture 15",
-          "email": "fixture15@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_16",
-          "employeeNumber": "EMP016",
-          "firstName": "Fixture16",
-          "lastName": "User",
-          "displayName": "Fixture 16",
-          "email": "fixture16@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_17",
-          "employeeNumber": "EMP017",
-          "firstName": "Fixture17",
-          "lastName": "User",
-          "displayName": "Fixture 17",
-          "email": "fixture17@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_18",
-          "employeeNumber": "EMP018",
-          "firstName": "Fixture18",
-          "lastName": "User",
-          "displayName": "Fixture 18",
-          "email": "fixture18@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_19",
-          "employeeNumber": "EMP019",
-          "firstName": "Fixture19",
-          "lastName": "User",
-          "displayName": "Fixture 19",
-          "email": "fixture19@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_20",
-          "employeeNumber": "EMP020",
-          "firstName": "Fixture20",
-          "lastName": "User",
-          "displayName": "Fixture 20",
-          "email": "fixture20@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_21",
-          "employeeNumber": "EMP021",
-          "firstName": "Fixture21",
-          "lastName": "User",
-          "displayName": "Fixture 21",
-          "email": "fixture21@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_22",
-          "employeeNumber": "EMP022",
-          "firstName": "Fixture22",
-          "lastName": "User",
-          "displayName": "Fixture 22",
-          "email": "fixture22@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_23",
-          "employeeNumber": "EMP023",
-          "firstName": "Fixture23",
-          "lastName": "User",
-          "displayName": "Fixture 23",
-          "email": "fixture23@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_24",
-          "employeeNumber": "EMP024",
-          "firstName": "Fixture24",
-          "lastName": "User",
-          "displayName": "Fixture 24",
-          "email": "fixture24@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_25",
-          "employeeNumber": "EMP025",
-          "firstName": "Fixture25",
-          "lastName": "User",
-          "displayName": "Fixture 25",
-          "email": "fixture25@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_26",
-          "employeeNumber": "EMP026",
-          "firstName": "Fixture26",
-          "lastName": "User",
-          "displayName": "Fixture 26",
-          "email": "fixture26@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_27",
-          "employeeNumber": "EMP027",
-          "firstName": "Fixture27",
-          "lastName": "User",
-          "displayName": "Fixture 27",
-          "email": "fixture27@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_28",
-          "employeeNumber": "EMP028",
-          "firstName": "Fixture28",
-          "lastName": "User",
-          "displayName": "Fixture 28",
-          "email": "fixture28@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_29",
-          "employeeNumber": "EMP029",
-          "firstName": "Fixture29",
-          "lastName": "User",
-          "displayName": "Fixture 29",
-          "email": "fixture29@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_30",
-          "employeeNumber": "EMP030",
-          "firstName": "Fixture30",
-          "lastName": "User",
-          "displayName": "Fixture 30",
-          "email": "fixture30@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_31",
-          "employeeNumber": "EMP031",
-          "firstName": "Fixture31",
-          "lastName": "User",
-          "displayName": "Fixture 31",
-          "email": "fixture31@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_32",
-          "employeeNumber": "EMP032",
-          "firstName": "Fixture32",
-          "lastName": "User",
-          "displayName": "Fixture 32",
-          "email": "fixture32@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_33",
-          "employeeNumber": "EMP033",
-          "firstName": "Fixture33",
-          "lastName": "User",
-          "displayName": "Fixture 33",
-          "email": "fixture33@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_34",
-          "employeeNumber": "EMP034",
-          "firstName": "Fixture34",
-          "lastName": "User",
-          "displayName": "Fixture 34",
-          "email": "fixture34@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_35",
-          "employeeNumber": "EMP035",
-          "firstName": "Fixture35",
-          "lastName": "User",
-          "displayName": "Fixture 35",
-          "email": "fixture35@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_36",
-          "employeeNumber": "EMP036",
-          "firstName": "Fixture36",
-          "lastName": "User",
-          "displayName": "Fixture 36",
-          "email": "fixture36@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_37",
-          "employeeNumber": "EMP037",
-          "firstName": "Fixture37",
-          "lastName": "User",
-          "displayName": "Fixture 37",
-          "email": "fixture37@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_38",
-          "employeeNumber": "EMP038",
-          "firstName": "Fixture38",
-          "lastName": "User",
-          "displayName": "Fixture 38",
-          "email": "fixture38@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_39",
-          "employeeNumber": "EMP039",
-          "firstName": "Fixture39",
-          "lastName": "User",
-          "displayName": "Fixture 39",
-          "email": "fixture39@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_40",
-          "employeeNumber": "EMP040",
-          "firstName": "Fixture40",
-          "lastName": "User",
-          "displayName": "Fixture 40",
-          "email": "fixture40@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_41",
-          "employeeNumber": "EMP041",
-          "firstName": "Fixture41",
-          "lastName": "User",
-          "displayName": "Fixture 41",
-          "email": "fixture41@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_42",
-          "employeeNumber": "EMP042",
-          "firstName": "Fixture42",
-          "lastName": "User",
-          "displayName": "Fixture 42",
-          "email": "fixture42@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_43",
-          "employeeNumber": "EMP043",
-          "firstName": "Fixture43",
-          "lastName": "User",
-          "displayName": "Fixture 43",
-          "email": "fixture43@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_44",
-          "employeeNumber": "EMP044",
-          "firstName": "Fixture44",
-          "lastName": "User",
-          "displayName": "Fixture 44",
-          "email": "fixture44@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_45",
-          "employeeNumber": "EMP045",
-          "firstName": "Fixture45",
-          "lastName": "User",
-          "displayName": "Fixture 45",
-          "email": "fixture45@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_46",
-          "employeeNumber": "EMP046",
-          "firstName": "Fixture46",
-          "lastName": "User",
-          "displayName": "Fixture 46",
-          "email": "fixture46@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_47",
-          "employeeNumber": "EMP047",
-          "firstName": "Fixture47",
-          "lastName": "User",
-          "displayName": "Fixture 47",
-          "email": "fixture47@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_48",
-          "employeeNumber": "EMP048",
-          "firstName": "Fixture48",
-          "lastName": "User",
-          "displayName": "Fixture 48",
-          "email": "fixture48@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_49",
-          "employeeNumber": "EMP049",
-          "firstName": "Fixture49",
-          "lastName": "User",
-          "displayName": "Fixture 49",
-          "email": "fixture49@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_50",
-          "employeeNumber": "EMP050",
-          "firstName": "Fixture50",
-          "lastName": "User",
-          "displayName": "Fixture 50",
-          "email": "fixture50@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_51",
-          "employeeNumber": "EMP051",
-          "firstName": "Fixture51",
-          "lastName": "User",
-          "displayName": "Fixture 51",
-          "email": "fixture51@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_52",
-          "employeeNumber": "EMP052",
-          "firstName": "Fixture52",
-          "lastName": "User",
-          "displayName": "Fixture 52",
-          "email": "fixture52@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_53",
-          "employeeNumber": "EMP053",
-          "firstName": "Fixture53",
-          "lastName": "User",
-          "displayName": "Fixture 53",
-          "email": "fixture53@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_54",
-          "employeeNumber": "EMP054",
-          "firstName": "Fixture54",
-          "lastName": "User",
-          "displayName": "Fixture 54",
-          "email": "fixture54@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_55",
-          "employeeNumber": "EMP055",
-          "firstName": "Fixture55",
-          "lastName": "User",
-          "displayName": "Fixture 55",
-          "email": "fixture55@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_56",
-          "employeeNumber": "EMP056",
-          "firstName": "Fixture56",
-          "lastName": "User",
-          "displayName": "Fixture 56",
-          "email": "fixture56@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_57",
-          "employeeNumber": "EMP057",
-          "firstName": "Fixture57",
-          "lastName": "User",
-          "displayName": "Fixture 57",
-          "email": "fixture57@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_58",
-          "employeeNumber": "EMP058",
-          "firstName": "Fixture58",
-          "lastName": "User",
-          "displayName": "Fixture 58",
-          "email": "fixture58@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_59",
-          "employeeNumber": "EMP059",
-          "firstName": "Fixture59",
-          "lastName": "User",
-          "displayName": "Fixture 59",
-          "email": "fixture59@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_60",
-          "employeeNumber": "EMP060",
-          "firstName": "Fixture60",
-          "lastName": "User",
-          "displayName": "Fixture 60",
-          "email": "fixture60@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_61",
-          "employeeNumber": "EMP061",
-          "firstName": "Fixture61",
-          "lastName": "User",
-          "displayName": "Fixture 61",
-          "email": "fixture61@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_62",
-          "employeeNumber": "EMP062",
-          "firstName": "Fixture62",
-          "lastName": "User",
-          "displayName": "Fixture 62",
-          "email": "fixture62@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_63",
-          "employeeNumber": "EMP063",
-          "firstName": "Fixture63",
-          "lastName": "User",
-          "displayName": "Fixture 63",
-          "email": "fixture63@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_64",
-          "employeeNumber": "EMP064",
-          "firstName": "Fixture64",
-          "lastName": "User",
-          "displayName": "Fixture 64",
-          "email": "fixture64@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_65",
-          "employeeNumber": "EMP065",
-          "firstName": "Fixture65",
-          "lastName": "User",
-          "displayName": "Fixture 65",
-          "email": "fixture65@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_66",
-          "employeeNumber": "EMP066",
-          "firstName": "Fixture66",
-          "lastName": "User",
-          "displayName": "Fixture 66",
-          "email": "fixture66@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_67",
-          "employeeNumber": "EMP067",
-          "firstName": "Fixture67",
-          "lastName": "User",
-          "displayName": "Fixture 67",
-          "email": "fixture67@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_68",
-          "employeeNumber": "EMP068",
-          "firstName": "Fixture68",
-          "lastName": "User",
-          "displayName": "Fixture 68",
-          "email": "fixture68@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_69",
-          "employeeNumber": "EMP069",
-          "firstName": "Fixture69",
-          "lastName": "User",
-          "displayName": "Fixture 69",
-          "email": "fixture69@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_70",
-          "employeeNumber": "EMP070",
-          "firstName": "Fixture70",
-          "lastName": "User",
-          "displayName": "Fixture 70",
-          "email": "fixture70@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_71",
-          "employeeNumber": "EMP071",
-          "firstName": "Fixture71",
-          "lastName": "User",
-          "displayName": "Fixture 71",
-          "email": "fixture71@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_72",
-          "employeeNumber": "EMP072",
-          "firstName": "Fixture72",
-          "lastName": "User",
-          "displayName": "Fixture 72",
-          "email": "fixture72@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_73",
-          "employeeNumber": "EMP073",
-          "firstName": "Fixture73",
-          "lastName": "User",
-          "displayName": "Fixture 73",
-          "email": "fixture73@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_74",
-          "employeeNumber": "EMP074",
-          "firstName": "Fixture74",
-          "lastName": "User",
-          "displayName": "Fixture 74",
-          "email": "fixture74@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_75",
-          "employeeNumber": "EMP075",
-          "firstName": "Fixture75",
-          "lastName": "User",
-          "displayName": "Fixture 75",
-          "email": "fixture75@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_76",
-          "employeeNumber": "EMP076",
-          "firstName": "Fixture76",
-          "lastName": "User",
-          "displayName": "Fixture 76",
-          "email": "fixture76@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_77",
-          "employeeNumber": "EMP077",
-          "firstName": "Fixture77",
-          "lastName": "User",
-          "displayName": "Fixture 77",
-          "email": "fixture77@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_78",
-          "employeeNumber": "EMP078",
-          "firstName": "Fixture78",
-          "lastName": "User",
-          "displayName": "Fixture 78",
-          "email": "fixture78@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_79",
-          "employeeNumber": "EMP079",
-          "firstName": "Fixture79",
-          "lastName": "User",
-          "displayName": "Fixture 79",
-          "email": "fixture79@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_80",
-          "employeeNumber": "EMP080",
-          "firstName": "Fixture80",
-          "lastName": "User",
-          "displayName": "Fixture 80",
-          "email": "fixture80@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_81",
-          "employeeNumber": "EMP081",
-          "firstName": "Fixture81",
-          "lastName": "User",
-          "displayName": "Fixture 81",
-          "email": "fixture81@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_82",
-          "employeeNumber": "EMP082",
-          "firstName": "Fixture82",
-          "lastName": "User",
-          "displayName": "Fixture 82",
-          "email": "fixture82@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_83",
-          "employeeNumber": "EMP083",
-          "firstName": "Fixture83",
-          "lastName": "User",
-          "displayName": "Fixture 83",
-          "email": "fixture83@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_84",
-          "employeeNumber": "EMP084",
-          "firstName": "Fixture84",
-          "lastName": "User",
-          "displayName": "Fixture 84",
-          "email": "fixture84@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_85",
-          "employeeNumber": "EMP085",
-          "firstName": "Fixture85",
-          "lastName": "User",
-          "displayName": "Fixture 85",
-          "email": "fixture85@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_86",
-          "employeeNumber": "EMP086",
-          "firstName": "Fixture86",
-          "lastName": "User",
-          "displayName": "Fixture 86",
-          "email": "fixture86@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_87",
-          "employeeNumber": "EMP087",
-          "firstName": "Fixture87",
-          "lastName": "User",
-          "displayName": "Fixture 87",
-          "email": "fixture87@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_88",
-          "employeeNumber": "EMP088",
-          "firstName": "Fixture88",
-          "lastName": "User",
-          "displayName": "Fixture 88",
-          "email": "fixture88@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_89",
-          "employeeNumber": "EMP089",
-          "firstName": "Fixture89",
-          "lastName": "User",
-          "displayName": "Fixture 89",
-          "email": "fixture89@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_90",
-          "employeeNumber": "EMP090",
-          "firstName": "Fixture90",
-          "lastName": "User",
-          "displayName": "Fixture 90",
-          "email": "fixture90@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_91",
-          "employeeNumber": "EMP091",
-          "firstName": "Fixture91",
-          "lastName": "User",
-          "displayName": "Fixture 91",
-          "email": "fixture91@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_92",
-          "employeeNumber": "EMP092",
-          "firstName": "Fixture92",
-          "lastName": "User",
-          "displayName": "Fixture 92",
-          "email": "fixture92@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_93",
-          "employeeNumber": "EMP093",
-          "firstName": "Fixture93",
-          "lastName": "User",
-          "displayName": "Fixture 93",
-          "email": "fixture93@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_94",
-          "employeeNumber": "EMP094",
-          "firstName": "Fixture94",
-          "lastName": "User",
-          "displayName": "Fixture 94",
-          "email": "fixture94@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_95",
-          "employeeNumber": "EMP095",
-          "firstName": "Fixture95",
-          "lastName": "User",
-          "displayName": "Fixture 95",
-          "email": "fixture95@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_96",
-          "employeeNumber": "EMP096",
-          "firstName": "Fixture96",
-          "lastName": "User",
-          "displayName": "Fixture 96",
-          "email": "fixture96@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_97",
-          "employeeNumber": "EMP097",
-          "firstName": "Fixture97",
-          "lastName": "User",
-          "displayName": "Fixture 97",
-          "email": "fixture97@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_98",
-          "employeeNumber": "EMP098",
-          "firstName": "Fixture98",
-          "lastName": "User",
-          "displayName": "Fixture 98",
-          "email": "fixture98@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_99",
-          "employeeNumber": "EMP099",
-          "firstName": "Fixture99",
-          "lastName": "User",
-          "displayName": "Fixture 99",
-          "email": "fixture99@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
-        },
-        {
-          "id": "emp_fixture_100",
-          "employeeNumber": "EMP100",
-          "firstName": "Fixture100",
-          "lastName": "User",
-          "displayName": "Fixture 100",
-          "email": "fixture100@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
+          "employeeNumber": "FIX-1",
+          "firstName": "Fixture employees 1",
+          "middleName": null,
+          "lastName": "Fixture employees 1",
+          "displayName": "Fixture employees 1",
+          "email": "fixture1@example.invalid",
+          "city": "fixture_employees_1",
+          "countryCode": "FIX",
+          "image": {
+            "fileName": null,
+            "thumbs": {}
+          },
+          "jobTitle": {
+            "identifier": "employees_fixture_1",
+            "title": "Fixture employees 1"
+          },
+          "secondaryJobTitle": null,
+          "reportsTo": {
+            "id": "employees_fixture_1",
+            "firstName": "Fixture employees 1",
+            "lastName": "Fixture employees 1",
+            "email": "fixture1@example.invalid"
+          },
+          "l2Manager": {
+            "id": "employees_fixture_1",
+            "firstName": "Fixture employees 1",
+            "lastName": "Fixture employees 1",
+            "email": "fixture1@example.invalid"
+          },
+          "dottedLineManager": {
+            "id": null,
+            "firstName": null,
+            "lastName": null,
+            "email": null
+          },
+          "contingentType": {
+            "id": "employees_fixture_1",
+            "name": "Fixture employees 1"
+          },
+          "timeType": 1,
+          "workerType": 2,
+          "isPrivate": false,
+          "isProfileComplete": true,
+          "maritalStatus": 1,
+          "marriageDate": null,
+          "gender": 1,
+          "joiningDate": "2026-01-01T00:00:00Z",
+          "professionalSummary": null,
+          "dateOfBirth": "2026-01-01T00:00:00Z",
+          "resignationSubmittedDate": null,
+          "exitDate": null,
+          "employmentStatus": 1,
+          "accountStatus": 1,
+          "invitationStatus": 1,
+          "exitStatus": 1,
+          "exitType": 1,
+          "exitReason": null,
+          "personalEmail": null,
+          "workPhone": null,
+          "homePhone": null,
+          "mobilePhone": "+15550100",
+          "bloodGroup": 1,
+          "attendanceNumber": "FIX-1",
+          "probationEndDate": "2026-01-01T00:00:00Z",
+          "currentAddress": null,
+          "permanentAddress": null,
+          "relations": [],
+          "educationDetails": [],
+          "experienceDetails": [],
+          "customFields": [
+            {
+              "id": "employees_fixture_1",
+              "title": "Fixture employees 1",
+              "type": "fixture_employees_1",
+              "value": null
+            },
+            {
+              "id": "employees_fixture_2",
+              "title": "Fixture employees 2",
+              "type": "fixture_employees_2",
+              "value": null
+            }
+          ],
+          "groups": [
+            {
+              "id": "employees_fixture_1",
+              "title": "Fixture employees 1",
+              "groupType": 1
+            },
+            {
+              "id": "employees_fixture_2",
+              "title": "Fixture employees 2",
+              "groupType": 2
+            }
+          ],
+          "leavePlanInfo": {
+            "identifier": "employees_fixture_1",
+            "title": "Fixture employees 1"
+          },
+          "bandInfo": null,
+          "payGradeInfo": null,
+          "shiftPolicyInfo": {
+            "identifier": "employees_fixture_1",
+            "title": "Fixture employees 1"
+          },
+          "weeklyOffPolicyInfo": {
+            "identifier": "employees_fixture_1",
+            "title": "Fixture employees 1"
+          },
+          "captureSchemeInfo": {
+            "identifier": "employees_fixture_1",
+            "title": "Fixture employees 1"
+          },
+          "trackingPolicyInfo": null,
+          "expensePolicyInfo": {
+            "identifier": "employees_fixture_1",
+            "title": "Fixture employees 1"
+          },
+          "overtimePolicyInfo": null,
+          "id": "employees_fixture_1"
+        },
+        {
+          "employeeNumber": "FIX-2",
+          "firstName": "Fixture employees 2",
+          "middleName": null,
+          "lastName": "Fixture employees 2",
+          "displayName": "Fixture employees 2",
+          "email": "fixture2@example.invalid",
+          "city": "fixture_employees_2",
+          "countryCode": "FIX",
+          "image": {
+            "fileName": null,
+            "thumbs": {}
+          },
+          "jobTitle": {
+            "identifier": "employees_fixture_2",
+            "title": "Fixture employees 2"
+          },
+          "secondaryJobTitle": null,
+          "reportsTo": {
+            "id": "employees_fixture_2",
+            "firstName": "Fixture employees 2",
+            "lastName": "Fixture employees 2",
+            "email": "fixture2@example.invalid"
+          },
+          "l2Manager": {
+            "id": "employees_fixture_2",
+            "firstName": "Fixture employees 2",
+            "lastName": "Fixture employees 2",
+            "email": "fixture2@example.invalid"
+          },
+          "dottedLineManager": {
+            "id": null,
+            "firstName": null,
+            "lastName": null,
+            "email": null
+          },
+          "contingentType": {
+            "id": "employees_fixture_2",
+            "name": "Fixture employees 2"
+          },
+          "timeType": 1,
+          "workerType": 2,
+          "isPrivate": false,
+          "isProfileComplete": false,
+          "maritalStatus": 1,
+          "marriageDate": null,
+          "gender": 1,
+          "joiningDate": "2026-01-01T00:00:00Z",
+          "professionalSummary": null,
+          "dateOfBirth": "2026-01-01T00:00:00Z",
+          "resignationSubmittedDate": "2026-01-01T00:00:00Z",
+          "exitDate": "2026-01-01T00:00:00Z",
+          "employmentStatus": 1,
+          "accountStatus": 1,
+          "invitationStatus": 1,
+          "exitStatus": 2,
+          "exitType": 2,
+          "exitReason": "fixture_employees_2",
+          "personalEmail": null,
+          "workPhone": null,
+          "homePhone": null,
+          "mobilePhone": "+15550100",
+          "bloodGroup": 1,
+          "attendanceNumber": "FIX-2",
+          "probationEndDate": "2026-01-01T00:00:00Z",
+          "currentAddress": null,
+          "permanentAddress": null,
+          "relations": [
+            {
+              "id": "employees_fixture_1",
+              "relationType": 1,
+              "gender": 2,
+              "firstName": "Fixture employees 1",
+              "lastName": "Fixture employees 1",
+              "displayName": "Fixture employees 1",
+              "email": "fixture1@example.invalid",
+              "dateOfBirth": "2026-01-01T00:00:00Z",
+              "profession": null,
+              "mobile": null
+            }
+          ],
+          "educationDetails": [],
+          "experienceDetails": [],
+          "customFields": [
+            {
+              "id": "employees_fixture_1",
+              "title": "Fixture employees 1",
+              "type": "fixture_employees_1",
+              "value": null
+            },
+            {
+              "id": "employees_fixture_2",
+              "title": "Fixture employees 2",
+              "type": "fixture_employees_2",
+              "value": null
+            }
+          ],
+          "groups": [
+            {
+              "id": "employees_fixture_1",
+              "title": "Fixture employees 1",
+              "groupType": 1
+            },
+            {
+              "id": "employees_fixture_2",
+              "title": "Fixture employees 2",
+              "groupType": 2
+            }
+          ],
+          "leavePlanInfo": {
+            "identifier": "employees_fixture_2",
+            "title": "Fixture employees 2"
+          },
+          "bandInfo": null,
+          "payGradeInfo": null,
+          "shiftPolicyInfo": {
+            "identifier": "employees_fixture_2",
+            "title": "Fixture employees 2"
+          },
+          "weeklyOffPolicyInfo": {
+            "identifier": "employees_fixture_2",
+            "title": "Fixture employees 2"
+          },
+          "captureSchemeInfo": {
+            "identifier": "employees_fixture_2",
+            "title": "Fixture employees 2"
+          },
+          "trackingPolicyInfo": {
+            "identifier": "employees_fixture_2",
+            "title": "Fixture employees 2"
+          },
+          "expensePolicyInfo": {
+            "identifier": "employees_fixture_2",
+            "title": "Fixture employees 2"
+          },
+          "overtimePolicyInfo": null,
+          "id": "employees_fixture_2"
         }
-      ]
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/employees",
+      "lastPage": "https://example.invalid/keka/employees",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
     }
   }
 }

@@ -1,0 +1,68 @@
+{
+  "record": {
+    "authenticator_id": "synthetic-conformance-value",
+    "method_type": "synthetic-conformance-value",
+    "status": "ACTIVE",
+    "type": "cert",
+    "_links": {
+      "activate": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "deactivate": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/authenticators/synthetic-conformance-value/methods/synthetic-conformance-value",
+    "body": {
+      "status": "ACTIVE",
+      "type": "cert",
+      "_links": {
+        "activate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "deactivate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

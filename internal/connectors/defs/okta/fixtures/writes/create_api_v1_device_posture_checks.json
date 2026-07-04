@@ -1,0 +1,84 @@
+{
+  "record": {
+    "createdBy": "2026-01-01T00:00:00Z",
+    "createdDate": "2026-01-01T00:00:00Z",
+    "description": "description_fixture",
+    "id": "id_fixture",
+    "lastUpdate": "2026-01-01T00:00:00Z",
+    "lastUpdatedBy": "2026-01-01T00:00:00Z",
+    "mappingType": "CHECKBOX",
+    "name": "name_fixture",
+    "platform": "MACOS",
+    "query": "query_fixture",
+    "remediationSettings": {
+      "link": {
+        "defaultUrl": "https://example.invalid/fixture",
+        "customUrl": "https://example.invalid/fixture"
+      },
+      "message": {
+        "defaultI18nKey": "fixture",
+        "customText": "custom_text_fixture"
+      }
+    },
+    "type": "BUILTIN",
+    "variableName": "variable_name_fixture",
+    "_links": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/device-posture-checks",
+    "body": {
+      "createdBy": "2026-01-01T00:00:00Z",
+      "createdDate": "2026-01-01T00:00:00Z",
+      "description": "description_fixture",
+      "id": "id_fixture",
+      "lastUpdate": "2026-01-01T00:00:00Z",
+      "lastUpdatedBy": "2026-01-01T00:00:00Z",
+      "mappingType": "CHECKBOX",
+      "name": "name_fixture",
+      "platform": "MACOS",
+      "query": "query_fixture",
+      "remediationSettings": {
+        "link": {
+          "defaultUrl": "https://example.invalid/fixture",
+          "customUrl": "https://example.invalid/fixture"
+        },
+        "message": {
+          "defaultI18nKey": "fixture",
+          "customText": "custom_text_fixture"
+        }
+      },
+      "type": "BUILTIN",
+      "variableName": "variable_name_fixture",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

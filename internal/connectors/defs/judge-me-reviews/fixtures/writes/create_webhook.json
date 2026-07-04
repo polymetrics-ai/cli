@@ -1,0 +1,18 @@
+{
+  "record": {
+    "webhook": {
+      "key": "review/created",
+      "url": "https://example.com/webhooks/review-created"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "webhook": {
+        "key": "review/created",
+        "url": "https://example.com/webhooks/review-created"
+      }
+    }
+  }
+}

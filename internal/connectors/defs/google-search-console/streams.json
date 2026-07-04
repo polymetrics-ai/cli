@@ -24,6 +24,17 @@
       "schema": "schemas/sites.json"
     },
     {
+      "name": "site_details",
+      "path": "/sites/{{ config.site_url }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "site_url": "{{ record.siteUrl }}",
+        "permission_level": "{{ record.permissionLevel }}"
+      },
+      "schema": "schemas/sites.json"
+    },
+    {
       "name": "sitemaps",
       "path": "/sites/{{ fanout.id }}/sitemaps",
       "records": { "path": "sitemap" },
@@ -33,6 +44,24 @@
         "stamp_field": "site_url"
       },
       "computed_fields": {
+        "path": "{{ record.path }}",
+        "last_submitted": "{{ record.lastSubmitted }}",
+        "last_downloaded": "{{ record.lastDownloaded }}",
+        "is_pending": "{{ record.isPending }}",
+        "is_sitemaps_index": "{{ record.isSitemapsIndex }}",
+        "type": "{{ record.type }}",
+        "warnings": "{{ record.warnings }}",
+        "errors": "{{ record.errors }}"
+      },
+      "schema": "schemas/sitemaps.json"
+    },
+    {
+      "name": "sitemap_details",
+      "path": "/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "site_url": "{{ config.site_url }}",
         "path": "{{ record.path }}",
         "last_submitted": "{{ record.lastSubmitted }}",
         "last_downloaded": "{{ record.lastDownloaded }}",

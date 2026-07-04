@@ -1,0 +1,19 @@
+{
+  "record": {
+    "type_id": "synthetic-conformance-value",
+    "description": "description_fixture",
+    "displayName": "display_name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/meta/types/user/synthetic-conformance-value",
+    "body": {
+      "description": "description_fixture",
+      "displayName": "display_name_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

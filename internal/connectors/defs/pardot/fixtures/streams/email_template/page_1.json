@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/email-templates/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,subject,isOneToOneEmail,isAutoResponderEmail,isDripEmail,isListEmail,trackerDomainId,folderId,type,campaignId,isDeleted,createdAt,updatedAt,createdById,updatedById,tagReplacementLanguage"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "subject": "subject_fixture",
+      "isOneToOneEmail": false,
+      "isAutoResponderEmail": false,
+      "isDripEmail": false,
+      "isListEmail": false,
+      "trackerDomainId": 1,
+      "folderId": 1,
+      "type": 1,
+      "campaignId": 1,
+      "isDeleted": false,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1,
+      "tagReplacementLanguage": "tagReplacementLanguage_fixture"
+    }
+  }
+}

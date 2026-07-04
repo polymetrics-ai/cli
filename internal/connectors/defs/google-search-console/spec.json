@@ -19,6 +19,14 @@
       "type": "string",
       "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. Required for those streams only; sites itself is account-scoped and does not reference it."
     },
+    "site_url": {
+      "type": "string",
+      "description": "Single Search Console site property for site_details and sitemap_details."
+    },
+    "feedpath": {
+      "type": "string",
+      "description": "Sitemap feed URL/path for sitemap_details."
+    },
     "start_date": {
       "type": "string",
       "format": "date",

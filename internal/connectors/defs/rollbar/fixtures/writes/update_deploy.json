@@ -1,0 +1,30 @@
+{
+  "record": {
+    "deploy_id": "synthetic-conformance-value",
+    "environment": "synthetic-conformance-value",
+    "revision": "synthetic-conformance-value",
+    "rollbar_username": "synthetic-conformance-value",
+    "local_username": "synthetic-conformance-value",
+    "comment": "synthetic-conformance-value",
+    "status": "enabled"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/1/deploy/synthetic-conformance-value",
+    "body": {
+      "environment": "synthetic-conformance-value",
+      "revision": "synthetic-conformance-value",
+      "rollbar_username": "synthetic-conformance-value",
+      "local_username": "synthetic-conformance-value",
+      "comment": "synthetic-conformance-value",
+      "status": "enabled"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segment_status",
+  "type": "object",
+  "additionalProperties": true,
+  "x-primary-key": [
+    "requestId"
+  ],
+  "properties": {
+    "requestId": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

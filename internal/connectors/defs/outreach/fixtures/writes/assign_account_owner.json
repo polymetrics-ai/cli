@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "assignaccountowner",
+      "attributes": {
+        "name": "Fixture Assign Account Owner"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/accountsAssignOwner",
+    "body": {
+      "data": {
+        "type": "assignaccountowner",
+        "attributes": {
+          "name": "Fixture Assign Account Owner"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

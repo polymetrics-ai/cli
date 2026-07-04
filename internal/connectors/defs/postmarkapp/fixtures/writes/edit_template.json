@@ -1,0 +1,9 @@
+{
+  "record": {
+    "template_id_or_alias": "template_id_or_alias_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/templates/template_id_or_alias_fixture"
+  }
+}

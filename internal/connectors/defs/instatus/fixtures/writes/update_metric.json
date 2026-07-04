@@ -1,0 +1,20 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "metric_id": "metric_id_fixture_1",
+    "name": "Fixture update metric"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/page_id_fixture_1/metrics/metric_id_fixture_1",
+    "body": {
+      "name": "Fixture update metric"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_metric_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "segmentId": "segmentId_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/segment/segmentId_fixture"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": "not_found"
+    }
+  }
+}

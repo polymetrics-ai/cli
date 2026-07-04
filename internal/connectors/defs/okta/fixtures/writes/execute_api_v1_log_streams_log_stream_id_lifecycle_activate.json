@@ -1,0 +1,13 @@
+{
+  "record": {
+    "log_stream_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/logStreams/synthetic-conformance-value/lifecycle/activate"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

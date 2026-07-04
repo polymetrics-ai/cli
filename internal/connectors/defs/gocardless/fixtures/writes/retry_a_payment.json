@@ -1,0 +1,21 @@
+{
+  "record": {
+    "payment_id": "payment_id_fixture",
+    "payments": {
+      "description": "Synthetic retry_a_payment fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payments/payment_id_fixture/actions/retry",
+    "body": {
+      "payments": {
+        "description": "Synthetic retry_a_payment fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

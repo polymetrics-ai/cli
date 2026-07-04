@@ -1,0 +1,13 @@
+{
+  "record": {
+    "candidate_id": "candidate_id_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/candidates/candidate_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

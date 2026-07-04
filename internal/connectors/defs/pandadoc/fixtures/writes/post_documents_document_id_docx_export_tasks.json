@@ -1,0 +1,16 @@
+{
+  "record": {
+    "document_id": "document_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/beta/documents/document_id_fixture/docx-export-tasks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_documents_document_id_docx_export_tasks_response",
+      "status": "ok"
+    }
+  }
+}

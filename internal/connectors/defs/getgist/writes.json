@@ -1,0 +1,1025 @@
+{
+  "actions": [
+    {
+      "name": "create_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/articles",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "create through the Gist API"
+    },
+    {
+      "name": "update_article",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/articles/{{ record.article_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "article_id"
+        ],
+        "properties": {
+          "article_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "article_id"
+      ]
+    },
+    {
+      "name": "delete_article",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/articles/{{ record.article_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "article_id"
+        ],
+        "properties": {
+          "article_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "delete through the Gist API",
+      "path_fields": [
+        "article_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/collections",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "create through the Gist API"
+    },
+    {
+      "name": "update_collection",
+      "kind": "update",
+      "method": "POST",
+      "path": "/collections/{{ record.collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "collection_id"
+      ]
+    },
+    {
+      "name": "delete_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/collections/{{ record.collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "delete through the Gist API",
+      "path_fields": [
+        "collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "upsert_contact",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/contacts",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "upsert through the Gist API"
+    },
+    {
+      "name": "upsert_contacts_batch",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/contacts/batch",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "upsert through the Gist API"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "delete through the Gist API",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "track_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/events",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "create through the Gist API"
+    },
+    {
+      "name": "upsert_tag",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/tags",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "upsert through the Gist API"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.tag_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "delete through the Gist API",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_tag_to_contacts",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tags",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "update through the Gist API"
+    },
+    {
+      "name": "remove_tag_from_contacts",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tags",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "update through the Gist API"
+    },
+    {
+      "name": "subscribe_contact_to_form",
+      "kind": "update",
+      "method": "POST",
+      "path": "/forms/{{ record.form_id }}/subscribe",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "form_id"
+        ],
+        "properties": {
+          "form_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "form_id"
+      ]
+    },
+    {
+      "name": "subscribe_contact_to_campaign",
+      "kind": "update",
+      "method": "POST",
+      "path": "/campaigns",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "update through the Gist API"
+    },
+    {
+      "name": "unsubscribe_contact_from_campaign",
+      "kind": "update",
+      "method": "POST",
+      "path": "/campaigns",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "update through the Gist API"
+    },
+    {
+      "name": "attach_contact_to_subscription_type",
+      "kind": "update",
+      "method": "POST",
+      "path": "/subscription_types/{{ record.subscription_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "subscription_type_id"
+        ],
+        "properties": {
+          "subscription_type_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "subscription_type_id"
+      ]
+    },
+    {
+      "name": "detach_contact_from_subscription_type",
+      "kind": "update",
+      "method": "POST",
+      "path": "/subscription_types/{{ record.subscription_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "subscription_type_id"
+        ],
+        "properties": {
+          "subscription_type_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "subscription_type_id"
+      ]
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "create through the Gist API"
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "reply_to_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/messages",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "create through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "delete_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "delete through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "unassign_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}/assign",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "assign_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}/assign",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "snooze_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "unsnooze_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "close_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "prioritize_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}/priority",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "tag_conversation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "untag_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "delete through the Gist API",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_store",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ecommerce/stores",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "create through the Gist API"
+    },
+    {
+      "name": "update_store",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{{ record.store_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "store_id"
+      ]
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ecommerce/stores/{{ record.store_id }}/customers",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "create through the Gist API",
+      "path_fields": [
+        "store_id"
+      ]
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{{ record.store_id }}/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "customer_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "customer_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "store_id",
+        "customer_id"
+      ]
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ecommerce/stores/{{ record.store_id }}/products",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "create through the Gist API",
+      "path_fields": [
+        "store_id"
+      ]
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "product_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "store_id",
+        "product_id"
+      ]
+    },
+    {
+      "name": "create_product_variant",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/variants",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "product_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "create through the Gist API",
+      "path_fields": [
+        "store_id",
+        "product_id"
+      ]
+    },
+    {
+      "name": "update_product_variant",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/variants/{{ record.product_variant_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "product_id",
+          "product_variant_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "product_variant_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "store_id",
+        "product_id",
+        "product_variant_id"
+      ]
+    },
+    {
+      "name": "create_product_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ecommerce/stores/{{ record.store_id }}/categories",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "create through the Gist API",
+      "path_fields": [
+        "store_id"
+      ]
+    },
+    {
+      "name": "update_product_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{{ record.store_id }}/categories/{{ record.category_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "category_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "store_id",
+        "category_id"
+      ]
+    },
+    {
+      "name": "upsert_cart",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/ecommerce/stores/{{ record.store_id }}/customers/{{ record.customer_id }}/cart",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "customer_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "customer_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "upsert through the Gist API",
+      "path_fields": [
+        "store_id",
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_cart",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{{ record.store_id }}/customers/{{ record.customer_id }}/cart",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "customer_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "customer_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "delete through the Gist API",
+      "path_fields": [
+        "store_id",
+        "customer_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ecommerce/stores/{{ record.store_id }}/orders",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "create through the Gist API",
+      "path_fields": [
+        "store_id"
+      ]
+    },
+    {
+      "name": "update_order",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{{ record.store_id }}/orders/{{ record.order_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "order_id"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "update through the Gist API",
+      "path_fields": [
+        "store_id",
+        "order_id"
+      ]
+    }
+  ]
+}

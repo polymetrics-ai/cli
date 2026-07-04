@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/people",
+    "path": "/v1/people",
     "query": {
       "page": "2",
       "limit": "100"

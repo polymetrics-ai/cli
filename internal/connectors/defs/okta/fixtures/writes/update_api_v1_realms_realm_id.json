@@ -1,0 +1,29 @@
+{
+  "record": {
+    "realm_id": "synthetic-conformance-value",
+    "profile": {
+      "domains": [
+        "domain_fixture"
+      ],
+      "name": "name_fixture",
+      "realmType": "PARTNER"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/realms/synthetic-conformance-value",
+    "body": {
+      "profile": {
+        "domains": [
+          "domain_fixture"
+        ],
+        "name": "name_fixture",
+        "realmType": "PARTNER"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

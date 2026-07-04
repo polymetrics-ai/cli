@@ -1,0 +1,25 @@
+{
+  "record": {
+    "company_id": "synthetic-conformance-value",
+    "contract_id": "synthetic-conformance-value",
+    "healthInsuranceContractIds": [
+      "contract_fixture_1"
+    ],
+    "effectiveDate": "2026-07-01"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies/synthetic-conformance-value/contracts-fr/synthetic-conformance-value/regularization",
+    "body": {
+      "healthInsuranceContractIds": [
+        "contract_fixture_1"
+      ],
+      "effectiveDate": "2026-07-01"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

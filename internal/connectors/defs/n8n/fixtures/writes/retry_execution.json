@@ -1,0 +1,17 @@
+{
+  "record": {
+    "execution_id": "101",
+    "loadWorkflow": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/executions/101/retry",
+    "body": {
+      "loadWorkflow": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

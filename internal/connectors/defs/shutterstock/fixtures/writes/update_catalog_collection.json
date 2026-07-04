@@ -1,0 +1,23 @@
+{
+  "record": {
+    "catalog_collection_id": "catalog-collection-id-fixture-1",
+    "visibility": "private",
+    "metadata": {
+      "source": "fixture"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/catalog/collections/catalog-collection-id-fixture-1",
+    "body": {
+      "visibility": "private",
+      "metadata": {
+        "source": "fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "credit_balance_adjustment_id": 123,
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/credit_balance_adjustments/123",
+    "body": {
+      "name": "Fixture record"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

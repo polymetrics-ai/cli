@@ -1,15 +1,23 @@
 {
   "api": "Jira Cloud REST API v3 (https://developer.atlassian.com/cloud/jira/platform/rest/v3/)",
-  "docs": "https://developer.atlassian.com/changelog/#",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (issues, projects, users); Jira's write endpoints (issue create/update/transition, comments, attachments) are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
+  "docs": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B review of Jira Cloud REST API v3. The bundle keeps the legacy read-only sync contracts for issue search, project search, and user search. Jira's remaining REST API groups are either detail duplicates, parameterized/fan-out subresources, administrative/configuration metadata, binary attachment payloads, or mutating workflows that are not exposed by the legacy connector.",
   "endpoints": [
     { "method": "GET", "path": "/rest/api/3/search", "covered_by": { "stream": "issues" } },
     { "method": "GET", "path": "/rest/api/3/project/search", "covered_by": { "stream": "projects" } },
     { "method": "GET", "path": "/rest/api/3/users/search", "covered_by": { "stream": "users" } },
-    { "method": "POST", "path": "/rest/api/3/issue", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented issue creation; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/rest/api/3/issue/{issueIdOrKey}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented issue updates; Pass B capability expansion" } },
-    { "method": "POST", "path": "/rest/api/3/issue/{issueIdOrKey}/comment", "excluded": { "category": "out_of_scope", "reason": "comments not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/rest/api/3/myself", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, used only by the Check health-check request, not a syncable object stream" } }
+    { "method": "GET", "path": "/rest/api/3/issue/{issueIdOrKey}", "excluded": { "category": "duplicate_of", "reason": "Issue detail returns the same issue object family as the covered issue search stream and requires caller-supplied issue IDs instead of producing an independent collection." } },
+    { "method": "GET", "path": "/rest/api/3/project/{projectIdOrKey}, /rest/api/3/user", "excluded": { "category": "duplicate_of", "reason": "Project and user detail endpoints duplicate the covered project/user search streams and require explicit IDs/accountIds." } },
+    { "method": "GET", "path": "/rest/api/3/myself", "excluded": { "category": "non_data_endpoint", "reason": "Authenticated-user profile introspection is used only by the Check health-check request, not a syncable object stream." } },
+    { "method": "GET", "path": "/rest/api/3/issue/{issueIdOrKey}/comment, /worklog, /watchers, /votes, /remotelink, /properties and similar issue subresources", "excluded": { "category": "out_of_scope", "reason": "Issue subresources require per-issue fan-out from the issue stream, which is not expressible as a standalone declarative stream without a StreamHook." } },
+    { "method": "GET", "path": "/rest/api/3/attachment/content/{id}, /attachment/thumbnail/{id}", "excluded": { "category": "binary_payload", "reason": "Attachment content and thumbnails return binary payloads; this connector syncs structured JSON records only." } },
+    { "method": "GET", "path": "/rest/api/3/project/{projectIdOrKey}/components, /versions, /role, /properties and project metadata subresources", "excluded": { "category": "out_of_scope", "reason": "Project subresources require project-ID fan-out or separate schemas outside the legacy project-search record contract." } },
+    { "method": "GET", "path": "/rest/api/3/auditing/record, /events, /field, /issuetype, /priority, /resolution, /status, /workflow*, /screen*, /permission*, /configuration and other platform/admin metadata", "excluded": { "category": "requires_elevated_scope", "reason": "Administrative and configuration endpoints often require Jira admin scopes/permissions and are outside the default source-read contract." } },
+    { "method": "GET", "path": "/rest/api/3/filter*, /dashboard*, /jql*, /label, /group*, /applicationrole*, /license*, /serverInfo", "excluded": { "category": "out_of_scope", "reason": "Discovery/configuration helpers and non-issue business metadata are not part of legacy's emitted issue/project/user data surface." } },
+    { "method": "POST", "path": "/rest/api/3/search and /rest/api/3/search/jql", "excluded": { "category": "duplicate_of", "reason": "POST search variants expose the same JQL issue search family as the covered GET /search stream; the bundle keeps the legacy GET search shape." } },
+    { "method": "POST", "path": "/rest/api/3/issue, /issue/bulk, /issue/{issueIdOrKey}/comment, /transitions, /worklog, /remotelink and related create actions", "excluded": { "category": "requires_elevated_scope", "reason": "Create/comment/transition/worklog endpoints mutate Jira project data and require a dedicated reverse-ETL approval/risk design; legacy Write is unsupported." } },
+    { "method": "PUT", "path": "/rest/api/3/issue/{issueIdOrKey}, /comment/{id}, /worklog/{id}, /project/*, /filter/*, /workflow* and related update actions", "excluded": { "category": "requires_elevated_scope", "reason": "Update endpoints mutate Jira issues, comments, worklogs, project configuration, or workflow metadata and are intentionally not exposed by this read-only connector." } },
+    { "method": "DELETE", "path": "/rest/api/3/issue*, /comment*, /worklog*, /attachment*, /project*, /filter*, /workflow* and related delete actions", "excluded": { "category": "destructive_admin", "reason": "Delete endpoints remove Jira business data or administrative configuration and are intentionally not exposed." } }
   ]
 }

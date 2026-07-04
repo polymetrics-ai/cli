@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sessions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "uid": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "app_url": { "type": ["string", "null"] },
+    "start_time": { "type": ["string", "null"] },
+    "duration_ms": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "record": {
+    "app_id": "app_id_fixture",
+    "checklist_id": "checklist_id_fixture",
+    "name": "fixture",
+    "handle": "fixture",
+    "title": "fixture",
+    "description": "fixture",
+    "customerSegmentId": "customer_segment_id_fixture",
+    "status": "draft",
+    "steps": [
+      {
+        "id": "id_fixture",
+        "name": "fixture",
+        "handle": "fixture",
+        "title": "fixture",
+        "description": "fixture",
+        "conditionType": "usage_event",
+        "conditionOperator": "fixture",
+        "conditionValue": "fixture",
+        "allowManualCompletion": true,
+        "allowSkip": true
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/apps/app_id_fixture/checklists/checklist_id_fixture",
+    "body": {
+      "name": "fixture",
+      "handle": "fixture",
+      "title": "fixture",
+      "description": "fixture",
+      "customerSegmentId": "customer_segment_id_fixture",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "id_fixture",
+          "name": "fixture",
+          "handle": "fixture",
+          "title": "fixture",
+          "description": "fixture",
+          "conditionType": "usage_event",
+          "conditionOperator": "fixture",
+          "conditionValue": "fixture",
+          "allowManualCompletion": true,
+          "allowSkip": true
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

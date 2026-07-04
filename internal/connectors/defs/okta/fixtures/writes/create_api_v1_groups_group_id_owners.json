@@ -1,0 +1,19 @@
+{
+  "record": {
+    "group_id": "synthetic-conformance-value",
+    "id": "id_fixture",
+    "type": "GROUP"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/groups/synthetic-conformance-value/owners",
+    "body": {
+      "id": "id_fixture",
+      "type": "GROUP"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

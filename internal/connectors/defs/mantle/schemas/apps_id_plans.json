@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "apps_id_plans",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the plan."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the plan."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the plan."
+    },
+    "amount": {
+      "type": "number",
+      "description": "The amount for the plan."
+    },
+    "currencyCode": {
+      "type": "string",
+      "description": "The currency code for the plan amount."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the plan."
+    },
+    "public": {
+      "type": "boolean",
+      "description": "Whether the plan is public."
+    },
+    "visible": {
+      "type": "boolean",
+      "description": "Whether the plan is visible."
+    },
+    "interval": {
+      "type": "string",
+      "description": "The interval for the plan."
+    },
+    "trialDays": {
+      "type": "number",
+      "description": "The number of trial days for the plan."
+    },
+    "monthlyRevenue": {
+      "type": "number",
+      "description": "The monthly revenue for the plan."
+    },
+    "lifetimeValue": {
+      "type": "number",
+      "description": "The lifetime value of the plan."
+    },
+    "averageLifetimeValue": {
+      "type": "number",
+      "description": "The average lifetime value of the plan."
+    },
+    "subscriberCount": {
+      "type": "number",
+      "description": "The number of subscribers for the plan."
+    },
+    "activeTrialCount": {
+      "type": "number",
+      "description": "The number of active trials for the plan."
+    },
+    "flexBilling": {
+      "type": "boolean",
+      "description": "Whether the plan has flexible billing."
+    },
+    "flexBillingTerms": {
+      "type": "string",
+      "description": "The terms for flexible billing."
+    },
+    "deprecatedAt": {
+      "type": "string",
+      "description": "The date when the plan was deprecated.",
+      "format": "date-time"
+    },
+    "features": {
+      "type": "object",
+      "description": "The features of the plan."
+    },
+    "customerId": {
+      "type": "string",
+      "description": "The customer ID associated with the plan."
+    },
+    "customerTags": {
+      "type": "array",
+      "description": "The tags associated with the customer.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "customerExcludeTags": {
+      "type": "array",
+      "description": "The tags to exclude for the customer.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "customFields": {
+      "type": "object",
+      "description": "The custom fields associated with the plan."
+    },
+    "shopifyPlans": {
+      "type": "array",
+      "description": "The Shopify plans associated with the plan.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation date of the plan.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update date of the plan.",
+      "format": "date-time"
+    }
+  }
+}

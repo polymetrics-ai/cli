@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/weighted-shares-outstanding"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "simId": 111111,
+        "ticker": "FIX",
+        "fiscalYear": 2026,
+        "fiscalPeriod": "Q1",
+        "weightedSharesOutstanding": 1000000
+      }
+    ]
+  }
+}

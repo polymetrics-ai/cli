@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/news/uuid/uuid-fixture-1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "uuid-fixture-1",
+      "title": "Fixture market news",
+      "url": "https://example.com/news",
+      "published_at": "2026-07-03T10:58:00Z",
+      "source": "example.com",
+      "language": "en"
+    }
+  }
+}

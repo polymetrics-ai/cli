@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/webhooks/get",
+    "query": {
+      "id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "url": "https://example.invalid/luma",
+      "event_types": [],
+      "status": "2026-01-01T00:00:00Z",
+      "secret": "fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

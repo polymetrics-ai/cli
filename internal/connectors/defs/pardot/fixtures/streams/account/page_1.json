@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/account",
+    "query": {
+      "fields": "id,company,level,website,pluginCampaignId,addressOne,addressTwo,city,state,zip,territory,country,phone,fax,adminId,createdAt,updatedAt,maximumDailyApiCalls,apiCallsUsed,createdById,updatedById"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "company": "company_fixture",
+      "level": "level_fixture",
+      "website": "website_fixture",
+      "pluginCampaignId": 1,
+      "addressOne": "addressOne_fixture",
+      "addressTwo": "addressTwo_fixture",
+      "city": "city_fixture",
+      "state": "state_fixture",
+      "zip": "zip_fixture",
+      "territory": "territory_fixture",
+      "country": "country_fixture",
+      "phone": "phone_fixture",
+      "fax": "fax_fixture",
+      "adminId": 1,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "maximumDailyApiCalls": "maximumDailyApiCalls_fixture",
+      "apiCallsUsed": "apiCallsUsed_fixture",
+      "createdById": 1,
+      "updatedById": 1
+    }
+  }
+}

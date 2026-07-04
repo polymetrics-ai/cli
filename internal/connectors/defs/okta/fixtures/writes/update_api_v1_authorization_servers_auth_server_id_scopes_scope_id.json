@@ -1,0 +1,60 @@
+{
+  "record": {
+    "auth_server_id": "synthetic-conformance-value",
+    "scope_id": "synthetic-conformance-value",
+    "consent": "FLEXIBLE",
+    "default": true,
+    "description": "description_fixture",
+    "displayName": "display_name_fixture",
+    "id": "id_fixture",
+    "metadataPublish": "ALL_CLIENTS",
+    "name": "name_fixture",
+    "optional": true,
+    "system": true,
+    "_links": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/scopes/synthetic-conformance-value",
+    "body": {
+      "consent": "FLEXIBLE",
+      "default": true,
+      "description": "description_fixture",
+      "displayName": "display_name_fixture",
+      "id": "id_fixture",
+      "metadataPublish": "ALL_CLIENTS",
+      "name": "name_fixture",
+      "optional": true,
+      "system": true,
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

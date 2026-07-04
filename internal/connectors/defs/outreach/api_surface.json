@@ -1,20 +1,1821 @@
 {
-  "api": "Outreach API v2 (https://api.outreach.io/api/v2)",
-  "docs": "https://api.outreach.io/api/v2/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave1 migration: the 4 legacy-parity read streams only; legacy outreach is read-only and the full Outreach surface (calls, tasks, opportunities, users, webhooks, custom objects, etc.) is out of scope until Pass B",
+  "api": "Outreach REST API v2 (https://api.outreach.io/api/v2)",
+  "docs": "https://developers.outreach.io/api (static OpenAPI: https://api.outreach.io/api/v2/schema/openapi.json; custom objects: https://developers.outreach.io/api/custom-objects)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against Outreach's official OpenAPI 3.0 document plus the custom-object documentation. Covers 96 streams and 163 write actions; no Pass B placeholder exclusions remain. Standard JSON:API resource list/detail endpoints are modeled directly, action endpoints become write actions, and custom-object endpoints are modeled with caller-supplied object-name configuration.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/prospects", "covered_by": { "stream": "prospects" } },
-    { "method": "GET", "path": "/api/v2/accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/api/v2/sequences", "covered_by": { "stream": "sequences" } },
-    { "method": "GET", "path": "/api/v2/mailings", "covered_by": { "stream": "mailings" } },
-    { "method": "GET", "path": "/api/v2/calls", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/tasks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/opportunities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/sequenceStates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/v2/prospects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/api/v2/prospects/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/accountNotes",
+      "covered_by": {
+        "stream": "account_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accountNotes/{id}",
+      "covered_by": {
+        "stream": "account_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{id}",
+      "covered_by": {
+        "stream": "account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/auditLogs",
+      "covered_by": {
+        "stream": "audit_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/batchItems",
+      "covered_by": {
+        "stream": "batch_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/batchItems/{id}",
+      "covered_by": {
+        "stream": "batch_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/batches",
+      "covered_by": {
+        "stream": "batches"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/batches/{id}",
+      "covered_by": {
+        "stream": "batch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/callDispositions",
+      "covered_by": {
+        "stream": "call_dispositions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/callDispositions/{id}",
+      "covered_by": {
+        "stream": "call_disposition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/callPurposes",
+      "covered_by": {
+        "stream": "call_purposes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/callPurposes/{id}",
+      "covered_by": {
+        "stream": "call_purpose"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/calls",
+      "covered_by": {
+        "stream": "calls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/calls/{id}",
+      "covered_by": {
+        "stream": "call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/complianceRequests",
+      "covered_by": {
+        "stream": "compliance_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/complianceRequests/{id}",
+      "covered_by": {
+        "stream": "compliance_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contentCategories",
+      "covered_by": {
+        "stream": "content_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contentCategories/{id}",
+      "covered_by": {
+        "stream": "content_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contentCategoryMemberships",
+      "covered_by": {
+        "stream": "content_category_memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contentCategoryMemberships/{id}",
+      "covered_by": {
+        "stream": "content_category_membership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contentCategoryOwnerships",
+      "covered_by": {
+        "stream": "content_category_ownerships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/duties",
+      "covered_by": {
+        "stream": "duties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/emailAddresses",
+      "covered_by": {
+        "stream": "email_addresses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/emailAddresses/{id}",
+      "covered_by": {
+        "stream": "email_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/events/{id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/favorites",
+      "covered_by": {
+        "stream": "favorites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/favorites/{id}",
+      "covered_by": {
+        "stream": "favorite"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/imports/{id}",
+      "covered_by": {
+        "stream": "import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/kaiaRecordings",
+      "covered_by": {
+        "stream": "kaia_recordings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/kaiaRecordings/{id}",
+      "covered_by": {
+        "stream": "kaia_recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/mailAliases",
+      "covered_by": {
+        "stream": "mail_aliases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/mailAliases/{id}",
+      "covered_by": {
+        "stream": "mail_alias"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/mailboxes",
+      "covered_by": {
+        "stream": "mailboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/mailboxes/{id}",
+      "covered_by": {
+        "stream": "mailbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/mailings",
+      "covered_by": {
+        "stream": "mailings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/mailings/{id}",
+      "covered_by": {
+        "stream": "mailing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/opportunities",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/opportunities/{id}",
+      "covered_by": {
+        "stream": "opportunity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/opportunityProspectRoles",
+      "covered_by": {
+        "stream": "opportunity_prospect_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/opportunityProspectRoles/{id}",
+      "covered_by": {
+        "stream": "opportunity_prospect_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/opportunityStages",
+      "covered_by": {
+        "stream": "opportunity_stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/opportunityStages/{id}",
+      "covered_by": {
+        "stream": "opportunity_stage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/orgSettings/{id}",
+      "covered_by": {
+        "stream": "org_setting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/personas",
+      "covered_by": {
+        "stream": "personas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/personas/{id}",
+      "covered_by": {
+        "stream": "persona"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/phoneNumbers",
+      "covered_by": {
+        "stream": "phone_numbers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/phoneNumbers/{id}",
+      "covered_by": {
+        "stream": "phone_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products/{id}",
+      "covered_by": {
+        "stream": "product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/profiles",
+      "covered_by": {
+        "stream": "profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/profiles/{id}",
+      "covered_by": {
+        "stream": "profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/prospectNotes",
+      "covered_by": {
+        "stream": "prospect_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/prospectNotes/{id}",
+      "covered_by": {
+        "stream": "prospect_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/prospects",
+      "covered_by": {
+        "stream": "prospects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/prospects/{id}",
+      "covered_by": {
+        "stream": "prospect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/purchases",
+      "covered_by": {
+        "stream": "purchases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/purchases/{id}",
+      "covered_by": {
+        "stream": "purchase"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/recipients",
+      "covered_by": {
+        "stream": "recipients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/recipients/{id}",
+      "covered_by": {
+        "stream": "recipient"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles/{id}",
+      "covered_by": {
+        "stream": "role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/rulesets",
+      "covered_by": {
+        "stream": "rulesets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/rulesets/{id}",
+      "covered_by": {
+        "stream": "ruleset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequenceStates",
+      "covered_by": {
+        "stream": "sequence_states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequenceStates/{id}",
+      "covered_by": {
+        "stream": "sequence_state"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequenceSteps",
+      "covered_by": {
+        "stream": "sequence_steps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequenceSteps/{id}",
+      "covered_by": {
+        "stream": "sequence_step"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequenceTemplates",
+      "covered_by": {
+        "stream": "sequence_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequenceTemplates/{id}",
+      "covered_by": {
+        "stream": "sequence_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequences",
+      "covered_by": {
+        "stream": "sequences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sequences/{id}",
+      "covered_by": {
+        "stream": "sequence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/snippets",
+      "covered_by": {
+        "stream": "snippets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/snippets/{id}",
+      "covered_by": {
+        "stream": "snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stages",
+      "covered_by": {
+        "stream": "stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stages/{id}",
+      "covered_by": {
+        "stream": "stage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/taskDispositions",
+      "covered_by": {
+        "stream": "task_dispositions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/taskDispositions/{id}",
+      "covered_by": {
+        "stream": "task_disposition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/taskPriorities",
+      "covered_by": {
+        "stream": "task_priorities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/taskPriorities/{id}",
+      "covered_by": {
+        "stream": "task_priority"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/taskPurposes",
+      "covered_by": {
+        "stream": "task_purposes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/taskPurposes/{id}",
+      "covered_by": {
+        "stream": "task_purpose"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tasks/{id}",
+      "covered_by": {
+        "stream": "task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams/{id}",
+      "covered_by": {
+        "stream": "team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/templates",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/templates/{id}",
+      "covered_by": {
+        "stream": "template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks/{id}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/schema",
+      "covered_by": {
+        "stream": "schema_definitions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/customObjects/{objectName}",
+      "covered_by": {
+        "stream": "custom_object_records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/customObjects/{objectName}/{id}",
+      "covered_by": {
+        "stream": "custom_object_record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accountNotes",
+      "covered_by": {
+        "write": "create_account_note"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/accountNotes/{id}",
+      "covered_by": {
+        "write": "update_account_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accountNotes/{id}",
+      "covered_by": {
+        "write": "delete_account_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts",
+      "covered_by": {
+        "write": "create_account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/accounts/{id}",
+      "covered_by": {
+        "write": "update_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{id}",
+      "covered_by": {
+        "write": "delete_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountAddTags",
+      "covered_by": {
+        "write": "add_account_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountsAddAssignments",
+      "covered_by": {
+        "write": "add_account_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountsAssignOwner",
+      "covered_by": {
+        "write": "assign_account_owner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountsBulkModify",
+      "covered_by": {
+        "write": "bulk_modify_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountsDestroyAll",
+      "covered_by": {
+        "write": "destroy_all_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountsRemoveAllAssignments",
+      "covered_by": {
+        "write": "remove_all_account_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountsRemoveAssignments",
+      "covered_by": {
+        "write": "remove_account_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/accountsRemoveTags",
+      "covered_by": {
+        "write": "remove_account_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/customObjectBulkDelete",
+      "covered_by": {
+        "write": "bulk_delete_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/customObjectBulkModify",
+      "covered_by": {
+        "write": "bulk_modify_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsAddAssignments",
+      "covered_by": {
+        "write": "add_prospect_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsAddTags",
+      "covered_by": {
+        "write": "add_prospect_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsAddToSequence",
+      "covered_by": {
+        "write": "add_prospects_to_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsAssignAccount",
+      "covered_by": {
+        "write": "assign_prospect_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsAssignOpportunity",
+      "covered_by": {
+        "write": "assign_prospect_opportunity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsAssignOwner",
+      "covered_by": {
+        "write": "assign_prospect_owner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsBulkModify",
+      "covered_by": {
+        "write": "bulk_modify_prospects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsDestroyAll",
+      "covered_by": {
+        "write": "destroy_all_prospects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsFinishAll",
+      "covered_by": {
+        "write": "finish_all_prospects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsPauseAll",
+      "covered_by": {
+        "write": "pause_all_prospects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsRemoveAllAssignments",
+      "covered_by": {
+        "write": "remove_all_prospect_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsRemoveAssignments",
+      "covered_by": {
+        "write": "remove_prospect_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/actions/prospectsRemoveTags",
+      "covered_by": {
+        "write": "remove_prospect_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/{id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_batch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/batches/{id}/actions/confirm",
+      "covered_by": {
+        "write": "confirm_batch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/callDispositions",
+      "covered_by": {
+        "write": "create_call_disposition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/callDispositions/{id}",
+      "covered_by": {
+        "write": "update_call_disposition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/callDispositions/{id}",
+      "covered_by": {
+        "write": "delete_call_disposition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/callPurposes",
+      "covered_by": {
+        "write": "create_call_purpose"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/callPurposes/{id}",
+      "covered_by": {
+        "write": "update_call_purpose"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/callPurposes/{id}",
+      "covered_by": {
+        "write": "delete_call_purpose"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/calls",
+      "covered_by": {
+        "write": "create_call"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/calls/{id}",
+      "covered_by": {
+        "write": "delete_call"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/complianceRequests",
+      "covered_by": {
+        "write": "create_compliance_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/contentCategories",
+      "covered_by": {
+        "write": "create_content_category"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/contentCategories/{id}",
+      "covered_by": {
+        "write": "update_content_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/contentCategories/{id}",
+      "covered_by": {
+        "write": "delete_content_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/contentCategoryMemberships",
+      "covered_by": {
+        "write": "create_content_category_membership"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/contentCategoryMemberships/{id}",
+      "covered_by": {
+        "write": "delete_content_category_membership"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/contentCategoryOwnerships",
+      "covered_by": {
+        "write": "create_content_category_ownership"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/contentCategoryOwnerships/{id}",
+      "covered_by": {
+        "write": "delete_content_category_ownership"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/customDuties",
+      "covered_by": {
+        "write": "create_custom_duty"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/emailAddresses",
+      "covered_by": {
+        "write": "create_email_address"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/emailAddresses/{id}",
+      "covered_by": {
+        "write": "update_email_address"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/emailAddresses/{id}",
+      "covered_by": {
+        "write": "delete_email_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/favorites",
+      "covered_by": {
+        "write": "create_favorite"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/favorites/{id}",
+      "covered_by": {
+        "write": "delete_favorite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/imports/actions/accountsImport",
+      "covered_by": {
+        "write": "import_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/imports/actions/bulkUpsert",
+      "covered_by": {
+        "write": "bulk_upsert_imports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/imports/actions/customObjectBulkUpsert",
+      "covered_by": {
+        "write": "bulk_upsert_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/imports/actions/generateUploadLink",
+      "covered_by": {
+        "write": "generate_import_upload_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/imports/actions/prospectsImport",
+      "covered_by": {
+        "write": "import_prospects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/imports/actions/validateUpload",
+      "covered_by": {
+        "write": "validate_import_upload"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/kaiaVoiceImports",
+      "covered_by": {
+        "write": "create_kaia_voice_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/mailboxes",
+      "covered_by": {
+        "write": "create_mailbox"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/mailboxes/{id}",
+      "covered_by": {
+        "write": "update_mailbox"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/mailboxes/{id}",
+      "covered_by": {
+        "write": "delete_mailbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/mailboxes/{id}/actions/linkEwsMasterAccount",
+      "covered_by": {
+        "write": "link_ews_master_account_mailbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/mailboxes/{id}/actions/testSend",
+      "covered_by": {
+        "write": "test_send_mailbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/mailboxes/{id}/actions/testSync",
+      "covered_by": {
+        "write": "test_sync_mailbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/mailboxes/{id}/actions/unlinkEwsMasterAccount",
+      "covered_by": {
+        "write": "unlink_ews_master_account_mailbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/mailings",
+      "covered_by": {
+        "write": "create_mailing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/opportunities",
+      "covered_by": {
+        "write": "create_opportunity"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/opportunities/{id}",
+      "covered_by": {
+        "write": "update_opportunity"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/opportunities/{id}",
+      "covered_by": {
+        "write": "delete_opportunity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/opportunityProspectRoles",
+      "covered_by": {
+        "write": "create_opportunity_prospect_role"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/opportunityProspectRoles/{id}",
+      "covered_by": {
+        "write": "update_opportunity_prospect_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/opportunityProspectRoles/{id}",
+      "covered_by": {
+        "write": "delete_opportunity_prospect_role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/opportunityStages",
+      "covered_by": {
+        "write": "create_opportunity_stage"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/opportunityStages/{id}",
+      "covered_by": {
+        "write": "update_opportunity_stage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/opportunityStages/{id}",
+      "covered_by": {
+        "write": "delete_opportunity_stage"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/orgSettings/{id}",
+      "covered_by": {
+        "write": "update_org_setting"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/personas",
+      "covered_by": {
+        "write": "create_persona"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/personas/{id}",
+      "covered_by": {
+        "write": "update_persona"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/personas/{id}",
+      "covered_by": {
+        "write": "delete_persona"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/phoneNumbers",
+      "covered_by": {
+        "write": "create_phone_number"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/phoneNumbers/{id}",
+      "covered_by": {
+        "write": "update_phone_number"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/phoneNumbers/{id}",
+      "covered_by": {
+        "write": "delete_phone_number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/products",
+      "covered_by": {
+        "write": "create_product"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/products/{id}",
+      "covered_by": {
+        "write": "update_product"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/products/{id}",
+      "covered_by": {
+        "write": "delete_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/profiles",
+      "covered_by": {
+        "write": "create_profile"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/profiles/{id}",
+      "covered_by": {
+        "write": "update_profile"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/profiles/{id}",
+      "covered_by": {
+        "write": "delete_profile"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/prospectNotes",
+      "covered_by": {
+        "write": "create_prospect_note"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/prospectNotes/{id}",
+      "covered_by": {
+        "write": "update_prospect_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/prospectNotes/{id}",
+      "covered_by": {
+        "write": "delete_prospect_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/prospects",
+      "covered_by": {
+        "write": "create_prospect"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/prospects/{id}",
+      "covered_by": {
+        "write": "update_prospect"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/prospects/{id}",
+      "covered_by": {
+        "write": "delete_prospect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/purchases",
+      "covered_by": {
+        "write": "create_purchase"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/purchases/{id}",
+      "covered_by": {
+        "write": "update_purchase"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/purchases/{id}",
+      "covered_by": {
+        "write": "delete_purchase"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/recipients",
+      "covered_by": {
+        "write": "create_recipient"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/recipients/{id}",
+      "covered_by": {
+        "write": "update_recipient"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/recipients/{id}",
+      "covered_by": {
+        "write": "delete_recipient"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/roles",
+      "covered_by": {
+        "write": "create_role"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/roles/{id}",
+      "covered_by": {
+        "write": "update_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/roles/{id}",
+      "covered_by": {
+        "write": "delete_role"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/rulesets",
+      "covered_by": {
+        "write": "create_ruleset"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/rulesets/{id}",
+      "covered_by": {
+        "write": "update_ruleset"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/rulesets/{id}",
+      "covered_by": {
+        "write": "delete_ruleset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceStates",
+      "covered_by": {
+        "write": "create_sequence_state"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/sequenceStates/{id}",
+      "covered_by": {
+        "write": "delete_sequence_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceStates/{id}/actions/finish",
+      "covered_by": {
+        "write": "finish_sequence_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceStates/{id}/actions/pause",
+      "covered_by": {
+        "write": "pause_sequence_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceStates/{id}/actions/resume",
+      "covered_by": {
+        "write": "resume_sequence_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceSteps",
+      "covered_by": {
+        "write": "create_sequence_step"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/sequenceSteps/{id}",
+      "covered_by": {
+        "write": "update_sequence_step"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceTemplates",
+      "covered_by": {
+        "write": "create_sequence_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/sequenceTemplates/{id}",
+      "covered_by": {
+        "write": "update_sequence_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/sequenceTemplates/{id}",
+      "covered_by": {
+        "write": "delete_sequence_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceTemplates/{id}/actions/activate",
+      "covered_by": {
+        "write": "activate_sequence_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequenceTemplates/{id}/actions/deactivate",
+      "covered_by": {
+        "write": "deactivate_sequence_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequences",
+      "covered_by": {
+        "write": "create_sequence"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/sequences/{id}",
+      "covered_by": {
+        "write": "update_sequence"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/sequences/{id}",
+      "covered_by": {
+        "write": "delete_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequences/{id}/actions/activate",
+      "covered_by": {
+        "write": "activate_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sequences/{id}/actions/deactivate",
+      "covered_by": {
+        "write": "deactivate_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/snippets",
+      "covered_by": {
+        "write": "create_snippet"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/snippets/{id}",
+      "covered_by": {
+        "write": "update_snippet"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/snippets/{id}",
+      "covered_by": {
+        "write": "delete_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/stages",
+      "covered_by": {
+        "write": "create_stage"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/stages/{id}",
+      "covered_by": {
+        "write": "update_stage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/stages/{id}",
+      "covered_by": {
+        "write": "delete_stage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/taskDispositions",
+      "covered_by": {
+        "write": "create_task_disposition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/taskDispositions/{id}",
+      "covered_by": {
+        "write": "update_task_disposition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/taskDispositions/{id}",
+      "covered_by": {
+        "write": "delete_task_disposition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/taskPurposes",
+      "covered_by": {
+        "write": "create_task_purpose"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/taskPurposes/{id}",
+      "covered_by": {
+        "write": "update_task_purpose"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/taskPurposes/{id}",
+      "covered_by": {
+        "write": "delete_task_purpose"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks",
+      "covered_by": {
+        "write": "create_task"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/tasks/{id}",
+      "covered_by": {
+        "write": "update_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/tasks/{id}",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/advance",
+      "covered_by": {
+        "write": "advance_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/deliver",
+      "covered_by": {
+        "write": "deliver_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/logMeetInPerson",
+      "covered_by": {
+        "write": "log_meet_in_person_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/markComplete",
+      "covered_by": {
+        "write": "mark_complete_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/reassignOwner",
+      "covered_by": {
+        "write": "reassign_owner_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/reschedule",
+      "covered_by": {
+        "write": "reschedule_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/snooze",
+      "covered_by": {
+        "write": "snooze_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/updateNote",
+      "covered_by": {
+        "write": "update_note_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/tasks/{id}/actions/updateOpportunityAssociation",
+      "covered_by": {
+        "write": "update_opportunity_association_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/teams/{id}",
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/teams/{id}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/templates",
+      "covered_by": {
+        "write": "create_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/templates/{id}",
+      "covered_by": {
+        "write": "update_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/templates/{id}",
+      "covered_by": {
+        "write": "delete_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/users/{id}",
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/webhooks/{id}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/webhooks/{id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/customObjects/{objectName}",
+      "covered_by": {
+        "write": "create_custom_object_record"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/customObjects/{objectName}/{id}",
+      "covered_by": {
+        "write": "update_custom_object_record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/customObjects/{objectName}/{id}",
+      "covered_by": {
+        "write": "delete_custom_object_record"
+      }
+    }
   ]
 }

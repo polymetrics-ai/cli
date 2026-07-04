@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Pendo Connection Specification",
   "type": "object",
-  "required": ["integration_key"],
+  "required": [
+    "integration_key"
+  ],
   "properties": {
     "integration_key": {
       "type": "string",
@@ -13,21 +15,93 @@
       "type": "string",
       "format": "uri",
       "default": "https://app.pendo.io/api/v1",
-      "description": "Pendo API base URL override for tests or proxies."
+      "description": "Pendo Engage API v1 base URL override for tests, regions, or proxies."
     },
     "limit": {
       "type": "string",
       "default": "100",
-      "description": "Records per page (1-500)."
+      "description": "Records per page for the four legacy list streams (1-500 in the native connector)."
     },
     "max_pages": {
       "type": "string",
       "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+      "description": "Maximum pages for the legacy cursor-paginated streams; 0/all/unlimited means exhaust."
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live (default) or fixture for legacy native connector fixture mode."
+    },
+    "page_id": {
+      "type": "string",
+      "description": "Pendo page id used by the corresponding detail stream."
+    },
+    "page_ids": {
+      "type": "string",
+      "description": "Pendo page ids used by the corresponding detail stream."
+    },
+    "feature_id": {
+      "type": "string",
+      "description": "Pendo feature id used by the corresponding detail stream."
+    },
+    "feature_ids": {
+      "type": "string",
+      "description": "Pendo feature ids used by the corresponding detail stream."
+    },
+    "tracktype_id": {
+      "type": "string",
+      "description": "Pendo tracktype id used by the corresponding detail stream."
+    },
+    "visitor_id": {
+      "type": "string",
+      "description": "Pendo visitor id used by the corresponding detail stream."
+    },
+    "visitor_history_starttime": {
+      "type": "string",
+      "description": "Pendo visitor history starttime used by the corresponding detail stream."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Pendo account id used by the corresponding detail stream."
+    },
+    "bulkdelete_id": {
+      "type": "string",
+      "description": "Pendo bulkdelete id used by the corresponding detail stream."
+    },
+    "segment_id": {
+      "type": "string",
+      "description": "Pendo segment id used by the corresponding detail stream."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Pendo report id used by the corresponding detail stream."
+    },
+    "guide_id": {
+      "type": "string",
+      "description": "Pendo guide id used by the corresponding detail stream."
+    },
+    "metadata_kind": {
+      "type": "string",
+      "description": "Pendo metadata kind used by the corresponding detail stream."
+    },
+    "metadata_group": {
+      "type": "string",
+      "description": "Pendo metadata group used by the corresponding detail stream."
+    },
+    "metadata_field_name": {
+      "type": "string",
+      "description": "Pendo metadata field name used by the corresponding detail stream."
+    },
+    "blacklist_type": {
+      "type": "string",
+      "description": "Pendo blacklist type used by the corresponding detail stream."
+    },
+    "server_name": {
+      "type": "string",
+      "description": "Pendo server name used by the corresponding detail stream."
+    },
+    "flag_name": {
+      "type": "string",
+      "description": "Pendo flag name used by the corresponding detail stream."
     }
   }
 }

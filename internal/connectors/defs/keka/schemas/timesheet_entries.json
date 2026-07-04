@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "timesheet_entries",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": true
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "attendee_id": "attendee_id_fixture",
+    "name": "fixture",
+    "email": "fixture@example.com",
+    "contactId": "contact_id_fixture",
+    "userId": "user_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/meetings/id_fixture/attendees/attendee_id_fixture",
+    "body": {
+      "name": "fixture",
+      "email": "fixture@example.com",
+      "contactId": "contact_id_fixture",
+      "userId": "user_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

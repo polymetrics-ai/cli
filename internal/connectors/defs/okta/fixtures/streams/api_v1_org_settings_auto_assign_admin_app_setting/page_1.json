@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/org/settings/autoAssignAdminAppSetting"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "autoAssignAdminAppSetting": true
+    }
+  }
+}

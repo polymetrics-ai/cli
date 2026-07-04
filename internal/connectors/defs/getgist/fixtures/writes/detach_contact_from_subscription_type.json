@@ -1,0 +1,13 @@
+{
+  "record": {
+    "subscription_type_id": "subscription_type_id_fixture_1",
+    "name": "Fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscription_types/subscription_type_id_fixture_1",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

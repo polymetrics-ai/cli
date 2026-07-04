@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/notification_preferences"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "notification_preferences_fixture",
+      "configured": true
+    }
+  }
+}

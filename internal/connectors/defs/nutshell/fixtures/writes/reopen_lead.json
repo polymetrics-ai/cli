@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "1-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/1-fixture/reopen"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

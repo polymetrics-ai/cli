@@ -1,0 +1,13 @@
+{
+  "record": {
+    "project_id": 123,
+    "module_name": "fixture_module_name",
+    "project_id_3": 123,
+    "name": "Fixture delete_project_association",
+    "description": "Fixture delete_project_association record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/pm/projects/123/fixture_module_name/123"
+  }
+}

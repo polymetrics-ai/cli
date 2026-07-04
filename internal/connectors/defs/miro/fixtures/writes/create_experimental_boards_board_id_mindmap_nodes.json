@@ -1,0 +1,51 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "data": {
+      "nodeView": {
+        "data": {
+          "type": "type_fixture",
+          "content": "content_fixture"
+        }
+      }
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "geometry": {
+      "width": 1.25
+    },
+    "parent": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2-experimental/boards/synthetic-conformance-value/mindmap_nodes",
+    "body": {
+      "data": {
+        "nodeView": {
+          "data": {
+            "type": "type_fixture",
+            "content": "content_fixture"
+          }
+        }
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "geometry": {
+        "width": 1.25
+      },
+      "parent": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

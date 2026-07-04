@@ -1,0 +1,20 @@
+{
+  "record": {
+    "shiftIds": [
+      "fixture_value"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/scheduling/shifts/publish",
+    "body": {
+      "shiftIds": [
+        "fixture_value"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

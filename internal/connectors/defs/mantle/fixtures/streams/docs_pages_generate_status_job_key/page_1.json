@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/docs/pages/generate/status/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "docs_pages_generate_status_job_key_fixture",
+      "status": "completed"
+    }
+  }
+}

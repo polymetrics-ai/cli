@@ -1,0 +1,19 @@
+{
+  "record": {
+    "project_id": "fixture_id",
+    "name": "Fixture Name",
+    "billable": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time-tracking/projects/fixture_id/tasks",
+    "body": {
+      "name": "Fixture Name",
+      "billable": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

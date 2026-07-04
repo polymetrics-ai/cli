@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/email/campaigns/id_fixture/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/iam/governance/optOut"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

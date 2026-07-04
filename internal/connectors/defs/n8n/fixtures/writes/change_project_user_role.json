@@ -1,0 +1,18 @@
+{
+  "record": {
+    "project_id": "project_fixture_1",
+    "project_user_id": "user_fixture_1",
+    "role": "project:viewer"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/project_fixture_1/users/user_fixture_1",
+    "body": {
+      "role": "project:viewer"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

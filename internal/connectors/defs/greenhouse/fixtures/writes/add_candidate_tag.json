@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/tags/candidate"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Updated file"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/objects/files/101",
+    "body": {
+      "name": "Updated file"
+    }
+  }
+}

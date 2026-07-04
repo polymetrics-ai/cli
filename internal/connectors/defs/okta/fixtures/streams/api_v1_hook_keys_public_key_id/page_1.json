@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/hook-keys/public/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "alg": "alg_fixture",
+      "e": "e_fixture",
+      "kid": "kid_fixture",
+      "kty": "kty_fixture",
+      "n": "n_fixture",
+      "use": "use_fixture"
+    }
+  }
+}

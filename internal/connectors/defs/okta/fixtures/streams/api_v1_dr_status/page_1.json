@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/dr/status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": [
+        {
+          "domain": "domain_fixture",
+          "isFailedOver": true
+        }
+      ]
+    }
+  }
+}

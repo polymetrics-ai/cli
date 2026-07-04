@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Greenhouse Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
@@ -13,16 +15,108 @@
       "type": "string",
       "format": "uri",
       "default": "https://harvest.greenhouse.io/v1",
-      "description": "Greenhouse Harvest API base URL override, for tests or proxies."
+      "description": "Greenhouse Harvest API v1 base URL override, for tests or proxies."
     },
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Records per page (1-500)."
+      "description": "Records per page for list streams (1-500 in the legacy connector; declarative requests pass the configured value as per_page)."
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Legacy runtime mode: live (default) or fixture. The declarative engine does not branch on this value; conformance uses JSON fixtures directly."
+    },
+    "application_id": {
+      "type": "string",
+      "description": "Application Id used by Greenhouse stream paths."
+    },
+    "approval_flow_id": {
+      "type": "string",
+      "description": "Approval Flow Id used by Greenhouse stream paths."
+    },
+    "candidate_id": {
+      "type": "string",
+      "description": "Candidate Id used by Greenhouse stream paths."
+    },
+    "custom_field_id": {
+      "type": "string",
+      "description": "Custom Field Id used by Greenhouse stream paths."
+    },
+    "demographic_answer_id": {
+      "type": "string",
+      "description": "Demographic Answer Id used by Greenhouse stream paths."
+    },
+    "demographic_answer_option_id": {
+      "type": "string",
+      "description": "Demographic Answer Option Id used by Greenhouse stream paths."
+    },
+    "demographic_question_id": {
+      "type": "string",
+      "description": "Demographic Question Id used by Greenhouse stream paths."
+    },
+    "demographic_question_set_id": {
+      "type": "string",
+      "description": "Demographic Question Set Id used by Greenhouse stream paths."
+    },
+    "department_id": {
+      "type": "string",
+      "description": "Department Id used by Greenhouse stream paths."
+    },
+    "email_template_id": {
+      "type": "string",
+      "description": "Email Template Id used by Greenhouse stream paths."
+    },
+    "field_type": {
+      "type": "string",
+      "description": "Field Type used by Greenhouse stream paths."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Job Id used by Greenhouse stream paths."
+    },
+    "job_post_id": {
+      "type": "string",
+      "description": "Job Post Id used by Greenhouse stream paths."
+    },
+    "job_stage_id": {
+      "type": "string",
+      "description": "Job Stage Id used by Greenhouse stream paths."
+    },
+    "offer_id": {
+      "type": "string",
+      "description": "Offer Id used by Greenhouse stream paths."
+    },
+    "office_id": {
+      "type": "string",
+      "description": "Office Id used by Greenhouse stream paths."
+    },
+    "on_behalf_of_user_id": {
+      "type": "string",
+      "description": "Optional Greenhouse user ID sent as On-Behalf-Of for audited Harvest mutations; omitted when unset."
+    },
+    "opening_id": {
+      "type": "string",
+      "description": "Opening Id used by Greenhouse stream paths."
+    },
+    "prospect_pool_id": {
+      "type": "string",
+      "description": "Prospect Pool Id used by Greenhouse stream paths."
+    },
+    "scheduled_interview_id": {
+      "type": "string",
+      "description": "Scheduled Interview Id used by Greenhouse stream paths."
+    },
+    "scorecard_id": {
+      "type": "string",
+      "description": "Scorecard Id used by Greenhouse stream paths."
+    },
+    "token": {
+      "type": "string",
+      "description": "Token used by Greenhouse stream paths."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User Id used by Greenhouse stream paths."
     }
   }
 }

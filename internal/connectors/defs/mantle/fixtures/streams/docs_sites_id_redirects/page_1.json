@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/docs/sites/synthetic-conformance-value/redirects"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "redirects": {
+        "id": "id_fixture",
+        "fromPath": "fixture",
+        "toPath": "fixture",
+        "redirectType": "fixture",
+        "enabled": true,
+        "notes": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

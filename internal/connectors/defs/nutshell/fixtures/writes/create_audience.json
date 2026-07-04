@@ -1,0 +1,26 @@
+{
+  "record": {
+    "emAudiences": [
+      {
+        "name": "Fixture create_audience"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/audiences",
+    "body": {
+      "emAudiences": [
+        {
+          "name": "Fixture create_audience"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

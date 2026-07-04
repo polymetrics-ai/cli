@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/message-streams",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 1,
+      "MessageStreams": [
+        {
+          "ID": "outbound",
+          "Name": "Transactional Stream",
+          "MessageStreamType": "Transactional"
+        }
+      ]
+    }
+  }
+}

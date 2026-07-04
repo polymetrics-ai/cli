@@ -1,0 +1,28 @@
+{
+  "record": {
+    "created": "2026-01-01T00:00:00Z",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "template": "template_fixture",
+    "translations": {},
+    "type": "SMS_VERIFY_CODE"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/templates/sms",
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "template": "template_fixture",
+      "translations": {},
+      "type": "SMS_VERIFY_CODE"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/benefit/company_benefit/type"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture_id",
+        "canBeAcaPlan": true,
+        "canCoExistEnrollment": true,
+        "isReimbursementPlan": true,
+        "name": "Fixture Name",
+        "slug": "fixture_value"
+      }
+    ]
+  }
+}

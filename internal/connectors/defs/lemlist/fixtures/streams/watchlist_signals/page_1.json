@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/watchlist/signals",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "signals": [
+        {
+          "_id": "sig_fixture_1",
+          "teamId": "team_fixture_1",
+          "watchListId": "watch_fixture_1",
+          "watchListName": "Fixture Signal Agent",
+          "type": "companyIsHiring",
+          "status": "new",
+          "receivedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "contact": null,
+          "company": { "_id": "cpn_fixture_1", "name": "Fixture Company" },
+          "signalData": { "jobTitle": "Engineer" }
+        }
+      ],
+      "total": 1,
+      "offset": 0,
+      "limit": 100
+    }
+  }
+}

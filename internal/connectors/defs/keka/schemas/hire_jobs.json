@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "hire_jobs",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "noOfOpenings": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "departmentName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jobType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "orgJobId": {
+      "type": [
+        "null"
+      ]
+    },
+    "jobLocations": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "targetHireDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "createdBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdOn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publishedBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publishedOn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "experience": {
+      "type": [
+        "null"
+      ]
+    },
+    "totalHiredPositions": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

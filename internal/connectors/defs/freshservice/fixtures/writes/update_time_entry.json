@@ -1,0 +1,16 @@
+{
+  "record": {
+    "change_id": 123,
+    "time_entry_id": 123,
+    "name": "Fixture update_time_entry",
+    "description": "Fixture update_time_entry record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/time_entries/123",
+    "body": {
+      "name": "Fixture update_time_entry",
+      "description": "Fixture update_time_entry record"
+    }
+  }
+}

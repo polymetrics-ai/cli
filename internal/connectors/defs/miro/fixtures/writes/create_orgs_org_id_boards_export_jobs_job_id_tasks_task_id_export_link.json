@@ -1,0 +1,15 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "job_id": "synthetic-conformance-value",
+    "task_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/orgs/synthetic-conformance-value/boards/export/jobs/synthetic-conformance-value/tasks/synthetic-conformance-value/export-link"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

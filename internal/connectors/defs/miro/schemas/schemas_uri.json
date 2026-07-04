@@ -1,0 +1,261 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Information on how users, groups, and enterprise-user attributes are formatted.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Identifier of the schema resource."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the schema resource."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the schema resource."
+    },
+    "attributes": {
+      "type": "array",
+      "description": "Attributes that are currently supported.",
+      "items": {
+        "type": "object",
+        "description": "Definition of schema attributes.",
+        "properties": {
+          "schemas": {
+            "type": "array",
+            "description": "Identifies which schema(s) this resource used. In this case it is the SCIM core User/Group schema.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "urn:ietf:params:scim:schemas:core:2.0:User"
+              ]
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of schema attribute."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of schema attribute."
+          },
+          "multiValued": {
+            "type": "boolean",
+            "description": "Indicates whether the attribute is multi-valued."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of schema attribute."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indicates whether the attribute is required."
+          },
+          "subAttributes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Definition of schema attributes.",
+              "properties": {
+                "schemas": {
+                  "type": "array",
+                  "description": "Identifies which schema(s) this resource used. In this case it is the SCIM core User/Group schema.",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "urn:ietf:params:scim:schemas:core:2.0:User"
+                    ]
+                  }
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of schema attribute."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Type of schema attribute."
+                },
+                "multiValued": {
+                  "type": "boolean",
+                  "description": "Indicates whether the attribute is multi-valued."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of schema attribute."
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Indicates whether the attribute is required."
+                },
+                "subAttributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Definition of schema attributes.",
+                    "properties": {
+                      "schemas": {
+                        "type": "array",
+                        "description": "Identifies which schema(s) this resource used. In this case it is the SCIM core User/Group schema.",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "urn:ietf:params:scim:schemas:core:2.0:User"
+                          ]
+                        }
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of schema attribute."
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Type of schema attribute."
+                      },
+                      "multiValued": {
+                        "type": "boolean",
+                        "description": "Indicates whether the attribute is multi-valued."
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Description of schema attribute."
+                      },
+                      "required": {
+                        "type": "boolean",
+                        "description": "Indicates whether the attribute is required."
+                      },
+                      "subAttributes": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "description": "Definition of schema attributes.",
+                          "properties": {
+                            "schemas": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "name": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "type": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "multiValued": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "description": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "required": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "subAttributes": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "caseExact": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "mutability": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "returned": {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            "uniqueness": {
+                              "type": "object",
+                              "additionalProperties": true
+                            }
+                          },
+                          "additionalProperties": true
+                        }
+                      },
+                      "caseExact": {
+                        "type": "boolean",
+                        "description": "Indicates whether the attribute is case exact."
+                      },
+                      "mutability": {
+                        "type": "string",
+                        "description": "Indicates the mutability of the attribute."
+                      },
+                      "returned": {
+                        "type": "string",
+                        "description": "Indicates when the attribute is returned in a response."
+                      },
+                      "uniqueness": {
+                        "type": "string",
+                        "description": "Indicates the uniqueness of the attribute."
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "caseExact": {
+                  "type": "boolean",
+                  "description": "Indicates whether the attribute is case exact."
+                },
+                "mutability": {
+                  "type": "string",
+                  "description": "Indicates the mutability of the attribute."
+                },
+                "returned": {
+                  "type": "string",
+                  "description": "Indicates when the attribute is returned in a response."
+                },
+                "uniqueness": {
+                  "type": "string",
+                  "description": "Indicates the uniqueness of the attribute."
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "caseExact": {
+            "type": "boolean",
+            "description": "Indicates whether the attribute is case exact."
+          },
+          "mutability": {
+            "type": "string",
+            "description": "Indicates the mutability of the attribute."
+          },
+          "returned": {
+            "type": "string",
+            "description": "Indicates when the attribute is returned in a response."
+          },
+          "uniqueness": {
+            "type": "string",
+            "description": "Indicates the uniqueness of the attribute."
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the schema resource.",
+      "properties": {
+        "resourceType": {
+          "type": "string",
+          "description": "Type of the resource."
+        },
+        "location": {
+          "type": "string",
+          "description": "The URI of the resource."
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

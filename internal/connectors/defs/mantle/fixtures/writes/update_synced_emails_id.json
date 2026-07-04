@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "subject": "fixture",
+    "snippet": "fixture",
+    "source": "fixture",
+    "contactId": "contact_id_fixture",
+    "customerId": "customer_id_fixture",
+    "dealId": "deal_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/synced_emails/id_fixture",
+    "body": {
+      "subject": "fixture",
+      "snippet": "fixture",
+      "source": "fixture",
+      "contactId": "contact_id_fixture",
+      "customerId": "customer_id_fixture",
+      "dealId": "deal_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

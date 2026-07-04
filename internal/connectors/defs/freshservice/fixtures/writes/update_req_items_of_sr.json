@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "requested_item_id": 123,
+    "name": "Fixture update_req_items_of_sr",
+    "description": "Fixture update_req_items_of_sr record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/requested_items/123",
+    "body": {
+      "name": "Fixture update_req_items_of_sr",
+      "description": "Fixture update_req_items_of_sr record"
+    }
+  }
+}

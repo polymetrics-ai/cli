@@ -1,0 +1,85 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "customerId": "customer_id_fixture",
+    "type": "installed",
+    "platformEventId": "platform_event_id_fixture",
+    "occurredAt": "2026-01-01T00:00:00Z",
+    "metadata": {
+      "id": "metadata_fixture_id"
+    },
+    "plan": {
+      "id": "id_fixture",
+      "previousId": "previous_id_fixture",
+      "previousExternalId": "previous_external_id_fixture",
+      "netChange": 1.23,
+      "name": "fixture",
+      "amount": 1.23,
+      "currencyCode": "fixture",
+      "interval": "EVERY_30_DAYS",
+      "trialDays": 1.23
+    },
+    "subscription": {
+      "id": "id_fixture",
+      "previousId": "previous_id_fixture"
+    },
+    "charge": {
+      "id": "id_fixture",
+      "externalId": "external_id_fixture",
+      "name": "fixture",
+      "amount": 1.23,
+      "currencyCode": "fixture",
+      "type": "one_time",
+      "status": "billed"
+    },
+    "externalId": "external_id_fixture",
+    "transactionId": "transaction_id_fixture",
+    "appReviewId": "app_review_id_fixture",
+    "invoiceId": "invoice_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/apps/id_fixture/app_events",
+    "body": {
+      "customerId": "customer_id_fixture",
+      "type": "installed",
+      "platformEventId": "platform_event_id_fixture",
+      "occurredAt": "2026-01-01T00:00:00Z",
+      "metadata": {
+        "id": "metadata_fixture_id"
+      },
+      "plan": {
+        "id": "id_fixture",
+        "previousId": "previous_id_fixture",
+        "previousExternalId": "previous_external_id_fixture",
+        "netChange": 1.23,
+        "name": "fixture",
+        "amount": 1.23,
+        "currencyCode": "fixture",
+        "interval": "EVERY_30_DAYS",
+        "trialDays": 1.23
+      },
+      "subscription": {
+        "id": "id_fixture",
+        "previousId": "previous_id_fixture"
+      },
+      "charge": {
+        "id": "id_fixture",
+        "externalId": "external_id_fixture",
+        "name": "fixture",
+        "amount": 1.23,
+        "currencyCode": "fixture",
+        "type": "one_time",
+        "status": "billed"
+      },
+      "externalId": "external_id_fixture",
+      "transactionId": "transaction_id_fixture",
+      "appReviewId": "app_review_id_fixture",
+      "invoiceId": "invoice_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

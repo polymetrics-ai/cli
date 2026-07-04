@@ -1,0 +1,26 @@
+{
+  "record": {
+    "additionalOptions": {
+      "categories": [
+        "instance"
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/audit",
+    "body": {
+      "additionalOptions": {
+        "categories": [
+          "instance"
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Instance Risk Report": {}
+    }
+  }
+}

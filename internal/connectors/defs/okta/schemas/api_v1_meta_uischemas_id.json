@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the UI Schema was created (ISO 86001)",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the UI Schema"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the UI Schema was last modified (ISO 86001)",
+      "format": "date-time"
+    },
+    "uiSchema": {
+      "type": "object",
+      "description": "Properties of the UI schema",
+      "properties": {
+        "buttonLabel": {
+          "type": "string",
+          "description": "Specifies the button label for the `Submit` button at the bottom of the enrollment form"
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Specifies the configuration of an input field on an enrollment form",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Label name for the UI element"
+              },
+              "options": {
+                "type": "object",
+                "description": "UI Schema element options object",
+                "properties": {
+                  "format": {
+                    "type": "string",
+                    "description": "Specifies how the input appears",
+                    "enum": [
+                      "text",
+                      "radio",
+                      "select",
+                      "checkbox",
+                      "radio_yes_no",
+                      "radio_true_false"
+                    ]
+                  }
+                },
+                "additionalProperties": true
+              },
+              "scope": {
+                "type": "string",
+                "description": "Specifies the property bound to the input field. It must follow the format `#/properties/PROPERTY_NAME` where `PROPERTY_NAME` is a variable name for an attribute in `profile editor`."
+              },
+              "type": {
+                "type": "string",
+                "description": "Specifies the relationship between this input element and `scope`. The `Control` value specifies that this input controls the value represented by `scope`."
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "label": {
+          "type": "string",
+          "description": "Specifies the label at the top of the enrollment form under the logo"
+        },
+        "type": {
+          "type": "string",
+          "description": "Specifies the type of layout"
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

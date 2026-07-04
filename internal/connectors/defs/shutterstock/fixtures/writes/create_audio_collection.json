@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture create audio collection"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/audio/collections",
+    "body": {
+      "name": "Fixture create audio collection"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

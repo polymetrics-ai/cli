@@ -1,0 +1,35 @@
+{
+  "record": {
+    "spreadsheet_id": "234",
+    "content": [
+      [
+        "Company",
+        "First name",
+        "Email"
+      ],
+      [
+        "Fixture Corp",
+        "Fixture",
+        "fixture@example.invalid"
+      ]
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spreadsheets/234/rows",
+    "body": {
+      "content": [
+        [
+          "Company",
+          "First name",
+          "Email"
+        ],
+        [
+          "Fixture Corp",
+          "Fixture",
+          "fixture@example.invalid"
+        ]
+      ]
+    }
+  }
+}

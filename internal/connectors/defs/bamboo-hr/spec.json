@@ -2,16 +2,147 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "BambooHR Connection Specification",
   "type": "object",
-  "required": ["subdomain", "api_key"],
+  "required": [
+    "subdomain",
+    "api_key"
+  ],
   "properties": {
     "subdomain": {
       "type": "string",
-      "description": "Your BambooHR account subdomain (the <subdomain> in https://<subdomain>.bamboohr.com). Used to derive base_url as https://{subdomain}.bamboohr.com/api/v1."
+      "description": "Your BambooHR account subdomain, the companySubDomain in https://companySubDomain.bamboohr.com."
     },
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "BambooHR API key. Sent as the HTTP Basic username with a literal 'x' password (BambooHR's documented API-key auth convention); never logged."
+      "description": "BambooHR API key used as the HTTP Basic username with literal password x."
+    },
+    "application_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream application_id."
+    },
+    "break_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream break_id."
+    },
+    "break_policy_breaks_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream break_policy_breaks_id."
+    },
+    "break_policy_employees_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream break_policy_employees_id."
+    },
+    "break_policy_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream break_policy_id."
+    },
+    "changed_employee_ids_since": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream changed_employee_ids_since."
+    },
+    "changed_employee_table_data_since": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream changed_employee_table_data_since."
+    },
+    "company_benefit_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream company_benefit_id."
+    },
+    "company_report_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream company_report_id."
+    },
+    "country_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream country_id."
+    },
+    "dataset_name": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream dataset_name."
+    },
+    "employee_break_availabilities_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream employee_break_availabilities_id."
+    },
+    "employee_break_policies_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream employee_break_policies_id."
+    },
+    "employee_dependent_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream employee_dependent_id."
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream employee_id."
+    },
+    "employee_table_data_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream employee_table_data_id."
+    },
+    "goal_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream goal_id."
+    },
+    "goal_share_options_search": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream goal_share_options_search."
+    },
+    "member_benefits_calendar_year": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream member_benefits_calendar_year."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream project_id."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream report_id."
+    },
+    "scheduling_get_schedule_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream scheduling_get_schedule_id."
+    },
+    "scheduling_get_shift_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream scheduling_get_shift_id."
+    },
+    "shift_differential_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream shift_differential_id."
+    },
+    "table": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream table."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream task_id."
+    },
+    "time_off_requests_end": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream time_off_requests_end."
+    },
+    "time_off_requests_start": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream time_off_requests_start."
+    },
+    "time_tracking_record_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream time_tracking_record_id."
+    },
+    "timesheet_entries_end": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream timesheet_entries_end."
+    },
+    "timesheet_entries_start": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream timesheet_entries_start."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Optional stream parameter used by BambooHR Pass B stream webhook_id."
     }
   }
 }

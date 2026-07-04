@@ -25,6 +25,14 @@
       "default": "200",
       "description": "Records per page (1-1000)."
     },
+    "session_uid": {
+      "type": "string",
+      "description": "Optional user uid filter for the sessions stream. FullStory's sessions endpoint requires uid and/or email."
+    },
+    "session_email": {
+      "type": "string",
+      "description": "Optional user email filter for the sessions stream. FullStory's sessions endpoint requires uid and/or email."
+    },
     "max_pages": {
       "type": "string",
       "default": "0",

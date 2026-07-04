@@ -1,0 +1,16 @@
+{
+  "record": {
+    "display_id": 123,
+    "component_id": 123,
+    "name": "Fixture update_a_component",
+    "description": "Fixture update_a_component record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/assets/123/components/123",
+    "body": {
+      "name": "Fixture update_a_component",
+      "description": "Fixture update_a_component record"
+    }
+  }
+}

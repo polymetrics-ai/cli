@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "assets",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assetName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assetId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "assetCategoryId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assetTypeId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assetConditionId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assignedTo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "assignedOn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

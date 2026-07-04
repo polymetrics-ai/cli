@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_change",
+    "description": "Fixture create_change record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/changes",
+    "body": {
+      "name": "Fixture create_change",
+      "description": "Fixture create_change record"
+    }
+  }
+}

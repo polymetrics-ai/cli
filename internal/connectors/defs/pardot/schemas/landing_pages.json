@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "landing_pages",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "campaignId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "folderId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "formId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "layoutTemplateId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isDoNotIndex": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "vanityUrlPath": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "redirectLocation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "trackerDomainId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "archiveDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updatedById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "isDeleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "salesforceCmsId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

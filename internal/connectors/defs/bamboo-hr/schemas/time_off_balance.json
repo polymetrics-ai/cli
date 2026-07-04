@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_off_balance",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "balance": {
+      "type": "string"
+    },
+    "end": {
+      "type": "string"
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "policyType": {
+      "type": "string",
+      "enum": [
+        "accruing",
+        "discretionary",
+        "manual"
+      ]
+    },
+    "timeOffType": {
+      "type": "string"
+    },
+    "units": {
+      "type": "string"
+    },
+    "usedYearToDate": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

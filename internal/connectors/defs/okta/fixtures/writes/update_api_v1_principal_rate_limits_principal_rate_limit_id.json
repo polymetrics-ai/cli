@@ -1,0 +1,35 @@
+{
+  "record": {
+    "principal_rate_limit_id": "synthetic-conformance-value",
+    "createdBy": "2026-01-01T00:00:00Z",
+    "createdDate": "2026-01-01T00:00:00Z",
+    "defaultConcurrencyPercentage": 1,
+    "defaultPercentage": 1,
+    "id": "id_fixture",
+    "lastUpdate": "2026-01-01T00:00:00Z",
+    "lastUpdatedBy": "2026-01-01T00:00:00Z",
+    "orgId": "org_id_fixture",
+    "principalId": "principal_id_fixture",
+    "principalType": "OAUTH_CLIENT"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/principal-rate-limits/synthetic-conformance-value",
+    "body": {
+      "createdBy": "2026-01-01T00:00:00Z",
+      "createdDate": "2026-01-01T00:00:00Z",
+      "defaultConcurrencyPercentage": 1,
+      "defaultPercentage": 1,
+      "id": "id_fixture",
+      "lastUpdate": "2026-01-01T00:00:00Z",
+      "lastUpdatedBy": "2026-01-01T00:00:00Z",
+      "orgId": "org_id_fixture",
+      "principalId": "principal_id_fixture",
+      "principalType": "OAUTH_CLIENT"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

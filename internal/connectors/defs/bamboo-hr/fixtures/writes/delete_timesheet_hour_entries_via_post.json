@@ -1,0 +1,20 @@
+{
+  "record": {
+    "hourEntryIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time_tracking/hour_entries/delete",
+    "body": {
+      "hourEntryIds": [
+        1001
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

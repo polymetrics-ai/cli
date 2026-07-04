@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/synced_emails/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "externalId": "external_id_fixture",
+      "subject": "fixture",
+      "snippet": "fixture",
+      "source": "fixture",
+      "lastMessageAt": "2026-01-01T00:00:00Z",
+      "messageCount": 1,
+      "contact": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "email": "fixture@example.com"
+      },
+      "customer": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "email": "fixture@example.com"
+      },
+      "deal": {
+        "id": "id_fixture",
+        "name": "fixture"
+      },
+      "syncedBy": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "email": "fixture@example.com"
+      },
+      "messages": [
+        {
+          "id": "id_fixture",
+          "externalId": "external_id_fixture",
+          "fromEmail": "fixture@example.com",
+          "fromName": "fixture",
+          "toEmails": [
+            "fixture@example.com"
+          ],
+          "ccEmails": [
+            "fixture@example.com"
+          ],
+          "bccEmails": [
+            "fixture@example.com"
+          ],
+          "subject": "fixture",
+          "snippet": "fixture",
+          "bodyText": "fixture",
+          "bodyHtml": "<p>Fixture</p>",
+          "date": "2026-01-01T00:00:00Z",
+          "isInbound": true,
+          "labelIds": [
+            "label_id_fixture"
+          ],
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

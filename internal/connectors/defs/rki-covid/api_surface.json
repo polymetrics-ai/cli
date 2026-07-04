@@ -1,16 +1,724 @@
 {
   "api": "corona-zahlen.org public JSON API (Robert Koch-Institut derived data; https://api.corona-zahlen.org)",
-  "docs": "https://api.corona-zahlen.org",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave1 fan-out migration: the 5 legacy-parity read streams only (germany, states, districts, cases_history, deaths_history), each a distinct GET endpoint; the API's full documented surface (vaccinations, hospitalization, incidence-campaigns) is out of scope until Pass B, matching legacy's own 5-endpoint coverage.",
+  "docs": "https://api.corona-zahlen.org/docs/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against the current VuePress endpoint docs (Germany, States, Districts, Vaccinations, Maps, Testing). The API is credential-free and read-only; all documented mutations are absent. Tabular JSON list/detail resources are covered by streams, path-parameter-limited aliases are excluded as duplicate_of, and map/legend visualization payloads are excluded as non_data_endpoint.",
   "endpoints": [
-    { "method": "GET", "path": "/germany", "covered_by": { "stream": "germany" } },
-    { "method": "GET", "path": "/states", "covered_by": { "stream": "states" } },
-    { "method": "GET", "path": "/districts", "covered_by": { "stream": "districts" } },
-    { "method": "GET", "path": "/history/cases", "covered_by": { "stream": "cases_history" } },
-    { "method": "GET", "path": "/history/deaths", "covered_by": { "stream": "deaths_history" } },
-    { "method": "GET", "path": "/vaccinations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
-    { "method": "GET", "path": "/germany/hospitalization", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not read by legacy" } },
-    { "method": "GET", "path": "/states/history/cases, /districts/history/cases, ...", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy only reads the Germany-wide history endpoints, not per-state/per-district history" } }
+    {
+      "method": "GET",
+      "path": "/districts",
+      "covered_by": {
+        "stream": "districts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/age-groups",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/cases",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/cases/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/deaths",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/deaths/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/frozen-incidence",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/frozen-incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/incidence",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/recovered",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/{ags}/history/recovered/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/age-groups",
+      "covered_by": {
+        "stream": "districts_age_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Section/default redirect in the public docs; the concrete target endpoint is covered or excluded separately."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/cases",
+      "covered_by": {
+        "stream": "districts_cases_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/cases/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/deaths",
+      "covered_by": {
+        "stream": "districts_deaths_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/deaths/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/frozen-incidence",
+      "covered_by": {
+        "stream": "districts_frozen_incidence_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/frozen-incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/incidence",
+      "covered_by": {
+        "stream": "districts_incidence_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/recovered",
+      "covered_by": {
+        "stream": "districts_recovered_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/districts/history/recovered/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany",
+      "covered_by": {
+        "stream": "germany"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/age-groups",
+      "covered_by": {
+        "stream": "germany_age_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Section/default redirect in the public docs; the concrete target endpoint is covered or excluded separately."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/cases",
+      "covered_by": {
+        "stream": "cases_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/cases/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/deaths",
+      "covered_by": {
+        "stream": "deaths_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/deaths/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/frozen-incidence",
+      "covered_by": {
+        "stream": "germany_frozen_incidence_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/frozen-incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/hospitalization",
+      "covered_by": {
+        "stream": "germany_hospitalization_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/hospitalization/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/incidence",
+      "covered_by": {
+        "stream": "germany_incidence_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/rValue",
+      "covered_by": {
+        "stream": "germany_r_value_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/rValue/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/recovered",
+      "covered_by": {
+        "stream": "germany_recovered_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/germany/history/recovered/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/districts",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/districts-legend",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/districts-legend/history/{date}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/districts/history/{date}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/districts/legend",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states-legend",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states-legend/history/{date}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states-legend/hospitalization",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states-legend/hospitalization/history/{date}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states/hospitalization",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states/hospitalization/history/{date}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/map/states/legend",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states",
+      "covered_by": {
+        "stream": "states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/age-groups",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/cases",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/cases/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/deaths",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/deaths/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/frozen-incidence",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/frozen-incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/hospitalization",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/hospitalization/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/incidence",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/recovered",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/{state}/history/recovered/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/age-groups",
+      "covered_by": {
+        "stream": "states_age_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Section/default redirect in the public docs; the concrete target endpoint is covered or excluded separately."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/cases",
+      "covered_by": {
+        "stream": "states_cases_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/cases/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/deaths",
+      "covered_by": {
+        "stream": "states_deaths_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/deaths/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/frozen-incidence",
+      "covered_by": {
+        "stream": "states_frozen_incidence_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/frozen-incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/hospitalization",
+      "covered_by": {
+        "stream": "states_hospitalization_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/hospitalization/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/incidence",
+      "covered_by": {
+        "stream": "states_incidence_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/incidence/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/recovered",
+      "covered_by": {
+        "stream": "states_recovered_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/states/history/recovered/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/testing/history",
+      "covered_by": {
+        "stream": "testing_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/testing/history/{weeks}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vaccinations",
+      "covered_by": {
+        "stream": "vaccinations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vaccinations/germany",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Germany-specific vaccination alias; the /vaccinations stream covers the same Germany-wide record shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vaccinations/history",
+      "covered_by": {
+        "stream": "vaccinations_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vaccinations/history/{days}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vaccinations/states",
+      "covered_by": {
+        "stream": "vaccinations_states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vaccinations/states/{state}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape."
+      }
+    }
   ]
 }

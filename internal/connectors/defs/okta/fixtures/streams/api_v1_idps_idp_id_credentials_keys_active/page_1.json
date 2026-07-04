@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/idps/synthetic-conformance-value/credentials/keys/active",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "e": "e_fixture",
+        "expiresAt": "2026-01-01T00:00:00Z",
+        "kid": "kid_fixture",
+        "kty": "kty_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "n": "n_fixture",
+        "use": "use_fixture",
+        "x5c": [
+          "x5c_fixture"
+        ],
+        "x5t#S256": "x5t_s256_fixture"
+      }
+    ]
+  }
+}

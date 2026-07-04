@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/groups",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "Fixture groups 1",
+          "code": null,
+          "description": "fixture_groups_1",
+          "groupTypeId": "groups_fixture_1",
+          "id": "groups_fixture_1"
+        },
+        {
+          "name": "Fixture groups 2",
+          "code": null,
+          "description": "fixture_groups_2",
+          "groupTypeId": "groups_fixture_2",
+          "id": "groups_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/groups",
+      "lastPage": "https://example.invalid/keka/groups",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

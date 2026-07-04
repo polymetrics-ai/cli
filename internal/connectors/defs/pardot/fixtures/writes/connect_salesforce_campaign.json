@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record",
+    "salesforceCampaignId": "701xx0000000001"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/campaigns/101/do/connectSalesforceCampaign",
+    "body": {
+      "name": "Fixture Pardot record",
+      "salesforceCampaignId": "701xx0000000001"
+    }
+  }
+}

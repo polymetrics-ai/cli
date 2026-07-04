@@ -1,0 +1,1404 @@
+{
+  "actions": [
+    {
+      "name": "post_documents_document_id_docx_export_tasks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/beta/documents/{{ record.document_id }}/docx-export-tasks",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "document_id"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/beta/documents/{document_id}/docx-export-tasks mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "document_id"
+      ]
+    },
+    {
+      "name": "post_documents_ai_metadata",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/beta/documents/ai-metadata",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/beta/documents/ai-metadata mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "post_contacts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/contacts mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "delete_contacts_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/contacts/{{ record.id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/contacts/{id}; destructive external mutation",
+      "path_fields": [
+        "id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "patch_contacts_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/contacts/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/contacts/{id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_content_library_items",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/content-library-items",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/content-library-items mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "delete_documents",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/documents",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/documents; destructive external mutation",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_documents",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/documents mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "patch_documents_document_id_auto_reminders",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/documents/{{ record.document_id }}/auto-reminders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "document_id"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/documents/{document_id}/auto-reminders mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "document_id"
+      ]
+    },
+    {
+      "name": "put_documents_document_id_quotes_quote_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/public/v1/documents/{{ record.document_id }}/quotes/{{ record.quote_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "document_id",
+          "quote_id"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string"
+          },
+          "quote_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PUT /public/v1/documents/{document_id}/quotes/{quote_id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "document_id",
+        "quote_id"
+      ]
+    },
+    {
+      "name": "post_documents_document_id_sections",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.document_id }}/sections",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "document_id"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{document_id}/sections mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "document_id"
+      ]
+    },
+    {
+      "name": "delete_documents_document_id_sections_section_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/documents/{{ record.document_id }}/sections/{{ record.section_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "document_id",
+          "section_id"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string"
+          },
+          "section_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{document_id}/sections/{section_id}; destructive external mutation",
+      "path_fields": [
+        "document_id",
+        "section_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_documents_document_id_send_reminder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.document_id }}/send-reminder",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "document_id"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{document_id}/send-reminder mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "document_id"
+      ]
+    },
+    {
+      "name": "delete_documents_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/documents/{{ record.id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}; destructive external mutation",
+      "path_fields": [
+        "id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "patch_documents_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/documents/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/documents/{id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_id_append_content_library_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/append-content-library-item",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/append-content-library-item mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_id_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/attachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/attachments mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_documents_id_attachments_attachment_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/documents/{{ record.id }}/attachments/{{ record.attachment_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "attachment_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "attachment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}/attachments/{attachment_id}; destructive external mutation",
+      "path_fields": [
+        "id",
+        "attachment_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_documents_id_draft",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/draft",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/draft mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_id_editing_sessions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/editing-sessions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/editing-sessions mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "patch_documents_id_fields",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/documents/{{ record.id }}/fields",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/documents/{id}/fields mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_id_fields",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/fields",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/fields mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_id_linked_objects",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/linked-objects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/linked-objects mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_documents_id_linked_objects_linked_object_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/documents/{{ record.id }}/linked-objects/{{ record.linked_object_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "linked_object_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "linked_object_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}/linked-objects/{linked_object_id}; destructive external mutation",
+      "path_fields": [
+        "id",
+        "linked_object_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_documents_id_move_to_folder_folder_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/move-to-folder/{{ record.folder_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "folder_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "folder_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/move-to-folder/{folder_id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id",
+        "folder_id"
+      ]
+    },
+    {
+      "name": "patch_documents_id_ownership",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/documents/{{ record.id }}/ownership",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/documents/{id}/ownership mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_id_recipients",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/recipients",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/recipients mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_documents_id_recipients_recipient_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/documents/{{ record.id }}/recipients/{{ record.recipient_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "recipient_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "recipient_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}/recipients/{recipient_id}; destructive external mutation",
+      "path_fields": [
+        "id",
+        "recipient_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_documents_id_recipients_recipient_id_reassign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/recipients/{{ record.recipient_id }}/reassign",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "recipient_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "recipient_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/recipients/{recipient_id}/reassign mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id",
+        "recipient_id"
+      ]
+    },
+    {
+      "name": "patch_documents_id_recipients_recipient_recipient_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/documents/{{ record.id }}/recipients/recipient/{{ record.recipient_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "recipient_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "recipient_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/documents/{id}/recipients/recipient/{recipient_id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id",
+        "recipient_id"
+      ]
+    },
+    {
+      "name": "post_documents_id_send",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/send",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/send mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_id_session",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/{{ record.id }}/session",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/documents/{id}/session mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "patch_documents_id_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/documents/{{ record.id }}/status",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/documents/{id}/status mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_documents_folders",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/documents/folders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/documents/folders mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "put_documents_folders_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/public/v1/documents/folders/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PUT /public/v1/documents/folders/{id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "patch_documents_ownership",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/documents/ownership",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "PATCH /public/v1/documents/ownership mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "post_templates",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/templates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/templates mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "delete_templates_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/templates/{{ record.id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/templates/{id}; destructive external mutation",
+      "path_fields": [
+        "id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "patch_templates_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/templates/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/templates/{id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_templates_id_editing_sessions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/templates/{{ record.id }}/editing-sessions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/templates/{id}/editing-sessions mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_templates_folders",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/templates/folders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/templates/folders mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "put_templates_folders_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/public/v1/templates/folders/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PUT /public/v1/templates/folders/{id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_users",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/users mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "post_webhook_subscriptions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/webhook-subscriptions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/webhook-subscriptions mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "delete_webhook_subscriptions_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/webhook-subscriptions/{{ record.id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/webhook-subscriptions/{id}; destructive external mutation",
+      "path_fields": [
+        "id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "patch_webhook_subscriptions_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/webhook-subscriptions/{{ record.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/webhook-subscriptions/{id} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "post_workspaces",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/workspaces",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v1/workspaces mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "post_workspaces_workspace_id_deactivate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/workspaces/{{ record.workspace_id }}/deactivate",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "workspace_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/workspaces/{workspace_id}/deactivate mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "workspace_id"
+      ]
+    },
+    {
+      "name": "post_workspaces_workspace_id_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v1/workspaces/{{ record.workspace_id }}/members",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "workspace_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /public/v1/workspaces/{workspace_id}/members mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "workspace_id"
+      ]
+    },
+    {
+      "name": "delete_workspaces_workspace_id_members_member_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v1/workspaces/{{ record.workspace_id }}/members/{{ record.member_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "member_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          },
+          "member_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v1/workspaces/{workspace_id}/members/{member_id}; destructive external mutation",
+      "path_fields": [
+        "workspace_id",
+        "member_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "patch_workspaces_workspace_id_members_member_id_role",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v1/workspaces/{{ record.workspace_id }}/members/{{ record.member_id }}/role",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "member_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          },
+          "member_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v1/workspaces/{workspace_id}/members/{member_id}/role mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "workspace_id",
+        "member_id"
+      ]
+    },
+    {
+      "name": "patch_documents_document_id_settings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v2/documents/{{ record.document_id }}/settings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "document_id"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v2/documents/{document_id}/settings mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "document_id"
+      ]
+    },
+    {
+      "name": "post_notary_notarization_requests",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v2/notary/notarization-requests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v2/notary/notarization-requests mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "delete_notary_notarization_requests_session_request_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v2/notary/notarization-requests/{{ record.session_request_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_request_id"
+        ],
+        "properties": {
+          "session_request_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v2/notary/notarization-requests/{session_request_id}; destructive external mutation",
+      "path_fields": [
+        "session_request_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_product_catalog_items",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/v2/product-catalog/items",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "POST /public/v2/product-catalog/items mutates PandaDoc data or workflow state"
+    },
+    {
+      "name": "delete_product_catalog_items_item_uuid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/public/v2/product-catalog/items/{{ record.item_uuid }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "item_uuid"
+        ],
+        "properties": {
+          "item_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes PandaDoc resource via /public/v2/product-catalog/items/{item_uuid}; destructive external mutation",
+      "path_fields": [
+        "item_uuid"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "patch_product_catalog_items_item_uuid",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v2/product-catalog/items/{{ record.item_uuid }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "item_uuid"
+        ],
+        "properties": {
+          "item_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v2/product-catalog/items/{item_uuid} mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "item_uuid"
+      ]
+    },
+    {
+      "name": "patch_templates_template_id_settings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/v2/templates/{{ record.template_id }}/settings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "template_id"
+        ],
+        "properties": {
+          "template_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /public/v2/templates/{template_id}/settings mutates PandaDoc data or workflow state",
+      "path_fields": [
+        "template_id"
+      ]
+    }
+  ]
+}

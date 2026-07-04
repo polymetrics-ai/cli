@@ -54,6 +54,15 @@ is `false` and this bundle ships no `writes.json`.
 
 ## Known limits
 
+- **Full-surface Pass B is quarantined.** The current Recruitee docs page
+  (`https://apidocs.recruitee.com/`) was scraped on 2026-07-04 and exposes 948 documented
+  method/path actions: 384 GET, 181 POST, 297 PATCH, 8 PUT, and 78 DELETE. The page is HTML-only
+  for this purpose; no machine-readable OpenAPI/response schema was discoverable, and the surface
+  spans ATS data plus admin, OAuth, billing, payment, SSO, security, attachment, and lifecycle
+  controls. Because legacy only grounds the five list streams above and no write surface,
+  `docs/migration/quarantine.json` records `recruitee` as `SCHEMA_AMBIGUOUS`. `api_surface.json`
+  still enumerates all scraped endpoints and covers the five legacy streams, but excludes the
+  remaining endpoints with closed categories instead of inventing stream schemas or write bodies.
 - **`name`/`title`-fallback is not modeled.** Legacy's `candidateRecord` maps `name` from
   `first(item, "name", "full_name")` (a defensive OR: use `name` if present, else fall back to
   `full_name`), and `namedRecord` (departments/sources/tags) maps `name` from

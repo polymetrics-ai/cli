@@ -1,0 +1,106 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/employees/fnf",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "employee_fnf_details_fixture_1",
+          "employeeNumber": "FIX-1",
+          "panNumber": null,
+          "uanNumber": null,
+          "esiNumber": null,
+          "pfNumber": null,
+          "terminationType": 2,
+          "terminationReason": "fixture_employee_fnf_details_1",
+          "resignationNote": null,
+          "terminationNoticeDate": "2026-01-01T00:00:00Z",
+          "lastWorkingDay": "fixture_employee_fnf_details_1",
+          "okToRehire": true,
+          "comments": "fixture_employee_fnf_details_1",
+          "lossOfPayDays": 1,
+          "noOfPayDays": 3,
+          "leaveEncashmentDays": 1,
+          "earnings": [
+            {
+              "id": "employee_fnf_details_fixture_1",
+              "componentIdentifier": "employee_fnf_details_fixture_1",
+              "componentTitle": "Fixture employee fnf details 1",
+              "amount": 2822.58
+            },
+            {
+              "id": "employee_fnf_details_fixture_2",
+              "componentIdentifier": "employee_fnf_details_fixture_2",
+              "componentTitle": "Fixture employee fnf details 2",
+              "amount": 290.32
+            }
+          ],
+          "contributions": [],
+          "deductions": [],
+          "netAmount": 8124,
+          "netRecovery": null,
+          "exitRequestStatus": 6,
+          "settlementDate": "2026-01-01T00:00:00Z",
+          "payAction": 1
+        },
+        {
+          "id": "employee_fnf_details_fixture_2",
+          "employeeNumber": "FIX-2",
+          "panNumber": null,
+          "uanNumber": null,
+          "esiNumber": null,
+          "pfNumber": null,
+          "terminationType": 1,
+          "terminationReason": "fixture_employee_fnf_details_2",
+          "resignationNote": "fixture_employee_fnf_details_2",
+          "terminationNoticeDate": "2026-01-01T00:00:00Z",
+          "lastWorkingDay": "fixture_employee_fnf_details_2",
+          "okToRehire": false,
+          "comments": "fixture_employee_fnf_details_2",
+          "lossOfPayDays": 1,
+          "noOfPayDays": 23,
+          "leaveEncashmentDays": 1,
+          "earnings": [
+            {
+              "id": "employee_fnf_details_fixture_1",
+              "componentIdentifier": "employee_fnf_details_fixture_1",
+              "componentTitle": "Fixture employee fnf details 1",
+              "amount": 204.19
+            },
+            {
+              "id": "employee_fnf_details_fixture_2",
+              "componentIdentifier": "employee_fnf_details_fixture_2",
+              "componentTitle": "Fixture employee fnf details 2",
+              "amount": 306.28
+            }
+          ],
+          "contributions": [],
+          "deductions": [],
+          "netAmount": 510,
+          "netRecovery": null,
+          "exitRequestStatus": 6,
+          "settlementDate": "2026-01-01T00:00:00Z",
+          "payAction": 2
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/employee_fnf_details",
+      "lastPage": "https://example.invalid/keka/employee_fnf_details",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

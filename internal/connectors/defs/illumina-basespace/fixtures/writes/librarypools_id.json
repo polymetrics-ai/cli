@@ -1,0 +1,15 @@
+{
+  "record": {
+    "librarypool_id": "librarypool_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/librarypools/librarypool_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

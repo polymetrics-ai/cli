@@ -1,14 +1,543 @@
 {
-  "api": "Pendo Engage API v1 (https://app.pendo.io/api/v1)",
+  "api": "Pendo Engage API v1 (https://app.pendo.io/api/v1 plus data.pendo.io event ingestion)",
   "docs": "https://engageapi.pendo.io/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Pendo surface (events, reports, guides, polls, aggregation endpoints) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion of the documented Pendo Postman collection. JSON GET list/detail endpoints are covered as streams when they return object or array JSON; safe object/no-body mutations are covered as write actions; binary, scalar, credential, destructive-admin, per-action-auth, and POST aggregation DSL endpoints are explicitly excluded with typed reasons.",
   "endpoints": [
-    { "method": "GET", "path": "/visitor", "covered_by": { "stream": "visitors" } },
-    { "method": "GET", "path": "/account", "covered_by": { "stream": "accounts" } },
-    { "method": "GET", "path": "/page", "covered_by": { "stream": "pages" } },
-    { "method": "GET", "path": "/feature", "covered_by": { "stream": "features" } },
-    { "method": "GET", "path": "/guide", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/aggregation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/visitor",
+      "covered_by": {
+        "stream": "visitors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page",
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page?id={page_id}",
+      "covered_by": {
+        "stream": "page_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/page?id={page_ids}",
+      "covered_by": {
+        "stream": "pages_by_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature",
+      "covered_by": {
+        "stream": "features"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature?id={feature_id}",
+      "covered_by": {
+        "stream": "feature_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feature?id={feature_ids}",
+      "covered_by": {
+        "stream": "features_by_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracktype",
+      "covered_by": {
+        "stream": "tracktypes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracktype?id={tracktype_id}",
+      "covered_by": {
+        "stream": "tracktype_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://data.pendo.io/data/track",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitor/{visitorId}",
+      "covered_by": {
+        "stream": "visitor_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitor/{b64_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "base64 visitor lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitor/{visitorId}/history?starttime={epochTimestamp}",
+      "covered_by": {
+        "stream": "visitor_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account/{accountId}",
+      "covered_by": {
+        "stream": "account_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account/{b64_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "base64 account lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulkdelete/visitor",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk GDPR/CCPA visitor deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulkdelete/account",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk GDPR/CCPA account deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkdelete",
+      "covered_by": {
+        "stream": "bulkdelete_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulkdelete/{id}",
+      "covered_by": {
+        "stream": "bulkdelete_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{id}",
+      "covered_by": {
+        "stream": "segment_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/segment/{segmentId}/visitors",
+      "covered_by": {
+        "write": "start_segment_visitor_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{segmentId}/visitors/{jobId}/status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "async export status returns a scalar status string rather than JSON object records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{segmentId}/visitors/{jobId}/results/{contentType}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "segment export results are documented as downloadable CSV-style payloads rather than JSON object records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/segment/upload",
+      "covered_by": {
+        "write": "create_segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment/{segmentId}/status",
+      "covered_by": {
+        "stream": "segment_status"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/segment/{segmentId}",
+      "covered_by": {
+        "write": "update_segment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/segment/{segmentId}",
+      "covered_by": {
+        "write": "delete_segment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/segment/{segmentId}/visitor/{visitorId}",
+      "covered_by": {
+        "write": "add_segment_visitor"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/segment/{segmentId}/visitor/{visitorId}",
+      "covered_by": {
+        "write": "remove_segment_visitor"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/segment/{segmentId}/visitor",
+      "covered_by": {
+        "write": "patch_segment_visitors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/{reportId}/results.json",
+      "covered_by": {
+        "stream": "report_results_json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/{reportId}/results.csv",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "report CSV export is a non-JSON payload and requires CSV parsing outside the declarative stream dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide",
+      "covered_by": {
+        "stream": "guides"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide?id={guide_id}",
+      "covered_by": {
+        "stream": "guide_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide/{guideId}/history",
+      "covered_by": {
+        "stream": "guide_history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/{guideId}/visitor/{visitorId}/reset",
+      "covered_by": {
+        "write": "reset_guide_for_visitor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/all/visitor/{visitorId}/reset",
+      "covered_by": {
+        "write": "reset_all_guides_for_visitor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/{guideId}/reset",
+      "covered_by": {
+        "write": "reset_staged_guide"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/staged/reset",
+      "covered_by": {
+        "write": "reset_all_staged_guides"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/{guideId}/experiment/export",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "guide experiment export returns CSV, not a JSON mutation response or record stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide/localization/export?guideids={guide_ids}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "bulk localization export returns XLIFF/XML content rather than JSON records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/guide/localization/import",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "bulk localization import requires raw XLIFF/XML request bodies; writes.json can only construct JSON/form/object bodies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guide/order",
+      "covered_by": {
+        "stream": "guide_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/guide/{guideId}/segment",
+      "covered_by": {
+        "write": "change_guide_segment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/guide/{guideId}/state",
+      "covered_by": {
+        "write": "change_guide_state"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/schema/{kind}",
+      "covered_by": {
+        "stream": "metadata_schema"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the endpoint returns a raw JSON scalar metadata value; declarative streams emit JSON object records only"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata/{kind}/pendo/value/{id}/blacklistguides",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "privacy/guide-display opt-out mutation requires a raw boolean body and changes compliance-sensitive visitor/account handling"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata/{kind}/pendo/value/{id}/donotprocess",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Do Not Process mutation requires a raw boolean body and changes compliance-sensitive visitor/account processing"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single metadata value update accepts an arbitrary raw JSON value body, including scalars, which writes.json cannot model safely as a record-object body"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata/{kind}/{group}/value",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk metadata value update requires a root JSON array body; writes.json cannot serialize records as a root array"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata/schema/{kind}/{group}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metadata field creation requires a root JSON array body; writes.json cannot serialize records as a root array"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata/schema/{kind}/{group}/{field}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deleting metadata schema fields is an administrative data-model change and can affect downstream reports/segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/dependencies",
+      "covered_by": {
+        "stream": "metadata_dependencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/dependencies/{kind}/{group}/{fieldName}",
+      "covered_by": {
+        "stream": "metadata_field_dependencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blacklist",
+      "covered_by": {
+        "stream": "blacklist"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blacklist/type/{type}",
+      "covered_by": {
+        "stream": "blacklist_by_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/servername",
+      "covered_by": {
+        "stream": "servers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/servername/{name}",
+      "covered_by": {
+        "stream": "server_by_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/servername/flag/{flagname}",
+      "covered_by": {
+        "stream": "servers_by_flag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasync/storageTypes/gcs/destinations/Default/credentials",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "rotates external GCS credentials and requires secret material in the request body"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasync/storageTypes/s3/destinations/Default/credentials",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "rotates external S3 credentials and requires secret access key material in the request body"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/datasync/storageTypes/azure/destinations/Default/credentials",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "rotates external Azure credentials and requires client secret material in the request body"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feedback/options",
+      "covered_by": {
+        "stream": "feedback_options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/feedback",
+      "covered_by": {
+        "write": "create_feedback"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/feedback/{id}",
+      "covered_by": {
+        "write": "update_feedback"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/feedback",
+      "covered_by": {
+        "write": "delete_feedback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://data.pendo.io/data/agentic",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/token/verify",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "integration-key validity probe, not a syncable data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/aggregation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pendo aggregation is a semantic read/report DSL carried in a POST JSON body; the current declarative read path does not transmit stream.body and generic user-supplied aggregation queries are not safe write actions"
+      }
+    }
   ]
 }

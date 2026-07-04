@@ -1,0 +1,27 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "completed": "fixture_value",
+    "type": 1001,
+    "cost": {
+      "amount": "fixture_value",
+      "currency": "fixture_value"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/training/record/employee/fixture_id",
+    "body": {
+      "completed": "fixture_value",
+      "type": 1001,
+      "cost": {
+        "amount": "fixture_value",
+        "currency": "fixture_value"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhooks",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 1,
+      "Webhooks": [
+        {
+          "ID": 20,
+          "Url": "https://example.com/webhook"
+        }
+      ]
+    }
+  }
+}

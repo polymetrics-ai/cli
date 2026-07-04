@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value/pages/sign-out/customized"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "EXTERNALLY_HOSTED",
+      "url": "https://example.invalid/fixture"
+    }
+  }
+}

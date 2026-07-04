@@ -1,0 +1,22 @@
+{
+  "record": {
+    "app_instance_id": "synthetic-conformance-value",
+    "group_id": "synthetic-conformance-value",
+    "attributes": [
+      "attribute_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/directories/synthetic-conformance-value/groups/synthetic-conformance-value/query",
+    "body": {
+      "attributes": [
+        "attribute_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,9 +1,10 @@
 # Overview
 
-Mention is a social listening and media monitoring tool. This bundle reads Mention accounts,
-alerts (monitored queries), mentions matched by an alert, and alert tags through the Mention REST
-API (`https://api.mention.net/api`). It is migrated from `internal/connectors/mention` (read-only;
-`Capabilities.Write` is false there and here).
+Mention is a social listening and media monitoring tool. This bundle reads Mention app metadata,
+accounts, alerts (monitored queries), mentions matched by an alert, alert tags, alert shares, alert
+preferences, and alert tasks through the Mention REST API (`https://api.mention.net/api`). It is
+migrated from `internal/connectors/mention` (read-only; `Capabilities.Write` is false there and
+here).
 
 ## Auth setup
 
@@ -13,6 +14,8 @@ legacy's `connsdk.APIKeyHeader("Authorization", secret, "")`. Never logged.
 
 ## Streams notes
 
+- `app_data` (`GET app/data`) is an unpaginated singleton configuration object with languages,
+  tones, sources, countries, folders, actions, integrations, and day names.
 - `account_me` (`GET accounts/me`) and `account` (`GET accounts/{account_id}`) are unpaginated,
   single-object reads; primary key `["id"]`.
 - `alert` (`GET accounts/{account_id}/alerts`), primary key `["id"]`, is paginated: Mention's list
@@ -35,6 +38,9 @@ legacy's `connsdk.APIKeyHeader("Authorization", secret, "")`. Never logged.
   pagination shape; primary key `["id"]`.
 - `alert_tag` (`GET accounts/{account_id}/alerts/{alert_id}/tags`) is unpaginated, matching
   legacy's `paginated: false` for this endpoint; primary key `["id"]`.
+- `alert_share`, `alert_preferences`, and `alert_task` read the documented alert-scoped shares,
+  preferences singleton, and alert task list using the same required `account_id`/`alert_id`
+  path inputs as `mention` and `alert_tag`.
 - None of Mention's streams expose an incremental/updated-since filter in the API surface legacy
   itself reads, so every stream here is full-refresh only, matching legacy exactly (legacy never
   declared `CursorFields` either).
@@ -42,7 +48,9 @@ legacy's `connsdk.APIKeyHeader("Authorization", secret, "")`. Never logged.
 ## Write actions & risks
 
 Not applicable — Mention is read-only (`capabilities.write: false`, no `writes.json`), matching
-legacy's `Write` returning `connectors.ErrUnsupportedOperation` unconditionally.
+legacy's `Write` returning `connectors.ErrUnsupportedOperation` unconditionally. Mention's
+documented create/update/delete endpoints mutate alerts, accounts, shares, tags, tasks, mention
+curation/read state, and alert preferences, so they remain excluded in `api_surface.json`.
 
 ## Known limits
 
@@ -72,3 +80,6 @@ legacy's `Write` returning `connectors.ErrUnsupportedOperation` unconditionally.
 - Fixtures use Mention's real wire shape for every field. The 2-page `alert`/`mention` fixtures set
   `_links.more.params.cursor` on page 1 and an empty `_links` object on page 2 (no `more` key),
   matching the paginator's stop-on-absent-token behavior exactly.
+- Statistics require repeated query-array filters such as `alerts[]`, and mention children/authors
+  require extra mention IDs or time/filter selectors. They are documented as excluded API surface
+  rather than adding dead or globally required config that legacy did not expose for every stream.

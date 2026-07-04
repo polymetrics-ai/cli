@@ -1,0 +1,9 @@
+{
+  "record": {
+    "project_id": "fixture_project_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/psa/projects/fixture_project_id/phases"
+  }
+}

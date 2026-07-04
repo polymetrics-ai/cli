@@ -1,0 +1,16 @@
+{
+  "record": {
+    "change_id": 123,
+    "approval_id": 123,
+    "name": "Fixture resend_reminder_change_approval",
+    "description": "Fixture resend_reminder_change_approval record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/approvals/123/remind",
+    "body": {
+      "name": "Fixture resend_reminder_change_approval",
+      "description": "Fixture resend_reminder_change_approval record"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_a_new_purchase_order",
+    "description": "Fixture create_a_new_purchase_order record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchase_orders",
+    "body": {
+      "name": "Fixture create_a_new_purchase_order",
+      "description": "Fixture create_a_new_purchase_order record"
+    }
+  }
+}

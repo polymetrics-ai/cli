@@ -1,0 +1,18 @@
+{
+  "record": {
+    "state": "state_fixture",
+    "stream_id": "stream_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/ssf/stream/verification",
+    "body": {
+      "state": "state_fixture",
+      "stream_id": "stream_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

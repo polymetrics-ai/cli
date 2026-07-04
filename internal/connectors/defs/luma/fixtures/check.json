@@ -1,7 +1,17 @@
 {
-  "request": { "method": "GET", "path": "/calendar/list-events" },
+  "request": {
+    "method": "GET",
+    "path": "/v1/users/get-self"
+  },
   "response": {
     "status": 200,
-    "body": { "entries": [], "has_more": false, "next_cursor": null }
+    "body": {
+      "id": "usr_fixture_1",
+      "name": "Fixture User",
+      "avatar_url": null,
+      "email": "fixture@example.invalid",
+      "first_name": "Fixture",
+      "last_name": "User"
+    }
   }
 }

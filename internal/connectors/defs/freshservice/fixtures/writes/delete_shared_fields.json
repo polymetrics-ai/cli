@@ -1,0 +1,11 @@
+{
+  "record": {
+    "shared_field_id": 123,
+    "name": "Fixture delete_shared_fields",
+    "description": "Fixture delete_shared_fields record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/service-catalog/shared-fields/123"
+  }
+}

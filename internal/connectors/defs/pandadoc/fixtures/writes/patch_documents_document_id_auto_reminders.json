@@ -1,0 +1,36 @@
+{
+  "record": {
+    "document_id": "document_id_fixture",
+    "name": "Fixture patch_documents_document_id_auto_reminders",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/public/v1/documents/document_id_fixture/auto-reminders",
+    "body": {
+      "name": "Fixture patch_documents_document_id_auto_reminders",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "patch_documents_document_id_auto_reminders_response",
+      "status": "ok"
+    }
+  }
+}

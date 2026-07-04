@@ -1,0 +1,337 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee",
+  "type": "object",
+  "properties": {
+    "employeeNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "firstName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "middleName": {
+      "type": [
+        "null"
+      ]
+    },
+    "lastName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "displayName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "city": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "countryCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "image": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "jobTitle": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "secondaryJobTitle": {
+      "type": [
+        "null"
+      ]
+    },
+    "reportsTo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "l2Manager": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "dottedLineManager": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "contingentType": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timeType": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "workerType": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "isPrivate": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isProfileComplete": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "maritalStatus": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "marriageDate": {
+      "type": [
+        "null"
+      ]
+    },
+    "gender": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "joiningDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "professionalSummary": {
+      "type": [
+        "null"
+      ]
+    },
+    "dateOfBirth": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resignationSubmittedDate": {
+      "type": [
+        "null"
+      ]
+    },
+    "exitDate": {
+      "type": [
+        "null"
+      ]
+    },
+    "employmentStatus": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "accountStatus": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "invitationStatus": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "exitStatus": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "exitType": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "exitReason": {
+      "type": [
+        "null"
+      ]
+    },
+    "personalEmail": {
+      "type": [
+        "null"
+      ]
+    },
+    "workPhone": {
+      "type": [
+        "null"
+      ]
+    },
+    "homePhone": {
+      "type": [
+        "null"
+      ]
+    },
+    "mobilePhone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bloodGroup": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "attendanceNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "probationEndDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currentAddress": {
+      "type": [
+        "null"
+      ]
+    },
+    "permanentAddress": {
+      "type": [
+        "null"
+      ]
+    },
+    "relations": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "educationDetails": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "experienceDetails": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "customFields": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "groups": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "leavePlanInfo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "bandInfo": {
+      "type": [
+        "null"
+      ]
+    },
+    "payGradeInfo": {
+      "type": [
+        "null"
+      ]
+    },
+    "shiftPolicyInfo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "weeklyOffPolicyInfo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "captureSchemeInfo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "trackingPolicyInfo": {
+      "type": [
+        "null"
+      ]
+    },
+    "expensePolicyInfo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "overtimePolicyInfo": {
+      "type": [
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "riskLevel": "HIGH",
+    "riskReason": "risk_reason_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/users/synthetic-conformance-value/risk",
+    "body": {
+      "riskLevel": "HIGH",
+      "riskReason": "risk_reason_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/verification_details",
+    "query": {
+      "limit": "50",
+      "creditor": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "verification_details": [
+        {
+          "id": "VD_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "description": "Synthetic Verification Details fixture"
+        }
+      ],
+      "meta": {
+        "cursors": {
+          "before": null,
+          "after": null
+        },
+        "limit": 50
+      }
+    }
+  }
+}

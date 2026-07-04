@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contracts/synthetic-conformance-value/attachments",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "attachments": [
+        {
+          "id": "list_all_attachments",
+          "name": "Fixture list_all_attachments",
+          "subject": "Fixture list_all_attachments",
+          "description": "Fixture list_all_attachments record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

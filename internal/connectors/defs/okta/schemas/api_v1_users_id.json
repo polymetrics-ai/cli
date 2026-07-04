@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "_embedded": {
+      "type": "object",
+      "description": "The embedded resources related to the object if the `expand` query parameter is specified",
+      "properties": {
+        "blocks": {
+          "type": "array",
+          "description": "A list of access block details for the user account",
+          "items": {
+            "type": "object",
+            "description": "Describes how the account is blocked from access. If `appliesTo` is `ANY_DEVICES`, then the account is blocked for all devices. If `appliesTo` is `UNKNOWN_DEVICES`, then the account is only blocked for unknown devices.",
+            "properties": {
+              "appliesTo": {
+                "type": "string",
+                "description": "The devices that the block applies to",
+                "enum": [
+                  "ANY_DEVICES",
+                  "UNKNOWN_DEVICES"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "description": "Type of access block",
+                "enum": [
+                  "DEVICE_BASED"
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

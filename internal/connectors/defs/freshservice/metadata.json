@@ -1,23 +1,25 @@
 {
   "name": "freshservice",
   "display_name": "Freshservice",
-  "description": "Reads Freshservice tickets, agents, requesters, assets, and problems through the Freshservice REST API v2.",
+  "description": "Reads and writes documented Freshservice REST API v2 resources, preserving legacy ticket, agent, requester, asset, and problem stream projections.",
   "integration_type": "api",
   "docs_url": "https://api.freshservice.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Freshservice API read of service desk ticket, agent, requester, asset, and problem data",
-    "approval": "none; read-only, no reverse-ETL writes"
+    "read": "external Freshservice API reads across documented REST API v2 JSON resources",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive delete actions are marked destructive",
+    "write": "creates, updates, restores, archives, cancels, and deletes Freshservice records through documented REST API v2 mutation endpoints"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "call_id": "fixture_id",
+    "contact_id": "fixture_value",
+    "call_time_int": 1,
+    "text": "Fixture text",
+    "phone_number": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/calls/fixture_id",
+    "body": {
+      "contact_id": "fixture_value",
+      "call_time_int": 1,
+      "text": "Fixture text",
+      "phone_number": "fixture_value"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Shop",
+    "owner": "Fixture Owner",
+    "email": "merchant@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/shops",
+    "body": {
+      "name": "Fixture Shop",
+      "owner": "Fixture Owner",
+      "email": "merchant@example.com"
+    }
+  }
+}

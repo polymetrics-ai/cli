@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1_1/employees/synthetic-conformance-value/time_off/policies"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "timeOffPolicyId": "fixture_id",
+        "accrualStartDate": "2026-01-01T00:00:00Z",
+        "timeOffTypeId": 1001
+      }
+    ]
+  }
+}

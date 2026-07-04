@@ -1,0 +1,42 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "schema": [
+      {
+        "name": "name_fixture",
+        "type": {
+          "name": "string"
+        }
+      }
+    ],
+    "folder": "folder_fixture",
+    "rows": [
+      {}
+    ],
+    "ai_project_id": "ai_project_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/datasets",
+    "body": {
+      "name": "name_fixture",
+      "schema": [
+        {
+          "name": "name_fixture",
+          "type": {
+            "name": "string"
+          }
+        }
+      ],
+      "folder": "folder_fixture",
+      "rows": [
+        {}
+      ],
+      "ai_project_id": "ai_project_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

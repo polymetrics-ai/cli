@@ -1,0 +1,50 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "item_id": "synthetic-conformance-value",
+    "data": {
+      "format": "custom",
+      "title": "Sample frame title",
+      "type": "freeform",
+      "showContent": true
+    },
+    "style": {
+      "fillColor": "#ffffff"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "geometry": {
+      "height": 1.25,
+      "width": 1.25
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/boards/synthetic-conformance-value/frames/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "format": "custom",
+        "title": "Sample frame title",
+        "type": "freeform",
+        "showContent": true
+      },
+      "style": {
+        "fillColor": "#ffffff"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "geometry": {
+        "height": 1.25,
+        "width": 1.25
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

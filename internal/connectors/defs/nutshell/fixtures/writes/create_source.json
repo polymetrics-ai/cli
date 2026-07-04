@@ -1,0 +1,26 @@
+{
+  "record": {
+    "sources": [
+      {
+        "name": "Fixture create_source"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sources",
+    "body": {
+      "sources": [
+        {
+          "name": "Fixture create_source"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": 101
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/forms/do/undelete",
+    "body": {
+      "id": 101
+    }
+  }
+}

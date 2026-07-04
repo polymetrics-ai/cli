@@ -1,0 +1,29 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "appConfig": {
+      "type": "ACTIVE_DIRECTORY"
+    },
+    "sourceGroupId": "source_group_id_fixture",
+    "status": "ACTIVE",
+    "targetGroupId": "target_group_id_fixture",
+    "targetGroupName": "target_group_name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/apps/synthetic-conformance-value/group-push/mappings",
+    "body": {
+      "appConfig": {
+        "type": "ACTIVE_DIRECTORY"
+      },
+      "sourceGroupId": "source_group_id_fixture",
+      "status": "ACTIVE",
+      "targetGroupId": "target_group_id_fixture",
+      "targetGroupName": "target_group_name_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

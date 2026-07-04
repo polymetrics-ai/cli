@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "charges",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the charge"
+    },
+    "billedOn": {
+      "type": "string",
+      "description": "Date and time when the charge was billed",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the charge"
+    },
+    "customerName": {
+      "type": "string",
+      "description": "Name of the customer associated with the charge"
+    },
+    "customerDomain": {
+      "type": "string",
+      "description": "Domain of the customer associated with the charge"
+    },
+    "appName": {
+      "type": "string",
+      "description": "Name of the app associated with the charge"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the charge"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the charge"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount of the charge",
+      "format": "float"
+    },
+    "currencyCode": {
+      "type": "string",
+      "description": "Currency code of the charge"
+    },
+    "paidOn": {
+      "type": "string",
+      "description": "Date and time when the charge was paid",
+      "format": "date-time"
+    },
+    "test": {
+      "type": "boolean",
+      "description": "Indicates if the charge is a test charge"
+    }
+  }
+}

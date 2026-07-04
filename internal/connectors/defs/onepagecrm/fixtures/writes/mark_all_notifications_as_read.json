@@ -1,0 +1,8 @@
+{
+  "record": {
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/notifications/mark_all_as_read"
+  }
+}

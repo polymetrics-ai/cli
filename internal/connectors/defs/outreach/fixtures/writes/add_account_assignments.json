@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "addaccountassignments",
+      "attributes": {
+        "name": "Fixture Add Account Assignments"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/accountsAddAssignments",
+    "body": {
+      "data": {
+        "type": "addaccountassignments",
+        "attributes": {
+          "name": "Fixture Add Account Assignments"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "escalation_policy_id": "escalation_policy_id_fixture_1",
+    "name": "Fixture update escalation policy"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/escalation-policies/escalation_policy_id_fixture_1",
+    "body": {
+      "name": "Fixture update escalation policy"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_escalation_policy_fixture_response"
+    }
+  }
+}

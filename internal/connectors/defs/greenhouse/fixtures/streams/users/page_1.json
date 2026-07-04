@@ -1,5 +1,11 @@
 {
-  "request": { "method": "GET", "path": "/users", "query": { "per_page": "synthetic-conformance-value" } },
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
   "response": {
     "status": 200,
     "body": [

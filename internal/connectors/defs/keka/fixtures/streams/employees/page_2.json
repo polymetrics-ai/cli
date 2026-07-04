@@ -10,22 +10,141 @@
   "response": {
     "status": 200,
     "body": {
-      "succeeded": true,
-      "totalPages": 2,
-      "pageNumber": 2,
       "data": [
         {
-          "id": "emp_fixture_101",
-          "employeeNumber": "EMP101",
-          "firstName": "Fixture101",
-          "lastName": "User",
-          "displayName": "Fixture 101",
-          "email": "fixture101@example.com",
-          "jobTitle": "Engineer",
-          "department": "Engineering",
-          "employmentStatus": "active"
+          "employeeNumber": "FIX-3",
+          "firstName": "Fixture employees 3",
+          "middleName": null,
+          "lastName": "Fixture employees 3",
+          "displayName": "Fixture employees 3",
+          "email": "fixture3@example.invalid",
+          "city": "fixture_employees_3",
+          "countryCode": "FIX",
+          "image": {
+            "fileName": null,
+            "thumbs": {}
+          },
+          "jobTitle": {
+            "identifier": "employees_fixture_3",
+            "title": "Fixture employees 3"
+          },
+          "secondaryJobTitle": null,
+          "reportsTo": {
+            "id": "employees_fixture_3",
+            "firstName": "Fixture employees 3",
+            "lastName": "Fixture employees 3",
+            "email": "fixture3@example.invalid"
+          },
+          "l2Manager": {
+            "id": "employees_fixture_3",
+            "firstName": "Fixture employees 3",
+            "lastName": "Fixture employees 3",
+            "email": "fixture3@example.invalid"
+          },
+          "dottedLineManager": {
+            "id": null,
+            "firstName": null,
+            "lastName": null,
+            "email": null
+          },
+          "contingentType": {
+            "id": "employees_fixture_3",
+            "name": "Fixture employees 3"
+          },
+          "timeType": 1,
+          "workerType": 2,
+          "isPrivate": false,
+          "isProfileComplete": true,
+          "maritalStatus": 1,
+          "marriageDate": null,
+          "gender": 1,
+          "joiningDate": "2026-01-01T00:00:00Z",
+          "professionalSummary": null,
+          "dateOfBirth": "2026-01-01T00:00:00Z",
+          "resignationSubmittedDate": null,
+          "exitDate": null,
+          "employmentStatus": 1,
+          "accountStatus": 1,
+          "invitationStatus": 1,
+          "exitStatus": 1,
+          "exitType": 1,
+          "exitReason": null,
+          "personalEmail": null,
+          "workPhone": null,
+          "homePhone": null,
+          "mobilePhone": "+15550100",
+          "bloodGroup": 1,
+          "attendanceNumber": "FIX-3",
+          "probationEndDate": "2026-01-01T00:00:00Z",
+          "currentAddress": null,
+          "permanentAddress": null,
+          "relations": [],
+          "educationDetails": [],
+          "experienceDetails": [],
+          "customFields": [
+            {
+              "id": "employees_fixture_1",
+              "title": "Fixture employees 1",
+              "type": "fixture_employees_1",
+              "value": null
+            },
+            {
+              "id": "employees_fixture_2",
+              "title": "Fixture employees 2",
+              "type": "fixture_employees_2",
+              "value": null
+            }
+          ],
+          "groups": [
+            {
+              "id": "employees_fixture_1",
+              "title": "Fixture employees 1",
+              "groupType": 1
+            },
+            {
+              "id": "employees_fixture_2",
+              "title": "Fixture employees 2",
+              "groupType": 2
+            }
+          ],
+          "leavePlanInfo": {
+            "identifier": "employees_fixture_3",
+            "title": "Fixture employees 3"
+          },
+          "bandInfo": null,
+          "payGradeInfo": null,
+          "shiftPolicyInfo": {
+            "identifier": "employees_fixture_3",
+            "title": "Fixture employees 3"
+          },
+          "weeklyOffPolicyInfo": {
+            "identifier": "employees_fixture_3",
+            "title": "Fixture employees 3"
+          },
+          "captureSchemeInfo": {
+            "identifier": "employees_fixture_3",
+            "title": "Fixture employees 3"
+          },
+          "trackingPolicyInfo": null,
+          "expensePolicyInfo": {
+            "identifier": "employees_fixture_3",
+            "title": "Fixture employees 3"
+          },
+          "overtimePolicyInfo": null,
+          "id": "employees_fixture_3"
         }
-      ]
+      ],
+      "pageNumber": 2,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/employees",
+      "lastPage": "https://example.invalid/keka/employees",
+      "totalPages": 2,
+      "totalRecords": 3,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
     }
   }
 }

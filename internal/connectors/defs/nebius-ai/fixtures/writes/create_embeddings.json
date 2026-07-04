@@ -1,0 +1,26 @@
+{
+  "record": {
+    "model": "model_fixture",
+    "input": "input_fixture",
+    "encoding_format": "encoding_format_fixture",
+    "user": "user_fixture",
+    "service_tier": "auto",
+    "dimensions": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/embeddings",
+    "body": {
+      "model": "model_fixture",
+      "input": "input_fixture",
+      "encoding_format": "encoding_format_fixture",
+      "user": "user_fixture",
+      "service_tier": "auto",
+      "dimensions": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

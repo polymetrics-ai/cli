@@ -8,7 +8,12 @@
     "body": {
       "object": "list",
       "data": [
-        { "id": "meta-llama/Llama-3.1-8B", "object": "model", "created": 1767225601, "owned_by": "nebius" }
+        {
+          "id": "model_fixture_1",
+          "object": "model",
+          "created": 1767225601,
+          "owned_by": "nebius"
+        }
       ]
     }
   }

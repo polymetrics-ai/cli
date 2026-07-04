@@ -1,0 +1,19 @@
+{
+  "record": {
+    "company_id": "fixture_id",
+    "name": "Fixture Name",
+    "description": "Fixture text",
+    "url": "fixture_value",
+    "phone": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/companies/fixture_id",
+    "body": {
+      "name": "Fixture Name",
+      "description": "Fixture text",
+      "url": "fixture_value",
+      "phone": "fixture_value"
+    }
+  }
+}

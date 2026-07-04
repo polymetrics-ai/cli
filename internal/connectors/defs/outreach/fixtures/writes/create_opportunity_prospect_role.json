@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "opportunityprospectrole",
+      "attributes": {
+        "name": "Fixture Create Opportunity Prospect Role"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/opportunityProspectRoles",
+    "body": {
+      "data": {
+        "type": "opportunityprospectrole",
+        "attributes": {
+          "name": "Fixture Create Opportunity Prospect Role"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

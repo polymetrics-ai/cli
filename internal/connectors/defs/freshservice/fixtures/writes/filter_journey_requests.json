@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture filter_journey_requests",
+    "description": "Fixture filter_journey_requests record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/journeys/requests/view",
+    "body": {
+      "name": "Fixture filter_journey_requests",
+      "description": "Fixture filter_journey_requests record"
+    }
+  }
+}

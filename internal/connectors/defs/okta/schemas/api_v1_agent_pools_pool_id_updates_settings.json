@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "agentType": {
+      "type": "string",
+      "description": "Agent types that are being monitored",
+      "enum": [
+        "AD",
+        "IWA",
+        "LDAP",
+        "MFA",
+        "OPP",
+        "RUM",
+        "Radius"
+      ]
+    },
+    "continueOnError": {
+      "type": "boolean",
+      "description": "Continues the update even if some agents fail to update"
+    },
+    "latestVersion": {
+      "type": "string",
+      "description": "Latest version of the agent"
+    },
+    "minimalSupportedVersion": {
+      "type": "string",
+      "description": "Minimal version of the agent"
+    },
+    "poolId": {
+      "type": "string",
+      "description": "ID of the agent pool that the settings apply to"
+    },
+    "poolName": {
+      "type": "string",
+      "description": "Pool name"
+    },
+    "releaseChannel": {
+      "type": "string",
+      "description": "Release channel for auto-update",
+      "enum": [
+        "BETA",
+        "EA",
+        "GA",
+        "TEST"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

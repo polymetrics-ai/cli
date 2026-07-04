@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/quotes",
+    "query": {
+      "page[limit]": "500",
+      "page[page]": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "quotes": [
+        {
+          "id": "501",
+          "name": "Fixture quotes",
+          "href": "https://app.nutshell.com/rest/quotes/501",
+          "htmlUrl": "https://app.nutshell.com/quotes/501",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

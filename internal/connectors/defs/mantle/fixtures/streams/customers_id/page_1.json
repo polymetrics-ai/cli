@@ -1,0 +1,179 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customers/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customer": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "email": "fixture@example.com",
+        "billingAddress": {
+          "id": "billing_address_fixture_id"
+        },
+        "domain": "fixture",
+        "shopifyDomain": "fixture",
+        "tags": [
+          "fixture"
+        ],
+        "firstInteractionAt": "2026-01-01T00:00:00Z",
+        "customFields": {
+          "id": "custom_fields_fixture_id"
+        },
+        "appInstallations": [
+          {
+            "id": "id_fixture",
+            "installedAt": "2026-01-01T00:00:00Z",
+            "uninstalledAt": "2026-01-01T00:00:00Z",
+            "trialStartsAt": "2026-01-01T00:00:00Z",
+            "trialExpiresAt": "2026-01-01T00:00:00Z",
+            "app": {
+              "id": "id_fixture",
+              "name": "fixture",
+              "displayName": "fixture",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "iconUrl": "https://example.com/fixture",
+              "slug": "fixture",
+              "development": true,
+              "apiClientId": "api_client_id_fixture",
+              "platform": "fixture"
+            },
+            "averageMonthlyRevenue": 1.23,
+            "lifetimeValue": 1.23,
+            "last30Revenue": 1.23,
+            "customFields": {
+              "id": "custom_fields_fixture_id"
+            },
+            "churnPrediction": 1.23,
+            "churnPredictionLabel": {
+              "id": "churn_prediction_label_fixture_id"
+            },
+            "platformId": "platform_id_fixture",
+            "trafficSource": "fixture",
+            "subscription": {
+              "id": "id_fixture",
+              "plan": {
+                "id": "plan_fixture_id"
+              },
+              "lineItems": [
+                {
+                  "id": "line_item_fixture_id"
+                }
+              ],
+              "active": true,
+              "cancelOn": "fixture",
+              "billingCycleAnchor": "fixture",
+              "currentPeriodStart": "fixture",
+              "currentPeriodEnd": "fixture",
+              "trialStartsAt": "2026-01-01T00:00:00Z",
+              "trialExpiresAt": "2026-01-01T00:00:00Z",
+              "activatedAt": "2026-01-01T00:00:00Z",
+              "canceledAt": "2026-01-01T00:00:00Z",
+              "frozenAt": "2026-01-01T00:00:00Z",
+              "features": [
+                {
+                  "id": "feature_fixture_id"
+                }
+              ],
+              "featuresOrder": [
+                {
+                  "id": "features_order_fixture_id"
+                }
+              ],
+              "createdAt": "2026-01-01T00:00:00Z",
+              "confirmationUrl": "https://example.com/fixture",
+              "shopifySubscription": {
+                "id": "shopify_subscription_fixture_id"
+              },
+              "usageCappedAmount": 1.23,
+              "usageBalanceUsed": 1.23,
+              "appliedDiscount": {
+                "id": "applied_discount_fixture_id"
+              },
+              "subtotal": 1.23,
+              "total": 1.23,
+              "presentmentSubtotal": 1.23,
+              "presentmentTotal": 1.23
+            }
+          }
+        ],
+        "companyId": "company_id_fixture",
+        "industry": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "contacts": [
+          {
+            "label": "fixture",
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com",
+            "phone": "fixture",
+            "jobTitle": "fixture",
+            "customers": [
+              {
+                "id": "customer_fixture_id"
+              }
+            ],
+            "notes": "fixture",
+            "socialProfiles": [
+              {
+                "id": "social_profile_fixture_id"
+              }
+            ],
+            "secondaryEmails": [
+              "fixture@example.com"
+            ],
+            "tags": [
+              "fixture"
+            ],
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "accountOwners": [
+          {
+            "id": "id_fixture",
+            "type": "account_manager",
+            "hasCommission": true,
+            "commissionPercentage": 1.23,
+            "commissionEndsAt": "2026-01-01T00:00:00Z",
+            "managementFeePercentage": 1.23,
+            "appCommissions": [
+              {
+                "id": "app_commission_fixture_id"
+              }
+            ],
+            "user": {
+              "id": "id_fixture",
+              "name": "fixture",
+              "email": "fixture@example.com"
+            },
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "deals": [
+          {
+            "id": "id_fixture",
+            "name": "fixture",
+            "amount": 1.23,
+            "amountCurrencyCode": "fixture",
+            "firstInteractionAt": "2026-01-01T00:00:00Z",
+            "closingAt": "2026-01-01T00:00:00Z",
+            "closedAt": "2026-01-01T00:00:00Z",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z",
+            "dealStage": {
+              "id": "id_fixture",
+              "name": "fixture",
+              "stage": "fixture",
+              "status": "fixture"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "record": {
+    "firstName": "Fixture firstName",
+    "lastName": "Fixture lastName",
+    "mobilePhone": {
+      "countryCode": "fixture_country_code_1",
+      "number": "FIX-1"
+    },
+    "email": "fixture1@example.invalid",
+    "additionalFields": {
+      "velit3a": "fixture_velit3a_1",
+      "gender": "fixture_gender_1"
+    },
+    "job_id": "fixture_job_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/hire/jobs/fixture_job_id/candidate",
+    "body": {
+      "firstName": "Fixture firstName",
+      "lastName": "Fixture lastName",
+      "mobilePhone": {
+        "countryCode": "fixture_country_code_1",
+        "number": "FIX-1"
+      },
+      "email": "fixture1@example.invalid",
+      "additionalFields": {
+        "velit3a": "fixture_velit3a_1",
+        "gender": "fixture_gender_1"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "create_candidate_fixture_1",
+          "name": "Fixture create candidate"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/create_candidate",
+      "lastPage": "https://example.invalid/keka/create_candidate",
+      "nextPage": null,
+      "previousPage": null,
+      "totalRecords": 1,
+      "totalPages": 1,
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

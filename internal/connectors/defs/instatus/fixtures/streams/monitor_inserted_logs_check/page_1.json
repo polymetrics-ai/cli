@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/monitors/check_inserted_logs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "inserted": true,
+      "checkedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

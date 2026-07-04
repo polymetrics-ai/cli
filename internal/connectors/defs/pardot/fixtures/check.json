@@ -1,7 +1,17 @@
 {
-  "request": { "method": "GET", "path": "/api/v5/objects/prospects", "query": { "limit": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/prospects",
+    "query": {
+      "limit": "1",
+      "fields": "id,email"
+    }
+  },
   "response": {
     "status": 200,
-    "body": { "values": [], "nextPageUrl": "" }
+    "body": {
+      "values": [],
+      "nextPageUrl": ""
+    }
   }
 }

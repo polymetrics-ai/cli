@@ -19,6 +19,43 @@
       "default": "1000",
       "description": "Records per page (1-10000)."
     },
+    "project_id": {
+      "type": "string",
+      "description": "Mixpanel project id used by current Query API, Annotations API, and other project-scoped API endpoints."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Optional Mixpanel workspace id for Query API endpoints that accept workspace_id."
+    },
+    "annotation_id": {
+      "type": "string",
+      "description": "Annotation id for the project_annotation detail stream."
+    },
+    "from_date": {
+      "type": "string",
+      "description": "Optional yyyy-mm-dd lower date bound for current Query or Annotations API streams."
+    },
+    "to_date": {
+      "type": "string",
+      "description": "Optional yyyy-mm-dd upper date bound for current Query or Annotations API streams."
+    },
+    "analysis_type": {
+      "type": "string",
+      "default": "unique",
+      "description": "Mixpanel event analysis type for event breakdown streams: general, unique, or average."
+    },
+    "event_name": {
+      "type": "string",
+      "description": "Event name for event-property breakdown streams."
+    },
+    "distinct_ids": {
+      "type": "string",
+      "description": "JSON array string of distinct ids for the activity_stream Query API stream."
+    },
+    "limit": {
+      "type": "string",
+      "description": "Optional result limit for Query API list-style streams."
+    },
     "max_pages": {
       "type": "string",
       "description": "Maximum pages; leave unset, or use all/unlimited, to exhaust the stream."

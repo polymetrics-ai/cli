@@ -1,0 +1,19 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "expression": "expression_fixture",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/apps/synthetic-conformance-value/federated-claims",
+    "body": {
+      "expression": "expression_fixture",
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "contentSecurityPolicySetting": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "enforced",
+            "report_only"
+          ]
+        },
+        "reportUri": {
+          "type": "string"
+        },
+        "srcList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "widgetCustomizations": {
+      "type": "object",
+      "properties": {
+        "signInLabel": {
+          "type": "string",
+          "description": "The label for the sign in widget"
+        },
+        "usernameLabel": {
+          "type": "string",
+          "description": "The label for the username field"
+        },
+        "usernameInfoTip": {
+          "type": "string",
+          "description": "The label for the username information tip"
+        },
+        "passwordLabel": {
+          "type": "string",
+          "description": "The label for the password field"
+        },
+        "passwordInfoTip": {
+          "type": "string",
+          "description": "The label for the password information tip"
+        },
+        "showPasswordVisibilityToggle": {
+          "type": "boolean",
+          "description": "Allows users to see their passwords as they type"
+        },
+        "showUserIdentifier": {
+          "type": "boolean",
+          "description": "Allows the user's identifier to appear on authentication and enrollment pages"
+        },
+        "forgotPasswordLabel": {
+          "type": "string",
+          "description": "The label for the forgot password page"
+        },
+        "forgotPasswordUrl": {
+          "type": "string",
+          "description": "The forgot password URL"
+        },
+        "unlockAccountLabel": {
+          "type": "string",
+          "description": "The label for the unlock account link"
+        },
+        "unlockAccountUrl": {
+          "type": "string",
+          "description": "The unlock account URL"
+        },
+        "helpLabel": {
+          "type": "string",
+          "description": "The label for the help link"
+        },
+        "helpUrl": {
+          "type": "string",
+          "description": "The help link URL"
+        },
+        "customLink1Label": {
+          "type": "string",
+          "description": "The label for the first custom link"
+        },
+        "customLink1Url": {
+          "type": "string",
+          "description": "The URL for the first custom link"
+        },
+        "customLink2Label": {
+          "type": "string",
+          "description": "The label for the second custom link"
+        },
+        "customLink2Url": {
+          "type": "string",
+          "description": "The URL for the second custom link"
+        },
+        "authenticatorPageCustomLinkLabel": {
+          "type": "string",
+          "description": "The label for the authenticator page custom link"
+        },
+        "authenticatorPageCustomLinkUrl": {
+          "type": "string",
+          "description": "The URL for the authenticator page custom link"
+        },
+        "classicRecoveryFlowEmailOrUsernameLabel": {
+          "type": "string",
+          "description": "The label for the username field in the classic recovery flow"
+        },
+        "widgetGeneration": {
+          "type": "string",
+          "description": "The generation of the Sign-in Widget",
+          "enum": [
+            "G2",
+            "G3"
+          ]
+        },
+        "postAuthKeepMeSignedInPrompt": {
+          "type": "object",
+          "properties": {
+            "acceptButtonText": {
+              "type": "string",
+              "description": "The label on the accept button when prompting for Stay signed in"
+            },
+            "rejectButtonText": {
+              "type": "string",
+              "description": "The label on the reject button when prompting for Stay signed in"
+            },
+            "subtitle": {
+              "type": "string",
+              "description": "The subtitle on the Sign-In Widget when prompting for Stay signed in"
+            },
+            "title": {
+              "type": "string",
+              "description": "The title on the Sign-In Widget when prompting for Stay signed in"
+            }
+          },
+          "additionalProperties": true
+        },
+        "classicFooterHelpTitle": {
+          "type": "string",
+          "description": "The title of the footer link on the sign-in page. Only applicable for Classic Engine orgs."
+        },
+        "gracePeriodRequiredSoon": {
+          "type": "object",
+          "description": "<x-lifecycle-container><x-lifecycle class=\"oie\"></x-lifecycle></x-lifecycle-container>Customizable strings to use with [grace periods](https://developer.okta.com/docs/concepts/policies/#authenticator-enrollment-policies) that are shown on the Sign-In Widget\n\nYou can use the `gracePeriodRequiredSoonDescription` string without using either of the custom link strings.\nHowever, if you use one of the c",
+          "properties": {
+            "gracePeriodRequiredSoonCustomLinkLabel": {
+              "type": "string",
+              "description": "The label of the custom link that's shown on the Sign-In Widget when users are prompted to enroll required authenticators before their grace period ends."
+            },
+            "gracePeriodRequiredSoonCustomLinkUrl": {
+              "type": "string",
+              "description": "The URL for the custom link that's shown on the Sign-In Widget when users are prompted to enroll required authenticators before their grace period ends."
+            },
+            "gracePeriodRequiredSoonDescription": {
+              "type": "string",
+              "description": "The description that's shown on the Sign-In Widget for users who are within an authenticator grace period. This description prompts users to enroll required authenticators before their grace period ends."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "widgetVersion": {
+      "type": "string",
+      "description": "The version specified as a [Semantic Version](https://semver.org/). This value can be a wildcard (`*`), a major version range (for example, `^2`), a major-only version (for example, `7`), or a specific `Major.Minor` version (for example, `5.15`)."
+    }
+  },
+  "additionalProperties": true
+}

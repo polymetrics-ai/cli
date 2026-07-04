@@ -1,0 +1,21 @@
+{
+  "record": {
+    "company_id": "synthetic-conformance-value",
+    "collaborator_id": "synthetic-conformance-value",
+    "jobTitle": "jobTitle_fixture",
+    "startDate": "2026-07-01"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies/synthetic-conformance-value/collaborators/synthetic-conformance-value/contracts",
+    "body": {
+      "jobTitle": "jobTitle_fixture",
+      "startDate": "2026-07-01"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

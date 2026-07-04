@@ -1,0 +1,16 @@
+{
+  "record": {
+    "requester_group_id": 123,
+    "requester_id": 123,
+    "name": "Fixture add_member_to_requester_group",
+    "description": "Fixture add_member_to_requester_group record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/requester_groups/123/members/123",
+    "body": {
+      "name": "Fixture add_member_to_requester_group",
+      "description": "Fixture add_member_to_requester_group record"
+    }
+  }
+}

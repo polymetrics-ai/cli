@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "project_fixture_1",
+          "name": "Fixture Project",
+          "type": "team"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Operation id"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "yql",
+        "materialize_history",
+        "batch_inference",
+        "finetuning",
+        "file_to_dataset",
+        "dataset_to_file",
+        "merge"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "YQL query to execute."
+        }
+      },
+      "additionalProperties": true
+    },
+    "src": {
+      "type": "array",
+      "description": "List of source datasets for the operation.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The object identifier, which can be referenced in the API endpoints."
+          },
+          "version": {
+            "type": "string"
+          },
+          "mapping": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "messages": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "max_tokens": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "custom_id": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "dst": {
+      "type": "array",
+      "description": "List of destination datasets for the operation.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The object identifier, which can be referenced in the API endpoints."
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "unknown"
+      ]
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "The Unix timestamp (in seconds) for when the operation was created."
+    },
+    "in_progress_at": {
+      "type": "integer"
+    },
+    "finished_at": {
+      "type": "integer"
+    },
+    "ai_project_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

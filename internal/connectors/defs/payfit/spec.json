@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "PayFit Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
@@ -12,8 +14,8 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://partner-api.payfit.com/v1",
-      "description": "PayFit API base URL override for tests or proxies."
+      "default": "https://partner-api.payfit.com",
+      "description": "PayFit API base URL override. Defaults to the current root host; legacy streams use /v1 paths explicitly."
     },
     "limit": {
       "type": "string",
@@ -28,6 +30,39 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "max_results": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page for current company-scoped PayFit endpoints (maxResults, max 50)."
+    },
+    "company_id": {
+      "type": "string",
+      "description": "PayFit company ID used by company-scoped current API endpoints. Discover it with the documented oauth.payfit.com/introspect helper outside this connector."
+    },
+    "collaborator_id": {
+      "type": "string",
+      "description": "Collaborator ID for detail streams and contract creation."
+    },
+    "contract_id": {
+      "type": "string",
+      "description": "Contract ID for detail streams and contract-scoped writes."
+    },
+    "absence_id": {
+      "type": "string",
+      "description": "Absence ID for cancellation writes."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Document ID for binary document download endpoints, which are excluded from streams."
+    },
+    "payslip_id": {
+      "type": "string",
+      "description": "Payslip ID for binary payslip download endpoints, which are excluded from streams."
+    },
+    "pay_period": {
+      "type": "string",
+      "description": "YYYYMM pay period/date value required by PayFit accounting, worked-time, payroll-status, and meal-voucher endpoints."
     }
   }
 }

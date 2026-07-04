@@ -1,0 +1,14 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "external_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture update_custom_field_of_resources",
+    "description": "Fixture update_custom_field_of_resources record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/itam/custom_fields/resources",
+    "body": {
+      "name": "Fixture update_custom_field_of_resources",
+      "description": "Fixture update_custom_field_of_resources record"
+    }
+  }
+}

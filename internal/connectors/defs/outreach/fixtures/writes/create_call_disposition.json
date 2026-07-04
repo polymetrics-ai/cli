@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "calldisposition",
+      "attributes": {
+        "name": "Fixture Create Call Disposition"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/callDispositions",
+    "body": {
+      "data": {
+        "type": "calldisposition",
+        "attributes": {
+          "name": "Fixture Create Call Disposition"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

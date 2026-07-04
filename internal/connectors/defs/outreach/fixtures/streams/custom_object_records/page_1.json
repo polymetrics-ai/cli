@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customObjects/synthetic-conformance-value",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "type": "vehicles",
+          "attributes": {
+            "name": "Fixture Custom Object Records",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          },
+          "relationships": {
+          },
+          "links": {
+            "self": "https://api.outreach.io/api/v2/customObjects/synthetic-conformance-value"
+          }
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

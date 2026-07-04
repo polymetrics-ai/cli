@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "organizationId": "organization_id_fixture",
+      "teamAccountDiscoverySettings": {
+        "accountDiscovery": "hidden"
+      },
+      "teamCollaborationSettings": {
+        "coOwnerRole": "enabled"
+      },
+      "teamCopyAccessLevelSettings": {
+        "copyAccessLevel": "anyone",
+        "copyAccessLevelLimitation": "anyone"
+      },
+      "teamId": "team_id_fixture",
+      "teamInvitationSettings": {
+        "inviteExternalUsers": "allowed",
+        "whoCanInvite": "only_org_admins"
+      },
+      "teamSharingPolicySettings": {
+        "allowListedDomains": [
+          "allow_listed_domain_fixture"
+        ],
+        "createAssetAccessLevel": "company_admins",
+        "defaultBoardAccess": "private",
+        "defaultBoardSharingAccess": "team_members_with_editing_rights",
+        "defaultOrganizationAccess": "private",
+        "defaultProjectAccess": "private",
+        "moveBoardToAccount": "allowed",
+        "restrictAllowedDomains": "enabled",
+        "sharingOnAccount": "allowed",
+        "sharingOnOrganization": "allowed",
+        "sharingViaPublicLink": "allowed"
+      },
+      "type": "team-settings"
+    }
+  }
+}

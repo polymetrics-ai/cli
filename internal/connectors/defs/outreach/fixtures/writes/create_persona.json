@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "persona",
+      "attributes": {
+        "name": "Fixture Create Persona"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/personas",
+    "body": {
+      "data": {
+        "type": "persona",
+        "attributes": {
+          "name": "Fixture Create Persona"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

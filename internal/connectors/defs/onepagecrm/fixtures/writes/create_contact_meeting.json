@@ -1,0 +1,19 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "meeting_time_int": 1,
+    "place": "Fixture Name",
+    "text": "Fixture text",
+    "user_ids_to_notify": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/fixture_id/meetings",
+    "body": {
+      "meeting_time_int": 1,
+      "place": "Fixture Name",
+      "text": "Fixture text",
+      "user_ids_to_notify": "fixture_value"
+    }
+  }
+}

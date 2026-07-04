@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/email/campaigns/synthetic-conformance-value/preview"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "emailId": "fixture@example.com",
+      "customerId": "customer_id_fixture",
+      "subject": "fixture",
+      "previewText": "fixture",
+      "html": "<p>Fixture</p>",
+      "warning": "fixture"
+    }
+  }
+}

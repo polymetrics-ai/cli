@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "fillColor": {
+      "type": "string",
+      "description": "Background color of the tag.",
+      "enum": [
+        "red",
+        "light_green",
+        "cyan",
+        "yellow",
+        "magenta",
+        "green",
+        "blue",
+        "gray",
+        "violet",
+        "dark_green",
+        "dark_blue",
+        "black"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the tag."
+    },
+    "title": {
+      "type": "string",
+      "description": "Text of the tag."
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object that is returned. In this case, type returns `tag`."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

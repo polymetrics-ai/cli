@@ -1,17 +1,17 @@
 {
   "api": "Microsoft Graph API (https://learn.microsoft.com/en-us/graph/api/overview)",
   "docs": "https://learn.microsoft.com/en-us/graph/api/overview",
-  "reviewed_at": "2026-07-03",
-  "scope": "Tier-2 quarantine-repair migration: the 5 legacy-parity read streams only (users, groups, applications, service principals, directory roles); the full Microsoft Graph directory surface (devices, administrative units, conditional access policies, audit logs, etc.) is out of scope until Pass B capability expansion",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 legacy-parity bundle. Pass B expansion is blocked by the Microsoft Graph @odata.nextLink literal-key pagination ENGINE_GAP recorded in docs/migration/quarantine.json; additional collection streams require editing the microsoft-entra-id StreamHook outside this shard's allowed paths.",
   "endpoints": [
     { "method": "GET", "path": "/v1.0/users", "covered_by": { "stream": "users" } },
     { "method": "GET", "path": "/v1.0/groups", "covered_by": { "stream": "groups" } },
     { "method": "GET", "path": "/v1.0/applications", "covered_by": { "stream": "applications" } },
     { "method": "GET", "path": "/v1.0/servicePrincipals", "covered_by": { "stream": "serviceprincipals" } },
     { "method": "GET", "path": "/v1.0/directoryRoles", "covered_by": { "stream": "directoryroles" } },
-    { "method": "GET", "path": "/v1.0/devices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1.0/administrativeUnits", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1.0/auditLogs/directoryAudits", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1.0/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (legacy microsoft-entra-id connector is read-only; no write actions exist to port)" } }
+    { "method": "GET", "path": "/v1.0/devices", "excluded": { "category": "out_of_scope", "reason": "Blocked by microsoft-entra-id ENGINE_GAP in docs/migration/quarantine.json: additional Graph collection streams require @odata.nextLink StreamHook routing outside this shard's allowed paths." } },
+    { "method": "GET", "path": "/v1.0/administrativeUnits", "excluded": { "category": "out_of_scope", "reason": "Blocked by microsoft-entra-id ENGINE_GAP in docs/migration/quarantine.json: additional Graph collection streams require @odata.nextLink StreamHook routing outside this shard's allowed paths." } },
+    { "method": "GET", "path": "/v1.0/auditLogs/directoryAudits", "excluded": { "category": "requires_elevated_scope", "reason": "Directory audit logs require elevated audit-log Graph permissions and the same @odata.nextLink StreamHook expansion blocked in docs/migration/quarantine.json." } },
+    { "method": "POST", "path": "/v1.0/users", "excluded": { "category": "requires_elevated_scope", "reason": "Creates tenant directory users and requires elevated directory write permissions; this connector remains read-only while Pass B reads are blocked by the microsoft-entra-id ENGINE_GAP." } }
   ]
 }

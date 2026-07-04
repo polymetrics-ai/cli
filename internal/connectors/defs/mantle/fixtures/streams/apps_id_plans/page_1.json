@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/apps/synthetic-conformance-value/plans",
+    "query": {
+      "take": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "plans": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "description": "fixture",
+        "amount": 1.23,
+        "currencyCode": "fixture",
+        "type": "fixture",
+        "public": true,
+        "visible": true,
+        "interval": "fixture",
+        "trialDays": 1.23,
+        "monthlyRevenue": 1.23,
+        "lifetimeValue": 1.23,
+        "averageLifetimeValue": 1.23,
+        "subscriberCount": 1.23,
+        "activeTrialCount": 1.23,
+        "flexBilling": true,
+        "flexBillingTerms": "fixture",
+        "deprecatedAt": "2026-01-01T00:00:00Z",
+        "features": {
+          "id": "features_fixture_id"
+        },
+        "customerId": "customer_id_fixture",
+        "customerTags": [
+          "fixture"
+        ],
+        "customerExcludeTags": [
+          "fixture"
+        ],
+        "customFields": {
+          "id": "custom_fields_fixture_id"
+        },
+        "shopifyPlans": [
+          "fixture"
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "hasMore": true,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "nextCursor": "",
+      "previousCursor": "fixture"
+    }
+  }
+}

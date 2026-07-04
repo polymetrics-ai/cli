@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "1-leads",
+    "stageset": "1-stagesets"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/1-leads/stageset",
+    "body": {
+      "stageset": "1-stagesets"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

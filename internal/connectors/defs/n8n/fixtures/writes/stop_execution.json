@@ -1,0 +1,13 @@
+{
+  "record": {
+    "execution_id": "101"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/executions/101/stop"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

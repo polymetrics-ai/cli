@@ -1,7 +1,7 @@
 {
   "name": "openfda",
   "display_name": "OpenFDA",
-  "description": "Reads FDA drug, device, and food datasets (adverse events, labels, and recall enforcement reports) from the public openFDA REST API.",
+  "description": "Reads documented FDA drug, device, food, animal/veterinary, cosmetics, tobacco, transparency, and other public datasets from the openFDA REST API.",
   "integration_type": "api",
   "docs_url": "https://open.fda.gov/apis/",
   "release_stage": "ga",

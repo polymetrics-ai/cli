@@ -1,0 +1,15 @@
+{
+  "record": {
+    "biosample_id": "biosample_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/biosamples/biosample_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

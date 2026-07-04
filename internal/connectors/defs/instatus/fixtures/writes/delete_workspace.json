@@ -1,0 +1,15 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/workspaces/workspace_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_workspace_fixture_response"
+    }
+  }
+}

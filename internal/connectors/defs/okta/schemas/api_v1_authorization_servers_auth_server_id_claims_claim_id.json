@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "alwaysIncludeInToken": {
+      "type": "boolean",
+      "description": "Specifies whether to include Claims in the token. The value is always `TRUE` for access token Claims. If the value is set to `FALSE` for an ID token claim, the Claim isn't included in the ID token when the token is requested with the access token or with the `authorization_code`. The client instead uses the access token to get Claims from the `/userinfo` endpoint."
+    },
+    "claimType": {
+      "type": "string",
+      "description": "Specifies whether the Claim is for an access token (`RESOURCE`) or an ID token (`IDENTITY`)",
+      "enum": [
+        "IDENTITY",
+        "RESOURCE"
+      ]
+    },
+    "conditions": {
+      "type": "object",
+      "description": "Specifies the scopes for the Claim",
+      "properties": {
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "group_filter_type": {
+      "type": "string",
+      "description": "Specifies the type of group filter if `valueType` is `GROUPS`\n\nIf `valueType` is `GROUPS`, then the groups returned are filtered according to the value of `group_filter_type`.\n\nIf you have complex filters for Groups, you can [create a Groups allowlist](https://developer.okta.com/docs/guides/customize-tokens-groups-claim/main/) to put them all in a Claim.",
+      "enum": [
+        "CONTAINS",
+        "EQUALS",
+        "REGEX",
+        "STARTS_WITH"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of the Claim"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the Claim"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "system": {
+      "type": "boolean",
+      "description": "When `true`, indicates that Okta created the Claim"
+    },
+    "value": {
+      "type": "string",
+      "description": "Specifies the value of the Claim. This value must be a string literal if `valueType` is `GROUPS`, and the string literal is matched with the selected `group_filter_type`. The value must be an Okta EL expression if `valueType` is `EXPRESSION`."
+    },
+    "valueType": {
+      "type": "string",
+      "description": "Specifies whether the Claim is an Okta Expression Language (EL) expression (`EXPRESSION`), a set of groups (`GROUPS`), or a system claim (`SYSTEM`)",
+      "enum": [
+        "EXPRESSION",
+        "GROUPS",
+        "SYSTEM"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

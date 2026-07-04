@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "task_assignments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "billable": { "type": ["boolean", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "hourly_rate": { "type": ["number", "null"] },
+    "budget": { "type": ["number", "null"] },
+    "project": { "type": ["object", "null"] },
+    "project_id": { "type": ["integer", "null"] },
+    "task": { "type": ["object", "null"] },
+    "task_id": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": "string" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/reviews_tab"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "widget": "<div class=\"jdgm-reviews-tab\">Reviews tab</div>"
+    }
+  }
+}

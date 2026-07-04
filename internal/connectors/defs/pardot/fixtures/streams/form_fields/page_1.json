@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/form-fields",
+    "query": {
+      "limit": "200",
+      "fields": "id,formId,prospectApiFieldId,type,dataFormat,label,description,errorMessage,cssClasses,isRequired,isAlwaysDisplay,isMaintainInitialValue,isDoNotPrefill,sortOrder,hasDependents,hasProgressives,hasValues,createdById,updatedById,createdAt,updatedAt"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "formId": 1,
+          "prospectApiFieldId": 1,
+          "type": 1,
+          "dataFormat": "dataFormat_fixture",
+          "label": "label_fixture",
+          "description": "description_fixture",
+          "errorMessage": "errorMessage_fixture",
+          "cssClasses": "cssClasses_fixture",
+          "isRequired": false,
+          "isAlwaysDisplay": false,
+          "isMaintainInitialValue": false,
+          "isDoNotPrefill": false,
+          "sortOrder": "sortOrder_fixture",
+          "hasDependents": false,
+          "hasProgressives": false,
+          "hasValues": false,
+          "createdById": 1,
+          "updatedById": 1,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

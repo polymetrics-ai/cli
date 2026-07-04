@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/email-servers/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "alias": "alias_fixture",
+      "authType": "BASIC_SMTP_AUTH",
+      "enabled": true,
+      "host": "host_fixture",
+      "id": "id_fixture",
+      "port": 1,
+      "username": "username_fixture"
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Users"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schemas": [
+        "schema_fixture"
+      ],
+      "totalResults": 1.25,
+      "startIndex": 1.25,
+      "itemsPerPage": 1.25,
+      "Resources": [
+        {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "id": "id_fixture",
+          "meta": {
+            "resourceType": "resource_type_fixture",
+            "location": "location_fixture"
+          },
+          "userName": "user_name_fixture",
+          "name": {
+            "formatted": "formatted_fixture",
+            "familyName": "family_name_fixture",
+            "givenName": "given_name_fixture"
+          },
+          "displayName": "display_name_fixture",
+          "userType": "user_type_fixture",
+          "active": true,
+          "emails": [
+            {
+              "value": "value_fixture",
+              "type": "type_fixture",
+              "primary": true
+            }
+          ],
+          "photos": [
+            {
+              "type": "type_fixture",
+              "value": "value_fixture"
+            }
+          ],
+          "groups": [
+            {
+              "value": "value_fixture",
+              "display": "display_fixture"
+            }
+          ],
+          "roles": [
+            {
+              "type": "type_fixture",
+              "value": "value_fixture",
+              "display": "display_fixture",
+              "primary": true
+            }
+          ],
+          "preferredLanguage": "preferred_language_fixture",
+          "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User": {
+            "employeeNumber": "employee_number_fixture",
+            "costCenter": "cost_center_fixture",
+            "organization": "organization_fixture",
+            "division": "division_fixture",
+            "department": "department_fixture",
+            "manager": {
+              "displayName": "display_name_fixture",
+              "value": "value_fixture"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

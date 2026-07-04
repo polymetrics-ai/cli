@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "employeeId": "fixture_id",
+    "firstName": "Fixture Name",
+    "lastName": "Fixture Name",
+    "addressLine1": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/employeedependents/fixture_id",
+    "body": {
+      "employeeId": "fixture_id",
+      "firstName": "Fixture Name",
+      "lastName": "Fixture Name",
+      "addressLine1": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

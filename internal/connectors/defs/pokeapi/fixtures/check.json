@@ -1,7 +1,24 @@
 {
-  "request": { "method": "GET", "path": "/pokemon", "query": { "limit": "1", "offset": "0" } },
+  "request": {
+    "method": "GET",
+    "path": "/pokemon",
+    "query": {
+      "limit": "1",
+      "offset": "0"
+    }
+  },
   "response": {
     "status": 200,
-    "body": { "count": 0, "next": null, "previous": null, "results": [] }
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "name": "fixture-pokemon-1",
+          "url": "https://pokeapi.co/api/v2/pokemon/1/"
+        }
+      ]
+    }
   }
 }

@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/emails",
+    "query": {
+      "limit": "200",
+      "fields": "id,name,campaignId,prospectId,subject,emailTemplateId,trackerDomainId,folderId,clientType,createdById,listEmailId,sentAt,type,salesforceCmsId"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "name": "name_fixture",
+          "campaignId": 1,
+          "prospectId": 1,
+          "subject": "subject_fixture",
+          "emailTemplateId": 1,
+          "trackerDomainId": 1,
+          "folderId": 1,
+          "clientType": "clientType_fixture",
+          "createdById": 1,
+          "listEmailId": 1,
+          "sentAt": "2026-01-01T00:00:00Z",
+          "type": 1,
+          "salesforceCmsId": 1
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

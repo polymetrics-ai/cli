@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/ability", "query": { "limit": "100", "offset": "0" } },
+  "request": {
+    "method": "GET",
+    "path": "/ability",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,7 +14,10 @@
       "next": null,
       "previous": null,
       "results": [
-        { "name": "overgrow", "url": "https://pokeapi.co/api/v2/ability/65/" }
+        {
+          "url": "https://pokeapi.co/api/v2/ability/1/",
+          "name": "fixture-ability-1"
+        }
       ]
     }
   }

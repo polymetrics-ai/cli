@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/tasks",
+    "path": "/v1/tasks",
     "query": {
       "page": "1",
       "limit": "100"

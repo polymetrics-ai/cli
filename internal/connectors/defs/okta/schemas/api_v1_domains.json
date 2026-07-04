@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "domains": {
+      "type": "array",
+      "description": "Each element of the array defines an individual domain",
+      "items": {
+        "type": "object",
+        "description": "The properties that define an individual domain.",
+        "properties": {
+          "brandId": {
+            "type": "string",
+            "description": "The ID number of the brand"
+          },
+          "certificateSourceType": {
+            "type": "string",
+            "description": "Certificate source type that indicates whether the certificate is provided by the user or Okta.",
+            "enum": [
+              "MANUAL",
+              "OKTA_MANAGED"
+            ]
+          },
+          "dnsRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "DNS records to be registered for the domain",
+              "properties": {
+                "expiration": {
+                  "type": "string",
+                  "description": "DNS TXT record expiration"
+                },
+                "fqdn": {
+                  "type": "string",
+                  "description": "DNS record name"
+                },
+                "recordType": {
+                  "type": "string",
+                  "enum": [
+                    "CAA",
+                    "CNAME",
+                    "TXT"
+                  ]
+                },
+                "values": {
+                  "type": "array",
+                  "description": "DNS record value",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "domain": {
+            "type": "string",
+            "description": "Custom domain name"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique ID of the domain"
+          },
+          "publicCertificate": {
+            "type": "object",
+            "description": "Certificate metadata for the domain",
+            "properties": {
+              "expiration": {
+                "type": "string",
+                "description": "Certificate expiration"
+              },
+              "fingerprint": {
+                "type": "string",
+                "description": "Certificate fingerprint"
+              },
+              "subject": {
+                "type": "string",
+                "description": "Certificate subject"
+              }
+            },
+            "additionalProperties": true
+          },
+          "validationStatus": {
+            "type": "string",
+            "description": "Status of the domain",
+            "enum": [
+              "COMPLETED",
+              "IN_PROGRESS",
+              "NOT_STARTED",
+              "VERIFIED"
+            ]
+          },
+          "_links": {
+            "type": "object",
+            "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+            "properties": {
+              "brand": {
+                "type": "object",
+                "description": "The associated brand",
+                "properties": {
+                  "hints": {
+                    "type": "object",
+                    "description": "Describes allowed HTTP verbs for the `href`",
+                    "properties": {
+                      "allow": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "href": {
+                    "type": "string",
+                    "description": "Link URI"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Link name"
+                  },
+                  "templated": {
+                    "type": "boolean",
+                    "description": "Indicates whether the link object's `href` property is a URI template."
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                  }
+                },
+                "additionalProperties": true
+              },
+              "certificate": {
+                "type": "object",
+                "description": "The certificate link references the domain certificate",
+                "properties": {
+                  "hints": {
+                    "type": "object",
+                    "description": "Describes allowed HTTP verbs for the `href`",
+                    "properties": {
+                      "allow": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "href": {
+                    "type": "string",
+                    "description": "Link URI"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Link name"
+                  },
+                  "templated": {
+                    "type": "boolean",
+                    "description": "Indicates whether the link object's `href` property is a URI template."
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                  }
+                },
+                "additionalProperties": true
+              },
+              "verify": {
+                "type": "object",
+                "description": "The verify link verifies the domain and transitions the domain status to `VERIFIED`",
+                "properties": {
+                  "hints": {
+                    "type": "object",
+                    "description": "Describes allowed HTTP verbs for the `href`",
+                    "properties": {
+                      "allow": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "href": {
+                    "type": "string",
+                    "description": "Link URI"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Link name"
+                  },
+                  "templated": {
+                    "type": "boolean",
+                    "description": "Indicates whether the link object's `href` property is a URI template."
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

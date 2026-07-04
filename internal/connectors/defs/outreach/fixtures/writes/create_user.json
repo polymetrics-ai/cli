@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "user",
+      "attributes": {
+        "name": "Fixture Create User"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": {
+      "data": {
+        "type": "user",
+        "attributes": {
+          "name": "Fixture Create User"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "record": {
+    "group_rule_id": "synthetic-conformance-value",
+    "actions": {
+      "assignUserToGroups": {
+        "groupIds": [
+          "group_id_fixture"
+        ]
+      }
+    },
+    "conditions": {
+      "expression": {
+        "type": "type_fixture",
+        "value": "value_fixture"
+      },
+      "people": {
+        "groups": {
+          "exclude": [
+            "exclude_fixture"
+          ]
+        },
+        "users": {
+          "exclude": [
+            "exclude_fixture"
+          ]
+        }
+      }
+    },
+    "created": "2026-01-01T00:00:00Z",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "status": "ACTIVE",
+    "type": "type_fixture",
+    "_embedded": {
+      "groupIdToGroupNameMap": {}
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/groups/rules/synthetic-conformance-value",
+    "body": {
+      "actions": {
+        "assignUserToGroups": {
+          "groupIds": [
+            "group_id_fixture"
+          ]
+        }
+      },
+      "conditions": {
+        "expression": {
+          "type": "type_fixture",
+          "value": "value_fixture"
+        },
+        "people": {
+          "groups": {
+            "exclude": [
+              "exclude_fixture"
+            ]
+          },
+          "users": {
+            "exclude": [
+              "exclude_fixture"
+            ]
+          }
+        }
+      },
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "type": "type_fixture",
+      "_embedded": {
+        "groupIdToGroupNameMap": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

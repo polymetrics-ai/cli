@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "fine_tuned_model_checkpoint": {
+      "type": "string"
+    },
+    "fine_tuning_job_id": {
+      "type": "string"
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Metrics at the step number during the fine-tuning job.",
+      "properties": {
+        "full_valid_loss": {
+          "type": "number"
+        },
+        "full_valid_mean_token_accuracy": {
+          "type": "number"
+        },
+        "step": {
+          "type": "number"
+        },
+        "train_loss": {
+          "type": "number"
+        },
+        "train_mean_token_accuracy": {
+          "type": "number"
+        },
+        "valid_loss": {
+          "type": "number"
+        },
+        "valid_mean_token_accuracy": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": true
+    },
+    "object": {
+      "type": "string"
+    },
+    "step_number": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

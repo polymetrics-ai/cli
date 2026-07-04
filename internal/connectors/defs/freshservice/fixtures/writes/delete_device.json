@@ -1,0 +1,11 @@
+{
+  "record": {
+    "device_id": 123,
+    "name": "Fixture delete_device",
+    "description": "Fixture delete_device record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/itam/devices/123"
+  }
+}

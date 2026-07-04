@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/capturescheme",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "capture_schemes_fixture_1",
+          "name": "Fixture capture schemes 1"
+        },
+        {
+          "id": "capture_schemes_fixture_2",
+          "name": "Fixture capture schemes 2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/capture_schemes",
+      "lastPage": "https://example.invalid/keka/capture_schemes",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

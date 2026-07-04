@@ -1,0 +1,13 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/users/synthetic-conformance-value/sessions"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

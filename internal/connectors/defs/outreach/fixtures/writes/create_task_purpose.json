@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "taskpurpose",
+      "attributes": {
+        "name": "Fixture Create Task Purpose"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/taskPurposes",
+    "body": {
+      "data": {
+        "type": "taskpurpose",
+        "attributes": {
+          "name": "Fixture Create Task Purpose"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

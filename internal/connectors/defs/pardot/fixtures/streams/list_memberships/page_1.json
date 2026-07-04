@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/list-memberships",
+    "query": {
+      "limit": "200",
+      "fields": "id,createdAt,updatedAt,createdById,updatedById,isDeleted,optedOut,listId,prospectId"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdById": 1,
+          "updatedById": 1,
+          "isDeleted": false,
+          "optedOut": false,
+          "listId": 1,
+          "prospectId": 1
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

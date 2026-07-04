@@ -1,0 +1,15 @@
+{
+  "record": {
+    "workspace_id": 123,
+    "name": "Fixture create_schedule",
+    "description": "Fixture create_schedule record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/oncall/ws/123/schedules",
+    "body": {
+      "name": "Fixture create_schedule",
+      "description": "Fixture create_schedule record"
+    }
+  }
+}

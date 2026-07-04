@@ -1,49 +1,22 @@
 # Overview
 
-Pendo is a read-only declarative-HTTP connector for the Pendo Engage REST API v1. It reads
-visitors, accounts, pages, and features through simple REST list endpoints, without aggregation
-writes — matching legacy's own conservative scope. This bundle migrates
-`internal/connectors/pendo` (the hand-written connector); the legacy package stays registered and
-unchanged until wave6's registry flip.
+Pendo reads Engage API v1 product analytics objects, visitor/account details, deletion-job status, segments, reports, guides, metadata schemas/dependencies, exclusion lists, servers, and Listen feedback options. The four original streams (visitors, accounts, pages, features) retain legacy projection and the legacy data-envelope/cursor pagination shape. Pass B adds documented JSON GET list/detail streams and safe segment, guide, and feedback write actions.
 
 ## Auth setup
 
-Provide a Pendo integration key via the `integration_key` secret; it is sent as the
-`x-pendo-integration-key` request header and is never logged.
+Provide a Pendo integration key via the `integration_key` secret. It is sent as `x-pendo-integration-key` and is never logged. `base_url` defaults to `https://app.pendo.io/api/v1`; override it only for tests, regional API hosts, or controlled proxies.
 
 ## Streams notes
 
-All 4 streams (`visitors`, `accounts`, `pages`, `features`) share the identical shape: `GET`
-against the Pendo list endpoint (`/visitor`, `/account`, `/page`, `/feature`), records at `data`,
-primary key `["id"]`. Pagination follows Pendo's body-token convention (`pagination.type: cursor`
-with `cursor_param: page` and `token_path: next`): every request (including the first) sends a
-`page` query param, starting at `"1"` (each stream's static `query.page: "1"`), and the next page's
-`page` value is read verbatim from the response body's top-level `next` field — identical to
-legacy's `harvestPages` loop, which also always sends `page` starting at `"1"` and follows the
-opaque `next` token rather than incrementing a counter itself. Pagination stops when `next` is
-absent or empty. Every request sends the configured `limit` (`config.limit`, default `100`,
-matching legacy's `pendoDefaultLimit`; legacy caps this at 500 as `pendoMaxLimit`, documented here
-as an operator-enforced bound since the engine does not itself validate config value ranges).
-Every stream carries its legacy cursor field (`lastVisit` for `visitors`/`accounts`, `lastUpdated`
-for `pages`/`features`) as its schema `x-cursor-field`, but — matching legacy exactly — no stream
-declares a server-side incremental filter: legacy's `Read` never sends a date-range filter
-regardless of `req.State`, so no `incremental` block is declared in `streams.json` either.
+The legacy streams `visitors`, `accounts`, `pages`, and `features` keep the hand-written connector behavior: records are read from the top-level `data` array and paginated with a body `next` token sent back as the `page` query parameter. Newly added documented endpoints use passthrough projection so the raw Pendo object shape is preserved. Detail streams require the corresponding config value, such as `visitor_id`, `account_id`, `segment_id`, `guide_id`, or `metadata_kind`.
 
 ## Write actions & risks
 
-Not applicable — this connector is read-only (`capabilities.write: false`), matching legacy
-exactly.
+Write actions cover expressible Pendo mutations whose request body is JSON object-shaped or empty: segment export/job creation and membership changes, guide seen/state/segment resets, and Listen feedback create/update/delete. Destructive actions are marked with destructive confirmation semantics where applicable. Bulk GDPR/CCPA erasure, metadata schema deletion, data-sync credential rotation, raw XML/CSV import/export, and event-ingestion writes requiring a different per-action secret are not exposed.
 
 ## Known limits
 
-- Full Pendo API surface (events, reports, guides, polls, and the POST-body aggregation endpoints)
-  is out of scope for this wave; see `api_surface.json`'s `excluded: {category: out_of_scope,
-  reason: "Pass B capability expansion"}` entries. Pendo's aggregation reporting API in particular
-  uses POST-body query payloads incompatible with this bundle's simple GET-list streams and would
-  need Tier-2/3 treatment if added later.
-- No incremental sync mode is wired for any stream (see Streams notes) — this mirrors legacy's own
-  full-refresh-only behavior, not a capability gap introduced by migration.
-- Legacy validates `limit` is between 1 and 500 and `max_pages` is a non-negative integer or
-  `all`/`unlimited` at read time; the engine does not perform bundle-declared numeric-range
-  validation on config values, so an out-of-range `limit` would be sent to the API as-is. This does
-  not change accepted-input behavior for any value legacy itself would accept.
+- Base64 visitor/account lookup endpoints require `x-pendo-base64-encoded-params: true` on only those requests. The current stream dialect has global base headers, not per-stream headers, so those detail endpoints are excluded and recorded in `docs/migration/quarantine.json`.
+- Pendo aggregation is a POST-body semantic read/report DSL. The generic declarative read path does not transmit `stream.body`, and exposing arbitrary aggregation bodies as writes would create a generic query/write tool surface.
+- CSV, XLIFF/XML, and scalar response endpoints are excluded because declarative streams emit JSON object records.
+- Metadata bulk updates and metadata field creation use root JSON array bodies; single metadata value updates and privacy opt-outs can use raw scalar bodies. The current write dialect constructs JSON objects from record maps, so these body shapes are not expressible without a hook or engine extension.

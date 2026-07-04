@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record",
+    "status": "Paused"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/bulk-actions/101",
+    "body": {
+      "name": "Fixture Pardot record",
+      "status": "Paused"
+    }
+  }
+}

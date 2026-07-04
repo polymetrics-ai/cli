@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee_break_availabilities",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "availabilityType": {
+      "enum": [
+        "anytime",
+        "hours_worked",
+        "time_of_day"
+      ]
+    },
+    "available": {
+      "type": "boolean"
+    },
+    "availableAfterMinutesWorked": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "availableAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "availableIn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "calculatedAt": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "integer"
+    },
+    "effectiveAt": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "paid": {
+      "type": "boolean"
+    },
+    "policyId": {
+      "type": "string"
+    },
+    "recordedDuration": {
+      "type": "integer"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "unavailableAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "unavailableIn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

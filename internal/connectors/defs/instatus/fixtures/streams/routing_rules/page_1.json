@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/routing-rules"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "routing_rule_fixture_1",
+        "name": "Fixture routing_rule_fixture_1"
+      }
+    ]
+  }
+}

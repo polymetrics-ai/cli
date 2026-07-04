@@ -1,0 +1,16 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "audience_group_id": "audience_group_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/page_id_fixture_1/audience-groups/audience_group_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_audience_group_fixture_response"
+    }
+  }
+}

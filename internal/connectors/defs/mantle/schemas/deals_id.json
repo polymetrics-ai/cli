@@ -1,0 +1,421 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "deals_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the deal."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the deal."
+    },
+    "amount": {
+      "type": "number",
+      "description": "The monetary value of the deal.",
+      "format": "float"
+    },
+    "amountCurrencyCode": {
+      "type": "string",
+      "description": "The currency code for the deal amount (e.g., USD, EUR)."
+    },
+    "currentAmount": {
+      "type": "number",
+      "description": "The current estimated value of the deal.",
+      "format": "float"
+    },
+    "acquisitionChannel": {
+      "type": "string",
+      "description": "The channel through which the deal was acquired."
+    },
+    "acquisitionSource": {
+      "type": "string",
+      "description": "The specific source of the deal acquisition."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the deal."
+    },
+    "firstInteractionAt": {
+      "type": "string",
+      "description": "The timestamp of the first interaction with the prospect.",
+      "format": "date-time"
+    },
+    "closingAt": {
+      "type": "string",
+      "description": "The expected closing date for the deal.",
+      "format": "date-time"
+    },
+    "closedAt": {
+      "type": "string",
+      "description": "The actual closing date for the deal.",
+      "format": "date-time"
+    },
+    "archivedAt": {
+      "type": "string",
+      "description": "The timestamp when the deal was archived.",
+      "format": "date-time"
+    },
+    "dealStage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "dealFlow": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the deal flow."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the deal flow."
+        },
+        "description": {
+          "type": "string",
+          "description": "The description of the deal flow."
+        },
+        "displayOrder": {
+          "type": "integer",
+          "description": "The display order of the deal flow."
+        },
+        "defaultAcquisitionChannel": {
+          "type": "string",
+          "description": "The default acquisition channel for deals in this flow."
+        },
+        "defaultAcquisitionSource": {},
+        "defaultDealOwner": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "affiliate": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "partnership": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            }
+          }
+        },
+        "acquirer": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "dealStages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "displayOrder": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "stage": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "weight": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "trigger": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "createdAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "updatedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The creation timestamp of the deal flow.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The last update timestamp of the deal flow.",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "description": "The deletion timestamp of the deal flow.",
+          "format": "date-time"
+        }
+      }
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "shopifyDomain": {
+          "type": "string"
+        }
+      }
+    },
+    "app": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "plan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "affiliate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "partnership": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        }
+      }
+    },
+    "acquirer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "email": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "contactId": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "email": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "customData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The namespaced key (namespace.key) for this custom data field."
+          },
+          "value": {},
+          "type": {
+            "type": "string",
+            "description": "The data type of the field (string, boolean, number_integer, number_decimal, date, date_time, url, json)."
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the custom data field."
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the deal.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the deal.",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "pauseallprospects",
+      "attributes": {
+        "name": "Fixture Pause All Prospects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsPauseAll",
+    "body": {
+      "data": {
+        "type": "pauseallprospects",
+        "attributes": {
+          "name": "Fixture Pause All Prospects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/movie/synthetic-conformance-value/keywords"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture movie_keywords",
+      "name": "Fixture movie_keywords",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

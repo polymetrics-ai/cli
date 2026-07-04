@@ -1,0 +1,20 @@
+{
+  "record": {
+    "conversation_id": "conversation_fixture_1",
+    "actor_type": "agent",
+    "message_parts": [
+      {
+        "text": {
+          "content": "Fixture reply"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/conversation_fixture_1/messages",
+    "body": {
+      "actor_type": "agent"
+    }
+  }
+}

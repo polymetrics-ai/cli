@@ -15,26 +15,85 @@
       "x-secret": true,
       "description": "Shutterstock OAuth access token, sent as a Bearer token."
     },
-    "page_size": {
-      "type": "integer",
-      "description": "Records requested per page (legacy default 100, max 500).",
-      "default": 100
-    },
     "query": {
       "type": "string",
-      "description": "Optional search query filter passed through to every search stream."
+      "description": "Optional search query filter passed through to search-style streams."
     },
     "sort": {
       "type": "string",
-      "description": "Optional sort order filter passed through to every search stream."
+      "description": "Optional sort order filter passed through to search-style streams."
     },
     "orientation": {
       "type": "string",
-      "description": "Optional orientation filter passed through to every search stream."
+      "description": "Optional orientation filter passed through to media search streams."
     },
     "category": {
       "type": "string",
-      "description": "Optional category filter passed through to every search stream."
+      "description": "Optional category filter passed through to media search streams."
+    },
+    "image_ids": {
+      "type": "string",
+      "description": "Comma-separated Shutterstock image IDs for image detail, recommendations, similar, and image-list fan-out streams."
+    },
+    "video_ids": {
+      "type": "string",
+      "description": "Comma-separated Shutterstock video IDs for video detail, similar, and video-list fan-out streams."
+    },
+    "audio_ids": {
+      "type": "string",
+      "description": "Comma-separated Shutterstock audio track IDs for audio detail and audio-list fan-out streams."
+    },
+    "sfx_ids": {
+      "type": "string",
+      "description": "Comma-separated Shutterstock sound-effect IDs for SFX detail and SFX-list fan-out streams."
+    },
+    "editorial_image_ids": {
+      "type": "string",
+      "description": "Comma-separated editorial image IDs for editorial image fan-out streams."
+    },
+    "editorial_ids": {
+      "type": "string",
+      "description": "Comma-separated editorial asset IDs for generic editorial detail fan-out streams."
+    },
+    "editorial_video_ids": {
+      "type": "string",
+      "description": "Comma-separated editorial video IDs for editorial video fan-out streams."
+    },
+    "image_collection_ids": {
+      "type": "string",
+      "description": "Comma-separated image collection IDs for collection detail and items fan-out streams."
+    },
+    "video_collection_ids": {
+      "type": "string",
+      "description": "Comma-separated video collection IDs for collection detail and items fan-out streams."
+    },
+    "audio_collection_ids": {
+      "type": "string",
+      "description": "Comma-separated audio collection IDs for collection detail and items fan-out streams."
+    },
+    "editorial_image_livefeed_ids": {
+      "type": "string",
+      "description": "Comma-separated editorial image livefeed IDs for livefeed fan-out streams."
+    },
+    "editorial_livefeed_ids": {
+      "type": "string",
+      "description": "Comma-separated editorial livefeed IDs for livefeed fan-out streams."
+    },
+    "visual_asset_ids": {
+      "type": "string",
+      "description": "Comma-separated asset IDs for computer-vision similar-media streams."
+    },
+    "contributor_ids": {
+      "type": "string",
+      "description": "Comma-separated contributor IDs for contributor fan-out streams."
+    },
+    "contributor_id": {
+      "type": "string",
+      "description": "Contributor ID used with contributor_collection_ids for nested contributor collection detail streams."
+    },
+    "contributor_collection_ids": {
+      "type": "string",
+      "description": "Comma-separated contributor collection IDs used with contributor_id for nested contributor collection detail streams."
     }
   }
 }

@@ -1,9 +1,10 @@
 # Overview
 
-OnePageCRM is a read-only declarative-HTTP migration (wave2 fan-out) of `internal/connectors/onepagecrm`
-(the hand-written connector it replaces at capability parity). It reads contacts, deals, actions,
-companies, and users through the OnePageCRM v3 REST API. The legacy package stays registered and
-unchanged until wave6's registry flip.
+OnePageCRM is a Pass B declarative-HTTP bundle for the OnePageCRM API v3. It keeps the legacy
+`contacts`, `deals`, `actions`, `companies`, and `users` stream projections from
+`internal/connectors/onepagecrm`, then expands the documented OpenAPI surface with additional
+account/configuration streams, detail streams, nested CRM subresource streams, and declarative write
+actions where the current JSON/path write dialect can model the request.
 
 ## Auth setup
 
@@ -14,16 +15,17 @@ logged.
 
 ## Streams notes
 
-All 5 streams (`contacts`, `deals`, `actions`, `companies`, `users`) share OnePageCRM's list-endpoint
-shape: `GET /<resource>`, records under `data.<resource>` (`users` is the one exception — its records
-live directly under `data`, matching legacy's `arrayPath: "data"` for that stream only). Every list
-element is wrapped under a singular key (e.g. `{"contact": {...}}`); since the engine's schema
-projection only matches top-level raw keys and has no per-element unwrap primitive, every field is
-instead extracted via a `computed_fields` bare `{{ record.<wrap_key>.<field> }}` reference — the
-engine's typed-extraction rule (a single bare `record.*` reference with no filter) copies the raw
-JSON value straight through with its native type preserved (e.g. `deals.amount` stays a number,
-`contacts.starred` stays a boolean), exactly matching legacy's `unwrap`+`mapRecord` behavior
-field-for-field.
+The 5 legacy streams (`contacts`, `deals`, `actions`, `companies`, `users`) preserve OnePageCRM's
+legacy list-endpoint projections field-for-field. They read `GET /<resource>`, records under
+`data.<resource>` (`users` is the exception: records live directly under `data`), and unwrap fields
+with typed `computed_fields`, matching legacy's `unwrap` plus `mapRecord` behavior.
+
+Pass B streams use `projection: "passthrough"` plus a computed `id` so the documented OnePageCRM
+envelope is preserved for new resources while the engine still has a stable primary key. New
+streams cover bootstrap/account data, users/detail, lead sources, statuses, custom/deal/company
+fields, predefined actions/items/groups, notes, calls, call results, meetings, relationship types,
+countries, filters, detail records, company/contact nested subresources, cascade contacts,
+action/team streams, notifications, webhooks, and pipelines.
 
 Pagination is `page`/`per_page` (`pagination.type: page_number`, `page_param: page`, `size_param:
 per_page`, `start_page: 1`, `page_size: 100` matching legacy's default `onepagecrmDefaultPageSize`).
@@ -41,14 +43,26 @@ ACCEPTABLE per `docs/migration/conventions.md`'s parity-deviation meta-rule.
 
 ## Write actions & risks
 
-None. OnePageCRM is exposed read-only in legacy (`Capabilities.Write: false`); this bundle ships no
-`writes.json`.
+`writes.json` declares the documented JSON/path POST, PUT, PATCH, and DELETE mutations that the
+engine can express: account configuration records, notes/calls/meetings/deals/actions, attachments,
+relationship types, company/contact updates and subresource mutations, notifications, and webhooks.
+Delete actions include idempotent 404 handling and destructive confirmation where appropriate.
+
+Every write is a live OnePageCRM mutation and must go through plan/preview/approval before
+execution. The schemas validate path identifiers plus representative documented body fields; the
+full endpoint-specific payload contract remains server-validated by OnePageCRM.
 
 ## Known limits
 
-- OnePageCRM's write surface (creating/updating contacts, deals, actions) is out of scope; legacy
-  itself never implemented it, so there is no parity gap, only an out-of-scope Pass B expansion (see
-  `api_surface.json`).
+- `POST /change_auth_key` is excluded because it rotates the current API key and returns new
+  credential material; credential rotation belongs in a dedicated credential-management flow, not a
+  generic connector write action.
+- Photo/logo upload/update endpoints are excluded as binary payloads because they accept base64
+  image data. Attachment metadata/association writes that use ordinary JSON remain modeled.
+- `DELETE /contacts/delete` is excluded as a broad destructive operation: the OpenAPI operation has
+  no path identifier and no JSON request body/query dialect that `writes.json` can safely model.
+- `GET /attachments/s3_form` is excluded as a non-data upload-helper endpoint for pre-authorized S3
+  file upload, not a durable CRM object stream.
 - The pagination stop-condition deviation described above (body `max_page` vs. short-page heuristic)
   is an accepted, request-count-only difference — see Streams notes.
 - `contacts`/`deals`/`actions`/`companies` declare `updated_at` as `x-cursor-field` for manifest

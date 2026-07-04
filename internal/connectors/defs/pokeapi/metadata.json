@@ -1,7 +1,7 @@
 {
   "name": "pokeapi",
   "display_name": "PokeAPI",
-  "description": "Reads Pokemon, types, abilities, and moves from the public PokeAPI.",
+  "description": "Reads the documented public PokeAPI v2 resource catalog, including list and detail endpoints.",
   "integration_type": "api",
   "docs_url": "https://pokeapi.co/docs/v2",
   "release_stage": "ga",

@@ -1,12 +1,26 @@
 {
-  "request": { "method": "GET", "path": "/issues", "query": { "limit": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/issues",
+    "query": {
+      "limit": "1"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": [
-        { "id": "iss_fixture_1", "title": "Fixture Issue", "name": "Fixture Issue", "state": "open", "updated_at": "2026-01-01T00:00:00Z" }
+        {
+          "id": "iss_fixture_1",
+          "title": "Fixture Issue",
+          "name": "Fixture Issue",
+          "state": "open",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
       ],
-      "pagination": { "next_cursor": null }
+      "pagination": {
+        "next_cursor": null
+      }
     }
   }
 }

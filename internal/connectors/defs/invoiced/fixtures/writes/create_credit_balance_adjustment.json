@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/credit_balance_adjustments",
+    "body": {
+      "name": "Fixture record"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

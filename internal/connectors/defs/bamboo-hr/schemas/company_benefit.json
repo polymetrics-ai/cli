@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "company_benefit",
+  "type": "object",
+  "x-primary-key": [
+    "benefitVendorId"
+  ],
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "benefitType": {
+      "type": "string",
+      "enum": [
+        "health",
+        "dental",
+        "vision",
+        "retirement",
+        "hsa",
+        "flex",
+        "life",
+        "disability",
+        "reimbursement",
+        "supplemental",
+        "other"
+      ]
+    },
+    "benefitVendorId": {
+      "type": "string"
+    },
+    "deductionTypeId": {
+      "type": "integer"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "meetAcaMin": {
+      "type": "string"
+    },
+    "minEssentialCoverage": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "planUrl": {
+      "type": "string"
+    },
+    "reimbursementAmount": {
+      "type": "number"
+    },
+    "reimbursementFrequency": {
+      "type": "string",
+      "enum": [
+        "pay period",
+        "month",
+        "quarter",
+        "year",
+        "one time"
+      ]
+    },
+    "safeHarbor": {
+      "type": "string"
+    },
+    "ssoLoginUrl": {
+      "type": "string"
+    },
+    "ssoLoginUrlLinkText": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

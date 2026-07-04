@@ -1,16 +1,669 @@
 {
-  "api": "Instatus API v1/v2 (https://api.instatus.com)",
+  "api": "Instatus REST API (https://api.instatus.com)",
   "docs": "https://instatus.com/help/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (pages, components, incidents, maintenances); write/mutation endpoints and any additional list resources are out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion against the current Instatus Help API pages plus the official Instatus OpenAPI monitor/on-call inventory. Legacy-parity streams keep their legacy projection; new streams use passthrough projection with permissive schemas because the API examples expose large resource-specific payloads.",
   "endpoints": [
-    { "method": "GET", "path": "/v2/pages", "covered_by": { "stream": "pages" } },
-    { "method": "GET", "path": "/v2/{page_id}/components", "covered_by": { "stream": "components" } },
-    { "method": "GET", "path": "/v1/{page_id}/incidents", "covered_by": { "stream": "incidents" } },
-    { "method": "GET", "path": "/v2/{page_id}/maintenances", "covered_by": { "stream": "maintenances" } },
-    { "method": "POST", "path": "/v1/{page_id}/incidents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/{page_id}/components", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PUT", "path": "/v2/{page_id}/components/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/v2/pages/{page_id}", "excluded": { "category": "destructive_admin", "reason": "destructive page deletion, not a syncable read" } }
+    {
+      "method": "GET",
+      "path": "/v2/pages",
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/pages",
+      "covered_by": {
+        "write": "create_page"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/{page_id}",
+      "covered_by": {
+        "write": "update_page"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/{page_id}",
+      "covered_by": {
+        "write": "delete_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces",
+      "covered_by": {
+        "write": "create_workspace"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspace_id}",
+      "covered_by": {
+        "write": "delete_workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{page_id}/components",
+      "covered_by": {
+        "stream": "components"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{page_id}/components/{component_id}",
+      "covered_by": {
+        "stream": "component_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/components",
+      "covered_by": {
+        "write": "create_component"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/{page_id}/components/{component_id}",
+      "covered_by": {
+        "write": "update_component"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/components/{component_id}",
+      "covered_by": {
+        "write": "delete_component"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/team",
+      "covered_by": {
+        "stream": "teammates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/team",
+      "covered_by": {
+        "write": "add_team_member"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/team/{member_id}",
+      "covered_by": {
+        "write": "delete_team_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/incidents",
+      "covered_by": {
+        "stream": "incidents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/incidents/{incident_id}",
+      "covered_by": {
+        "stream": "incident_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/incidents",
+      "covered_by": {
+        "write": "add_incident"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/incidents/{template}",
+      "covered_by": {
+        "write": "add_incident_with_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/incidents/{incident_id}",
+      "covered_by": {
+        "write": "update_incident"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/incidents/{incident_id}",
+      "covered_by": {
+        "write": "delete_incident"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/incidents/{incident_id}/incident-updates/{incident_update_id}",
+      "covered_by": {
+        "stream": "incident_update_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/incidents/{incident_id}/incident-updates",
+      "covered_by": {
+        "write": "add_incident_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/{page_id}/incidents/{incident_id}/incident-updates/{template}",
+      "covered_by": {
+        "write": "resolve_incident_with_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/incidents/{incident_id}/incident-updates/{incident_update_id}",
+      "covered_by": {
+        "write": "update_incident_update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/incidents/{incident_id}/incident-updates/{incident_update_id}",
+      "covered_by": {
+        "write": "delete_incident_update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{page_id}/maintenances",
+      "covered_by": {
+        "stream": "maintenances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/maintenances/{maintenance_id}",
+      "covered_by": {
+        "stream": "maintenance_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/maintenances",
+      "covered_by": {
+        "write": "add_maintenance"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/maintenances/{maintenance_id}",
+      "covered_by": {
+        "write": "update_maintenance"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/maintenances/{maintenance_id}",
+      "covered_by": {
+        "write": "delete_maintenance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/maintenances/{maintenance_id}/maintenance-updates/{maintenance_update_id}",
+      "covered_by": {
+        "stream": "maintenance_update_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/maintenances/{maintenance_id}/maintenance-updates",
+      "covered_by": {
+        "write": "add_maintenance_update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/maintenances/{maintenance_id}/maintenance-updates/{maintenance_update_id}",
+      "covered_by": {
+        "write": "update_maintenance_update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/maintenances/{maintenance_id}/maintenance-updates/{maintenance_update_id}",
+      "covered_by": {
+        "write": "delete_maintenance_update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/templates",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/templates/{template_id}",
+      "covered_by": {
+        "stream": "template_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/templates",
+      "covered_by": {
+        "write": "add_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "update_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/templates/{template_id}",
+      "covered_by": {
+        "write": "delete_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/generic-notices",
+      "covered_by": {
+        "stream": "generic_notices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/generic-notices/{generic_notice_id}",
+      "covered_by": {
+        "stream": "generic_notice_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/generic-notices",
+      "covered_by": {
+        "write": "add_generic_notice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/generic-notices/{generic_notice_id}",
+      "covered_by": {
+        "write": "update_generic_notice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/generic-notices/{generic_notice_id}",
+      "covered_by": {
+        "write": "delete_generic_notice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/{page_id}/subscribers",
+      "covered_by": {
+        "stream": "subscribers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/subscribers",
+      "covered_by": {
+        "write": "add_subscriber"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/subscribers/bulk",
+      "covered_by": {
+        "write": "add_subscribers_bulk"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/subscribers/{subscriber_id}",
+      "covered_by": {
+        "write": "delete_subscriber"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/metrics",
+      "covered_by": {
+        "stream": "metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/metrics/{metric_id}",
+      "covered_by": {
+        "stream": "metric_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/metrics",
+      "covered_by": {
+        "write": "add_metric"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/metrics/{metric_id}",
+      "covered_by": {
+        "write": "update_metric"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/metrics/{metric_id}",
+      "covered_by": {
+        "write": "delete_metric"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/metrics/{metric_id}",
+      "covered_by": {
+        "write": "add_metric_datapoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/metrics/{metric_id}/data",
+      "covered_by": {
+        "write": "add_metric_datapoints"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/metrics/{metric_id}/data",
+      "covered_by": {
+        "write": "delete_metric_datapoints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/user",
+      "covered_by": {
+        "stream": "user_profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "{status_page_url}/summary.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Public status summary is served from each public status-page host, not the authenticated api.instatus.com base; the shared requester would attach the API bearer token to an arbitrary public host."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/audience-groups",
+      "covered_by": {
+        "stream": "audience_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{page_id}/audience-groups/{audience_group_id}",
+      "covered_by": {
+        "stream": "audience_group_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/audience_groups",
+      "covered_by": {
+        "write": "create_audience_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{page_id}/audience_groups/{audience_group_id}",
+      "covered_by": {
+        "write": "update_audience_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/{page_id}/audience-groups/{audience_group_id}",
+      "covered_by": {
+        "write": "delete_audience_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{page_id}/regenerate-secure-link",
+      "covered_by": {
+        "write": "regenerate_secure_link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/monitors/check_inserted_logs",
+      "covered_by": {
+        "stream": "monitor_inserted_logs_check"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{page_id}/monitors",
+      "covered_by": {
+        "stream": "monitors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/monitors/{id}/logs",
+      "covered_by": {
+        "stream": "monitor_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/monitors/{id}/run",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Runs an active monitor check; it is not a passive list/detail data endpoint."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/monitors",
+      "covered_by": {
+        "write": "create_monitor"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/monitors/{id}",
+      "covered_by": {
+        "write": "update_monitor"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/monitors/{id}",
+      "covered_by": {
+        "write": "delete_monitor"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/monitors/{id}/group",
+      "covered_by": {
+        "write": "update_monitor_group_assignment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{page_id}/monitor-alerts",
+      "covered_by": {
+        "stream": "monitor_alerts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/monitor-alerts",
+      "covered_by": {
+        "write": "create_monitor_alert"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/monitor-alerts/{id}",
+      "covered_by": {
+        "write": "update_monitor_alert"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/monitor-alerts/{id}",
+      "covered_by": {
+        "write": "delete_monitor_alert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/monitors-groups",
+      "covered_by": {
+        "write": "create_monitors_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/monitors-groups/{id}",
+      "covered_by": {
+        "write": "update_monitors_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/monitors-groups/{id}",
+      "covered_by": {
+        "write": "delete_monitors_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/monitors-groups/{id}/monitors",
+      "covered_by": {
+        "write": "add_monitors_to_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/monitors-groups/{id}/run",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Runs an active monitor-group check; it is not a passive list/detail data endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{page_id}/routing-rules",
+      "covered_by": {
+        "stream": "routing_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/routing-rules",
+      "covered_by": {
+        "write": "create_routing_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/routing-rules/{id}",
+      "covered_by": {
+        "write": "update_routing_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/routing-rules/{id}",
+      "covered_by": {
+        "write": "delete_routing_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{page_id}/escalation-policies",
+      "covered_by": {
+        "stream": "escalation_policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/escalation-policies",
+      "covered_by": {
+        "write": "create_escalation_policy"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/escalation-policies/{id}",
+      "covered_by": {
+        "write": "update_escalation_policy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/escalation-policies/{id}",
+      "covered_by": {
+        "write": "delete_escalation_policy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/on-call-schedules/{id}/members",
+      "covered_by": {
+        "stream": "on_call_schedule_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/on-call-schedules",
+      "covered_by": {
+        "write": "create_on_call_schedule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/on-call-schedules/{id}",
+      "covered_by": {
+        "write": "update_on_call_schedule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/on-call-schedules/{id}",
+      "covered_by": {
+        "write": "delete_on_call_schedule"
+      }
+    }
   ]
 }

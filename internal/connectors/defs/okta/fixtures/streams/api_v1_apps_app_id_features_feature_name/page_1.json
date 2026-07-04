@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/features/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "description": "description_fixture",
+      "name": "USER_PROVISIONING",
+      "status": "DISABLED",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

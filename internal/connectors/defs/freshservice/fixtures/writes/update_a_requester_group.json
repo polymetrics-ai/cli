@@ -1,0 +1,15 @@
+{
+  "record": {
+    "requester_group_id": 123,
+    "name": "Fixture update_a_requester_group",
+    "description": "Fixture update_a_requester_group record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/requester_groups/123",
+    "body": {
+      "name": "Fixture update_a_requester_group",
+      "description": "Fixture update_a_requester_group record"
+    }
+  }
+}

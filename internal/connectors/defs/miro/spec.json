@@ -2,12 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Miro Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "Miro REST API v2 access token. Sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+      "description": "Miro REST API access token. Sent as a Bearer token and never logged."
     },
     "base_url": {
       "type": "string",
@@ -17,7 +19,111 @@
     },
     "board_id": {
       "type": "string",
-      "description": "Miro board id that board-scoped streams (board_users, board_items, board_tags, board_connectors) read from. Required for those streams."
+      "description": "Path parameter board_id for Miro board-scoped streams."
+    },
+    "org_id": {
+      "type": "string",
+      "description": "Path parameter org_id for the orgs_org_id_ai_interaction_logs stream."
+    },
+    "from": {
+      "type": "string",
+      "description": "Required query parameter from for the orgs_org_id_ai_interaction_logs stream."
+    },
+    "to": {
+      "type": "string",
+      "description": "Required query parameter to for the orgs_org_id_ai_interaction_logs stream."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Required query parameter createdAfter for the audit_logs stream."
+    },
+    "created_before": {
+      "type": "string",
+      "description": "Required query parameter createdBefore for the audit_logs stream."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Path parameter team_id for the orgs_org_id_teams_team_id_data_classification_settings stream."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Path parameter item_id for the boards_board_id_docs_item_id stream."
+    },
+    "case_id": {
+      "type": "string",
+      "description": "Path parameter case_id for the orgs_org_id_cases_case_id stream."
+    },
+    "legal_hold_id": {
+      "type": "string",
+      "description": "Path parameter legal_hold_id for the orgs_org_id_cases_case_id_legal_holds_legal_hold_id stream."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Path parameter job_id for the orgs_org_id_boards_export_jobs_job_id stream."
+    },
+    "id": {
+      "type": "string",
+      "description": "Path parameter id for the users_id stream."
+    },
+    "resource": {
+      "type": "string",
+      "description": "Path parameter resource for the resource_types_resource stream."
+    },
+    "uri": {
+      "type": "string",
+      "description": "Path parameter uri for the schemas_uri stream."
+    },
+    "member_id": {
+      "type": "string",
+      "description": "Path parameter member_id for the orgs_org_id_members_member_id stream."
+    },
+    "connector_id": {
+      "type": "string",
+      "description": "Path parameter connector_id for the boards_board_id_connectors_connector_id stream."
+    },
+    "board_member_id": {
+      "type": "string",
+      "description": "Path parameter board_member_id for the boards_board_id_members_board_member_id stream."
+    },
+    "board_id_platform_containers": {
+      "type": "string",
+      "description": "Path parameter board_id_PlatformContainers for the boards_board_id_platform_containers_items stream."
+    },
+    "parent_item_id": {
+      "type": "string",
+      "description": "Required query parameter parent_item_id for the boards_board_id_platform_containers_items stream."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "Path parameter app_id for the experimental_apps_app_id_metrics stream."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Required query parameter startDate for the experimental_apps_app_id_metrics stream."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Required query parameter endDate for the experimental_apps_app_id_metrics stream."
+    },
+    "group_item_id": {
+      "type": "string",
+      "description": "Required query parameter group_item_id for the boards_board_id_groups_items stream."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Path parameter group_id for the boards_board_id_groups_group_id stream."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Path parameter tag_id for the boards_board_id_tags_tag_id stream."
+    },
+    "board_id_platform_tags": {
+      "type": "string",
+      "description": "Path parameter board_id_PlatformTags for the boards_board_id_platform_tags_items stream."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Path parameter project_id for the orgs_org_id_teams_team_id_projects_project_id stream."
     }
   }
 }

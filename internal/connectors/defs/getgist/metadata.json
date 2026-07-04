@@ -1,23 +1,25 @@
 {
   "name": "getgist",
   "display_name": "GetGist",
-  "description": "Reads Gist contacts, tags, segments, campaigns, forms, and teammates through the Gist REST API.",
+  "description": "Reads Gist contacts, tags, segments, campaigns, forms, teammates, articles, collections, conversations, teams, workspace metadata, and e-commerce resources through the Gist REST API; writes regular JSON Gist resources and relationship actions.",
   "integration_type": "api",
-  "docs_url": "https://developers.getgist.com/",
+  "docs_url": "https://developers.getgist.com/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Gist API read of contact and marketing data",
-    "approval": "none; read-only source connector"
+    "read": "external Gist API reads of workspace, contact, marketing, conversation, team, knowledge base, and e-commerce data",
+    "write": "creates, updates, deletes, tags, subscribes, assigns, replies to, and otherwise mutates Gist workspace resources",
+    "approval": "reverse ETL writes require plan preview and approval token"
   }
 }

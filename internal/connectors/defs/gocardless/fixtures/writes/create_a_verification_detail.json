@@ -1,0 +1,20 @@
+{
+  "record": {
+    "verification_details": {
+      "description": "Synthetic create_a_verification_detail fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/verification_details",
+    "body": {
+      "verification_details": {
+        "description": "Synthetic create_a_verification_detail fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

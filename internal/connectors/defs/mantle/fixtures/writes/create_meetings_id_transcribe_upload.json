@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "filename": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/meetings/id_fixture/transcribe/upload",
+    "body": {
+      "filename": "fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/devices",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "device": {
+          "created": "2026-01-01T00:00:00Z",
+          "id": "id_fixture",
+          "lastUpdated": "2026-01-01T00:00:00Z",
+          "profile": {
+            "diskEncryptionType": "ALL_INTERNAL_VOLUMES",
+            "displayName": "display_name_fixture",
+            "imei": "imei_fixture",
+            "integrityJailbreak": true,
+            "managed": true,
+            "manufacturer": "manufacturer_fixture",
+            "meid": "meid_fixture",
+            "model": "model_fixture",
+            "osVersion": "os_version_fixture",
+            "platform": "ANDROID",
+            "registered": true,
+            "secureHardwarePresent": true,
+            "serialNumber": "serial_number_fixture",
+            "sid": "sid_fixture",
+            "tpmPublicKeyHash": "fixture",
+            "udid": "udid_fixture"
+          },
+          "resourceAlternateId": "resource_alternate_id_fixture",
+          "resourceDisplayName": {
+            "sensitive": true,
+            "value": "value_fixture"
+          },
+          "resourceId": "resource_id_fixture",
+          "resourceType": "resource_type_fixture",
+          "status": "ACTIVE",
+          "_links": {
+            "suspend": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            },
+            "unsuspend": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            },
+            "users": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        },
+        "deviceUserId": "device_user_id_fixture"
+      }
+    ]
+  }
+}

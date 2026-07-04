@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/employees/synthetic-conformance-value/break-policies"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "_links": {
+        "next": {},
+        "prev": {}
+      },
+      "data": [
+        {
+          "description": "fixture_value",
+          "allEmployeesAssigned": true,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "deletedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "limit": 1001,
+        "offset": 1001,
+        "totalItems": 1001
+      }
+    }
+  }
+}

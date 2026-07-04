@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "destroyallaccounts",
+      "attributes": {
+        "name": "Fixture Destroy All Accounts"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/accountsDestroyAll",
+    "body": {
+      "data": {
+        "type": "destroyallaccounts",
+        "attributes": {
+          "name": "Fixture Destroy All Accounts"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

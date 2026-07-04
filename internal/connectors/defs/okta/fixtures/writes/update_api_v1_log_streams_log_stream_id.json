@@ -1,0 +1,19 @@
+{
+  "record": {
+    "log_stream_id": "synthetic-conformance-value",
+    "name": "name_fixture",
+    "type": "aws_eventbridge"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/logStreams/synthetic-conformance-value",
+    "body": {
+      "name": "name_fixture",
+      "type": "aws_eventbridge"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

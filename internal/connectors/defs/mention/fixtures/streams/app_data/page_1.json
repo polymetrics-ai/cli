@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/app/data" },
+  "response": {
+    "status": 200,
+    "body": {
+      "languages": { "en": { "name": "English" } },
+      "alert_languages": { "en": { "name": "English" } },
+      "tones": { "0": { "name": "Neutral" } },
+      "sources": { "twitter": { "name": "Twitter" } },
+      "countries": { "US": { "name": "United States" } },
+      "folders": { "inbox": { "name": "Inbox" } },
+      "actions": { "favorite": { "name": "favorited" } },
+      "integrations": { "buffer": { "name": "Buffer" } },
+      "days": { "mon": { "name": "Mon" } }
+    }
+  }
+}

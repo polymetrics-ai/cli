@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "orgsetting",
+      "attributes": {
+        "name": "Fixture Update Org Setting"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/orgSettings/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "orgsetting",
+        "attributes": {
+          "name": "Fixture Update Org Setting"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

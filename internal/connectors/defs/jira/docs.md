@@ -4,7 +4,8 @@ Jira is a wave2 fan-out declarative-HTTP migration. It reads Jira issues, projec
 through the Jira Cloud REST API v3 (`GET https://<site>.atlassian.net/rest/api/3/...`) using HTTP
 Basic auth (account email + API token). This bundle migrates
 `internal/connectors/jira` (the hand-written connector); the legacy package stays registered and
-unchanged until wave6's registry flip. Read-only: Jira has no reverse-ETL write path.
+unchanged until wave6's registry flip. Read-only: Jira has no reverse-ETL write path in this
+connector.
 
 ## Auth setup
 
@@ -61,7 +62,10 @@ declared-but-unwireable key is worse than an absent one, F6).
 ## Write actions & risks
 
 None. Jira is a read-only source connector (`capabilities.write: false`); this bundle ships no
-`writes.json`, matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
+`writes.json`, matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`. Jira's
+documented create/update/delete endpoints mutate issues, comments, worklogs, project metadata, or
+workflow/admin configuration and are excluded in `api_surface.json` with elevated-scope or
+destructive-admin categories.
 
 ## Known limits
 
@@ -80,3 +84,7 @@ None. Jira is a read-only source connector (`capabilities.write: false`); this b
   fixtures target the live path only. The engine's own conformance/fixture-replay harness
   provides the credential-free test affordance this bundle needs, so no fixture-mode equivalent is
   needed here.
+- **Jira Cloud REST API v3 is much broader than this source contract.** Detail endpoints are
+  duplicate lookups for issue/project/user records; issue/project subresources require fan-out from
+  parent IDs; attachment content is binary; and workflow, screen, permission, field, and project
+  configuration APIs require administrative scopes or mutate account/project state.

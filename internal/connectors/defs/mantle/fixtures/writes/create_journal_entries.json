@@ -1,0 +1,32 @@
+{
+  "record": {
+    "appId": "app_id_fixture",
+    "date": "2026-01-01T00:00:00Z",
+    "title": "fixture",
+    "description": "fixture",
+    "tags": [
+      "fixture"
+    ],
+    "url": "https://example.com/fixture",
+    "emoji": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/journal_entries",
+    "body": {
+      "appId": "app_id_fixture",
+      "date": "2026-01-01T00:00:00Z",
+      "title": "fixture",
+      "description": "fixture",
+      "tags": [
+        "fixture"
+      ],
+      "url": "https://example.com/fixture",
+      "emoji": "fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

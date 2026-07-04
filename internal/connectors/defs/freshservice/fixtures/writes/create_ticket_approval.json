@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture create_ticket_approval",
+    "description": "Fixture create_ticket_approval record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/123/approvals",
+    "body": {
+      "name": "Fixture create_ticket_approval",
+      "description": "Fixture create_ticket_approval record"
+    }
+  }
+}

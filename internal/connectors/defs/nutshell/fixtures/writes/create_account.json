@@ -1,0 +1,26 @@
+{
+  "record": {
+    "accounts": [
+      {
+        "name": "Fixture create_account"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts",
+    "body": {
+      "accounts": [
+        {
+          "name": "Fixture create_account"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

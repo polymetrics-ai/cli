@@ -1,0 +1,16 @@
+{
+  "record": {
+    "warningThreshold": 1
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/rate-limit-settings/warning-threshold",
+    "body": {
+      "warningThreshold": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

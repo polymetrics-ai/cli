@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/factors/catalog",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "enrollment": "OPTIONAL",
+        "factorType": "call",
+        "provider": "CUSTOM",
+        "status": "ACTIVE",
+        "vendorName": "vendor_name_fixture",
+        "_embedded": {},
+        "_links": {
+          "verify": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sender_identities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "reply_to_email": { "type": ["string", "null"] },
+    "reply_to_name": { "type": ["string", "null"] },
+    "is_verified": { "type": ["boolean", "null"] },
+    "resends": { "type": ["integer", "null"] },
+    "add_note": { "type": ["boolean", "null"] },
+    "personal_note": { "type": ["string", "null"] },
+    "domain": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "item_id": "synthetic-conformance-value",
+    "data": {
+      "content": "content_fixture",
+      "shape": "rectangle"
+    },
+    "style": {
+      "borderColor": "#ffffff",
+      "borderOpacity": "border_opacity_fixture",
+      "borderStyle": "normal",
+      "borderWidth": "border_width_fixture",
+      "color": "#ffffff",
+      "fillColor": "#ffffff",
+      "fillOpacity": "fill_opacity_fixture",
+      "fontFamily": "arial",
+      "fontSize": "font_size_fixture",
+      "textAlign": "left",
+      "textAlignVertical": "top"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "geometry": {
+      "height": 1.25,
+      "rotation": 1.25,
+      "width": 1.25
+    },
+    "parent": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/boards/synthetic-conformance-value/shapes/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "content": "content_fixture",
+        "shape": "rectangle"
+      },
+      "style": {
+        "borderColor": "#ffffff",
+        "borderOpacity": "border_opacity_fixture",
+        "borderStyle": "normal",
+        "borderWidth": "border_width_fixture",
+        "color": "#ffffff",
+        "fillColor": "#ffffff",
+        "fillOpacity": "fill_opacity_fixture",
+        "fontFamily": "arial",
+        "fontSize": "font_size_fixture",
+        "textAlign": "left",
+        "textAlignVertical": "top"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "geometry": {
+        "height": 1.25,
+        "rotation": 1.25,
+        "width": 1.25
+      },
+      "parent": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

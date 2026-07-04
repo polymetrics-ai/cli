@@ -1,7 +1,14 @@
 {
-  "request": { "method": "GET", "path": "/v1/customers" },
+  "request": {
+    "method": "GET",
+    "path": "/v1/customers"
+  },
   "response": {
     "status": 200,
-    "body": { "customers": [], "cursor": "", "hasNextPage": false }
+    "body": {
+      "customers": [],
+      "cursor": "",
+      "hasNextPage": false
+    }
   }
 }

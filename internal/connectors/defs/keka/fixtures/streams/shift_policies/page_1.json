@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/shiftpolicies",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "shift_policies_fixture_1",
+          "name": "Fixture shift policies 1"
+        },
+        {
+          "id": "shift_policies_fixture_2",
+          "name": "Fixture shift policies 2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/shift_policies",
+      "lastPage": "https://example.invalid/keka/shift_policies",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

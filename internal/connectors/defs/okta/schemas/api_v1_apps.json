@@ -1,0 +1,654 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "accessibility": {
+      "type": "object",
+      "description": "Specifies access settings for the app",
+      "properties": {
+        "errorRedirectUrl": {
+          "type": "string",
+          "description": "Custom error page URL for the app"
+        },
+        "loginRedirectUrl": {
+          "type": "string",
+          "description": "Custom login page URL for the app\n> **Note:** The `loginRedirectUrl` property is deprecated in Identity Engine. This property is used with the custom app login feature. Orgs that actively use this feature can continue to do so. See [Okta-hosted sign-in (redirect authentication)](https://developer.okta.com/docs/guides/redirect-authentication/) or [configure IdP routing rules](https://help.okta.com/"
+        },
+        "selfService": {
+          "type": "boolean",
+          "description": "Represents whether the app can be self-assignable by users"
+        }
+      },
+      "additionalProperties": true
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the application object was created",
+      "format": "date-time"
+    },
+    "expressConfiguration": {
+      "type": "object",
+      "description": "<div class=\"x-lifecycle-container\"><x-lifecycle class=\"oie\"></x-lifecycle></div>\nIndicates which Express Configuration capabilities the app supports and has enabled",
+      "properties": {
+        "enabledCapabilities": {
+          "type": "array",
+          "description": "Capabilities currently enabled for the app",
+          "items": {
+            "type": "string",
+            "description": "Capabilities supported by the app",
+            "enum": [
+              "PROVISIONING",
+              "SSO",
+              "UNIVERSAL_LOGOUT"
+            ]
+          }
+        },
+        "supportedCapabilities": {
+          "type": "array",
+          "description": "Capabilities supported by the app",
+          "items": {
+            "type": "string",
+            "description": "Capabilities supported by the app",
+            "enum": [
+              "PROVISIONING",
+              "SSO",
+              "UNIVERSAL_LOGOUT"
+            ]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "features": {
+      "type": "array",
+      "description": "Enabled app features\n> **Note:** See [Application Features](/openapi/okta-management/management/tags/applicationfeatures/) for app provisioning features.\n",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique ID for the app instance"
+    },
+    "label": {
+      "type": "string",
+      "description": "User-defined display name for app"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the application object was last updated",
+      "format": "date-time"
+    },
+    "licensing": {
+      "type": "object",
+      "description": "Licenses for the app",
+      "properties": {
+        "seatCount": {
+          "type": "integer",
+          "description": "Number of licenses purchased for the app"
+        }
+      },
+      "additionalProperties": true
+    },
+    "orn": {
+      "type": "string",
+      "description": "The Okta resource name (ORN) for the current app instance"
+    },
+    "profile": {
+      "type": "object",
+      "description": "Contains any valid JSON schema for specifying properties that can be referenced from a request (only available to OAuth 2.0 client apps).\nFor example, add an app manager contact email address or define an allowlist of groups that you can then reference using the Okta Expression Language `getFilteredGroups` function.\n\n> **Notes:**\n> * `profile` isn't encrypted, so don't store sensitive data in it.\n",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "signOnMode": {
+      "type": "string",
+      "description": "Authentication mode for the app\n\n| signOnMode | Description |\n| ---------- | ----------- |\n| AUTO_LOGIN | Secure Web Authentication (SWA) |\n| BASIC_AUTH | HTTP Basic Authentication with Okta Browser Plugin |\n| BOOKMARK | Just a bookmark (no-authentication) |\n| BROWSER_PLUGIN | Secure Web Authentication (SWA) with Okta Browser Plugin |\n| OPENID_CONNECT | Federated Authentication with OpenID Connect",
+      "enum": [
+        "AUTO_LOGIN",
+        "BASIC_AUTH",
+        "BOOKMARK",
+        "BROWSER_PLUGIN",
+        "OPENID_CONNECT",
+        "SAML_1_1",
+        "SAML_2_0",
+        "SECURE_PASSWORD_STORE",
+        "WS_FEDERATION"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "App instance status",
+      "enum": [
+        "ACTIVE",
+        "DELETED",
+        "INACTIVE"
+      ]
+    },
+    "universalLogout": {
+      "type": "object",
+      "description": "<div class=\"x-lifecycle-container\"><x-lifecycle class=\"oie\"></x-lifecycle></div>\nUniversal Logout properties for the app. These properties are only returned and can't be updated.",
+      "properties": {
+        "identityStack": {
+          "type": "string",
+          "description": "Indicates whether the app uses a shared identity stack that may cause the user to sign out of other apps by the same company",
+          "enum": [
+            "SHARED",
+            "NOT_SHARED"
+          ]
+        },
+        "protocol": {
+          "type": "string",
+          "description": "The protocol used for Universal Logout",
+          "enum": [
+            "PROPRIETARY",
+            "GLOBAL_TOKEN_REVOCATION"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "description": "Universal Logout status for the app instance",
+          "enum": [
+            "ENABLED",
+            "DISABLED",
+            "UNSUPPORTED"
+          ]
+        },
+        "supportType": {
+          "type": "string",
+          "description": "Indicates whether the app supports full or partial Universal Logout (UL).",
+          "enum": [
+            "FULL",
+            "PARTIAL"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "visibility": {
+      "type": "object",
+      "description": "Specifies visibility settings for the app",
+      "properties": {
+        "appLinks": {
+          "type": "object",
+          "description": "Links or icons that appear on the End-User Dashboard if they're set to `true`.",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "autoLaunch": {
+          "type": "boolean",
+          "description": "Automatically signs in to the app when user signs into Okta"
+        },
+        "autoSubmitToolbar": {
+          "type": "boolean",
+          "description": "Automatically sign in when user lands on the sign-in page"
+        },
+        "hide": {
+          "type": "object",
+          "description": "Hides the app for specific end-user apps",
+          "properties": {
+            "iOS": {
+              "type": "boolean",
+              "description": "Okta Mobile for iOS or Android (pre-dates Android)"
+            },
+            "web": {
+              "type": "boolean",
+              "description": "Okta End-User Dashboard on a web browser"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "_embedded": {
+      "type": "object",
+      "description": "Embedded resources related to the app using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. If the `expand=user/{userId}` query parameter is specified, then the assigned [Application User](/openapi/okta-management/management/tags/applicationusers) is embedded.",
+      "properties": {
+        "user": {
+          "type": "object",
+          "description": "The specified [Application User](/openapi/okta-management/management/tags/applicationusers) assigned to the app",
+          "properties": {},
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Discoverable resources related to the app",
+      "properties": {
+        "accessPolicy": {
+          "type": "object",
+          "description": "Link to the app access policy resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "activate": {
+          "type": "object",
+          "description": "Link to activate the resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "appLinks": {
+          "type": "array",
+          "description": "List of app link resources",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hints": {
+                "type": "object",
+                "description": "Describes allowed HTTP verbs for the `href`",
+                "properties": {
+                  "allow": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "DELETE",
+                        "GET",
+                        "POST",
+                        "PUT"
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "href": {
+                "type": "string",
+                "description": "Link URI"
+              },
+              "name": {
+                "type": "string",
+                "description": "Link name"
+              },
+              "templated": {
+                "type": "boolean",
+                "description": "Indicates whether the link object's `href` property is a URI template."
+              },
+              "type": {
+                "type": "string",
+                "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "deactivate": {
+          "type": "object",
+          "description": "Link to deactivate the resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "groups": {
+          "type": "object",
+          "description": "Link to the [Application Groups](/openapi/okta-management/management/tags/applicationgroups/other/listapplicationgroupassignments) resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "help": {
+          "type": "object",
+          "description": "Link to the app help resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "logo": {
+          "type": "array",
+          "description": "List of app logo resources",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hints": {
+                "type": "object",
+                "description": "Describes allowed HTTP verbs for the `href`",
+                "properties": {
+                  "allow": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "DELETE",
+                        "GET",
+                        "POST",
+                        "PUT"
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "href": {
+                "type": "string",
+                "description": "Link URI"
+              },
+              "name": {
+                "type": "string",
+                "description": "Link name"
+              },
+              "templated": {
+                "type": "boolean",
+                "description": "Indicates whether the link object's `href` property is a URI template."
+              },
+              "type": {
+                "type": "string",
+                "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Link to the [SAML metadata](/openapi/okta-management/management/applicationsso/previewsamlmetadataforapplication) for SSO",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "users": {
+          "type": "object",
+          "description": "Link to the [Application Users](/openapi/okta-management/management/applicationusers#tag/ApplicationUsers/operation/listApplicationUsers) resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

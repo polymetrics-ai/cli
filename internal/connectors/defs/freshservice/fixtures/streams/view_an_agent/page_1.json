@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/agents/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "agent": {
+        "id": "view_an_agent",
+        "name": "Fixture view_an_agent",
+        "subject": "Fixture view_an_agent",
+        "description": "Fixture view_an_agent record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

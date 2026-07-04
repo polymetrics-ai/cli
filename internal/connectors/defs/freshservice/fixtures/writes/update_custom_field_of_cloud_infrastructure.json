@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture update_custom_field_of_cloud_infrastructure",
+    "description": "Fixture update_custom_field_of_cloud_infrastructure record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/itam/custom_fields/cloudinfrastructures",
+    "body": {
+      "name": "Fixture update_custom_field_of_cloud_infrastructure",
+      "description": "Fixture update_custom_field_of_cloud_infrastructure record"
+    }
+  }
+}

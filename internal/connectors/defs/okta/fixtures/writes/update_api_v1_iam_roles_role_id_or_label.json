@@ -1,0 +1,19 @@
+{
+  "record": {
+    "role_id_or_label": "synthetic-conformance-value",
+    "description": "description_fixture",
+    "label": "label_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/iam/roles/synthetic-conformance-value",
+    "body": {
+      "description": "description_fixture",
+      "label": "label_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

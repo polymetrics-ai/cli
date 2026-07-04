@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hire/jobs/{{ config.job_id }}/candidate/{{ config.candidate_id }}/interviews",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "candidate_interviews_fixture_1",
+          "candidateId": "2026-01-01T00:00:00Z",
+          "jobId": "candidate_interviews_fixture_1",
+          "interviewDate": "2026-01-01T00:00:00Z",
+          "startTime": {
+            "hours": 12,
+            "minutes": 1
+          },
+          "endTime": {
+            "hours": 13,
+            "minutes": 1
+          },
+          "timeZoneId": "2026-01-01T00:00:00Z",
+          "scheduledBy": "fixture_candidate_interviews_1",
+          "scheduledDate": "2026-01-01T00:00:00Z",
+          "interviewType": "fixture_candidate_interviews_1",
+          "stageId": "candidate_interviews_fixture_1",
+          "panelMembers": "fixture_candidate_interviews_1"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/candidate_interviews",
+      "lastPage": "https://example.invalid/keka/candidate_interviews",
+      "nextPage": null,
+      "previousPage": null,
+      "totalRecords": 1,
+      "totalPages": 1,
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

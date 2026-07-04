@@ -1,0 +1,90 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/groups",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "id": "id_fixture",
+        "lastMembershipUpdated": "2026-01-01T00:00:00Z",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "objectClass": [
+          "object_clas_fixture"
+        ],
+        "profile": {
+          "description": "description_fixture",
+          "name": "name_fixture"
+        },
+        "type": "APP_GROUP",
+        "_embedded": {
+          "stats": {
+            "usersCount": 1,
+            "appsCount": 1,
+            "groupPushMappingsCount": 1,
+            "hasAdminPrivlege": true
+          },
+          "app": {
+            "id": "id_fixture",
+            "name": "name_fixture",
+            "label": "label_fixture",
+            "signOnMode": "sign_on_mode_fixture"
+          }
+        },
+        "_links": {
+          "apps": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "logo": [
+            {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          ],
+          "source": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "users": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

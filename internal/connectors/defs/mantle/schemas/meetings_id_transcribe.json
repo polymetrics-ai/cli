@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "meetings_id_transcribe",
+  "type": [
+    "object",
+    "null"
+  ],
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "description": "Transcript status (pending, processing, completed, failed)"
+    },
+    "externalId": {
+      "type": "string",
+      "description": "AssemblyAI transcript ID"
+    }
+  }
+}

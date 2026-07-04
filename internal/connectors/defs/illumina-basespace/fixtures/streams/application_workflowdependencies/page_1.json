@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/applications/synthetic-conformance-value/workflowdependencies"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Id": "application_workflowdependencies_fixture_1",
+        "Name": "Fixture application_workflowdependencies",
+        "Href": "v1pre3/application_workflowdependencies/application_workflowdependencies_fixture_1",
+        "DateCreated": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

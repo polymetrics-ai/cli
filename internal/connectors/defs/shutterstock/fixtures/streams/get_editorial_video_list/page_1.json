@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/editorial/videos",
+    "query": {
+      "id": "get-editorial-video-list-fixture-1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "get-editorial-video-list-fixture-1",
+          "name": "Fixture get editorial video list",
+          "media_type": "get",
+          "updated_time": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

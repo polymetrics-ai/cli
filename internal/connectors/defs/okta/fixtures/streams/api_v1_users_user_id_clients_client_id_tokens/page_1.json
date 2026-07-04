@@ -1,0 +1,68 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/clients/synthetic-conformance-value/tokens",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "clientId": "client_id_fixture",
+        "created": "2026-01-01T00:00:00Z",
+        "expiresAt": "2026-01-01T00:00:00Z",
+        "id": "id_fixture",
+        "issuer": "issuer_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "scopes": [
+          "scope_fixture"
+        ],
+        "status": "ACTIVE",
+        "userId": "user_id_fixture",
+        "_embedded": {
+          "scopes": [
+            {
+              "description": "description_fixture",
+              "displayName": "display_name_fixture",
+              "id": "id_fixture",
+              "name": "name_fixture",
+              "_links": {
+                "scope": {
+                  "href": "https://example.invalid/fixture",
+                  "title": "title_fixture"
+                }
+              }
+            }
+          ]
+        },
+        "_links": {
+          "app": {
+            "href": "https://example.invalid/fixture",
+            "title": "title_fixture"
+          },
+          "revoke": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            }
+          },
+          "client": {
+            "href": "https://example.invalid/fixture",
+            "title": "title_fixture"
+          },
+          "user": {
+            "href": "https://example.invalid/fixture",
+            "title": "title_fixture"
+          },
+          "authorizationServer": {
+            "href": "https://example.invalid/fixture",
+            "title": "title_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "object_id": 123,
+    "record_id": 123,
+    "name": "Fixture put_custom_object_record",
+    "description": "Fixture put_custom_object_record record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/objects/123/records/123",
+    "body": {
+      "name": "Fixture put_custom_object_record",
+      "description": "Fixture put_custom_object_record record"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/apps/synthetic-conformance-value/interclient-allowed-apps",
+    "body": {
+      "id": "id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

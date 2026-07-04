@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/activity-types"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "slug": "fixture-activity_types"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

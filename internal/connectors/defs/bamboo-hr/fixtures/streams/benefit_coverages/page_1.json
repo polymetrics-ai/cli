@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/benefitcoverages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Benefit Coverages": [
+        {
+          "id": "fixture_id",
+          "description": "fixture_value",
+          "benefitPlanId": "fixture_id",
+          "shortName": "Fixture Name",
+          "sortOrder": "fixture_value"
+        }
+      ]
+    }
+  }
+}

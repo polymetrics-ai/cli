@@ -1,0 +1,43 @@
+{
+  "record": {
+    "billingAddress": {
+      "countryCode": "fixture_country_code_1",
+      "addressLine2": "fixture_address_line2_1",
+      "addressLine1": "fixture_address_line1_1",
+      "state": "fixture_state_1",
+      "zip": "fixture_zip_1"
+    },
+    "name": "Fixture name",
+    "description": "fixture_description_1",
+    "code": "fixture_code_1",
+    "client_id": "fixture_client_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/psa/clients/fixture_client_id",
+    "body": {
+      "billingAddress": {
+        "countryCode": "fixture_country_code_1",
+        "addressLine2": "fixture_address_line2_1",
+        "addressLine1": "fixture_address_line1_1",
+        "state": "fixture_state_1",
+        "zip": "fixture_zip_1"
+      },
+      "name": "Fixture name",
+      "description": "fixture_description_1",
+      "code": "fixture_code_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "update_client_fixture_1",
+        "name": "Fixture update client"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

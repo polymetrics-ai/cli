@@ -4,7 +4,8 @@ Insightful is a read-only declarative-HTTP migration (wave2 fan-out) of
 `internal/connectors/insightful` (legacy Go package `insightful`). It reads Insightful
 workforce-analytics employees, teams, projects, and directory entries through the Insightful REST
 API (`https://app.insightful.io/api/v1`). This bundle targets capability parity with the legacy
-connector; the legacy package stays registered and unchanged until wave6's registry flip.
+connector for safe resource reads; the legacy package stays registered and unchanged until wave6's
+registry flip.
 
 ## Auth setup
 
@@ -44,10 +45,10 @@ every write with `connectors.ErrUnsupportedOperation`. No `writes.json` is shipp
 
 ## Known limits
 
-- Full Insightful API surface (time windows, screenshots, activity analytics, project/task writes)
-  is out of scope for this wave; see `api_surface.json`'s `excluded: {category: out_of_scope,
-  reason: "Pass B capability expansion"}` entries. Only the 4 legacy-parity streams are
-  implemented.
+- The remaining documented Insightful endpoints are not added as streams in this bundle:
+  detail endpoints duplicate list streams, employee deactivation is a mutating GET,
+  screenshots expose sensitive capture data, and activity/time-window/task endpoints need explicit
+  date/window or workflow contracts. See `api_surface.json` for the exact category and reason.
 - **`start_date`-seeded FRESH syncs are not modeled** (documented scope narrowing, not a data-
   correctness change on the common resumed-sync path). Legacy's `incrementalLowerBound` computes
   the `start` query param two ways: (1) from the persisted state cursor — forwarded verbatim, fully

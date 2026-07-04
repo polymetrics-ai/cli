@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/events/get",
+    "query": {
+      "event_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "platform": "2026-01-01T00:00:00Z",
+      "id": "fixture_id",
+      "user_id": "fixture_user_id",
+      "calendar_id": "fixture_calendar_id",
+      "start_at": "2026-01-01T00:00:00Z",
+      "duration_interval": "2026-01-01T00:00:00Z",
+      "end_at": "2026-01-01T00:00:00Z",
+      "created_at": "2026-01-01T00:00:00Z",
+      "timezone": "2026-01-01T00:00:00Z",
+      "name": "Fixture Name",
+      "description": "Fixture description",
+      "description_md": "Fixture description",
+      "geo_address_json": {},
+      "coordinate": {
+        "longitude": -73.9857,
+        "latitude": 40.7484
+      },
+      "meeting_url": "https://example.invalid/luma",
+      "location_type": "2026-01-01T00:00:00Z",
+      "location_visibility": "2026-01-01T00:00:00Z",
+      "cover_url": "https://example.invalid/image.png",
+      "registration_questions": [],
+      "url": "https://example.invalid/luma",
+      "visibility": "public",
+      "waitlist_status": "2026-01-01T00:00:00Z",
+      "registration_open": true,
+      "feedback_email": {},
+      "access": "fixture",
+      "hosts": [],
+      "guest_counts": {}
+    }
+  }
+}

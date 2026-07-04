@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee_time_off_policies_v1_1",
+  "type": "object",
+  "x-primary-key": [
+    "timeOffPolicyId"
+  ],
+  "properties": {
+    "accrualStartDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "timeOffPolicyId": {
+      "type": "string"
+    },
+    "timeOffTypeId": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true
+}

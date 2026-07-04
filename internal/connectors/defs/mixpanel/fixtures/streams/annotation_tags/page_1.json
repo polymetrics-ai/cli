@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/123/annotations/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 789,
+        "name": "launch",
+        "project_id": 123,
+        "has_annotations": true
+      }
+    ]
+  }
+}

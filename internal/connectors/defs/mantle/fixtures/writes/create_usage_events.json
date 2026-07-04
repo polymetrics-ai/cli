@@ -1,0 +1,66 @@
+{
+  "record": {
+    "timestamp": "2026-01-01T00:00:00Z",
+    "properties": {
+      "id": "properties_fixture_id"
+    },
+    "customerId": "customer_id_fixture",
+    "appId": "app_id_fixture",
+    "eventName": "fixture",
+    "eventId": "event_id_fixture",
+    "events": [
+      {
+        "organizationId": "organization_id_fixture",
+        "apiClientId": "api_client_id_fixture",
+        "customerId": "customer_id_fixture",
+        "appId": "app_id_fixture",
+        "eventName": "fixture",
+        "eventId": "event_id_fixture",
+        "timestamp": "2026-01-01T00:00:00Z",
+        "properties": {
+          "id": "properties_fixture_id"
+        },
+        "private": true
+      }
+    ],
+    "event_name": "fixture",
+    "event_id": "event_id_fixture",
+    "private": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/usage_events",
+    "body": {
+      "timestamp": "2026-01-01T00:00:00Z",
+      "properties": {
+        "id": "properties_fixture_id"
+      },
+      "customerId": "customer_id_fixture",
+      "appId": "app_id_fixture",
+      "eventName": "fixture",
+      "eventId": "event_id_fixture",
+      "events": [
+        {
+          "organizationId": "organization_id_fixture",
+          "apiClientId": "api_client_id_fixture",
+          "customerId": "customer_id_fixture",
+          "appId": "app_id_fixture",
+          "eventName": "fixture",
+          "eventId": "event_id_fixture",
+          "timestamp": "2026-01-01T00:00:00Z",
+          "properties": {
+            "id": "properties_fixture_id"
+          },
+          "private": true
+        }
+      ],
+      "event_name": "fixture",
+      "event_id": "event_id_fixture",
+      "private": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

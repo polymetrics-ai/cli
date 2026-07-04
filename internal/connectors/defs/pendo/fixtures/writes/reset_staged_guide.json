@@ -1,0 +1,9 @@
+{
+  "record": {
+    "guideId": "guideId_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/guide/guideId_fixture/reset"
+  }
+}

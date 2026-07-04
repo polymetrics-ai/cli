@@ -1,0 +1,46 @@
+{
+  "record": {
+    "title": "fixture",
+    "handle": "fixture",
+    "content": {
+      "id": "content_fixture_id"
+    },
+    "defaultLocale": "fixture",
+    "status": "draft",
+    "tags": [
+      "fixture"
+    ],
+    "categoryId": "category_id_fixture",
+    "appId": "app_id_fixture",
+    "roles": [
+      "fixture"
+    ],
+    "isPrivate": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tickets/saved_replies",
+    "body": {
+      "title": "fixture",
+      "handle": "fixture",
+      "content": {
+        "id": "content_fixture_id"
+      },
+      "defaultLocale": "fixture",
+      "status": "draft",
+      "tags": [
+        "fixture"
+      ],
+      "categoryId": "category_id_fixture",
+      "appId": "app_id_fixture",
+      "roles": [
+        "fixture"
+      ],
+      "isPrivate": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

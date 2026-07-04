@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "usage_metric_id": "usage_metric_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/apps/id_fixture/usage_metrics/usage_metric_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

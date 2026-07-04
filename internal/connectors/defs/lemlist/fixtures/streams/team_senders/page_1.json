@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/team/senders" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "userId": "usr_fixture_1",
+        "campaigns": [
+          {
+            "_id": "cmp_fixture_1",
+            "name": "Fixture Campaign 1",
+            "status": "running",
+            "sendingChannels": ["email"]
+          }
+        ]
+      }
+    ]
+  }
+}

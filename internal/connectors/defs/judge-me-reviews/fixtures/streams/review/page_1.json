@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reviews/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "review": {
+        "id": 501,
+        "title": "Fixture review 501",
+        "body": "Fixture review body",
+        "rating": 5,
+        "product_external_id": "prod_501",
+        "source": "web",
+        "curated": "ok",
+        "published": true,
+        "hidden": false,
+        "verified": "buyer",
+        "created_at": "2026-01-01T00:21:00Z",
+        "updated_at": "2026-01-01T00:21:00Z",
+        "reviewer": {
+          "id": 1501,
+          "name": "Fixture Reviewer 501",
+          "email": "reviewer501@example.com"
+        },
+        "product_title": "Fixture Product",
+        "product_handle": "fixture-product",
+        "has_published_pictures": true,
+        "has_published_videos": false,
+        "pictures": [
+          {
+            "hidden": false,
+            "urls": {
+              "small": "https://example.com/small.jpg"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

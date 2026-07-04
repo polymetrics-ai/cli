@@ -1,0 +1,13 @@
+{
+  "record": {
+    "handle": "handle_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/flow/extensions/triggers/handle_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

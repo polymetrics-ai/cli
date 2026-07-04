@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "purchase",
+      "attributes": {
+        "name": "Fixture Create Purchase"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchases",
+    "body": {
+      "data": {
+        "type": "purchase",
+        "attributes": {
+          "name": "Fixture Create Purchase"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

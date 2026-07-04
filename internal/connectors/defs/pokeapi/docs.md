@@ -1,38 +1,44 @@
 # Overview
 
-PokeAPI is a wave2 fan-out declarative-HTTP migration. It reads Pokemon, types, abilities, and
-moves from the public PokeAPI (`GET https://pokeapi.co/api/v2/<resource>`). This bundle is a
-capability-parity port of `internal/connectors/pokeapi` (the hand-written connector it migrates);
-the legacy package stays registered and unchanged until wave6's registry flip.
+PokeAPI is a public, read-only REST API for Pokemon reference data. This bundle covers the
+documented PokeAPI v2 REST surface from `https://pokeapi.co/docs/v2`: every concrete resource
+list endpoint implied by the generic list/pagination rule, every documented resource detail
+endpoint, and the Pokemon location-area subresource.
+
+The four legacy streams (`pokemon`, `types`, `abilities`, and `moves`) keep the legacy record
+shape exactly: `name` and `url` pass through from `results[]`, and `id` is computed from the
+final path segment of `url` with `{{ record.url | last_path_segment }}`.
 
 ## Auth setup
 
-No credentials are required: PokeAPI is a public, open reference API. `base_url` defaults to
-`https://pokeapi.co/api/v2` and may be overridden for tests/proxies.
+No credentials are required. PokeAPI documents that only HTTP GET is available and that resources
+are public. `base_url` defaults to `https://pokeapi.co/api/v2` and may be overridden for tests or
+proxies.
 
 ## Streams notes
 
-All four streams (`pokemon`, `type`→`types`, `ability`→`abilities`, `move`→`moves`) are named-
-resource list endpoints returning a `{count, next, previous, results[]}` envelope; records are
-extracted from `results`. Every record computes an `id` field via the `last_path_segment` filter
-over the raw `url` (`{{ record.url | last_path_segment }}`), matching legacy's
-`idFromURL(urlValue)` (`pokeapi.go:151-158`), which trims a trailing slash and returns the final
-`/`-delimited segment (PokeAPI's own resource-id-in-URL convention, e.g.
-`.../pokemon/1/` -> `"1"`). `name` and `url` pass through schema projection unchanged. Primary key
-is `name` (matching legacy's `PrimaryKey: []string{"name"}` stream declaration — PokeAPI resource
-names are the stable identifier across pagination, not the numeric `id` derived from the URL).
+Resource-list streams use PokeAPI's `{count, next, previous, results[]}` envelope with
+`offset_limit` pagination (`limit`/`offset`, page size 100, default `max_pages: 3`). Named list
+resources use `name` as the primary key, matching legacy. The documented unnamed list resources
+(`characteristic`, `contest-effect`, `evolution-chain`, `machine`, and `super-contest-effect`)
+use the URL-derived `id` as primary key because their list records contain only `url`.
 
-Pagination is `offset_limit` (`limit`/`offset` query params, matching legacy's
-`connsdk.OffsetPaginator{LimitParam:"limit", OffsetParam:"offset", PageSize:pageSize}`,
-`pokeapi.go:93`), 100 records per page and a default `max_pages: 3` cap, both matching legacy's
-`defaultPageSize`/`defaultMaxPages` constants exactly.
+List streams: pokemon, types, abilities, moves, berries, berry_firmnesses, berry_flavors, contest_types, contest_effects, super_contest_effects, encounter_methods, encounter_conditions, encounter_condition_values, evolution_chains, evolution_triggers, generations, pokedexes, versions, version_groups, items, item_attributes, item_categories, item_fling_effects, item_pockets, locations, location_areas, pal_park_areas, regions, machines, move_ailments, move_battle_styles, move_categories, move_damage_classes, move_learn_methods, move_targets, characteristics, egg_groups, genders, growth_rates, natures, pokeathlon_stats, pokemon_colors, pokemon_forms, pokemon_habitats, pokemon_shapes, pokemon_species, stats, languages.
+
+Detail streams are config-backed single-resource reads named `<list_stream>_detail`. Configure
+`<resource>_id` (for example `pokemon_id`, `item_id`, or `version_group_id`) with either an ID or
+a name where the PokeAPI docs allow `{id or name}`. Detail streams use passthrough projection so
+the full resource object returned by PokeAPI is retained while schemas pin the stable `id`/`name`
+identifiers. `pokemon_location_areas` reads `GET /pokemon/{id or name}/encounters` and computes
+`id` from the returned `location_area.url`.
 
 ## Write actions & risks
 
-None. PokeAPI's legacy connector is read-only (`Capabilities.Write: false`); this bundle ships no
-`writes.json`.
+None. PokeAPI documents the REST API as consumption-only with only HTTP GET available, so
+`capabilities.write` is false and this bundle intentionally has no `writes.json`.
 
 ## Known limits
 
-None beyond the Pass B API-surface narrowing recorded in `api_surface.json`. Every field legacy's
-`namedResourceRecord` emits (`id`, `name`, `url`) is modeled without approximation.
+Detail and `pokemon_location_areas` streams require the matching config ID/name because PokeAPI
+does not expose a bulk detail endpoint for those full resource objects. The list streams remain
+bounded by `max_pages` unless callers set `max_pages` to `0`, `all`, or `unlimited`.

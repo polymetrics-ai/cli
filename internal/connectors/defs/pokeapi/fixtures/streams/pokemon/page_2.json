@@ -15,8 +15,8 @@
       "previous": "https://pokeapi.co/api/v2/pokemon?offset=0&limit=100",
       "results": [
         {
-          "name": "fixture-pokemon-101",
-          "url": "https://pokeapi.co/api/v2/pokemon/101/"
+          "url": "https://pokeapi.co/api/v2/pokemon/101/",
+          "name": "fixture-pokemon-101"
         }
       ]
     }

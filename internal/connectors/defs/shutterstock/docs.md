@@ -1,71 +1,71 @@
 # Overview
 
-Shutterstock is a wave2 fan-out declarative-HTTP migration. It reads Shutterstock image, video,
-and audio search metadata through the Shutterstock REST API
-(`GET https://api.shutterstock.com/v2/{images,videos,audio}/search`). This bundle migrates
-`internal/connectors/shutterstock` (the hand-written legacy connector) to a declarative defs
-bundle at capability parity; the legacy package stays registered and unchanged until wave6's
-registry flip.
+Shutterstock is a declarative-HTTP connector for the Shutterstock REST API. The legacy streams
+(`images`, `videos`, `audio`) keep the hand-written connector's four-field record mapping for
+search results. Pass B reviewed the static API reference generated on 2026-07-01 and enumerated
+109 documented endpoints: 74 GET endpoints and 35 POST/PATCH/DELETE endpoints.
+
+This bundle now covers the legacy media searches plus additional media, license-list, collection,
+editorial, catalog, contributor, computer-vision similarity, and subscription reads. It also exposes
+collection/lightbox create, rename, delete, and item-add write actions. Licensing, download,
+OAuth/test, reference/autocomplete, binary upload, and DELETE item-removal endpoints remain
+excluded in `api_surface.json` with concrete reasons.
 
 ## Auth setup
 
 Provide a Shutterstock OAuth access token via the `access_token` secret; it is sent as a Bearer
 token (`Authorization: Bearer <access_token>`, matching legacy's `connsdk.Bearer(secret)` at
 `shutterstock.go:127`) and is never logged. `base_url` defaults to `https://api.shutterstock.com`
-(legacy's `shutterstockDefaultBaseURL`) and may be overridden for tests/proxies.
+and may be overridden for tests/proxies.
+
+Optional search filters `query`, `sort`, `orientation`, and `category` are passed only to
+search-style streams. Detail/list-by-ID streams use comma-separated ID config keys such as
+`image_ids`, `video_ids`, `audio_ids`, `sfx_ids`, `editorial_image_ids`, `image_collection_ids`,
+`visual_asset_ids`, and `contributor_ids`.
 
 ## Streams notes
 
-All three streams (`images`, `videos`, `audio`) share an identical shape: `GET
-/v2/<stream>/search`, records at the top-level `data` key, and Shutterstock's own 1-based
-page-number pagination (`pagination.type: page_number`, `page_param: page`, `size_param:
-per_page`, `start_page: 1`) with a short-page stop threshold, matching legacy's `harvest` loop
-(`shutterstock.go:90-116`)'s `len(records) < pageSize` check exactly (the engine's
-`PageNumberPaginator` implements the identical stop rule natively). Four optional, config-driven
-search filters — `query`, `sort`, `orientation`, `category` — are passed through to every stream
-verbatim (`stream.Query`'s `omit_when_absent` object form), matching legacy's `filters` helper
-(`shutterstock.go:174-182`) which only sets a query param when the corresponding config value is
-non-empty. None of the three streams expose a real server-side incremental filter in legacy (no
-date-range/updated-since query parameter is ever sent); `x-cursor-field: updated_at` is declared
-purely as catalog/sort-key metadata matching legacy's own `CursorFields` declaration
-(`shutterstock.go:163`), and no `incremental` block is declared on any stream, matching legacy's
-full-refresh-only read behavior exactly.
+The three legacy streams (`images`, `videos`, `audio`) use `GET /v2/{images,videos,audio}/search`,
+records at `data`, and the same `page`/`per_page` page-number pagination as legacy. Their schemas
+and `computed_fields` intentionally preserve legacy's emitted record data: `id`, `description`,
+`media_type`, and `updated_at`.
+
+New Pass B streams use `projection: "passthrough"` so the connector does not truncate live
+Shutterstock response fields that are outside the documented core schema. Non-paginated reference
+or detail endpoints explicitly set `pagination.type: none`; paginated list/search endpoints inherit
+the base `page`/`per_page` pagination.
+
+ID-scoped endpoints are modeled with `fan_out.ids_from.config_key`. If a caller leaves the relevant
+comma-separated ID config empty, the stream emits no records. When IDs are provided, the engine
+runs the endpoint once per ID and stamps the parent ID onto emitted records where useful. Nested
+contributor collection detail streams require `contributor_id` plus `contributor_collection_ids`
+because the endpoint has two path variables.
 
 ## Write actions & risks
 
-None. Shutterstock's legacy connector is read-only (`Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+`capabilities.write` is true for collection/lightbox metadata writes only. The write actions are:
+create, rename, delete, and add-items for image, video, and audio collections; plus create, update,
+delete, and add-items for catalog collections. Delete actions are marked destructive and tolerate
+404 as an idempotent missing result.
+
+Licensing and download endpoints are not exposed as writes: they create rights-bearing
+transactions or binary asset delivery rather than ordinary metadata mutations. DELETE item-removal
+endpoints are also excluded because Shutterstock documents `item_id` as a DELETE query parameter,
+and the current `writes.json` dialect has no query-param field for write actions.
 
 ## Known limits
 
-- **`page_size`/`per_page` is not runtime-configurable.** Legacy exposes `page_size` as a
-  config-driven override (`shutterstock.go:217-230`, default 100, max 500). The engine's
-  `PaginationSpec.PageSize` (used by the `page_number` paginator for both the `per_page` query
-  value and the short-page stop threshold) is a fixed bundle-authored literal with no
-  config-templating mechanism — this bundle declares `page_size: 100`, matching legacy's own
-  default, and does not expose a `page_size` config property at all (a declared-but-unwireable
-  config key is worse than an absent one, per conventions.md F6/`docs/migration/conventions.md`'s
-  bitly precedent for the identical limitation). An operator can no longer override the per-page
-  request size; the full record set synced is unaffected (only the number of requests it takes
-  changes), so this is judged an ACCEPTABLE, documented scope-narrowing rather than an
-  `ENGINE_GAP`.
-- **Fallback field names are not modeled.** Legacy's `shutterstockRecord` mapper reads
-  `description` with a fallback from `description` to `title`, `media_type` with a fallback from
-  `media_type` to `asset_type`, and `updated_at` with a fallback from `updated_time` to
-  `updated_at` (`shutterstock.go:142-144`). This bundle implements only the PRIMARY field of each
-  pair — there is no coalesce/first-non-null filter in this dialect's `computed_fields`
-  templating. Legacy's own test suite (`shutterstock_test.go`) only ever exercises the primary
-  field names (`description`, `updated_time`); this is judged an ACCEPTABLE, documented
-  scope-narrowing rather than an `ENGINE_GAP`, per the `encharge` bundle's identical precedent for
-  an unexercised defensive fallback.
-- **`max_pages` is not runtime-configurable.** Legacy exposes a `max_pages` config override
-  (`0`/`all`/`unlimited` for unbounded, or a positive integer hard cap, `shutterstock.go:231-241`).
-  The engine's `PaginationSpec.MaxPages` is a fixed bundle-authored literal, not config-driven;
-  this bundle leaves it unset (unbounded), matching legacy's own default.
-- **Legacy's fixture-mode-only stamped fields are not modeled.** Legacy's `readFixture` path
-  (only reached when `config.mode == "fixture"`) stamps a `fixture: true` marker onto every emitted
-  record (`shutterstock.go:151`); this is a credential-free conformance-harness affordance, not
-  part of the live record shape, and is intentionally not reproduced — the engine's own
-  `internal/connectors/conformance` fixture-replay harness provides the equivalent test
-  affordance.
+- **`page_size`/`per_page` is not runtime-configurable.** Legacy accepts `page_size`/`per_page`
+  overrides, but the engine's paginator page size is a bundle-authored literal. The spec no longer
+  declares a dead `page_size` property; the bundle uses Shutterstock's legacy default of 100.
+- **Legacy fallback field names are not modeled.** Legacy maps `description` from
+  `description || title`, `media_type` from `media_type || asset_type`, and `updated_at` from
+  `updated_time || updated_at`. The declarative `computed_fields` use the primary names exercised
+  by the legacy tests; there is no first-non-null template filter.
+- **`max_pages` is not runtime-configurable.** Legacy accepts `max_pages`; this bundle leaves
+  pagination unbounded and relies on short-page termination.
+- **Fixture-mode-only stamped fields are not modeled.** Legacy's synthetic fixture path stamps
+  `fixture: true`; the declarative fixture replay harness replaces that test affordance.
+- **Reference and helper endpoints are excluded.** Categories, genres, instruments, moods,
+  autocomplete, CV keyword suggestions, user/token introspection, OAuth, and test endpoints are
+  not syncable account data streams.

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/surveys"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "name": "fixture-surveys",
+          "updated_at": "fixture-surveys"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

@@ -1,12 +1,14 @@
 {
   "api": "Mailjet SMS API v4 (https://api.mailjet.com/v4)",
   "docs": "https://dev.mailjet.com/sms/reference/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only; the full Mailjet SMS surface (sending SMS, single-message lookup) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion covering every documented Mailjet SMS reference endpoint that the declarative HTTP dialect can express",
   "endpoints": [
     { "method": "GET", "path": "/v4/sms", "covered_by": { "stream": "sms" } },
+    { "method": "GET", "path": "/v4/sms/{sms_ID}", "covered_by": { "stream": "sms_message" } },
     { "method": "GET", "path": "/v4/sms/count", "covered_by": { "stream": "sms_count" } },
-    { "method": "POST", "path": "/v4/sms-send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v4/sms/{message_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/v4/sms-send", "covered_by": { "write": "send_sms" } },
+    { "method": "POST", "path": "/v4/sms/export", "covered_by": { "write": "request_sms_export" } },
+    { "method": "GET", "path": "/v4/sms/export/{Job_ID}", "covered_by": { "stream": "sms_export" } }
   ]
 }

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/inbound", "query": { "page": "1", "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "inbound_fixture_1",
+          "name": "Fixture inbound route",
+          "address": "fixture@inbound.mailersend.net",
+          "domain": "fixture.example.com",
+          "dns_checked_at": null,
+          "enabled": true,
+          "filters": [{ "type": "match_all", "key": null, "comparer": null, "value": null }],
+          "forwards": [{ "type": "webhook", "value": "https://example.com/inbound" }],
+          "priority": 100,
+          "mxValues": { "priority": 10, "target": "inbound.mailersend.net" }
+        }
+      ]
+    }
+  }
+}

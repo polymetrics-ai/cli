@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/benefit/employee_benefit"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "employeeBenefits": [
+        {
+          "employeeId": 1001,
+          "employeeBenefit": [
+            {
+              "companyAmount": 12.34,
+              "companyAmountType": "fixture_value",
+              "companyAnnualMax": 12.34,
+              "companyBenefitId": "fixture_id"
+            }
+          ],
+          "payFrequency": "fixture_value"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "role",
+      "attributes": {
+        "name": "Fixture Create Role"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/roles",
+    "body": {
+      "data": {
+        "type": "role",
+        "attributes": {
+          "name": "Fixture Create Role"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

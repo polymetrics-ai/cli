@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "addaccounttags",
+      "attributes": {
+        "name": "Fixture Add Account Tags"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/accountAddTags",
+    "body": {
+      "data": {
+        "type": "addaccounttags",
+        "attributes": {
+          "name": "Fixture Add Account Tags"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "template",
+      "attributes": {
+        "name": "Fixture Create Template"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates",
+    "body": {
+      "data": {
+        "type": "template",
+        "attributes": {
+          "name": "Fixture Create Template"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

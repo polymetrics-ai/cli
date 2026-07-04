@@ -1,0 +1,20 @@
+{
+  "record": {
+    "creditors": {
+      "description": "Synthetic create_a_creditor fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/creditors",
+    "body": {
+      "creditors": {
+        "description": "Synthetic create_a_creditor fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

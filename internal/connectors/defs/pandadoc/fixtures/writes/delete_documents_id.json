@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/public/v1/documents/id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_documents_id_response",
+      "status": "ok"
+    }
+  }
+}

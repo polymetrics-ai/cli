@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/images/list-similar-images-fixture-1/similar",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "list-similar-images-fixture-1",
+          "name": "Fixture list similar images",
+          "media_type": "list",
+          "updated_time": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

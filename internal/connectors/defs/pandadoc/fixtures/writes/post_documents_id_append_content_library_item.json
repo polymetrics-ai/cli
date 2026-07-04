@@ -1,0 +1,36 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "Fixture post_documents_id_append_content_library_item",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/documents/id_fixture/append-content-library-item",
+    "body": {
+      "name": "Fixture post_documents_id_append_content_library_item",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_documents_id_append_content_library_item_response",
+      "status": "ok"
+    }
+  }
+}

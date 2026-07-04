@@ -1,0 +1,23 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "id": "id_fixture",
+    "name": "name_fixture",
+    "description": "description_fixture",
+    "type": "user-group"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/boards/synthetic-conformance-value/groups",
+    "body": {
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "type": "user-group"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

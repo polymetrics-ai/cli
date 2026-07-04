@@ -3,7 +3,7 @@
   "display_name": "Insightful",
   "description": "Reads Insightful workforce-analytics employees, teams, projects, and directory entries through the Insightful REST API.",
   "integration_type": "api",
-  "docs_url": "https://developer.insightful.io/",
+  "docs_url": "https://developers.insightful.io/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,

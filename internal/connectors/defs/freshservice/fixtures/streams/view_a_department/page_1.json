@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/departments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "department": {
+        "id": "view_a_department",
+        "name": "Fixture view_a_department",
+        "subject": "Fixture view_a_department",
+        "description": "Fixture view_a_department record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

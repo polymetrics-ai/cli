@@ -1,39 +1,77 @@
 {
   "base": {
-    "url": "https://{{ config.subdomain }}.bamboohr.com/api/v1",
+    "url": "https://{{ config.subdomain }}.bamboohr.com",
     "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json"
+    },
     "auth": [
-      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "x" }
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": "x"
+      }
     ],
     "pagination": {
-      "type": "page_number",
-      "page_param": "page",
-      "size_param": "limit",
-      "start_page": 1,
-      "page_size": 100
+      "type": "none"
     },
-    "check": { "method": "GET", "path": "meta/fields" },
+    "check": {
+      "method": "GET",
+      "path": "/api/v1/meta/fields"
+    },
     "error_map": [
-      { "status": 401, "hint": "bamboo-hr api_key is missing or invalid; re-run pm credentials add bamboo-hr" },
-      { "status": 403, "hint": "bamboo-hr account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "bamboo-hr rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "bamboo-hr api_key is missing or invalid; re-run pm credentials add bamboo-hr"
+      },
+      {
+        "status": 403,
+        "hint": "bamboo-hr account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "bamboo-hr rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "employees",
-      "path": "employees/directory",
-      "records": { "path": "employees" },
+      "path": "/api/v1/employees/directory",
+      "records": {
+        "path": "employees"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
       "computed_fields": {
-        "id": "{{ record.id | last_path_segment }}"
+        "id": "{{ record.id | last_path_segment }}",
+        "display_name": "{{ record.displayName }}",
+        "first_name": "{{ record.firstName }}",
+        "last_name": "{{ record.lastName }}",
+        "preferred_name": "{{ record.preferredName }}",
+        "job_title": "{{ record.jobTitle }}",
+        "work_email": "{{ record.workEmail }}",
+        "work_phone": "{{ record.workPhone }}",
+        "mobile_phone": "{{ record.mobilePhone }}",
+        "photo_url": "{{ record.photoUrl }}"
       },
       "schema": "schemas/employees.json"
     },
     {
       "name": "meta_fields",
-      "path": "meta/fields",
-      "records": { "path": "" },
-      "pagination": { "type": "none" },
+      "path": "/api/v1/meta/fields",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
       "computed_fields": {
         "id": "{{ record.id | last_path_segment }}"
       },
@@ -41,9 +79,13 @@
     },
     {
       "name": "meta_lists",
-      "path": "meta/lists",
-      "records": { "path": "" },
-      "pagination": { "type": "none" },
+      "path": "/api/v1/meta/lists",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
       "computed_fields": {
         "field_id": "{{ record.fieldId | last_path_segment }}"
       },
@@ -51,13 +93,961 @@
     },
     {
       "name": "time_off_types",
-      "path": "meta/time_off/types",
-      "records": { "path": "timeOffTypes" },
-      "pagination": { "type": "none" },
+      "path": "/api/v1/meta/time_off/types",
+      "records": {
+        "path": "timeOffTypes"
+      },
+      "pagination": {
+        "type": "none"
+      },
       "computed_fields": {
         "id": "{{ record.id | last_path_segment }}"
       },
       "schema": "schemas/time_off_types.json"
+    },
+    {
+      "name": "applications",
+      "path": "/api/v1/applicant_tracking/applications",
+      "records": {
+        "path": "applications"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/applications.json"
+    },
+    {
+      "name": "application_details",
+      "path": "/api/v1/applicant_tracking/applications/{{ config.application_id }}",
+      "records": {
+        "path": "questionsAndAnswers"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/application_details.json"
+    },
+    {
+      "name": "hiring_leads",
+      "path": "/api/v1/applicant_tracking/hiring_leads",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/hiring_leads.json"
+    },
+    {
+      "name": "job_summaries",
+      "path": "/api/v1/applicant_tracking/jobs",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/job_summaries.json"
+    },
+    {
+      "name": "company_locations",
+      "path": "/api/v1/applicant_tracking/locations",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_locations.json"
+    },
+    {
+      "name": "statuses",
+      "path": "/api/v1/applicant_tracking/statuses",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/statuses.json"
+    },
+    {
+      "name": "company_benefits",
+      "path": "/api/v1/benefit/company_benefit",
+      "records": {
+        "path": "companyBenefits"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_benefits.json"
+    },
+    {
+      "name": "company_benefit_types",
+      "path": "/api/v1/benefit/company_benefit/type",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_benefit_types.json"
+    },
+    {
+      "name": "company_benefit",
+      "path": "/api/v1/benefit/company_benefit/{{ config.company_benefit_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_benefit.json"
+    },
+    {
+      "name": "employee_benefits",
+      "path": "/api/v1/benefit/employee_benefit",
+      "records": {
+        "path": "employeeBenefits"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_benefits.json"
+    },
+    {
+      "name": "member_benefit_events",
+      "path": "/api/v1/benefit/member_benefit",
+      "records": {
+        "path": "members"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/member_benefit_events.json"
+    },
+    {
+      "name": "benefit_coverages",
+      "path": "/api/v1/benefitcoverages",
+      "records": {
+        "path": "Benefit Coverages"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/benefit_coverages.json"
+    },
+    {
+      "name": "member_benefits",
+      "path": "/api/v1/benefits/member-benefits",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/member_benefits.json",
+      "query": {
+        "calendarYear": "{{ config.member_benefits_calendar_year }}"
+      }
+    },
+    {
+      "name": "benefit_deduction_types",
+      "path": "/api/v1/benefits/settings/deduction_types/all",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/benefit_deduction_types.json"
+    },
+    {
+      "name": "company_profile_integrations",
+      "path": "/api/v1/company-profile-integrations",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_profile_integrations.json"
+    },
+    {
+      "name": "company_eins",
+      "path": "/api/v1/company_eins",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_eins.json"
+    },
+    {
+      "name": "company_information",
+      "path": "/api/v1/company_information",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_information.json"
+    },
+    {
+      "name": "reports",
+      "path": "/api/v1/custom-reports",
+      "records": {
+        "path": "reports"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "pagination.next_page"
+      },
+      "schema": "schemas/reports.json",
+      "query": {
+        "page_size": "100"
+      }
+    },
+    {
+      "name": "report_by_id",
+      "path": "/api/v1/custom-reports/{{ config.report_id }}",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "pagination.next_page"
+      },
+      "schema": "schemas/report_by_id.json",
+      "query": {
+        "page_size": "100"
+      }
+    },
+    {
+      "name": "datasets_v1",
+      "path": "/api/v1/datasets",
+      "records": {
+        "path": "datasets"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/datasets_v1.json"
+    },
+    {
+      "name": "fields_from_dataset_v1",
+      "path": "/api/v1/datasets/{{ config.dataset_name }}/fields",
+      "records": {
+        "path": "fields"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "pagination.next_page"
+      },
+      "schema": "schemas/fields_from_dataset_v1.json",
+      "query": {
+        "page_size": "100"
+      }
+    },
+    {
+      "name": "employee_dependents",
+      "path": "/api/v1/employeedependents",
+      "records": {
+        "path": "Employee Dependents"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_dependents.json"
+    },
+    {
+      "name": "employee_dependent",
+      "path": "/api/v1/employeedependents/{{ config.employee_dependent_id }}",
+      "records": {
+        "path": "Employee Dependents"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_dependent.json"
+    },
+    {
+      "name": "employee_roster",
+      "path": "/api/v1/employees",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "_links.next.href"
+      },
+      "schema": "schemas/employee_roster.json",
+      "query": {
+        "page[limit]": "250"
+      }
+    },
+    {
+      "name": "changed_employee_ids",
+      "path": "/api/v1/employees/changed",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/changed_employee_ids.json",
+      "query": {
+        "since": "{{ config.changed_employee_ids_since }}"
+      }
+    },
+    {
+      "name": "changed_employee_table_data",
+      "path": "/api/v1/employees/changed/tables/{{ config.table }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/changed_employee_table_data.json",
+      "query": {
+        "since": "{{ config.changed_employee_table_data_since }}"
+      }
+    },
+    {
+      "name": "time_off_balance",
+      "path": "/api/v1/employees/{{ config.employee_id }}/time_off/calculator",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/time_off_balance.json"
+    },
+    {
+      "name": "employee_time_off_policies",
+      "path": "/api/v1/employees/{{ config.employee_id }}/time_off/policies",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_time_off_policies.json"
+    },
+    {
+      "name": "employee_table_data",
+      "path": "/api/v1/employees/{{ config.employee_table_data_id }}/tables/{{ config.table }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_table_data.json"
+    },
+    {
+      "name": "all_currency_types",
+      "path": "/api/v1/meta/currency/types",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/all_currency_types.json"
+    },
+    {
+      "name": "states_by_country_id",
+      "path": "/api/v1/meta/provinces/{{ config.country_id }}",
+      "records": {
+        "path": "options"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/states_by_country_id.json"
+    },
+    {
+      "name": "tabular_fields",
+      "path": "/api/v1/meta/tables",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/tabular_fields.json"
+    },
+    {
+      "name": "time_off_policies",
+      "path": "/api/v1/meta/time_off/policies",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/time_off_policies.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v1/meta/users",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "goals",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals",
+      "records": {
+        "path": "goals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goals.json"
+    },
+    {
+      "name": "goals_aggregate_v1",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals/aggregate",
+      "records": {
+        "path": "goals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goals_aggregate_v1.json"
+    },
+    {
+      "name": "alignable_goal_options",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals/alignmentOptions",
+      "records": {
+        "path": "alignsWithOptions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/alignable_goal_options.json"
+    },
+    {
+      "name": "goal_creation_permission",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals/canCreateGoals",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goal_creation_permission.json"
+    },
+    {
+      "name": "goals_filters_v1",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals/filters",
+      "records": {
+        "path": "filters"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goals_filters_v1.json"
+    },
+    {
+      "name": "goal_share_options",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals/shareOptions",
+      "records": {
+        "path": "persons"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goal_share_options.json",
+      "query": {
+        "search": "{{ config.goal_share_options_search }}"
+      }
+    },
+    {
+      "name": "goal_aggregate",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals/{{ config.goal_id }}/aggregate",
+      "records": {
+        "path": "comments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goal_aggregate.json"
+    },
+    {
+      "name": "goal_comments",
+      "path": "/api/v1/performance/employees/{{ config.employee_id }}/goals/{{ config.goal_id }}/comments",
+      "records": {
+        "path": "comments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goal_comments.json"
+    },
+    {
+      "name": "company_report",
+      "path": "/api/v1/reports/{{ config.company_report_id }}",
+      "records": {
+        "path": "employees"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/company_report.json"
+    },
+    {
+      "name": "scheduling_list_schedules",
+      "path": "/api/v1/scheduling/schedules",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scheduling_list_schedules.json"
+    },
+    {
+      "name": "scheduling_get_schedule",
+      "path": "/api/v1/scheduling/schedules/{{ config.scheduling_get_schedule_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scheduling_get_schedule.json"
+    },
+    {
+      "name": "scheduling_list_shift_assessments",
+      "path": "/api/v1/scheduling/shift-assessments",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scheduling_list_shift_assessments.json"
+    },
+    {
+      "name": "scheduling_list_shifts",
+      "path": "/api/v1/scheduling/shifts",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scheduling_list_shifts.json"
+    },
+    {
+      "name": "scheduling_get_shift",
+      "path": "/api/v1/scheduling/shifts/{{ config.scheduling_get_shift_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scheduling_get_shift.json"
+    },
+    {
+      "name": "scheduling_list_timezones",
+      "path": "/api/v1/scheduling/timezones",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scheduling_list_timezones.json"
+    },
+    {
+      "name": "break_assessments",
+      "path": "/api/v1/time-tracking/break-assessments",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/break_assessments.json"
+    },
+    {
+      "name": "break_policies",
+      "path": "/api/v1/time-tracking/break-policies",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/break_policies.json"
+    },
+    {
+      "name": "break_policy",
+      "path": "/api/v1/time-tracking/break-policies/{{ config.break_policy_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/break_policy.json"
+    },
+    {
+      "name": "break_policy_breaks",
+      "path": "/api/v1/time-tracking/break-policies/{{ config.break_policy_breaks_id }}/breaks",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/break_policy_breaks.json"
+    },
+    {
+      "name": "break_policy_employees",
+      "path": "/api/v1/time-tracking/break-policies/{{ config.break_policy_employees_id }}/employees",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/break_policy_employees.json"
+    },
+    {
+      "name": "break",
+      "path": "/api/v1/time-tracking/breaks/{{ config.break_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/break.json"
+    },
+    {
+      "name": "employee_break_availabilities",
+      "path": "/api/v1/time-tracking/employees/{{ config.employee_break_availabilities_id }}/break-availabilities",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_break_availabilities.json"
+    },
+    {
+      "name": "employee_break_policies",
+      "path": "/api/v1/time-tracking/employees/{{ config.employee_break_policies_id }}/break-policies",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_break_policies.json"
+    },
+    {
+      "name": "projects",
+      "path": "/api/v1/time-tracking/projects",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "project",
+      "path": "/api/v1/time-tracking/projects/{{ config.project_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/project.json"
+    },
+    {
+      "name": "project_tasks",
+      "path": "/api/v1/time-tracking/projects/{{ config.project_id }}/tasks",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/project_tasks.json"
+    },
+    {
+      "name": "shift_differentials",
+      "path": "/api/v1/time-tracking/shift-differentials",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/shift_differentials.json"
+    },
+    {
+      "name": "shift_differential",
+      "path": "/api/v1/time-tracking/shift-differentials/{{ config.shift_differential_id }}",
+      "records": {
+        "path": "times"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/shift_differential.json"
+    },
+    {
+      "name": "task",
+      "path": "/api/v1/time-tracking/tasks/{{ config.task_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/task.json"
+    },
+    {
+      "name": "time_off_requests",
+      "path": "/api/v1/time_off/requests",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/time_off_requests.json",
+      "query": {
+        "start": "{{ config.time_off_requests_start }}",
+        "end": "{{ config.time_off_requests_end }}"
+      }
+    },
+    {
+      "name": "whos_out",
+      "path": "/api/v1/time_off/whos_out",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/whos_out.json"
+    },
+    {
+      "name": "timesheet_entries",
+      "path": "/api/v1/time_tracking/timesheet_entries",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/timesheet_entries.json",
+      "query": {
+        "start": "{{ config.timesheet_entries_start }}",
+        "end": "{{ config.timesheet_entries_end }}"
+      }
+    },
+    {
+      "name": "time_tracking_record",
+      "path": "/api/v1/timetracking/record/{{ config.time_tracking_record_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/time_tracking_record.json"
+    },
+    {
+      "name": "training_categories",
+      "path": "/api/v1/training/category",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/training_categories.json"
+    },
+    {
+      "name": "training_types",
+      "path": "/api/v1/training/type",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/training_types.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/api/v1/webhooks",
+      "records": {
+        "path": "webhooks"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "monitor_fields",
+      "path": "/api/v1/webhooks/monitor_fields",
+      "records": {
+        "path": "fields"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/monitor_fields.json"
+    },
+    {
+      "name": "post_fields",
+      "path": "/api/v1/webhooks/post-fields",
+      "records": {
+        "path": "fields"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/post_fields.json"
+    },
+    {
+      "name": "webhook",
+      "path": "/api/v1/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "path": "errors"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/webhook.json"
+    },
+    {
+      "name": "employee_time_off_policies_v1_1",
+      "path": "/api/v1_1/employees/{{ config.employee_id }}/time_off/policies",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee_time_off_policies_v1_1.json"
+    },
+    {
+      "name": "goals_aggregate_v1_1",
+      "path": "/api/v1_1/performance/employees/{{ config.employee_id }}/goals/aggregate",
+      "records": {
+        "path": "goals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goals_aggregate_v1_1.json"
+    },
+    {
+      "name": "goals_filters_v1_1",
+      "path": "/api/v1_1/performance/employees/{{ config.employee_id }}/goals/filters",
+      "records": {
+        "path": "filters"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goals_filters_v1_1.json"
+    },
+    {
+      "name": "datasets_v1_2",
+      "path": "/api/v1_2/datasets",
+      "records": {
+        "path": "datasets"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/datasets_v1_2.json"
+    },
+    {
+      "name": "fields_from_dataset_v1_2",
+      "path": "/api/v1_2/datasets/{{ config.dataset_name }}/fields",
+      "records": {
+        "path": "fields"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "pagination.next_page"
+      },
+      "schema": "schemas/fields_from_dataset_v1_2.json",
+      "query": {
+        "page_size": "100"
+      }
+    },
+    {
+      "name": "goals_aggregate_v1_2",
+      "path": "/api/v1_2/performance/employees/{{ config.employee_id }}/goals/aggregate",
+      "records": {
+        "path": "goals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goals_aggregate_v1_2.json"
+    },
+    {
+      "name": "goals_filters_v1_2",
+      "path": "/api/v1_2/performance/employees/{{ config.employee_id }}/goals/filters",
+      "records": {
+        "path": "filters"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goals_filters_v1_2.json"
     }
   ]
 }

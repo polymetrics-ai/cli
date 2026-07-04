@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workflow_version",
+  "type": "object",
+  "x-primary-key": [
+    "versionId"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "versionId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workflowId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "authors": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nodes": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "connections": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "nodeGroups": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

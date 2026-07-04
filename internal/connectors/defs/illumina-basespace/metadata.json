@@ -1,23 +1,25 @@
 {
   "name": "illumina-basespace",
   "display_name": "Illumina BaseSpace",
-  "description": "Reads Illumina BaseSpace projects, runs, samples, app sessions, and datasets through the BaseSpace v1pre3 REST API.",
+  "description": "Reads and writes documented Illumina BaseSpace v1pre3 REST API resources through the declarative connector engine.",
   "integration_type": "api",
   "docs_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Illumina BaseSpace API read of project, run, sample, app session, and dataset data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Illumina BaseSpace API read of documented v1pre3 resources",
+    "write": "external Illumina BaseSpace API mutations including settings, workflow, threshold, trash, lab requeue, and app session actions",
+    "approval": "required for every write action; destructive actions are marked confirm: destructive"
   }
 }

@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Metadata for the available resource types (User and Group)",
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "description": "An array of URNs that identify the schema(s) that define the structure of this resource type.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "Identifier of the resource type."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the resource type."
+    },
+    "description": {
+      "type": "string",
+      "description": "Name of the resource type."
+    },
+    "endpoint": {
+      "type": "string",
+      "description": "Endpoint extension of the resource type."
+    },
+    "schema": {
+      "type": "string",
+      "description": "Schema URI of the resource type."
+    },
+    "schemaExtensions": {
+      "type": "array",
+      "description": "Schema extensions supported for the resource type.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "type": "string",
+            "description": "Schema extension URI of the resource type."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indicator of whether the schema extension is required."
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

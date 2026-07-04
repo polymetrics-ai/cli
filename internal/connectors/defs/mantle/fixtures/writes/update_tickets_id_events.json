@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/tickets/id_fixture/events"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

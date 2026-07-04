@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/team/synthetic-conformance-value/project/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "id": 1,
+        "name": "Fixture team_project_assignment",
+        "title": "Fixture team_project_assignment",
+        "status": "active"
+      }
+    }
+  }
+}

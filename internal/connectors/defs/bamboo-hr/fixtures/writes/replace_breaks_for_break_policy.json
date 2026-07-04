@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/time-tracking/break-policies/fixture_id/breaks"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

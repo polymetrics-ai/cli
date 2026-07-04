@@ -2,15 +2,51 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "attendance",
   "type": "object",
-  "x-primary-key": ["id"],
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "employeeId": { "type": ["string", "null"] },
-    "attendanceDate": { "type": ["string", "null"] },
-    "shiftStartTime": { "type": ["string", "null"] },
-    "shiftEndTime": { "type": ["string", "null"] },
-    "status": { "type": ["string", "null"] },
-    "totalGrossHours": { "type": ["number", "null"] }
+    "id": {
+      "type": "string"
+    },
+    "employeeId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "attendanceDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "shiftStartTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "shiftEndTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "totalGrossHours": {
+      "type": [
+        "number",
+        "null"
+      ]
+    }
   }
 }

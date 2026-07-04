@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee_dependent",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "addressLine1": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "addressLine2": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "city": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "country": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "dateOfBirth": {
+      "type": "string"
+    },
+    "employeeId": {
+      "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "string"
+    },
+    "homePhone": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "isStudent": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "isUsCitizen": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "maskedSIN": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "maskedSSN": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "middleName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "relationship": {
+      "type": "string"
+    },
+    "state": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "zipCode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

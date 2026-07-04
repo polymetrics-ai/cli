@@ -1,22 +1,25 @@
 {
   "name": "fullstory",
   "display_name": "Fullstory",
-  "description": "Reads FullStory segments, users, and events through the FullStory REST API (read-only analytics export).",
+  "description": "Reads FullStory segments, users, events, and user-scoped sessions; writes server-side user and custom event data through the FullStory Server API.",
   "integration_type": "api",
   "docs_url": "https://developer.fullstory.com/reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 200
+    "read_page_size": 200,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external FullStory API read of session-analytics segment, user, and event data"
+    "read": "external FullStory API read of session-analytics segment, user, event, and user-scoped session data",
+    "write": "creates or updates FullStory server-side user attributes and custom events used for analytics segmentation",
+    "approval": "reverse ETL writes require plan preview and approval token"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/visitor/synthetic-conformance-value/history",
+    "query": {
+      "starttime": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "type": "page",
+        "ts": 1760000000000,
+        "pageId": "pge_fixture_1",
+        "duration": 123
+      }
+    ]
+  }
+}

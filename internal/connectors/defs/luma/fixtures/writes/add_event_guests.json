@@ -1,0 +1,24 @@
+{
+  "record": {
+    "event_id": "fixture_event_id",
+    "guests": [
+      {
+        "email": "guest@example.invalid",
+        "name": "Fixture Guest"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/guests/add",
+    "body": {
+      "event_id": "fixture_event_id",
+      "guests": [
+        {
+          "email": "guest@example.invalid",
+          "name": "Fixture Guest"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pms_timeframes",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": true
+}

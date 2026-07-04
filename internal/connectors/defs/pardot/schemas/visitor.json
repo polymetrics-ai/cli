@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "visitor",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "campaignParameter": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "contentParameter": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "doNotSell": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hostname": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ipAddress": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mediumParameter": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pageViewCount": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "prospectId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "campaignId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "sourceParameter": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "termParameter": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "isIdentified": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

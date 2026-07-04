@@ -1,0 +1,2928 @@
+{
+  "actions": [
+    {
+      "name": "update_accounts",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_ids": {
+            "type": "array"
+          },
+          "account_type": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "owner_id": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array"
+          },
+          "tags_apply_mode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_ids"
+        ]
+      },
+      "risk": "external Pylon PATCH /accounts; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_type": {
+            "type": "string"
+          },
+          "channels": {
+            "type": "array"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "domains": {
+            "type": "array"
+          },
+          "external_ids": {
+            "type": "array"
+          },
+          "logo_url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner_id": {
+            "type": "string"
+          },
+          "primary_domain": {
+            "type": "string"
+          },
+          "subaccount_ids": {
+            "type": "array"
+          },
+          "tags": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "external Pylon POST /accounts; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "merge_accounts",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/merge",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "merge_account_ids": {
+            "type": "array"
+          },
+          "merge_into_account_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "merge_into_account_id",
+          "merge_account_ids"
+        ]
+      },
+      "risk": "destructive external Pylon POST /accounts/merge; approval required",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "search_accounts",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/accounts/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "search_text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filter"
+        ]
+      },
+      "risk": "external Pylon POST /accounts/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "create_account_highlight",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/highlights",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "content_html": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content_html",
+          "account_id"
+        ]
+      },
+      "risk": "external Pylon POST /accounts/{account_id}/highlights; approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_account_highlight",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/highlights/{{ record.highlight_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "highlight_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "highlight_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /accounts/{account_id}/highlights/{highlight_id}; approval required",
+      "path_fields": [
+        "account_id",
+        "highlight_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_account_highlight",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ record.account_id }}/highlights/{{ record.highlight_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "highlight_id": {
+            "type": "string"
+          },
+          "content_html": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "highlight_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /accounts/{account_id}/highlights/{highlight_id}; approval required",
+      "path_fields": [
+        "account_id",
+        "highlight_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_account_relationship",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/relationship",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "related_object_id": {
+            "type": "string"
+          },
+          "relationship_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "related_object_id",
+          "relationship_type",
+          "account_id"
+        ]
+      },
+      "risk": "external Pylon POST /accounts/{account_id}/relationship; approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_account_relationship",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/relationships/{{ record.relationship_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "relationship_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "relationship_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /accounts/{account_id}/relationships/{relationship_id}; approval required",
+      "path_fields": [
+        "account_id",
+        "relationship_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /accounts/{id}; approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ record.account_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "account_type": {
+            "type": "string"
+          },
+          "channels": {
+            "type": "array"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "domains": {
+            "type": "array"
+          },
+          "external_ids": {
+            "type": "array"
+          },
+          "is_disabled": {
+            "type": "boolean"
+          },
+          "logo_url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner_id": {
+            "type": "string"
+          },
+          "primary_domain": {
+            "type": "string"
+          },
+          "subaccount_ids": {
+            "type": "array"
+          },
+          "tags": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "account_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /accounts/{id}; approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_activity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/activities",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "contact_id": {
+            "type": "string"
+          },
+          "happened_at": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "link_text": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "account_id"
+        ]
+      },
+      "risk": "external Pylon POST /accounts/{id}/activities; approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "search_audit_logs",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/audit-logs/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /audit-logs/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "search_call_recordings",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/call-recordings/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /call-recordings/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_call_recording",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/call-recordings/{{ record.call_recording_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "call_recording_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "call_recording_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /call-recordings/{id}; approval required",
+      "path_fields": [
+        "call_recording_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_call_recording",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/call-recordings/{{ record.call_recording_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "call_recording_id": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "call_recording_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /call-recordings/{id}; approval required",
+      "path_fields": [
+        "call_recording_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_external_id": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "email": {
+            "type": "string"
+          },
+          "external_ids": {
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone_numbers": {
+            "type": "array"
+          },
+          "portal_role": {
+            "type": "string"
+          },
+          "portal_role_id": {
+            "type": "string"
+          },
+          "primary_phone_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "external Pylon POST /contacts; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "search_contacts",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/contacts/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "search_text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filter"
+        ]
+      },
+      "risk": "external Pylon POST /contacts/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "contact_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /contacts/{id}; approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          },
+          "account_external_id": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "email": {
+            "type": "string"
+          },
+          "emails": {
+            "type": "array"
+          },
+          "external_ids": {
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone_numbers": {
+            "type": "array"
+          },
+          "portal_role": {
+            "type": "string"
+          },
+          "portal_role_id": {
+            "type": "string"
+          },
+          "primary_phone_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "contact_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /contacts/{id}; approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom-fields",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "default_value": {
+            "type": "string"
+          },
+          "default_values": {
+            "type": "array"
+          },
+          "description": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "object_type": {
+            "type": "string"
+          },
+          "select_options": {
+            "type": "array"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_type",
+          "label",
+          "type"
+        ]
+      },
+      "risk": "external Pylon POST /custom-fields; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_custom_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom-fields/{{ record.custom_field_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_field_id": {
+            "type": "string"
+          },
+          "default_value": {
+            "type": "string"
+          },
+          "default_values": {
+            "type": "array"
+          },
+          "description": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "select_options": {
+            "type": "array"
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_field_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /custom-fields/{id}; approval required",
+      "path_fields": [
+        "custom_field_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_custom_objects",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom-objects/{{ record.custom_object_type }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_object_type": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "object"
+          },
+          "ids": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "ids",
+          "custom_object_type"
+        ]
+      },
+      "risk": "external Pylon PATCH /custom-objects/{type}; approval required",
+      "path_fields": [
+        "custom_object_type"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_custom_object",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom-objects/{{ record.custom_object_type }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_object_type": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "custom_object_type"
+        ]
+      },
+      "risk": "external Pylon POST /custom-objects/{type}; approval required",
+      "path_fields": [
+        "custom_object_type"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "search_custom_objects",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/custom-objects/{{ record.custom_object_type }}/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_object_type": {
+            "type": "string"
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "filter",
+          "custom_object_type"
+        ]
+      },
+      "risk": "external Pylon POST /custom-objects/{type}/search; approval required",
+      "path_fields": [
+        "custom_object_type"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_custom_object",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom-objects/{{ record.custom_object_type }}/{{ record.custom_object_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_object_type": {
+            "type": "string"
+          },
+          "custom_object_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_type",
+          "custom_object_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /custom-objects/{type}/{id}; approval required",
+      "path_fields": [
+        "custom_object_type",
+        "custom_object_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_custom_object",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom-objects/{{ record.custom_object_type }}/{{ record.custom_object_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_object_type": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "custom_object_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_type",
+          "custom_object_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /custom-objects/{type}/{id}; approval required",
+      "path_fields": [
+        "custom_object_type",
+        "custom_object_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_feature_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/feature-requests",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "should_auto_fetch_evidence": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "risk": "external Pylon POST /feature-requests; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "search_feature_requests",
+      "kind": "update",
+      "method": "POST",
+      "path": "/feature-requests/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_ids": {
+            "type": "array"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "query": {
+            "type": "string"
+          },
+          "request_statuses": {
+            "type": "array"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /feature-requests/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_feature_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/feature-requests/{{ record.feature_request_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "feature_request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "feature_request_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /feature-requests/{id}; approval required",
+      "path_fields": [
+        "feature_request_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_feature_request",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/feature-requests/{{ record.feature_request_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "feature_request_id": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "request_status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "feature_request_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /feature-requests/{id}; approval required",
+      "path_fields": [
+        "feature_request_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "set_feature_request_portal_visibility",
+      "kind": "update",
+      "method": "POST",
+      "path": "/feature-requests/{{ record.feature_request_id }}/set-portal-visibility",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "feature_request_id": {
+            "type": "string"
+          },
+          "account_ids": {
+            "type": "array"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "account_ids",
+          "visible",
+          "feature_request_id"
+        ]
+      },
+      "risk": "external Pylon POST /feature-requests/{id}/set-portal-visibility; approval required",
+      "path_fields": [
+        "feature_request_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "import_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/import/contacts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "portal_role": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ]
+      },
+      "risk": "external Pylon POST /import/contacts; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "import_issue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/import/issues",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "attachment_urls": {
+            "type": "array"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "external_issues": {
+            "type": "array"
+          },
+          "external_refs": {
+            "type": "object"
+          },
+          "first_response_time": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "array"
+          },
+          "requester_id": {
+            "type": "string"
+          },
+          "resolution_time": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "state",
+          "messages"
+        ]
+      },
+      "risk": "external Pylon POST /import/issues; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "import_messages",
+      "kind": "create",
+      "method": "POST",
+      "path": "/import/issues/{{ record.issue_id }}/messages",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "messages",
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /import/issues/{id}/messages; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_issue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/issues",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "attachment_urls": {
+            "type": "array"
+          },
+          "author_unverified": {
+            "type": "boolean"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "contact_id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "destination_metadata": {
+            "type": "object"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "requester_avatar_url": {
+            "type": "string"
+          },
+          "requester_email": {
+            "type": "string"
+          },
+          "requester_id": {
+            "type": "string"
+          },
+          "requester_name": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "body_html"
+        ]
+      },
+      "risk": "external Pylon POST /issues; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "search_issues",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/issues/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "search_text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filter"
+        ]
+      },
+      "risk": "external Pylon POST /issues/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_issue",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/issues/{{ record.issue_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /issues/{id}; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_issue",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/issues/{{ record.issue_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "customer_portal_visible": {
+            "type": "boolean"
+          },
+          "requester_id": {
+            "type": "string"
+          },
+          "requestor_id": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /issues/{id}; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_issue_ai_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/ai-response",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "ai_agent_id": {
+            "type": "string"
+          },
+          "post_as_internal_note": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ai_agent_id",
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /issues/{id}/ai-response; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "link_external_issue",
+      "kind": "update",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/external-issues",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "external_issue_id": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "external_issue_id",
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /issues/{id}/external-issues; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "add_issue_followers",
+      "kind": "update",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/followers",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /issues/{id}/followers; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_message",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/issues/{{ record.issue_id }}/messages/{{ record.message_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id",
+          "message_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /issues/{id}/messages/{message_id}; approval required",
+      "path_fields": [
+        "issue_id",
+        "message_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "redact_message",
+      "kind": "update",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/messages/{{ record.message_id }}/redact",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id",
+          "message_id"
+        ]
+      },
+      "risk": "destructive external Pylon POST /issues/{id}/messages/{message_id}/redact; approval required",
+      "path_fields": [
+        "issue_id",
+        "message_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_issue_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/note",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "attachment_urls": {
+            "type": "array"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string"
+          },
+          "thread_id": {
+            "type": "string"
+          },
+          "thread_name": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "body_html",
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /issues/{id}/note; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_issue_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/reply",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "attachment_urls": {
+            "type": "array"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "contact_id": {
+            "type": "string"
+          },
+          "custom_source": {
+            "type": "object"
+          },
+          "email_info": {
+            "type": "object"
+          },
+          "message_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "body_html",
+          "message_id",
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /issues/{id}/reply; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "snooze_issue",
+      "kind": "update",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/snooze",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "snooze_until": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "snooze_until",
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /issues/{id}/snooze; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_issue_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/issues/{{ record.issue_id }}/threads",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ]
+      },
+      "risk": "external Pylon POST /issues/{id}/threads; approval required",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/articles",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "author_user_id": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "collection_id": {
+            "type": "string"
+          },
+          "is_published": {
+            "type": "boolean"
+          },
+          "is_unlisted": {
+            "type": "boolean"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "translations": {
+            "type": "array"
+          },
+          "visibility_config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "title",
+          "author_user_id",
+          "body_html",
+          "knowledge_base_id"
+        ]
+      },
+      "risk": "external Pylon POST /knowledge-bases/{id}/articles; approval required",
+      "path_fields": [
+        "knowledge_base_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_article",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "article_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "knowledge_base_id",
+          "article_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /knowledge-bases/{id}/articles/{article_id}; approval required",
+      "path_fields": [
+        "knowledge_base_id",
+        "article_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_article",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "article_id": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "is_published": {
+            "type": "boolean"
+          },
+          "is_unlisted": {
+            "type": "boolean"
+          },
+          "language": {
+            "type": "string"
+          },
+          "publish_updated_body_html": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string"
+          },
+          "visibility_config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "knowledge_base_id",
+          "article_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /knowledge-bases/{id}/articles/{article_id}; approval required",
+      "path_fields": [
+        "knowledge_base_id",
+        "article_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "request_article_review",
+      "kind": "update",
+      "method": "POST",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}/request-review",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "article_id": {
+            "type": "string"
+          },
+          "request_ai_review": {
+            "type": "boolean"
+          },
+          "reviewer_user_ids": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "knowledge_base_id",
+          "article_id"
+        ]
+      },
+      "risk": "external Pylon POST /knowledge-bases/{id}/articles/{article_id}/request-review; approval required",
+      "path_fields": [
+        "knowledge_base_id",
+        "article_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/collections",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "parent_collection_id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "knowledge_base_id"
+        ]
+      },
+      "risk": "external Pylon POST /knowledge-bases/{id}/collections; approval required",
+      "path_fields": [
+        "knowledge_base_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/collections/{{ record.collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "collection_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "knowledge_base_id",
+          "collection_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /knowledge-bases/{id}/collections/{collection_id}; approval required",
+      "path_fields": [
+        "knowledge_base_id",
+        "collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_collection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/collections/{{ record.collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "collection_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "visibility_config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "knowledge_base_id",
+          "collection_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /knowledge-bases/{id}/collections/{collection_id}; approval required",
+      "path_fields": [
+        "knowledge_base_id",
+        "collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_route_redirect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge-bases/{{ record.knowledge_base_id }}/route-redirects",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "from_path": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "object_id": {
+            "type": "string"
+          },
+          "object_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "from_path",
+          "object_id",
+          "object_type",
+          "knowledge_base_id"
+        ]
+      },
+      "risk": "external Pylon POST /knowledge-bases/{id}/route-redirects; approval required",
+      "path_fields": [
+        "knowledge_base_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_macro",
+      "kind": "create",
+      "method": "POST",
+      "path": "/macros",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conditions": {
+            "type": "object"
+          },
+          "macro_group_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "text_html": {
+            "type": "string"
+          },
+          "text_type": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "name",
+          "text_html",
+          "macro_group_id"
+        ]
+      },
+      "risk": "external Pylon POST /macros; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_macro",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/macros/{{ record.macro_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "macro_id": {
+            "type": "string"
+          },
+          "conditions": {
+            "type": "object"
+          },
+          "macro_group_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "text_html": {
+            "type": "string"
+          },
+          "text_type": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "macro_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /macros/{id}; approval required",
+      "path_fields": [
+        "macro_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_milestone",
+      "kind": "create",
+      "method": "POST",
+      "path": "/milestones",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "due_date": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "project_id"
+        ]
+      },
+      "risk": "external Pylon POST /milestones; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_milestone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/milestones/{{ record.milestone_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "milestone_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "milestone_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /milestones/{id}; approval required",
+      "path_fields": [
+        "milestone_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_milestone",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/milestones/{{ record.milestone_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "milestone_id": {
+            "type": "string"
+          },
+          "due_date": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "milestone_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /milestones/{id}; approval required",
+      "path_fields": [
+        "milestone_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "customer_portal_visible": {
+            "type": "boolean"
+          },
+          "description_html": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner_id": {
+            "type": "string"
+          },
+          "project_template_id": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "account_id"
+        ]
+      },
+      "risk": "external Pylon POST /projects; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "search_projects",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/projects/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /projects/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.project_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /projects/{id}; approval required",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/{{ record.project_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "customer_portal_visible": {
+            "type": "boolean"
+          },
+          "description_html": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "is_archived": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner_id": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /projects/{id}; approval required",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "search_surveys",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/surveys/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /surveys/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "hex_color": {
+            "type": "string"
+          },
+          "object_type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_type",
+          "value"
+        ]
+      },
+      "risk": "external Pylon POST /tags; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.tag_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /tags/{id}; approval required",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tags/{{ record.tag_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "hex_color": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /tags/{id}; approval required",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "customer_portal_visible": {
+            "type": "boolean"
+          },
+          "due_date": {
+            "type": "string"
+          },
+          "milestone_id": {
+            "type": "string"
+          },
+          "parent_task_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "risk": "external Pylon POST /tasks; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "search_tasks",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/tasks/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /tasks/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /tasks/{id}; approval required",
+      "path_fields": [
+        "task_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array"
+          },
+          "customer_portal_visible": {
+            "type": "boolean"
+          },
+          "due_date": {
+            "type": "string"
+          },
+          "milestone_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /tasks/{id}; approval required",
+      "path_fields": [
+        "task_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_task_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_id }}/comments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "is_internal": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "body_html",
+          "task_id"
+        ]
+      },
+      "risk": "external Pylon POST /tasks/{id}/comments; approval required",
+      "path_fields": [
+        "task_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_task_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.task_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "comment_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /tasks/{id}/comments/{comment_id}; approval required",
+      "path_fields": [
+        "task_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_task_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tasks/{{ record.task_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "body_html",
+          "task_id",
+          "comment_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /tasks/{id}/comments/{comment_id}; approval required",
+      "path_fields": [
+        "task_id",
+        "comment_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "array"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /teams; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "team_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /teams/{id}; approval required",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_training_data",
+      "kind": "create",
+      "method": "POST",
+      "path": "/training-data",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "training_data_name": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /training-data; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "upload_training_data_file_content",
+      "kind": "create",
+      "method": "POST",
+      "path": "/training-data/upload-content",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "training_data_id": {
+            "type": "string"
+          },
+          "training_data_name": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string"
+          }
+        },
+        "required": [
+
+        ]
+      },
+      "risk": "external Pylon POST /training-data/upload-content; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_training_data_documents",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/training-data/{{ record.training_data_id }}/documents",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "training_data_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "training_data_id"
+        ]
+      },
+      "risk": "destructive external Pylon DELETE /training-data/{id}/documents; approval required",
+      "path_fields": [
+        "training_data_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "search_users",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/users/search",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "filter"
+        ]
+      },
+      "risk": "external Pylon POST /users/search; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/{{ record.user_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "external Pylon PATCH /users/{id}; approval required",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json"
+    }
+  ]
+}

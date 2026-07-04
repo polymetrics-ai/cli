@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/break-assessments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "_links": {
+        "next": {},
+        "prev": {}
+      },
+      "data": [
+        {
+          "availableYmdt": "fixture_value",
+          "breakId": "fixture_id",
+          "clockEntryIds": [
+            1001
+          ],
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "limit": 1001,
+        "offset": 1001,
+        "totalItems": 1001
+      }
+    }
+  }
+}

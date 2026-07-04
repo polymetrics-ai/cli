@@ -1,0 +1,31 @@
+{
+  "record": {
+    "list_field_id": "fixture_id",
+    "options": [
+      {
+        "adpCode": "fixture_value",
+        "archived": "yes",
+        "id": 1001,
+        "value": "fixture_value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/meta/lists/fixture_id",
+    "body": {
+      "options": [
+        {
+          "adpCode": "fixture_value",
+          "archived": "yes",
+          "id": 1001,
+          "value": "fixture_value"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

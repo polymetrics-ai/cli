@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices/synthetic-conformance-value/payment_plan",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "payment_plan",
+      "created_at": 1767225600,
+      "updated_at": 1767225601,
+      "status": "active",
+      "installments": []
+    }
+  }
+}

@@ -1,7 +1,18 @@
 {
-  "request": { "method": "GET", "path": "/payments" },
+  "request": {
+    "method": "GET",
+    "path": "/payments"
+  },
   "response": {
     "status": 200,
-    "body": { "payments": [], "meta": { "cursors": { "before": null, "after": null } } }
+    "body": {
+      "payments": [],
+      "meta": {
+        "cursors": {
+          "before": null,
+          "after": null
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/servername"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "server_fixture",
+        "name": "fixture.example.com",
+        "flags": [
+          "production"
+        ],
+        "lastUpdatedAt": 1760000000000
+      }
+    ]
+  }
+}

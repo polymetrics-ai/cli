@@ -1,0 +1,15 @@
+{
+  "record": {
+    "project_id": 123,
+    "name": "Fixture add_project_members",
+    "description": "Fixture add_project_members record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pm/projects/123/members",
+    "body": {
+      "name": "Fixture add_project_members",
+      "description": "Fixture add_project_members record"
+    }
+  }
+}

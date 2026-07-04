@@ -1,0 +1,17 @@
+{
+  "record": {
+    "group_id": "synthetic-conformance-value",
+    "type": "ACCESS_CERTIFICATIONS_ADMIN"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/groups/synthetic-conformance-value/roles",
+    "body": {
+      "type": "ACCESS_CERTIFICATIONS_ADMIN"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

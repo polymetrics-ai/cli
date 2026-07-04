@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/list-emails/synthetic-conformance-value/stats",
+    "query": {
+      "fields": "id,name,campaignId,subject,emailTemplateId,trackerDomainId,folderId,isPaused,isSent,isDeleted,clientType,createdById,updatedById,createdAt,updatedAt,sentAt,isOperational,type"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "campaignId": 1,
+      "subject": "subject_fixture",
+      "emailTemplateId": 1,
+      "trackerDomainId": 1,
+      "folderId": 1,
+      "isPaused": false,
+      "isSent": false,
+      "isDeleted": false,
+      "clientType": "clientType_fixture",
+      "createdById": 1,
+      "updatedById": 1,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "sentAt": "2026-01-01T00:00:00Z",
+      "isOperational": false,
+      "type": 1
+    }
+  }
+}

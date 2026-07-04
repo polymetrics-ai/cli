@@ -1,0 +1,22 @@
+{
+  "record": {
+    "custom_object_type": "synthetic-conformance-value",
+    "ids": [
+
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/custom-objects/synthetic-conformance-value",
+    "body": {
+      "ids": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

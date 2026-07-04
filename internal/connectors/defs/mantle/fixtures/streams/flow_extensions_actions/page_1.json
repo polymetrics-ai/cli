@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/flow/extensions/actions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "actions": {
+        "id": "id_fixture",
+        "address": "https://example.com/fixture",
+        "name": "fixture",
+        "handle": "fixture",
+        "description": "fixture",
+        "organizationId": "organization_id_fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "settingsSchema": {
+          "id": "settings_schema_fixture_id"
+        }
+      }
+    }
+  }
+}

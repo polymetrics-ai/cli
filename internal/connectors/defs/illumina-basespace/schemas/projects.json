@@ -2,16 +2,52 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "projects",
   "type": "object",
-  "x-primary-key": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "x-cursor-field": "date_created",
-  "required": ["id"],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "name": { "type": ["string", "null"] },
-    "href": { "type": ["string", "null"] },
-    "date_created": { "type": ["string", "null"] },
-    "date_modified": { "type": ["string", "null"] },
-    "total_size": { "type": ["integer", "null"] },
-    "user_owned_by": { "type": ["object", "null"] }
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "href": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_modified": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_owned_by": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
   }
 }

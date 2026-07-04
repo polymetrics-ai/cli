@@ -1,0 +1,34 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "reengagement_card_id": "synthetic-conformance-value",
+    "name": "fixture_name",
+    "instructions": "fixture_instructions",
+    "sampleAnswer": "fixture_sampleAnswer",
+    "sendAfter": 1,
+    "toneOfVoice": "fixture_toneOfVoice",
+    "responseLength": "fixture_responseLength",
+    "links": [],
+    "isEnabled": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v3/ai-sdr/knowledge-bases/synthetic-conformance-value/reengagement-cards/synthetic-conformance-value",
+    "body": {
+      "name": "fixture_name",
+      "instructions": "fixture_instructions",
+      "sampleAnswer": "fixture_sampleAnswer",
+      "sendAfter": 1,
+      "toneOfVoice": "fixture_toneOfVoice",
+      "responseLength": "fixture_responseLength",
+      "links": [],
+      "isEnabled": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

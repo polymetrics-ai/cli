@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/synthetic-conformance-value/actions/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

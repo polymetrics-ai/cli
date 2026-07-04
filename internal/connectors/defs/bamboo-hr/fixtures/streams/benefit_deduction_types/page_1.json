@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/benefits/settings/deduction_types/all"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "additionalDescription": "fixture_value",
+        "allowableBenefitTypes": [
+          "fixture_value"
+        ],
+        "canBeCollectedByTrax": true,
+        "deductionNote": "fixture_value",
+        "deductionNoteLink": "https://example.com/resource",
+        "deductionNoteLinkText": "https://example.com/resource",
+        "deductionTypeName": "Fixture Name"
+      }
+    ]
+  }
+}

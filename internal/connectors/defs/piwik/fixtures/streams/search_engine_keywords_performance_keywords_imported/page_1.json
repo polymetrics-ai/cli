@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "SearchEngineKeywordsPerformance.getKeywordsImported",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "label": "Fixture row 1",
+        "nb_clicks": 1,
+        "nb_impressions": 2,
+        "ctr": 3,
+        "position": 4
+      },
+      {
+        "label": "Fixture row 2",
+        "nb_clicks": 1,
+        "nb_impressions": 2,
+        "ctr": 3,
+        "position": 4
+      }
+    ]
+  }
+}

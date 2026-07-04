@@ -1,0 +1,24 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "description": "fixture_description",
+    "body": "fixture_body",
+    "type": "fixture_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/ai-sdr/playbooks",
+    "body": {
+      "name": "fixture_name",
+      "description": "fixture_description",
+      "body": "fixture_body",
+      "type": "fixture_type"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

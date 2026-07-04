@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/employees/directory",
+    "path": "/api/v1/employees/directory",
     "query": {
       "page": "2",
       "limit": "100"
@@ -27,8 +27,8 @@
           "division": "Product",
           "location": "Remote",
           "workEmail": "fixture101@example.com",
-          "workPhone": "555-0201",
-          "mobilePhone": "555-0301",
+          "workPhone": "555-01101",
+          "mobilePhone": "555-02101",
           "supervisor": "Fixture Manager",
           "photoUrl": "https://example.com/photo101.png"
         }

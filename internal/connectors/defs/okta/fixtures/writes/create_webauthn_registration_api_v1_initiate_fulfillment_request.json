@@ -1,0 +1,32 @@
+{
+  "record": {
+    "fulfillmentData": [
+      {
+        "customizationId": "customization_id_fixture",
+        "inventoryProductId": "inventory_product_id_fixture",
+        "productId": "product_id_fixture"
+      }
+    ],
+    "fulfillmentProvider": "yubico",
+    "userId": "user_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webauthn-registration/api/v1/initiate-fulfillment-request",
+    "body": {
+      "fulfillmentData": [
+        {
+          "customizationId": "customization_id_fixture",
+          "inventoryProductId": "inventory_product_id_fixture",
+          "productId": "product_id_fixture"
+        }
+      ],
+      "fulfillmentProvider": "yubico",
+      "userId": "user_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

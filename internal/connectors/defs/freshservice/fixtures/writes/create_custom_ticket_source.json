@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_custom_ticket_source",
+    "description": "Fixture create_custom_ticket_source record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ticket_fields/sources",
+    "body": {
+      "name": "Fixture create_custom_ticket_source",
+      "description": "Fixture create_custom_ticket_source record"
+    }
+  }
+}

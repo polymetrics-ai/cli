@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_an_asset_for_freshservice_itam",
+    "description": "Fixture create_an_asset_for_freshservice_itam record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/itam/assets",
+    "body": {
+      "name": "Fixture create_an_asset_for_freshservice_itam",
+      "description": "Fixture create_an_asset_for_freshservice_itam record"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "synthetic-conformance-value",
+    "access_level": "standard"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/1/teams",
+    "body": {
+      "name": "synthetic-conformance-value",
+      "access_level": "standard"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

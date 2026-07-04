@@ -1,0 +1,13 @@
+{
+  "record": {
+    "authenticator_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/authenticators/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/grouptypes",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "Fixture group types 1",
+          "isSystemDefined": true,
+          "systemGroupType": 1,
+          "id": "group_types_fixture_1"
+        },
+        {
+          "name": "Fixture group types 2",
+          "isSystemDefined": true,
+          "systemGroupType": 2,
+          "id": "group_types_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/group_types",
+      "lastPage": "https://example.invalid/keka/group_types",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

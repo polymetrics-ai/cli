@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "A timestamp from when the user type was created",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "The user ID of the account that created the user type"
+    },
+    "default": {
+      "type": "boolean",
+      "description": "A boolean value to indicate if this is the default user type"
+    },
+    "description": {
+      "type": "string",
+      "description": "The human-readable description of the user type"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "The human-readable name of the user type"
+    },
+    "id": {
+      "type": "string",
+      "description": "The unique key for the user type"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "A timestamp from when the user type was most recently updated",
+      "format": "date-time"
+    },
+    "lastUpdatedBy": {
+      "type": "string",
+      "description": "The user ID of the most recent account to edit the user type"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the user type. The name must start with A-Z or a-z and contain only A-Z, a-z, 0-9, or underscore (_) characters. This value becomes read-only after creation and can't be updated."
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "schema": {
+          "type": "object",
+          "description": "The associated schema",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "break_policy_employees",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "_links": {
+      "type": "object",
+      "required": [
+        "prev",
+        "next"
+      ],
+      "properties": {
+        "next": {
+          "type": [
+            "null",
+            "object"
+          ]
+        },
+        "prev": {
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "photoUrl"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "photoUrl": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "totalItems",
+        "offset",
+        "limit"
+      ],
+      "properties": {
+        "limit": {
+          "type": "integer"
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "totalItems": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

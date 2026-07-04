@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/certification/movie/list"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture certification_movie_list",
+      "name": "Fixture certification_movie_list",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

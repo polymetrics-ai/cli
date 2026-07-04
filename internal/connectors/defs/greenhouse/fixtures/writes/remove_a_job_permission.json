@@ -1,0 +1,17 @@
+{
+  "record": {
+    "user_id": "user_id_fixture",
+    "job_permission_id": 27207466
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/user_id_fixture/permissions/jobs",
+    "body": {
+      "job_permission_id": 27207466
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

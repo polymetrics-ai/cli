@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/authenticators/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "description": "description_fixture",
+      "id": "id_fixture",
+      "key": "custom_app",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "type": "app",
+      "_links": {
+        "methods": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

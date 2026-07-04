@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/transactions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactions": {
+        "id": "id_fixture",
+        "date": "2026-01-01T00:00:00Z",
+        "type": "fixture",
+        "processingFee": 1.23,
+        "processingFeeCurrencyCode": "fixture",
+        "netAmount": 1.23,
+        "netAmountCurrencyCode": "fixture",
+        "grossAmount": 1.23,
+        "grossAmountCurrencyCode": "fixture",
+        "billingProvider": "fixture",
+        "billingProviderId": "billing_provider_id_fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "subscriptionId": "subscription_id_fixture",
+        "appId": "app_id_fixture",
+        "customerId": "customer_id_fixture",
+        "appInstallationId": "app_installation_id_fixture"
+      },
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": ""
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pms/reviewcycles",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "reviewGroup": {
+            "id": "review_cycles_fixture_1",
+            "name": "Fixture review cycles 1"
+          },
+          "name": "Fixture review cycles 1",
+          "fromDate": "2026-01-01T00:00:00Z",
+          "toDate": "2026-01-01T00:00:00Z",
+          "status": 1,
+          "isAdhoc": false,
+          "id": "review_cycles_fixture_1"
+        },
+        {
+          "reviewGroup": {
+            "id": "review_cycles_fixture_2",
+            "name": "Fixture review cycles 2"
+          },
+          "name": "Fixture review cycles 2",
+          "fromDate": "2026-01-01T00:00:00Z",
+          "toDate": null,
+          "status": 1,
+          "isAdhoc": true,
+          "id": "review_cycles_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/review_cycles",
+      "lastPage": "https://example.invalid/keka/review_cycles",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture create_client"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/psa/clients",
+    "body": {
+      "name": "Fixture create_client"
+    }
+  }
+}

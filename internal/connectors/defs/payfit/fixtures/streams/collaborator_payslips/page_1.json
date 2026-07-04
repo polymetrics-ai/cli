@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/collaborators/synthetic-conformance-value/payslips"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payslips": [
+        {
+          "payslipId": "collaborator_payslips_1",
+          "name": "Fixture collaborator payslips",
+          "contractId": "contract_fixture_1"
+        }
+      ]
+    }
+  }
+}

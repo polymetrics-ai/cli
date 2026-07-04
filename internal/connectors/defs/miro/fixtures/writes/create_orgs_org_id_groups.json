@@ -1,0 +1,19 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "name": "name_fixture",
+    "description": "description_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/orgs/synthetic-conformance-value/groups",
+    "body": {
+      "name": "name_fixture",
+      "description": "description_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

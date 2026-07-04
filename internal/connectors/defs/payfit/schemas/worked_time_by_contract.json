@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "worked_time_by_contract",
+  "type": "object",
+  "x-primary-key": [
+    "contractId"
+  ],
+  "properties": {
+    "contractId": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "null"
+      ]
+    }
+  }
+}

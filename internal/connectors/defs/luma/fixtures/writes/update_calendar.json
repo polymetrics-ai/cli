@@ -1,0 +1,12 @@
+{
+  "record": {
+    "calendar_id": "fixture_calendar_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/update",
+    "body": {
+      "calendar_id": "fixture_calendar_id"
+    }
+  }
+}

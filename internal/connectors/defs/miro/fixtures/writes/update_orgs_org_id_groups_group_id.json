@@ -1,0 +1,20 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "group_id": "synthetic-conformance-value",
+    "name": "name_fixture",
+    "description": "description_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/orgs/synthetic-conformance-value/groups/synthetic-conformance-value",
+    "body": {
+      "name": "name_fixture",
+      "description": "description_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

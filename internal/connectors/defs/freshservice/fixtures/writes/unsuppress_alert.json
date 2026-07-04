@@ -1,0 +1,15 @@
+{
+  "record": {
+    "alert_id": 123,
+    "name": "Fixture unsuppress_alert",
+    "description": "Fixture unsuppress_alert record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ams/alerts/123/unsuppress",
+    "body": {
+      "name": "Fixture unsuppress_alert",
+      "description": "Fixture unsuppress_alert record"
+    }
+  }
+}

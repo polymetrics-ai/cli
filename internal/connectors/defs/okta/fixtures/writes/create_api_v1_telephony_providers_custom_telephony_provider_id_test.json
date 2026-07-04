@@ -1,0 +1,21 @@
+{
+  "record": {
+    "custom_telephony_provider_id": "synthetic-conformance-value",
+    "countryCodeIso2": "country_code_iso2_fixture",
+    "factor": "SMS",
+    "phoneNumber": "phone_number_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/telephony-providers/synthetic-conformance-value/test",
+    "body": {
+      "countryCodeIso2": "country_code_iso2_fixture",
+      "factor": "SMS",
+      "phoneNumber": "phone_number_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

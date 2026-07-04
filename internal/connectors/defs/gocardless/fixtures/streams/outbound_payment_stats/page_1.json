@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/outbound_payments/stats"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "outbound_payments": {
+        "pending_approval_amount": 200,
+        "pending_approval_count": 2,
+        "executing_amount": 3000,
+        "executing_count": 3,
+        "scheduled_amount": 123,
+        "scheduled_count": 1
+      }
+    }
+  }
+}

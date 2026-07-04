@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounttypes"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "1",
+        "name": "Fixture account_types",
+        "href": "https://app.nutshell.com/rest/account_types/1",
+        "htmlUrl": "https://app.nutshell.com/account_types/1",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      },
+      {
+        "id": "2",
+        "name": "Fixture account_types",
+        "href": "https://app.nutshell.com/rest/account_types/2",
+        "htmlUrl": "https://app.nutshell.com/account_types/2",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      }
+    ]
+  }
+}

@@ -33,6 +33,27 @@
       "schema": "schemas/team.json"
     },
     {
+      "name": "team_senders",
+      "path": "/team/senders",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team_senders.json"
+    },
+    {
+      "name": "team_credits",
+      "path": "/team/credits",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team_credits.json"
+    },
+    {
+      "name": "team_crm_users",
+      "path": "/team/crmUsers",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team_crm_users.json"
+    },
+    {
       "name": "activities",
       "path": "/activities",
       "records": { "path": "" },
@@ -43,6 +64,98 @@
       "path": "/unsubscribes",
       "records": { "path": "" },
       "schema": "schemas/unsubscribes.json"
+    },
+    {
+      "name": "schedules",
+      "path": "/schedules",
+      "records": { "path": "schedules" },
+      "schema": "schemas/schedules.json"
+    },
+    {
+      "name": "database_filters",
+      "path": "/database/filters",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/database_filters.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "inbox_labels",
+      "path": "/inbox/labels",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/inbox_labels.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "contact_lists",
+      "path": "/contacts/lists",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/contact_lists.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": { "path": "data" },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/hooks",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "unsubscribed_variables",
+      "path": "/v2/unsubscribes/variables",
+      "records": { "path": "" },
+      "schema": "schemas/unsubscribed_variables.json"
+    },
+    {
+      "name": "watchlist_signals",
+      "path": "/watchlist/signals",
+      "records": { "path": "signals" },
+      "schema": "schemas/watchlist_signals.json"
+    },
+    {
+      "name": "user_channels",
+      "path": "/user/channels",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/user_channels.json"
+    },
+    {
+      "name": "fields_contact",
+      "path": "/fields",
+      "records": { "path": "data.contact" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/fields_contact.json"
+    },
+    {
+      "name": "fields_company",
+      "path": "/fields",
+      "records": { "path": "data.company" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/fields_company.json"
     }
   ]
 }

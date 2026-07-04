@@ -1,0 +1,14 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/public/v1/documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_documents_response",
+      "status": "ok"
+    }
+  }
+}

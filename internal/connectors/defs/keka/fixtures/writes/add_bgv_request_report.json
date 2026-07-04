@@ -1,0 +1,10 @@
+{
+  "record": {
+    "bgv_id": "fixture_bgv_id",
+    "request_id": "fixture_request_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/hris/bgv/fixture_bgv_id/requests/fixture_request_id"
+  }
+}

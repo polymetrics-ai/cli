@@ -1,0 +1,15 @@
+{
+  "record": {
+    "preprequest_id": "preprequest_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/preprequests/preprequest_id_fixture/labrequeues"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

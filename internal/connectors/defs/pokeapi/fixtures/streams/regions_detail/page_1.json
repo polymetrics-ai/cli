@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/region/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "name": "fixture-region-detail",
+      "names": [
+
+      ]
+    }
+  }
+}

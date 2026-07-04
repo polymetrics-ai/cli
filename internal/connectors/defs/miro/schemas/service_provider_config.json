@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Supported operations and SCIM API basic configuration.",
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "description": "An array of URNs that identify the schema(s) that define the structure of this response. <br><br> In this case, it contains urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig, which indicates that this is a SCIM ServiceProviderConfig response.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "documentationUri": {
+      "type": "string",
+      "description": "A link to Miro SCIM documentation."
+    },
+    "patch": {
+      "type": "object",
+      "description": "Indicator of whether the PATCH operation is supported.",
+      "properties": {
+        "supported": {
+          "type": "boolean",
+          "description": "Returns true if the operation is supported."
+        }
+      },
+      "additionalProperties": true
+    },
+    "bulk": {
+      "type": "object",
+      "description": "Indicator of whether the Bulk operation is supported.",
+      "properties": {
+        "supported": {
+          "type": "boolean",
+          "description": "Returns true if the operation is supported."
+        },
+        "maxOperations": {
+          "type": "number",
+          "description": "Maximum operations supported in a single request."
+        },
+        "maxPayloadSize": {
+          "type": "number",
+          "description": "Maximum payload size supported for a single request."
+        }
+      },
+      "additionalProperties": true
+    },
+    "filter": {
+      "type": "object",
+      "description": "Indicator of whether the Filter operation is supported.",
+      "properties": {
+        "supported": {
+          "type": "boolean",
+          "description": "Returns true if the operation is supported."
+        },
+        "maxResults": {
+          "type": "number",
+          "description": "Maximum results returned in a list response."
+        }
+      },
+      "additionalProperties": true
+    },
+    "changePassword": {
+      "type": "object",
+      "description": "Indicator of whether the Change Password operation is supported.",
+      "properties": {
+        "supported": {
+          "type": "boolean",
+          "description": "Returns true if the operation is supported."
+        }
+      },
+      "additionalProperties": true
+    },
+    "sort": {
+      "type": "object",
+      "description": "Indicator of whether the Sort operation is supported.",
+      "properties": {
+        "supported": {
+          "type": "boolean",
+          "description": "Returns true if the operation is supported."
+        }
+      },
+      "additionalProperties": true
+    },
+    "etag": {
+      "type": "object",
+      "description": "Indicator of whether ETag is supported.",
+      "properties": {
+        "supported": {
+          "type": "boolean",
+          "description": "Returns true if ETag is supported."
+        }
+      },
+      "additionalProperties": true
+    },
+    "authenticationSchemes": {
+      "type": "array",
+      "description": "A list of supported authentication schemes.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the authentication scheme."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the authentication scheme."
+          },
+          "specUri": {
+            "type": "string",
+            "description": "Specification URI of the authentication scheme."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the authentication scheme."
+          },
+          "primary": {
+            "type": "boolean",
+            "description": "Returns true if this is the primary authentication scheme of the service provider."
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

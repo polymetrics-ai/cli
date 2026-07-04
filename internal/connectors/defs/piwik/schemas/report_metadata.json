@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik Report Metadata",
+  "type": "object",
+  "x-primary-key": [
+    "record_id"
+  ],
+  "required": [
+    "record_id"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "unique_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subcategory": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "module": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dimension": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "documentation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metrics": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "processedMetrics": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "metricsDocumentation": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

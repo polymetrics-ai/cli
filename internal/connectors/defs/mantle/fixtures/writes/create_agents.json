@@ -1,0 +1,18 @@
+{
+  "record": {
+    "email": "fixture@example.com",
+    "name": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/agents",
+    "body": {
+      "email": "fixture@example.com",
+      "name": "fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

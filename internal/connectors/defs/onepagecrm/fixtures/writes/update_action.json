@@ -1,0 +1,19 @@
+{
+  "record": {
+    "action_id": "fixture_id",
+    "contact_id": "fixture_value",
+    "assignee_id": "fixture_value",
+    "status": "fixture_value",
+    "text": "Fixture text"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/actions/fixture_id",
+    "body": {
+      "contact_id": "fixture_value",
+      "assignee_id": "fixture_value",
+      "status": "fixture_value",
+      "text": "Fixture text"
+    }
+  }
+}

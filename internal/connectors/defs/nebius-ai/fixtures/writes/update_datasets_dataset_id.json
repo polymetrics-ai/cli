@@ -1,0 +1,19 @@
+{
+  "record": {
+    "dataset_id": "synthetic-conformance-value",
+    "name": "name_fixture",
+    "folder": "folder_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/datasets/synthetic-conformance-value",
+    "body": {
+      "name": "name_fixture",
+      "folder": "folder_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

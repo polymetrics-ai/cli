@@ -1,0 +1,719 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/filings/list",
+    "query": {
+      "page": "0",
+      "per-page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "simId": 111111,
+          "ticker": "FX1",
+          "filingType": "HTML",
+          "filingIdentifier": 900000,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111112,
+          "ticker": "FX2",
+          "filingType": "HTML",
+          "filingIdentifier": 900001,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111113,
+          "ticker": "FX3",
+          "filingType": "HTML",
+          "filingIdentifier": 900002,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111114,
+          "ticker": "FX4",
+          "filingType": "HTML",
+          "filingIdentifier": 900003,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111115,
+          "ticker": "FX5",
+          "filingType": "HTML",
+          "filingIdentifier": 900004,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111116,
+          "ticker": "FX6",
+          "filingType": "HTML",
+          "filingIdentifier": 900005,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111117,
+          "ticker": "FX7",
+          "filingType": "HTML",
+          "filingIdentifier": 900006,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111118,
+          "ticker": "FX8",
+          "filingType": "HTML",
+          "filingIdentifier": 900007,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111119,
+          "ticker": "FX9",
+          "filingType": "HTML",
+          "filingIdentifier": 900008,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111120,
+          "ticker": "FX10",
+          "filingType": "HTML",
+          "filingIdentifier": 900009,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111121,
+          "ticker": "FX11",
+          "filingType": "HTML",
+          "filingIdentifier": 900010,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111122,
+          "ticker": "FX12",
+          "filingType": "HTML",
+          "filingIdentifier": 900011,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111123,
+          "ticker": "FX13",
+          "filingType": "HTML",
+          "filingIdentifier": 900012,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111124,
+          "ticker": "FX14",
+          "filingType": "HTML",
+          "filingIdentifier": 900013,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111125,
+          "ticker": "FX15",
+          "filingType": "HTML",
+          "filingIdentifier": 900014,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111126,
+          "ticker": "FX16",
+          "filingType": "HTML",
+          "filingIdentifier": 900015,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111127,
+          "ticker": "FX17",
+          "filingType": "HTML",
+          "filingIdentifier": 900016,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111128,
+          "ticker": "FX18",
+          "filingType": "HTML",
+          "filingIdentifier": 900017,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111129,
+          "ticker": "FX19",
+          "filingType": "HTML",
+          "filingIdentifier": 900018,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111130,
+          "ticker": "FX20",
+          "filingType": "HTML",
+          "filingIdentifier": 900019,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111131,
+          "ticker": "FX21",
+          "filingType": "HTML",
+          "filingIdentifier": 900020,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111132,
+          "ticker": "FX22",
+          "filingType": "HTML",
+          "filingIdentifier": 900021,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111133,
+          "ticker": "FX23",
+          "filingType": "HTML",
+          "filingIdentifier": 900022,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111134,
+          "ticker": "FX24",
+          "filingType": "HTML",
+          "filingIdentifier": 900023,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111135,
+          "ticker": "FX25",
+          "filingType": "HTML",
+          "filingIdentifier": 900024,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111136,
+          "ticker": "FX26",
+          "filingType": "HTML",
+          "filingIdentifier": 900025,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111137,
+          "ticker": "FX27",
+          "filingType": "HTML",
+          "filingIdentifier": 900026,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111138,
+          "ticker": "FX28",
+          "filingType": "HTML",
+          "filingIdentifier": 900027,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111139,
+          "ticker": "FX29",
+          "filingType": "HTML",
+          "filingIdentifier": 900028,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111140,
+          "ticker": "FX30",
+          "filingType": "HTML",
+          "filingIdentifier": 900029,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111141,
+          "ticker": "FX31",
+          "filingType": "HTML",
+          "filingIdentifier": 900030,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111142,
+          "ticker": "FX32",
+          "filingType": "HTML",
+          "filingIdentifier": 900031,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111143,
+          "ticker": "FX33",
+          "filingType": "HTML",
+          "filingIdentifier": 900032,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111144,
+          "ticker": "FX34",
+          "filingType": "HTML",
+          "filingIdentifier": 900033,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111145,
+          "ticker": "FX35",
+          "filingType": "HTML",
+          "filingIdentifier": 900034,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111146,
+          "ticker": "FX36",
+          "filingType": "HTML",
+          "filingIdentifier": 900035,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111147,
+          "ticker": "FX37",
+          "filingType": "HTML",
+          "filingIdentifier": 900036,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111148,
+          "ticker": "FX38",
+          "filingType": "HTML",
+          "filingIdentifier": 900037,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111149,
+          "ticker": "FX39",
+          "filingType": "HTML",
+          "filingIdentifier": 900038,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111150,
+          "ticker": "FX40",
+          "filingType": "HTML",
+          "filingIdentifier": 900039,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111151,
+          "ticker": "FX41",
+          "filingType": "HTML",
+          "filingIdentifier": 900040,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111152,
+          "ticker": "FX42",
+          "filingType": "HTML",
+          "filingIdentifier": 900041,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111153,
+          "ticker": "FX43",
+          "filingType": "HTML",
+          "filingIdentifier": 900042,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111154,
+          "ticker": "FX44",
+          "filingType": "HTML",
+          "filingIdentifier": 900043,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111155,
+          "ticker": "FX45",
+          "filingType": "HTML",
+          "filingIdentifier": 900044,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111156,
+          "ticker": "FX46",
+          "filingType": "HTML",
+          "filingIdentifier": 900045,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111157,
+          "ticker": "FX47",
+          "filingType": "HTML",
+          "filingIdentifier": 900046,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111158,
+          "ticker": "FX48",
+          "filingType": "HTML",
+          "filingIdentifier": 900047,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111159,
+          "ticker": "FX49",
+          "filingType": "HTML",
+          "filingIdentifier": 900048,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111160,
+          "ticker": "FX50",
+          "filingType": "HTML",
+          "filingIdentifier": 900049,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111161,
+          "ticker": "FX51",
+          "filingType": "HTML",
+          "filingIdentifier": 900050,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111162,
+          "ticker": "FX52",
+          "filingType": "HTML",
+          "filingIdentifier": 900051,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111163,
+          "ticker": "FX53",
+          "filingType": "HTML",
+          "filingIdentifier": 900052,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111164,
+          "ticker": "FX54",
+          "filingType": "HTML",
+          "filingIdentifier": 900053,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111165,
+          "ticker": "FX55",
+          "filingType": "HTML",
+          "filingIdentifier": 900054,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111166,
+          "ticker": "FX56",
+          "filingType": "HTML",
+          "filingIdentifier": 900055,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111167,
+          "ticker": "FX57",
+          "filingType": "HTML",
+          "filingIdentifier": 900056,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111168,
+          "ticker": "FX58",
+          "filingType": "HTML",
+          "filingIdentifier": 900057,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111169,
+          "ticker": "FX59",
+          "filingType": "HTML",
+          "filingIdentifier": 900058,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111170,
+          "ticker": "FX60",
+          "filingType": "HTML",
+          "filingIdentifier": 900059,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111171,
+          "ticker": "FX61",
+          "filingType": "HTML",
+          "filingIdentifier": 900060,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111172,
+          "ticker": "FX62",
+          "filingType": "HTML",
+          "filingIdentifier": 900061,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111173,
+          "ticker": "FX63",
+          "filingType": "HTML",
+          "filingIdentifier": 900062,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111174,
+          "ticker": "FX64",
+          "filingType": "HTML",
+          "filingIdentifier": 900063,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111175,
+          "ticker": "FX65",
+          "filingType": "HTML",
+          "filingIdentifier": 900064,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111176,
+          "ticker": "FX66",
+          "filingType": "HTML",
+          "filingIdentifier": 900065,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111177,
+          "ticker": "FX67",
+          "filingType": "HTML",
+          "filingIdentifier": 900066,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111178,
+          "ticker": "FX68",
+          "filingType": "HTML",
+          "filingIdentifier": 900067,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111179,
+          "ticker": "FX69",
+          "filingType": "HTML",
+          "filingIdentifier": 900068,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111180,
+          "ticker": "FX70",
+          "filingType": "HTML",
+          "filingIdentifier": 900069,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111181,
+          "ticker": "FX71",
+          "filingType": "HTML",
+          "filingIdentifier": 900070,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111182,
+          "ticker": "FX72",
+          "filingType": "HTML",
+          "filingIdentifier": 900071,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111183,
+          "ticker": "FX73",
+          "filingType": "HTML",
+          "filingIdentifier": 900072,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111184,
+          "ticker": "FX74",
+          "filingType": "HTML",
+          "filingIdentifier": 900073,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111185,
+          "ticker": "FX75",
+          "filingType": "HTML",
+          "filingIdentifier": 900074,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111186,
+          "ticker": "FX76",
+          "filingType": "HTML",
+          "filingIdentifier": 900075,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111187,
+          "ticker": "FX77",
+          "filingType": "HTML",
+          "filingIdentifier": 900076,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111188,
+          "ticker": "FX78",
+          "filingType": "HTML",
+          "filingIdentifier": 900077,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111189,
+          "ticker": "FX79",
+          "filingType": "HTML",
+          "filingIdentifier": 900078,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111190,
+          "ticker": "FX80",
+          "filingType": "HTML",
+          "filingIdentifier": 900079,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111191,
+          "ticker": "FX81",
+          "filingType": "HTML",
+          "filingIdentifier": 900080,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111192,
+          "ticker": "FX82",
+          "filingType": "HTML",
+          "filingIdentifier": 900081,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111193,
+          "ticker": "FX83",
+          "filingType": "HTML",
+          "filingIdentifier": 900082,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111194,
+          "ticker": "FX84",
+          "filingType": "HTML",
+          "filingIdentifier": 900083,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111195,
+          "ticker": "FX85",
+          "filingType": "HTML",
+          "filingIdentifier": 900084,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111196,
+          "ticker": "FX86",
+          "filingType": "HTML",
+          "filingIdentifier": 900085,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111197,
+          "ticker": "FX87",
+          "filingType": "HTML",
+          "filingIdentifier": 900086,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111198,
+          "ticker": "FX88",
+          "filingType": "HTML",
+          "filingIdentifier": 900087,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111199,
+          "ticker": "FX89",
+          "filingType": "HTML",
+          "filingIdentifier": 900088,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111200,
+          "ticker": "FX90",
+          "filingType": "HTML",
+          "filingIdentifier": 900089,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111201,
+          "ticker": "FX91",
+          "filingType": "HTML",
+          "filingIdentifier": 900090,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111202,
+          "ticker": "FX92",
+          "filingType": "HTML",
+          "filingIdentifier": 900091,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111203,
+          "ticker": "FX93",
+          "filingType": "HTML",
+          "filingIdentifier": 900092,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111204,
+          "ticker": "FX94",
+          "filingType": "HTML",
+          "filingIdentifier": 900093,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111205,
+          "ticker": "FX95",
+          "filingType": "HTML",
+          "filingIdentifier": 900094,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111206,
+          "ticker": "FX96",
+          "filingType": "HTML",
+          "filingIdentifier": 900095,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111207,
+          "ticker": "FX97",
+          "filingType": "HTML",
+          "filingIdentifier": 900096,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111208,
+          "ticker": "FX98",
+          "filingType": "HTML",
+          "filingIdentifier": 900097,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111209,
+          "ticker": "FX99",
+          "filingType": "HTML",
+          "filingIdentifier": 900098,
+          "reportDate": "2026-01-02"
+        },
+        {
+          "simId": 111210,
+          "ticker": "FX100",
+          "filingType": "HTML",
+          "filingIdentifier": 900099,
+          "reportDate": "2026-01-02"
+        }
+      ],
+      "page": 0,
+      "perPage": 100
+    }
+  }
+}

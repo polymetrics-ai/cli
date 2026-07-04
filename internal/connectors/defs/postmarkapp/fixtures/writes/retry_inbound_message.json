@@ -1,0 +1,9 @@
+{
+  "record": {
+    "message_id": "message_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/messages/inbound/message_id_fixture/retry"
+  }
+}

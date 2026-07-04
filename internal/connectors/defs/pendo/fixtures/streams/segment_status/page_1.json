@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/segment/synthetic-conformance-value/status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requestId": "segment_status_fixture",
+      "status": 200,
+      "command": "finish",
+      "updatePending": false
+    }
+  }
+}

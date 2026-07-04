@@ -1,0 +1,20 @@
+{
+  "record": {
+    "branding": {
+      "description": "Synthetic create_a_logo_associated_with_a_creditor fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/branding/logos",
+    "body": {
+      "branding": {
+        "description": "Synthetic create_a_logo_associated_with_a_creditor fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

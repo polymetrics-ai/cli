@@ -1,0 +1,14 @@
+{
+  "record": {
+    "app_id": "app_id_fixture",
+    "feature_id": "feature_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/apps/app_id_fixture/plans/features/feature_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

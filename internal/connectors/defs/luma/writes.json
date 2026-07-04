@@ -1,0 +1,1828 @@
+{
+  "actions": [
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/events/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "can_register_for_multiple_tickets": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "cover_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coordinate": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "description_md": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "geo_address_json": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "location_visibility": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "max_capacity": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "meeting_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name_requirement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone_number_requirement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "registration_open": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "registration_questions": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "reminders_disabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "feedback_email": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "show_guest_list": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tint_color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "visibility": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "waitlist_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "start_at",
+          "timezone"
+        ]
+      },
+      "risk": "create event through the Luma API."
+    },
+    {
+      "name": "update_event",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "suppress_notifications": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "can_register_for_multiple_tickets": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "cover_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coordinate": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "description_md": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "geo_address_json": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "location_visibility": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "max_capacity": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "meeting_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name_requirement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone_number_requirement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "registration_open": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "registration_questions": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "reminders_disabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "feedback_email": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "show_guest_list": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tint_color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "visibility": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "waitlist_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id"
+        ]
+      },
+      "risk": "update event through the Luma API."
+    },
+    {
+      "name": "update_guest_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/guests/update-status",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "guest_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "should_refund": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "send_email": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "guest_id",
+          "status"
+        ]
+      },
+      "risk": "update guest status through the Luma API."
+    },
+    {
+      "name": "send_event_invites",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/guests/send-invites",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "guests": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "guests"
+        ]
+      },
+      "risk": "send event invites through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_event_guests",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/events/guests/add",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "guests": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "ticket": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "tickets": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "approval_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "send_email": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "guests"
+        ]
+      },
+      "risk": "add event guests through the Luma API."
+    },
+    {
+      "name": "add_event_host",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/events/hosts/add",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "access_level": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_visible": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "email"
+        ]
+      },
+      "risk": "add event host through the Luma API."
+    },
+    {
+      "name": "update_event_host",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/hosts/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "access_level": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_visible": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "email"
+        ]
+      },
+      "risk": "update event host through the Luma API."
+    },
+    {
+      "name": "remove_event_host",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/v1/events/hosts/remove",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "email"
+        ]
+      },
+      "risk": "remove event host through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_event_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/events/coupons/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "remaining_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "valid_start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discount": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_ticket_type_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "code",
+          "discount",
+          "event_id"
+        ]
+      },
+      "risk": "create event coupon through the Luma API."
+    },
+    {
+      "name": "update_event_coupon",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/coupons/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "remaining_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "valid_start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "code"
+        ]
+      },
+      "risk": "update event coupon through the Luma API."
+    },
+    {
+      "name": "create_calendar_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/calendars/coupons/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "remaining_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "valid_start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discount": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "code",
+          "discount"
+        ]
+      },
+      "risk": "create calendar coupon through the Luma API."
+    },
+    {
+      "name": "update_calendar_coupon",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/coupons/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "remaining_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "valid_start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "code"
+        ]
+      },
+      "risk": "update calendar coupon through the Luma API."
+    },
+    {
+      "name": "import_calendar_contacts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/calendars/contacts/import",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contacts": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contacts"
+        ]
+      },
+      "risk": "import calendar contacts through the Luma API."
+    },
+    {
+      "name": "create_contact_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "create contact tag through the Luma API."
+    },
+    {
+      "name": "update_contact_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "update contact tag through the Luma API."
+    },
+    {
+      "name": "delete_contact_tag",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/delete",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "delete contact tag through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "apply_contact_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/apply",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "user_ids": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "emails": {
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag"
+        ]
+      },
+      "risk": "apply contact tag through the Luma API."
+    },
+    {
+      "name": "unapply_contact_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/unapply",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "user_ids": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "emails": {
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag"
+        ]
+      },
+      "risk": "unapply contact tag through the Luma API."
+    },
+    {
+      "name": "create_event_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "create event tag through the Luma API."
+    },
+    {
+      "name": "update_event_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "update event tag through the Luma API."
+    },
+    {
+      "name": "delete_event_tag",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/delete",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "delete event tag through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "apply_event_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/apply",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_ids": {
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag",
+          "event_ids"
+        ]
+      },
+      "risk": "apply event tag through the Luma API."
+    },
+    {
+      "name": "unapply_event_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/unapply",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_ids": {
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag",
+          "event_ids"
+        ]
+      },
+      "risk": "unapply event tag through the Luma API."
+    },
+    {
+      "name": "add_calendar_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/calendars/events/add",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "submission_mode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duration_interval": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "geo_address_json": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "host": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "geo_longitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "geo_latitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "coordinate": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_api_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "add calendar event through the Luma API."
+    },
+    {
+      "name": "approve_calendar_event",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/events/approve",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calendar_event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "calendar_event_id"
+        ]
+      },
+      "risk": "approve calendar event through the Luma API."
+    },
+    {
+      "name": "reject_calendar_event",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/events/reject",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calendar_event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "calendar_event_id"
+        ]
+      },
+      "risk": "reject calendar event through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_image_upload_url",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/images/create-upload-url",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "content_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "create image upload url through the Luma API."
+    },
+    {
+      "name": "create_ticket_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/events/ticket-types/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "require_approval": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "is_hidden": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "max_capacity": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cents": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_flexible": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "min_cents": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "name",
+          "type"
+        ]
+      },
+      "risk": "create ticket type through the Luma API."
+    },
+    {
+      "name": "update_ticket_type",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/ticket-types/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_ticket_type_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "require_approval": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "is_hidden": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_start_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "valid_end_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "max_capacity": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cents": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_flexible": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "min_cents": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_ticket_type_id"
+        ]
+      },
+      "risk": "update ticket type through the Luma API."
+    },
+    {
+      "name": "delete_ticket_type",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/v1/events/ticket-types/delete",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_ticket_type_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_ticket_type_id"
+        ]
+      },
+      "risk": "delete ticket type through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_membership_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/memberships/members/add",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "membership_tier_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "registration_answers": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "skip_payment": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "email",
+          "membership_tier_id"
+        ]
+      },
+      "risk": "add membership member through the Luma API."
+    },
+    {
+      "name": "update_membership_member_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/memberships/members/update-status",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id",
+          "status"
+        ]
+      },
+      "risk": "update membership member status through the Luma API."
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/webhooks/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_types": {
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "url",
+          "event_types"
+        ]
+      },
+      "risk": "create webhook through the Luma API."
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/webhooks/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "event_types": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "update webhook through the Luma API."
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/v1/webhooks/delete",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "delete webhook through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "request_event_cancellation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/cancel/request",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id"
+        ]
+      },
+      "risk": "request event cancellation through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_event",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/v1/events/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cancellation_token": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "should_refund": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "cancellation_token"
+        ]
+      },
+      "risk": "cancel event through the Luma API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_calendar",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/calendars/update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calendar_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "avatar_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tint_color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "calendar_id"
+        ]
+      },
+      "risk": "update calendar through the Luma API."
+    },
+    {
+      "name": "create_organization_calendar",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/organizations/calendars/create",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "avatar_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tint_color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "create organization calendar through the Luma API."
+    },
+    {
+      "name": "transfer_event_calendar",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/organizations/events/transfer-calendar",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "calendar_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "event_id",
+          "calendar_id"
+        ]
+      },
+      "risk": "transfer event calendar through the Luma API.",
+      "confirm": "destructive"
+    }
+  ]
+}

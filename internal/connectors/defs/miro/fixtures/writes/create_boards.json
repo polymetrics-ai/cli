@@ -1,0 +1,48 @@
+{
+  "record": {
+    "description": "description_fixture",
+    "name": "Untitled",
+    "policy": {
+      "permissionsPolicy": {
+        "collaborationToolsStartAccess": "all_editors",
+        "copyAccess": "anyone",
+        "sharingAccess": "team_members_with_editing_rights"
+      },
+      "sharingPolicy": {
+        "access": "private",
+        "inviteToAccountAndBoardLinkAccess": "no_access",
+        "organizationAccess": "private",
+        "teamAccess": "private"
+      }
+    },
+    "teamId": "team_id_fixture",
+    "projectId": "project_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/boards",
+    "body": {
+      "description": "description_fixture",
+      "name": "Untitled",
+      "policy": {
+        "permissionsPolicy": {
+          "collaborationToolsStartAccess": "all_editors",
+          "copyAccess": "anyone",
+          "sharingAccess": "team_members_with_editing_rights"
+        },
+        "sharingPolicy": {
+          "access": "private",
+          "inviteToAccountAndBoardLinkAccess": "no_access",
+          "organizationAccess": "private",
+          "teamAccess": "private"
+        }
+      },
+      "teamId": "team_id_fixture",
+      "projectId": "project_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

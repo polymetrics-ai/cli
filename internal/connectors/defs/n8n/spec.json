@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "n8n Connection Specification",
   "type": "object",
-  "required": ["base_url", "api_key"],
+  "required": [
+    "base_url",
+    "api_key"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
@@ -27,6 +30,106 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "workflow_id": {
+      "type": "string",
+      "description": "Workflow id used by workflow detail/version/tag streams and workflow write actions."
+    },
+    "workflow_version_id": {
+      "type": "string",
+      "description": "Workflow version id used by the workflow_version stream."
+    },
+    "workflow_active": {
+      "type": "string",
+      "description": "Optional active filter for the workflows list stream; use true or false."
+    },
+    "workflow_tags": {
+      "type": "string",
+      "description": "Optional comma-separated tag filter for the workflows list stream."
+    },
+    "workflow_name": {
+      "type": "string",
+      "description": "Optional workflow name filter for the workflows list stream."
+    },
+    "exclude_pinned_data": {
+      "type": "string",
+      "description": "Optional n8n excludePinnedData flag for workflow reads; use true or false."
+    },
+    "execution_id": {
+      "type": "string",
+      "description": "Execution id used by execution detail/tag streams and execution write actions."
+    },
+    "execution_status": {
+      "type": "string",
+      "description": "Optional status filter for the executions list stream."
+    },
+    "include_execution_data": {
+      "type": "string",
+      "description": "Optional includeData flag for execution reads; use true or false."
+    },
+    "ignore_data_size_limit": {
+      "type": "string",
+      "description": "Optional ignoreDataSizeLimit flag for execution reads; use true or false."
+    },
+    "redact_execution_data": {
+      "type": "string",
+      "description": "Optional redactExecutionData flag for execution reads; use true or false."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User id or email used by the user detail stream."
+    },
+    "include_role": {
+      "type": "string",
+      "description": "Optional includeRole flag for user reads; use true or false."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Tag id used by the tag detail stream and tag write actions."
+    },
+    "variable_id": {
+      "type": "string",
+      "description": "Variable id used by variable write actions."
+    },
+    "variable_state": {
+      "type": "string",
+      "description": "Optional state filter for the variables list stream."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Project id used by project-scoped streams, filters, and project write actions."
+    },
+    "project_user_id": {
+      "type": "string",
+      "description": "User id used by project membership write actions."
+    },
+    "data_table_id": {
+      "type": "string",
+      "description": "Data table id used by data table detail, row, column, and write actions."
+    },
+    "data_table_column_id": {
+      "type": "string",
+      "description": "Data table column id used by column write actions."
+    },
+    "data_table_filter": {
+      "type": "string",
+      "description": "Optional encoded filter value for data table list/row reads."
+    },
+    "data_table_sort_by": {
+      "type": "string",
+      "description": "Optional sortBy value for data table list/row reads."
+    },
+    "data_table_search": {
+      "type": "string",
+      "description": "Optional search value for data table row reads."
+    },
+    "credential_id": {
+      "type": "string",
+      "description": "Credential id used by credential detail, test, and transfer actions."
+    },
+    "credential_type_name": {
+      "type": "string",
+      "description": "Credential type name used by the credential_schema stream."
     }
   }
 }

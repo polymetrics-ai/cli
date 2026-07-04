@@ -1,0 +1,20 @@
+{
+  "record": {
+    "refunds": {
+      "description": "Synthetic create_a_refund fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/refunds",
+    "body": {
+      "refunds": {
+        "description": "Synthetic create_a_refund fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

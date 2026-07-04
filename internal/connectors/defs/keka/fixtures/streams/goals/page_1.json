@@ -1,0 +1,112 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pms/goals",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "parentGoal": null,
+          "childGoals": [
+            {
+              "employeeId": "goals_fixture_1",
+              "employeeNumber": "FIX-1",
+              "timeFrameId": "2026-01-01T00:00:00Z",
+              "name": "Fixture goals 1",
+              "description": null,
+              "startDate": "2026-01-01T00:00:00Z",
+              "endDate": "2026-01-01T00:00:00Z",
+              "initialValue": 1,
+              "targetValue": 100,
+              "currentValue": 16,
+              "progress": 16,
+              "metricType": 1,
+              "status": 2,
+              "tags": [],
+              "type": 1,
+              "departmentId": null,
+              "id": "goals_fixture_1"
+            }
+          ],
+          "isPrivate": true,
+          "employeeId": "goals_fixture_1",
+          "employeeNumber": "FIX-1",
+          "timeFrameId": "2026-01-01T00:00:00Z",
+          "name": "Fixture goals 1",
+          "description": "fixture_goals_1",
+          "startDate": "2026-01-01T00:00:00Z",
+          "endDate": "2026-01-01T00:00:00Z",
+          "initialValue": 1,
+          "targetValue": 100,
+          "currentValue": 16,
+          "progress": 16,
+          "metricType": 1,
+          "status": 3,
+          "tags": [],
+          "type": 1,
+          "departmentId": null,
+          "id": "goals_fixture_1"
+        },
+        {
+          "parentGoal": null,
+          "childGoals": [
+            {
+              "employeeId": "goals_fixture_1",
+              "employeeNumber": "FIX-1",
+              "timeFrameId": "2026-01-01T00:00:00Z",
+              "name": "Fixture goals 1",
+              "description": null,
+              "startDate": "2026-01-01T00:00:00Z",
+              "endDate": "2026-01-01T00:00:00Z",
+              "initialValue": 1,
+              "targetValue": 52,
+              "currentValue": 1,
+              "progress": 1,
+              "metricType": 1,
+              "status": 1,
+              "tags": [],
+              "type": 1,
+              "departmentId": null,
+              "id": "goals_fixture_1"
+            }
+          ],
+          "isPrivate": true,
+          "employeeId": "goals_fixture_2",
+          "employeeNumber": "FIX-2",
+          "timeFrameId": "2026-01-01T00:00:00Z",
+          "name": "Fixture goals 2",
+          "description": "fixture_goals_2",
+          "startDate": "2026-01-01T00:00:00Z",
+          "endDate": "2026-01-01T00:00:00Z",
+          "initialValue": 1,
+          "targetValue": 100,
+          "currentValue": 1,
+          "progress": 1,
+          "metricType": 1,
+          "status": 1,
+          "tags": [],
+          "type": 1,
+          "departmentId": null,
+          "id": "goals_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/goals",
+      "lastPage": "https://example.invalid/keka/goals",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

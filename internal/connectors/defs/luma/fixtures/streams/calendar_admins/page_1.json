@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/calendars/admins/list"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "fixture_id",
+          "name": "Fixture Name",
+          "avatar_url": "https://example.invalid/image.png",
+          "email": "fixture@example.invalid",
+          "first_name": "Fixture Name",
+          "last_name": "Fixture Name"
+        },
+        {
+          "id": "calendar_admins_fixture_2",
+          "name": "Fixture Name",
+          "avatar_url": "https://example.invalid/image.png",
+          "email": "fixture@example.invalid",
+          "first_name": "Fixture Name",
+          "last_name": "Fixture Name"
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  }
+}

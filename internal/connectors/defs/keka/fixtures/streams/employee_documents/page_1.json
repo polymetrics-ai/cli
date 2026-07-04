@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/employees/{{ config.employee_id }}/documenttypes/{{ config.document_type_id }}/documents",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "employee_documents_fixture_1",
+          "name": "Fixture employee documents 1",
+          "attributes": [
+            {
+              "id": "employee_documents_fixture_1",
+              "title": "Fixture employee documents 1",
+              "type": "fixture_employee_documents_1",
+              "value": "fixture_employee_documents_1"
+            },
+            {
+              "id": "employee_documents_fixture_2",
+              "title": "Fixture employee documents 2",
+              "type": "fixture_employee_documents_2",
+              "value": "fixture_employee_documents_2"
+            }
+          ],
+          "attachments": [
+            {
+              "id": "employee_documents_fixture_1",
+              "name": "Fixture employee documents 1"
+            }
+          ]
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/employee_documents",
+      "lastPage": "https://example.invalid/keka/employee_documents",
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

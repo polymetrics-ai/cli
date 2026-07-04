@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/break-policies/synthetic-conformance-value/breaks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "_links": {
+        "next": {},
+        "prev": {}
+      },
+      "data": [
+        {
+          "availabilityEndTime": "fixture_value",
+          "availabilityMaxHoursWorked": 12.34,
+          "availabilityMinHoursWorked": 12.34,
+          "availabilityStartTime": "fixture_value"
+        }
+      ],
+      "meta": {
+        "limit": 1001,
+        "offset": 1001,
+        "totalItems": 1001
+      }
+    }
+  }
+}

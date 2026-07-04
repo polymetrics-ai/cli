@@ -1,0 +1,48 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "lastUpdatedDate": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "providerType": "APNS",
+    "_links": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/push-providers",
+    "body": {
+      "id": "id_fixture",
+      "lastUpdatedDate": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "providerType": "APNS",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

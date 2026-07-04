@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "emailaddress",
+      "attributes": {
+        "name": "Fixture Update Email Address"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/emailAddresses/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "emailaddress",
+        "attributes": {
+          "name": "Fixture Update Email Address"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

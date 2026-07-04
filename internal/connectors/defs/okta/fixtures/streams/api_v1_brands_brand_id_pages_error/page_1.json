@@ -1,0 +1,59 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value/pages/error"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "default": {
+          "pageContent": "page_content_fixture"
+        },
+        "customized": {
+          "pageContent": "page_content_fixture"
+        },
+        "customizedUrl": "https://example.invalid/fixture",
+        "preview": {
+          "pageContent": "page_content_fixture"
+        },
+        "previewUrl": "https://example.invalid/fixture"
+      },
+      "_links": {
+        "default": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "customized": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "preview": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

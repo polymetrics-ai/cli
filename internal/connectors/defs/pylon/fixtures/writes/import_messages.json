@@ -1,0 +1,22 @@
+{
+  "record": {
+    "issue_id": "synthetic-conformance-value",
+    "messages": [
+
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/import/issues/synthetic-conformance-value/messages",
+    "body": {
+      "messages": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data-tables"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "dt_fixture_1",
+          "name": "Fixture Table",
+          "columns": [
+            {
+              "id": "col_fixture_1",
+              "name": "name",
+              "type": "string",
+              "index": 0
+            }
+          ],
+          "projectId": "project_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

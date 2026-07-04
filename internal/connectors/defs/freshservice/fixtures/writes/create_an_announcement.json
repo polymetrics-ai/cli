@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_an_announcement",
+    "description": "Fixture create_an_announcement record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/announcements",
+    "body": {
+      "name": "Fixture create_an_announcement",
+      "description": "Fixture create_an_announcement record"
+    }
+  }
+}

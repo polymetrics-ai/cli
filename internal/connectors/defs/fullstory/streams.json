@@ -38,6 +38,18 @@
       "query": { "limit": "200" },
       "records": { "path": "results" },
       "schema": "schemas/events.json"
+    },
+    {
+      "name": "sessions",
+      "path": "/v2/sessions",
+      "pagination": { "type": "none" },
+      "query": {
+        "limit": "200",
+        "uid": { "template": "{{ config.session_uid }}", "omit_when_absent": true },
+        "email": { "template": "{{ config.session_email }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/sessions.json"
     }
   ]
 }

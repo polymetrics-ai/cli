@@ -25,16 +25,74 @@
   },
   "streams": [
     {
+      "name": "account_configuration",
+      "path": "/accounts/configuration",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/account_configuration.json"
+    },
+    {
       "name": "agents",
       "path": "/agents",
       "records": { "path": "agents" },
+      "incremental": { "cursor_field": "updated_time" },
       "schema": "schemas/agents.json"
+    },
+    {
+      "name": "agent_details",
+      "path": "/agents/{{ config.agent_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/agents.json"
+    },
+    {
+      "name": "agent_statuses",
+      "path": "/agents/status",
+      "records": { "path": "statuses" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/agent_statuses.json"
     },
     {
       "name": "users",
       "path": "/users",
       "records": { "path": "users" },
+      "incremental": { "cursor_field": "updated_time" },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "user_details",
+      "path": "/users/{{ config.user_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "user_conversations",
+      "path": "/users/{{ config.user_id }}/conversations",
+      "records": { "path": "conversations" },
+      "computed_fields": { "user_id": "{{ config.user_id }}" },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "conversation_detail",
+      "path": "/conversations/{{ config.conversation_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "conversation_messages",
+      "path": "/conversations/{{ config.conversation_id }}/messages",
+      "records": { "path": "messages" },
+      "computed_fields": { "conversation_id": "{{ config.conversation_id }}" },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "conversation_fields",
+      "path": "/conversations/fields",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/conversation_fields.json"
     },
     {
       "name": "groups",
@@ -46,6 +104,7 @@
       "name": "channels",
       "path": "/channels",
       "records": { "path": "channels" },
+      "incremental": { "cursor_field": "updated_time" },
       "schema": "schemas/channels.json"
     },
     {
@@ -53,6 +112,68 @@
       "path": "/roles",
       "records": { "path": "roles" },
       "schema": "schemas/roles.json"
+    },
+    {
+      "name": "outbound_messages",
+      "path": "/outbound-messages",
+      "query": {
+        "request_id": { "template": "{{ config.outbound_request_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "outbound_messages" },
+      "schema": "schemas/outbound_messages.json"
+    },
+    {
+      "name": "report_status",
+      "path": "/reports/raw/{{ config.report_id }}",
+      "query": {
+        "status": { "template": "{{ config.report_status }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/reports.json"
+    },
+    {
+      "name": "historical_metrics",
+      "path": "/metrics/historical",
+      "query": {
+        "metric": "{{ config.metrics_metric }}",
+        "start": "{{ config.metrics_start }}",
+        "end": "{{ config.metrics_end }}",
+        "group_by": { "template": "{{ config.metrics_group_by }}", "omit_when_absent": true },
+        "filter_by": { "template": "{{ config.metrics_filter_by }}", "omit_when_absent": true },
+        "aggregator": { "template": "{{ config.metrics_aggregator }}", "omit_when_absent": true },
+        "interval": { "template": "{{ config.metrics_interval }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric_type": "historical" },
+      "projection": "passthrough",
+      "schema": "schemas/metrics.json"
+    },
+    {
+      "name": "instant_metrics",
+      "path": "/metrics/instant",
+      "query": {
+        "metric": "{{ config.metrics_metric }}",
+        "group_by": { "template": "{{ config.metrics_group_by }}", "omit_when_absent": true },
+        "filter_by": { "template": "{{ config.metrics_filter_by }}", "omit_when_absent": true },
+        "summary": { "template": "{{ config.metrics_summary }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric_type": "instant" },
+      "projection": "passthrough",
+      "schema": "schemas/metrics.json"
+    },
+    {
+      "name": "business_hours_status",
+      "path": "/business-hours/within-bh",
+      "query": { "group_id": "{{ config.business_hours_group_id }}" },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "group_id": "{{ config.business_hours_group_id }}" },
+      "projection": "passthrough",
+      "schema": "schemas/business_hours_status.json"
     }
   ]
 }

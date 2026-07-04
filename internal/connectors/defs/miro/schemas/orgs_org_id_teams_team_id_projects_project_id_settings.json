@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "sharingPolicySettings": {
+      "type": "object",
+      "properties": {
+        "teamAccess": {
+          "type": "string",
+          "description": "Team access\n* \"private\": Only the members of the project can access the information within the project.\n* \"view\":    Anyone in the team can view the information in within the project.\n",
+          "enum": [
+            "private",
+            "view"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object"
+    }
+  },
+  "additionalProperties": true
+}

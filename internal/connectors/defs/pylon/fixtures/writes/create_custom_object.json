@@ -1,0 +1,18 @@
+{
+  "record": {
+    "custom_object_type": "synthetic-conformance-value",
+    "name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/custom-objects/synthetic-conformance-value",
+    "body": {
+      "name": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

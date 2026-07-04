@@ -1,0 +1,15 @@
+{
+  "record": {
+    "alert_id": 123,
+    "name": "Fixture resolve_alert",
+    "description": "Fixture resolve_alert record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ams/alerts/123/resolve",
+    "body": {
+      "name": "Fixture resolve_alert",
+      "description": "Fixture resolve_alert record"
+    }
+  }
+}

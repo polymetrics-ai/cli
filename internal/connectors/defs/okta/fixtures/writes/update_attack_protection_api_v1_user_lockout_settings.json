@@ -1,0 +1,16 @@
+{
+  "record": {
+    "preventBruteForceLockoutFromUnknownDevices": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/attack-protection/api/v1/user-lockout-settings",
+    "body": {
+      "preventBruteForceLockoutFromUnknownDevices": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

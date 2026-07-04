@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/apps/synthetic-conformance-value/checklists"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "checklists": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "handle": "fixture",
+        "title": "fixture",
+        "description": "fixture",
+        "status": "draft",
+        "steps": [
+          {
+            "id": "id_fixture",
+            "name": "fixture",
+            "handle": "fixture",
+            "title": "fixture",
+            "description": "fixture",
+            "conditionType": "usage_event",
+            "conditionOperator": "equals",
+            "conditionValue": "fixture",
+            "allowManualCompletion": true,
+            "allowSkip": true,
+            "order": "fixture",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

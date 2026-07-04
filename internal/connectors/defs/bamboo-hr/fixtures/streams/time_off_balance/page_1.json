@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees/synthetic-conformance-value/time_off/calculator"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture_id",
+        "balance": "fixture_value",
+        "end": "fixture_value",
+        "name": "Fixture Name",
+        "policyType": "accruing",
+        "timeOffType": "fixture_value",
+        "units": "fixture_value",
+        "usedYearToDate": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

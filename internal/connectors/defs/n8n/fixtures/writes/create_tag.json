@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture tag"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags",
+    "body": {
+      "name": "Fixture tag"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

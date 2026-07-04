@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/iam/resource-sets/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "description": "description_fixture",
+      "id": "id_fixture",
+      "label": "label_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "_links": {
+        "resources": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "bindings": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

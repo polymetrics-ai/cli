@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "sequencestate",
+      "attributes": {
+        "name": "Fixture Create Sequence State"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sequenceStates",
+    "body": {
+      "data": {
+        "type": "sequencestate",
+        "attributes": {
+          "name": "Fixture Create Sequence State"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

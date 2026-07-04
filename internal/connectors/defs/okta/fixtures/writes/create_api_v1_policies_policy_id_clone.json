@@ -1,0 +1,13 @@
+{
+  "record": {
+    "policy_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/policies/synthetic-conformance-value/clone"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

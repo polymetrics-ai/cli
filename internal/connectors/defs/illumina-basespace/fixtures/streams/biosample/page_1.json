@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/biosamples/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Id": "biosample_fixture_1",
+        "Name": "Fixture Biosample",
+        "Href": "v1pre3/biosample/biosample_fixture_1",
+        "DateCreated": "2026-01-01T00:00:00Z",
+        "DateModified": "2026-01-01T01:00:00Z",
+        "TotalSize": 1000
+      }
+    }
+  }
+}

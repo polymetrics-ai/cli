@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pms/badges",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "Fixture badges 1",
+          "description": "fixture_badges_1",
+          "status": 1,
+          "id": "badges_fixture_1"
+        },
+        {
+          "name": "Fixture badges 2",
+          "description": "fixture_badges_2",
+          "status": 1,
+          "id": "badges_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/badges",
+      "lastPage": "https://example.invalid/keka/badges",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

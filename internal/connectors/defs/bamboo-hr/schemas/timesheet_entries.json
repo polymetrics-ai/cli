@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "timesheet_entries",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "type": {
+      "type": "string"
+    },
+    "approved": {
+      "type": "boolean"
+    },
+    "approvedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "employeeId": {
+      "type": "integer"
+    },
+    "end": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "hours": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "note": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "projectInfo": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "project": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "task": {
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "start": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

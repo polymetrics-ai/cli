@@ -1,0 +1,21 @@
+{
+  "record": {
+    "auth_server_id": "synthetic-conformance-value",
+    "trusted": [
+      "trusted_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/associatedServers",
+    "body": {
+      "trusted": [
+        "trusted_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

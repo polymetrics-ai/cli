@@ -23,7 +23,7 @@
       "records": { "path": "data.issues.nodes" },
       "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
       "schema": "schemas/issues.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + pageInfo.hasNextPage/endCursor cursor-connection pagination); hook-covered, proven live by internal/connectors/paritytest/linear and internal/connectors/hooks/linear/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
     },
     {
       "name": "teams",
@@ -32,7 +32,7 @@
       "records": { "path": "data.teams.nodes" },
       "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
       "schema": "schemas/teams.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + pageInfo.hasNextPage/endCursor cursor-connection pagination); hook-covered, proven live by internal/connectors/paritytest/linear and internal/connectors/hooks/linear/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
     },
     {
       "name": "projects",
@@ -41,7 +41,7 @@
       "records": { "path": "data.projects.nodes" },
       "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
       "schema": "schemas/projects.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + pageInfo.hasNextPage/endCursor cursor-connection pagination); hook-covered, proven live by internal/connectors/paritytest/linear and internal/connectors/hooks/linear/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
     },
     {
       "name": "users",
@@ -50,7 +50,7 @@
       "records": { "path": "data.users.nodes" },
       "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
       "schema": "schemas/users.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + pageInfo.hasNextPage/endCursor cursor-connection pagination); hook-covered, proven live by internal/connectors/paritytest/linear and internal/connectors/hooks/linear/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
     }
   ]
 }

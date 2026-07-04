@@ -1,0 +1,15 @@
+{
+  "record": {
+    "user_id": "user_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/users/user_id_fixture/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

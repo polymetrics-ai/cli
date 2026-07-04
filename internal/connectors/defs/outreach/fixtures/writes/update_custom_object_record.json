@@ -1,0 +1,29 @@
+{
+  "record": {
+    "objectName": "synthetic-conformance-value",
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "customobjectrecord",
+      "attributes": {
+        "name": "Fixture Update Custom Object Record"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/customObjects/synthetic-conformance-value/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "customobjectrecord",
+        "attributes": {
+          "name": "Fixture Update Custom Object Record"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

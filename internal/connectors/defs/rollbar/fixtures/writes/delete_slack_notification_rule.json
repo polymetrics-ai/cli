@@ -1,0 +1,16 @@
+{
+  "record": {
+    "rule_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/1/notifications/slack/rule/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

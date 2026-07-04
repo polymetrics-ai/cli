@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "API.getReportMetadata",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uniqueId": "VisitsSummary_get",
+        "category": "Visitors",
+        "subcategory": "Overview",
+        "name": "Visits Summary",
+        "module": "VisitsSummary",
+        "action": "get",
+        "documentation": "Fixture report metadata",
+        "metrics": {
+          "nb_visits": "Visits"
+        }
+      },
+      {
+        "uniqueId": "Referrers_getKeywords",
+        "category": "Acquisition",
+        "name": "Keywords",
+        "module": "Referrers",
+        "action": "getKeywords",
+        "dimension": "Keyword",
+        "documentation": "Fixture report metadata",
+        "metrics": {
+          "nb_visits": "Visits"
+        }
+      }
+    ]
+  }
+}

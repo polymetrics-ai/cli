@@ -1,0 +1,13 @@
+{
+  "record": {
+    "outbound_payment_id": "outbound_payment_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/outbound_payments/outbound_payment_id_fixture/actions/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

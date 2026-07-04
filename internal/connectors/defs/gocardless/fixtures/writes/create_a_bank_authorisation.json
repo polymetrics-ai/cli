@@ -1,0 +1,20 @@
+{
+  "record": {
+    "bank_authorisations": {
+      "description": "Synthetic create_a_bank_authorisation fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bank_authorisations",
+    "body": {
+      "bank_authorisations": {
+        "description": "Synthetic create_a_bank_authorisation fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "bulkupsertimports",
+      "attributes": {
+        "name": "Fixture Bulk Upsert Imports"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/imports/actions/bulkUpsert",
+    "body": {
+      "data": {
+        "type": "bulkupsertimports",
+        "attributes": {
+          "name": "Fixture Bulk Upsert Imports"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

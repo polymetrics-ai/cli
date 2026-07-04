@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the log stream object was created",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the log stream"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the log stream object was last updated",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique name for the log stream object"
+    },
+    "status": {
+      "type": "string",
+      "description": "Lifecycle status of the log stream object",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "Specifies the streaming provider used\n\nSupported providers:\n  * `aws_eventbridge` ([AWS EventBridge](https://aws.amazon.com/eventbridge))\n  * `splunk_cloud_logstreaming` ([Splunk Cloud](https://www.splunk.com/en_us/software/splunk-cloud-platform.html))\n\nSelect the provider type to see provider-specific configurations in the `settings` property:",
+      "enum": [
+        "aws_eventbridge",
+        "splunk_cloud_logstreaming"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the current status of an application using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "activate": {
+          "type": "object",
+          "description": "Link to activate the resource",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "The URI of the resource"
+            },
+            "method": {
+              "type": "string",
+              "description": "HTTP method allowed for the resource",
+              "enum": [
+                "GET",
+                "POST"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "deactivate": {
+          "type": "object",
+          "description": "Link to deactivate the resource",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "The URI of the resource"
+            },
+            "method": {
+              "type": "string",
+              "description": "HTTP method allowed for the resource",
+              "enum": [
+                "GET",
+                "POST"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "The URI of the resource"
+            },
+            "method": {
+              "type": "string",
+              "description": "HTTP method allowed for the resource",
+              "enum": [
+                "GET",
+                "POST"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

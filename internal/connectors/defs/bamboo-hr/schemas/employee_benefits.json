@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee_benefits",
+  "type": "object",
+  "x-primary-key": [
+    "employeeId"
+  ],
+  "properties": {
+    "employeeBenefit": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "companyAmount": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "companyAmountType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "companyAnnualMax": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "companyBenefitId": {
+            "type": "string"
+          },
+          "companyBenefitName": {
+            "type": "string"
+          },
+          "companyCapAmount": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "companyCapAmountType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "companyPercentBasedOn": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "coverageLevel": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "currencyCode": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "deductionEndDate": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "deductionStartDate": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "employeeAmount": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "employeeAmountType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "employeeAnnualMax": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "employeeCapAmount": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "employeeCapAmountType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "employeePercentBasedOn": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "enrollmentStatus": {
+            "type": "string",
+            "enum": [
+              "Eligible",
+              "Enrolled",
+              "Waived",
+              "Withdrew",
+              "Terminated",
+              "Ineligible"
+            ]
+          },
+          "enrollmentStatusEffectiveDate": {
+            "type": "string"
+          },
+          "occurrencesPerYear": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "employeeId": {
+      "type": "integer"
+    },
+    "payFrequency": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

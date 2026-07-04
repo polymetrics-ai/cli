@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "name": "fixture_name",
+    "color": "fixture_color"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v3/inbox/threads/categories/synthetic-conformance-value",
+    "body": {
+      "name": "fixture_name",
+      "color": "fixture_color"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

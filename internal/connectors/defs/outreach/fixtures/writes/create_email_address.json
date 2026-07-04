@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "emailaddress",
+      "attributes": {
+        "name": "Fixture Create Email Address"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/emailAddresses",
+    "body": {
+      "data": {
+        "type": "emailaddress",
+        "attributes": {
+          "name": "Fixture Create Email Address"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

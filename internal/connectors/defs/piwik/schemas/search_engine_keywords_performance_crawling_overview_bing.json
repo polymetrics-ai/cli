@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik SearchEngineKeywordsPerformance.getCrawlingOverviewBing Report",
+  "type": "object",
+  "x-primary-key": [
+    "report"
+  ],
+  "required": [
+    "report"
+  ],
+  "properties": {
+    "report": {
+      "type": "string"
+    }
+  }
+}

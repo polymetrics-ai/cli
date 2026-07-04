@@ -1,22 +1,25 @@
 {
   "name": "greenhouse",
   "display_name": "Greenhouse",
-  "description": "Reads Greenhouse candidates, applications, jobs, offers, and users through the Greenhouse Harvest REST API (read-only).",
+  "description": "Reads and writes documented Greenhouse Harvest REST API resources through the declarative connector engine.",
   "integration_type": "api",
   "docs_url": "https://developers.greenhouse.io/harvest.html",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Greenhouse Harvest API read of candidates, applications, jobs, offers, and users"
+    "read": "external Greenhouse Harvest API read of candidates, applications, jobs, offers, users, and other documented resources",
+    "write": "external Greenhouse Harvest API mutations including candidate, application, job, office, department, tag, and user changes",
+    "approval": "required for every write action; destructive and identity-changing actions are marked confirm: destructive"
   }
 }

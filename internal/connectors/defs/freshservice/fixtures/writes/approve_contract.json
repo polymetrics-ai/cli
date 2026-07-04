@@ -1,0 +1,15 @@
+{
+  "record": {
+    "contract_id": 123,
+    "name": "Fixture approve_contract",
+    "description": "Fixture approve_contract record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contracts/123",
+    "body": {
+      "name": "Fixture approve_contract",
+      "description": "Fixture approve_contract record"
+    }
+  }
+}

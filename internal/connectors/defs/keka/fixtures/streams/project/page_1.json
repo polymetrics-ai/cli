@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/projects/{{ config.project_id }}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "project_fixture_1",
+          "name": "Fixture project"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

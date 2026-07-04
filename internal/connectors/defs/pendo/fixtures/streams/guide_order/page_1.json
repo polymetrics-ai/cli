@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/guide/order"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "appId": -323232,
+      "guideIds": [
+        "guide_fixture"
+      ]
+    }
+  }
+}

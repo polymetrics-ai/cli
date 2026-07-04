@@ -1,0 +1,20 @@
+{
+  "record": {
+    "outbound_payment_imports": {
+      "description": "Synthetic create_an_outbound_payment_import fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/outbound_payment_imports",
+    "body": {
+      "outbound_payment_imports": {
+        "description": "Synthetic create_an_outbound_payment_import fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

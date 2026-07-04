@@ -2,8 +2,15 @@
   "base": {
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Api-Token": "{{ secrets.api_key }}"
+    },
     "auth": [
-      { "mode": "api_key_query", "param": "api_token", "value": "{{ secrets.api_key }}" }
+      {
+        "mode": "api_key_query",
+        "param": "shop_domain",
+        "value": "{{ config.shop_domain }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -13,11 +20,24 @@
       "page_size": 100,
       "max_pages": 1000
     },
-    "check": { "method": "GET", "path": "/reviews" },
+    "check": {
+      "method": "GET",
+      "path": "/reviews"
+    },
     "error_map": [
-      { "status": 401, "hint": "judge-me-reviews api_key is missing or invalid; re-run pm credentials add judge-me-reviews" },
-      { "status": 403, "hint": "judge-me-reviews shop_domain lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "judge.me rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "judge-me-reviews api_key is missing or invalid; re-run pm credentials add judge-me-reviews"
+      },
+      {
+        "status": 403,
+        "hint": "judge-me-reviews shop_domain lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "judge.me rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -25,10 +45,26 @@
       "name": "reviews",
       "path": "/reviews",
       "query": {
-        "shop_domain": "{{ config.shop_domain }}",
-        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        },
+        "product_id": {
+          "template": "{{ config.product_id }}",
+          "omit_when_absent": true
+        },
+        "rating": {
+          "template": "{{ config.rating }}",
+          "omit_when_absent": true
+        },
+        "reviewer_id": {
+          "template": "{{ config.reviewer_id }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "reviews" },
+      "records": {
+        "path": "reviews"
+      },
       "computed_fields": {
         "reviewer_id": "{{ record.reviewer.id }}",
         "reviewer_name": "{{ record.reviewer.name }}",
@@ -43,10 +79,14 @@
       "name": "products",
       "path": "/products",
       "query": {
-        "shop_domain": "{{ config.shop_domain }}",
-        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
       },
-      "records": { "path": "products" },
+      "records": {
+        "path": "products"
+      },
       "incremental": {
         "cursor_field": "created_at"
       },
@@ -56,14 +96,412 @@
       "name": "widgets",
       "path": "/widgets",
       "query": {
-        "shop_domain": "{{ config.shop_domain }}",
-        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
       },
-      "records": { "path": "widgets" },
+      "records": {
+        "path": "widgets"
+      },
       "incremental": {
         "cursor_field": "created_at"
       },
       "schema": "schemas/widgets.json"
+    },
+    {
+      "name": "product_review_widget",
+      "path": "/widgets/product_review",
+      "query": {
+        "handle": {
+          "template": "{{ config.product_handle }}",
+          "omit_when_absent": true
+        },
+        "external_id": {
+          "template": "{{ config.product_external_id }}",
+          "omit_when_absent": true
+        },
+        "id": {
+          "template": "{{ config.product_id }}",
+          "omit_when_absent": true
+        },
+        "page": {
+          "template": "{{ config.widget_page }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ config.widget_per_page }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "product_review_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/product_review_widget.json"
+    },
+    {
+      "name": "preview_badge_widget",
+      "path": "/widgets/preview_badge",
+      "query": {
+        "handle": {
+          "template": "{{ config.product_handle }}",
+          "omit_when_absent": true
+        },
+        "external_id": {
+          "template": "{{ config.product_external_id }}",
+          "omit_when_absent": true
+        },
+        "id": {
+          "template": "{{ config.product_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "preview_badge_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/preview_badge_widget.json"
+    },
+    {
+      "name": "featured_carousel_widget",
+      "path": "/widgets/featured_carousel",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "featured_carousel_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/featured_carousel_widget.json"
+    },
+    {
+      "name": "reviews_tab_widget",
+      "path": "/widgets/reviews_tab",
+      "query": {
+        "page": {
+          "template": "{{ config.widget_page }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ config.widget_per_page }}",
+          "omit_when_absent": true
+        },
+        "review_type": {
+          "template": "{{ config.widget_review_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "reviews_tab_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/reviews_tab_widget.json"
+    },
+    {
+      "name": "all_reviews_page_widget",
+      "path": "/widgets/all_reviews_page",
+      "query": {
+        "page": {
+          "template": "{{ config.widget_page }}",
+          "omit_when_absent": true
+        },
+        "review_type": {
+          "template": "{{ config.widget_review_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "all_reviews_page_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/all_reviews_page_widget.json"
+    },
+    {
+      "name": "verified_badge_widget",
+      "path": "/widgets/verified_badge",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "verified_badge_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/verified_badge_widget.json"
+    },
+    {
+      "name": "all_reviews_count_widget",
+      "path": "/widgets/all_reviews_count",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "all_reviews_count_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/all_reviews_count_widget.json"
+    },
+    {
+      "name": "all_reviews_rating_widget",
+      "path": "/widgets/all_reviews_rating",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "all_reviews_rating_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/all_reviews_rating_widget.json"
+    },
+    {
+      "name": "shop_reviews_count_widget",
+      "path": "/widgets/shop_reviews_count",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "shop_reviews_count_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/shop_reviews_count_widget.json"
+    },
+    {
+      "name": "shop_reviews_rating_widget",
+      "path": "/widgets/shop_reviews_rating",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "shop_reviews_rating_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/shop_reviews_rating_widget.json"
+    },
+    {
+      "name": "widget_settings",
+      "path": "/widgets/settings",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "widget_settings"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/widget_settings.json"
+    },
+    {
+      "name": "html_miracle_widget",
+      "path": "/widgets/html_miracle",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "html_miracle_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/html_miracle_widget.json"
+    },
+    {
+      "name": "checkout_comments_widget",
+      "path": "/widgets/checkout_comments_widget",
+      "query": {
+        "handle": {
+          "template": "{{ config.product_handle }}",
+          "omit_when_absent": true
+        },
+        "external_id": {
+          "template": "{{ config.product_external_id }}",
+          "omit_when_absent": true
+        },
+        "id": {
+          "template": "{{ config.product_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "checkout_comments_widget"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/checkout_comments_widget.json"
+    },
+    {
+      "name": "reviews_count",
+      "path": "/reviews/count",
+      "query": {
+        "product_id": {
+          "template": "{{ config.product_id }}",
+          "omit_when_absent": true
+        },
+        "rating": {
+          "template": "{{ config.rating }}",
+          "omit_when_absent": true
+        },
+        "reviewer_id": {
+          "template": "{{ config.reviewer_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "reviews_count"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/reviews_count.json"
+    },
+    {
+      "name": "review",
+      "path": "/reviews/{{ config.review_id }}",
+      "records": {
+        "path": "review"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "reviewer_id": "{{ record.reviewer.id }}",
+        "reviewer_name": "{{ record.reviewer.name }}",
+        "reviewer_email": "{{ record.reviewer.email }}"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/review.json"
+    },
+    {
+      "name": "reviewer",
+      "path": "/reviewers/{{ config.reviewer_id }}",
+      "query": {
+        "external_id": {
+          "template": "{{ config.reviewer_external_id }}",
+          "omit_when_absent": true
+        },
+        "email": {
+          "template": "{{ config.reviewer_email }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "reviewer"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/reviewer.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": {
+        "path": "webhooks"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "webhook",
+      "path": "/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "path": "webhook"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/webhook.json"
+    },
+    {
+      "name": "shop_info",
+      "path": "/shops/info",
+      "records": {
+        "path": "shop"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/shop_info.json"
+    },
+    {
+      "name": "settings",
+      "path": "/settings",
+      "query": {
+        "setting_keys[]": {
+          "template": "{{ config.setting_keys }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "settings"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "settings"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/settings.json"
     }
   ]
 }

@@ -1,0 +1,30 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "timezoneId": "synthetic-conformance-value",
+    "excludeHolidays": true,
+    "useProspectTimezone": true,
+    "useFollowUpSchedule": true,
+    "mainTimings": [],
+    "followUpTimings": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/schedules",
+    "body": {
+      "name": "fixture_name",
+      "timezoneId": "synthetic-conformance-value",
+      "excludeHolidays": true,
+      "useProspectTimezone": true,
+      "useFollowUpSchedule": true,
+      "mainTimings": [],
+      "followUpTimings": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "record": {
+    "credResponses": [
+      {
+        "authenticatorEnrollmentId": "authenticator_enrollment_id_fixture",
+        "credResponseJwe": "cred_response_jwe_fixture"
+      }
+    ],
+    "fulfillmentProvider": "yubico",
+    "pinResponseJwe": "pin_response_jwe_fixture",
+    "serial": "serial_fixture",
+    "userId": "user_id_fixture",
+    "version": "version_fixture",
+    "yubicoSigningJwks": [
+      {
+        "crv": "P-384",
+        "kid": "kid_fixture",
+        "kty": "EC",
+        "use": "enc",
+        "x": "x_fixture",
+        "y": "y_fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webauthn-registration/api/v1/activate",
+    "body": {
+      "credResponses": [
+        {
+          "authenticatorEnrollmentId": "authenticator_enrollment_id_fixture",
+          "credResponseJwe": "cred_response_jwe_fixture"
+        }
+      ],
+      "fulfillmentProvider": "yubico",
+      "pinResponseJwe": "pin_response_jwe_fixture",
+      "serial": "serial_fixture",
+      "userId": "user_id_fixture",
+      "version": "version_fixture",
+      "yubicoSigningJwks": [
+        {
+          "crv": "P-384",
+          "kid": "kid_fixture",
+          "kty": "EC",
+          "use": "enc",
+          "x": "x_fixture",
+          "y": "y_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_a_department",
+    "description": "Fixture create_a_department record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/departments",
+    "body": {
+      "name": "Fixture create_a_department",
+      "description": "Fixture create_a_department record"
+    }
+  }
+}

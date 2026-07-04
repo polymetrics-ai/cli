@@ -1,0 +1,287 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the group was created",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique ID for the group"
+    },
+    "lastMembershipUpdated": {
+      "type": "string",
+      "description": "Timestamp when the groups memberships were last updated",
+      "format": "date-time"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the group's profile was last updated",
+      "format": "date-time"
+    },
+    "objectClass": {
+      "type": "array",
+      "description": "Determines the group's `profile`",
+      "items": {
+        "type": "string"
+      }
+    },
+    "profile": {
+      "type": "object",
+      "description": "Profile for any group that is not imported from Active Directory. Specifies the standard\nand custom profile properties for a group.\n\nThe `objectClass` for these groups is `okta:user_group`.\n\nYou can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schema",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description of the group"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the group"
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Determines how a group's profile and memberships are managed",
+      "enum": [
+        "APP_GROUP",
+        "BUILT_IN",
+        "OKTA_GROUP"
+      ]
+    },
+    "_embedded": {
+      "type": "object",
+      "description": "Embedded resources related to the group",
+      "properties": {
+        "stats": {
+          "type": "object",
+          "description": "Statistics about the group",
+          "properties": {
+            "usersCount": {
+              "type": "integer",
+              "description": "Number of users in the group"
+            },
+            "appsCount": {
+              "type": "integer",
+              "description": "Number of apps associated with the group"
+            },
+            "groupPushMappingsCount": {
+              "type": "integer",
+              "description": "Number of group push mappings associated with the group"
+            },
+            "hasAdminPrivlege": {
+              "type": "boolean",
+              "description": "Indicates if the group has admin privileges via a group-level role assignment"
+            }
+          },
+          "additionalProperties": true
+        },
+        "app": {
+          "type": "object",
+          "description": "If the group is sourced from an app, this object contains information about that app",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The ID of the `AppInstance`"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the `AppInstance`"
+            },
+            "label": {
+              "type": "string",
+              "description": "The user-facing display name of the `AppInstance`"
+            },
+            "signOnMode": {
+              "type": "string",
+              "description": "The configured sign-on mode for the `AppInstance`"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "apps": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "logo": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "hints": {
+                "type": "object",
+                "description": "Describes allowed HTTP verbs for the `href`",
+                "properties": {
+                  "allow": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "DELETE",
+                        "GET",
+                        "POST",
+                        "PUT"
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "href": {
+                "type": "string",
+                "description": "Link URI"
+              },
+              "name": {
+                "type": "string",
+                "description": "Link name"
+              },
+              "templated": {
+                "type": "boolean",
+                "description": "Indicates whether the link object's `href` property is a URI template."
+              },
+              "type": {
+                "type": "string",
+                "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "users": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

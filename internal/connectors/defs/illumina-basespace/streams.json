@@ -3,7 +3,11 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "api_key_header", "header": "x-access-token", "value": "{{ secrets.access_token }}" }
+      {
+        "mode": "api_key_header",
+        "header": "x-access-token",
+        "value": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
       "type": "offset_limit",
@@ -11,17 +15,29 @@
       "offset_param": "Offset",
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/v1pre3/users/{{ config.user }}" },
+    "check": {
+      "method": "GET",
+      "path": "/v1pre3/users/{{ config.user }}"
+    },
     "error_map": [
-      { "status": 401, "hint": "illumina-basespace access_token is missing or invalid; re-run pm credentials add illumina-basespace" },
-      { "status": 429, "class": "rate_limited", "hint": "illumina-basespace rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "illumina-basespace access_token is missing or invalid; re-run pm credentials add illumina-basespace"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "illumina-basespace rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "projects",
       "path": "/v1pre3/users/{{ config.user }}/projects",
-      "records": { "path": "Response.Items" },
+      "records": {
+        "path": "Response.Items"
+      },
       "computed_fields": {
         "id": "{{ record.Id }}",
         "name": "{{ record.Name }}",
@@ -36,7 +52,9 @@
     {
       "name": "runs",
       "path": "/v1pre3/users/{{ config.user }}/runs",
-      "records": { "path": "Response.Items" },
+      "records": {
+        "path": "Response.Items"
+      },
       "computed_fields": {
         "id": "{{ record.Id }}",
         "name": "{{ record.Name }}",
@@ -53,7 +71,9 @@
     {
       "name": "samples",
       "path": "/v1pre3/users/{{ config.user }}/samples",
-      "records": { "path": "Response.Items" },
+      "records": {
+        "path": "Response.Items"
+      },
       "computed_fields": {
         "id": "{{ record.Id }}",
         "name": "{{ record.Name }}",
@@ -70,7 +90,9 @@
     {
       "name": "appsessions",
       "path": "/v1pre3/users/{{ config.user }}/appsessions",
-      "records": { "path": "Response.Items" },
+      "records": {
+        "path": "Response.Items"
+      },
       "computed_fields": {
         "id": "{{ record.Id }}",
         "name": "{{ record.Name }}",
@@ -87,7 +109,9 @@
     {
       "name": "datasets",
       "path": "/v1pre3/users/{{ config.user }}/datasets",
-      "records": { "path": "Response.Items" },
+      "records": {
+        "path": "Response.Items"
+      },
       "computed_fields": {
         "id": "{{ record.Id }}",
         "name": "{{ record.Name }}",
@@ -98,6 +122,453 @@
         "project": "{{ record.Project }}"
       },
       "schema": "schemas/datasets.json"
+    },
+    {
+      "name": "applications",
+      "path": "/v1pre3/applications",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/applications.json"
+    },
+    {
+      "name": "application",
+      "path": "/v1pre3/applications/{{ config.application_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/application.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "application_qcthresholds",
+      "path": "/v1pre3/applications/{{ config.application_id }}/qcthresholds",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/application_qcthresholds.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "application_settings",
+      "path": "/v1pre3/applications/{{ config.application_id }}/settings",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/application_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "application_workflowdependencies",
+      "path": "/v1pre3/applications/{{ config.application_id }}/workflowdependencies",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/application_workflowdependencies.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "appsessions_all",
+      "path": "/v1pre3/appsessions",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/appsessions_all.json"
+    },
+    {
+      "name": "appsession",
+      "path": "/v1pre3/appsessions/{{ config.appsession_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/appsession.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "appsession_comments",
+      "path": "/v1pre3/appsessions/{{ config.appsession_id }}/comments",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/appsession_comments.json"
+    },
+    {
+      "name": "appsessions_logfiles",
+      "path": "/v1pre3/appsessions/{{ config.appsession_id }}/logfiles",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/appsessions_logfiles.json"
+    },
+    {
+      "name": "appsession_properties",
+      "path": "/v1pre3/appsessions/{{ config.appsession_id }}/properties",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/appsession_properties.json"
+    },
+    {
+      "name": "appsession_property",
+      "path": "/v1pre3/appsessions/{{ config.appsession_id }}/properties/{{ config.name }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/appsession_property.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "appsession_property_items",
+      "path": "/v1pre3/appsessions/{{ config.appsession_id }}/properties/{{ config.name }}/items",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/appsession_property_items.json"
+    },
+    {
+      "name": "biosamples",
+      "path": "/v1pre3/biosamples",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/biosamples.json"
+    },
+    {
+      "name": "biosample_labrequeues",
+      "path": "/v1pre3/biosamples/{{ config.biosample_id }}/labrequeues",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/biosample_labrequeues.json"
+    },
+    {
+      "name": "biosample",
+      "path": "/v1pre3/biosamples/{{ config.biosample_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/biosample.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "biosample_libraries",
+      "path": "/v1pre3/biosamples/{{ config.biosample_id }}/libraries",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/biosample_libraries.json"
+    },
+    {
+      "name": "biosample_runlane_summaries",
+      "path": "/v1pre3/biosamples/{{ config.biosample_id }}/runlanesummaries",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/biosample_runlane_summaries.json"
+    },
+    {
+      "name": "datasets_all",
+      "path": "/v1pre3/datasets",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/datasets_all.json"
+    },
+    {
+      "name": "dataset",
+      "path": "/v1pre3/datasets/{{ config.dataset_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/dataset.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "dataset_comments",
+      "path": "/v1pre3/datasets/{{ config.dataset_id }}/comments",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/dataset_comments.json"
+    },
+    {
+      "name": "dataset_files",
+      "path": "/v1pre3/datasets/{{ config.dataset_id }}/files",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/dataset_files.json"
+    },
+    {
+      "name": "datasettype",
+      "path": "/v1pre3/datasettypes/{{ config.datasettype_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/datasettype.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "instrumentstatistics",
+      "path": "/v1pre3/instrumentstatistics",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/instrumentstatistics.json"
+    },
+    {
+      "name": "labrequeues",
+      "path": "/v1pre3/labrequeues",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/labrequeues.json"
+    },
+    {
+      "name": "labrequeue",
+      "path": "/v1pre3/labrequeues/{{ config.labrequeue_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/labrequeue.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "laneqcthresholds",
+      "path": "/v1pre3/laneqcthresholds",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/laneqcthresholds.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lane",
+      "path": "/v1pre3/lanes/{{ config.lane_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lane.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lane_comments",
+      "path": "/v1pre3/lanes/{{ config.lane_id }}/comments",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lane_comments.json"
+    },
+    {
+      "name": "libraries",
+      "path": "/v1pre3/libraries",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/libraries.json"
+    },
+    {
+      "name": "librarypool_libraries",
+      "path": "/v1pre3/librarypools/{{ config.librarypool_id }}/libraries",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/librarypool_libraries.json"
+    },
+    {
+      "name": "project",
+      "path": "/v1pre3/projects/{{ config.project_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/project.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "project_datasets",
+      "path": "/v1pre3/projects/{{ config.project_id }}/datasets",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/project_datasets.json"
+    },
+    {
+      "name": "run_files",
+      "path": "/v1pre3/runs/{{ config.run_id }}/files",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/run_files.json"
+    },
+    {
+      "name": "trash",
+      "path": "/v1pre3/trash",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/trash.json"
+    },
+    {
+      "name": "trash_2",
+      "path": "/v1pre3/trash/{{ config.trash_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/trash_2.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "current_user",
+      "path": "/v1pre3/users/current",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/current_user.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "current_user_subscription",
+      "path": "/v1pre3/users/current/subscription",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/current_user_subscription.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "current_user_usage",
+      "path": "/v1pre3/users/current/usage",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/current_user_usage.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "current_user_workgroups",
+      "path": "/v1pre3/users/current/workgroups",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/current_user_workgroups.json"
+    },
+    {
+      "name": "user",
+      "path": "/v1pre3/users/{{ config.user_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user_settings",
+      "path": "/v1pre3/users/{{ config.user_id }}/settings",
+      "records": {
+        "path": "Response.Items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user_settings.json"
+    },
+    {
+      "name": "workgroup",
+      "path": "/v1pre3/workgroups/{{ config.workgroup_id }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workgroup.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "configured_user",
+      "path": "/v1pre3/users/{{ config.user }}",
+      "records": {
+        "path": "Response"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/configured_user.json",
+      "pagination": {
+        "type": "none"
+      }
     }
   ]
 }

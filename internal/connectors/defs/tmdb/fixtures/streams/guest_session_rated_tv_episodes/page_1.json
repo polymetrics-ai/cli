@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/guest_session/123/rated/tv/episodes",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 123,
+          "title": "Fixture guest_session_rated_tv_episodes",
+          "name": "Fixture guest_session_rated_tv_episodes",
+          "overview": "Deterministic TMDb fixture",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        }
+      ],
+      "page": 1,
+      "total_pages": 1,
+      "total_results": 1
+    }
+  }
+}

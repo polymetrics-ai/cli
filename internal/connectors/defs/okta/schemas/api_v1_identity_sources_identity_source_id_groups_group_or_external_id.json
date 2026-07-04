@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "externalId": {
+      "type": "string",
+      "description": "The external ID of the identity source group"
+    },
+    "id": {
+      "type": "string",
+      "description": "The Okta group ID of the identity source group"
+    },
+    "profile": {
+      "type": "object",
+      "description": "The profile information of the group",
+      "properties": {
+        "profile": {
+          "type": "object",
+          "description": "Contains a set of external group attributes and their values that are mapped to Okta standard properties. See the group [`profile` object](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/#tag/Group/operation/getGroup!c=200&path=profile&t=response) and Declaration of a Custom Identity Source Schema in [Using anything as a source](https://help.okta.com/okta_help.htm?",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Description of the group"
+            },
+            "displayName": {
+              "type": "string",
+              "description": "Name of the group"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

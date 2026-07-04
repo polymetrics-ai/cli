@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/affiliate_payouts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "affiliatePayouts": {
+        "id": "id_fixture",
+        "number": 1,
+        "affiliateId": "affiliate_id_fixture",
+        "affiliateProgramId": "affiliate_program_id_fixture",
+        "status": "fixture",
+        "amount": 1.23,
+        "amountPaid": 1.23,
+        "periodStart": "2026-01-01T00:00:00Z",
+        "periodEnd": "2026-01-01T00:00:00Z",
+        "paidAt": "2026-01-01T00:00:00Z",
+        "paymentMethod": "fixture",
+        "paymentMethodData": {
+          "id": "payment_method_data_fixture_id"
+        },
+        "notes": "fixture",
+        "paymentRequestedAt": "2026-01-01T00:00:00Z",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": ""
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "dateHoursWorked": "2026-01-01T00:00:00Z",
+    "employeeId": 1001,
+    "hoursWorked": 12.34,
+    "rateType": "fixture_value",
+    "timeTrackingId": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/timetracking/add",
+    "body": {
+      "dateHoursWorked": "2026-01-01T00:00:00Z",
+      "employeeId": 1001,
+      "hoursWorked": 12.34,
+      "rateType": "fixture_value",
+      "timeTrackingId": "fixture_id"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

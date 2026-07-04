@@ -1,0 +1,20 @@
+{
+  "record": {
+    "invoice_id": 123,
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/123/letters",
+    "body": {
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

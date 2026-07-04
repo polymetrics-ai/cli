@@ -1,0 +1,12 @@
+{
+  "record": {
+    "code": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/coupons/update",
+    "body": {
+      "code": "fixture"
+    }
+  }
+}

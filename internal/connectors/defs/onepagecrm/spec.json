@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "OnePageCRM Connection Specification",
   "type": "object",
-  "required": ["username", "password"],
+  "required": [
+    "username",
+    "password"
+  ],
   "properties": {
     "username": {
       "type": "string",
@@ -32,6 +35,114 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "action_id": {
+      "type": "string",
+      "description": "action id for parameterized OnePageCRM streams."
+    },
+    "attachment_id": {
+      "type": "string",
+      "description": "attachment id for parameterized OnePageCRM streams."
+    },
+    "call_id": {
+      "type": "string",
+      "description": "call id for parameterized OnePageCRM streams."
+    },
+    "company_field_id": {
+      "type": "string",
+      "description": "company field id for parameterized OnePageCRM streams."
+    },
+    "company_id": {
+      "type": "string",
+      "description": "company id for parameterized OnePageCRM streams."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "contact id for parameterized OnePageCRM streams."
+    },
+    "custom_field_id": {
+      "type": "string",
+      "description": "custom field id for parameterized OnePageCRM streams."
+    },
+    "deal_field_id": {
+      "type": "string",
+      "description": "deal field id for parameterized OnePageCRM streams."
+    },
+    "deal_id": {
+      "type": "string",
+      "description": "deal id for parameterized OnePageCRM streams."
+    },
+    "filter_id": {
+      "type": "string",
+      "description": "filter id for parameterized OnePageCRM streams."
+    },
+    "last_id": {
+      "type": "string",
+      "description": "last id for parameterized OnePageCRM streams."
+    },
+    "lead_source_id": {
+      "type": "string",
+      "description": "lead source id for parameterized OnePageCRM streams."
+    },
+    "meeting_id": {
+      "type": "string",
+      "description": "meeting id for parameterized OnePageCRM streams."
+    },
+    "note_id": {
+      "type": "string",
+      "description": "note id for parameterized OnePageCRM streams."
+    },
+    "notification_id": {
+      "type": "string",
+      "description": "notification id for parameterized OnePageCRM streams."
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "owner id for parameterized OnePageCRM streams."
+    },
+    "pipeline_id": {
+      "type": "string",
+      "description": "pipeline id for parameterized OnePageCRM streams."
+    },
+    "predefined_action_group_id": {
+      "type": "string",
+      "description": "predefined action group id for parameterized OnePageCRM streams."
+    },
+    "predefined_action_id": {
+      "type": "string",
+      "description": "predefined action id for parameterized OnePageCRM streams."
+    },
+    "predefined_item_group_id": {
+      "type": "string",
+      "description": "predefined item group id for parameterized OnePageCRM streams."
+    },
+    "predefined_item_id": {
+      "type": "string",
+      "description": "predefined item id for parameterized OnePageCRM streams."
+    },
+    "relationship_id": {
+      "type": "string",
+      "description": "relationship id for parameterized OnePageCRM streams."
+    },
+    "relationship_type_id": {
+      "type": "string",
+      "description": "relationship type id for parameterized OnePageCRM streams."
+    },
+    "status_id": {
+      "type": "string",
+      "description": "status id for parameterized OnePageCRM streams."
+    },
+    "tag_name": {
+      "type": "string",
+      "description": "tag name for parameterized OnePageCRM streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "user id for parameterized OnePageCRM streams."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "webhook id for parameterized OnePageCRM streams."
     }
   }
 }

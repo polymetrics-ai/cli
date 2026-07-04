@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture list_membership",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/list-memberships",
+    "body": {
+      "name": "Fixture list_membership",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

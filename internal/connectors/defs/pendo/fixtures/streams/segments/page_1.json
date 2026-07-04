@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/segment"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "seg_fixture",
+        "name": "Fixture",
+        "lastUpdatedAt": 1760000000000,
+        "kind": "Segment"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Actions.get",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "nb_pageviews": 1,
+      "nb_uniq_pageviews": 2,
+      "nb_downloads": 3,
+      "nb_uniq_downloads": 4,
+      "nb_outlinks": 5,
+      "nb_uniq_outlinks": 6,
+      "nb_searches": 7,
+      "nb_keywords": 8,
+      "hits": 9,
+      "avg_time_generation": 10
+    }
+  }
+}

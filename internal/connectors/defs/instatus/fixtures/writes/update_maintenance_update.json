@@ -1,0 +1,23 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "maintenance_id": "maintenance_id_fixture_1",
+    "maintenance_update_id": "maintenance_update_id_fixture_1",
+    "name": "Fixture update maintenance update",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/page_id_fixture_1/maintenances/maintenance_id_fixture_1/maintenance-updates/maintenance_update_id_fixture_1",
+    "body": {
+      "name": "Fixture update maintenance update",
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_maintenance_update_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/okta-personal-settings/api/v1/export-blocklists",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "domains": [
+        "domain_fixture"
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "form_handler",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "folderId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "campaignId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "trackerDomainId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "isDataForwarded": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isCookieless": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "salesforceId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "embedCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updatedById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "isDeleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

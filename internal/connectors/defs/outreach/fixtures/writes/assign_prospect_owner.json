@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "assignprospectowner",
+      "attributes": {
+        "name": "Fixture Assign Prospect Owner"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsAssignOwner",
+    "body": {
+      "data": {
+        "type": "assignprospectowner",
+        "attributes": {
+          "name": "Fixture Assign Prospect Owner"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

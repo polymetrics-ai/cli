@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customer_segments_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the customer segment"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the customer segment"
+    },
+    "filters": {
+      "type": "array",
+      "description": "The filters applied to the customer segment",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

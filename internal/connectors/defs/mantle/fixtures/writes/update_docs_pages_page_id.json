@@ -1,0 +1,35 @@
+{
+  "record": {
+    "page_id": "page_id_fixture",
+    "handle": "fixture",
+    "title": "fixture",
+    "content": "fixture",
+    "seoTitle": "fixture",
+    "seoDescription": "fixture",
+    "openGraphImage": "fixture",
+    "locale": "fixture",
+    "parentPageId": "parent_page_id_fixture",
+    "displayOrder": 1,
+    "groupId": "group_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/docs/pages/page_id_fixture",
+    "body": {
+      "handle": "fixture",
+      "title": "fixture",
+      "content": "fixture",
+      "seoTitle": "fixture",
+      "seoDescription": "fixture",
+      "openGraphImage": "fixture",
+      "locale": "fixture",
+      "parentPageId": "parent_page_id_fixture",
+      "displayOrder": 1,
+      "groupId": "group_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

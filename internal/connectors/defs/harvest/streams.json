@@ -146,6 +146,202 @@
         "request_param": "updated_since"
       },
       "schema": "schemas/time_entries.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "contacts" },
+      "computed_fields": {
+        "client_id": "{{ record.client.id }}",
+        "client_name": "{{ record.client.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "company",
+      "path": "/company",
+      "pagination": { "type": "none" },
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/company.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "invoices" },
+      "computed_fields": {
+        "client_id": "{{ record.client.id }}",
+        "client_name": "{{ record.client.name }}",
+        "creator_id": "{{ record.creator.id }}",
+        "creator_name": "{{ record.creator.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "estimates",
+      "path": "/estimates",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "estimates" },
+      "computed_fields": {
+        "client_id": "{{ record.client.id }}",
+        "client_name": "{{ record.client.name }}",
+        "creator_id": "{{ record.creator.id }}",
+        "creator_name": "{{ record.creator.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/estimates.json"
+    },
+    {
+      "name": "expenses",
+      "path": "/expenses",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "expenses" },
+      "computed_fields": {
+        "user_id": "{{ record.user.id }}",
+        "client_id": "{{ record.client.id }}",
+        "project_id": "{{ record.project.id }}",
+        "expense_category_id": "{{ record.expense_category.id }}",
+        "invoice_id": "{{ record.invoice.id }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/expenses.json"
+    },
+    {
+      "name": "invoice_item_categories",
+      "path": "/invoice_item_categories",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "invoice_item_categories" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/invoice_item_categories.json"
+    },
+    {
+      "name": "estimate_item_categories",
+      "path": "/estimate_item_categories",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "estimate_item_categories" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/estimate_item_categories.json"
+    },
+    {
+      "name": "expense_categories",
+      "path": "/expense_categories",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "expense_categories" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/expense_categories.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "roles" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "task_assignments",
+      "path": "/task_assignments",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "task_assignments" },
+      "computed_fields": {
+        "project_id": "{{ record.project.id }}",
+        "task_id": "{{ record.task.id }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/task_assignments.json"
     }
   ]
 }

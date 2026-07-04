@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "changed_employee_ids",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "latest",
+    "employees"
+  ],
+  "properties": {
+    "employees": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "latest": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

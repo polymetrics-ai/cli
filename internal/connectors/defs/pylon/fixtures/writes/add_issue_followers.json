@@ -1,0 +1,14 @@
+{
+  "record": {
+    "issue_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/issues/synthetic-conformance-value/followers"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

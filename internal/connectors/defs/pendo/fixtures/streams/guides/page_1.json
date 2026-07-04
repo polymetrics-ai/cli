@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/guide"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "guide_fixture",
+        "name": "Fixture",
+        "lastUpdatedAt": 1760000000000,
+        "kind": "Guide"
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "PagePerformance.get",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "avg_time_network": 1,
+      "avg_time_server": 2,
+      "avg_time_transfer": 3,
+      "avg_time_dom_processing": 4,
+      "avg_time_dom_completion": 5,
+      "avg_time_on_load": 6,
+      "avg_page_load_time": 7
+    }
+  }
+}

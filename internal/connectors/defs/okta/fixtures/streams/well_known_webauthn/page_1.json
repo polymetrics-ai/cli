@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/.well-known/webauthn"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

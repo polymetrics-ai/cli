@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/knowledge-bases"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "title": "fixture-knowledge_bases",
+          "slug": "fixture-knowledge_bases"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

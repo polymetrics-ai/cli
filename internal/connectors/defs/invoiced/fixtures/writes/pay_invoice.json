@@ -1,0 +1,22 @@
+{
+  "record": {
+    "invoice_id": 123,
+    "method": "check",
+    "amount": 100
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/123/pay",
+    "body": {
+      "method": "check",
+      "amount": 100
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

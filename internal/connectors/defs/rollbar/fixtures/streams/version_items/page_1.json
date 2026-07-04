@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/versions/synthetic-conformance-value/items",
+    "query": {
+      "environment": "synthetic-conformance-value",
+      "event": "synthetic-conformance-value",
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": [
+        {
+          "id": 1,
+          "name": "Fixture version_items",
+          "title": "Fixture version_items",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

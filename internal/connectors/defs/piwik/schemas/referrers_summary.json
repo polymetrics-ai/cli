@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik Referrers.get Report",
+  "type": "object",
+  "x-primary-key": [
+    "report"
+  ],
+  "required": [
+    "report"
+  ],
+  "properties": {
+    "report": {
+      "type": "string"
+    },
+    "Referrers_distinctAIAssistants": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_distinctCampaigns": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_distinctKeywords": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_distinctSearchEngines": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_distinctSocialNetworks": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_distinctWebsites": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromAIAssistants": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromAIAssistants_percent": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromCampaigns": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromCampaigns_percent": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromDirectEntry": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromDirectEntry_percent": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromSearchEngines": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromSearchEngines_percent": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromSocialNetworks": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromSocialNetworks_percent": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromWebsites": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "Referrers_visitorsFromWebsites_percent": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "incident_id": "incident_id_fixture_1",
+    "name": "Fixture add incident update",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/incidents/incident_id_fixture_1/incident-updates",
+    "body": {
+      "name": "Fixture add incident update",
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "add_incident_update_fixture_response"
+    }
+  }
+}

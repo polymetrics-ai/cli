@@ -1,0 +1,574 @@
+{
+  "actions": [
+    {
+      "name": "create_employee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/hris/employees",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Employee through the Keka API."
+    },
+    {
+      "name": "update_employee_personal_details",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/hris/employees/{{ record.employee_id }}/personaldetails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "employee_id"
+        ]
+      },
+      "risk": "Update Employee Personal Details through the Keka API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "update_employee_job_details",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/hris/employees/{{ record.employee_id }}/jobdetails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "employee_id"
+        ]
+      },
+      "risk": "Update Employee Job Details through the Keka API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_exit_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/hris/employees/{{ record.employee_id }}/exitrequest",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "employee_id"
+        ]
+      },
+      "risk": "Create Exit Request through the Keka API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "update_exit_request",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/hris/employees/{{ record.employee_id }}/exitrequest",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "employee_id"
+        ]
+      },
+      "risk": "Update Exit Request through the Keka API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_leave_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/time/leaverequests",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Leave Request through the Keka API."
+    },
+    {
+      "name": "update_payment_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/payroll/paygroups/{{ record.pay_group_id }}/paycycles/{{ record.pay_cycle_id }}/paybatches/{{ record.pay_batch_id }}/payments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "pay_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "pay_cycle_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "pay_batch_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "pay_group_id",
+          "pay_cycle_id",
+          "pay_batch_id"
+        ]
+      },
+      "risk": "Update Payment Status through the Keka API.",
+      "path_fields": [
+        "pay_group_id",
+        "pay_cycle_id",
+        "pay_batch_id"
+      ]
+    },
+    {
+      "name": "create_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/psa/clients",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Client through the Keka API."
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/psa/clients/{{ record.client_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "client_id"
+        ]
+      },
+      "risk": "Update Client through the Keka API.",
+      "path_fields": [
+        "client_id"
+      ]
+    },
+    {
+      "name": "create_project_phase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/psa/projects/{{ record.project_id }}/phases",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Create Project Phase through the Keka API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/psa/projects",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Project through the Keka API."
+    },
+    {
+      "name": "update_project_details",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/psa/projects/{{ record.project_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Update Project Details through the Keka API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "add_project_allocation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/psa/projects/{{ record.project_id }}/allocations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Add Project Allocation through the Keka API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "create_project_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/psa/projects/{{ record.project_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Create Project Task through the Keka API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "update_project_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/psa/projects/{{ record.project_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id"
+        ]
+      },
+      "risk": "Update Project Task through the Keka API.",
+      "path_fields": [
+        "project_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "update_goal_progress",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/pms/goals/{{ record.goal_id }}/progress",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "goal_id"
+        ]
+      },
+      "risk": "Update Goal Progress through the Keka API.",
+      "path_fields": [
+        "goal_id"
+      ]
+    },
+    {
+      "name": "create_praise",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pms/praise",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Praise through the Keka API."
+    },
+    {
+      "name": "update_candidate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/hire/jobs/{{ record.job_id }}/candidate/{{ record.candidate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id",
+          "candidate_id"
+        ]
+      },
+      "risk": "Update Candidate through the Keka API.",
+      "path_fields": [
+        "job_id",
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "add_candidate_notes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/hire/jobs/{{ record.job_id }}/candidate/{{ record.candidate_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id",
+          "candidate_id"
+        ]
+      },
+      "risk": "Add Candidate Notes through the Keka API.",
+      "path_fields": [
+        "job_id",
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "create_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/hire/jobs/{{ record.job_id }}/candidate",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "Create Candidate through the Keka API.",
+      "path_fields": [
+        "job_id"
+      ]
+    },
+    {
+      "name": "create_preboarding_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/hire/preboarding/candidates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Preboarding Candidate through the Keka API."
+    },
+    {
+      "name": "update_preboarding_candidate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/hire/preboarding/candidates/{{ record.preboarding_candidate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "preboarding_candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "preboarding_candidate_id"
+        ]
+      },
+      "risk": "Update Preboarding Candidate through the Keka API.",
+      "path_fields": [
+        "preboarding_candidate_id"
+      ]
+    },
+    {
+      "name": "update_asset_assignment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/assets/{{ record.asset_id }}/allocation",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "asset_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "asset_id"
+        ]
+      },
+      "risk": "Update Asset Assignment through the Keka API.",
+      "path_fields": [
+        "asset_id"
+      ]
+    },
+    {
+      "name": "add_bgv_request_report",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/hris/bgv/{{ record.bgv_id }}/requests/{{ record.request_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "bgv_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "bgv_id",
+          "request_id"
+        ]
+      },
+      "risk": "Add Bgv Request Report through the Keka API.",
+      "path_fields": [
+        "bgv_id",
+        "request_id"
+      ]
+    }
+  ]
+}

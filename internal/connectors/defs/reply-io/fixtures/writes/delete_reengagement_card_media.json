@@ -1,0 +1,17 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "reengagement_card_id": "synthetic-conformance-value",
+    "media_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v3/ai-sdr/knowledge-bases/synthetic-conformance-value/reengagement-cards/synthetic-conformance-value/media/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "deal_items": [
+      {
+        "id": "fixture_item_id",
+        "quantity": 1
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/predefined_item_groups",
+    "body": {
+      "name": "Fixture Name",
+      "deal_items": [
+        {
+          "id": "fixture_item_id",
+          "quantity": 1
+        }
+      ]
+    }
+  }
+}

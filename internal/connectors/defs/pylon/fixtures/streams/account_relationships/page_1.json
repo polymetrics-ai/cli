@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/relationships"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "created_at": "fixture-account_relationships",
+          "updated_at": "fixture-account_relationships"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

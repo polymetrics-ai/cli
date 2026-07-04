@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik UserId.getUsers Report",
+  "type": "object",
+  "x-primary-key": [
+    "record_id"
+  ],
+  "required": [
+    "record_id"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "report": {
+      "type": "string"
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "idsubdatatable": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "segment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "avg_time_on_site": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "bounce_rate": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "conversion_rate": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_actions": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_actions_per_visit": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_visits": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_visits_converted": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    }
+  }
+}

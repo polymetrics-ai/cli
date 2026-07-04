@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_value",
+    "name": "Fixture Name",
+    "type": "fixture_value",
+    "position": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/company_fields",
+    "body": {
+      "id": "fixture_value",
+      "name": "Fixture Name",
+      "type": "fixture_value",
+      "position": 1
+    }
+  }
+}

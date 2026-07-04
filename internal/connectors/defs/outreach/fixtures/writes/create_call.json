@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "call",
+      "attributes": {
+        "name": "Fixture Create Call"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/calls",
+    "body": {
+      "data": {
+        "type": "call",
+        "attributes": {
+          "name": "Fixture Create Call"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

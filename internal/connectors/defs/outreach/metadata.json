@@ -1,14 +1,14 @@
 {
   "name": "outreach",
   "display_name": "Outreach",
-  "description": "Reads Outreach prospects, accounts, sequences, and mailings via the Outreach API v2 (JSON:API links.next pagination).",
+  "description": "Reads and mutates Outreach REST API v2 JSON:API resources, including standard resources and caller-selected custom objects.",
   "integration_type": "api",
-  "docs_url": "https://api.outreach.io/api/v2/docs",
+  "docs_url": "https://developers.outreach.io/api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Outreach API read of prospect, account, sequence, and mailing data",
-    "approval": "none; read-only, no reverse-ETL write surface"
+    "read": "external Outreach API read of JSON:API resources including prospects, accounts, sequences, mailings, tasks, calls, opportunities, users, webhooks, and custom objects",
+    "write": "external Outreach API mutations for documented JSON:API create/update/delete/action endpoints; destructive delete and bulk-destroy actions require approval",
+    "approval": "write actions require explicit reverse-ETL approval; destructive deletes and bulk-destroy actions are marked destructive"
   }
 }

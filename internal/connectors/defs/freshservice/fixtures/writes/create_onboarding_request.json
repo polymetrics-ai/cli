@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_onboarding_request",
+    "description": "Fixture create_onboarding_request record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/onboarding_requests",
+    "body": {
+      "name": "Fixture create_onboarding_request",
+      "description": "Fixture create_onboarding_request record"
+    }
+  }
+}

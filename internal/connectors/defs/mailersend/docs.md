@@ -1,11 +1,13 @@
 # Overview
 
-MailerSend is a read-only declarative-HTTP connector that reads email activity, domains, messages,
-and recipients through the MailerSend REST API (`https://api.mailersend.com/v1`). This bundle
-migrates `internal/connectors/mailersend` (the hand-written legacy connector, which stays registered
-and unchanged until wave6's registry flip) to a Tier-1 defs bundle at capability parity. MailerSend's
-mutating endpoints send transactional email rather than perform safe reverse-ETL upserts, so the
-connector is read-only, matching legacy exactly.
+MailerSend is a read-only declarative-HTTP connector that reads the legacy email activity, domains,
+messages, and recipients streams plus additional documented MailerSend API collections: templates,
+scheduled messages, sender identities, inbound routes, account users, invites, tokens, webhooks, and
+the four email analytics views. Requests use the MailerSend REST API
+(`https://api.mailersend.com/v1`). This bundle migrates `internal/connectors/mailersend` (the
+hand-written legacy connector, which stays registered and unchanged until wave6's registry flip) to
+a Tier-1 defs bundle. MailerSend's mutating endpoints send transactional email or alter account
+configuration rather than perform safe reverse-ETL upserts, so the connector remains read-only.
 
 ## Auth setup
 
@@ -14,31 +16,39 @@ Provide a MailerSend API token via the `api_token` secret; it is used only for B
 
 ## Streams notes
 
-All 4 streams share MailerSend's `{data:[...]}` envelope and `page_number` pagination (`page_param:
-page`, `size_param: limit`, `start_page: 1`, `page_size: 25`) — matching legacy's
-`connsdk.PageNumberPaginator{PageParam:"page", SizeParam:"limit", StartPage:1, PageSize:pageSize}`
-short-page stop rule exactly.
+Paginated collection streams share MailerSend's `{data:[...]}` envelope and `page_number`
+pagination (`page_param: page`, `size_param: limit`, `start_page: 1`, `page_size: 25`) — matching
+legacy's `connsdk.PageNumberPaginator{PageParam:"page", SizeParam:"limit", StartPage:1,
+PageSize:pageSize}` short-page stop rule exactly for the original streams and matching the
+documented page/limit shape for the added collection streams.
 
 - `domains` (`GET /domains`) and `recipients` (`GET /recipients`) take no extra config.
 - `messages` (`GET /messages`) optionally filters by `domain_id` when set (`omit_when_absent: true`
   — sent only when `domain_id` is configured, matching legacy's `if domain := ...; domain != ""`
   guard).
+- `templates` optionally filters by `domain_id`; `webhooks` requires `domain_id`, matching
+  MailerSend's documented webhook list parameters.
 - `activity` (`GET /activity/{domain_id}`) requires `domain_id` (templated into the path, urlencoded
   by default like every path segment) and the `date_from`/`date_to` unix-seconds query window
   (both hard-required — an absent value is a hard interpolation error, matching legacy's explicit
   `errors.New("mailersend activity stream requires config domain_id")` /
   `"... requires config date_from and date_to"`).
+- `analytics_by_date`, `analytics_country`, `analytics_user_agents`, and
+  `analytics_reading_environment` require the same `date_from`/`date_to` unix-seconds window and
+  read `data.stats` without pagination.
 
-None of the 4 streams declares an `incremental` block: legacy's `InitialState` always seeds an empty
-cursor and `Read` never applies any cursor-based filter (server-side or client-side) to any request —
-every MailerSend read is a full sync. Declaring an `incremental`/`client_filtered` block here would
-introduce new record-dropping behavior legacy never had, so this bundle omits it and keeps each
-schema's `x-cursor-field` purely as a documented dedup-capable field name.
+None of the streams declares an `incremental` block: legacy's `InitialState` always seeds an empty
+cursor and `Read` never applies any cursor-based filter (server-side or client-side) to any request.
+Declaring an `incremental`/`client_filtered` block here would introduce new record-dropping behavior
+legacy never had, so this bundle omits it and keeps `x-cursor-field` values purely as documented
+dedup-capable field names.
 
 ## Write actions & risks
 
-None. MailerSend's mutating endpoints send transactional email, not reverse-ETL upserts;
-`capabilities.write` is `false` and no `writes.json` is shipped, matching legacy.
+None. MailerSend's mutating endpoints send transactional email, verify addresses, manage users and
+tokens, change sending domains/routes/templates/webhooks, or delete scheduled messages;
+`capabilities.write` is `false` and no `writes.json` is shipped, matching legacy's unsupported
+`Write`.
 
 ## Known limits
 
@@ -59,6 +69,8 @@ None. MailerSend's mutating endpoints send transactional email, not reverse-ETL 
   engine's `PaginationSpec.PageSize`/`MaxPages` are fixed values in `streams.json`, not
   runtime-config-driven); pagination is fixed at `limit=25` (legacy's own default) with unbounded
   pages.
-- Only the 4 legacy-parity read streams are implemented; the broader MailerSend API surface (send
-  email, templates, webhooks, scheduled messages) is out of scope until Pass B — see
-  `api_surface.json`.
+- Detail endpoints that require a template, identity, inbound route, message, webhook, token, user,
+  invite, domain, recipient, verification, or SMS object ID are excluded as ID-scoped lookups rather
+  than global streams.
+- SMS and email-verification resources are excluded because this connector's legacy/source contract
+  is the Email API/account surface and those resources use separate scopes and operational risk.

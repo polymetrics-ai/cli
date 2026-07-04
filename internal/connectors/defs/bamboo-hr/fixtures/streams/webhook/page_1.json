@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/webhooks/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "errors": [
+        {
+          "id": "fixture_id",
+          "duplicatePostString": [
+            "fixture_value"
+          ],
+          "error": "fixture_value",
+          "monitorFields": [
+            {
+              "id": 1001,
+              "name": "Fixture Name"
+            }
+          ],
+          "postFields": [
+            {
+              "id": 1001,
+              "name": "Fixture Name"
+            }
+          ],
+          "unknownFields": [
+            {
+              "id": 1001,
+              "name": "Fixture Name"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

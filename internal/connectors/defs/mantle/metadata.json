@@ -1,22 +1,23 @@
 {
   "name": "mantle",
   "display_name": "Mantle",
-  "description": "Reads Mantle customers and subscriptions through the Mantle (heymantle.com) REST API.",
+  "description": "Reads and writes Mantle Core API resources through the heymantle.com REST API.",
   "integration_type": "api",
-  "docs_url": "https://docs.mantle.xyz/",
+  "docs_url": "https://coreapi.heymantle.dev/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 500
+    "read_page_size": 100
   },
   "risk": {
-    "read": "external Mantle API read of customer and subscription billing data"
+    "read": "external Mantle API read of customer, billing, CRM, docs, email, helpdesk, and workflow data",
+    "write": "external Mantle API mutation of customer, billing, CRM, docs, email, helpdesk, webhook, and workflow resources; approval required"
   }
 }

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "1-fixture",
+    "activities": [
+      {
+        "name": "Fixture update_activity"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/activities/1-fixture",
+    "body": {
+      "activities": [
+        {
+          "name": "Fixture update_activity"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

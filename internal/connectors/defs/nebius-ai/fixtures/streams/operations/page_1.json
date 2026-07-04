@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/operations",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "object_fixture",
+      "data": [
+        {
+          "id": "id_fixture",
+          "type": "yql",
+          "params": {
+            "query": "query_fixture"
+          },
+          "src": [
+            {
+              "id": "id_fixture",
+              "version": "version_fixture",
+              "mapping": {
+                "type": "type_fixture",
+                "messages": {
+                  "type": "type_fixture",
+                  "value": "value_fixture"
+                },
+                "max_tokens": {
+                  "type": "type_fixture",
+                  "value": 1
+                },
+                "custom_id": {
+                  "type": "type_fixture",
+                  "name": "name_fixture"
+                }
+              }
+            }
+          ],
+          "dst": [
+            {
+              "id": "id_fixture",
+              "version": "version_fixture"
+            }
+          ],
+          "status": "queued",
+          "created_at": 1,
+          "in_progress_at": 1,
+          "finished_at": 1,
+          "ai_project_id": "ai_project_id_fixture"
+        }
+      ]
+    }
+  }
+}

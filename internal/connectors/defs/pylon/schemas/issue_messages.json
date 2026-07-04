@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issue_messages",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "author": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "email_info": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "file_urls": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_private": {
+      "type": [
+        "boolean",
+        "string",
+        "null"
+      ]
+    },
+    "message_html": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "thread_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timestamp": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

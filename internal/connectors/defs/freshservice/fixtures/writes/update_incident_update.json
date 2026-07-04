@@ -1,0 +1,18 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "status_page_id": 123,
+    "incident_id": 123,
+    "update_id": 123,
+    "name": "Fixture update_incident_update",
+    "description": "Fixture update_incident_update record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/status/pages/123/incidents/123/updates/123",
+    "body": {
+      "name": "Fixture update_incident_update",
+      "description": "Fixture update_incident_update record"
+    }
+  }
+}

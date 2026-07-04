@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "ID of the project member."
+    },
+    "email": {
+      "type": "string",
+      "description": "Email ID of the project member."
+    },
+    "role": {
+      "type": "string",
+      "description": "Role of the project member.",
+      "enum": [
+        "owner",
+        "editor",
+        "viewer",
+        "commentator",
+        "coowner"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

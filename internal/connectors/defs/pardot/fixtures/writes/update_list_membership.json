@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Updated list_membership"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/objects/list-memberships/101",
+    "body": {
+      "name": "Updated list_membership"
+    }
+  }
+}

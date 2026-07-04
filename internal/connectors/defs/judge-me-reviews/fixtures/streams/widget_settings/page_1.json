@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "settings": "<script>window.jdgmSettings = {};</script><style>.jdgm{}</style>"
+    }
+  }
+}

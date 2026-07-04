@@ -1,0 +1,15 @@
+{
+  "record": {
+    "application_id": "application_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/applications/application_id_fixture/workflows"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "benefitPlanCoverageId": 12.34,
+    "companyAmount": 12.34,
+    "companyAmountType": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/benefit/employee_benefit",
+    "body": {
+      "benefitPlanCoverageId": 12.34,
+      "companyAmount": 12.34,
+      "companyAmountType": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

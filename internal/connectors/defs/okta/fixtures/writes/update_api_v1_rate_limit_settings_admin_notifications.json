@@ -1,0 +1,16 @@
+{
+  "record": {
+    "notificationsEnabled": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/rate-limit-settings/admin-notifications",
+    "body": {
+      "notificationsEnabled": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

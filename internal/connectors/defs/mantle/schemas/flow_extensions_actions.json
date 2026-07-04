@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "flow_extensions_actions",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the API action."
+    },
+    "address": {
+      "type": "string",
+      "description": "URL address of the API action."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the API action."
+    },
+    "handle": {
+      "type": "string",
+      "description": "Handle of the API action."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the API action."
+    },
+    "organizationId": {
+      "type": "string",
+      "description": "Identifier of the organization associated with the API action."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Timestamp when the API action was created.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Timestamp when the API action was last updated.",
+      "format": "date-time"
+    },
+    "settingsSchema": {
+      "type": "object",
+      "description": "Schema for the settings of the API action."
+    }
+  }
+}

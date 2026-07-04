@@ -1,0 +1,11 @@
+{
+  "record": {
+    "category_id": 123,
+    "name": "Fixture delete_solution_category",
+    "description": "Fixture delete_solution_category record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/solutions/categories/123"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "case_id": "synthetic-conformance-value",
+    "name": "name_fixture",
+    "description": "description_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/orgs/synthetic-conformance-value/cases/synthetic-conformance-value",
+    "body": {
+      "name": "name_fixture",
+      "description": "description_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

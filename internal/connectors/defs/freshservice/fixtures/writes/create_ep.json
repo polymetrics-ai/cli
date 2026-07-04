@@ -1,0 +1,16 @@
+{
+  "record": {
+    "workspace_id": 123,
+    "schedule_id": 123,
+    "name": "Fixture create_ep",
+    "description": "Fixture create_ep record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/oncall/ws/123/schedules/123/escalation-policies",
+    "body": {
+      "name": "Fixture create_ep",
+      "description": "Fixture create_ep record"
+    }
+  }
+}

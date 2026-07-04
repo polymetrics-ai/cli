@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/custom-redirects",
+    "query": {
+      "limit": "200",
+      "fields": "id,name,campaignId,destinationUrl,folderId,trackerDomainId,createdAt,updatedAt,createdById,updatedById,isDeleted"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "name": "name_fixture",
+          "campaignId": 1,
+          "destinationUrl": "destinationUrl_fixture",
+          "folderId": 1,
+          "trackerDomainId": 1,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdById": 1,
+          "updatedById": 1,
+          "isDeleted": false
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

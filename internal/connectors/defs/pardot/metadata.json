@@ -1,23 +1,25 @@
 {
   "name": "pardot",
   "display_name": "Pardot",
-  "description": "Reads Account Engagement prospects, campaigns, and lists through Pardot API v5 REST endpoints.",
+  "description": "Reads and writes documented Salesforce Account Engagement (Pardot) API v5 JSON resources.",
   "integration_type": "api",
   "docs_url": "https://developer.salesforce.com/docs/marketing/pardot/overview",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 200
+    "read_page_size": 200,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Salesforce Account Engagement (Pardot) API read of prospect and marketing data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Salesforce Account Engagement (Pardot) API reads of prospect, campaign, marketing asset, visitor, and admin metadata",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive delete actions are marked destructive",
+    "write": "creates, updates, sends, tags, copies, restores, cancels, and deletes Salesforce Account Engagement records through documented API v5 mutation endpoints"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "project_id": 123,
+    "task_id": 123,
+    "note_id": 123,
+    "name": "Fixture delete_note_task_newgen",
+    "description": "Fixture delete_note_task_newgen record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/pm/projects/123/tasks/123/notes/123"
+  }
+}

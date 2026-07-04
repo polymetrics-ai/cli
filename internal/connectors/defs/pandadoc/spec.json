@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "PandaDoc Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
@@ -12,8 +14,8 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.pandadoc.com/public/v1",
-      "description": "PandaDoc API base URL override for tests or proxies."
+      "default": "https://api.pandadoc.com",
+      "description": "PandaDoc API root URL override for tests or proxies."
     },
     "count": {
       "type": "string",
@@ -28,6 +30,46 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Optional document_id used by detail streams."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional task_id used by detail streams."
+    },
+    "id": {
+      "type": "string",
+      "description": "Optional id used by detail streams."
+    },
+    "section_id": {
+      "type": "string",
+      "description": "Optional section_id used by detail streams."
+    },
+    "upload_id": {
+      "type": "string",
+      "description": "Optional upload_id used by detail streams."
+    },
+    "attachment_id": {
+      "type": "string",
+      "description": "Optional attachment_id used by detail streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Optional user_id used by detail streams."
+    },
+    "session_request_id": {
+      "type": "string",
+      "description": "Optional session_request_id used by detail streams."
+    },
+    "item_uuid": {
+      "type": "string",
+      "description": "Optional item_uuid used by detail streams."
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Optional template_id used by detail streams."
     }
   }
 }

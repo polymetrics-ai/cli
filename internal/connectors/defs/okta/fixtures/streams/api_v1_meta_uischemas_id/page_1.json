@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/uischemas/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "uiSchema": {
+        "buttonLabel": "button_label_fixture",
+        "elements": [
+          {
+            "label": "label_fixture",
+            "options": {
+              "format": "text"
+            },
+            "scope": "scope_fixture",
+            "type": "type_fixture"
+          }
+        ],
+        "label": "label_fixture",
+        "type": "type_fixture"
+      },
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

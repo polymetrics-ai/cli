@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "fixture",
+    "parentCustomerId": "parent_customer_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/companies",
+    "body": {
+      "name": "fixture",
+      "parentCustomerId": "parent_customer_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

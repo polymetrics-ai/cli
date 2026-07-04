@@ -1,0 +1,18 @@
+{
+  "record": {
+    "task_id": "synthetic-conformance-value",
+    "body_html": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/synthetic-conformance-value/comments",
+    "body": {
+      "body_html": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

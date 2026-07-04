@@ -1,19 +1,707 @@
 {
-  "api": "Keka HRIS/Time/PSA REST API",
-  "docs": "https://developers.keka.com/reference/introduction",
-  "reviewed_at": "2026-07-03",
-  "scope": "Migration wave: the 6 legacy-parity read streams only, matching internal/connectors/keka's exact endpoint set (HRIS employees, Time attendance/leave, PSA clients/projects). The full Keka surface (payroll, performance, recruitment, expenses, webhooks, etc.) is out of scope until Pass B capability expansion.",
+  "api": "Keka HRMS REST API",
+  "docs": "https://apidocs.keka.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion from the official Keka Postman documentation collection at apidocs.keka.com. Every documented GET with a published URL is exposed as a stream; every object-bodied POST/PUT mutation expressible by the write dialect is exposed as a write action. The OAuth token endpoint, URL-less documentation entries, and two root-array request-body writes are explicitly excluded with specific reasons.",
   "endpoints": [
-    { "method": "GET", "path": "/hris/employees", "covered_by": { "stream": "employees" } },
-    { "method": "GET", "path": "/time/attendance", "covered_by": { "stream": "attendance" } },
-    { "method": "GET", "path": "/time/leavetypes", "covered_by": { "stream": "leave_types" } },
-    { "method": "GET", "path": "/time/leaverequests", "covered_by": { "stream": "leave_requests" } },
-    { "method": "GET", "path": "/psa/clients", "covered_by": { "stream": "clients" } },
-    { "method": "GET", "path": "/psa/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/hris/payroll", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/performance/reviews", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/recruitment/candidates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/expense/claims", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/hris/employees", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy keka is read-only, no write actions implemented" } }
+    {
+      "method": "POST",
+      "path": "/connect/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token exchange endpoint; implemented by the existing Keka custom AuthHook rather than exposed as a data stream or write action."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/employees",
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hris/employees",
+      "covered_by": {
+        "write": "create_employee"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hris/employees/{employee_id}/personaldetails",
+      "covered_by": {
+        "write": "update_employee_personal_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hris/employees/{employee_id}/jobdetails",
+      "covered_by": {
+        "write": "update_employee_job_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/employees/{employee_id}",
+      "covered_by": {
+        "stream": "employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/employees/updatefields",
+      "covered_by": {
+        "stream": "employee_update_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/grouptypes",
+      "covered_by": {
+        "stream": "group_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/locations",
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/jobtitles",
+      "covered_by": {
+        "stream": "job_titles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/currencies",
+      "covered_by": {
+        "stream": "currencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/noticeperiods",
+      "covered_by": {
+        "stream": "notice_periods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/exitreasons",
+      "covered_by": {
+        "stream": "exit_reasons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hris/employees/{employee_id}/exitrequest",
+      "covered_by": {
+        "write": "create_exit_request"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hris/employees/{employee_id}/exitrequest",
+      "covered_by": {
+        "write": "update_exit_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/documents/types",
+      "covered_by": {
+        "stream": "document_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/employees/{employee_id}/documenttypes/{document_type_id}/documents",
+      "covered_by": {
+        "stream": "employee_documents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/employees/{employee_id}/documents/{document_id}/attachment/{attachment_id}",
+      "covered_by": {
+        "stream": "employee_document_attachment_download_urls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/leaverequests",
+      "covered_by": {
+        "stream": "leave_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/leavetypes",
+      "covered_by": {
+        "stream": "leave_types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/time/leaverequests",
+      "covered_by": {
+        "write": "create_leave_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/leavebalance",
+      "covered_by": {
+        "stream": "leave_balances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/leaveplans",
+      "covered_by": {
+        "stream": "leave_plans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/attendance",
+      "covered_by": {
+        "stream": "attendance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body is a root JSON array of attendance punches; the declarative write engine can send JSON/form objects only, not a top-level array."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/capturescheme",
+      "covered_by": {
+        "stream": "capture_schemes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/shiftpolicies",
+      "covered_by": {
+        "stream": "shift_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/holidayscalendar",
+      "covered_by": {
+        "stream": "holiday_calendars"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/penalisationpolicies",
+      "covered_by": {
+        "stream": "tracking_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/weeklyoffpolicies",
+      "covered_by": {
+        "stream": "weekly_off_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/salarycomponents",
+      "covered_by": {
+        "stream": "salary_components"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/paygroups",
+      "covered_by": {
+        "stream": "pay_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/paygroups/{pay_group_id}/paycycles",
+      "covered_by": {
+        "stream": "pay_cycles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/paygroups/{pay_group_id}/paycycles/{pay_cycle_id}/payregister",
+      "covered_by": {
+        "stream": "pay_register"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/paygroups/{pay_group_id}/paycycles/{pay_cycle_id}/paybatches",
+      "covered_by": {
+        "stream": "pay_batches"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/paygroups/{pay_group_id}/paycycles/{pay_cycle_id}/paybatches/{pay_batch_id}/payments",
+      "covered_by": {
+        "stream": "batch_payments"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/payroll/paygroups/{pay_group_id}/paycycles/{pay_cycle_id}/paybatches/{pay_batch_id}/payments",
+      "covered_by": {
+        "write": "update_payment_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time/payroll/paygrades",
+      "covered_by": {
+        "stream": "pay_grades"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/payband",
+      "covered_by": {
+        "stream": "pay_bands"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/salaries",
+      "covered_by": {
+        "stream": "employee_salaries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payroll/employees/fnf",
+      "covered_by": {
+        "stream": "employee_fnf_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Official Postman collection documents this operation name but does not publish a request URL or path; implementing it would require inventing an endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/clients",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/psa/clients",
+      "covered_by": {
+        "write": "create_client"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/clients/{client_id}",
+      "covered_by": {
+        "stream": "client"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/psa/clients/{client_id}",
+      "covered_by": {
+        "write": "update_client"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/clients/{client_id}/billingroles",
+      "covered_by": {
+        "stream": "billing_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects/{project_id}/phases",
+      "covered_by": {
+        "stream": "project_phases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/psa/projects/{project_id}/phases",
+      "covered_by": {
+        "write": "create_project_phase"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/psa/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects/{project_id}",
+      "covered_by": {
+        "stream": "project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/psa/projects/{project_id}",
+      "covered_by": {
+        "write": "update_project_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects/{project_id}/allocations",
+      "covered_by": {
+        "stream": "project_allocations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/psa/projects/{project_id}/allocations",
+      "covered_by": {
+        "write": "add_project_allocation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects/{project_id}/timeentries",
+      "covered_by": {
+        "stream": "project_time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects/{project_id}/tasks",
+      "covered_by": {
+        "stream": "project_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/psa/projects/{project_id}/tasks",
+      "covered_by": {
+        "write": "create_project_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/psa/projects/{project_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "update_project_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects/{project_id}/tasks/{task_id}/timeentries",
+      "covered_by": {
+        "stream": "project_task_time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/projects/{project_id}/tasks/{task_id}",
+      "covered_by": {
+        "stream": "project_task_assignees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/psa/timeentries",
+      "covered_by": {
+        "stream": "timesheet_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/timeframes",
+      "covered_by": {
+        "stream": "pms_timeframes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/goals",
+      "covered_by": {
+        "stream": "goals"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/goals/{goal_id}/progress",
+      "covered_by": {
+        "write": "update_goal_progress"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/badges",
+      "covered_by": {
+        "stream": "badges"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/praise",
+      "covered_by": {
+        "stream": "praise"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/praise",
+      "covered_by": {
+        "write": "create_praise"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reviewgroups",
+      "covered_by": {
+        "stream": "review_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reviewcycles",
+      "covered_by": {
+        "stream": "review_cycles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reviews",
+      "covered_by": {
+        "stream": "reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Official Postman collection documents this operation name but does not publish a request URL or path; implementing it would require inventing an endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hire/jobs",
+      "covered_by": {
+        "stream": "hire_jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hire/jobs/{job_id}/applicationfields",
+      "covered_by": {
+        "stream": "job_application_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hire/jobs/{job_id}/candidates",
+      "covered_by": {
+        "stream": "candidates"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hire/jobs/{job_id}/candidate/{candidate_id}",
+      "covered_by": {
+        "write": "update_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hire/jobs/{job_id}/candidate/{candidate_id}/notes",
+      "covered_by": {
+        "write": "add_candidate_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/hire/jobs/{job_id}/candidate",
+      "covered_by": {
+        "write": "create_candidate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hire/jobs/{job_id}/candidate/{candidate_id}/interviews",
+      "covered_by": {
+        "stream": "candidate_interviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hire/jobs/{job_id}/candidate/{candidate_id}/scorecards",
+      "covered_by": {
+        "stream": "candidate_scorecards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hire/preboarding/candiates",
+      "covered_by": {
+        "stream": "preboarding_candidates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hire/preboarding/candidates",
+      "covered_by": {
+        "write": "create_preboarding_candidate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hire/preboarding/candidates/{preboarding_candidate_id}",
+      "covered_by": {
+        "write": "update_preboarding_candidate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/categories",
+      "covered_by": {
+        "stream": "expense_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/claims",
+      "covered_by": {
+        "stream": "expense_claims"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expensepolicies",
+      "covered_by": {
+        "stream": "expense_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/assets",
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/assets/{asset_id}/allocation",
+      "covered_by": {
+        "write": "update_asset_assignment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/assets/types",
+      "covered_by": {
+        "stream": "asset_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/assets/categories",
+      "covered_by": {
+        "stream": "asset_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/assets/conditions",
+      "covered_by": {
+        "stream": "asset_conditions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requisition/requests",
+      "covered_by": {
+        "stream": "requisition_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Official Postman collection documents this operation name but does not publish a request URL or path; implementing it would require inventing an endpoint."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/employees/{employee_id}/skills",
+      "covered_by": {
+        "stream": "employee_skills"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hris/employees/{employee_id}/skills",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body is a root JSON array of employee skill ratings; the declarative write engine can send JSON/form objects only, not a top-level array."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hris/bgv/{bgv_id}/requests",
+      "covered_by": {
+        "stream": "bgv_requests"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hris/bgv/{bgv_id}/requests/{request_id}",
+      "covered_by": {
+        "write": "add_bgv_request_report"
+      }
+    }
   ]
 }

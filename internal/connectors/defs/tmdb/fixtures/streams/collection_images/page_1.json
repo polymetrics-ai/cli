@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/collection/123/images"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture collection_images",
+      "name": "Fixture collection_images",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

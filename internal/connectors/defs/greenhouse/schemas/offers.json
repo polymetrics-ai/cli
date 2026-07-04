@@ -2,18 +2,64 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "offers",
   "type": "object",
-  "x-primary-key": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "x-cursor-field": "updated_at",
-  "required": ["id"],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "integer" },
-    "application_id": { "type": ["integer", "null"] },
-    "candidate_id": { "type": ["integer", "null"] },
-    "status": { "type": ["string", "null"] },
-    "version": { "type": ["integer", "null"] },
-    "starts_at": { "type": ["string", "null"] },
-    "sent_at": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "id": {
+      "type": "integer"
+    },
+    "application_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "candidate_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "starts_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sent_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }

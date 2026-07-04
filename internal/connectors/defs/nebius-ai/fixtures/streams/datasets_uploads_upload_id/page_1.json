@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/datasets/uploads/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "upload_info": {
+        "status": "PENDING",
+        "dataset": {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "schema": [
+            {
+              "name": "name_fixture",
+              "type": {
+                "name": "string"
+              }
+            }
+          ],
+          "folder": "folder_fixture"
+        },
+        "error": "error_fixture",
+        "created_at": 1,
+        "completed_at": 1,
+        "ai_project_id": "ai_project_id_fixture"
+      }
+    }
+  }
+}

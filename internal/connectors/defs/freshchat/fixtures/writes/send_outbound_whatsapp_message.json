@@ -1,0 +1,18 @@
+{
+  "record": {
+    "provider": "whatsapp",
+    "to": {
+      "phone": "+15550100"
+    },
+    "template": {
+      "name": "fixture_template"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/outbound-messages/whatsapp",
+    "body": {
+      "provider": "whatsapp"
+    }
+  }
+}

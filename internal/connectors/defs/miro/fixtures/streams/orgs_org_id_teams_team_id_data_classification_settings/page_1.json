@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/data-classification-settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "defaultLabelId": "default_label_id_fixture",
+      "enabled": true,
+      "type": "team-data-classification-settings"
+    }
+  }
+}

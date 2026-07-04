@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2-experimental/apps/synthetic-conformance-value/metrics",
+    "query": {
+      "startDate": "2020-01-01T00:00:00Z",
+      "endDate": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "periodStart": "2026-01-01",
+        "uniqueUsers": 1,
+        "uniqueRecurringUsers": 1,
+        "uniqueOrganizations": 1,
+        "installations": 1,
+        "uninstallations": 1
+      }
+    ]
+  }
+}

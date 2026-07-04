@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leads/list/fields"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "1",
+      "name": "Fixture lead_list_fields",
+      "href": "https://app.nutshell.com/rest/lead_list_fields/1",
+      "htmlUrl": "https://app.nutshell.com/lead_list_fields/1",
+      "createdTime": "2026-01-01T00:00:00+0000",
+      "modifiedTime": "2026-01-01T00:00:01+0000"
+    }
+  }
+}

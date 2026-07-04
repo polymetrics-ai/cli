@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "fixture",
+    "allowRepeatRuns": true,
+    "blockRepeatsTimeValue": 1,
+    "blockRepeatsTimeUnit": "minutes"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/flows/id_fixture",
+    "body": {
+      "name": "fixture",
+      "allowRepeatRuns": true,
+      "blockRepeatsTimeValue": 1,
+      "blockRepeatsTimeUnit": "minutes"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

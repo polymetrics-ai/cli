@@ -1,0 +1,15 @@
+{
+  "record": {
+    "email": "freshchat-agent@example.com",
+    "first_name": "Fixture",
+    "last_name": "Agent"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/agents",
+    "body": {
+      "email": "freshchat-agent@example.com",
+      "first_name": "Fixture"
+    }
+  }
+}

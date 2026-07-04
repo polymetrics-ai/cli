@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/email/layouts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "layouts": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "format": "fixture",
+        "thumbnail": "fixture",
+        "defaultLayout": true,
+        "appId": "app_id_fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

@@ -1,17 +1,354 @@
 {
-  "api": "Nebius AI Studio REST API (https://api.studio.nebius.com, OpenAI-compatible)",
-  "docs": "https://docs.nebius.com/studio/inference/api-reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 migration: the 3 legacy-parity read-only list streams only; chat/embeddings/completions inference endpoints and any mutation surface (file upload, batch creation/cancellation) are out of scope until Pass B",
+  "api": "Nebius OpenAI-compatible inference API",
+  "docs": "https://api.tokenfactory.nebius.com/docs",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion from Nebius Token Factory OpenAPI: 26 streams, 20 write actions, 3 binary upload exclusions, plus the legacy /v1/batches read stream retained for parity.",
   "endpoints": [
-    { "method": "GET", "path": "/v1/models", "covered_by": { "stream": "models" } },
-    { "method": "GET", "path": "/v1/files", "covered_by": { "stream": "files" } },
-    { "method": "GET", "path": "/v1/batches", "covered_by": { "stream": "batches" } },
-    { "method": "POST", "path": "/v1/files", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (file upload is a write, not a read stream)" } },
-    { "method": "DELETE", "path": "/v1/files/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes an uploaded file" } },
-    { "method": "POST", "path": "/v1/batches", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (creates a real batch job)" } },
-    { "method": "POST", "path": "/v1/batches/{id}/cancel", "excluded": { "category": "destructive_admin", "reason": "cancels a running batch job" } },
-    { "method": "POST", "path": "/v1/chat/completions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (inference endpoint, not a list/read stream)" } },
-    { "method": "POST", "path": "/v1/embeddings", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (inference endpoint, not a list/read stream)" } }
+    {
+      "method": "GET",
+      "path": "/v1/models",
+      "covered_by": {
+        "stream": "models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files",
+      "covered_by": {
+        "stream": "files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/batches",
+      "covered_by": {
+        "stream": "batches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/completions",
+      "covered_by": {
+        "write": "create_completions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/chat/completions",
+      "covered_by": {
+        "write": "create_chat_completions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/embeddings",
+      "covered_by": {
+        "write": "create_embeddings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/rerank",
+      "covered_by": {
+        "write": "create_rerank"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/responses",
+      "covered_by": {
+        "write": "create_responses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/files",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Upload file uses multipart/form-data request payloads that are outside the JSON declarative write dialect."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/models/upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Upload custom model archive uses multipart/form-data request payloads that are outside the JSON declarative write dialect."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files/{file_id}",
+      "covered_by": {
+        "stream": "files_file_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/files/{file_id}",
+      "covered_by": {
+        "write": "delete_files_file_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files/{file_id}/content",
+      "covered_by": {
+        "stream": "files_file_id_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files/{file_id}/link",
+      "covered_by": {
+        "stream": "files_file_id_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/images/generations",
+      "covered_by": {
+        "write": "create_images_generations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs",
+      "covered_by": {
+        "stream": "fine_tuning_jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/fine_tuning/jobs",
+      "covered_by": {
+        "write": "create_fine_tuning_jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}",
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/fine_tuning/jobs/{job_id}/cancel",
+      "covered_by": {
+        "write": "execute_fine_tuning_jobs_job_id_cancel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}/events",
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints",
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id_checkpoints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints/{checkpoint_id}",
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id_checkpoints_checkpoint_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/models/spec-draft",
+      "covered_by": {
+        "stream": "fine_tuning_models_spec_draft"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fine_tuning/models/spec-draft",
+      "covered_by": {
+        "stream": "fine_tuning_models_spec_draft_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/dedicated_endpoints/templates",
+      "covered_by": {
+        "stream": "dedicated_endpoints_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/dedicated_endpoints",
+      "covered_by": {
+        "stream": "dedicated_endpoints"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/dedicated_endpoints",
+      "covered_by": {
+        "write": "create_dedicated_endpoints"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/dedicated_endpoints/{endpoint_id}",
+      "covered_by": {
+        "write": "update_dedicated_endpoints_endpoint_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/dedicated_endpoints/{endpoint_id}",
+      "covered_by": {
+        "write": "delete_dedicated_endpoints_endpoint_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets",
+      "covered_by": {
+        "stream": "datasets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets",
+      "covered_by": {
+        "write": "create_datasets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}",
+      "covered_by": {
+        "stream": "datasets_dataset_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/datasets/{dataset_id}",
+      "covered_by": {
+        "write": "update_datasets_dataset_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/datasets/{dataset_id}",
+      "covered_by": {
+        "write": "delete_datasets_dataset_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}/query_templates",
+      "covered_by": {
+        "stream": "datasets_dataset_id_query_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}/content",
+      "covered_by": {
+        "stream": "datasets_dataset_id_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}/export",
+      "covered_by": {
+        "stream": "datasets_dataset_id_export"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/uploads",
+      "covered_by": {
+        "write": "create_datasets_uploads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/uploads/{upload_id}/parts",
+      "covered_by": {
+        "stream": "datasets_uploads_upload_id_parts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/uploads/{upload_id}/parts",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Upload a new part for a multipart upload uses application/octet-stream request payloads that are outside the JSON declarative write dialect."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/uploads/{upload_id}/complete",
+      "covered_by": {
+        "write": "create_datasets_uploads_upload_id_complete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/uploads/{upload_id}",
+      "covered_by": {
+        "stream": "datasets_uploads_upload_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/uploads/{upload_id}/cancel",
+      "covered_by": {
+        "write": "execute_datasets_uploads_upload_id_cancel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/operations",
+      "covered_by": {
+        "stream": "operations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/operations",
+      "covered_by": {
+        "write": "create_operations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/operations/{operation_id}",
+      "covered_by": {
+        "stream": "operations_operation_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/operations/{operation_id}/cancel",
+      "covered_by": {
+        "write": "execute_operations_operation_id_cancel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/operations/{operation_id}/results",
+      "covered_by": {
+        "stream": "operations_operation_id_results"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/operations/{operation_id}/errors",
+      "covered_by": {
+        "stream": "operations_operation_id_errors"
+      }
+    }
   ]
 }

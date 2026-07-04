@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Actions.getPageTitlesFollowingSiteSearch",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "label": "Fixture row 1",
+        "nb_hits_following_search": 1,
+        "nb_hits": 2,
+        "avg_time_on_page": 3,
+        "bounce_rate": 4,
+        "exit_rate": 5,
+        "avg_time_generation": 6
+      },
+      {
+        "label": "Fixture row 2",
+        "nb_hits_following_search": 1,
+        "nb_hits": 2,
+        "avg_time_on_page": 3,
+        "bounce_rate": 4,
+        "exit_rate": 5,
+        "avg_time_generation": 6
+      }
+    ]
+  }
+}

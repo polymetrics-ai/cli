@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record",
+    "prospectId": 1,
+    "assignDeletedProspect": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/visitors/101/do/assignToProspect",
+    "body": {
+      "name": "Fixture Pardot record",
+      "prospectId": 1,
+      "assignDeletedProspect": false
+    }
+  }
+}

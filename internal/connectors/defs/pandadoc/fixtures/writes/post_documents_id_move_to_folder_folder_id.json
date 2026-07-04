@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "folder_id": "folder_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/documents/id_fixture/move-to-folder/folder_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_documents_id_move_to_folder_folder_id_response",
+      "status": "ok"
+    }
+  }
+}

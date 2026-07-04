@@ -1,0 +1,13 @@
+{
+  "record": {
+    "device_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/devices/synthetic-conformance-value/lifecycle/unsuspend"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

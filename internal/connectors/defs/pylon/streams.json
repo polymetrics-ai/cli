@@ -3,18 +3,37 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_token }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "cursor",
       "token_path": "pagination.next_cursor"
     },
-    "check": { "method": "GET", "path": "/issues", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/issues",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "pylon api_token is missing or invalid; re-run pm credentials add pylon" },
-      { "status": 403, "hint": "pylon account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "pylon rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "pylon api_token is missing or invalid; re-run pm credentials add pylon"
+      },
+      {
+        "status": 403,
+        "hint": "pylon account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "pylon rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -23,9 +42,14 @@
       "path": "/issues",
       "query": {
         "limit": "100",
-        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "updated_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/issues.json"
     },
     {
@@ -33,9 +57,14 @@
       "path": "/accounts",
       "query": {
         "limit": "100",
-        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "updated_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/accounts.json"
     },
     {
@@ -43,9 +72,14 @@
       "path": "/contacts",
       "query": {
         "limit": "100",
-        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "updated_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/contacts.json"
     },
     {
@@ -53,9 +87,14 @@
       "path": "/users",
       "query": {
         "limit": "100",
-        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "updated_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/users.json"
     },
     {
@@ -63,10 +102,600 @@
       "path": "/messages",
       "query": {
         "limit": "100",
-        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "updated_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/messages.json"
+    },
+    {
+      "name": "account_relationships",
+      "path": "/accounts/{{ config.account_id }}/relationships",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_relationships.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "account",
+      "path": "/accounts/{{ config.account_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "activity_types",
+      "path": "/activity-types",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/activity_types.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "audit_logs",
+      "path": "/audit-logs",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/audit_logs.json",
+      "query": {
+        "limit": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "pagination.cursor",
+        "stop_path": "pagination.has_next_page"
+      }
+    },
+    {
+      "name": "call_recording",
+      "path": "/call-recordings/{{ config.call_recording_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/call_recording.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "contact",
+      "path": "/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact.json",
+      "query": {
+        "limit": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "pagination.cursor",
+        "stop_path": "pagination.has_next_page"
+      }
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom-fields",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_fields.json",
+      "query": {
+        "object_type": "{{ config.custom_fields_object_type }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_field",
+      "path": "/custom-fields/{{ config.custom_field_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_field.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_objects",
+      "path": "/custom-objects/{{ config.custom_object_type }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_objects.json",
+      "query": {
+        "limit": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "pagination.cursor",
+        "stop_path": "pagination.has_next_page"
+      }
+    },
+    {
+      "name": "custom_object",
+      "path": "/custom-objects/{{ config.custom_object_type }}/{{ config.custom_object_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_object.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "feature_request",
+      "path": "/feature-requests/{{ config.feature_request_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/feature_request.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "issue_statuses",
+      "path": "/issue-statuses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/issue_statuses.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "issue",
+      "path": "/issues/{{ config.issue_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/issue.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "issue_followers",
+      "path": "/issues/{{ config.issue_id }}/followers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/issue_followers.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "issue_messages",
+      "path": "/issues/{{ config.issue_id }}/messages",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/issue_messages.json",
+      "query": {
+        "limit": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "pagination.cursor",
+        "stop_path": "pagination.has_next_page"
+      }
+    },
+    {
+      "name": "issue_threads",
+      "path": "/issues/{{ config.issue_id }}/threads",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/issue_threads.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "issue_voice_calls",
+      "path": "/issues/{{ config.issue_id }}/voice-calls",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/issue_voice_calls.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "knowledge_bases",
+      "path": "/knowledge-bases",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/knowledge_bases.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "knowledge_base",
+      "path": "/knowledge-bases/{{ config.knowledge_base_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/knowledge_base.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "articles",
+      "path": "/knowledge-bases/{{ config.knowledge_base_id }}/articles",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/articles.json",
+      "query": {
+        "limit": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "pagination.cursor",
+        "stop_path": "pagination.has_next_page"
+      }
+    },
+    {
+      "name": "article",
+      "path": "/knowledge-bases/{{ config.knowledge_base_id }}/articles/{{ config.article_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/article.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "collections",
+      "path": "/knowledge-bases/{{ config.knowledge_base_id }}/collections",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collections.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "collection",
+      "path": "/knowledge-bases/{{ config.knowledge_base_id }}/collections/{{ config.collection_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collection.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "macro_groups",
+      "path": "/macro-groups",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/macro_groups.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "macros",
+      "path": "/macros",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/macros.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "macro",
+      "path": "/macros/{{ config.macro_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/macro.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "me",
+      "path": "/me",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/me.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "milestone",
+      "path": "/milestones/{{ config.milestone_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/milestone.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "project",
+      "path": "/projects/{{ config.project_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/project.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "surveys",
+      "path": "/surveys",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/surveys.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "survey",
+      "path": "/surveys/{{ config.survey_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/survey.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "survey_responses",
+      "path": "/surveys/{{ config.survey_id }}/responses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/survey_responses.json",
+      "query": {
+        "limit": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "pagination.cursor",
+        "stop_path": "pagination.has_next_page"
+      }
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tags.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tag",
+      "path": "/tags/{{ config.tag_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tag.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks.json",
+      "query": {
+        "limit": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "pagination.cursor",
+        "stop_path": "pagination.has_next_page"
+      }
+    },
+    {
+      "name": "task",
+      "path": "/tasks/{{ config.task_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/task.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "task_comments",
+      "path": "/tasks/{{ config.task_id }}/comments",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/task_comments.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teams.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "team",
+      "path": "/teams/{{ config.team_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "ticket_forms",
+      "path": "/ticket-forms",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/ticket_forms.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "ticket_form",
+      "path": "/ticket-forms/{{ config.ticket_form_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/ticket_form.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "training_data",
+      "path": "/training-data",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/training_data.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "training_data_detail",
+      "path": "/training-data/{{ config.training_data_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/training_data_detail.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user_roles",
+      "path": "/user-roles",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user_roles.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user.json",
+      "pagination": {
+        "type": "none"
+      }
     }
   ]
 }

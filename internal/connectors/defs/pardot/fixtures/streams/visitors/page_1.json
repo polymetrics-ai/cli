@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/visitors",
+    "query": {
+      "limit": "200",
+      "fields": "id,campaignParameter,contentParameter,createdAt,doNotSell,hostname,ipAddress,mediumParameter,pageViewCount,prospectId,campaignId,sourceParameter,termParameter,updatedAt,isIdentified"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "campaignParameter": "campaignParameter_fixture",
+          "contentParameter": "contentParameter_fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "doNotSell": false,
+          "hostname": "hostname_fixture",
+          "ipAddress": "ipAddress_fixture",
+          "mediumParameter": "mediumParameter_fixture",
+          "pageViewCount": 1,
+          "prospectId": 1,
+          "campaignId": 1,
+          "sourceParameter": "sourceParameter_fixture",
+          "termParameter": "termParameter_fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "isIdentified": false
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

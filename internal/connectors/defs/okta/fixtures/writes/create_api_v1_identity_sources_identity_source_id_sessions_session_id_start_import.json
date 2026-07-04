@@ -1,0 +1,14 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "session_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/sessions/synthetic-conformance-value/start-import"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

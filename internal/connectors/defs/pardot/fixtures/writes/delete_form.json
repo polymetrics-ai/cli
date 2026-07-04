@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v5/objects/forms/101"
+  }
+}

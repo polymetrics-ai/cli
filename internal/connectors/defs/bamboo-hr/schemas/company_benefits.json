@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "company_benefits",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "health",
+        "dental",
+        "vision",
+        "retirement",
+        "hsa",
+        "flex",
+        "life",
+        "disability",
+        "reimbursement",
+        "supplemental",
+        "other"
+      ]
+    },
+    "allowsCatchUp": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allowsSuperCatchUp": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "benefitVendorId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "companyDeductionId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "deductionTypeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "endDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

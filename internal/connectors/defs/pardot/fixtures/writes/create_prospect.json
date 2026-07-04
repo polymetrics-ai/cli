@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture Pardot record",
+    "email": "fixture@example.com",
+    "firstName": "First",
+    "lastName": "Fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/prospects",
+    "body": {
+      "name": "Fixture Pardot record",
+      "email": "fixture@example.com",
+      "firstName": "First",
+      "lastName": "Fixture"
+    }
+  }
+}

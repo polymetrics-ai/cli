@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data-tables/synthetic-conformance-value/rows"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "row_fixture_1",
+          "name": "Fixture Row",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

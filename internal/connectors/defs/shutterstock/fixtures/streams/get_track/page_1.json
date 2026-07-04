@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/audio/get-track-fixture-1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get-track-fixture-1",
+      "name": "Fixture get track",
+      "media_type": "get",
+      "updated_time": "2026-01-01T00:00:00Z"
+    }
+  }
+}

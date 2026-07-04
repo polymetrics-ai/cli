@@ -1,0 +1,28 @@
+{
+  "record": {
+    "clockOuts": [
+      {
+        "date": "2026-01-01T00:00:00Z",
+        "end": "fixture_value",
+        "timesheetId": 1001
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time_tracking/timesheets/clock_out_and_approve",
+    "body": {
+      "clockOuts": [
+        {
+          "date": "2026-01-01T00:00:00Z",
+          "end": "fixture_value",
+          "timesheetId": 1001
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

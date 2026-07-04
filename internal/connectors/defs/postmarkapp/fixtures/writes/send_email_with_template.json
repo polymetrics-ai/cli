@@ -1,0 +1,16 @@
+{
+  "record": {
+    "From": "sender@example.com",
+    "To": "receiver@example.com",
+    "TemplateAlias": "fixture-template"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/email/withTemplate",
+    "body": {
+      "From": "sender@example.com",
+      "To": "receiver@example.com",
+      "TemplateAlias": "fixture-template"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "emails": [
+      "fixture@example.com"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/email/unsubscribe_groups/id_fixture/members",
+    "body": {
+      "emails": [
+        "fixture@example.com"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

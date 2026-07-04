@@ -1,0 +1,15 @@
+{
+  "record": {
+    "pool_id": "pool_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/librarypools/pool_id_fixture/labrequeues"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

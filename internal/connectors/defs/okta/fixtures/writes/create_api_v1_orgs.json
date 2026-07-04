@@ -1,0 +1,72 @@
+{
+  "record": {
+    "admin": {
+      "credentials": {
+        "password": {
+          "value": "value_fixture"
+        },
+        "recovery_question": {
+          "answer": "answer_fixture",
+          "question": "question_fixture"
+        }
+      },
+      "profile": {
+        "firstName": "first_name_fixture",
+        "lastName": "last_name_fixture",
+        "email": "fixture@example.invalid",
+        "login": "fixture@example.invalid"
+      }
+    },
+    "created": "2026-01-01T00:00:00Z",
+    "edition": "SKU",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "settings": {},
+    "status": "ACTIVE",
+    "subdomain": "subdomain_fixture",
+    "token": "fixture",
+    "tokenType": "SSWS",
+    "website": "website_fixture",
+    "_links": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/orgs",
+    "body": {
+      "admin": {
+        "credentials": {
+          "password": {
+            "value": "value_fixture"
+          },
+          "recovery_question": {
+            "answer": "answer_fixture",
+            "question": "question_fixture"
+          }
+        },
+        "profile": {
+          "firstName": "first_name_fixture",
+          "lastName": "last_name_fixture",
+          "email": "fixture@example.invalid",
+          "login": "fixture@example.invalid"
+        }
+      },
+      "created": "2026-01-01T00:00:00Z",
+      "edition": "SKU",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "settings": {},
+      "status": "ACTIVE",
+      "subdomain": "subdomain_fixture",
+      "token": "fixture",
+      "tokenType": "SSWS",
+      "website": "website_fixture",
+      "_links": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

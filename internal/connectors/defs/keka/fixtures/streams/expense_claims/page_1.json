@@ -1,0 +1,101 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/expense/claims",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "expense_claims_fixture_1",
+          "employee": {
+            "id": "expense_claims_fixture_1",
+            "employeeNumber": "FIX-1",
+            "employeeName": "Fixture expense claims 1"
+          },
+          "claimNumber": "FIX-1",
+          "title": "Fixture expense claims 1",
+          "submittedOn": "fixture_expense_claims_1",
+          "approvalStatus": 2,
+          "expenses": [
+            {
+              "id": "expense_claims_fixture_1",
+              "title": "Fixture expense claims 1",
+              "date": "2026-01-01T00:00:00Z",
+              "expenseCategory": {
+                "id": "expense_claims_fixture_1",
+                "name": "Fixture expense claims 1"
+              },
+              "amount": 2000,
+              "comment": "fixture_expense_claims_1",
+              "currency": {
+                "name": null,
+                "code": "FIX"
+              }
+            },
+            {
+              "id": "expense_claims_fixture_2",
+              "title": "Fixture expense claims 2",
+              "date": "2026-01-01T00:00:00Z",
+              "expenseCategory": {
+                "id": "expense_claims_fixture_2",
+                "name": "Fixture expense claims 2"
+              },
+              "amount": 1500,
+              "comment": null,
+              "currency": {
+                "name": "Fixture expense claims 2",
+                "code": "FIX"
+              }
+            }
+          ]
+        },
+        {
+          "id": "expense_claims_fixture_2",
+          "employee": {
+            "id": "expense_claims_fixture_2",
+            "employeeNumber": "FIX-2",
+            "employeeName": "Fixture expense claims 2"
+          },
+          "claimNumber": "FIX-2",
+          "title": "Fixture expense claims 2",
+          "submittedOn": "fixture_expense_claims_2",
+          "approvalStatus": 2,
+          "expenses": [
+            {
+              "id": "expense_claims_fixture_1",
+              "title": "Fixture expense claims 1",
+              "date": "2026-01-01T00:00:00Z",
+              "expenseCategory": {
+                "id": "expense_claims_fixture_1",
+                "name": "Fixture expense claims 1"
+              },
+              "amount": 2000,
+              "comment": null,
+              "currency": {
+                "name": null,
+                "code": "FIX"
+              }
+            }
+          ]
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/expense_claims",
+      "lastPage": "https://example.invalid/keka/expense_claims",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

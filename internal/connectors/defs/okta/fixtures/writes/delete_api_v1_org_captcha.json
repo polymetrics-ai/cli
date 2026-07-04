@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/org/captcha"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

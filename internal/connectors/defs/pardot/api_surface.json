@@ -1,16 +1,1212 @@
 {
-  "api": "Pardot API v5 (https://pi.pardot.com/api/v5)",
+  "api": "Salesforce Account Engagement (Pardot) API v5",
   "docs": "https://developer.salesforce.com/docs/marketing/pardot/overview",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Pardot object surface (opportunities, visitors, visits, emails, forms, custom fields, users) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion from official Salesforce Account Engagement API v5 object pages plus the Salesforce-referenced public v5 Postman collection for endpoint enumeration. JSON GET list/detail endpoints are streams; JSON mutation endpoints are writes; multipart/file/CSV downloads are excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v5/objects/prospects", "covered_by": { "stream": "prospects" } },
-    { "method": "GET", "path": "/api/v5/objects/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/api/v5/objects/lists", "covered_by": { "stream": "lists" } },
-    { "method": "GET", "path": "/api/v5/objects/opportunities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v5/objects/visitors", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v5/objects/emails", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/v5/objects/prospects", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/api/v5/objects/prospects/{id}", "excluded": { "category": "destructive_admin", "reason": "delete mutation, not a read stream" } }
+    {
+      "method": "GET",
+      "path": "/api/v5/bulk-actions/{id}/errors",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Official docs define this endpoint as a CSV error-report download, which is outside the JSON stream dialect."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/bulk-actions/{id}",
+      "covered_by": {
+        "stream": "bulk_action"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/bulk-actions/{id}",
+      "covered_by": {
+        "write": "update_bulk_action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/bulk-actions",
+      "covered_by": {
+        "stream": "bulk_actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/bulk-actions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "bulk action creation requires a CSV file upload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/external-activities/{id}",
+      "covered_by": {
+        "stream": "external_activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/external-activities",
+      "covered_by": {
+        "stream": "external_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/external-activities",
+      "covered_by": {
+        "write": "create_external_activity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/imports/{id}/batches",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Official docs require uploading a CSV batch file, which is outside the JSON write dialect."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/imports/{id}/do/cancel",
+      "covered_by": {
+        "write": "cancel_import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/imports/{id}/errors",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Official docs define this endpoint as a CSV error-report download, which is outside the JSON stream dialect."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/imports/{id}",
+      "covered_by": {
+        "stream": "import_job"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/imports/{id}",
+      "covered_by": {
+        "write": "update_import_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/imports",
+      "covered_by": {
+        "stream": "imports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/imports",
+      "covered_by": {
+        "write": "create_import_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/account",
+      "covered_by": {
+        "stream": "account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/campaigns/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/campaigns/{id}/do/connectSalesforceCampaign",
+      "covered_by": {
+        "write": "connect_salesforce_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/campaigns/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_campaign"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/campaigns/{id}",
+      "covered_by": {
+        "stream": "campaign"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/custom-fields/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_custom_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/custom-fields/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_custom_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/custom-fields/{id}",
+      "covered_by": {
+        "write": "delete_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/custom-fields/{id}",
+      "covered_by": {
+        "stream": "custom_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/custom-fields/{id}",
+      "covered_by": {
+        "write": "update_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/custom-fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/custom-fields",
+      "covered_by": {
+        "write": "create_custom_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/custom-redirects/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_custom_redirect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/custom-redirects/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_custom_redirect"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/custom-redirects/{id}",
+      "covered_by": {
+        "write": "delete_custom_redirect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/custom-redirects/{id}",
+      "covered_by": {
+        "stream": "custom_redirect"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/custom-redirects/{id}",
+      "covered_by": {
+        "write": "update_custom_redirect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/custom-redirects",
+      "covered_by": {
+        "stream": "custom_redirects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/custom-redirects",
+      "covered_by": {
+        "write": "create_custom_redirect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/dynamic-contents/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_dynamic_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/dynamic-contents/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_dynamic_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/dynamic-contents/{id}",
+      "covered_by": {
+        "stream": "dynamic_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/dynamic-contents",
+      "covered_by": {
+        "stream": "dynamic_contents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/dynamic-contents",
+      "covered_by": {
+        "write": "create_dynamic_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/email-templates/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_email_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/email-templates/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_email_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/email-templates/{id}",
+      "covered_by": {
+        "write": "delete_email_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/email-templates/{id}",
+      "covered_by": {
+        "stream": "email_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/email-templates/{id}",
+      "covered_by": {
+        "write": "update_email_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/email-templates",
+      "covered_by": {
+        "stream": "email_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/email-templates",
+      "covered_by": {
+        "write": "create_email_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/emails/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/emails/{id}/do/copyToCms",
+      "covered_by": {
+        "write": "copy_email_to_cms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/emails/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/emails/{id}",
+      "covered_by": {
+        "stream": "email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/emails",
+      "covered_by": {
+        "stream": "emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/emails",
+      "covered_by": {
+        "write": "create_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/engagement-studio-programs/{id}/download-program-structure",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Official docs define this endpoint as a downloaded program structure file, not a JSON list/detail response."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/engagement-studio-programs/{id}",
+      "covered_by": {
+        "stream": "engagement_studio_program"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/engagement-studio-programs",
+      "covered_by": {
+        "stream": "engagement_studio_programs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/engagement-studio-programs",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart program structure file upload is required for create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/files/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_file"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/files/{id}/do/copyToCms",
+      "covered_by": {
+        "write": "copy_file_to_cms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/files/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_file"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/files/{id}",
+      "covered_by": {
+        "write": "delete_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/files/{id}",
+      "covered_by": {
+        "stream": "file"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/files/{id}",
+      "covered_by": {
+        "write": "update_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/files",
+      "covered_by": {
+        "stream": "files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/files",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart file upload is required for file creation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/folder-contents/{id}",
+      "covered_by": {
+        "stream": "folder_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/folder-contents",
+      "covered_by": {
+        "stream": "folder_contents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/folders/{id}",
+      "covered_by": {
+        "stream": "folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/folders",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{id}/do/addDependent",
+      "covered_by": {
+        "write": "add_form_field_dependent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{id}/do/addProgressive",
+      "covered_by": {
+        "write": "add_form_field_progressive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_form_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{id}/do/addValue",
+      "covered_by": {
+        "write": "add_form_field_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_form_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{id}/do/reorderFormFieldValues",
+      "covered_by": {
+        "write": "reorder_form_field_values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/form-fields/{id}",
+      "covered_by": {
+        "stream": "form_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/form-fields",
+      "covered_by": {
+        "stream": "form_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields",
+      "covered_by": {
+        "write": "create_form_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/form-handler-fields/{id}",
+      "covered_by": {
+        "write": "delete_form_handler_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/form-handler-fields/{id}",
+      "covered_by": {
+        "stream": "form_handler_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/form-handler-fields/{id}",
+      "covered_by": {
+        "write": "update_form_handler_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/form-handler-fields",
+      "covered_by": {
+        "stream": "form_handler_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-handler-fields",
+      "covered_by": {
+        "write": "create_form_handler_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-handlers/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_form_handler"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-handlers/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_form_handler"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/form-handlers/{id}",
+      "covered_by": {
+        "write": "delete_form_handler"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/form-handlers/{id}",
+      "covered_by": {
+        "stream": "form_handler"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/form-handlers/{id}",
+      "covered_by": {
+        "write": "update_form_handler"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/form-handlers",
+      "covered_by": {
+        "stream": "form_handlers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/form-handlers",
+      "covered_by": {
+        "write": "create_form_handler"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{id}/do/copyToCms",
+      "covered_by": {
+        "write": "copy_form_to_cms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{id}/do/reorderFormFields",
+      "covered_by": {
+        "write": "reorder_form_fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/forms/{id}",
+      "covered_by": {
+        "write": "delete_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/forms/{id}",
+      "covered_by": {
+        "stream": "form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/forms/do/undelete",
+      "covered_by": {
+        "write": "undelete_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/forms",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/forms",
+      "covered_by": {
+        "write": "create_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_landing_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages/{id}/do/copyToCms",
+      "covered_by": {
+        "write": "copy_landing_page_to_cms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_landing_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/landing-pages/{id}",
+      "covered_by": {
+        "stream": "landing_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/landing-pages",
+      "covered_by": {
+        "stream": "landing_pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages",
+      "covered_by": {
+        "write": "create_landing_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/layout-templates/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_layout_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/layout-templates/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_layout_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/layout-templates/{id}",
+      "covered_by": {
+        "write": "delete_layout_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/layout-templates/{id}",
+      "covered_by": {
+        "stream": "layout_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/layout-templates/{id}",
+      "covered_by": {
+        "write": "update_layout_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/layout-templates",
+      "covered_by": {
+        "stream": "layout_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/layout-templates",
+      "covered_by": {
+        "write": "create_layout_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/lifecycle-histories/{id}",
+      "covered_by": {
+        "stream": "lifecycle_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/lifecycle-histories",
+      "covered_by": {
+        "stream": "lifecycle_histories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/lifecycle-stages/{id}",
+      "covered_by": {
+        "stream": "lifecycle_stage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/lifecycle-stages",
+      "covered_by": {
+        "stream": "lifecycle_stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/list-emails/{id}/stats",
+      "covered_by": {
+        "stream": "list_email_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/list-emails/{id}",
+      "covered_by": {
+        "stream": "list_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/list-emails",
+      "covered_by": {
+        "stream": "list_emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/list-emails",
+      "covered_by": {
+        "write": "create_list_email"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/list-memberships/{id}",
+      "covered_by": {
+        "write": "delete_list_membership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/list-memberships/{id}",
+      "covered_by": {
+        "stream": "list_membership"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/list-memberships/{id}",
+      "covered_by": {
+        "write": "update_list_membership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/list-memberships",
+      "covered_by": {
+        "stream": "list_memberships"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/list-memberships",
+      "covered_by": {
+        "write": "create_list_membership"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/lists/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/lists/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/lists/{id}",
+      "covered_by": {
+        "write": "delete_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/lists/{id}",
+      "covered_by": {
+        "stream": "list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/lists/{id}",
+      "covered_by": {
+        "write": "update_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/lists",
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/lists",
+      "covered_by": {
+        "write": "create_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/opportunities/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_opportunity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/opportunities/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_opportunity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/opportunities/{id}",
+      "covered_by": {
+        "stream": "opportunity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/opportunities",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/prospect-accounts/{id}",
+      "covered_by": {
+        "stream": "prospect_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/prospect-accounts",
+      "covered_by": {
+        "stream": "prospect_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_prospect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_prospect"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/prospects/{id}",
+      "covered_by": {
+        "write": "delete_prospect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/prospects/{id}",
+      "covered_by": {
+        "stream": "prospect"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/prospects/{id}",
+      "covered_by": {
+        "write": "update_prospect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/do/undelete",
+      "covered_by": {
+        "write": "undelete_prospect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/do/upsertLatestByEmail",
+      "covered_by": {
+        "write": "upsert_prospect_latest_by_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/prospects",
+      "covered_by": {
+        "stream": "prospects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/prospects",
+      "covered_by": {
+        "write": "create_prospect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/tagged-objects/{id}",
+      "covered_by": {
+        "stream": "tagged_object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/tagged-objects",
+      "covered_by": {
+        "stream": "tagged_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/tags/{id}/do/mergeTags",
+      "covered_by": {
+        "write": "merge_tags"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v5/objects/tags/{id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/tags/{id}",
+      "covered_by": {
+        "stream": "tag"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v5/objects/tags/{id}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/tracker-domains/{id}",
+      "covered_by": {
+        "stream": "tracker_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/tracker-domains",
+      "covered_by": {
+        "stream": "tracker_domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/users/{id}/do/addTag",
+      "covered_by": {
+        "write": "add_tag_to_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/users/{id}/do/removeTag",
+      "covered_by": {
+        "write": "remove_tag_from_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/users/{id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visitor-activities/{id}",
+      "covered_by": {
+        "stream": "visitor_activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visitor-activities",
+      "covered_by": {
+        "stream": "visitor_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visitor-page-views/{id}",
+      "covered_by": {
+        "stream": "visitor_page_view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visitor-page-views",
+      "covered_by": {
+        "stream": "visitor_page_views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/visitors/{id}/do/assignToProspect",
+      "covered_by": {
+        "write": "assign_visitor_to_prospect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v5/objects/visitors/{id}/do/identifyCompany",
+      "covered_by": {
+        "write": "identify_visitor_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visitors/{id}",
+      "covered_by": {
+        "stream": "visitor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visitors",
+      "covered_by": {
+        "stream": "visitors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visits/{id}",
+      "covered_by": {
+        "stream": "visit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v5/objects/visits",
+      "covered_by": {
+        "stream": "visits"
+      }
+    }
   ]
 }

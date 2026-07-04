@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/applicant_tracking/jobs"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "title": {
+          "id": 1001,
+          "label": "fixture_value"
+        },
+        "activeApplicantsCount": 1001,
+        "department": {},
+        "hiringLead": {},
+        "location": {},
+        "newApplicantsCount": 1001,
+        "postedDate": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

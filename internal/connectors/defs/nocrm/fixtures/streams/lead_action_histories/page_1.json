@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/leads/synthetic-conformance-value/action_histories", "query": { "offset": "0" } },
+  "response": { "status": 200, "body": [ { "id": 701, "action": "status_changed", "user_id": 514, "created_at": "2026-01-01T00:00:00Z" } ] }
+}

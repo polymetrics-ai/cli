@@ -1,0 +1,567 @@
+{
+  "actions": [
+    {
+      "name": "start_segment_visitor_export",
+      "kind": "create",
+      "method": "POST",
+      "path": "/segment/{{ record.segmentId }}/visitors",
+      "body_type": "none",
+      "path_fields": [
+        "segmentId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "segmentId"
+        ],
+        "properties": {
+          "segmentId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "starts an asynchronous Pendo segment visitor export job; approval required"
+    },
+    {
+      "name": "create_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/segment/upload",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "visitors"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "visitors": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "creates a shared Pendo segment from visitor ids; approval required"
+    },
+    {
+      "name": "update_segment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/segment/{{ record.segmentId }}",
+      "body_type": "json",
+      "path_fields": [
+        "segmentId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "segmentId",
+          "name",
+          "visitors"
+        ],
+        "properties": {
+          "segmentId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "visitors": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "replaces the visitor membership for a Pendo segment; approval required"
+    },
+    {
+      "name": "delete_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/segment/{{ record.segmentId }}",
+      "body_type": "none",
+      "path_fields": [
+        "segmentId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "segmentId"
+        ],
+        "properties": {
+          "segmentId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Pendo segment; destructive external mutation"
+    },
+    {
+      "name": "add_segment_visitor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/segment/{{ record.segmentId }}/visitor/{{ record.visitorId }}",
+      "body_type": "none",
+      "path_fields": [
+        "segmentId",
+        "visitorId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "segmentId",
+          "visitorId"
+        ],
+        "properties": {
+          "segmentId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "visitorId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "adds a visitor to a Pendo segment; approval required"
+    },
+    {
+      "name": "remove_segment_visitor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/segment/{{ record.segmentId }}/visitor/{{ record.visitorId }}",
+      "body_type": "none",
+      "path_fields": [
+        "segmentId",
+        "visitorId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "segmentId",
+          "visitorId"
+        ],
+        "properties": {
+          "segmentId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "visitorId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "removes a visitor from a Pendo segment; destructive membership mutation"
+    },
+    {
+      "name": "patch_segment_visitors",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/segment/{{ record.segmentId }}/visitor",
+      "body_type": "json",
+      "path_fields": [
+        "segmentId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "segmentId",
+          "patch"
+        ],
+        "properties": {
+          "segmentId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "patch": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "adds/removes a small batch of visitors for a Pendo segment; approval required"
+    },
+    {
+      "name": "reset_guide_for_visitor",
+      "kind": "update",
+      "method": "POST",
+      "path": "/guide/{{ record.guideId }}/visitor/{{ record.visitorId }}/reset",
+      "body_type": "none",
+      "path_fields": [
+        "guideId",
+        "visitorId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "guideId",
+          "visitorId"
+        ],
+        "properties": {
+          "guideId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "visitorId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "resets guide-seen state for one visitor; approval required"
+    },
+    {
+      "name": "reset_all_guides_for_visitor",
+      "kind": "update",
+      "method": "POST",
+      "path": "/guide/all/visitor/{{ record.visitorId }}/reset",
+      "body_type": "none",
+      "path_fields": [
+        "visitorId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "visitorId"
+        ],
+        "properties": {
+          "visitorId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "resets guide-seen state for one visitor across all guides; approval required"
+    },
+    {
+      "name": "reset_staged_guide",
+      "kind": "update",
+      "method": "POST",
+      "path": "/guide/{{ record.guideId }}/reset",
+      "body_type": "none",
+      "path_fields": [
+        "guideId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "guideId"
+        ],
+        "properties": {
+          "guideId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "resets one staged guide; approval required"
+    },
+    {
+      "name": "reset_all_staged_guides",
+      "kind": "update",
+      "method": "POST",
+      "path": "/guide/staged/reset",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {}
+      },
+      "risk": "resets all staged guides in the subscription; approval required"
+    },
+    {
+      "name": "change_guide_segment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/guide/{{ record.guideId }}/segment",
+      "body_type": "json",
+      "path_fields": [
+        "guideId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "guideId",
+          "segmentId"
+        ],
+        "properties": {
+          "guideId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "segmentId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "changes the segment assigned to a Pendo guide; approval required"
+    },
+    {
+      "name": "change_guide_state",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/guide/{{ record.guideId }}/state",
+      "body_type": "json",
+      "path_fields": [
+        "guideId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "guideId",
+          "state"
+        ],
+        "properties": {
+          "guideId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "changes a Pendo guide state such as public, staged, disabled, or draft; approval required"
+    },
+    {
+      "name": "create_feedback",
+      "kind": "create",
+      "method": "POST",
+      "path": "/feedback",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "accountId",
+          "visitorId",
+          "title"
+        ],
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "visitorId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Pendo Listen feedback item; approval required"
+    },
+    {
+      "name": "update_feedback",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/feedback/{{ record.id }}",
+      "body_type": "json",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "updates a Pendo Listen feedback item; approval required"
+    },
+    {
+      "name": "delete_feedback",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/feedback",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "ids"
+        ],
+        "properties": {
+          "ids": {
+            "type": "array"
+          }
+        }
+      },
+      "body_fields": [
+        "ids"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes Pendo Listen feedback items by id; destructive external mutation"
+    }
+  ]
+}

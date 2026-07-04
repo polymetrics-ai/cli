@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hire/jobs/{{ config.job_id }}/candidate/{{ config.candidate_id }}/scorecards",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/candidate_scorecards",
+      "lastPage": "https://example.invalid/keka/candidate_scorecards",
+      "nextPage": null,
+      "previousPage": null,
+      "totalRecords": 0,
+      "totalPages": 1,
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

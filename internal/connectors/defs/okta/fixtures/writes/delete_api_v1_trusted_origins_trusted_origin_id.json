@@ -1,0 +1,13 @@
+{
+  "record": {
+    "trusted_origin_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/trustedOrigins/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

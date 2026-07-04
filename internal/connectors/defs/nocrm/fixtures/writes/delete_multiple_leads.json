@@ -1,0 +1,18 @@
+{
+  "record": {
+    "ids": [
+      "456",
+      "457"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/leads/delete_multiple",
+    "body": {
+      "ids": [
+        "456",
+        "457"
+      ]
+    }
+  }
+}

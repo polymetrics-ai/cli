@@ -45,6 +45,62 @@
       "records": { "path": "subscriptions" },
       "schema": "schemas/subscriptions.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "add_ons",
+      "path": "/merchants/{{ config.merchant_id }}/add_ons",
+      "pagination": { "type": "none" },
+      "records": { "path": "add_ons" },
+      "schema": "schemas/add_ons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "discounts",
+      "path": "/merchants/{{ config.merchant_id }}/discounts",
+      "pagination": { "type": "none" },
+      "records": { "path": "discounts" },
+      "schema": "schemas/discounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "plans",
+      "path": "/merchants/{{ config.merchant_id }}/plans",
+      "pagination": { "type": "none" },
+      "records": { "path": "plans" },
+      "schema": "schemas/plans.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "merchant_accounts",
+      "path": "/merchants/{{ config.merchant_id }}/merchant_accounts",
+      "pagination": { "type": "none" },
+      "records": { "path": "merchant_accounts" },
+      "schema": "schemas/merchant_accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "payment_methods",
+      "path": "/merchants/{{ config.merchant_id }}/payment_methods",
+      "pagination": { "type": "none" },
+      "records": { "path": "payment_methods" },
+      "schema": "schemas/payment_methods.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "disputes",
+      "path": "/merchants/{{ config.merchant_id }}/disputes",
+      "pagination": { "type": "none" },
+      "records": { "path": "disputes" },
+      "schema": "schemas/disputes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "apple_pay_domains",
+      "path": "/merchants/{{ config.merchant_id }}/apple_pay/registered_domains",
+      "pagination": { "type": "none" },
+      "records": { "path": "domains" },
+      "schema": "schemas/apple_pay_domains.json",
+      "projection": "passthrough"
     }
   ]
 }

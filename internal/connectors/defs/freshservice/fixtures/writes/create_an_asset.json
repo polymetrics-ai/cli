@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_an_asset",
+    "description": "Fixture create_an_asset record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/assets",
+    "body": {
+      "name": "Fixture create_an_asset",
+      "description": "Fixture create_an_asset record"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "stockdata",
   "display_name": "StockData",
-  "description": "Reads stockdata.org tickers, end-of-day prices, intraday prices, and news through the StockData API.",
+  "description": "Reads StockData market quotes, prices, splits, dividends, news, entity stats, entities, and source metadata through the StockData API.",
   "integration_type": "api",
   "docs_url": "https://www.stockdata.org/documentation",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external StockData API read of ticker, price, and news data",
+    "read": "external StockData API read of ticker, quote, price, split, dividend, news, entity, stats, and source data",
     "approval": "none; read-only public market data API"
   }
 }

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_ticket",
+    "description": "Fixture create_ticket record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets",
+    "body": {
+      "name": "Fixture create_ticket",
+      "description": "Fixture create_ticket record"
+    }
+  }
+}

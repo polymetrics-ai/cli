@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "opportunityprospectrole",
+      "attributes": {
+        "name": "Fixture Update Opportunity Prospect Role"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/opportunityProspectRoles/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "opportunityprospectrole",
+        "attributes": {
+          "name": "Fixture Update Opportunity Prospect Role"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

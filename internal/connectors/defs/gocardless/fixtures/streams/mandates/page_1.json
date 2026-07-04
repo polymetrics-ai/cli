@@ -2,7 +2,10 @@
   "request": {
     "method": "GET",
     "path": "/mandates",
-    "query": { "limit": "50", "created_at[gt]": "2020-01-01T00:00:00Z" }
+    "query": {
+      "limit": "50",
+      "created_at[gt]": "2020-01-01T00:00:00Z"
+    }
   },
   "response": {
     "status": 200,
@@ -22,7 +25,12 @@
           }
         }
       ],
-      "meta": { "cursors": { "before": null, "after": null } }
+      "meta": {
+        "cursors": {
+          "before": null,
+          "after": null
+        }
+      }
     }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "brand_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/brands/synthetic-conformance-value/pages/error/preview"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

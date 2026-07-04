@@ -1,0 +1,13 @@
+{
+  "record": {
+    "inline_hook_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/inlineHooks/synthetic-conformance-value/lifecycle/deactivate"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

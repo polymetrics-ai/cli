@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/meetings/synthetic-conformance-value/permissions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "permissions": {
+        "id": "id_fixture",
+        "userId": "user_id_fixture",
+        "user": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "grantedBy": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "createdAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

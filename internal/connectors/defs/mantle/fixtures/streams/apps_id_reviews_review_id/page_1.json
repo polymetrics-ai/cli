@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/apps/synthetic-conformance-value/reviews/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "review": {
+        "id": "id_fixture",
+        "rating": 1.23,
+        "date": "2026-01-01T00:00:00Z",
+        "content": "fixture",
+        "location": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "archivedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

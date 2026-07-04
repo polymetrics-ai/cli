@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "blocks": [
+          {
+            "appliesTo": "ANY_DEVICES",
+            "type": "DEVICE_BASED"
+          }
+        ]
+      }
+    }
+  }
+}

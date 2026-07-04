@@ -1,0 +1,20 @@
+{
+  "record": {
+    "domains": [
+      "domain_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/dr/failback",
+    "body": {
+      "domains": [
+        "domain_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

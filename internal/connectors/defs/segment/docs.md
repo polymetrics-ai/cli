@@ -6,6 +6,13 @@ bundle is engine-vs-legacy parity-tested against `internal/connectors/segment` (
 connector it migrates); the legacy package stays registered and unchanged until wave6's registry
 flip.
 
+Pass B reviewed the current Segment Redocly OpenAPI (`openapi: 3.0.3`, docs version `73.0.0`) on
+2026-07-04. The documented surface contains 187 operations across nested Segment configuration,
+analytics, IAM, deletion/suppression, activation, warehouse, function, and Reverse ETL resources.
+That full surface is recorded in `api_surface.json`, but remains quarantined as an `ENGINE_GAP`
+because complete reads require multi-level parent-resource graph discovery that the declarative
+engine cannot express correctly today.
+
 ## Auth setup
 
 Provide a Segment Public API access token via the `api_token` secret; it is sent as a Bearer token
@@ -15,15 +22,18 @@ and may be overridden for tests, proxies, or a region-specific endpoint.
 
 ## Streams notes
 
-`workspaces`, `sources`, and `destinations` are simple list endpoints (`GET /workspaces`,
+`workspaces`, `sources`, and `destinations` are simple legacy list endpoints (`GET /workspaces`,
 `/sources`, `/destinations`); records live at the top-level key matching the stream name, exactly
-matching legacy's `streamEndpoints` records-path map (`segment.go:111-115`). All three streams
-declare `"projection": "passthrough"`: legacy's `Read` hands `connsdk.Harvest`'s per-record
-callback straight to `emit(connectors.Record(rec))` with no field-built mapping
-(`segment.go:88-90`), so schema-mode projection would silently drop any field the live API returns
-beyond `id`/`name`/`slug`/`updated_at` (conventions.md §8 rule 1) — passthrough preserves legacy's
-actual verbatim-emit behavior; the schemas remain a documentation surface, not an enforced
-allowlist. None of the three streams expose an incremental cursor field that legacy actually filters on — legacy declares no
+matching legacy's `streamEndpoints` records-path map (`segment.go:111-115`). Current Segment docs
+publish workspace metadata as `GET /`, not the legacy plural `/workspaces` envelope, so the
+workspace-detail endpoint is explicitly recorded as a blocked duplicate in `api_surface.json` until
+the Segment surface is unblocked. All three streams declare `"projection": "passthrough"`: legacy's
+`Read` hands `connsdk.Harvest`'s per-record callback straight to `emit(connectors.Record(rec))`
+with no field-built mapping (`segment.go:88-90`), so schema-mode projection would silently drop any
+field the live API returns beyond `id`/`name`/`slug`/`updated_at` (conventions.md §8 rule 1) —
+passthrough preserves legacy's actual verbatim-emit behavior; the schemas remain a documentation
+surface, not an enforced allowlist. None of the three streams expose an incremental cursor field
+that legacy actually filters on — legacy declares no
 `CursorFields`/incremental request param anywhere; this bundle likewise declares no `incremental`
 block for any stream, matching legacy exactly (full refresh only). Pagination is `page_number`
 (`page`/`page_size` query params, `start_page: 1`, `page_size: 100`), matching legacy's
@@ -35,7 +45,9 @@ pageSize}` (`segment.go:87`) with legacy's own default page size of 100 (`defaul
 
 None. Legacy's package declares `Capabilities.Write: false` and its `Write` method always returns
 `connectors.ErrUnsupportedOperation`; `capabilities.write` is `false` here and this bundle ships no
-`writes.json`.
+`writes.json`. The 98 documented Segment POST/PUT/PATCH/DELETE operations are administrative
+configuration, governance, lifecycle, or destructive actions and remain excluded in
+`api_surface.json` while the connector is quarantined.
 
 ## Known limits
 
@@ -66,3 +78,11 @@ None. Legacy's package declares `Capabilities.Write: false` and its `Write` meth
   returning fewer than `page_size` records stops pagination) for termination, which is the same
   practical stop condition legacy's own default (`max_pages: 1`) plus short-page detection would
   reach for any fixture/small dataset exercised by this bundle's tests.
+- **Full Segment surface is quarantined.** Segment's current OpenAPI has 89 GET endpoints and 98
+  mutation endpoints. Most data reads are nested below parent resources (`spaces`, `audiences`,
+  destination connections, schedules, warehouses, connected sources, tracking plans, functions,
+  versions, IAM groups/users, Reverse ETL models/syncs). The current `fan_out` dialect can feed one
+  parent-id listing into one child stream, but it cannot express arbitrary multi-level graph
+  traversal with distinct parent IDs across the whole Segment resource model. A config-only
+  workaround would either require callers to hand-supply many unrelated IDs or silently miss
+  resources, so this connector is recorded in `docs/migration/quarantine.json` as `ENGINE_GAP`.

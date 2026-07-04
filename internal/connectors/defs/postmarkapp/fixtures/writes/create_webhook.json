@@ -1,0 +1,12 @@
+{
+  "record": {
+    "Url": "https://example.com/webhook"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "Url": "https://example.com/webhook"
+    }
+  }
+}

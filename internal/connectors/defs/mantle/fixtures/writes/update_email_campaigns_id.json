@@ -1,0 +1,33 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "fixture",
+    "subject": "fixture",
+    "previewText": "fixture",
+    "html": "<p>Fixture</p>",
+    "plainText": "fixture",
+    "senderId": "sender_id_fixture",
+    "layoutId": "layout_id_fixture",
+    "status": "draft",
+    "unsubscribeGroupId": "unsubscribe_group_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/email/campaigns/id_fixture",
+    "body": {
+      "name": "fixture",
+      "subject": "fixture",
+      "previewText": "fixture",
+      "html": "<p>Fixture</p>",
+      "plainText": "fixture",
+      "senderId": "sender_id_fixture",
+      "layoutId": "layout_id_fixture",
+      "status": "draft",
+      "unsubscribeGroupId": "unsubscribe_group_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

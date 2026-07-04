@@ -1,0 +1,15 @@
+{
+  "record": {
+    "contact_id": "contact_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/contact_id_fixture_1"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "status": "not_found"
+    }
+  }
+}

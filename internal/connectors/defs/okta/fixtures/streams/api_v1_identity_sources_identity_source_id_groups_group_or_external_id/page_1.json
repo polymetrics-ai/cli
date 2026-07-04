@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "externalId": "external_id_fixture",
+      "id": "id_fixture",
+      "profile": {
+        "profile": {
+          "description": "description_fixture",
+          "displayName": "display_name_fixture"
+        }
+      }
+    }
+  }
+}

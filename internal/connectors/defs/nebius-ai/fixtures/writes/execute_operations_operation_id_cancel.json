@@ -1,0 +1,13 @@
+{
+  "record": {
+    "operation_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/operations/synthetic-conformance-value/cancel"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

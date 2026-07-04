@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/connections/default"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "authScheme": "TOKEN",
+      "baseUrl": "https://example.invalid/fixture",
+      "profile": {
+        "authScheme": "OAUTH2",
+        "signing": {
+          "rotationMode": "AUTO"
+        }
+      },
+      "status": "DISABLED",
+      "_links": {
+        "authorize": {
+          "hints": {
+            "guidance": [
+              "guidance_fixture"
+            ]
+          },
+          "href": "https://example.invalid/fixture"
+        }
+      }
+    }
+  }
+}

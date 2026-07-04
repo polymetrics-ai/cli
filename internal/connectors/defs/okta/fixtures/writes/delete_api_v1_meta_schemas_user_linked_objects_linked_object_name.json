@@ -1,0 +1,13 @@
+{
+  "record": {
+    "linked_object_name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/meta/schemas/user/linkedObjects/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

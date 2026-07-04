@@ -1,0 +1,19 @@
+{
+  "record": {
+    "variable_id": "var_fixture_1",
+    "key": "FIXTURE_KEY",
+    "value": "updated-fixture-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/variables/var_fixture_1",
+    "body": {
+      "key": "FIXTURE_KEY",
+      "value": "updated-fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

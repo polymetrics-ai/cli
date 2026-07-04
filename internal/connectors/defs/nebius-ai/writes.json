@@ -1,0 +1,1555 @@
+{
+  "actions": [
+    {
+      "name": "create_completions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/completions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "ID of the model to use."
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "stream": {
+            "type": "boolean"
+          },
+          "stream_options": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "max_tokens": {
+            "type": "integer"
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "n": {
+            "type": "integer"
+          },
+          "logprobs": {
+            "type": "integer"
+          },
+          "echo": {
+            "type": "boolean"
+          },
+          "stop": {
+            "type": "string"
+          },
+          "presence_penalty": {
+            "type": "number"
+          },
+          "frequency_penalty": {
+            "type": "number"
+          },
+          "logit_bias": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "user": {
+            "type": "string"
+          },
+          "extra_body": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "service_tier": {
+            "type": "string",
+            "description": "Represents the service tier for requests.\n\nAttributes:\n    Auto: Automatically choose the best available tier for the request (Default or OverLimit).\n    Analyze response to determine which tier was used.\n    Default: Return 429 errors on hitting the rate limit, do not exceed to the OverLimit tier.\n    OverLimit: Indicate that the request was over the user limit.\n            This tier cannot be set by user in the request, but us used in a response for tier=Auto.\n    Flex: Do not consume rate-lim",
+            "enum": [
+              "auto",
+              "default",
+              "over-limit",
+              "flex",
+              "no-limit"
+            ]
+          }
+        },
+        "required": [
+          "model",
+          "prompt"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_chat_completions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/chat/completions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "ID of the model to use."
+          },
+          "store": {
+            "type": "boolean"
+          },
+          "messages": {
+            "type": "array",
+            "description": "A list of messages comprising the conversation so far. [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "system",
+                    "user",
+                    "assistant",
+                    "tool"
+                  ]
+                },
+                "content": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "tool_calls": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "function": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "arguments": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "tool_call_id": {
+                  "type": "string"
+                },
+                "reasoning_content": {
+                  "type": "string"
+                },
+                "reasoning": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "max_tokens": {
+            "type": "integer"
+          },
+          "max_completion_tokens": {
+            "type": "integer"
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The type of the tool. Currently, only `function` is supported."
+                },
+                "function": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64."
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "parameters": {
+                      "type": "object",
+                      "properties": {},
+                      "additionalProperties": true
+                    },
+                    "strict": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "tool_choice": {
+            "type": "string"
+          },
+          "reasoning_effort": {
+            "type": "string",
+            "enum": [
+              "none",
+              "minimal",
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ]
+          },
+          "n": {
+            "type": "integer"
+          },
+          "stream": {
+            "type": "boolean"
+          },
+          "stream_options": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "stop": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "presence_penalty": {
+            "type": "number"
+          },
+          "frequency_penalty": {
+            "type": "number"
+          },
+          "logit_bias": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "logprobs": {
+            "type": "boolean"
+          },
+          "top_logprobs": {
+            "type": "integer"
+          },
+          "user": {
+            "type": "string"
+          },
+          "response_format": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "json_object",
+                  "json_schema"
+                ]
+              },
+              "json_schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "schema": {
+                    "type": "object",
+                    "properties": {},
+                    "additionalProperties": true
+                  },
+                  "strict": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "extra_body": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "service_tier": {
+            "type": "string",
+            "description": "Represents the service tier for requests.\n\nAttributes:\n    Auto: Automatically choose the best available tier for the request (Default or OverLimit).\n    Analyze response to determine which tier was used.\n    Default: Return 429 errors on hitting the rate limit, do not exceed to the OverLimit tier.\n    OverLimit: Indicate that the request was over the user limit.\n            This tier cannot be set by user in the request, but us used in a response for tier=Auto.\n    Flex: Do not consume rate-lim",
+            "enum": [
+              "auto",
+              "default",
+              "over-limit",
+              "flex",
+              "no-limit"
+            ]
+          }
+        },
+        "required": [
+          "model",
+          "messages"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_embeddings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/embeddings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "ID of the model to use."
+          },
+          "input": {
+            "type": "string"
+          },
+          "encoding_format": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "service_tier": {
+            "type": "string",
+            "description": "Represents the service tier for requests.\n\nAttributes:\n    Auto: Automatically choose the best available tier for the request (Default or OverLimit).\n    Analyze response to determine which tier was used.\n    Default: Return 429 errors on hitting the rate limit, do not exceed to the OverLimit tier.\n    OverLimit: Indicate that the request was over the user limit.\n            This tier cannot be set by user in the request, but us used in a response for tier=Auto.\n    Flex: Do not consume rate-lim",
+            "enum": [
+              "auto",
+              "default",
+              "over-limit",
+              "flex",
+              "no-limit"
+            ]
+          },
+          "dimensions": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "model",
+          "input"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_rerank",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/rerank",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "ID of the model to use."
+          },
+          "query": {
+            "type": "string",
+            "description": "Query to rerank, encoded as a string."
+          },
+          "documents": {
+            "type": "array",
+            "description": "Documents to rerank, encoded as a list of strings.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "user": {
+            "type": "string"
+          },
+          "service_tier": {
+            "type": "string",
+            "description": "Represents the service tier for requests.\n\nAttributes:\n    Auto: Automatically choose the best available tier for the request (Default or OverLimit).\n    Analyze response to determine which tier was used.\n    Default: Return 429 errors on hitting the rate limit, do not exceed to the OverLimit tier.\n    OverLimit: Indicate that the request was over the user limit.\n            This tier cannot be set by user in the request, but us used in a response for tier=Auto.\n    Flex: Do not consume rate-lim",
+            "enum": [
+              "auto",
+              "default",
+              "over-limit",
+              "flex",
+              "no-limit"
+            ]
+          }
+        },
+        "required": [
+          "model",
+          "query",
+          "documents"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_responses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/responses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "background": {
+            "type": "boolean"
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "code_interpreter_call.outputs",
+                "computer_call_output.output.image_url",
+                "file_search_call.results",
+                "message.input_image.image_url",
+                "message.output_text.logprobs",
+                "reasoning.encrypted_content"
+              ]
+            }
+          },
+          "input": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "max_output_tokens": {
+            "type": "integer"
+          },
+          "max_tool_calls": {
+            "type": "integer"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "model": {
+            "type": "string",
+            "description": "The model used for the chat completion."
+          },
+          "parallel_tool_calls": {
+            "type": "boolean"
+          },
+          "previous_response_id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "object",
+            "description": "Reference to a prompt template and its variables.\n[Learn more](https://platform.openai.com/docs/guides/text?api-mode=responses#reusable-prompts).",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "variables": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "reasoning": {
+            "type": "object",
+            "description": "**gpt-5 and o-series models only**\n\nConfiguration options for\n[reasoning models](https://platform.openai.com/docs/guides/reasoning).",
+            "properties": {
+              "effort": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "minimal",
+                  "low",
+                  "medium",
+                  "high",
+                  "xhigh"
+                ]
+              },
+              "generate_summary": {
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "concise",
+                  "detailed"
+                ]
+              },
+              "summary": {
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "concise",
+                  "detailed"
+                ]
+              }
+            },
+            "additionalProperties": true
+          },
+          "service_tier": {
+            "type": "string",
+            "description": "Represents the service tier for requests.\n\nAttributes:\n    Auto: Automatically choose the best available tier for the request (Default or OverLimit).\n    Analyze response to determine which tier was used.\n    Default: Return 429 errors on hitting the rate limit, do not exceed to the OverLimit tier.\n    OverLimit: Indicate that the request was over the user limit.\n            This tier cannot be set by user in the request, but us used in a response for tier=Auto.\n    Flex: Do not consume rate-lim",
+            "enum": [
+              "auto",
+              "default",
+              "over-limit",
+              "flex",
+              "no-limit"
+            ]
+          },
+          "store": {
+            "type": "boolean"
+          },
+          "stream": {
+            "type": "boolean"
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "text": {
+            "type": "object",
+            "description": "Configuration options for a text response from the model.\n\nCan be plain\ntext or structured JSON data. Learn more:\n- [Text inputs and outputs](https://platform.openai.com/docs/guides/text)\n- [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs)",
+            "properties": {
+              "format": {
+                "type": "object",
+                "description": "Default response format. Used to generate text responses.",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "verbosity": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            },
+            "additionalProperties": true
+          },
+          "tool_choice": {
+            "type": "string",
+            "enum": [
+              "none",
+              "auto",
+              "required"
+            ]
+          },
+          "tools": {
+            "type": "array",
+            "description": "An array of tools the model may call while generating a response.",
+            "items": {
+              "type": "object",
+              "description": "Defines a function in your own code the model can choose to call.\n\nLearn more about [function calling](https://platform.openai.com/docs/guides/function-calling).",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "parameters": {
+                  "type": "object",
+                  "properties": {},
+                  "additionalProperties": true
+                },
+                "strict": {
+                  "type": "boolean"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "defer_loading": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "top_logprobs": {
+            "type": "integer"
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "truncation": {
+            "type": "string",
+            "description": "The truncation strategy to use for the model response.",
+            "enum": [
+              "auto",
+              "disabled"
+            ]
+          },
+          "user": {
+            "type": "string"
+          },
+          "prompt_cache_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "input",
+          "model"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "delete_files_file_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/files/{{ record.file_id }}",
+      "path_fields": [
+        "file_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "file_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ]
+      },
+      "risk": "medium: external Nebius API side effect or mutation; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_images_generations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/images/generations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "ID of the model to use."
+          },
+          "loras": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "LoRA .safetensors URL"
+                },
+                "scale": {
+                  "type": "number",
+                  "description": "Scale of LoRA weights"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "prompt": {
+            "type": "string",
+            "description": "A text description of the desired image(s)."
+          },
+          "width": {
+            "type": "integer",
+            "description": "The width of the generated image(s) in pixels."
+          },
+          "height": {
+            "type": "integer",
+            "description": "The height of the generated image(s) in pixels."
+          },
+          "num_inference_steps": {
+            "type": "integer"
+          },
+          "seed": {
+            "type": "integer",
+            "description": "Random seed for image generation. Use -1 for a random seed."
+          },
+          "guidance_scale": {
+            "type": "number"
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "A text description of the non-desired image(s)."
+          },
+          "response_extension": {
+            "type": "string",
+            "enum": [
+              "webp",
+              "jpg",
+              "png"
+            ]
+          },
+          "response_format": {
+            "type": "string",
+            "enum": [
+              "b64_json",
+              "url"
+            ]
+          }
+        },
+        "required": [
+          "model",
+          "prompt"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_fine_tuning_jobs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/fine_tuning/jobs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "The name of the model to fine-tune"
+          },
+          "from_checkpoint": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "repo": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "string"
+              },
+              "token": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "training_file": {
+            "type": "string",
+            "description": "The ID of the uploaded training data file"
+          },
+          "validation_file": {
+            "type": "string"
+          },
+          "hyperparameters": {
+            "type": "object",
+            "properties": {
+              "batch_size": {
+                "type": "integer",
+                "description": "Batch size for training"
+              },
+              "learning_rate": {
+                "type": "number",
+                "description": "Learning rate for training"
+              },
+              "n_epochs": {
+                "type": "integer",
+                "description": "Number of epochs for training"
+              },
+              "warmup_ratio": {
+                "type": "number",
+                "description": "Warmup ratio for learning rate"
+              },
+              "weight_decay": {
+                "type": "number",
+                "description": "Weight decay for optimizer"
+              },
+              "packing": {
+                "type": "boolean",
+                "description": "Whether to use packing for training"
+              },
+              "max_grad_norm": {
+                "type": "number",
+                "description": "Maximum gradient norm for optimizer"
+              },
+              "context_length": {
+                "type": "integer",
+                "description": "Context length for training"
+              },
+              "lora": {
+                "type": "boolean",
+                "description": "Whether to use LoRA (Low-Rank Adaptation) for training"
+              },
+              "lora_r": {
+                "type": "integer",
+                "description": "Rank for LoRA"
+              },
+              "lora_alpha": {
+                "type": "integer",
+                "description": "Alpha parameter for LoRA"
+              },
+              "lora_dropout": {
+                "type": "number",
+                "description": "Dropout rate for LoRA"
+              }
+            },
+            "additionalProperties": true
+          },
+          "method": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "supervised": {
+                "type": "object",
+                "properties": {
+                  "hyperparameters": {
+                    "type": "object",
+                    "properties": {
+                      "batch_size": {
+                        "type": "integer",
+                        "description": "Batch size for training"
+                      },
+                      "learning_rate": {
+                        "type": "number",
+                        "description": "Learning rate for training"
+                      },
+                      "n_epochs": {
+                        "type": "integer",
+                        "description": "Number of epochs for training"
+                      },
+                      "warmup_ratio": {
+                        "type": "number",
+                        "description": "Warmup ratio for learning rate"
+                      },
+                      "weight_decay": {
+                        "type": "number",
+                        "description": "Weight decay for optimizer"
+                      },
+                      "packing": {
+                        "type": "boolean",
+                        "description": "Whether to use packing for training"
+                      },
+                      "max_grad_norm": {
+                        "type": "number",
+                        "description": "Maximum gradient norm for optimizer"
+                      },
+                      "context_length": {
+                        "type": "integer",
+                        "description": "Context length for training"
+                      },
+                      "lora": {
+                        "type": "boolean",
+                        "description": "Whether to use LoRA (Low-Rank Adaptation) for training"
+                      },
+                      "lora_r": {
+                        "type": "integer",
+                        "description": "Rank for LoRA"
+                      },
+                      "lora_alpha": {
+                        "type": "integer",
+                        "description": "Alpha parameter for LoRA"
+                      },
+                      "lora_dropout": {
+                        "type": "number",
+                        "description": "Dropout rate for LoRA"
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "integrations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "wandb": {
+                  "type": "object",
+                  "properties": {
+                    "project": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "entity": {
+                      "type": "string"
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "api_key": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "extra_body": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "model",
+          "training_file"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "execute_fine_tuning_jobs_job_id_cancel",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/fine_tuning/jobs/{{ record.job_id }}/cancel",
+      "path_fields": [
+        "job_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "job_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_dedicated_endpoints",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v0/dedicated_endpoints",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "model_name": {
+            "type": "string"
+          },
+          "flavor_name": {
+            "type": "string"
+          },
+          "gpu_type": {
+            "type": "string",
+            "enum": [
+              "gpu-l40s-d",
+              "gpu-l40s-a",
+              "gpu-h100-sxm",
+              "gpu-h200-sxm",
+              "gpu-b200-sxm",
+              "gpu-b200-sxm-a",
+              "gpu-b300-sxm"
+            ]
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "eu-north1",
+              "us-central1",
+              "eu-west1",
+              "me-west1",
+              "uk-south1",
+              "tf-us1",
+              "tf-us2",
+              "tf-ca1"
+            ]
+          },
+          "gpu_count": {
+            "type": "integer"
+          },
+          "custom_weights_id": {
+            "type": "string"
+          },
+          "scaling": {
+            "type": "object",
+            "properties": {
+              "min_replicas": {
+                "type": "integer"
+              },
+              "max_replicas": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "model_name",
+          "flavor_name",
+          "gpu_type",
+          "region",
+          "gpu_count",
+          "scaling"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "update_dedicated_endpoints_endpoint_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v0/dedicated_endpoints/{{ record.endpoint_id }}",
+      "path_fields": [
+        "endpoint_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "endpoint_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "gpu_type": {
+            "type": "string",
+            "enum": [
+              "gpu-l40s-d",
+              "gpu-l40s-a",
+              "gpu-h100-sxm",
+              "gpu-h200-sxm",
+              "gpu-b200-sxm",
+              "gpu-b200-sxm-a",
+              "gpu-b300-sxm"
+            ]
+          },
+          "gpu_count": {
+            "type": "integer"
+          },
+          "custom_weights_id": {
+            "type": "string"
+          },
+          "scaling": {
+            "type": "object",
+            "properties": {
+              "min_replicas": {
+                "type": "integer"
+              },
+              "max_replicas": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "endpoint_id"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "delete_dedicated_endpoints_endpoint_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v0/dedicated_endpoints/{{ record.endpoint_id }}",
+      "path_fields": [
+        "endpoint_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "endpoint_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "endpoint_id"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_datasets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/datasets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "ID of the dataset."
+          },
+          "schema": {
+            "type": "array",
+            "description": "Dataset schema definition.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "boolean",
+                        "float",
+                        "double",
+                        "json",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "folder": {
+            "type": "string",
+            "description": "Folder path where the dataset is stored."
+          },
+          "rows": {
+            "type": "array",
+            "description": "List of rows to be included in the dataset.",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            }
+          },
+          "ai_project_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "schema",
+          "folder",
+          "rows"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "update_datasets_dataset_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/datasets/{{ record.dataset_id }}",
+      "path_fields": [
+        "dataset_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dataset_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "folder": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataset_id"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "delete_datasets_dataset_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/datasets/{{ record.dataset_id }}",
+      "path_fields": [
+        "dataset_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dataset_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataset_id"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_datasets_uploads",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/datasets/uploads",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "ID of the dataset."
+          },
+          "schema": {
+            "type": "array",
+            "description": "Dataset schema definition.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "boolean",
+                        "float",
+                        "double",
+                        "json",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "folder": {
+            "type": "string",
+            "description": "Folder path where the dataset is stored."
+          }
+        },
+        "required": [
+          "name",
+          "schema",
+          "folder"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_datasets_uploads_upload_id_complete",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/datasets/uploads/{{ record.upload_id }}/complete",
+      "path_fields": [
+        "upload_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "upload_id": {
+            "type": "string"
+          },
+          "part_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "upload_id",
+          "part_ids"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "execute_datasets_uploads_upload_id_cancel",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/datasets/uploads/{{ record.upload_id }}/cancel",
+      "path_fields": [
+        "upload_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "upload_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "upload_id"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "create_operations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/operations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "YQL query to execute."
+              }
+            },
+            "additionalProperties": true
+          },
+          "src": {
+            "type": "array",
+            "description": "List of source datasets for the operation.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The object identifier, which can be referenced in the API endpoints."
+                },
+                "version": {
+                  "type": "string"
+                },
+                "mapping": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "messages": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": true
+                    },
+                    "max_tokens": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "integer"
+                        }
+                      },
+                      "additionalProperties": true
+                    },
+                    "custom_id": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "dst": {
+            "type": "array",
+            "description": "Optional destination datasets. If not provided, a temporary dataset will be created.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The object identifier, which can be referenced in the API endpoints."
+                },
+                "version": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "ai_project_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "params",
+          "src"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    },
+    {
+      "name": "execute_operations_operation_id_cancel",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/operations/{{ record.operation_id }}/cancel",
+      "path_fields": [
+        "operation_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "operation_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "risk": "high: external Nebius API side effect or mutation; approval required"
+    }
+  ]
+}

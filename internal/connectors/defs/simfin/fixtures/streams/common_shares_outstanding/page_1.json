@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/common-shares-outstanding"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "simId": 111111,
+        "ticker": "FIX",
+        "date": "2026-01-02",
+        "commonSharesOutstanding": 1000000
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "subject": "fixture",
+    "status": "open",
+    "priority": "low",
+    "tags": [
+      "fixture"
+    ],
+    "contactId": "contact_id_fixture",
+    "customerId": "customer_id_fixture",
+    "channelId": "channel_id_fixture",
+    "appId": "app_id_fixture",
+    "assignedToId": "assigned_to_id_fixture",
+    "updatedAt": "2026-01-01T00:00:00Z",
+    "lastMessageAt": "2026-01-01T00:00:00Z",
+    "readOnly": true,
+    "managedBy": "fixture",
+    "contact": {
+      "email": "fixture@example.com",
+      "name": "fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/tickets/id_fixture",
+    "body": {
+      "subject": "fixture",
+      "status": "open",
+      "priority": "low",
+      "tags": [
+        "fixture"
+      ],
+      "contactId": "contact_id_fixture",
+      "customerId": "customer_id_fixture",
+      "channelId": "channel_id_fixture",
+      "appId": "app_id_fixture",
+      "assignedToId": "assigned_to_id_fixture",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "lastMessageAt": "2026-01-01T00:00:00Z",
+      "readOnly": true,
+      "managedBy": "fixture",
+      "contact": {
+        "email": "fixture@example.com",
+        "name": "fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

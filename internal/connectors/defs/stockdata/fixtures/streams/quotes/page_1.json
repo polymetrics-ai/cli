@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data/quote",
+    "query": {
+      "symbols": "synthetic-conformance-value",
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "exchange": "NASDAQ",
+          "price": 123.45,
+          "last_trade_time": "2026-07-03T10:58:00Z"
+        }
+      ]
+    }
+  }
+}

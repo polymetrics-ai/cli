@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/contact-tags/create",
+    "body": {
+      "name": "Fixture Name"
+    }
+  }
+}

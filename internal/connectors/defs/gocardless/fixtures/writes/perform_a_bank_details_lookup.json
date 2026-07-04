@@ -1,0 +1,20 @@
+{
+  "record": {
+    "bank_details_lookups": {
+      "description": "Synthetic perform_a_bank_details_lookup fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bank_details_lookups",
+    "body": {
+      "bank_details_lookups": {
+        "description": "Synthetic perform_a_bank_details_lookup fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "fixture",
+    "eventName": "fixture",
+    "calculation": "fixture",
+    "params": {
+      "id": "params_fixture_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/apps/id_fixture/usage_metrics",
+    "body": {
+      "name": "fixture",
+      "eventName": "fixture",
+      "calculation": "fixture",
+      "params": {
+        "id": "params_fixture_id"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

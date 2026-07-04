@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/rate-limit-settings/warning-threshold"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "warningThreshold": 1
+    }
+  }
+}

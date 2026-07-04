@@ -1,0 +1,86 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customers/synthetic-conformance-value/timeline"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": {
+        "id": "id_fixture",
+        "type": "fixture",
+        "source": "appEvents",
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "customerId": "customer_id_fixture",
+        "appInstallationId": "app_installation_id_fixture",
+        "subscription": {
+          "id": "id_fixture",
+          "activatedAt": "2026-01-01T00:00:00Z",
+          "trialExpiresAt": "2026-01-01T00:00:00Z",
+          "canceledAt": "2026-01-01T00:00:00Z",
+          "lineItems": [
+            {
+              "id": "id_fixture",
+              "type": "fixture",
+              "amount": 1.23,
+              "currencyCode": "fixture",
+              "quantity": 1.23,
+              "plan": {
+                "id": "plan_fixture_id"
+              },
+              "appliedDiscount": {
+                "id": "applied_discount_fixture_id"
+              }
+            }
+          ]
+        },
+        "previousSubscription": {
+          "id": "previous_subscription_fixture_id"
+        },
+        "netChange": 1.23,
+        "planAmount": 1.23,
+        "planCurrencyCode": "fixture",
+        "planInterval": "fixture",
+        "planChanges": {
+          "id": "plan_changes_fixture_id"
+        },
+        "metadata": {
+          "id": "metadata_fixture_id"
+        },
+        "uninstallEvent": {
+          "reasonCode": "fixture",
+          "reasonDetails": "fixture"
+        },
+        "appCharge": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "amount": 1.23,
+          "currencyCode": "fixture"
+        },
+        "utm": {
+          "source": "fixture",
+          "medium": "fixture",
+          "campaign": "fixture",
+          "content": "fixture",
+          "term": "fixture"
+        },
+        "affiliateAttribution": {
+          "affiliateId": "affiliate_id_fixture",
+          "affiliateName": "fixture"
+        },
+        "email": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "to": "fixture",
+          "eventName": "fixture"
+        },
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "cursor": "",
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "total": 1
+    }
+  }
+}

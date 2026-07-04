@@ -14,15 +14,65 @@
       "format": "uri",
       "description": "Freshchat API base URL, e.g. https://<account_name>.freshchat.com/v2. This bundle requires the full base URL directly: legacy derives it from an account_name config value (https://<account_name>.freshchat.com/v2), but that cross-key derivation has no engine mechanism today (see docs.md Known limits) — spec.json's default materialization only supports a fixed literal, never one derived from another config value."
     },
-    "page_size": {
+    "user_id": {
       "type": "string",
-      "default": "50",
-      "description": "Records per page (1-100)."
+      "description": "Freshchat user id for user_details and user_conversations streams."
     },
-    "max_pages": {
+    "conversation_id": {
       "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+      "description": "Freshchat conversation id for conversation_detail and conversation_messages streams."
+    },
+    "agent_id": {
+      "type": "string",
+      "description": "Freshchat agent id for agent_details."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Freshchat report id for report_status."
+    },
+    "report_status": {
+      "type": "string",
+      "description": "Optional status filter for report_status."
+    },
+    "business_hours_group_id": {
+      "type": "string",
+      "description": "Freshchat group id for business_hours_status."
+    },
+    "outbound_request_id": {
+      "type": "string",
+      "description": "Optional request id filter for outbound_messages."
+    },
+    "metrics_metric": {
+      "type": "string",
+      "description": "Metric name for Freshchat historical_metrics and instant_metrics streams."
+    },
+    "metrics_start": {
+      "type": "string",
+      "description": "Historical metrics start timestamp."
+    },
+    "metrics_end": {
+      "type": "string",
+      "description": "Historical metrics end timestamp."
+    },
+    "metrics_group_by": {
+      "type": "string",
+      "description": "Optional metrics group_by query value."
+    },
+    "metrics_filter_by": {
+      "type": "string",
+      "description": "Optional metrics filter_by query value."
+    },
+    "metrics_aggregator": {
+      "type": "string",
+      "description": "Optional historical metrics aggregator query value."
+    },
+    "metrics_interval": {
+      "type": "string",
+      "description": "Optional historical metrics interval query value."
+    },
+    "metrics_summary": {
+      "type": "string",
+      "description": "Optional instant metrics summary query value."
     },
     "mode": {
       "type": "string",

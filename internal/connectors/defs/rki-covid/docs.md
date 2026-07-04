@@ -1,94 +1,68 @@
 # Overview
 
 RKI COVID reads public Germany COVID-19 metrics derived from Robert Koch-Institut reports via the
-corona-zahlen.org JSON API (`https://api.corona-zahlen.org`). It is read-only and requires no
-credentials — every endpoint is public. This is a pure **Tier-1 declarative bundle**
-(`docs/migration/conventions.md` §1): legacy (`internal/connectors/rki-covid/rki_covid.go`) is a
-plain `connsdk`-based HTTP JSON reader with no auth, no pagination, and no protocol-native logic —
-every behavior it has is expressible in `streams.json`/`spec.json`/schemas alone. The legacy package
-stays registered and unchanged until wave6's registry flip.
+corona-zahlen.org JSON API. It is credential-free, read-only, and pure Tier-1 declarative HTTP:
+there is no auth, no pagination, and no write surface. Pass B expanded the bundle from the original
+five legacy-parity streams to the tabular JSON data surface documented under
+`https://api.corona-zahlen.org/docs/`.
+
+The legacy connector remains the record-shape ground truth for the original `germany`, `states`,
+`districts`, `cases_history`, and `deaths_history` streams: every stream uses
+`projection: "passthrough"` and stamps the legacy `stream` marker so vendor fields are preserved.
+The two original history streams now use the documented `/germany/history/...` paths; the emitted
+records are the same `data[]` history objects legacy reads from the older alias paths.
 
 ## Auth setup
 
-None. `streams.json`'s `base.auth` is `[{"mode": "none"}]`, matching legacy's credential-free
-`connsdk.Requester` construction (`rki_covid.go`'s `requester` sets only `Client`/`BaseURL`/
-`UserAgent`, no `Auth`).
+None. `streams.json` declares `base.auth: [{"mode":"none"}]`, matching legacy's credential-free
+`connsdk.Requester`. `base_url` defaults to `https://api.corona-zahlen.org` and may be overridden for
+tests or proxies.
 
 ## Streams notes
 
-Legacy defines 5 streams (`endpoints` map, `rki_covid.go:114-120`), each a distinct GET endpoint on
-`api.corona-zahlen.org`, with no pagination on any of them:
+The bundle declares 28 streams:
 
-- **germany** (`GET /germany`) — a single whole-object response (Germany-wide current metrics), no
-  wrapping `data` array. `records.path: ""` selects the whole response body as one record
-  (`connsdk.RecordsAt` treats a bare JSON object at the given path as exactly one record). The raw
-  payload has no natural id field, so `computed_fields.id` is the static literal `"germany"` —
-  matching legacy's `mapRecord` fallback chain (`id`/`ags`/`abbreviation`/`name`/`date` all absent on
-  this shape, so `mapRecord` falls all the way through to `out["id"] = stream`).
-- **states** (`GET /states`) — `data` is a JSON OBJECT keyed by state abbreviation (`"BW"`, `"BY"`,
-  ...), not an array; `records.keyed_object: true` (`key_field: "abbreviation"`) explodes each value
-  into its own record (conventions.md §3's keyed-object flatten dialect). Each state object already
-  carries its own `id` field in the raw API, so no `computed_fields.id` override is declared —
-  `projection: "passthrough"` copies it (and every other raw field) forward verbatim, matching
-  legacy's `mapRecord` which never overwrites an already-present `id`.
-- **districts** (`GET /districts`) — same keyed-object shape as `states`, keyed by AGS district code
-  (`key_field: "ags"`). District objects have no top-level `id`, only `ags`; `computed_fields.id:
-  "{{ record.ags }}"` (a bare single reference — typed extraction preserves `ags`'s native JSON
-  string type, matching legacy's `first()` returning the raw, unstringified value) reproduces
-  legacy's fallback exactly.
-- **cases_history** / **deaths_history** (`GET /history/cases`, `GET /history/deaths`) — `data` is
-  an array of `{cases|deaths, date}` objects, no id field at all; `computed_fields.id: "{{
-  record.date }}"` reproduces legacy's fallback (`ags`/`abbreviation`/`name` are all absent on this
-  shape, so `first()` resolves `date`). Both streams declare bare `incremental.cursor_field: "date"`
-  with **no** `request_param` — matching legacy's published `CursorFields: []string{"date"}`
-  (`rki_covid.go:127-128`) while staying behaviorally identical to legacy's real always-full-sync
-  behavior: legacy's `Read` never consults incoming state/cursor at all (grep confirms no
-  state-read anywhere in the file), so this bundle's `incremental` block exists purely for
-  manifest/derived-sync-mode parity (conventions.md §8 rule 2), never wired to an actual server-side
-  filter.
+- Legacy/current summaries: `germany`, `states`, `districts`.
+- Germany histories: `cases_history`, `deaths_history`, `germany_incidence_history`,
+  `germany_recovered_history`, `germany_r_value_history`, `germany_hospitalization_history`,
+  `germany_frozen_incidence_history`.
+- Age-group resources: `germany_age_groups`, `states_age_groups`, `districts_age_groups`.
+- State histories: `states_cases_history`, `states_deaths_history`, `states_incidence_history`,
+  `states_recovered_history`, `states_frozen_incidence_history`, `states_hospitalization_history`.
+- District histories: `districts_cases_history`, `districts_deaths_history`,
+  `districts_incidence_history`, `districts_recovered_history`,
+  `districts_frozen_incidence_history`.
+- Testing and vaccinations: `testing_history`, `vaccinations`, `vaccinations_states`,
+  `vaccinations_history`.
 
-Every stream declares `projection: "passthrough"` (conventions.md §8 rule 1): legacy's `mapRecord`
-copies every raw field verbatim (`for k, v := range rec { out[k] = v }`) before only fixing up
-`id`/`stream` — this is not a field-built `connectors.Record{...}` mapping, so schema-mode
-projection (which would silently drop any undeclared field) would be a parity violation. Every
-stream also stamps a static-literal `stream` computed field (`"germany"`/`"states"`/`"districts"`/
-`"cases_history"`/`"deaths_history"`), matching legacy's own `out["stream"] = stream` marker.
+Object-keyed responses use `records.keyed_object` with the documented key stamped onto
+`abbreviation`, `ags`, or `age_group`. History-array responses use the documented `data` or
+`data.history` arrays and compute `id` from `date`. State/district history collection endpoints emit
+one record per state or district with the raw `history` array preserved, because the current dialect
+does not need to fan out inner history rows to satisfy a distinct documented collection resource.
 
-The optional `days` config value is sent as a `days` query parameter on **every** stream's request
-when set (`stream.Query`'s `omit_when_absent` dialect) — this reproduces legacy's real (if slightly
-odd) behavior verbatim: `rki_covid.go:79-82` builds one shared `query := url.Values{}` with `days`
-set unconditionally before the single `r.Do(...)` call, so `days` is sent on `germany`/`states`/
-`districts` requests too, not only the two history endpoints, even though those three endpoints do
-not document a `days` parameter. This bundle intentionally reproduces that exact behavior rather than
-"fixing" it (§5's meta-rule: never diverge from an accepted-input legacy behavior).
+The optional `days` config value is still sent as a `days` query parameter on every stream when set.
+That preserves legacy behavior exactly: legacy builds one shared query map before calling each
+endpoint, so it sends `days` even to endpoints where the docs do not mention that query parameter.
+The documented `/{days}` and `/{weeks}` path variants are treated as narrower aliases in
+`api_surface.json`, not separate streams.
 
 ## Write actions & risks
 
-None. `capabilities.write: false`, no `writes.json` — matching legacy's `Write` returning
-`connectors.ErrUnsupportedOperation` unconditionally (`rki_covid.go:108-110`).
+None. The public API is read-only for this connector, and legacy's `Write` returns
+`connectors.ErrUnsupportedOperation`. `capabilities.write` remains `false` and no `writes.json` is
+present.
 
 ## Known limits
 
-- **`page_size` config is NOT migrated (F6, dead config).** Legacy's `pageSize(req.Config)`
-  (`rki_covid.go:83-85`) validates `config.page_size` is an integer in `[1, 1000]` but its return
-  value is discarded (`if _, err := pageSize(req.Config); err != nil`) — it is never sent as a query
-  parameter or used to bound any request. `page_size` is therefore genuinely dead config with zero
-  wire effect (searxng's F6 precedent, conventions.md §2): declaring it in `spec.json` with no
-  template anywhere consuming it would be worse than omitting it. The one observable legacy behavior
-  this drops is validation-only: legacy rejects an out-of-range `page_size` value even though it does
-  nothing with it; this bundle has no equivalent no-op validation surface to reject against. No
-  accepted-input record-emitting behavior changes for any config legacy would actually use
-  successfully.
-- **No pagination on any stream**, matching legacy exactly (`rki_covid.go` issues exactly one
-  `r.Do(...)` call per `Read`, no loop). `streams.json` declares `pagination.type: "none"` at the
-  base level; no 2-page fixture is required (conventions.md §4 only mandates one when pagination is
-  declared).
-- **`cases_history`/`deaths_history`'s `x-cursor-field` is manifest-only**, matching legacy's own
-  always-full-sync behavior — see "Streams notes" above.
-- **Fixture record shapes (states/districts/history) are recorded-real-shape best-effort, not
-  captured from a live call.** This environment had no outbound network access to
-  `api.corona-zahlen.org` at migration time; fixtures reproduce the documented, publicly-known
-  corona-zahlen.org response shapes (keyed `data` objects for `states`/`districts`, array `data` for
-  the history endpoints) with synthetic values, following the same field names legacy's own
-  `fields()` catalog declares (conventions.md §4's "recorded-real-shape, sanitized" rule, applied
-  here as "documented-shape, sanitized" given the live-capture constraint).
+- Path-parameter-limited aliases such as `/states/{state}`, `/districts/{ags}`,
+  `/germany/history/cases/{days}`, and `/testing/history/{weeks}` are excluded as `duplicate_of`.
+  The broader collection streams cover the same record shapes without requiring global synthetic
+  config values for each narrow alias.
+- Section/default redirect paths such as `/germany/history`, `/states/history`,
+  `/districts/history`, and `/map` are excluded as `duplicate_of`; their concrete targets are listed
+  separately in `api_surface.json`.
+- Map and legend endpoints are excluded as `non_data_endpoint` because they are visualization
+  payloads for choropleth rendering, not tabular ETL records.
+- `page_size` remains intentionally absent. Legacy validates `config.page_size` but never uses the
+  value in a request; carrying a no-op config key into the declarative spec would be misleading.

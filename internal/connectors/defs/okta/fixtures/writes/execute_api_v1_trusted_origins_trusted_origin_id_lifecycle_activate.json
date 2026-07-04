@@ -1,0 +1,13 @@
+{
+  "record": {
+    "trusted_origin_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/trustedOrigins/synthetic-conformance-value/lifecycle/activate"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

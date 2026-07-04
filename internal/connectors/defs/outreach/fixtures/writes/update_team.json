@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "team",
+      "attributes": {
+        "name": "Fixture Update Team"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/teams/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "team",
+        "attributes": {
+          "name": "Fixture Update Team"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

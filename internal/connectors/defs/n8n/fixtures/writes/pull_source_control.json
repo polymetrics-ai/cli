@@ -1,0 +1,18 @@
+{
+  "record": {
+    "force": false,
+    "autoPublish": "none"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/source-control/pull",
+    "body": {
+      "force": false,
+      "autoPublish": "none"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

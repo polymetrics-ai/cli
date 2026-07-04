@@ -2,15 +2,46 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "widgets",
   "type": "object",
-  "x-primary-key": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "x-cursor-field": "created_at",
-  "required": ["id"],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "integer" },
-    "name": { "type": ["string", "null"] },
-    "widget_type": { "type": ["string", "null"] },
-    "status": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "widget_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }

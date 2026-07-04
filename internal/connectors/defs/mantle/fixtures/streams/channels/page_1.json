@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/channels"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "channels": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "type": "email",
+        "enabled": true,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Team member id."
+    },
+    "role": {
+      "type": "string",
+      "description": "\nRole of the team member.\n* \"member\":     Team member with full member permissions.\n* \"admin\":      Admin of a team. Team member with permission to manage team.\n* \"non_team\":   External user, non-team user.\n* \"team_guest\": (Deprecated) Team-guest user, user with access only to a team without access to organization.\n",
+      "enum": [
+        "non_team",
+        "member",
+        "admin"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Date and time when member was invited to the team.",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "Id of the user who invited the team member."
+    },
+    "modifiedAt": {
+      "type": "string",
+      "description": "Date and time when the user's membership was last updated.",
+      "format": "date-time"
+    },
+    "modifiedBy": {
+      "type": "string",
+      "description": "Id of the user who last updated the user's membership."
+    },
+    "teamId": {
+      "type": "string",
+      "description": "Team id"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object returned."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

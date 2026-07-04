@@ -1,0 +1,14 @@
+{
+  "record": {
+    "store_id": "store_id_fixture_1",
+    "name": "Fixture",
+    "order_number": "order_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ecommerce/stores/store_id_fixture_1/orders",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture update_service_request_approval_chain_rule",
+    "description": "Fixture update_service_request_approval_chain_rule record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/approval-chain-rule",
+    "body": {
+      "name": "Fixture update_service_request_approval_chain_rule",
+      "description": "Fixture update_service_request_approval_chain_rule record"
+    }
+  }
+}

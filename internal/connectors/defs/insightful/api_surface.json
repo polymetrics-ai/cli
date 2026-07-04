@@ -1,17 +1,21 @@
 {
   "api": "Insightful API v1 (https://app.insightful.io/api/v1)",
-  "docs": "https://developer.insightful.io/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Insightful surface (time windows, screenshots, activity, apps/URLs tracking, projects/tasks writes, etc.) is out of scope until Pass B",
+  "docs": "https://developers.insightful.io/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B review of the Insightful Developer Portal/Postman collection. The connector keeps the legacy read-only record contracts for employee, team, project, and directory resources; remaining documented endpoints are detail duplicates, sensitive monitoring/reporting windows, or workforce-management mutations.",
   "endpoints": [
     { "method": "GET", "path": "/employee", "covered_by": { "stream": "employee" } },
     { "method": "GET", "path": "/team", "covered_by": { "stream": "team" } },
     { "method": "GET", "path": "/project", "covered_by": { "stream": "projects" } },
     { "method": "GET", "path": "/directory", "covered_by": { "stream": "directory" } },
-    { "method": "GET", "path": "/time-windows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/screenshots", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/analytics/activity", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/project", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/task", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/employee/{id}, /team/{id}, /project/{id}", "excluded": { "category": "duplicate_of", "reason": "Detail endpoints return the same resource shapes as the covered list streams and would require caller-supplied IDs rather than producing an independent syncable collection." } },
+    { "method": "GET", "path": "/employee/deactivate/{id}", "excluded": { "category": "destructive_admin", "reason": "Despite using GET in the documented collection, this endpoint deactivates an employee account and is a mutation, not a read stream." } },
+    { "method": "GET", "path": "/time-windows", "excluded": { "category": "out_of_scope", "reason": "Time-window reads are parameterized monitoring windows rather than durable resource lists; adding them needs an explicit date/window contract and privacy review." } },
+    { "method": "GET", "path": "/screenshots", "excluded": { "category": "binary_payload", "reason": "Screenshot endpoints expose employee desktop captures or screenshot metadata tied to image payloads; the connector does not sync binary/surveillance captures." } },
+    { "method": "GET", "path": "/analytics/activity", "excluded": { "category": "out_of_scope", "reason": "Activity analytics require explicit employee/time filters and emit high-volume monitoring events, not the legacy resource record surface." } },
+    { "method": "GET", "path": "/task", "excluded": { "category": "out_of_scope", "reason": "Task endpoints are project-management workflow records outside legacy's employee/team/project/directory contract and require a separate task schema and permission review." } },
+    { "method": "POST", "path": "/employee, /team, /project, /task", "excluded": { "category": "requires_elevated_scope", "reason": "Create endpoints invite employees or create workforce-management records and require administrative privileges; legacy Write is unsupported." } },
+    { "method": "PUT", "path": "/employee/{id}, /team/{id}, /project/{id}, /task/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "Update endpoints mutate monitored employees, teams, projects, or tasks and require a dedicated reverse-ETL approval/risk design." } },
+    { "method": "DELETE", "path": "/project/{id}, /task/{id} and other removable workforce-management resources", "excluded": { "category": "destructive_admin", "reason": "Delete endpoints remove live Insightful project/task management data and are intentionally not exposed by this read-only connector." } }
   ]
 }

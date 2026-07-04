@@ -1,0 +1,252 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "properties": { "type": "array" },
+          "reference_id": { "type": "string" }
+        },
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "creates a Freshchat user/contact visible to agents"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_id }}",
+      "path_fields": ["user_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["user_id"],
+        "properties": {
+          "user_id": { "type": "string" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "properties": { "type": "array" },
+          "reference_id": { "type": "string" }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "updates an existing Freshchat user/contact"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.user_id }}",
+      "path_fields": ["user_id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": ["user_id"],
+        "properties": { "user_id": { "type": "string" } }
+      },
+      "risk": "deletes a Freshchat user/contact"
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": { "type": "string" },
+          "channel_id": { "type": "string" },
+          "messages": { "type": "array" },
+          "properties": { "type": "object" }
+        },
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "creates a Freshchat conversation"
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "path_fields": ["conversation_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["conversation_id"],
+        "properties": {
+          "conversation_id": { "type": "string" },
+          "status": { "type": "string" },
+          "assigned_agent_id": { "type": "string" },
+          "assigned_group_id": { "type": "string" },
+          "priority": { "type": "string" },
+          "properties": { "type": "object" }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "updates routing, status, or properties on an existing Freshchat conversation"
+    },
+    {
+      "name": "send_conversation_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/messages",
+      "path_fields": ["conversation_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["conversation_id"],
+        "properties": {
+          "conversation_id": { "type": "string" },
+          "message_parts": { "type": "array" },
+          "actor_type": { "type": "string" },
+          "actor_id": { "type": "string" }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "sends a message into an existing Freshchat conversation"
+    },
+    {
+      "name": "create_agent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/agents",
+      "record_schema": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "role_id": { "type": "string" },
+          "groups": { "type": "array" }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates a Freshchat agent account"
+    },
+    {
+      "name": "update_agent",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/agents/{{ record.agent_id }}",
+      "path_fields": ["agent_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["agent_id"],
+        "properties": {
+          "agent_id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "role_id": { "type": "string" },
+          "groups": { "type": "array" },
+          "is_deactivated": { "type": "boolean" }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "updates an existing Freshchat agent"
+    },
+    {
+      "name": "update_agent_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/agents/{{ record.agent_id }}",
+      "path_fields": ["agent_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["agent_id", "status"],
+        "properties": {
+          "agent_id": { "type": "string" },
+          "status": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates an agent's Freshchat availability status"
+    },
+    {
+      "name": "delete_agent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agents/{{ record.agent_id }}",
+      "path_fields": ["agent_id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": ["agent_id"],
+        "properties": { "agent_id": { "type": "string" } }
+      },
+      "risk": "deletes a Freshchat agent"
+    },
+    {
+      "name": "send_outbound_whatsapp_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/outbound-messages/whatsapp",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "from": { "type": "object" },
+          "to": { "type": "object" },
+          "provider": { "type": "string" },
+          "template": { "type": "object" }
+        },
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "sends an outbound WhatsApp message through Freshchat"
+    },
+    {
+      "name": "extract_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reports/raw",
+      "record_schema": {
+        "type": "object",
+        "required": ["start", "end", "event", "format"],
+        "properties": {
+          "start": { "type": "string" },
+          "end": { "type": "string" },
+          "event": { "type": "string" },
+          "format": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "risk": "requests generation of a Freshchat raw report extract"
+    },
+    {
+      "name": "create_csat_rating",
+      "kind": "create",
+      "method": "POST",
+      "path": "/csat/{{ record.conversation_id }}",
+      "path_fields": ["conversation_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["conversation_id"],
+        "properties": {
+          "conversation_id": { "type": "string" },
+          "rating": { "type": "integer" },
+          "comment": { "type": "string" }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "creates a CSAT rating for a Freshchat conversation"
+    }
+  ]
+}

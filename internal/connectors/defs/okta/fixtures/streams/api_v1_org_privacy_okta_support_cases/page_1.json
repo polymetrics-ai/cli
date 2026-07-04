@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/org/privacy/oktaSupport/cases",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "supportCases": [
+        {
+          "caseNumber": "case_number_fixture",
+          "impersonation": {
+            "status": "DISABLED",
+            "expiration": "2026-01-01T00:00:00Z"
+          },
+          "selfAssigned": {
+            "status": "APPROVED"
+          },
+          "subject": "subject_fixture"
+        }
+      ]
+    }
+  }
+}

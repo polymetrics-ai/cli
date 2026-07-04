@@ -1,19 +1,494 @@
 {
   "api": "n8n public REST API v1 ({instance}/api/v1)",
-  "docs": "https://docs.n8n.io/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "legacy-parity read streams only (workflows, executions, tags, users); the full n8n surface (workflow activation/deactivation, credentials, executions retry, variables, source control, audit logs) is out of scope until Pass B",
+  "docs": "https://docs.n8n.io/connect/n8n-api/api-reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion over the current n8n public REST API reference. Expressible read endpoints are streams and expressible non-secret, non-destructive mutations are write actions; destructive/admin/secret-body or dialect-blocked endpoints are explicitly excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v1/workflows", "covered_by": { "stream": "workflows" } },
-    { "method": "GET", "path": "/api/v1/executions", "covered_by": { "stream": "executions" } },
-    { "method": "GET", "path": "/api/v1/tags", "covered_by": { "stream": "tags" } },
-    { "method": "GET", "path": "/api/v1/users", "covered_by": { "stream": "users" } },
-    { "method": "POST", "path": "/api/v1/workflows", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/v1/workflows/{id}/activate", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/api/v1/workflows/{id}", "excluded": { "category": "destructive_admin", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/v1/executions/{id}/retry", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v1/credentials", "excluded": { "category": "requires_elevated_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v1/variables", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v1/audit", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows",
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows",
+      "covered_by": {
+        "write": "create_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}",
+      "covered_by": {
+        "stream": "workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/{id}",
+      "covered_by": {
+        "write": "update_workflow"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/workflows/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes a workflow from the n8n instance; destructive administrative lifecycle actions are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/{versionId}",
+      "covered_by": {
+        "stream": "workflow_version"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/activate",
+      "covered_by": {
+        "write": "publish_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/deactivate",
+      "covered_by": {
+        "write": "deactivate_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/archive",
+      "covered_by": {
+        "write": "archive_workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/unarchive",
+      "covered_by": {
+        "write": "unarchive_workflow"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/{id}/transfer",
+      "covered_by": {
+        "write": "transfer_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/tags",
+      "covered_by": {
+        "stream": "workflow_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/workflows/{id}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/executions",
+      "covered_by": {
+        "stream": "executions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/executions/{id}",
+      "covered_by": {
+        "stream": "execution"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/executions/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes execution history from the n8n instance; destructive administrative deletes are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/executions/{id}/retry",
+      "covered_by": {
+        "write": "retry_execution"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/executions/{id}/stop",
+      "covered_by": {
+        "write": "stop_execution"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/executions/stop",
+      "covered_by": {
+        "write": "stop_executions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/executions/{id}/tags",
+      "covered_by": {
+        "stream": "execution_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/executions/{id}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Creates/invites n8n users and requires instance user administration; the request body is also a root array, which the current write dialect cannot construct."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes an n8n user account; destructive user-administration actions are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/users/{id}/role",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Changes a user global role and requires elevated instance administration."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tags/{id}",
+      "covered_by": {
+        "stream": "tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tags/{id}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/tags/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes a tag from the n8n instance; destructive deletes are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/variables",
+      "covered_by": {
+        "stream": "variables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/variables",
+      "covered_by": {
+        "write": "create_variable"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/variables/{id}",
+      "covered_by": {
+        "write": "update_variable"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/variables/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes an n8n variable; destructive deletes are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/projects/{projectId}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/projects/{projectId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes an n8n project; destructive project-administration deletes are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects/{projectId}/users",
+      "covered_by": {
+        "stream": "project_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/{projectId}/users",
+      "covered_by": {
+        "write": "add_project_users"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/projects/{projectId}/users/{userId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Removes a user from a project; destructive membership removals are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/projects/{projectId}/users/{userId}",
+      "covered_by": {
+        "write": "change_project_user_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/data-tables",
+      "covered_by": {
+        "stream": "data_tables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables",
+      "covered_by": {
+        "write": "create_data_table"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/data-tables/{dataTableId}",
+      "covered_by": {
+        "stream": "data_table"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes a data table; destructive table deletes are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/data-tables/{dataTableId}",
+      "covered_by": {
+        "write": "update_data_table"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/data-tables/{dataTableId}/rows",
+      "covered_by": {
+        "stream": "data_table_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables/{dataTableId}/rows",
+      "covered_by": {
+        "write": "insert_data_table_rows"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/update",
+      "covered_by": {
+        "write": "update_data_table_rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/upsert",
+      "covered_by": {
+        "write": "upsert_data_table_row"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this DELETE operation carries filter/returnData/dryRun as query parameters, but writes.json has no query field."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/data-tables/{dataTableId}/columns",
+      "covered_by": {
+        "stream": "data_table_columns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/data-tables/{dataTableId}/columns",
+      "covered_by": {
+        "write": "add_data_table_column"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes a data table column; destructive schema deletes are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
+      "covered_by": {
+        "write": "update_data_table_column"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/credentials",
+      "covered_by": {
+        "stream": "credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/credentials",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Creates credentials with write-only secret data; connector rules prohibit requesting or storing secret values in write records."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/credentials/{id}",
+      "covered_by": {
+        "stream": "credential"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/credentials/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Deletes a credential from the n8n instance; destructive credential deletes are not exposed as reverse-ETL writes."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/credentials/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Updates credentials and can carry write-only secret data; connector rules prohibit requesting or storing secret values in write records."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/credentials/{id}/test",
+      "covered_by": {
+        "write": "test_credential"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/credentials/schema/{credentialTypeName}",
+      "covered_by": {
+        "stream": "credential_schema"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/credentials/{id}/transfer",
+      "covered_by": {
+        "write": "transfer_credential"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/source-control/pull",
+      "covered_by": {
+        "write": "pull_source_control"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/audit",
+      "covered_by": {
+        "write": "generate_audit"
+      }
+    }
   ]
 }

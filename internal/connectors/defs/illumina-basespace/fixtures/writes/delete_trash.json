@@ -1,0 +1,13 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1pre3/trash"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

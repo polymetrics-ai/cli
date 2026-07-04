@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "user_fixture_1",
+      "email": "fixture@example.com",
+      "firstName": "Fixture",
+      "lastName": "User",
+      "isPending": false,
+      "role": "global:member",
+      "mfaEnabled": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

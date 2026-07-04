@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/people", "query": { "limit": "1", "page": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/v1/people",
+    "query": {
+      "limit": "1",
+      "page": "1"
+    }
+  },
   "response": {
     "status": 200,
     "body": []

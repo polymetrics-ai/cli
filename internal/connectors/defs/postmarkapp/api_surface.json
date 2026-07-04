@@ -1,18 +1,623 @@
 {
   "api": "Postmark HTTP API (https://api.postmarkapp.com)",
   "docs": "https://postmarkapp.com/developer",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: 2 of the 3 legacy-parity read streams (outbound_messages, inbound_messages); the 'servers' stream is blocked (see Known limits) and the full Postmark surface (templates, bounces, stats, suppressions) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion of the documented Postmark API reference. Server-token JSON GET endpoints are covered as streams and server-token object/no-body mutations are covered as write actions. Account-token endpoints, root-array batch sends, and per-auth gaps are explicitly excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/messages/outbound", "covered_by": { "stream": "outbound_messages" } },
-    { "method": "GET", "path": "/messages/inbound", "covered_by": { "stream": "inbound_messages" } },
-    { "method": "GET", "path": "/servers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: this stream needs a different auth header (X-Postmark-Account-Token) than the two migrated message streams (X-Postmark-Server-Token); the engine's auth/headers are resolved once per bundle at Runtime construction with no per-stream override, so a single bundle cannot select a different credential header by stream name. See docs.md Known limits and this migration's reported blocker." } },
-    { "method": "GET", "path": "/messages/outbound/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/messages/inbound/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/deliverystats", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/bounces", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/templates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/email", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/suppressions/dump", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "POST",
+      "path": "/email",
+      "covered_by": {
+        "write": "send_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "batch send requires a root JSON array body, which writes.json cannot construct from record maps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/bulk",
+      "covered_by": {
+        "write": "send_bulk_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/bulk/{bulk-request-id}",
+      "covered_by": {
+        "stream": "bulk_email_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/withTemplate",
+      "covered_by": {
+        "write": "send_email_with_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/batchWithTemplates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "batch template send requires a root JSON array body, which writes.json cannot construct from record maps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deliverystats",
+      "covered_by": {
+        "stream": "delivery_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bounces",
+      "covered_by": {
+        "stream": "bounces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bounces/{bounceid}",
+      "covered_by": {
+        "stream": "bounce"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bounces/{bounceid}/dump",
+      "covered_by": {
+        "stream": "bounce_dump"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/bounces/{bounceid}/activate",
+      "covered_by": {
+        "write": "activate_bounce"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/server",
+      "covered_by": {
+        "stream": "current_server"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/server",
+      "covered_by": {
+        "write": "edit_current_server"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{templateIdOrAlias}",
+      "covered_by": {
+        "stream": "template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates",
+      "covered_by": {
+        "write": "create_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/{templateIdOrAlias}",
+      "covered_by": {
+        "write": "edit_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/templates/{templateIdOrAlias}",
+      "covered_by": {
+        "write": "delete_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/validate",
+      "covered_by": {
+        "write": "validate_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message-streams",
+      "covered_by": {
+        "stream": "message_streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message-streams/{stream_ID}",
+      "covered_by": {
+        "stream": "message_stream"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/message-streams/{stream_ID}",
+      "covered_by": {
+        "write": "edit_message_stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message-streams",
+      "covered_by": {
+        "write": "create_message_stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message-streams/{stream_ID}/archive",
+      "covered_by": {
+        "write": "archive_message_stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message-streams/{stream_ID}/unarchive",
+      "covered_by": {
+        "write": "unarchive_message_stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/outbound",
+      "covered_by": {
+        "stream": "outbound_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/outbound/{messageid}/details",
+      "covered_by": {
+        "stream": "outbound_message_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/outbound/{messageid}/dump",
+      "covered_by": {
+        "stream": "outbound_message_dump"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/inbound",
+      "covered_by": {
+        "stream": "inbound_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/inbound/{messageid}/details",
+      "covered_by": {
+        "stream": "inbound_message_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/messages/inbound/{messageid}/bypass",
+      "covered_by": {
+        "write": "bypass_inbound_message"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/messages/inbound/{messageid}/retry",
+      "covered_by": {
+        "write": "retry_inbound_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/outbound/opens",
+      "covered_by": {
+        "stream": "outbound_message_opens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/outbound/opens/{messageid}",
+      "covered_by": {
+        "stream": "outbound_message_opens_by_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/outbound/clicks",
+      "covered_by": {
+        "stream": "outbound_message_clicks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/outbound/clicks/{messageid}",
+      "covered_by": {
+        "stream": "outbound_message_clicks_by_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound",
+      "covered_by": {
+        "stream": "stats_outbound"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/sends",
+      "covered_by": {
+        "stream": "stats_outbound_sends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/bounces",
+      "covered_by": {
+        "stream": "stats_outbound_bounces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/spam",
+      "covered_by": {
+        "stream": "stats_outbound_spam"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/tracked",
+      "covered_by": {
+        "stream": "stats_outbound_tracked"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/opens",
+      "covered_by": {
+        "stream": "stats_outbound_opens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/opens/platforms",
+      "covered_by": {
+        "stream": "stats_outbound_open_platforms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/opens/emailclients",
+      "covered_by": {
+        "stream": "stats_outbound_email_clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/clicks",
+      "covered_by": {
+        "stream": "stats_outbound_clicks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/clicks/browserfamilies",
+      "covered_by": {
+        "stream": "stats_outbound_click_browser_families"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/clicks/platforms",
+      "covered_by": {
+        "stream": "stats_outbound_click_platforms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stats/outbound/clicks/location",
+      "covered_by": {
+        "stream": "stats_outbound_click_location"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/triggers/inboundrules",
+      "covered_by": {
+        "stream": "inbound_rule_triggers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/triggers/inboundrules",
+      "covered_by": {
+        "write": "create_inbound_rule_trigger"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/triggers/inboundrules/{triggerid}",
+      "covered_by": {
+        "write": "delete_inbound_rule_trigger"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{Id}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{Id}",
+      "covered_by": {
+        "write": "edit_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{Id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message-streams/{stream_id}/suppressions/dump",
+      "covered_by": {
+        "stream": "suppressions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message-streams/{stream_id}/suppressions",
+      "covered_by": {
+        "write": "create_suppression"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message-streams/{stream_id}/suppressions/delete",
+      "covered_by": {
+        "write": "delete_suppression"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/push",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/servers/{serverid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/servers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/servers/{serverid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/servers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/servers/{serverid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domainid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/domains",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/domains/{domainid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/domains/{domainid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/domains/{domainid}/verifyDkim",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/domains/{domainid}/verifyReturnPath",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/domains/{domainid}/verifyspf",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/domains/{domainid}/rotatedkim",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/senders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/senders/{signatureid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/senders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/senders/{signatureid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/senders/{signatureid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/senders/{signatureid}/resend",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/senders/{signatureid}/verifyspf",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/senders/{signatureid}/requestnewdkim",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data-removals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data-removals/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override"
+      }
+    }
   ]
 }

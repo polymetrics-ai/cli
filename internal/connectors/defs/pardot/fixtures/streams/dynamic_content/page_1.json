@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/dynamic-contents/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,basedOnProspectApiFieldId,baseContent,folderId,trackerDomainId,embedCode,embedUrl,basedOn,tagReplacementLanguage,createdAt,updatedAt,isDeleted,createdById,updatedById"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "basedOnProspectApiFieldId": 1,
+      "baseContent": "baseContent_fixture",
+      "folderId": 1,
+      "trackerDomainId": 1,
+      "embedCode": "embedCode_fixture",
+      "embedUrl": "embedUrl_fixture",
+      "basedOn": "basedOn_fixture",
+      "tagReplacementLanguage": "tagReplacementLanguage_fixture",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "isDeleted": false,
+      "createdById": 1,
+      "updatedById": 1
+    }
+  }
+}

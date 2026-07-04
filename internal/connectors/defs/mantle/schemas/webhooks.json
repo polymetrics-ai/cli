@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the webhook"
+    },
+    "topic": {
+      "type": "string",
+      "description": "The topic of the webhook"
+    },
+    "address": {
+      "type": "string",
+      "description": "The address where the webhook will send requests",
+      "format": "uri"
+    },
+    "appIds": {
+      "type": "array",
+      "description": "List of application IDs to register this webhook for. If not set, will register for all apps.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the webhook",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the webhook",
+      "format": "date-time"
+    },
+    "filter": {
+      "type": "object",
+      "description": "The filter criteria for the webhook. This property only applies to the customers/usage_event topic.",
+      "properties": {
+        "eventName": {
+          "type": "string",
+          "description": "Only usage events with a matching name will fire this webhook."
+        }
+      }
+    }
+  }
+}

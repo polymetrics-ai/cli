@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/timeline_comments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "timelineComment": {
+        "id": "id_fixture",
+        "comment": "fixture",
+        "commentHtml": "<p>Fixture</p>",
+        "appInstallationId": "app_installation_id_fixture",
+        "customerId": "customer_id_fixture",
+        "dealId": "deal_id_fixture",
+        "userId": "user_id_fixture",
+        "user": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "originalCommentId": "original_comment_id_fixture",
+        "attachments": [
+          {
+            "id": "id_fixture",
+            "fileName": "fixture",
+            "fileType": "fixture",
+            "fileSize": 1,
+            "url": "https://example.com/fixture"
+          }
+        ],
+        "taggedUsers": [
+          {
+            "id": "id_fixture",
+            "userId": "user_id_fixture"
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

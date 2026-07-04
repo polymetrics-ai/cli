@@ -1,0 +1,31 @@
+{
+  "record": {
+    "app_instance_id": "synthetic-conformance-value",
+    "id": "id_fixture",
+    "parameters": {
+      "action": "ADD",
+      "attribute": "attribute_fixture",
+      "values": [
+        "value_fixture"
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/directories/synthetic-conformance-value/groups/modify",
+    "body": {
+      "id": "id_fixture",
+      "parameters": {
+        "action": "ADD",
+        "attribute": "attribute_fixture",
+        "values": [
+          "value_fixture"
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

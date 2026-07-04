@@ -1,17 +1,687 @@
 {
   "api": "PokeAPI v2 (https://pokeapi.co/api/v2)",
   "docs": "https://pokeapi.co/docs/v2",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (pokemon, types, abilities, moves); PokeAPI's much larger resource catalog (items, locations, games, berries, evolution chains, egg groups, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Complete PokeAPI v2 documented REST surface: every concrete resource list endpoint implied by the documented generic list pagination rule, every documented resource detail endpoint, and the pokemon encounters subresource. PokeAPI is consumption-only, so there are no mutation endpoints or write actions.",
   "endpoints": [
-    { "method": "GET", "path": "/pokemon", "covered_by": { "stream": "pokemon" } },
-    { "method": "GET", "path": "/type", "covered_by": { "stream": "types" } },
-    { "method": "GET", "path": "/ability", "covered_by": { "stream": "abilities" } },
-    { "method": "GET", "path": "/move", "covered_by": { "stream": "moves" } },
-    { "method": "GET", "path": "/item", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/location", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/berry", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/evolution-chain", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/generation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/pokemon",
+      "covered_by": {
+        "stream": "pokemon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/type",
+      "covered_by": {
+        "stream": "types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ability",
+      "covered_by": {
+        "stream": "abilities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move",
+      "covered_by": {
+        "stream": "moves"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/berry",
+      "covered_by": {
+        "stream": "berries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/berry-firmness",
+      "covered_by": {
+        "stream": "berry_firmnesses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/berry-flavor",
+      "covered_by": {
+        "stream": "berry_flavors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contest-type",
+      "covered_by": {
+        "stream": "contest_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contest-effect",
+      "covered_by": {
+        "stream": "contest_effects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/super-contest-effect",
+      "covered_by": {
+        "stream": "super_contest_effects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-method",
+      "covered_by": {
+        "stream": "encounter_methods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition",
+      "covered_by": {
+        "stream": "encounter_conditions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition-value",
+      "covered_by": {
+        "stream": "encounter_condition_values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-chain",
+      "covered_by": {
+        "stream": "evolution_chains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-trigger",
+      "covered_by": {
+        "stream": "evolution_triggers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/generation",
+      "covered_by": {
+        "stream": "generations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokedex",
+      "covered_by": {
+        "stream": "pokedexes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version",
+      "covered_by": {
+        "stream": "versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version-group",
+      "covered_by": {
+        "stream": "version_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-attribute",
+      "covered_by": {
+        "stream": "item_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-category",
+      "covered_by": {
+        "stream": "item_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-fling-effect",
+      "covered_by": {
+        "stream": "item_fling_effects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-pocket",
+      "covered_by": {
+        "stream": "item_pockets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/location",
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/location-area",
+      "covered_by": {
+        "stream": "location_areas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pal-park-area",
+      "covered_by": {
+        "stream": "pal_park_areas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/region",
+      "covered_by": {
+        "stream": "regions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/machine",
+      "covered_by": {
+        "stream": "machines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-ailment",
+      "covered_by": {
+        "stream": "move_ailments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-battle-style",
+      "covered_by": {
+        "stream": "move_battle_styles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-category",
+      "covered_by": {
+        "stream": "move_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-damage-class",
+      "covered_by": {
+        "stream": "move_damage_classes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-learn-method",
+      "covered_by": {
+        "stream": "move_learn_methods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-target",
+      "covered_by": {
+        "stream": "move_targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/characteristic",
+      "covered_by": {
+        "stream": "characteristics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/egg-group",
+      "covered_by": {
+        "stream": "egg_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gender",
+      "covered_by": {
+        "stream": "genders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/growth-rate",
+      "covered_by": {
+        "stream": "growth_rates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nature",
+      "covered_by": {
+        "stream": "natures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokeathlon-stat",
+      "covered_by": {
+        "stream": "pokeathlon_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-color",
+      "covered_by": {
+        "stream": "pokemon_colors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-form",
+      "covered_by": {
+        "stream": "pokemon_forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-habitat",
+      "covered_by": {
+        "stream": "pokemon_habitats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-shape",
+      "covered_by": {
+        "stream": "pokemon_shapes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-species",
+      "covered_by": {
+        "stream": "pokemon_species"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stat",
+      "covered_by": {
+        "stream": "stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/language",
+      "covered_by": {
+        "stream": "languages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon/{id or name}",
+      "covered_by": {
+        "stream": "pokemon_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/type/{id or name}",
+      "covered_by": {
+        "stream": "types_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ability/{id or name}",
+      "covered_by": {
+        "stream": "abilities_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move/{id or name}",
+      "covered_by": {
+        "stream": "moves_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/berry/{id or name}",
+      "covered_by": {
+        "stream": "berries_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/berry-firmness/{id or name}",
+      "covered_by": {
+        "stream": "berry_firmnesses_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/berry-flavor/{id or name}",
+      "covered_by": {
+        "stream": "berry_flavors_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contest-type/{id or name}",
+      "covered_by": {
+        "stream": "contest_types_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contest-effect/{id}",
+      "covered_by": {
+        "stream": "contest_effects_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/super-contest-effect/{id}",
+      "covered_by": {
+        "stream": "super_contest_effects_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-method/{id or name}",
+      "covered_by": {
+        "stream": "encounter_methods_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition/{id or name}",
+      "covered_by": {
+        "stream": "encounter_conditions_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition-value/{id or name}",
+      "covered_by": {
+        "stream": "encounter_condition_values_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-chain/{id}",
+      "covered_by": {
+        "stream": "evolution_chains_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-trigger/{id or name}",
+      "covered_by": {
+        "stream": "evolution_triggers_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/generation/{id or name}",
+      "covered_by": {
+        "stream": "generations_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokedex/{id or name}",
+      "covered_by": {
+        "stream": "pokedexes_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version/{id or name}",
+      "covered_by": {
+        "stream": "versions_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version-group/{id or name}",
+      "covered_by": {
+        "stream": "version_groups_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item/{id or name}",
+      "covered_by": {
+        "stream": "items_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-attribute/{id or name}",
+      "covered_by": {
+        "stream": "item_attributes_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-category/{id or name}",
+      "covered_by": {
+        "stream": "item_categories_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-fling-effect/{id or name}",
+      "covered_by": {
+        "stream": "item_fling_effects_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item-pocket/{id or name}",
+      "covered_by": {
+        "stream": "item_pockets_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/location/{id or name}",
+      "covered_by": {
+        "stream": "locations_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/location-area/{id or name}",
+      "covered_by": {
+        "stream": "location_areas_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pal-park-area/{id or name}",
+      "covered_by": {
+        "stream": "pal_park_areas_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/region/{id or name}",
+      "covered_by": {
+        "stream": "regions_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/machine/{id}",
+      "covered_by": {
+        "stream": "machines_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-ailment/{id or name}",
+      "covered_by": {
+        "stream": "move_ailments_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-battle-style/{id or name}",
+      "covered_by": {
+        "stream": "move_battle_styles_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-category/{id or name}",
+      "covered_by": {
+        "stream": "move_categories_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-damage-class/{id or name}",
+      "covered_by": {
+        "stream": "move_damage_classes_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-learn-method/{id or name}",
+      "covered_by": {
+        "stream": "move_learn_methods_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-target/{id or name}",
+      "covered_by": {
+        "stream": "move_targets_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/characteristic/{id}",
+      "covered_by": {
+        "stream": "characteristics_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/egg-group/{id or name}",
+      "covered_by": {
+        "stream": "egg_groups_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gender/{id or name}",
+      "covered_by": {
+        "stream": "genders_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/growth-rate/{id or name}",
+      "covered_by": {
+        "stream": "growth_rates_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nature/{id or name}",
+      "covered_by": {
+        "stream": "natures_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokeathlon-stat/{id or name}",
+      "covered_by": {
+        "stream": "pokeathlon_stats_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-color/{id or name}",
+      "covered_by": {
+        "stream": "pokemon_colors_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-form/{id or name}",
+      "covered_by": {
+        "stream": "pokemon_forms_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-habitat/{id or name}",
+      "covered_by": {
+        "stream": "pokemon_habitats_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-shape/{id or name}",
+      "covered_by": {
+        "stream": "pokemon_shapes_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-species/{id or name}",
+      "covered_by": {
+        "stream": "pokemon_species_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stat/{id or name}",
+      "covered_by": {
+        "stream": "stats_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/language/{id or name}",
+      "covered_by": {
+        "stream": "languages_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon/{id or name}/encounters",
+      "covered_by": {
+        "stream": "pokemon_location_areas"
+      }
+    }
   ]
 }

@@ -3,34 +3,1748 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
-    "pagination": {
-      "type": "cursor",
-      "cursor_param": "cursor",
-      "token_path": "cursor",
-      "stop_path": "hasNextPage"
+    "check": {
+      "method": "GET",
+      "path": "/v1/customers"
     },
-    "check": { "method": "GET", "path": "/v1/customers" },
     "error_map": [
-      { "status": 401, "hint": "mantle api key is missing or invalid; re-run pm credentials add mantle" },
-      { "status": 429, "class": "rate_limited", "hint": "mantle rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "mantle api key is missing or invalid; re-run pm credentials add mantle"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "mantle rate limit exceeded; retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "customers",
       "path": "/v1/customers",
-      "query": { "take": "500" },
-      "records": { "path": "customers" },
+      "query": {
+        "take": "500"
+      },
+      "records": {
+        "path": "customers"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
       "schema": "schemas/customers.json"
     },
     {
       "name": "subscriptions",
       "path": "/v1/subscriptions",
-      "query": { "take": "500" },
-      "records": { "path": "subscriptions" },
+      "query": {
+        "take": "500"
+      },
+      "records": {
+        "path": "subscriptions"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
       "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "affiliate_commissions",
+      "path": "/v1/affiliate_commissions",
+      "records": {
+        "path": "affiliateCommissions"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_commissions.json"
+    },
+    {
+      "name": "affiliate_commissions_id",
+      "path": "/v1/affiliate_commissions/{{ config.id }}",
+      "records": {
+        "path": "affiliateCommission"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_commissions_id.json"
+    },
+    {
+      "name": "affiliate_payouts",
+      "path": "/v1/affiliate_payouts",
+      "records": {
+        "path": "affiliatePayouts"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_payouts.json"
+    },
+    {
+      "name": "affiliate_payouts_id",
+      "path": "/v1/affiliate_payouts/{{ config.id }}",
+      "records": {
+        "path": "affiliatePayout"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_payouts_id.json"
+    },
+    {
+      "name": "affiliate_programs",
+      "path": "/v1/affiliate_programs",
+      "records": {
+        "path": "affiliatePrograms"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_programs.json"
+    },
+    {
+      "name": "affiliate_programs_id",
+      "path": "/v1/affiliate_programs/{{ config.id }}",
+      "records": {
+        "path": "affiliateProgram"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_programs_id.json"
+    },
+    {
+      "name": "affiliate_referrals",
+      "path": "/v1/affiliate_referrals",
+      "records": {
+        "path": "affiliateReferrals"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_referrals.json"
+    },
+    {
+      "name": "affiliate_referrals_id",
+      "path": "/v1/affiliate_referrals/{{ config.id }}",
+      "records": {
+        "path": "affiliateReferral"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliate_referrals_id.json"
+    },
+    {
+      "name": "affiliates",
+      "path": "/v1/affiliates",
+      "records": {
+        "path": "affiliates"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "nextCursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliates.json"
+    },
+    {
+      "name": "affiliates_id",
+      "path": "/v1/affiliates/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/affiliates_id.json"
+    },
+    {
+      "name": "agents",
+      "path": "/v1/agents",
+      "records": {
+        "path": "agents"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/agents.json"
+    },
+    {
+      "name": "ai_agents_agent_id_runs_run_id",
+      "path": "/v1/ai/agents/{{ config.agent_id }}/runs/{{ config.run_id }}",
+      "records": {
+        "path": "run"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/ai_agents_agent_id_runs_run_id.json"
+    },
+    {
+      "name": "api_core_v1_metrics_active_installs",
+      "path": "/v1/api/core/v1/metrics/activeInstalls",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_active_installs.json"
+    },
+    {
+      "name": "api_core_v1_metrics_active_subscriptions",
+      "path": "/v1/api/core/v1/metrics/activeSubscriptions",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_active_subscriptions.json"
+    },
+    {
+      "name": "api_core_v1_metrics_arpu",
+      "path": "/v1/api/core/v1/metrics/arpu",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_arpu.json"
+    },
+    {
+      "name": "api_core_v1_metrics_arr",
+      "path": "/v1/api/core/v1/metrics/arr",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_arr.json"
+    },
+    {
+      "name": "api_core_v1_metrics_logo_churn",
+      "path": "/v1/api/core/v1/metrics/logoChurn",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_logo_churn.json"
+    },
+    {
+      "name": "api_core_v1_metrics_mrr",
+      "path": "/v1/api/core/v1/metrics/mrr",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_mrr.json"
+    },
+    {
+      "name": "api_core_v1_metrics_net_installs",
+      "path": "/v1/api/core/v1/metrics/netInstalls",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_net_installs.json"
+    },
+    {
+      "name": "api_core_v1_metrics_net_revenue",
+      "path": "/v1/api/core/v1/metrics/netRevenue",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_net_revenue.json"
+    },
+    {
+      "name": "api_core_v1_metrics_net_revenue_retention",
+      "path": "/v1/api/core/v1/metrics/netRevenueRetention",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_net_revenue_retention.json"
+    },
+    {
+      "name": "api_core_v1_metrics_payout",
+      "path": "/v1/api/core/v1/metrics/payout",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_payout.json"
+    },
+    {
+      "name": "api_core_v1_metrics_predicted_ltv",
+      "path": "/v1/api/core/v1/metrics/predictedLtv",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_predicted_ltv.json"
+    },
+    {
+      "name": "api_core_v1_metrics_revenue_churn",
+      "path": "/v1/api/core/v1/metrics/revenueChurn",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_revenue_churn.json"
+    },
+    {
+      "name": "api_core_v1_metrics_revenue_retention",
+      "path": "/v1/api/core/v1/metrics/revenueRetention",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_revenue_retention.json"
+    },
+    {
+      "name": "api_core_v1_metrics_subscription_churn",
+      "path": "/v1/api/core/v1/metrics/subscriptionChurn",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_subscription_churn.json"
+    },
+    {
+      "name": "api_core_v1_metrics_usage_event",
+      "path": "/v1/api/core/v1/metrics/usageEvent",
+      "query": {
+        "eventName": "{{ config.event_name }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_usage_event.json"
+    },
+    {
+      "name": "api_core_v1_metrics_usage_metric",
+      "path": "/v1/api/core/v1/metrics/usageMetric",
+      "query": {
+        "usageMetricId": "{{ config.usage_metric_id }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_core_v1_metrics_usage_metric.json"
+    },
+    {
+      "name": "apps",
+      "path": "/v1/apps",
+      "records": {
+        "path": "apps"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps.json"
+    },
+    {
+      "name": "apps_app_id_checklists",
+      "path": "/v1/apps/{{ config.app_id }}/checklists",
+      "records": {
+        "path": "checklists"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_app_id_checklists.json"
+    },
+    {
+      "name": "apps_app_id_checklists_checklist_id",
+      "path": "/v1/apps/{{ config.app_id }}/checklists/{{ config.checklist_id }}",
+      "records": {
+        "path": "checklist"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_app_id_checklists_checklist_id.json"
+    },
+    {
+      "name": "apps_app_id_plans_features",
+      "path": "/v1/apps/{{ config.app_id }}/plans/features",
+      "records": {
+        "path": "features"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_app_id_plans_features.json"
+    },
+    {
+      "name": "apps_app_id_plans_features_feature_id",
+      "path": "/v1/apps/{{ config.app_id }}/plans/features/{{ config.feature_id }}",
+      "records": {
+        "path": "feature"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_app_id_plans_features_feature_id.json"
+    },
+    {
+      "name": "apps_id",
+      "path": "/v1/apps/{{ config.id }}",
+      "records": {
+        "path": "app"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id.json"
+    },
+    {
+      "name": "apps_id_app_events",
+      "path": "/v1/apps/{{ config.id }}/app_events",
+      "records": {
+        "path": "appEvents"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_app_events.json"
+    },
+    {
+      "name": "apps_id_app_events_app_event_id",
+      "path": "/v1/apps/{{ config.id }}/app_events/{{ config.app_event_id }}",
+      "records": {
+        "path": "appEvent"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_app_events_app_event_id.json"
+    },
+    {
+      "name": "apps_id_plans",
+      "path": "/v1/apps/{{ config.id }}/plans",
+      "query": {
+        "take": "100"
+      },
+      "records": {
+        "path": "plans"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "nextCursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_plans.json"
+    },
+    {
+      "name": "apps_id_plans_plan_id",
+      "path": "/v1/apps/{{ config.id }}/plans/{{ config.plan_id }}",
+      "records": {
+        "path": "plan"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_plans_plan_id.json"
+    },
+    {
+      "name": "apps_id_reviews",
+      "path": "/v1/apps/{{ config.id }}/reviews",
+      "records": {
+        "path": "reviews"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "nextCursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_reviews.json"
+    },
+    {
+      "name": "apps_id_reviews_review_id",
+      "path": "/v1/apps/{{ config.id }}/reviews/{{ config.review_id }}",
+      "records": {
+        "path": "review"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_reviews_review_id.json"
+    },
+    {
+      "name": "apps_id_skills_skill_id",
+      "path": "/v1/apps/{{ config.id }}/skills/{{ config.skill_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_skills_skill_id.json"
+    },
+    {
+      "name": "apps_id_usage_metrics",
+      "path": "/v1/apps/{{ config.id }}/usage_metrics",
+      "records": {
+        "path": "usageMetrics"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_usage_metrics.json"
+    },
+    {
+      "name": "apps_id_usage_metrics_usage_metric_id",
+      "path": "/v1/apps/{{ config.id }}/usage_metrics/{{ config.usage_metric_id }}",
+      "records": {
+        "path": "usageMetric"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps_id_usage_metrics_usage_metric_id.json"
+    },
+    {
+      "name": "assistant_conversations_id",
+      "path": "/v1/assistant/conversations/{{ config.id }}",
+      "records": {
+        "path": "conversation"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/assistant_conversations_id.json"
+    },
+    {
+      "name": "channels",
+      "path": "/v1/channels",
+      "records": {
+        "path": "channels"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/channels.json"
+    },
+    {
+      "name": "charges",
+      "path": "/v1/charges",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/charges.json"
+    },
+    {
+      "name": "companies",
+      "path": "/v1/companies",
+      "records": {
+        "path": "companies"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "nextCursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "companies_id",
+      "path": "/v1/companies/{{ config.id }}",
+      "records": {
+        "path": "company"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/companies_id.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/v1/contacts",
+      "records": {
+        "path": "contacts"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "contacts_id",
+      "path": "/v1/contacts/{{ config.id }}",
+      "records": {
+        "path": "contact"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contacts_id.json"
+    },
+    {
+      "name": "custom_data",
+      "path": "/v1/custom_data",
+      "query": {
+        "resourceId": "{{ config.resource_id }}",
+        "resourceType": "{{ config.resource_type }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_data.json"
+    },
+    {
+      "name": "customer_segments",
+      "path": "/v1/customer_segments",
+      "records": {
+        "path": "customerSegments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_segments.json"
+    },
+    {
+      "name": "customer_segments_id",
+      "path": "/v1/customer_segments/{{ config.id }}",
+      "records": {
+        "path": "customField"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_segments_id.json"
+    },
+    {
+      "name": "customers_custom_fields",
+      "path": "/v1/customers/custom_fields",
+      "records": {
+        "path": "customFields"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customers_custom_fields.json"
+    },
+    {
+      "name": "customers_custom_fields_id",
+      "path": "/v1/customers/custom_fields/{{ config.id }}",
+      "records": {
+        "path": "customField"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customers_custom_fields_id.json"
+    },
+    {
+      "name": "customers_id",
+      "path": "/v1/customers/{{ config.id }}",
+      "records": {
+        "path": "customer"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customers_id.json"
+    },
+    {
+      "name": "customers_id_account_owners",
+      "path": "/v1/customers/{{ config.id }}/account_owners",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customers_id_account_owners.json"
+    },
+    {
+      "name": "customers_id_timeline",
+      "path": "/v1/customers/{{ config.id }}/timeline",
+      "records": {
+        "path": "events"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customers_id_timeline.json"
+    },
+    {
+      "name": "deal_activities",
+      "path": "/v1/deal_activities",
+      "records": {
+        "path": "dealActivities"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deal_activities.json"
+    },
+    {
+      "name": "deal_activities_id",
+      "path": "/v1/deal_activities/{{ config.id }}",
+      "records": {
+        "path": "dealActivity"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deal_activities_id.json"
+    },
+    {
+      "name": "deal_flows",
+      "path": "/v1/deal_flows",
+      "records": {
+        "path": "dealFlows"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deal_flows.json"
+    },
+    {
+      "name": "deal_flows_id",
+      "path": "/v1/deal_flows/{{ config.id }}",
+      "records": {
+        "path": "dealFlow"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deal_flows_id.json"
+    },
+    {
+      "name": "deals",
+      "path": "/v1/deals",
+      "records": {
+        "path": "deals"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deals.json"
+    },
+    {
+      "name": "deals_id",
+      "path": "/v1/deals/{{ config.id }}",
+      "records": {
+        "path": "deal"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deals_id.json"
+    },
+    {
+      "name": "deals_id_events",
+      "path": "/v1/deals/{{ config.id }}/events",
+      "query": {
+        "take": "100"
+      },
+      "records": {
+        "path": "events"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deals_id_events.json"
+    },
+    {
+      "name": "deals_id_timeline",
+      "path": "/v1/deals/{{ config.id }}/timeline",
+      "query": {
+        "take": "100"
+      },
+      "records": {
+        "path": "events"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deals_id_timeline.json"
+    },
+    {
+      "name": "docs_collections",
+      "path": "/v1/docs/collections",
+      "query": {
+        "repositoryId": "{{ config.repository_id }}"
+      },
+      "records": {
+        "path": "collections"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_collections.json"
+    },
+    {
+      "name": "docs_groups",
+      "path": "/v1/docs/groups",
+      "query": {
+        "collectionId": "{{ config.collection_id }}"
+      },
+      "records": {
+        "path": "groups"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_groups.json"
+    },
+    {
+      "name": "docs_pages",
+      "path": "/v1/docs/pages",
+      "records": {
+        "path": "pages"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_pages.json"
+    },
+    {
+      "name": "docs_pages_generate_status_job_key",
+      "path": "/v1/docs/pages/generate/status/{{ config.job_key }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_pages_generate_status_job_key.json"
+    },
+    {
+      "name": "docs_pages_page_id",
+      "path": "/v1/docs/pages/{{ config.page_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_pages_page_id.json"
+    },
+    {
+      "name": "docs_repositories",
+      "path": "/v1/docs/repositories",
+      "records": {
+        "path": "repositories"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_repositories.json"
+    },
+    {
+      "name": "docs_repositories_id",
+      "path": "/v1/docs/repositories/{{ config.id }}",
+      "records": {
+        "path": "repository"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_repositories_id.json"
+    },
+    {
+      "name": "docs_sites",
+      "path": "/v1/docs/sites",
+      "records": {
+        "path": "sites"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_sites.json"
+    },
+    {
+      "name": "docs_sites_id",
+      "path": "/v1/docs/sites/{{ config.id }}",
+      "records": {
+        "path": "site"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_sites_id.json"
+    },
+    {
+      "name": "docs_sites_id_redirects",
+      "path": "/v1/docs/sites/{{ config.id }}/redirects",
+      "records": {
+        "path": "redirects"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_sites_id_redirects.json"
+    },
+    {
+      "name": "docs_sites_id_repositories",
+      "path": "/v1/docs/sites/{{ config.id }}/repositories",
+      "records": {
+        "path": "attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_sites_id_repositories.json"
+    },
+    {
+      "name": "docs_tree",
+      "path": "/v1/docs/tree",
+      "query": {
+        "repositoryId": "{{ config.repository_id }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/docs_tree.json"
+    },
+    {
+      "name": "email_campaigns",
+      "path": "/v1/email/campaigns",
+      "records": {
+        "path": "campaigns"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_campaigns.json"
+    },
+    {
+      "name": "email_campaigns_id",
+      "path": "/v1/email/campaigns/{{ config.id }}",
+      "records": {
+        "path": "campaign"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_campaigns_id.json"
+    },
+    {
+      "name": "email_campaigns_id_preview",
+      "path": "/v1/email/campaigns/{{ config.id }}/preview",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_campaigns_id_preview.json"
+    },
+    {
+      "name": "email_deliveries",
+      "path": "/v1/email/deliveries",
+      "records": {
+        "path": "deliveries"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_deliveries.json"
+    },
+    {
+      "name": "email_deliveries_id",
+      "path": "/v1/email/deliveries/{{ config.id }}",
+      "records": {
+        "path": "delivery"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_deliveries_id.json"
+    },
+    {
+      "name": "email_layouts",
+      "path": "/v1/email/layouts",
+      "records": {
+        "path": "layouts"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_layouts.json"
+    },
+    {
+      "name": "email_senders",
+      "path": "/v1/email/senders",
+      "records": {
+        "path": "senders"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_senders.json"
+    },
+    {
+      "name": "email_unsubscribe_groups",
+      "path": "/v1/email/unsubscribe_groups",
+      "records": {
+        "path": "unsubscribeGroups"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_unsubscribe_groups.json"
+    },
+    {
+      "name": "email_unsubscribe_groups_id_members",
+      "path": "/v1/email/unsubscribe_groups/{{ config.id }}/members",
+      "records": {
+        "path": "members"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_unsubscribe_groups_id_members.json"
+    },
+    {
+      "name": "entities",
+      "path": "/v1/entities",
+      "records": {
+        "path": "entities"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/entities.json"
+    },
+    {
+      "name": "flow_extensions_actions",
+      "path": "/v1/flow/extensions/actions",
+      "records": {
+        "path": "actions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/flow_extensions_actions.json"
+    },
+    {
+      "name": "flows",
+      "path": "/v1/flows",
+      "records": {
+        "path": "flows"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/flows.json"
+    },
+    {
+      "name": "flows_id",
+      "path": "/v1/flows/{{ config.id }}",
+      "records": {
+        "path": "flow"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/flows_id.json"
+    },
+    {
+      "name": "journal_entries",
+      "path": "/v1/journal_entries",
+      "records": {
+        "path": "entries"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/journal_entries.json"
+    },
+    {
+      "name": "journal_entries_id",
+      "path": "/v1/journal_entries/{{ config.id }}",
+      "records": {
+        "path": "entry"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/journal_entries_id.json"
+    },
+    {
+      "name": "lists",
+      "path": "/v1/lists",
+      "records": {
+        "path": "lists"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "lists_id",
+      "path": "/v1/lists/{{ config.id }}",
+      "records": {
+        "path": "entities"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lists_id.json"
+    },
+    {
+      "name": "meetings",
+      "path": "/v1/meetings",
+      "records": {
+        "path": "meetings"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/meetings.json"
+    },
+    {
+      "name": "meetings_id",
+      "path": "/v1/meetings/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/meetings_id.json"
+    },
+    {
+      "name": "meetings_id_permissions",
+      "path": "/v1/meetings/{{ config.id }}/permissions",
+      "records": {
+        "path": "permissions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/meetings_id_permissions.json"
+    },
+    {
+      "name": "meetings_id_recording_url",
+      "path": "/v1/meetings/{{ config.id }}/recording-url",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/meetings_id_recording_url.json"
+    },
+    {
+      "name": "meetings_id_transcribe",
+      "path": "/v1/meetings/{{ config.id }}/transcribe",
+      "records": {
+        "path": "transcript"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/meetings_id_transcribe.json"
+    },
+    {
+      "name": "metrics_sales",
+      "path": "/v1/metrics/sales",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/metrics_sales.json"
+    },
+    {
+      "name": "notification_preferences",
+      "path": "/v1/notification_preferences",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/notification_preferences.json"
+    },
+    {
+      "name": "organization",
+      "path": "/v1/organization",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/organization.json"
+    },
+    {
+      "name": "subscriptions_id",
+      "path": "/v1/subscriptions/{{ config.id }}",
+      "records": {
+        "path": "subscription"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscriptions_id.json"
+    },
+    {
+      "name": "synced_emails",
+      "path": "/v1/synced_emails",
+      "records": {
+        "path": "syncedEmails"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/synced_emails.json"
+    },
+    {
+      "name": "synced_emails_id",
+      "path": "/v1/synced_emails/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/synced_emails_id.json"
+    },
+    {
+      "name": "synced_emails_id_messages",
+      "path": "/v1/synced_emails/{{ config.id }}/messages",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/synced_emails_id_messages.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/v1/tasks",
+      "query": {
+        "take": "100"
+      },
+      "records": {
+        "path": "tasks"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "tasks_id",
+      "path": "/v1/tasks/{{ config.id }}",
+      "records": {
+        "path": "task"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks_id.json"
+    },
+    {
+      "name": "tasks_id_comments",
+      "path": "/v1/tasks/{{ config.id }}/comments",
+      "records": {
+        "path": "comments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks_id_comments.json"
+    },
+    {
+      "name": "tasks_id_todo_items",
+      "path": "/v1/tasks/{{ config.id }}/todo-items",
+      "records": {
+        "path": "items"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks_id_todo_items.json"
+    },
+    {
+      "name": "tasks_id_todo_items_item_id",
+      "path": "/v1/tasks/{{ config.id }}/todo-items/{{ config.item_id }}",
+      "records": {
+        "path": "item"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks_id_todo_items_item_id.json"
+    },
+    {
+      "name": "tickets",
+      "path": "/v1/tickets",
+      "records": {
+        "path": "tickets"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets.json"
+    },
+    {
+      "name": "tickets_id",
+      "path": "/v1/tickets/{{ config.id }}",
+      "records": {
+        "path": "ticket"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_id.json"
+    },
+    {
+      "name": "tickets_id_events",
+      "path": "/v1/tickets/{{ config.id }}/events",
+      "records": {
+        "path": "events"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_id_events.json"
+    },
+    {
+      "name": "tickets_id_loops",
+      "path": "/v1/tickets/{{ config.id }}/loops",
+      "records": {
+        "path": "loops"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_id_loops.json"
+    },
+    {
+      "name": "tickets_id_loops_loop_id",
+      "path": "/v1/tickets/{{ config.id }}/loops/{{ config.loop_id }}",
+      "records": {
+        "path": "loop"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_id_loops_loop_id.json"
+    },
+    {
+      "name": "tickets_id_messages",
+      "path": "/v1/tickets/{{ config.id }}/messages",
+      "records": {
+        "path": "messages"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_id_messages.json"
+    },
+    {
+      "name": "tickets_id_messages_message_id",
+      "path": "/v1/tickets/{{ config.id }}/messages/{{ config.message_id }}",
+      "records": {
+        "path": "message"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_id_messages_message_id.json"
+    },
+    {
+      "name": "tickets_saved_filters",
+      "path": "/v1/tickets/saved_filters",
+      "records": {
+        "path": "savedTicketFilters"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_saved_filters.json"
+    },
+    {
+      "name": "tickets_saved_filters_filter_id",
+      "path": "/v1/tickets/saved_filters/{{ config.filter_id }}",
+      "records": {
+        "path": "savedTicketFilter"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_saved_filters_filter_id.json"
+    },
+    {
+      "name": "tickets_saved_replies",
+      "path": "/v1/tickets/saved_replies",
+      "records": {
+        "path": "savedReplies"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_saved_replies.json"
+    },
+    {
+      "name": "tickets_saved_replies_reply_id",
+      "path": "/v1/tickets/saved_replies/{{ config.reply_id }}",
+      "records": {
+        "path": "savedReply"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tickets_saved_replies_reply_id.json"
+    },
+    {
+      "name": "timeline_comments",
+      "path": "/v1/timeline_comments",
+      "records": {
+        "path": "timelineComments"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/timeline_comments.json"
+    },
+    {
+      "name": "timeline_comments_id",
+      "path": "/v1/timeline_comments/{{ config.id }}",
+      "records": {
+        "path": "timelineComment"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/timeline_comments_id.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/v1/transactions",
+      "records": {
+        "path": "transactions"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "transactions_id",
+      "path": "/v1/transactions/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/transactions_id.json"
+    },
+    {
+      "name": "usage_events",
+      "path": "/v1/usage_events",
+      "records": {
+        "path": "events"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor",
+        "stop_path": "hasNextPage"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/usage_events.json"
+    },
+    {
+      "name": "users",
+      "path": "/v1/users",
+      "records": {
+        "path": "users"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "users_id",
+      "path": "/v1/users/{{ config.id }}",
+      "records": {
+        "path": "user"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/users_id.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/webhooks",
+      "records": {
+        "path": "webhooks"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

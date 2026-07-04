@@ -1,0 +1,31 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "customActivityName": "fixture",
+    "notes": "fixture",
+    "dealActivityId": "deal_activity_id_fixture",
+    "dealStageId": "deal_stage_id_fixture",
+    "taskId": "task_id_fixture",
+    "appEventId": "app_event_id_fixture",
+    "occurredAt": "2026-01-01T00:00:00Z",
+    "userId": "user_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/deals/id_fixture/events",
+    "body": {
+      "customActivityName": "fixture",
+      "notes": "fixture",
+      "dealActivityId": "deal_activity_id_fixture",
+      "dealStageId": "deal_stage_id_fixture",
+      "taskId": "task_id_fixture",
+      "appEventId": "app_event_id_fixture",
+      "occurredAt": "2026-01-01T00:00:00Z",
+      "userId": "user_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

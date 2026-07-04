@@ -1,0 +1,13 @@
+{
+  "record": {
+    "department_id": "department_id_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/departments/department_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

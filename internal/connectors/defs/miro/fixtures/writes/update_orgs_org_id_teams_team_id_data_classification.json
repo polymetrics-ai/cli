@@ -1,0 +1,20 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "team_id": "synthetic-conformance-value",
+    "labelId": 1,
+    "notClassifiedOnly": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/data-classification",
+    "body": {
+      "labelId": 1,
+      "notClassifiedOnly": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employeedependents/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Employee Dependents": [
+        {
+          "id": "fixture_id",
+          "addressLine1": "fixture_value",
+          "addressLine2": "fixture_value",
+          "city": "fixture_value",
+          "country": "fixture_value",
+          "dateOfBirth": "2026-01-01T00:00:00Z",
+          "employeeId": "fixture_id",
+          "firstName": "Fixture Name"
+        }
+      ]
+    }
+  }
+}

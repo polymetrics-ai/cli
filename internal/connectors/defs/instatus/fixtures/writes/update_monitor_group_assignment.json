@@ -1,0 +1,19 @@
+{
+  "record": {
+    "monitor_id": "monitor_id_fixture_1",
+    "name": "Fixture update monitor group assignment"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/monitors/monitor_id_fixture_1/group",
+    "body": {
+      "name": "Fixture update monitor group assignment"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_monitor_group_assignment_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "verifyKnowledgeSecondWhen2faRequired": {
+      "type": "boolean",
+      "description": "If true, requires users to verify a possession factor before verifying a knowledge factor when the assurance requires two-factor authentication (2FA)."
+    }
+  },
+  "additionalProperties": true
+}

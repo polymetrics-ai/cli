@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the case."
+    },
+    "organizationId": {
+      "type": "string",
+      "description": "Unique identifier of the organization."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the case."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the case."
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "User information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User email."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        }
+      },
+      "additionalProperties": true
+    },
+    "lastModifiedBy": {
+      "type": "object",
+      "description": "User information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User email."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastModifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

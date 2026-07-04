@@ -1,0 +1,7536 @@
+{
+  "actions": [
+    {
+      "name": "create_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Ticket through the Freshservice API."
+    },
+    {
+      "name": "update_a_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Update a Ticket through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "move_a_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/move_workspace",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Move a Ticket through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "delete_a_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Ticket.",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_a_ticket_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "attachment_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Ticket Attachment.",
+      "path_fields": [
+        "ticket_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_a_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Restore a Ticket through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "create_child_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.parent_id }}/create_child_ticket",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "parent_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "parent_id"
+        ]
+      },
+      "risk": "Create a Child Ticket through the Freshservice API.",
+      "path_fields": [
+        "parent_id"
+      ]
+    },
+    {
+      "name": "create_ticket_time_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/time_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Create a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_ticket_time_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Update a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "time_entry_id"
+      ]
+    },
+    {
+      "name": "delete_ticket_time_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Time Entry.",
+      "path_fields": [
+        "ticket_id",
+        "time_entry_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_custom_ticket_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ticket_fields/sources",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Source through the Freshservice API."
+    },
+    {
+      "name": "create_service_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/service_catalog/items/{{ record.display_id }}/place_request",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "display_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "display_id"
+        ]
+      },
+      "risk": "Create a Service Request through the Freshservice API.",
+      "path_fields": [
+        "display_id"
+      ]
+    },
+    {
+      "name": "update_req_items_of_sr",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/requested_items/{{ record.requested_item_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "requested_item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "requested_item_id"
+        ]
+      },
+      "risk": "Update Requested Items of a Service Request through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "requested_item_id"
+      ]
+    },
+    {
+      "name": "add_catalog_item_to_existing_sr",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/requested_items",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Add Catalog Item to Existing Service Request through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "create_ticket_approval",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/approvals",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Request Approval for a Service Request through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "resend_reminder_ticket_approval",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/approvals/{{ record.approval_id }}/remind",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "approval_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "approval_id"
+        ]
+      },
+      "risk": "Send Reminder for an Approval through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "approval_id"
+      ]
+    },
+    {
+      "name": "cancel_a_ticket_approval",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/approvals/{{ record.approval_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "approval_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "approval_id"
+        ]
+      },
+      "risk": "Cancel an approval through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "approval_id"
+      ]
+    },
+    {
+      "name": "create_approval_groups",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/approval-groups",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Create Approval Groups for a Service Request through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_approval_groups",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/approval-groups/{{ record.approval_group_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "approval_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "approval_group_id"
+        ]
+      },
+      "risk": "Update Approval Group In A Service Request through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "approval_group_id"
+      ]
+    },
+    {
+      "name": "update_service_request_approval_chain_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/approval-chain-rule",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Update approval chain rule for a service request through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "promote_incident_to_major",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/promote",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Promote an incident to a major incident through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "demote_incident_from_major",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/demote",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Demote an incident from a major incident through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "create_ticket_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Create a Task through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_a_ticket_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "task_id"
+        ]
+      },
+      "risk": "Update a Task through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "delete_a_ticket_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "task_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Task.",
+      "path_fields": [
+        "ticket_id",
+        "task_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/reply",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Create a Reply through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "create_a_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Create a Note through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_a_conversations",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "Update a Conversation through the Freshservice API.",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "delete_a_conversations",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Conversation.",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_a_conversation_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "attachment_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Conversation Attachment.",
+      "path_fields": [
+        "conversation_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_problem",
+      "kind": "create",
+      "method": "POST",
+      "path": "/problems",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Problem through the Freshservice API."
+    },
+    {
+      "name": "update_problem_priority",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/problems/{{ record.problem_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id"
+        ]
+      },
+      "risk": "Update a Problem through the Freshservice API.",
+      "path_fields": [
+        "problem_id"
+      ]
+    },
+    {
+      "name": "move_a_problem",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/problems/{{ record.problem_id }}/move_workspace",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id"
+        ]
+      },
+      "risk": "Move a Problem through the Freshservice API.",
+      "path_fields": [
+        "problem_id"
+      ]
+    },
+    {
+      "name": "delete_a_problem",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/problems/{{ record.problem_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Problem.",
+      "path_fields": [
+        "problem_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_a_problem",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/problems/{{ record.problem_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id"
+        ]
+      },
+      "risk": "Restore a Problem through the Freshservice API.",
+      "path_fields": [
+        "problem_id"
+      ]
+    },
+    {
+      "name": "create_problem_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/problems/{{ record.problem_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id"
+        ]
+      },
+      "risk": "Create a note through the Freshservice API.",
+      "path_fields": [
+        "problem_id"
+      ]
+    },
+    {
+      "name": "update_a_problem_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/problems/{{ record.problem_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id",
+          "note_id"
+        ]
+      },
+      "risk": "Update a note through the Freshservice API.",
+      "path_fields": [
+        "problem_id",
+        "note_id"
+      ]
+    },
+    {
+      "name": "delete_a_problem_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/problems/{{ record.problem_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id",
+          "note_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a note.",
+      "path_fields": [
+        "problem_id",
+        "note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_problem_time_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/problems/{{ record.problem_id }}/time_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id"
+        ]
+      },
+      "risk": "Create a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "problem_id"
+      ]
+    },
+    {
+      "name": "update_problem_time_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/problems/{{ record.problem_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Update a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "problem_id",
+        "time_entry_id"
+      ]
+    },
+    {
+      "name": "delete_a_problem_time_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/problems/{{ record.problem_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Time Entry.",
+      "path_fields": [
+        "problem_id",
+        "time_entry_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_problem_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/problems/{{ record.problem_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id"
+        ]
+      },
+      "risk": "Create a Task through the Freshservice API.",
+      "path_fields": [
+        "problem_id"
+      ]
+    },
+    {
+      "name": "update_a_problem_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/problems/{{ record.problem_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id",
+          "task_id"
+        ]
+      },
+      "risk": "Update a Task through the Freshservice API.",
+      "path_fields": [
+        "problem_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "delete_a_problem_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/problems/{{ record.problem_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "problem_id",
+          "task_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Task.",
+      "path_fields": [
+        "problem_id",
+        "task_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_change",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Change through the Freshservice API."
+    },
+    {
+      "name": "update_change_priority",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Update a Change through the Freshservice API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "move_a_change",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/move_workspace",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Move a Change through the Freshservice API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "delete_a_change",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Change.",
+      "path_fields": [
+        "change_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "resend_reminder_change_approval",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/approvals/{{ record.approval_id }}/remind",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "approval_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "approval_id"
+        ]
+      },
+      "risk": "Send Reminder for a Change Approval through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "approval_id"
+      ]
+    },
+    {
+      "name": "cancel_change_approval",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/approvals/{{ record.approval_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "approval_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "approval_id"
+        ]
+      },
+      "risk": "Cancel a Change Approval through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "approval_id"
+      ]
+    },
+    {
+      "name": "create_change_approval_groups",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes/{{ record.change_id }}/approval-groups",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Create an Approval Group for Changes through the Freshservice API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "update_change_approval_groups",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/approval-groups/{{ record.approval_group_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "approval_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "approval_group_id"
+        ]
+      },
+      "risk": "Update Approval Group In A Change Request through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "approval_group_id"
+      ]
+    },
+    {
+      "name": "update_approval_chain_rule_change",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/approval-chain-rule",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Update approval chain rule for a change through the Freshservice API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "create_change_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes/{{ record.change_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Create a Note through the Freshservice API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "update_a_change_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "note_id"
+        ]
+      },
+      "risk": "Update a Note through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "note_id"
+      ]
+    },
+    {
+      "name": "delete_a_change_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "note_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Note.",
+      "path_fields": [
+        "change_id",
+        "note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_time_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes/{{ record.change_id }}/time_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Create a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "update_time_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Update a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "time_entry_id"
+      ]
+    },
+    {
+      "name": "delete_a_time_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Time Entry.",
+      "path_fields": [
+        "change_id",
+        "time_entry_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_change_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes/{{ record.change_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id"
+        ]
+      },
+      "risk": "Create a Task through the Freshservice API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "update_a_change_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "task_id"
+        ]
+      },
+      "risk": "Update a Task through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "delete_a_change_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "task_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Task.",
+      "path_fields": [
+        "change_id",
+        "task_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_release",
+      "kind": "create",
+      "method": "POST",
+      "path": "/releases",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Release through the Freshservice API."
+    },
+    {
+      "name": "update_release_priority",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/releases/{{ record.release_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id"
+        ]
+      },
+      "risk": "Update a Release through the Freshservice API.",
+      "path_fields": [
+        "release_id"
+      ]
+    },
+    {
+      "name": "move_a_release",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/releases/{{ record.release_id }}/move_workspace",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id"
+        ]
+      },
+      "risk": "Move a Release through the Freshservice API.",
+      "path_fields": [
+        "release_id"
+      ]
+    },
+    {
+      "name": "delete_a_release",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/releases/{{ record.release_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Release.",
+      "path_fields": [
+        "release_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_a_release",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/releases/{{ record.release_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id"
+        ]
+      },
+      "risk": "Restore a Release through the Freshservice API.",
+      "path_fields": [
+        "release_id"
+      ]
+    },
+    {
+      "name": "create_release_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/releases/{{ record.release_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id"
+        ]
+      },
+      "risk": "Create a note through the Freshservice API.",
+      "path_fields": [
+        "release_id"
+      ]
+    },
+    {
+      "name": "update_a_release_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/releases/{{ record.release_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id",
+          "note_id"
+        ]
+      },
+      "risk": "Update a note through the Freshservice API.",
+      "path_fields": [
+        "release_id",
+        "note_id"
+      ]
+    },
+    {
+      "name": "delete_a_release_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/releases/{{ record.release_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id",
+          "note_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a note.",
+      "path_fields": [
+        "release_id",
+        "note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_release_time_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/releases/{{ record.release_id }}/time_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id"
+        ]
+      },
+      "risk": "Create a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "release_id"
+      ]
+    },
+    {
+      "name": "update_release_time_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/releases/{{ record.release_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Update a Time Entry through the Freshservice API.",
+      "path_fields": [
+        "release_id",
+        "time_entry_id"
+      ]
+    },
+    {
+      "name": "delete_a_release_time_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/releases/{{ record.release_id }}/time_entries/{{ record.time_entry_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "time_entry_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id",
+          "time_entry_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Time Entry.",
+      "path_fields": [
+        "release_id",
+        "time_entry_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_release_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/releases/{{ record.release_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id"
+        ]
+      },
+      "risk": "Create a Task through the Freshservice API.",
+      "path_fields": [
+        "release_id"
+      ]
+    },
+    {
+      "name": "update_a_release_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/releases/{{ record.release_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id",
+          "task_id"
+        ]
+      },
+      "risk": "Update a Task through the Freshservice API.",
+      "path_fields": [
+        "release_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "delete_a_release_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/releases/{{ record.release_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "release_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "release_id",
+          "task_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Task.",
+      "path_fields": [
+        "release_id",
+        "task_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_a_cab",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/cabs/{{ record.cab_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "cab_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "cab_id"
+        ]
+      },
+      "risk": "Update a CAB through the Freshservice API.",
+      "path_fields": [
+        "cab_id"
+      ]
+    },
+    {
+      "name": "delete_a_cab",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/cabs/{{ record.cab_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "cab_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "cab_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a CAB.",
+      "path_fields": [
+        "cab_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_requester",
+      "kind": "create",
+      "method": "POST",
+      "path": "/requesters",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Requester/Contact through the Freshservice API."
+    },
+    {
+      "name": "update_a_requester",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/requesters/{{ record.requester_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_id"
+        ]
+      },
+      "risk": "Update a Requester/Contact through the Freshservice API.",
+      "path_fields": [
+        "requester_id"
+      ]
+    },
+    {
+      "name": "deactivate_a_requester",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/requesters/{{ record.requester_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Deactivate a Requester/Contact.",
+      "path_fields": [
+        "requester_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "forget_a_requester",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/requesters/{{ record.requester_id }}/forget",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Forget a Requester/Contact.",
+      "path_fields": [
+        "requester_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "convert_to_agent",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/requesters/{{ record.requester_id }}/convert_to_agent",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_id"
+        ]
+      },
+      "risk": "Convert To Agent through the Freshservice API.",
+      "path_fields": [
+        "requester_id"
+      ]
+    },
+    {
+      "name": "merge_requesters",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/requesters/{{ record.requester_id }}/merge?secondary_requesters=111,222,333",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_id"
+        ]
+      },
+      "risk": "Merge Requesters/Contacts through the Freshservice API.",
+      "path_fields": [
+        "requester_id"
+      ]
+    },
+    {
+      "name": "create_an_agent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/agents",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create an Agent through the Freshservice API."
+    },
+    {
+      "name": "update_an_agent",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/agents/{{ record.agent_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "agent_id"
+        ]
+      },
+      "risk": "Update an Agent through the Freshservice API.",
+      "path_fields": [
+        "agent_id"
+      ]
+    },
+    {
+      "name": "delete_an_agent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agents/{{ record.agent_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "agent_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Deactivate an Agent.",
+      "path_fields": [
+        "agent_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "forget_an_agent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agents/{{ record.agent_id }}/forget",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "agent_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Forget an Agent.",
+      "path_fields": [
+        "agent_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reactivate_an_agent",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/agents/{{ record.agent_id }}/reactivate",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "agent_id"
+        ]
+      },
+      "risk": "Reactivate an Agent through the Freshservice API.",
+      "path_fields": [
+        "agent_id"
+      ]
+    },
+    {
+      "name": "convert_an_agent_to_requester",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/agents/{{ record.agent_id }}/convert_to_requester",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "agent_id"
+        ]
+      },
+      "risk": "Convert To Requester through the Freshservice API.",
+      "path_fields": [
+        "agent_id"
+      ]
+    },
+    {
+      "name": "create_a_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Group through the Freshservice API."
+    },
+    {
+      "name": "update_a_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "group_id"
+        ]
+      },
+      "risk": "Update a Group through the Freshservice API.",
+      "path_fields": [
+        "group_id"
+      ]
+    },
+    {
+      "name": "delete_a_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "group_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Group.",
+      "path_fields": [
+        "group_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_requester_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/requester_groups",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Requester Group/Contact Group through the Freshservice API."
+    },
+    {
+      "name": "update_a_requester_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/requester_groups/{{ record.requester_group_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_group_id"
+        ]
+      },
+      "risk": "Update a Requester Group/Contact Group through the Freshservice API.",
+      "path_fields": [
+        "requester_group_id"
+      ]
+    },
+    {
+      "name": "delete_a_requester_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/requester_groups/{{ record.requester_group_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_group_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Requester Group/Contact Group.",
+      "path_fields": [
+        "requester_group_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_member_to_requester_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/requester_groups/{{ record.requester_group_id }}/members/{{ record.requester_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "requester_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_group_id",
+          "requester_id"
+        ]
+      },
+      "risk": "Add Requester to Requester/Contact Group through the Freshservice API.",
+      "path_fields": [
+        "requester_group_id",
+        "requester_id"
+      ]
+    },
+    {
+      "name": "delete_member_from_requester_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/requester_groups/{{ record.requester_group_id }}/members/{{ record.requester_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requester_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "requester_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "requester_group_id",
+          "requester_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Requester/Contact from Requester/Contact Group.",
+      "path_fields": [
+        "requester_group_id",
+        "requester_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/locations",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Location through the Freshservice API."
+    },
+    {
+      "name": "update_a_location",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/locations/{{ record.location_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "location_id"
+        ]
+      },
+      "risk": "Update a Location through the Freshservice API.",
+      "path_fields": [
+        "location_id"
+      ]
+    },
+    {
+      "name": "delete_a_location",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/locations/{{ record.location_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "location_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Location.",
+      "path_fields": [
+        "location_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Product through the Freshservice API."
+    },
+    {
+      "name": "update_a_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.product_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "product_id"
+        ]
+      },
+      "risk": "Update a Product through the Freshservice API.",
+      "path_fields": [
+        "product_id"
+      ]
+    },
+    {
+      "name": "delete_a_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.product_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "product_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Product.",
+      "path_fields": [
+        "product_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_vendor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/vendors",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Vendor through the Freshservice API."
+    },
+    {
+      "name": "update_a_vendor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/vendors/{{ record.vendor_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "vendor_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "vendor_id"
+        ]
+      },
+      "risk": "Update a Vendor through the Freshservice API.",
+      "path_fields": [
+        "vendor_id"
+      ]
+    },
+    {
+      "name": "delete_a_vendor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/vendors/{{ record.vendor_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "vendor_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "vendor_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Vendor.",
+      "path_fields": [
+        "vendor_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "acknowledge_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ams/alerts/{{ record.alert_id }}/acknowledge",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id"
+        ]
+      },
+      "risk": "Acknowledge an alert through the Freshservice API.",
+      "path_fields": [
+        "alert_id"
+      ]
+    },
+    {
+      "name": "resolve_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ams/alerts/{{ record.alert_id }}/resolve",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id"
+        ]
+      },
+      "risk": "Resolve an alert through the Freshservice API.",
+      "path_fields": [
+        "alert_id"
+      ]
+    },
+    {
+      "name": "suppress_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ams/alerts/{{ record.alert_id }}/suppress",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id"
+        ]
+      },
+      "risk": "Suppress an alert through the Freshservice API.",
+      "path_fields": [
+        "alert_id"
+      ]
+    },
+    {
+      "name": "unsuppress_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ams/alerts/{{ record.alert_id }}/unsuppress",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id"
+        ]
+      },
+      "risk": "Unsuppress an alert through the Freshservice API.",
+      "path_fields": [
+        "alert_id"
+      ]
+    },
+    {
+      "name": "delete_alert",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ams/alerts/{{ record.alert_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an Alert.",
+      "path_fields": [
+        "alert_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_alert_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ams/alerts/{{ record.alert_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id"
+        ]
+      },
+      "risk": "Create an Alert Note through the Freshservice API.",
+      "path_fields": [
+        "alert_id"
+      ]
+    },
+    {
+      "name": "update_alert_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ams/alerts/{{ record.alert_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id",
+          "note_id"
+        ]
+      },
+      "risk": "Update an alert note through the Freshservice API.",
+      "path_fields": [
+        "alert_id",
+        "note_id"
+      ]
+    },
+    {
+      "name": "delete_alert_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ams/alerts/{{ record.alert_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "alert_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "alert_id",
+          "note_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an alert note.",
+      "path_fields": [
+        "alert_id",
+        "note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_an_asset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/assets",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create an Asset through the Freshservice API."
+    },
+    {
+      "name": "update_an_asset",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/assets/{{ record.display_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "display_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "display_id"
+        ]
+      },
+      "risk": "Update an Asset through the Freshservice API.",
+      "path_fields": [
+        "display_id"
+      ]
+    },
+    {
+      "name": "delete_an_asset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/assets/{{ record.display_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "display_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "display_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an Asset.",
+      "path_fields": [
+        "display_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_an_asset",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/assets/{{ record.display_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "display_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "display_id"
+        ]
+      },
+      "risk": "Restore an Asset through the Freshservice API.",
+      "path_fields": [
+        "display_id"
+      ]
+    },
+    {
+      "name": "delete_forever_an_asset",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/assets/{{ record.display_id }}/delete_forever",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "display_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "display_id"
+        ]
+      },
+      "risk": "Delete an Asset Permanently through the Freshservice API.",
+      "path_fields": [
+        "display_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_a_component",
+      "kind": "create",
+      "method": "POST",
+      "path": "/assets/{{ record.display_id }}/components",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "display_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "display_id"
+        ]
+      },
+      "risk": "Create a Component through the Freshservice API.",
+      "path_fields": [
+        "display_id"
+      ]
+    },
+    {
+      "name": "update_a_component",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/assets/{{ record.display_id }}/components/{{ record.component_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "display_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "component_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "display_id",
+          "component_id"
+        ]
+      },
+      "risk": "Update a Component through the Freshservice API.",
+      "path_fields": [
+        "display_id",
+        "component_id"
+      ]
+    },
+    {
+      "name": "create_relationships",
+      "kind": "create",
+      "method": "POST",
+      "path": "/relationships/bulk-create",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Relationships in bulk through the Freshservice API."
+    },
+    {
+      "name": "delete_relationships",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/relationships?ids={{ record.ids }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ids"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Relationships in bulk.",
+      "path_fields": [
+        "ids"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_new_purchase_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchase_orders",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a new Purchase Order through the Freshservice API."
+    },
+    {
+      "name": "update_a_purchase_order",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/purchase_orders/{{ record.purchase_order_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "purchase_order_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "purchase_order_id"
+        ]
+      },
+      "risk": "Update a Purchase Order through the Freshservice API.",
+      "path_fields": [
+        "purchase_order_id"
+      ]
+    },
+    {
+      "name": "delete_a_purchase_order",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/purchase_orders/{{ record.purchase_order_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "purchase_order_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "purchase_order_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Purchase Order.",
+      "path_fields": [
+        "purchase_order_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_an_asset_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/asset_types",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create an Asset Type through the Freshservice API."
+    },
+    {
+      "name": "update_an_asset_type",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/asset_types/{{ record.asset_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "asset_type_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "asset_type_id"
+        ]
+      },
+      "risk": "Update an Asset Type through the Freshservice API.",
+      "path_fields": [
+        "asset_type_id"
+      ]
+    },
+    {
+      "name": "delete_an_asset_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/asset_types/{{ record.asset_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "asset_type_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "asset_type_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an Asset Type.",
+      "path_fields": [
+        "asset_type_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_software",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Software through the Freshservice API."
+    },
+    {
+      "name": "update_a_software",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/applications/{{ record.application_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Update a Software through the Freshservice API.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "delete_a_software",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/applications/{{ record.application_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Software.",
+      "path_fields": [
+        "application_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_multiple_software",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/applications",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Deletes Freshservice data: Delete multiple Software.",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_contract",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contracts",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Contract through the Freshservice API."
+    },
+    {
+      "name": "update_a_contract",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contracts/{{ record.contract_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contract_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contract_id"
+        ]
+      },
+      "risk": "Update a Contract through the Freshservice API.",
+      "path_fields": [
+        "contract_id"
+      ]
+    },
+    {
+      "name": "submit_contract_for_approval",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contracts/{{ record.contract_id }}?operation=submit-for-approval",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contract_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contract_id"
+        ]
+      },
+      "risk": "Submit a contract for approval through the Freshservice API.",
+      "path_fields": [
+        "contract_id"
+      ]
+    },
+    {
+      "name": "approve_contract",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contracts/{{ record.contract_id }}?operation=approve",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contract_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contract_id"
+        ]
+      },
+      "risk": "Approve a Contract through the Freshservice API.",
+      "path_fields": [
+        "contract_id"
+      ]
+    },
+    {
+      "name": "reject_contract",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contracts/{{ record.contract_id }}?operation=reject",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contract_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contract_id"
+        ]
+      },
+      "risk": "Reject a Contract through the Freshservice API.",
+      "path_fields": [
+        "contract_id"
+      ]
+    },
+    {
+      "name": "create_a_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/departments",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Department through the Freshservice API."
+    },
+    {
+      "name": "update_a_department",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/departments/{{ record.department_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "department_id"
+        ]
+      },
+      "risk": "Update a Department through the Freshservice API.",
+      "path_fields": [
+        "department_id"
+      ]
+    },
+    {
+      "name": "delete_a_department",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/departments/{{ record.department_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "department_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Department.",
+      "path_fields": [
+        "department_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Project through the Freshservice API."
+    },
+    {
+      "name": "update_a_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.project_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Update a Project through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "delete_a_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.project_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Project.",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "archive_a_project",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/archive",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Archive a Project through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "restore_a_project",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Restore a Project through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "create_a_project_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Create a Project Task through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "update_a_project_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.project_id }}/task/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id"
+        ]
+      },
+      "risk": "Update a Project Task through the Freshservice API.",
+      "path_fields": [
+        "project_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "delete_a_project_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.project_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Project Task.",
+      "path_fields": [
+        "project_id",
+        "task_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_project_newgen",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pm/projects",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Project through the Freshservice API."
+    },
+    {
+      "name": "update_a_project_newgen",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/pm/projects/{{ record.project_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Update a Project through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "delete_a_project_newgen",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Project.",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "archive_a_project_newgen",
+      "kind": "update",
+      "method": "POST",
+      "path": "/pm/projects/{{ record.project_id }}/archive",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Archive a Project through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "restore_a_project_newgen",
+      "kind": "update",
+      "method": "POST",
+      "path": "/pm/projects/{{ record.project_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Restore a Project through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "add_project_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pm/projects/{{ record.project_id }}/members",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Add Members through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "create_project_associations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pm/projects/{{ record.project_id }}/{{ record.module_name }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "module_name": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "module_name"
+        ]
+      },
+      "risk": "Create Associations through the Freshservice API.",
+      "path_fields": [
+        "project_id",
+        "module_name"
+      ]
+    },
+    {
+      "name": "delete_project_association",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}/{{ record.module_name }}/{{ record.project_id_3 }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "module_name": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "project_id_3": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "module_name",
+          "project_id_3"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Association.",
+      "path_fields": [
+        "project_id",
+        "module_name",
+        "project_id_3"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_attachment_project_newgen",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "attachment_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Attachment of a Project.",
+      "path_fields": [
+        "project_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_project_task_newgen",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pm/projects/{{ record.project_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id"
+        ]
+      },
+      "risk": "Create a Project Task through the Freshservice API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "update_a_project_task_newgen",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id"
+        ]
+      },
+      "risk": "Update a Project Task through the Freshservice API.",
+      "path_fields": [
+        "project_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "delete_a_project_task_newgen",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Project Task.",
+      "path_fields": [
+        "project_id",
+        "task_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_project_task_associations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/{{ record.module_name }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "module_name": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id",
+          "module_name"
+        ]
+      },
+      "risk": "Create Associations through the Freshservice API.",
+      "path_fields": [
+        "project_id",
+        "task_id",
+        "module_name"
+      ]
+    },
+    {
+      "name": "delete_project_task_association",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/{{ record.module_name }}/{{ record.task_id_4 }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "module_name": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id_4": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id",
+          "module_name",
+          "task_id_4"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Association.",
+      "path_fields": [
+        "project_id",
+        "task_id",
+        "module_name",
+        "task_id_4"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_note_task_newgen",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id"
+        ]
+      },
+      "risk": "Create Note through the Freshservice API.",
+      "path_fields": [
+        "project_id",
+        "task_id"
+      ]
+    },
+    {
+      "name": "update_note_task_newgen",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id",
+          "note_id"
+        ]
+      },
+      "risk": "Update Note through the Freshservice API.",
+      "path_fields": [
+        "project_id",
+        "task_id",
+        "note_id"
+      ]
+    },
+    {
+      "name": "delete_note_task_newgen",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id",
+          "note_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Note.",
+      "path_fields": [
+        "project_id",
+        "task_id",
+        "note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_attachment_note_task_newgen",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes/{{ record.note_id }}/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id",
+          "note_id",
+          "attachment_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Attachment of a Note.",
+      "path_fields": [
+        "project_id",
+        "task_id",
+        "note_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_attachment_task_newgen",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "project_id",
+          "task_id",
+          "attachment_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Attachment of a Task.",
+      "path_fields": [
+        "project_id",
+        "task_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_solution_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/solutions/categories",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Solution Category through the Freshservice API."
+    },
+    {
+      "name": "update_solution_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/categories/{{ record.category_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "category_id"
+        ]
+      },
+      "risk": "Update Solution Category through the Freshservice API.",
+      "path_fields": [
+        "category_id"
+      ]
+    },
+    {
+      "name": "delete_solution_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/categories/{{ record.category_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "category_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Solution Category.",
+      "path_fields": [
+        "category_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_solution_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/categories/{{ record.category_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "category_id"
+        ]
+      },
+      "risk": "Restore Solution Category through the Freshservice API.",
+      "path_fields": [
+        "category_id"
+      ]
+    },
+    {
+      "name": "delete_forever_solution_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/categories/{{ record.category_id }}/delete_forever",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "category_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Permanently Delete Solution Category.",
+      "path_fields": [
+        "category_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_solution_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/solutions/folders",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Solution Folder through the Freshservice API."
+    },
+    {
+      "name": "update_solution_folder",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/folders/{{ record.folder_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "folder_id"
+        ]
+      },
+      "risk": "Update Solution Folder through the Freshservice API.",
+      "path_fields": [
+        "folder_id"
+      ]
+    },
+    {
+      "name": "delete_solution_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/folders/{{ record.folder_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "folder_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Solution Folder.",
+      "path_fields": [
+        "folder_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_solution_folder",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/folders/{{ record.folder_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "folder_id"
+        ]
+      },
+      "risk": "Restore Solution Folder through the Freshservice API.",
+      "path_fields": [
+        "folder_id"
+      ]
+    },
+    {
+      "name": "delete_forever_solution_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/folders/{{ record.folder_id }}/delete_forever",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "folder_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "folder_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Permanently Delete Solution Folder.",
+      "path_fields": [
+        "folder_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_solution_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/solutions/articles",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create Solution Article through the Freshservice API."
+    },
+    {
+      "name": "send_article_to_approval",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/articles/{{ record.article_id }}/send_for_approval",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id"
+        ]
+      },
+      "risk": "Send Article to Approval through the Freshservice API.",
+      "path_fields": [
+        "article_id"
+      ]
+    },
+    {
+      "name": "publish_solution_article",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/articles/{{ record.article_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id"
+        ]
+      },
+      "risk": "Publish Solution Article through the Freshservice API.",
+      "path_fields": [
+        "article_id"
+      ]
+    },
+    {
+      "name": "delete_solution_article",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/articles/{{ record.article_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Solution Article.",
+      "path_fields": [
+        "article_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_solution_article",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/articles/{{ record.article_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id"
+        ]
+      },
+      "risk": "Restore Solution Article through the Freshservice API.",
+      "path_fields": [
+        "article_id"
+      ]
+    },
+    {
+      "name": "delete_forever_solution_article",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/articles/{{ record.article_id }}/delete_forever",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Permanently Delete Solution Article.",
+      "path_fields": [
+        "article_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "bulk_restore_solution_article",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/solutions/articles/bulk_restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Bulk Restore Solution Articles through the Freshservice API."
+    },
+    {
+      "name": "update_service_item",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/service-catalog/items/{{ record.service_item_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "service_item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "service_item_id"
+        ]
+      },
+      "risk": "Update a Service Catalog Item through the Freshservice API.",
+      "path_fields": [
+        "service_item_id"
+      ]
+    },
+    {
+      "name": "delete_a_service_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/service-catalog/items/{{ record.service_item_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "service_item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "service_item_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Service Catalog Item.",
+      "path_fields": [
+        "service_item_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_shared_fields",
+      "kind": "create",
+      "method": "POST",
+      "path": "/service-catalog/shared-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a shared field through the Freshservice API."
+    },
+    {
+      "name": "update_shared_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/service-catalog/shared-fields/{{ record.shared_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shared_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "shared_field_id"
+        ]
+      },
+      "risk": "Update shared fields through the Freshservice API.",
+      "path_fields": [
+        "shared_field_id"
+      ]
+    },
+    {
+      "name": "delete_shared_fields",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/service-catalog/shared-fields/{{ record.shared_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shared_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "shared_field_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete shared fields.",
+      "path_fields": [
+        "shared_field_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "archive_shared_fields",
+      "kind": "update",
+      "method": "POST",
+      "path": "/service-catalog/shared-fields/{{ record.shared_field_id }}/archive",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shared_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "shared_field_id"
+        ]
+      },
+      "risk": "Archive shared fields through the Freshservice API.",
+      "path_fields": [
+        "shared_field_id"
+      ]
+    },
+    {
+      "name": "unarchive_shared_fields",
+      "kind": "update",
+      "method": "POST",
+      "path": "/service-catalog/shared-fields/{{ record.shared_field_id }}/unarchive",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shared_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "shared_field_id"
+        ]
+      },
+      "risk": "Unarchive shared fields through the Freshservice API.",
+      "path_fields": [
+        "shared_field_id"
+      ]
+    },
+    {
+      "name": "create_an_announcement",
+      "kind": "create",
+      "method": "POST",
+      "path": "/announcements",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create an Announcement through the Freshservice API."
+    },
+    {
+      "name": "edit_an_announcement",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/announcements/{{ record.announcement_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "announcement_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "announcement_id"
+        ]
+      },
+      "risk": "Edit an Announcement through the Freshservice API.",
+      "path_fields": [
+        "announcement_id"
+      ]
+    },
+    {
+      "name": "delete_an_announcement",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/announcements/{{ record.announcement_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "announcement_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "announcement_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an Announcement.",
+      "path_fields": [
+        "announcement_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_onboarding_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/onboarding_requests",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create an Onboarding Request through the Freshservice API."
+    },
+    {
+      "name": "create_offboarding_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/offboarding_requests",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create an Offboarding Request through the Freshservice API."
+    },
+    {
+      "name": "create_journey_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/journeys/requests",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a Journey Request through the Freshservice API."
+    },
+    {
+      "name": "filter_journey_requests",
+      "kind": "create",
+      "method": "POST",
+      "path": "/journeys/requests/view",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Filter Journey Requests through the Freshservice API."
+    },
+    {
+      "name": "update_journey_request",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/journeys/requests/{{ record.request_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "request_id"
+        ]
+      },
+      "risk": "Update a Journey Request through the Freshservice API.",
+      "path_fields": [
+        "request_id"
+      ]
+    },
+    {
+      "name": "cancel_journey_request",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/journeys/requests/{{ record.request_id }}/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "request_id"
+        ]
+      },
+      "risk": "Cancel a Journey Request through the Freshservice API.",
+      "path_fields": [
+        "request_id"
+      ]
+    },
+    {
+      "name": "delete_journey_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/journeys/requests/{{ record.request_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "request_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a Journey Request.",
+      "path_fields": [
+        "request_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "risk": "Create a schedule through the Freshservice API.",
+      "path_fields": [
+        "workspace_id"
+      ]
+    },
+    {
+      "name": "edit_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id"
+        ]
+      },
+      "risk": "Update a schedule through the Freshservice API.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "delete_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a schedule.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "edit_shift",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/shifts/{{ record.shift_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "shift_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id",
+          "shift_id"
+        ]
+      },
+      "risk": "Update a shift through the Freshservice API.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id",
+        "shift_id"
+      ]
+    },
+    {
+      "name": "delete_shift",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/shifts/{{ record.shift_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "shift_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id",
+          "shift_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a shift.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id",
+        "shift_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "override",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/shifts/{{ record.shift_id }}/rosters/override",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "shift_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id",
+          "shift_id"
+        ]
+      },
+      "risk": "Create/Update/Delete an override through the Freshservice API.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id",
+        "shift_id"
+      ]
+    },
+    {
+      "name": "create_ep",
+      "kind": "create",
+      "method": "POST",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/escalation-policies",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id"
+        ]
+      },
+      "risk": "Create an escalation policy through the Freshservice API.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "delete_ep",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/escalation-policies/{{ record.ep_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "ep_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id",
+          "ep_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an escalation policy.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id",
+        "ep_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_ep",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/escalation-policies/reorder",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspace_id",
+          "schedule_id"
+        ]
+      },
+      "risk": "Reorder an escalation policy through the Freshservice API.",
+      "path_fields": [
+        "workspace_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "create_custom_object_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/objects/{{ record.object_id }}/records",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "object_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "object_id"
+        ]
+      },
+      "risk": "Create new Custom Object Record through the Freshservice API.",
+      "path_fields": [
+        "object_id"
+      ]
+    },
+    {
+      "name": "put_custom_object_record",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/objects/{{ record.object_id }}/records/{{ record.record_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "object_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "record_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "object_id",
+          "record_id"
+        ]
+      },
+      "risk": "Update Custom Object Record through the Freshservice API.",
+      "path_fields": [
+        "object_id",
+        "record_id"
+      ]
+    },
+    {
+      "name": "delete_custom_object_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/objects/{{ record.object_id }}/records/{{ record.record_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "object_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "record_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "object_id",
+          "record_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete Custom Object Record.",
+      "path_fields": [
+        "object_id",
+        "record_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_new_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/post-incident-reports/templates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create new templates for post-incident reports through the Freshservice API."
+    },
+    {
+      "name": "enable_pir_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/post-incident-reports/templates/{{ record.template_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "template_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "template_id"
+        ]
+      },
+      "risk": "Enable template for post-incident reports through the Freshservice API.",
+      "path_fields": [
+        "template_id"
+      ]
+    },
+    {
+      "name": "mark_primary_pir_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/post-incident-reports/templates/{{ record.template_id }}/mark-as-primary",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "template_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "template_id"
+        ]
+      },
+      "risk": "Set template as primary for post-incident reports through the Freshservice API.",
+      "path_fields": [
+        "template_id"
+      ]
+    },
+    {
+      "name": "delete_pir_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/post-incident-reports/templates/{{ record.template_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "template_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "template_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an existing post-incident report template.",
+      "path_fields": [
+        "template_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "trigger_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/communications",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Trigger email for a major incident through the Freshservice API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "create_incident",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "status_page_id"
+        ]
+      },
+      "risk": "Create an incident through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "status_page_id"
+      ]
+    },
+    {
+      "name": "update_incident",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "incident_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "status_page_id",
+          "incident_id"
+        ]
+      },
+      "risk": "Update an incident through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "status_page_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "delete_incident",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "incident_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "status_page_id",
+          "incident_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an incident.",
+      "path_fields": [
+        "ticket_id",
+        "status_page_id",
+        "incident_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_incident_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}/updates",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "incident_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "status_page_id",
+          "incident_id"
+        ]
+      },
+      "risk": "Create incident update through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "status_page_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_update",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}/updates/{{ record.update_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "incident_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "update_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "status_page_id",
+          "incident_id",
+          "update_id"
+        ]
+      },
+      "risk": "Edit an incident update through the Freshservice API.",
+      "path_fields": [
+        "ticket_id",
+        "status_page_id",
+        "incident_id",
+        "update_id"
+      ]
+    },
+    {
+      "name": "delete_incident_update",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}/updates/{{ record.update_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "incident_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "update_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "status_page_id",
+          "incident_id",
+          "update_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an incident update.",
+      "path_fields": [
+        "ticket_id",
+        "status_page_id",
+        "incident_id",
+        "update_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_maintenance_from_change",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "status_page_id"
+        ]
+      },
+      "risk": "Create a maintenance from a change through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "status_page_id"
+      ]
+    },
+    {
+      "name": "update_maintenance_from_change",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "status_page_id",
+          "maintenance_id"
+        ]
+      },
+      "risk": "Update a maintenance from a change through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "status_page_id",
+        "maintenance_id"
+      ]
+    },
+    {
+      "name": "delete_maintenance_from_change",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "status_page_id",
+          "maintenance_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a maintenance from a change.",
+      "path_fields": [
+        "change_id",
+        "status_page_id",
+        "maintenance_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_maintenance_from_maintenance_window",
+      "kind": "create",
+      "method": "POST",
+      "path": "/maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "maintenance_window_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "maintenance_window_id",
+          "status_page_id"
+        ]
+      },
+      "risk": "Create a maintenance from a maintenance window through the Freshservice API.",
+      "path_fields": [
+        "maintenance_window_id",
+        "status_page_id"
+      ]
+    },
+    {
+      "name": "update_maintenance_from_maintenance_window",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "maintenance_window_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "maintenance_window_id",
+          "status_page_id",
+          "maintenance_id"
+        ]
+      },
+      "risk": "Update a maintenance from a maintenance window through the Freshservice API.",
+      "path_fields": [
+        "maintenance_window_id",
+        "status_page_id",
+        "maintenance_id"
+      ]
+    },
+    {
+      "name": "delete_maintenance_from_maintenance_window",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "maintenance_window_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "maintenance_window_id",
+          "status_page_id",
+          "maintenance_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a maintenance from a maintenance window.",
+      "path_fields": [
+        "maintenance_window_id",
+        "status_page_id",
+        "maintenance_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_maintenance_update_from_change",
+      "kind": "update",
+      "method": "POST",
+      "path": "/changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "status_page_id",
+          "maintenance_id"
+        ]
+      },
+      "risk": "Create a maintenance update from a change through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "status_page_id",
+        "maintenance_id"
+      ]
+    },
+    {
+      "name": "update_maintenance_update_from_change",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "update_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "status_page_id",
+          "maintenance_id",
+          "update_id"
+        ]
+      },
+      "risk": "Update a maintenance update from a change through the Freshservice API.",
+      "path_fields": [
+        "change_id",
+        "status_page_id",
+        "maintenance_id",
+        "update_id"
+      ]
+    },
+    {
+      "name": "delete_maintenance_update_from_change",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "change_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "update_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "change_id",
+          "status_page_id",
+          "maintenance_id",
+          "update_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a maintenance update from a change.",
+      "path_fields": [
+        "change_id",
+        "status_page_id",
+        "maintenance_id",
+        "update_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_maintenance_update_from_maintenance_window",
+      "kind": "update",
+      "method": "POST",
+      "path": "/maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "maintenance_window_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "maintenance_window_id",
+          "status_page_id",
+          "maintenance_id"
+        ]
+      },
+      "risk": "Create a maintenance update from a maintenance window through the Freshservice API.",
+      "path_fields": [
+        "maintenance_window_id",
+        "status_page_id",
+        "maintenance_id"
+      ]
+    },
+    {
+      "name": "update_maintenance_update_from_maintenance_window",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "maintenance_window_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "update_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "maintenance_window_id",
+          "status_page_id",
+          "maintenance_id",
+          "update_id"
+        ]
+      },
+      "risk": "Update a maintenance update from a maintenance window through the Freshservice API.",
+      "path_fields": [
+        "maintenance_window_id",
+        "status_page_id",
+        "maintenance_id",
+        "update_id"
+      ]
+    },
+    {
+      "name": "delete_maintenance_update_from_maintenance_window",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "maintenance_window_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "maintenance_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "update_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "maintenance_window_id",
+          "status_page_id",
+          "maintenance_id",
+          "update_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a maintenance update from a maintenance window.",
+      "path_fields": [
+        "maintenance_window_id",
+        "status_page_id",
+        "maintenance_id",
+        "update_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_subscriber",
+      "kind": "create",
+      "method": "POST",
+      "path": "/status/pages/{{ record.status_page_id }}/subscribers",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "status_page_id"
+        ]
+      },
+      "risk": "Create a subscriber through the Freshservice API.",
+      "path_fields": [
+        "status_page_id"
+      ]
+    },
+    {
+      "name": "update_subscriber",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/status/pages/{{ record.status_page_id }}/subscribers/{{ record.subscriber_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "subscriber_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "status_page_id",
+          "subscriber_id"
+        ]
+      },
+      "risk": "Update a subscriber through the Freshservice API.",
+      "path_fields": [
+        "status_page_id",
+        "subscriber_id"
+      ]
+    },
+    {
+      "name": "delete_subscriber",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/status/pages/{{ record.status_page_id }}/subscribers/{{ record.subscriber_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "status_page_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "subscriber_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "status_page_id",
+          "subscriber_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a subscriber.",
+      "path_fields": [
+        "status_page_id",
+        "subscriber_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_delegation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ record.user_id }}/delegation",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Create a delegation through the Freshservice API.",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "update_delegation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_id }}/delegation",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Update a delegation through the Freshservice API.",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "delete_delegation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.user_id }}/delegation",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a delegation.",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_physical_subtype",
+      "kind": "update",
+      "method": "POST",
+      "path": "/itam/physical-subtypes",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create or update physical subtypes through the Freshservice API."
+    },
+    {
+      "name": "delete_physical_subtype",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/itam/physical-subtypes/{{ record.physical_subtype_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "physical_subtype_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "physical_subtype_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a physical subtype.",
+      "path_fields": [
+        "physical_subtype_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_device",
+      "kind": "create",
+      "method": "POST",
+      "path": "/itam/devices",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create a device through the Freshservice API."
+    },
+    {
+      "name": "update_device",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/itam/devices/{{ record.device_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "device_id"
+        ]
+      },
+      "risk": "Update a device through the Freshservice API.",
+      "path_fields": [
+        "device_id"
+      ]
+    },
+    {
+      "name": "update_custom_field_of_devices",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/itam/custom_fields/devices",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create or update custom field through the Freshservice API."
+    },
+    {
+      "name": "delete_device",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/itam/devices/{{ record.device_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "device_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a device.",
+      "path_fields": [
+        "device_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_an_asset_for_freshservice_itam",
+      "kind": "create",
+      "method": "POST",
+      "path": "/itam/assets",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create an asset through the Freshservice API."
+    },
+    {
+      "name": "update_an_asset_for_freshservice_itam",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/itam/assets",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Update an asset through the Freshservice API."
+    },
+    {
+      "name": "update_an_asset_by_id_for_freshservice_itam",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/itam/assets/{{ record.asset_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "asset_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "asset_id"
+        ]
+      },
+      "risk": "Update an asset by ID through the Freshservice API.",
+      "path_fields": [
+        "asset_id"
+      ]
+    },
+    {
+      "name": "delete_an_asset_for_freshservice_itam",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/itam/assets/{{ record.asset_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "asset_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "asset_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete an asset.",
+      "path_fields": [
+        "asset_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_or_update_custom_field_of_assets_for_freshservice_itam",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/itam/custom_fields/assets",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create or update custom field through the Freshservice API."
+    },
+    {
+      "name": "update_cloud_resource",
+      "kind": "update",
+      "method": "POST",
+      "path": "/itam/resources",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Update a cloud resource through the Freshservice API."
+    },
+    {
+      "name": "delete_cloud_resource",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/itam/resources/{{ record.resource_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "resource_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "resource_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a cloud resource.",
+      "path_fields": [
+        "resource_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_custom_field_of_resources",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/itam/custom_fields/resources",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create or update custom field through the Freshservice API."
+    },
+    {
+      "name": "delete_cloud_resource_relationship",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/itam/resource_relationships/{{ record.resource_relationship_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "resource_relationship_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "resource_relationship_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a cloud resource relationship.",
+      "path_fields": [
+        "resource_relationship_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_cloud_infrastructure",
+      "kind": "update",
+      "method": "POST",
+      "path": "/itam/cloud_infrastructures",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Update cloud details through the Freshservice API."
+    },
+    {
+      "name": "update_custom_field_of_cloud_infrastructure",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/itam/custom_fields/cloudinfrastructures",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create or update custom field through the Freshservice API."
+    },
+    {
+      "name": "update_lifecycle_events",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/itam/lifecycle_events",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create or update lifecycle events through the Freshservice API."
+    },
+    {
+      "name": "delete_lifecycle_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/itam/lifecycle_events/{{ record.lifecycle_event_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "lifecycle_event_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "lifecycle_event_id"
+        ]
+      },
+      "risk": "Deletes Freshservice data: Delete a lifecycle event.",
+      "path_fields": [
+        "lifecycle_event_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    }
+  ]
+}

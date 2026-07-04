@@ -1,0 +1,15 @@
+{
+  "record": {
+    "monitor_alert_id": "monitor_alert_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/monitor-alerts/monitor_alert_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_monitor_alert_fixture_response"
+    }
+  }
+}

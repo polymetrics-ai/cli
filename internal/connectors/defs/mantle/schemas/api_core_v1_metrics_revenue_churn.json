@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "api_core_v1_metrics_revenue_churn",
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "Current period value"
+    },
+    "format": {
+      "type": "string",
+      "description": "Data format type",
+      "enum": [
+        "money",
+        "percent",
+        "count",
+        "number"
+      ]
+    },
+    "period": {
+      "type": "string",
+      "description": "Period used for the query"
+    },
+    "periodStart": {
+      "type": "string",
+      "description": "Start date of the period",
+      "format": "date-time"
+    },
+    "periodEnd": {
+      "type": "string",
+      "description": "End date of the period",
+      "format": "date-time"
+    },
+    "timeSeries": {
+      "type": "array",
+      "description": "Time series data (only present if interval is provided)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Value for this time bucket"
+          },
+          "periodStart": {
+            "type": "string",
+            "description": "Start of this time bucket",
+            "format": "date-time"
+          },
+          "periodEnd": {
+            "type": "string",
+            "description": "End of this time bucket",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "timeSeriesInterval": {
+      "type": "string",
+      "description": "Interval used for time series (only present if interval is provided)"
+    }
+  }
+}

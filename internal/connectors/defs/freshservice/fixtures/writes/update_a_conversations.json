@@ -1,0 +1,15 @@
+{
+  "record": {
+    "conversation_id": 123,
+    "name": "Fixture update_a_conversations",
+    "description": "Fixture update_a_conversations record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/conversations/123",
+    "body": {
+      "name": "Fixture update_a_conversations",
+      "description": "Fixture update_a_conversations record"
+    }
+  }
+}

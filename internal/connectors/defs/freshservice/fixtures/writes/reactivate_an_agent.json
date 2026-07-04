@@ -1,0 +1,15 @@
+{
+  "record": {
+    "agent_id": 123,
+    "name": "Fixture reactivate_an_agent",
+    "description": "Fixture reactivate_an_agent record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/agents/123/reactivate",
+    "body": {
+      "name": "Fixture reactivate_an_agent",
+      "description": "Fixture reactivate_an_agent record"
+    }
+  }
+}

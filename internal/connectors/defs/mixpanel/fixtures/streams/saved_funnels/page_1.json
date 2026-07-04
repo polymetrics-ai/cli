@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/funnels/list"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "funnel_id": 7509, "name": "Signup funnel" },
+      { "funnel_id": 9070, "name": "Activation funnel" }
+    ]
+  }
+}

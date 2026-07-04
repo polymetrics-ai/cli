@@ -1,9 +1,9 @@
 {
   "name": "simfin",
   "display_name": "SimFin",
-  "description": "Reads SimFin companies, statements, and markets through the SimFin REST API.",
+  "description": "Reads SimFin company, financial statement, price, share, filing, and database-change data through the SimFin REST API.",
   "integration_type": "api",
-  "docs_url": "https://simfin.com/api/v3/documentation/",
+  "docs_url": "https://simfin.readme.io/reference/getting-started-1",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external SimFin API read of company, statement, and market data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external SimFin API read of company, statement, price, share, filing, and change-log data",
+    "approval": "none; read-only, no reverse-ETL writes"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "invoice_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/invoices/123/payment_plan"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

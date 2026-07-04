@@ -84,9 +84,11 @@ of scope for reverse ETL by design, matching legacy's own doc comment.
 ## Known limits
 
 - Full Microsoft Graph directory surface (devices, administrative units, conditional access
-  policies, directory audit logs, etc.) is out of scope for this migration; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
-  entries. Only the 5 legacy-parity read streams are implemented.
+  policies, directory audit logs, etc.) remains blocked for Pass B in this shard. Every additional
+  Graph collection would need the same `@odata.nextLink` literal-key pagination support, but the
+  existing `hooks/microsoft-entra-id/hooks.go` routing/mapping tables recognize only the five
+  legacy streams and shared hook edits are outside this shard's allowed paths. The typed blocker is
+  recorded in `docs/migration/quarantine.json`.
 - **Dynamic conformance checks are skipped, stream-by-stream (every stream carries the marker) and
   also at the bundle level in `metadata.json`** — pagination is hook-driven for every stream, and
   the StreamHook itself needs a real, resolvable Graph endpoint (or at minimum a live/replay HTTP

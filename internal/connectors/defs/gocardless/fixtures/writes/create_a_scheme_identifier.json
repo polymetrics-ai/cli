@@ -1,0 +1,20 @@
+{
+  "record": {
+    "scheme_identifiers": {
+      "description": "Synthetic create_a_scheme_identifier fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/scheme_identifiers",
+    "body": {
+      "scheme_identifiers": {
+        "description": "Synthetic create_a_scheme_identifier fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

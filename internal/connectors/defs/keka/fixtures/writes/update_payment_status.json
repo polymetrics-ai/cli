@@ -1,0 +1,11 @@
+{
+  "record": {
+    "pay_group_id": "fixture_pay_group_id",
+    "pay_cycle_id": "fixture_pay_cycle_id",
+    "pay_batch_id": "fixture_pay_batch_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/payroll/paygroups/fixture_pay_group_id/paycycles/fixture_pay_cycle_id/paybatches/fixture_pay_batch_id/payments"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "channels": {
+      "type": "array",
+      "description": "An array of sources send notifications to users.\n> **Note**: Currently, Okta only allows `email` channels.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notificationType": {
+      "type": "string",
+      "description": "The type of notification",
+      "enum": [
+        "AD_AGENT",
+        "AGENT_AUTO_UPDATE_NOTIFICATION",
+        "AGENT_AUTO_UPDATE_NOTIFICATION_LDAP",
+        "APP_IMPORT",
+        "CONNECTOR_AGENT",
+        "IWA_AGENT",
+        "LDAP_AGENT",
+        "OKTA_ANNOUNCEMENT",
+        "OKTA_UPDATE",
+        "RATELIMIT_NOTIFICATION",
+        "REPORT_SUSPICIOUS_ACTIVITY",
+        "USER_DEPROVISION",
+        "USER_LOCKED_OUT"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the subscription",
+      "enum": [
+        "subscribed",
+        "unsubscribed"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Discoverable resources related to the subscription",
+      "properties": {
+        "self": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

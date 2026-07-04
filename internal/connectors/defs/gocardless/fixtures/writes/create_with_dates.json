@@ -1,0 +1,20 @@
+{
+  "record": {
+    "instalment_schedules": {
+      "description": "Synthetic create_with_dates fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/instalment_schedules",
+    "body": {
+      "instalment_schedules": {
+        "description": "Synthetic create_with_dates fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

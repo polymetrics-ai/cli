@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/grants/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "clientId": "client_id_fixture",
+      "created": "2026-01-01T00:00:00Z",
+      "createdBy": {
+        "id": "id_fixture",
+        "type": "type_fixture"
+      },
+      "id": "id_fixture",
+      "issuer": "issuer_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "scopeId": "scope_id_fixture",
+      "source": "ADMIN",
+      "status": "ACTIVE",
+      "userId": "user_id_fixture",
+      "_embedded": {
+        "scope": {
+          "id": "id_fixture"
+        }
+      },
+      "_links": {
+        "app": {
+          "href": "https://example.invalid/fixture",
+          "title": "title_fixture"
+        },
+        "client": {
+          "href": "https://example.invalid/fixture",
+          "title": "title_fixture"
+        },
+        "scope": {
+          "href": "https://example.invalid/fixture",
+          "title": "title_fixture"
+        },
+        "user": {
+          "href": "https://example.invalid/fixture",
+          "title": "title_fixture"
+        },
+        "authorizationServer": {
+          "href": "https://example.invalid/fixture",
+          "title": "title_fixture"
+        }
+      }
+    }
+  }
+}

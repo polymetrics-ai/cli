@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/currency/types"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "code": "fixture_value",
+        "name": "Fixture Name",
+        "symbol": "fixture_value",
+        "symbolPosition": 0
+      }
+    ]
+  }
+}

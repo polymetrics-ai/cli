@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/types/user/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "createdBy": "2026-01-01T00:00:00Z",
+      "default": true,
+      "description": "description_fixture",
+      "displayName": "display_name_fixture",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "lastUpdatedBy": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "_links": {
+        "schema": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

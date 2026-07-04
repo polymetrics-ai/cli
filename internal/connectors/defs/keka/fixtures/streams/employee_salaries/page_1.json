@@ -1,0 +1,89 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/salaries",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "employee_salaries_fixture_1",
+          "employee": {
+            "id": "employee_salaries_fixture_1",
+            "employeeNumber": "FIX-1",
+            "employeeName": "Fixture employee salaries 1"
+          },
+          "ctc": 900000,
+          "gross": 900000,
+          "remunerationType": 3,
+          "effectiveFrom": "fixture_employee_salaries_1",
+          "earnings": [
+            {
+              "id": "employee_salaries_fixture_1",
+              "name": "Fixture employee salaries 1",
+              "title": "Fixture employee salaries 1",
+              "amount": 3000
+            },
+            {
+              "id": "employee_salaries_fixture_2",
+              "name": "Fixture employee salaries 2",
+              "title": "Fixture employee salaries 2",
+              "amount": 360000
+            }
+          ],
+          "deductions": [
+            {
+              "id": "employee_salaries_fixture_1",
+              "name": "Fixture employee salaries 1",
+              "title": "Fixture employee salaries 1",
+              "amount": 150
+            }
+          ]
+        },
+        {
+          "id": "employee_salaries_fixture_2",
+          "employee": {
+            "id": "employee_salaries_fixture_2",
+            "employeeNumber": "FIX-2",
+            "employeeName": "Fixture employee salaries 2"
+          },
+          "ctc": 680000,
+          "gross": 680000,
+          "remunerationType": 3,
+          "effectiveFrom": "fixture_employee_salaries_2",
+          "earnings": [
+            {
+              "id": "employee_salaries_fixture_1",
+              "name": "Fixture employee salaries 1",
+              "title": "Fixture employee salaries 1",
+              "amount": 340000
+            },
+            {
+              "id": "employee_salaries_fixture_2",
+              "name": "Fixture employee salaries 2",
+              "title": "Fixture employee salaries 2",
+              "amount": 36000
+            }
+          ],
+          "deductions": []
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/employee_salaries",
+      "lastPage": "https://example.invalid/keka/employee_salaries",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

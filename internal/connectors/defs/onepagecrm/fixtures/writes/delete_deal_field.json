@@ -1,0 +1,9 @@
+{
+  "record": {
+    "deal_field_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/deal_fields/fixture_id"
+  }
+}

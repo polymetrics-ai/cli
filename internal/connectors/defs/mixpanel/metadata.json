@@ -1,7 +1,7 @@
 {
   "name": "mixpanel",
   "display_name": "Mixpanel",
-  "description": "Reads Mixpanel cohorts, annotations, and engage profiles through read-only Query API endpoints.",
+  "description": "Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.",
   "integration_type": "api",
   "docs_url": "https://developer.mixpanel.com/reference/overview",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 1000
   },
   "risk": {
-    "read": "external Mixpanel Query API read of cohort, annotation, and profile data",
+    "read": "external Mixpanel Query/Application API read of cohort, annotation, profile, saved funnel, event breakdown, and annotation metadata",
     "approval": "none; read-only Query API"
   },
   "conformance": {

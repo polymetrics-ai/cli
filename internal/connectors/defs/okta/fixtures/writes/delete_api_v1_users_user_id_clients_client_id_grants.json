@@ -1,0 +1,14 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "client_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/users/synthetic-conformance-value/clients/synthetic-conformance-value/grants"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

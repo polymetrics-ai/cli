@@ -1,0 +1,15 @@
+{
+  "record": {
+    "release_id": 123,
+    "name": "Fixture restore_a_release",
+    "description": "Fixture restore_a_release record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/releases/123/restore",
+    "body": {
+      "name": "Fixture restore_a_release",
+      "description": "Fixture restore_a_release record"
+    }
+  }
+}

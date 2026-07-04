@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/prospect-accounts/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,salesforceId,isDeleted,annualRevenue,billingCity,billingCountry,billingState,billingZip,phone,website,createdAt,updatedAt,createdById,updatedById,assignedToId"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "salesforceId": 1,
+      "isDeleted": false,
+      "annualRevenue": "annualRevenue_fixture",
+      "billingCity": "billingCity_fixture",
+      "billingCountry": "billingCountry_fixture",
+      "billingState": "billingState_fixture",
+      "billingZip": "billingZip_fixture",
+      "phone": "phone_fixture",
+      "website": "website_fixture",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1,
+      "assignedToId": 1
+    }
+  }
+}

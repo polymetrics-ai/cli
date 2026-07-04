@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Updated tag"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/objects/tags/101",
+    "body": {
+      "name": "Updated tag"
+    }
+  }
+}

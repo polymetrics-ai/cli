@@ -1,0 +1,17 @@
+{
+  "record": {
+    "predefined_action_id": "fixture_id",
+    "id": "fixture_value",
+    "text": "Fixture text",
+    "days": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/predefined_actions/fixture_id",
+    "body": {
+      "id": "fixture_value",
+      "text": "Fixture text",
+      "days": "fixture_value"
+    }
+  }
+}

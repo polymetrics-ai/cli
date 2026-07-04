@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/database/filters" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "dbf_fixture_1",
+        "name": "Fixture Filter",
+        "criteria": { "role": "engineering" }
+      }
+    ]
+  }
+}

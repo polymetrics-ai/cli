@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/dedicated_endpoints"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "description": "description_fixture",
+          "enabled": true,
+          "routing_key": "routing_key_fixture",
+          "model_name": "model_name_fixture",
+          "flavor_name": "flavor_name_fixture",
+          "region": "region_fixture",
+          "gpu_type": "gpu-l40s-d",
+          "gpu_count": 1,
+          "custom_weights_id": "custom_weights_id_fixture",
+          "scaling": {
+            "min_replicas": 1,
+            "max_replicas": 1
+          },
+          "deployment": {
+            "ready_replicas": 1,
+            "status": "starting",
+            "readiness": "ready"
+          },
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "object": "object_fixture"
+    }
+  }
+}

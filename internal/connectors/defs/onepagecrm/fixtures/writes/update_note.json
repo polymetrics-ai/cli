@@ -1,0 +1,19 @@
+{
+  "record": {
+    "note_id": "fixture_id",
+    "contact_id": "fixture_value",
+    "text": "Fixture text",
+    "date": "2026-01-01",
+    "linked_deal_id": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/notes/fixture_id",
+    "body": {
+      "contact_id": "fixture_value",
+      "text": "Fixture text",
+      "date": "2026-01-01",
+      "linked_deal_id": "fixture_value"
+    }
+  }
+}

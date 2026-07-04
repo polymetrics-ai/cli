@@ -1,0 +1,15 @@
+{
+  "record": {
+    "routing_rule_id": "routing_rule_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/routing-rules/routing_rule_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_routing_rule_fixture_response"
+    }
+  }
+}

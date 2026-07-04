@@ -1,0 +1,28 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value",
+    "credentials": {
+      "password": {
+        "value": "value_fixture"
+      },
+      "userName": "user_name_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/apps/synthetic-conformance-value/users/synthetic-conformance-value",
+    "body": {
+      "credentials": {
+        "password": {
+          "value": "value_fixture"
+        },
+        "userName": "user_name_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

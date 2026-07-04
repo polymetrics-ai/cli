@@ -1,0 +1,15 @@
+{
+  "record": {
+    "user_id": 123,
+    "name": "Fixture update_delegation",
+    "description": "Fixture update_delegation record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/123/delegation",
+    "body": {
+      "name": "Fixture update_delegation",
+      "description": "Fixture update_delegation record"
+    }
+  }
+}

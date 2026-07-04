@@ -1,0 +1,22 @@
+{
+  "record": {
+    "uid": "uid_fixture_1",
+    "display_name": "Fixture User",
+    "email": "fixture@example.com",
+    "properties": { "plan": "paid" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/users",
+    "body": {
+      "uid": "uid_fixture_1",
+      "display_name": "Fixture User",
+      "email": "fixture@example.com",
+      "properties": { "plan": "paid" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "user_fixture_created" }
+  }
+}

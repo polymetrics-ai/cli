@@ -2,18 +2,72 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "SimFin Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "SimFin API key, sent as the api-key query parameter on every request. Never logged."
+      "description": "SimFin API key. The legacy connector sends this as the api-key query parameter; current SimFin v3 endpoints also receive it in the Authorization header."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://backend.simfin.com",
       "description": "SimFin API base URL override for tests or proxies."
+    },
+    "company_ids": {
+      "type": "string",
+      "description": "Optional comma-separated SimFin company IDs for company-scoped v3 endpoints."
+    },
+    "tickers": {
+      "type": "string",
+      "description": "Optional comma-separated ticker symbols for company-scoped v3 endpoints."
+    },
+    "statements": {
+      "type": "string",
+      "description": "Optional comma-separated statement set for statement endpoints, for example PL,BS,CF,DERIVED. Defaults to all documented statement families when absent."
+    },
+    "periods": {
+      "type": "string",
+      "description": "Optional comma-separated fiscal periods such as Q1,Q2,Q3,Q4,FY."
+    },
+    "fiscal_years": {
+      "type": "string",
+      "description": "Optional comma-separated fiscal years."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional start date filter for endpoints that accept start/start-date."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional end date filter for endpoints that accept end/end-date."
+    },
+    "include_ttm": {
+      "type": "string",
+      "description": "Optional boolean string for endpoints that accept the ttm flag."
+    },
+    "as_reported": {
+      "type": "string",
+      "description": "Optional boolean string for endpoints that accept the asreported flag."
+    },
+    "include_details": {
+      "type": "string",
+      "description": "Optional boolean string for the compact statements details flag."
+    },
+    "include_ratios": {
+      "type": "string",
+      "description": "Optional boolean string for price endpoints that can include ratios and derived metrics."
+    },
+    "filing_company_id": {
+      "type": "string",
+      "description": "Optional SimFin ID for the filings-by-company endpoint."
+    },
+    "filing_company_ticker": {
+      "type": "string",
+      "description": "Optional ticker for the filings-by-company endpoint."
     }
   }
 }

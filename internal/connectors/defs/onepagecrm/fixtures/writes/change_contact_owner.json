@@ -1,0 +1,10 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "owner_id": "fixture_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture_id/change_owner/fixture_id"
+  }
+}

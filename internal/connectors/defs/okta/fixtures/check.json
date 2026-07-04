@@ -1,5 +1,11 @@
 {
-  "request": { "method": "GET", "path": "/api/v1/users", "query": { "limit": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users",
+    "query": {
+      "limit": "1"
+    }
+  },
   "response": {
     "status": 200,
     "body": []

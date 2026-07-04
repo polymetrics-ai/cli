@@ -1,16 +1,28 @@
 {
   "api": "Mention REST API (https://api.mention.net/api)",
-  "docs": "https://dev.mention.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; write actions and the broader Mention surface (webhooks, users, memberships) are out of scope until Pass B",
+  "docs": "https://dev.mention.com/current/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B review of the Mention API reference. This bundle covers the legacy read streams plus app metadata and alert-scoped shares, preferences, and tasks that fit the declarative JSON read dialect. Remaining endpoints are detail duplicates, ID/filter-scoped subresources, statistics with repeated query-array filters, streaming endpoints, or account/alert/task/share/tag mutations.",
   "endpoints": [
+    { "method": "GET", "path": "/app/data", "covered_by": { "stream": "app_data" } },
     { "method": "GET", "path": "/accounts/me", "covered_by": { "stream": "account_me" } },
     { "method": "GET", "path": "/accounts/{account_id}", "covered_by": { "stream": "account" } },
     { "method": "GET", "path": "/accounts/{account_id}/alerts", "covered_by": { "stream": "alert" } },
     { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/mentions", "covered_by": { "stream": "mention" } },
     { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/tags", "covered_by": { "stream": "alert_tag" } },
-    { "method": "POST", "path": "/accounts/{account_id}/alerts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/me", "excluded": { "category": "duplicate_of", "reason": "superseded by /accounts/me (account_me stream)" } }
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/shares", "covered_by": { "stream": "alert_share" } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/preferences", "covered_by": { "stream": "alert_preferences" } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/tasks", "covered_by": { "stream": "alert_task" } },
+    { "method": "GET", "path": "/me", "excluded": { "category": "duplicate_of", "reason": "Superseded by /accounts/me, which is covered by the account_me stream." } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}, /accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}, /accounts/{account_id}/alerts/{alert_id}/shares/{share_id}, /accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}/tasks/{task_id}", "excluded": { "category": "duplicate_of", "reason": "Detail endpoints return the same alert, mention, share, or task object families as covered list streams and require caller-supplied IDs." } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}/children", "excluded": { "category": "out_of_scope", "reason": "Mention children require a caller-supplied mention ID and are not a standalone account/alert collection." } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/mentions/stream", "excluded": { "category": "non_data_endpoint", "reason": "The stream-mentions endpoint is a live streaming/polling surface, not a finite paginated JSON sync stream." } },
+    { "method": "GET", "path": "/accounts/{account_id}/alerts/{alert_id}/authors", "excluded": { "category": "out_of_scope", "reason": "Authors require additional time/source/sort filters in the query string and are not emitted by the legacy connector's account/alert/mention/tag record contract." } },
+    { "method": "GET", "path": "/accounts/{account_id}/stats", "excluded": { "category": "out_of_scope", "reason": "Statistics require repeated query-array filters such as alerts[] and optional analytics selectors that the current stream.Query dialect cannot model without adding broad per-stream config." } },
+    { "method": "POST", "path": "/accounts, /accounts/{account_id}/alerts, /accounts/{account_id}/alerts/{alert_id}/shares, /accounts/{account_id}/alerts/{alert_id}/tags, /accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}/tasks", "excluded": { "category": "requires_elevated_scope", "reason": "Create endpoints mutate accounts, alerts, shares, tags, or tasks and need a dedicated reverse-ETL approval design; legacy Write is unsupported." } },
+    { "method": "PUT", "path": "/accounts/{account_id}, /accounts/{account_id}/alerts/{alert_id}, /accounts/{account_id}/alerts/{alert_id}/shares/{share_id}, /accounts/{account_id}/alerts/{alert_id}/preferences, /accounts/{account_id}/alerts/{alert_id}/tags/{tag_id}, /accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}/tasks/{task_id}", "excluded": { "category": "requires_elevated_scope", "reason": "Update endpoints mutate account, alert, share, preference, tag, or task state and are intentionally not exposed by this read-only connector." } },
+    { "method": "PATCH", "path": "/accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}", "excluded": { "category": "requires_elevated_scope", "reason": "Mention curation changes read/favorite/relevance state and is not a safe source-read operation." } },
+    { "method": "POST", "path": "/accounts/{account_id}/alerts/{alert_id}/pause, /accounts/{account_id}/alerts/{alert_id}/unpause, /accounts/{account_id}/alerts/{alert_id}/mentions/mark-all-read", "excluded": { "category": "requires_elevated_scope", "reason": "Pause/unpause and mark-all-read endpoints mutate alert processing or mention read state." } },
+    { "method": "DELETE", "path": "/accounts/{account_id}, /accounts/{account_id}/alerts/{alert_id}, /accounts/{account_id}/alerts/{alert_id}/shares/{share_id}, /accounts/{account_id}/alerts/{alert_id}/tags/{tag_id}, /accounts/{account_id}/alerts/{alert_id}/mentions/{mention_id}/tasks/{task_id}", "excluded": { "category": "destructive_admin", "reason": "Delete endpoints remove accounts, alerts, shares, tags, or tasks and are intentionally not exposed." } }
   ]
 }

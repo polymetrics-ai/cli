@@ -1,0 +1,21 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "date": "2026-01-01T00:00:00Z",
+    "note": "fixture_value",
+    "amount": 12.34
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/employees/fixture_id/time_off/history",
+    "body": {
+      "date": "2026-01-01T00:00:00Z",
+      "note": "fixture_value",
+      "amount": 12.34
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

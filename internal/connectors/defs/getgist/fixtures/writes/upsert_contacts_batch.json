@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/batch",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

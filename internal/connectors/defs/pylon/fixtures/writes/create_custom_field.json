@@ -1,0 +1,21 @@
+{
+  "record": {
+    "object_type": "synthetic-conformance-value",
+    "label": "synthetic-conformance-value",
+    "type": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/custom-fields",
+    "body": {
+      "object_type": "synthetic-conformance-value",
+      "label": "synthetic-conformance-value",
+      "type": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

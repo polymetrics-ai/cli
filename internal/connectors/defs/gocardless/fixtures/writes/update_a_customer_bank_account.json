@@ -1,0 +1,21 @@
+{
+  "record": {
+    "customer_bank_account_id": "customer_bank_account_id_fixture",
+    "customer_bank_accounts": {
+      "description": "Synthetic update_a_customer_bank_account fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customer_bank_accounts/customer_bank_account_id_fixture",
+    "body": {
+      "customer_bank_accounts": {
+        "description": "Synthetic update_a_customer_bank_account fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "factor_id": "synthetic-conformance-value",
+    "factorType": "call"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/users/synthetic-conformance-value/factors/synthetic-conformance-value/resend",
+    "body": {
+      "factorType": "call"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

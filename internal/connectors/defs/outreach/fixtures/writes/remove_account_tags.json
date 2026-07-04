@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "removeaccounttags",
+      "attributes": {
+        "name": "Fixture Remove Account Tags"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/accountsRemoveTags",
+    "body": {
+      "data": {
+        "type": "removeaccounttags",
+        "attributes": {
+          "name": "Fixture Remove Account Tags"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

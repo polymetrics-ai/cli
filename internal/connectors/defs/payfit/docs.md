@@ -1,43 +1,22 @@
 # Overview
 
-PayFit is a read-only declarative-HTTP connector for the PayFit Partner REST API v1. It reads
-employees, contracts, and companies. This bundle migrates `internal/connectors/payfit` (the
-hand-written connector); the legacy package stays registered and unchanged until wave6's registry
-flip.
+PayFit reads the legacy customer `/v1` endpoints used by `internal/connectors/payfit` and the current company-scoped PayFit API documented at `developers.payfit.io`. The legacy streams (`employees`, `contracts`, `companies`) keep their schema projection, field names, and emitted records; new Pass B streams use passthrough projection for PayFit's documented JSON response objects.
 
 ## Auth setup
 
-Provide a PayFit partner API key via the `api_key` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_key>`) and is never logged.
+Provide a PayFit API key via the `api_key` secret. It is sent as `Authorization: Bearer <api_key>` and is never logged. Current company-scoped endpoints require `company_id`; PayFit documents retrieving that value via `https://oauth.payfit.com/introspect`, which is listed in `api_surface.json` as a non-data helper rather than modeled as a stream or write.
 
 ## Streams notes
 
-All 3 streams (`employees`, `contracts`, `companies`) share the identical shape: `GET` against the
-PayFit list endpoint, records at `data`, primary key `["id"]`. Pagination follows PayFit's
-offset-cursor convention (`pagination.type: cursor` with `cursor_param: offset` and
-`token_path: meta.next_offset`): the next page's `offset` query param is read verbatim from the
-response body's `meta.next_offset` field, and pagination stops when that field is absent or empty
-— identical to legacy's `harvestOffset` loop (legacy treats `meta.next_offset` as an opaque token,
-never an integer it increments itself). Every request sends the configured `limit`
-(`config.limit`, default `100`, matching legacy's `payfitDefaultLimit`/`payfitMaxLimit`, which are
-both 100). Every stream carries `updated_at` as its catalog cursor field (matching legacy's
-`CursorFields`), but — matching legacy exactly — no stream declares a server-side incremental
-filter: legacy's `Read` never sends a date-range filter regardless of `req.State`, so no
-`incremental` block is declared in `streams.json` either.
+There are 21 streams: 3 legacy `/v1` streams plus current company, collaborator, contract, absence, payroll-status, accounting-v2, meal-voucher, payslip-metadata, and insurance/provident-fund metadata streams. Legacy streams continue using PayFit's old `limit` + `offset`/`meta.next_offset` pagination. Current paginated endpoints use `maxResults=50`, `nextPageToken`, and `meta.nextPageToken`. Endpoints returning PDF, CSV, or octet-stream files are excluded as `binary_payload` and the JSON metadata endpoints that link to those files are streamed instead.
 
 ## Write actions & risks
 
-Not applicable — this connector is read-only (`capabilities.write: false`), matching legacy
-exactly.
+There are 7 write actions for documented JSON customer-key mutations: create collaborator, create contract, create absence, cancel absence, update contract health insurance, update contract provident fund, and request health-insurance regularization. Multipart setup-sheet upload is excluded as `binary_payload`; partner-only billing declarations are excluded as `requires_elevated_scope` because this migrated connector authenticates with a customer API key.
 
 ## Known limits
 
-- Full PayFit API surface (payslips, absences, collective agreements) is out of scope for this
-  wave; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability
-  expansion"}` entries.
-- No incremental sync mode is wired for any stream (see Streams notes) — this mirrors legacy's own
-  full-refresh-only behavior, not a capability gap introduced by migration.
-- Legacy validates `limit` is between 1 and 100 and `max_pages` is a non-negative integer or
-  `all`/`unlimited` at read time; the engine does not perform bundle-declared numeric-range
-  validation on config values, so an out-of-range `limit` would be sent to the API as-is. This does
-  not change accepted-input behavior for any value legacy itself would accept.
+- Legacy `/v1` streams are retained for emitted-record parity even though current PayFit documentation now centers on `/companies/{companyId}/...` endpoints.
+- Optional filters such as collaborator email, absence status/date range, and include-in-progress contracts are not modeled because the read dialect lacks optional per-stream query omission for arbitrary config keys. Required date/pay-period parameters are modeled with `pay_period`.
+- Binary download endpoints for payslips, company documents, payment files, and CSV accounting exports are excluded; their JSON list/metadata endpoints are covered where documented.
+- The OAuth introspection and webhook-dashboard helper URLs are documented operational endpoints, not syncable data resources; they are listed as `non_data_endpoint` exclusions.

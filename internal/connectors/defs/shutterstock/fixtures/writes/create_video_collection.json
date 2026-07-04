@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture create video collection"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/videos/collections",
+    "body": {
+      "name": "Fixture create video collection"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

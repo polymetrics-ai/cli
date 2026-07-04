@@ -1,71 +1,23 @@
 # Overview
 
-Piwik / Matomo is a wave2 fan-out migration of `internal/connectors/piwik` (the hand-written
-connector it replaces). It reads Piwik/Matomo sites, recent visit details, page-action metrics, and
-configured goals through the Matomo Reporting API's single `index.php?module=API` entry point. This
-bundle is read-only, matching legacy exactly; the legacy package stays registered and unchanged
-until wave6's registry flip.
+Piwik / Matomo reads from Matomo's Reporting API through the single `GET /index.php?module=API` entry point. The bundle keeps the four legacy streams byte-for-byte compatible at the record boundary (`sites`, `visits`, `actions`, and `goals`) and expands Pass B coverage to Matomo's documented analytics report method inventory from `API.getReportMetadata`, plus selected site list/detail reads and live counters documented in the Reporting API guide.
 
 ## Auth setup
 
-Provide `token_auth` as a secret; it is sent as the `token_auth` query parameter
-(`api_key_query` mode) on every request and never logged. A `base_url` config value (defaulting to
-the same placeholder legacy used, `https://matomo.example.com` — a real Matomo instance origin must
-always be supplied) points at the Matomo instance.
+Provide `token_auth` as a secret; it is sent as the `token_auth` query parameter on every request and never logged. `base_url` defaults to the same placeholder legacy used (`https://matomo.example.com`), so live use must provide the real Matomo instance origin. `site_id`, `period`, and `date` scope analytics report streams; `custom_dimension_id` is only needed for `custom_dimensions_custom_dimension`, and `last_minutes` controls `live_counters`.
 
 ## Streams notes
 
-Every stream hits the same `GET /index.php` endpoint with a different `method` query parameter
-(Matomo's RPC-over-REST convention), matching legacy's `streamEndpoints` table exactly:
+The legacy streams preserve the hand-written connector's record mapping: `sites` renames `idsite` to `site_id`, `visits` renames visit identifiers and `lastActionDateTime`, `actions` renames `nb_hits`/`nb_visits` to `hits`/`visits`, and `goals` renames `idgoal` to `goal_id`. New analytics streams use the documented `Module.action` method name as the Matomo `method` query value and project documented metric fields with either a report-level primary key for summary objects or a computed `record_id` from Matomo's row `label` for dimensioned reports.
 
-- `sites` — `method=SitesManager.getAllSites`, no site scoping required, records at the top-level
-  JSON array. `site_id` renames the raw `idsite` field (schema projection copies by exact key match
-  only; the rename is required or the field would silently drop).
-- `visits` — `method=Live.getLastVisitsDetails`, requires config `site_id`, records at the top-level
-  array, paginated.
-- `actions` — `method=Actions.getPageUrls`, requires config `site_id`, records at the top-level
-  array, paginated. `hits`/`visits` rename the raw `nb_hits`/`nb_visits` fields.
-- `goals` — `method=Goals.getGoals`, requires config `site_id`, records at the top-level array, not
-  paginated (matches legacy's `endpoint.paginated: false`, which always returns after the first
-  page regardless of the response size).
-
-`period` (default `day`) and `date` (default `today`) are sent as `period`/`date` query params on
-every site-scoped stream, matching legacy's `valueOrDefault(cfg.Config["period"], "day")`/
-`valueOrDefault(cfg.Config["date"], "today")` fallbacks — both now materialize via `spec.json`'s
-`"default"` mechanism rather than a template-level default.
-
-Pagination (`visits`, `actions`) is offset+limit using Matomo's own param names
-(`pagination.type: offset_limit`, `limit_param: filter_limit`, `offset_param: filter_offset`,
-`page_size: 100`, matching legacy's `defaultPageSize`) — the engine stops when a page returns fewer
-records than `page_size`, identical to legacy's own `len(records) < pageSize` stop condition.
-`sites`/`goals` always send `filter_limit=100&filter_offset=0` on their single request too (legacy
-sends these on every call regardless of `endpoint.paginated`), declared as static per-stream `query`
-entries since `pagination.type: none` streams issue exactly one request.
-
-Legacy never sends an incremental filter parameter for any stream (no cursor-based
-`request_param`), so no `incremental` block is declared here — every stream is full-refresh only,
-matching legacy's actual (non-incremental) read behavior. `last_action_at` is exposed as a plain
-field, not a declared cursor.
+Matomo's Reporting API documents `filter_limit` and `filter_offset` as standard optional filters for report tables, so table and summary report streams use the engine's offset/limit pagination with a page size of 100. Summary endpoints naturally stop after their single object response; table endpoints stop on a short page.
 
 ## Write actions & risks
 
-None. Piwik/Matomo is `capabilities.write: false`; no `writes.json` is shipped, matching legacy's
-`Write` always returning `connectors.ErrUnsupportedOperation`.
+None. The legacy connector's `Write` returns `connectors.ErrUnsupportedOperation`, and Matomo's documented website/user/goal management mutations are GET-style RPC methods rather than POST/PUT/PATCH/DELETE endpoints. This bundle remains `capabilities.write: false` and ships no `writes.json`.
 
 ## Known limits
 
-- Legacy's `id_site` config-key fallback (`siteID` tries `config.site_id` then `config.id_site`) is
-  narrowed to `site_id` only — declaring two spec properties that both resolve to the same query
-  param with no coalesce mechanism in the engine dialect would require picking one as canonical
-  anyway; `site_id` is legacy's primary/first-checked key, so this narrowing never changes behavior
-  for any caller already using `site_id`, only for the undocumented legacy alias.
-- The full Matomo Reporting API method surface (hundreds of report methods across `VisitsSummary`,
-  `Referrers`, `DevicesDetection`, `Goals` conversion reports, custom segments, multi-site batch
-  requests, etc.) is out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 4
-  legacy-parity streams are implemented.
-- `page_size`/`max_pages` config overrides from legacy (`intConfig` reading `config.page_size`/
-  `config.max_pages`) have no runtime-config-driven equivalent in this engine dialect
-  (`PaginationSpec.PageSize`/`MaxPages` are bundle-fixed values, never read from `RuntimeConfig`) —
-  they are therefore not declared in `spec.json` at all (a declared-but-unwireable key is worse than
-  an absent one, per the F6 dead-config rule) rather than accepted but silently ignored.
+Matomo's full HTTP API is partly per-installation and plugin-dependent. This bundle covers the analytics report surface exposed by the official public `API.getReportMetadata` endpoint and explicitly enumerates common documented generic, management, binary, and helper methods in `api_surface.json` with typed exclusions. Premium/plugin reports that appear in a Matomo instance's metadata list but are not installed on another instance may return permission or plugin errors at runtime; they are still modeled because the public documentation exposes them as report methods.
+
+The legacy `id_site` alias is still narrowed to `site_id` because the declarative query dialect has no coalesce operator. The legacy `page_size`/`max_pages` runtime overrides also remain absent; pagination sizes are bundle-fixed by the engine dialect.

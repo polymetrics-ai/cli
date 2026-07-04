@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "benefit_deduction_types",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "additionalDescription": {
+      "type": "string"
+    },
+    "allowableBenefitTypes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "canBeCollectedByTrax": {
+      "type": "boolean"
+    },
+    "deductionNote": {
+      "type": "string"
+    },
+    "deductionNoteLink": {
+      "type": "string"
+    },
+    "deductionNoteLinkText": {
+      "type": "string"
+    },
+    "deductionTypeName": {
+      "type": "string"
+    },
+    "defaultDeductionCode": {
+      "type": "string"
+    },
+    "hideAnnualMax": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "managedDeductionType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nonBenefitDeductionType": {
+      "type": "boolean"
+    },
+    "subTypeText": {
+      "type": "string"
+    },
+    "subTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "additionalDescription": {
+            "type": "string"
+          },
+          "allowableBenefitTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "canBeCollectedByTrax": {
+            "type": "boolean"
+          },
+          "deductionNote": {
+            "type": "string"
+          },
+          "deductionNoteLink": {
+            "type": "string"
+          },
+          "deductionNoteLinkText": {
+            "type": "string"
+          },
+          "deductionTypeName": {
+            "type": "string"
+          },
+          "defaultDeductionCode": {
+            "type": "string"
+          },
+          "hideAnnualMax": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "managedDeductionType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "nonBenefitDeductionType": {
+            "type": "boolean"
+          },
+          "subTypeText": {
+            "type": "string"
+          },
+          "subTypes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

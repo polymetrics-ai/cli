@@ -1,0 +1,28 @@
+{
+  "record": {
+    "taskType": "fixture_taskType",
+    "startAt": "fixture_startAt",
+    "dueTo": "fixture_dueTo",
+    "template": {},
+    "contactId": 1,
+    "linkedInTaskType": "fixture_linkedInTaskType"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/tasks",
+    "body": {
+      "taskType": "fixture_taskType",
+      "startAt": "fixture_startAt",
+      "dueTo": "fixture_dueTo",
+      "template": {},
+      "contactId": 1,
+      "linkedInTaskType": "fixture_linkedInTaskType"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

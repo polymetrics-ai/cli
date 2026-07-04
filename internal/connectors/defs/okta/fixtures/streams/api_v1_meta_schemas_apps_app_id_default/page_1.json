@@ -1,0 +1,1206 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/schemas/apps/synthetic-conformance-value/default"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "$schema": "schema_fixture",
+      "created": "2026-01-01T00:00:00Z",
+      "definitions": {
+        "base": {
+          "id": "id_fixture",
+          "properties": {
+            "city": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "costCenter": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "countryCode": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "department": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "displayName": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "division": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "email": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "employeeNumber": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "firstName": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "honorificPrefix": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "honorificSuffix": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "lastName": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "locale": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "login": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "manager": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "managerId": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "middleName": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "mobilePhone": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "nickName": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "organization": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "postalAddress": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "preferredLanguage": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "primaryPhone": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "profileUrl": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "secondEmail": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "state": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "streetAddress": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "timezone": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "title": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "userType": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "zipCode": {
+              "default": "default_fixture",
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "master": {
+                "priority": [
+                  {}
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "pattern": "pattern_fixture",
+              "permissions": [
+                {
+                  "action": {},
+                  "principal": {}
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            }
+          },
+          "required": [
+            "required_fixture"
+          ],
+          "type": "type_fixture"
+        },
+        "custom": {
+          "id": "id_fixture",
+          "properties": {},
+          "required": [
+            "required_fixture"
+          ],
+          "type": "type_fixture"
+        }
+      },
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "properties": {
+        "profile": {
+          "allOf": [
+            {
+              "$ref": "ref_fixture"
+            }
+          ]
+        }
+      },
+      "title": "title_fixture",
+      "type": "type_fixture",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

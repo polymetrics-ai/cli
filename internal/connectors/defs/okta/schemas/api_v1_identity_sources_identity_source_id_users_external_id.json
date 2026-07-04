@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "The timestamp when the user was created in the identity source",
+      "format": "date-time"
+    },
+    "externalId": {
+      "type": "string",
+      "description": "The external ID of the user in the identity source"
+    },
+    "id": {
+      "type": "string",
+      "description": "The ID of the user in the identity source"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "The timestamp when the user was last updated in the identity source",
+      "format": "date-time"
+    },
+    "profile": {
+      "type": "object",
+      "description": "Contains a set of external user attributes and their values that are mapped to Okta standard and custom profile properties. See the [`profile` object](https://developer.okta.com/docs/api/openapi/okta-management/management/user/getuser#user/getuser/t=response&c=200&path=profile) and Declaration of a Custom Identity Source Schema in [Using anything as a source](https://help.okta.com/okta_help.htm?ty",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email address of the user",
+          "format": "email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user"
+        },
+        "homeAddress": {
+          "type": "string",
+          "description": "Home address of the user"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user"
+        },
+        "mobilePhone": {
+          "type": "string",
+          "description": "Mobile phone number of the user"
+        },
+        "secondEmail": {
+          "type": "string",
+          "description": "Alternative email address of the user",
+          "format": "email"
+        },
+        "userName": {
+          "type": "string",
+          "description": "Username of the user"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

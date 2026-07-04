@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom-fields",
+    "query": {
+      "object_type": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "slug": "fixture-custom_fields",
+          "created_at": "fixture-custom_fields",
+          "updated_at": "fixture-custom_fields"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

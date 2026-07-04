@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "accountnote",
+      "attributes": {
+        "name": "Fixture Create Account Note"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accountNotes",
+    "body": {
+      "data": {
+        "type": "accountnote",
+        "attributes": {
+          "name": "Fixture Create Account Note"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "claim_id": "synthetic-conformance-value",
+    "created": "2026-01-01T00:00:00Z",
+    "expression": "expression_fixture",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/apps/synthetic-conformance-value/federated-claims/synthetic-conformance-value",
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "expression": "expression_fixture",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

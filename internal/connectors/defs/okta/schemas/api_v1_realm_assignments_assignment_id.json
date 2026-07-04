@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "object",
+      "description": "Action to apply to a user",
+      "properties": {
+        "assignUserToRealm": {
+          "type": "object",
+          "description": "Action that assigns a user to a realm",
+          "properties": {
+            "realmId": {
+              "type": "string",
+              "description": "ID of the realm"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "conditions": {
+      "type": "object",
+      "description": "Conditions of applying realm assignment",
+      "properties": {
+        "expression": {
+          "type": "object",
+          "description": "Conditional expression",
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Value of the condition expression"
+            }
+          },
+          "additionalProperties": true
+        },
+        "profileSourceId": {
+          "type": "string",
+          "description": "ID of the profile source"
+        }
+      },
+      "additionalProperties": true
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the realm assignment was created",
+      "format": "date-time"
+    },
+    "domains": {
+      "type": "array",
+      "description": "Array of allowed domains. No user in this realm can be created or updated unless they have a username and email from one of these domains.\n\nThe following characters aren't allowed in the domain name: `!$%^&()=*+,:;<>'[]|/?\\`",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique ID of the realm assignment"
+    },
+    "isDefault": {
+      "type": "boolean",
+      "description": "Indicates the default realm. Existing users will start out in the default realm and can be moved individually to other realms."
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp of when the realm assignment was updated",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the realm"
+    },
+    "priority": {
+      "type": "integer",
+      "description": "The priority of the realm assignment. The lower the number, the higher the priority. This helps resolve conflicts between realm assignments.\n> **Note:** When you create realm assignments in bulk, realm assignment priorities must be unique."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

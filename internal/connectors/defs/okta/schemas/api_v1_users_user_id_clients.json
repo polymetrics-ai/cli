@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "description": "Unique key for the client application. The `client_id` is immutable."
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Human-readable string name of the client application"
+    },
+    "client_uri": {
+      "type": "string"
+    },
+    "logo_uri": {
+      "type": "string",
+      "description": "URL string that references a logo for the client consent dialog (not the sign-in dialog)"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "grants": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            }
+          },
+          "additionalProperties": true
+        },
+        "tokens": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

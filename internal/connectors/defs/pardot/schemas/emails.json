@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "emails",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "campaignId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "prospectId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "subject": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "emailTemplateId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "trackerDomainId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "folderId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "clientType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "listEmailId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "sentAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "type": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "salesforceCmsId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

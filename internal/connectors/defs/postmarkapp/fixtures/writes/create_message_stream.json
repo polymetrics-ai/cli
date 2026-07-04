@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ID": "broadcast",
+    "Name": "Fixture",
+    "MessageStreamType": "Broadcasts"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/message-streams",
+    "body": {
+      "ID": "broadcast",
+      "Name": "Fixture",
+      "MessageStreamType": "Broadcasts"
+    }
+  }
+}

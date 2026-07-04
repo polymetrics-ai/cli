@@ -1,0 +1,35 @@
+{
+  "record": {
+    "name": "Fixture post_content_library_items",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/content-library-items",
+    "body": {
+      "name": "Fixture post_content_library_items",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_content_library_items_response",
+      "status": "ok"
+    }
+  }
+}

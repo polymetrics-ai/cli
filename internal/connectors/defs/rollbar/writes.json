@@ -1,0 +1,994 @@
+{
+  "actions": [
+    {
+      "name": "assign_team_to_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/team/{{ record.team_id }}/project/{{ record.project_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id",
+          "project_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Changes Rollbar membership/assignment for /api/1/team/{team_id}/project/{project_id}; external access mapping mutation, approval required.",
+      "path_fields": [
+        "team_id",
+        "project_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "assign_user_to_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/team/{{ record.team_id }}/user/{{ record.user_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id",
+          "user_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Changes Rollbar membership/assignment for /api/1/team/{team_id}/user/{user_id}; external access mapping mutation, approval required.",
+      "path_fields": [
+        "team_id",
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "cancel_invitation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/invite/{{ record.invite_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "invite_id"
+        ],
+        "properties": {
+          "invite_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/invite/{invite_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "invite_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_rql_job",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/1/rql/job/{{ record.job_id }}/cancel",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "job_id"
+        ],
+        "properties": {
+          "job_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/rql/job/{job_id}/cancel; destructive external mutation, approval required.",
+      "path_fields": [
+        "job_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "configure_email_notifications",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/notifications/email",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Changes Rollbar notification configuration for /api/1/notifications/email; external configuration mutation, approval required.",
+      "body_type": "json",
+      "body_fields": [
+        "enabled"
+      ]
+    },
+    {
+      "name": "configure_slack_notifications",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/notifications/slack",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "channel": {
+            "type": "string"
+          },
+          "show_message_buttons": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Changes Rollbar notification configuration for /api/1/notifications/slack; external configuration mutation, approval required.",
+      "body_type": "json",
+      "body_fields": [
+        "enabled",
+        "channel",
+        "show_message_buttons"
+      ]
+    },
+    {
+      "name": "create_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/1/item/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through POST /api/1/item/; external API write, approval required.",
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/1/projects",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through POST /api/1/projects; external API write, approval required.",
+      "body_type": "json",
+      "body_fields": [
+        "name"
+      ]
+    },
+    {
+      "name": "create_service_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/1/service_links",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "template": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through POST /api/1/service_links; external API write, approval required.",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "template"
+      ]
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/1/teams",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "access_level": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through POST /api/1/teams; external API write, approval required.",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "access_level"
+      ]
+    },
+    {
+      "name": "delete_email_notification_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/notifications/email/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/notifications/email/rule/{rule_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_occurrence",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/instance/{{ record.instance_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "instance_id"
+        ],
+        "properties": {
+          "instance_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/instance/{instance_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "instance_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_pagerduty_notification_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/notifications/pagerduty/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/notifications/pagerduty/rule/{rule_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/project/{{ record.project_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/project/{project_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_service_link",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/service_links/{{ record.service_link_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service_link_id"
+        ],
+        "properties": {
+          "service_link_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/service_links/{id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "service_link_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_session_replay",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/environment/{{ record.environment }}/session/{{ record.session_id }}/replay/{{ record.replay_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "environment",
+          "session_id",
+          "replay_id"
+        ],
+        "properties": {
+          "environment": {
+            "type": "string"
+          },
+          "session_id": {
+            "type": "string"
+          },
+          "replay_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/environment/{environment}/session/{sessionId}/replay/{replayId}; destructive external mutation, approval required.",
+      "path_fields": [
+        "environment",
+        "session_id",
+        "replay_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_slack_notification_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/notifications/slack/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/notifications/slack/rule/{rule_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/team/{{ record.team_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/team/{team_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_webhook_notification_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/notifications/webhook/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/notifications/webhook/rule/{rule_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "invite_team_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/1/team/{{ record.team_id }}/invites",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through POST /api/1/team/{team_id}/invites; external API write, approval required.",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "email"
+      ]
+    },
+    {
+      "name": "remove_team_from_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/team/{{ record.team_id }}/project/{{ record.project_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id",
+          "project_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/team/{team_id}/project/{project_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "team_id",
+        "project_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_user_from_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/1/team/{{ record.team_id }}/user/{{ record.user_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "team_id",
+          "user_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar by deleting/removing/canceling /api/1/team/{team_id}/user/{user_id}; destructive external mutation, approval required.",
+      "path_fields": [
+        "team_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_deploy",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/1/deploy/{{ record.deploy_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deploy_id"
+        ],
+        "properties": {
+          "deploy_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "rollbar_username": {
+            "type": "string"
+          },
+          "local_username": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through PATCH /api/1/deploy/{deploy_id}; external API write, approval required.",
+      "path_fields": [
+        "deploy_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "environment",
+        "revision",
+        "rollbar_username",
+        "local_username",
+        "comment",
+        "status"
+      ]
+    },
+    {
+      "name": "update_email_notification_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/notifications/email/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through PUT /api/1/notifications/email/rule/{rule_id}; external API write, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "trigger",
+        "status",
+        "filters",
+        "config"
+      ]
+    },
+    {
+      "name": "update_item",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/1/item/{{ record.item_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "item_id"
+        ],
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "resolved_in_version": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          },
+          "assigned_user_id": {
+            "type": "string"
+          },
+          "assigned_team_id": {
+            "type": "string"
+          },
+          "snooze_enabled": {
+            "type": "boolean"
+          },
+          "snooze_expiration_in_seconds": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through PATCH /api/1/item/{itemid}; external API write, approval required.",
+      "path_fields": [
+        "item_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "status",
+        "resolved_in_version",
+        "title",
+        "level",
+        "assigned_user_id",
+        "assigned_team_id",
+        "snooze_enabled",
+        "snooze_expiration_in_seconds"
+      ]
+    },
+    {
+      "name": "update_pagerduty_notification_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/notifications/pagerduty/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through PUT /api/1/notifications/pagerduty/rule/{rule_id}; external API write, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "trigger",
+        "status",
+        "filters",
+        "config"
+      ]
+    },
+    {
+      "name": "update_service_link",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/service_links/{{ record.service_link_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service_link_id"
+        ],
+        "properties": {
+          "service_link_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "template": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through PUT /api/1/service_links/{id}; external API write, approval required.",
+      "path_fields": [
+        "service_link_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "template"
+      ]
+    },
+    {
+      "name": "update_slack_notification_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/notifications/slack/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through PUT /api/1/notifications/slack/rule/{rule_id}; external API write, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "trigger",
+        "status",
+        "filters",
+        "config"
+      ]
+    },
+    {
+      "name": "update_webhook_notification_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/1/notifications/webhook/rule/{{ record.rule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "rule_id"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Mutates Rollbar through PUT /api/1/notifications/webhook/rule/{rule_id}; external API write, approval required.",
+      "path_fields": [
+        "rule_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "trigger",
+        "status",
+        "filters",
+        "config"
+      ]
+    }
+  ]
+}

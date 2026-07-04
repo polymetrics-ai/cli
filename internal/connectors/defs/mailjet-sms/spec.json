@@ -17,16 +17,31 @@
     },
     "start_date": {
       "type": "string",
-      "description": "Unix-seconds lower bound sent as the FromTS query param on the sms stream."
+      "description": "Unix-seconds lower bound sent as the FromTS query param on list/count streams."
     },
     "end_date": {
       "type": "string",
-      "description": "Unix-seconds upper bound sent as the ToTS query param on the sms stream."
+      "description": "Unix-seconds upper bound sent as the ToTS query param on list/count streams."
     },
-    "page_size": {
+    "status_code": {
       "type": "string",
-      "default": "100",
-      "description": "Records per page (1-1000) for the sms stream."
+      "description": "Optional Mailjet SMS StatusCode filter for message list/count requests; use the API's comma-separated code format when filtering multiple statuses."
+    },
+    "recipient": {
+      "type": "string",
+      "description": "Optional To filter for message list/count requests."
+    },
+    "sms_ids": {
+      "type": "string",
+      "description": "Optional IDs filter for the sms list stream; use Mailjet's comma-separated ID format."
+    },
+    "sms_id": {
+      "type": "string",
+      "description": "SMS message id used by the sms_message detail stream."
+    },
+    "export_job_id": {
+      "type": "string",
+      "description": "Mailjet export job id used by the sms_export detail stream."
     },
     "mode": {
       "type": "string",

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "parent_id": 123,
+    "name": "Fixture create_child_ticket",
+    "description": "Fixture create_child_ticket record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/123/create_child_ticket",
+    "body": {
+      "name": "Fixture create_child_ticket",
+      "description": "Fixture create_child_ticket record"
+    }
+  }
+}

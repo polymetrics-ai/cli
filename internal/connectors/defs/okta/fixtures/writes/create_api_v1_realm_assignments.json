@@ -1,0 +1,40 @@
+{
+  "record": {
+    "actions": {
+      "assignUserToRealm": {
+        "realmId": "realm_id_fixture"
+      }
+    },
+    "conditions": {
+      "expression": {
+        "value": "value_fixture"
+      },
+      "profileSourceId": "profile_source_id_fixture"
+    },
+    "name": "name_fixture",
+    "priority": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/realm-assignments",
+    "body": {
+      "actions": {
+        "assignUserToRealm": {
+          "realmId": "realm_id_fixture"
+        }
+      },
+      "conditions": {
+        "expression": {
+          "value": "value_fixture"
+        },
+        "profileSourceId": "profile_source_id_fixture"
+      },
+      "name": "name_fixture",
+      "priority": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

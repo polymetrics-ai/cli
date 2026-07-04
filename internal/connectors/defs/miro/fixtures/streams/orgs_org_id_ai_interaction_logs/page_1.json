@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/ai-interaction-logs",
+    "query": {
+      "from": "synthetic-conformance-value",
+      "to": "synthetic-conformance-value",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "storedAt": "2026-01-01T00:00:00Z",
+          "sessionId": "session_id_fixture",
+          "messageId": "message_id_fixture",
+          "object": {
+            "id": "id_fixture",
+            "type": "type_fixture"
+          },
+          "aiFeatureName": "ai_feature_name_fixture",
+          "actor": {
+            "id": "id_fixture",
+            "email": "fixture@example.invalid",
+            "name": "name_fixture"
+          },
+          "logType": "log_type_fixture",
+          "details": {}
+        }
+      ],
+      "type": "cursor-list"
+    }
+  }
+}

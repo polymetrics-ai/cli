@@ -3,29 +3,50 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "headers": {
-      "GoCardless-Version": "{{ config.gocardless_version }}"
+      "GoCardless-Version": "{{ config.gocardless_version }}",
+      "Gc-Key-Id": "{{ config.gc_key_id }}"
     },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "after",
       "token_path": "meta.cursors.after"
     },
-    "check": { "method": "GET", "path": "/payments" },
+    "check": {
+      "method": "GET",
+      "path": "/payments"
+    },
     "error_map": [
-      { "status": 401, "hint": "gocardless access token is missing or invalid; re-run pm credentials add gocardless" },
-      { "status": 403, "hint": "gocardless account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "gocardless rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "gocardless access token is missing or invalid; re-run pm credentials add gocardless"
+      },
+      {
+        "status": 403,
+        "hint": "gocardless account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "gocardless rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "payments",
       "path": "/payments",
-      "query": { "limit": "50" },
-      "records": { "path": "payments" },
+      "query": {
+        "limit": "50"
+      },
+      "records": {
+        "path": "payments"
+      },
       "incremental": {
         "cursor_field": "created_at",
         "request_param": "created_at[gt]",
@@ -40,8 +61,12 @@
     {
       "name": "mandates",
       "path": "/mandates",
-      "query": { "limit": "50" },
-      "records": { "path": "mandates" },
+      "query": {
+        "limit": "50"
+      },
+      "records": {
+        "path": "mandates"
+      },
       "incremental": {
         "cursor_field": "created_at",
         "request_param": "created_at[gt]",
@@ -56,8 +81,12 @@
     {
       "name": "payouts",
       "path": "/payouts",
-      "query": { "limit": "50" },
-      "records": { "path": "payouts" },
+      "query": {
+        "limit": "50"
+      },
+      "records": {
+        "path": "payouts"
+      },
       "incremental": {
         "cursor_field": "created_at",
         "request_param": "created_at[gt]",
@@ -72,8 +101,12 @@
     {
       "name": "refunds",
       "path": "/refunds",
-      "query": { "limit": "50" },
-      "records": { "path": "refunds" },
+      "query": {
+        "limit": "50"
+      },
+      "records": {
+        "path": "refunds"
+      },
       "incremental": {
         "cursor_field": "created_at",
         "request_param": "created_at[gt]",
@@ -84,6 +117,727 @@
         "mandate": "{{ record.links.mandate }}"
       },
       "schema": "schemas/refunds.json"
+    },
+    {
+      "name": "bank_authorisation",
+      "path": "/bank_authorisations/{{ config.bank_authorisation_id }}",
+      "records": {
+        "path": "bank_authorisations"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/bank_authorisation.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "billing_requests",
+      "path": "/billing_requests",
+      "records": {
+        "path": "billing_requests"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/billing_requests.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "billing_request",
+      "path": "/billing_requests/{{ config.billing_request_id }}",
+      "records": {
+        "path": "billing_requests"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/billing_request.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "billing_request_templates",
+      "path": "/billing_request_templates",
+      "records": {
+        "path": "billing_request_templates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/billing_request_templates.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "billing_request_template",
+      "path": "/billing_request_templates/{{ config.billing_request_template_id }}",
+      "records": {
+        "path": "billing_request_templates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/billing_request_template.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "institutions",
+      "path": "/institutions",
+      "records": {
+        "path": "institutions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/institutions.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "billing_request_institutions",
+      "path": "/billing_requests/{{ config.billing_request_id }}/institutions",
+      "records": {
+        "path": "institutions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/billing_request_institutions.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "country_code": "{{ config.billing_request_institutions_country_code }}"
+      }
+    },
+    {
+      "name": "balances",
+      "path": "/balances",
+      "records": {
+        "path": "balances"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/balances.json",
+      "query": {
+        "limit": "50",
+        "creditor": "{{ config.balances_creditor_id }}"
+      }
+    },
+    {
+      "name": "bank_account_detail",
+      "path": "/bank_account_details/{{ config.bank_account_detail_id }}",
+      "records": {
+        "path": "bank_account_details"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/bank_account_detail.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bank_account_holder_verification",
+      "path": "/bank_account_holder_verifications/{{ config.bank_account_holder_verification_id }}",
+      "records": {
+        "path": "bank_account_holder_verifications"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/bank_account_holder_verification.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "block",
+      "path": "/blocks/{{ config.block_id }}",
+      "records": {
+        "path": "blocks"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/block.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "blocks",
+      "path": "/blocks",
+      "records": {
+        "path": "blocks"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/blocks.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "creditors",
+      "path": "/creditors",
+      "records": {
+        "path": "creditors"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/creditors.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "creditor",
+      "path": "/creditors/{{ config.creditor_id }}",
+      "records": {
+        "path": "creditors"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/creditor.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "creditor_bank_accounts",
+      "path": "/creditor_bank_accounts",
+      "records": {
+        "path": "creditor_bank_accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/creditor_bank_accounts.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "creditor_bank_account",
+      "path": "/creditor_bank_accounts/{{ config.creditor_bank_account_id }}",
+      "records": {
+        "path": "creditor_bank_accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/creditor_bank_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "currency_exchange_rates",
+      "path": "/currency_exchange_rates",
+      "records": {
+        "path": "currency_exchange_rates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/currency_exchange_rates.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": {
+        "path": "customers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customers.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "customer",
+      "path": "/customers/{{ config.customer_id }}",
+      "records": {
+        "path": "customers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_bank_accounts",
+      "path": "/customer_bank_accounts",
+      "records": {
+        "path": "customer_bank_accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_bank_accounts.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "customer_bank_account",
+      "path": "/customer_bank_accounts/{{ config.customer_bank_account_id }}",
+      "records": {
+        "path": "customer_bank_accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_bank_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": "events"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/events.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "event",
+      "path": "/events/{{ config.event_id }}",
+      "records": {
+        "path": "events"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/event.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "export",
+      "path": "/exports/{{ config.export_id }}",
+      "records": {
+        "path": "exports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/export.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "exports",
+      "path": "/exports",
+      "records": {
+        "path": "exports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/exports.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "funds_availability",
+      "path": "/funds_availability/{{ config.mandate_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/funds_availability.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "amount": "{{ config.funds_availability_amount }}"
+      }
+    },
+    {
+      "name": "instalment_schedules",
+      "path": "/instalment_schedules",
+      "records": {
+        "path": "instalment_schedules"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/instalment_schedules.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "instalment_schedule",
+      "path": "/instalment_schedules/{{ config.instalment_schedule_id }}",
+      "records": {
+        "path": "instalment_schedules"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/instalment_schedule.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "mandate",
+      "path": "/mandates/{{ config.mandate_id }}",
+      "records": {
+        "path": "mandates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/mandate.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "mandate_import",
+      "path": "/mandate_imports/{{ config.mandate_import_id }}",
+      "records": {
+        "path": "mandate_imports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/mandate_import.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "mandate_import_entries",
+      "path": "/mandate_import_entries",
+      "records": {
+        "path": "mandate_import_entries"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/mandate_import_entries.json",
+      "query": {
+        "limit": "50",
+        "mandate_import": "{{ config.mandate_import_id }}"
+      }
+    },
+    {
+      "name": "negative_balance_limits",
+      "path": "/negative_balance_limits",
+      "records": {
+        "path": "negative_balance_limits"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/negative_balance_limits.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "outbound_payment",
+      "path": "/outbound_payments/{{ config.outbound_payment_id }}",
+      "records": {
+        "path": "outbound_payments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/outbound_payment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "outbound_payments",
+      "path": "/outbound_payments",
+      "records": {
+        "path": "outbound_payments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/outbound_payments.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "outbound_payment_stats",
+      "path": "/outbound_payments/stats",
+      "records": {
+        "path": "outbound_payments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/outbound_payment_stats.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "outbound_payment_import",
+      "path": "/outbound_payment_imports/{{ config.outbound_payment_import_id }}",
+      "records": {
+        "path": "outbound_payment_imports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/outbound_payment_import.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "outbound_payment_imports",
+      "path": "/outbound_payment_imports",
+      "records": {
+        "path": "outbound_payment_imports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/outbound_payment_imports.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "outbound_payment_import_entries",
+      "path": "/outbound_payment_import_entries",
+      "records": {
+        "path": "outbound_payment_import_entries"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/outbound_payment_import_entries.json",
+      "query": {
+        "limit": "50",
+        "outbound_payment_import": "{{ config.outbound_payment_import_id }}"
+      }
+    },
+    {
+      "name": "payer_authorisation",
+      "path": "/payer_authorisations/{{ config.payer_authorisation_id }}",
+      "records": {
+        "path": "payer_authorisations"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payer_authorisation.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payment",
+      "path": "/payments/{{ config.payment_id }}",
+      "records": {
+        "path": "payments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payment_account",
+      "path": "/payment_accounts/{{ config.payment_account_id }}",
+      "records": {
+        "path": "payment_accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payment_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payment_accounts",
+      "path": "/payment_accounts",
+      "records": {
+        "path": "payment_accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payment_accounts.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "payment_account_transaction",
+      "path": "/payment_account_transactions/{{ config.payment_account_transaction_id }}",
+      "records": {
+        "path": "payment_account_transactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payment_account_transaction.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payment_account_transactions_by_payment_account",
+      "path": "/payment_accounts/{{ config.payment_account_id }}/transactions",
+      "records": {
+        "path": "payment_account_transactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payment_account_transactions_by_payment_account.json",
+      "query": {
+        "limit": "50",
+        "value_date_from": "{{ config.payment_account_transactions_value_date_from }}",
+        "value_date_to": "{{ config.payment_account_transactions_value_date_to }}"
+      }
+    },
+    {
+      "name": "payout",
+      "path": "/payouts/{{ config.payout_id }}",
+      "records": {
+        "path": "payouts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payout.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payout_items",
+      "path": "/payout_items",
+      "records": {
+        "path": "payout_items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payout_items.json",
+      "query": {
+        "limit": "50",
+        "payout": "{{ config.payout_id }}"
+      }
+    },
+    {
+      "name": "redirect_flow",
+      "path": "/redirect_flows/{{ config.redirect_flow_id }}",
+      "records": {
+        "path": "redirect_flows"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/redirect_flow.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "refund",
+      "path": "/refunds/{{ config.refund_id }}",
+      "records": {
+        "path": "refunds"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/refund.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "scheme_identifiers",
+      "path": "/scheme_identifiers",
+      "records": {
+        "path": "scheme_identifiers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scheme_identifiers.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "scheme_identifier",
+      "path": "/scheme_identifiers/{{ config.scheme_identifier_id }}",
+      "records": {
+        "path": "scheme_identifiers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scheme_identifier.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "records": {
+        "path": "subscriptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscriptions.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "subscription",
+      "path": "/subscriptions/{{ config.subscription_id }}",
+      "records": {
+        "path": "subscriptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscription.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tax_rates",
+      "path": "/tax_rates",
+      "records": {
+        "path": "tax_rates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tax_rates.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "tax_rate",
+      "path": "/tax_rates/{{ config.tax_rate_id }}",
+      "records": {
+        "path": "tax_rates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tax_rate.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "transferred_mandate",
+      "path": "/transferred_mandates/{{ config.transferred_mandate_id }}",
+      "records": {
+        "path": "transferred_mandates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/transferred_mandate.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "verification_details",
+      "path": "/verification_details",
+      "records": {
+        "path": "verification_details"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/verification_details.json",
+      "query": {
+        "limit": "50",
+        "creditor": "{{ config.verification_details_creditor_id }}"
+      }
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": {
+        "path": "webhooks"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/webhooks.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "webhook",
+      "path": "/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "path": "webhooks"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/webhook.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_bank_account_token",
+      "path": "/customer_bank_account_tokens/{{ config.customer_bank_account_token_id }}",
+      "records": {
+        "path": "customer_bank_account_tokens"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_bank_account_token.json",
+      "pagination": {
+        "type": "none"
+      }
     }
   ]
 }

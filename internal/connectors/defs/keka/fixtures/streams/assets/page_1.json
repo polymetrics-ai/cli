@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/assets",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "assets_fixture_1",
+          "assetName": "Fixture assets 1",
+          "assetId": "assets_fixture_1",
+          "status": 2,
+          "assetCategoryId": "assets_fixture_1",
+          "assetTypeId": "assets_fixture_1",
+          "assetConditionId": "assets_fixture_1",
+          "assignedTo": {
+            "id": "assets_fixture_1",
+            "firstName": "Fixture assets 1",
+            "lastName": "Fixture assets 1",
+            "email": "fixture1@example.invalid"
+          },
+          "assignedOn": "fixture_assets_1"
+        },
+        {
+          "id": "assets_fixture_2",
+          "assetName": "Fixture assets 2",
+          "assetId": "assets_fixture_2",
+          "status": 1,
+          "assetCategoryId": "assets_fixture_2",
+          "assetTypeId": "assets_fixture_2",
+          "assetConditionId": "assets_fixture_2",
+          "assignedTo": null,
+          "assignedOn": null
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/assets",
+      "lastPage": "https://example.invalid/keka/assets",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

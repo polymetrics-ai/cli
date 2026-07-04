@@ -1,22 +1,889 @@
 {
-  "api": "PandaDoc Public API v1 (https://api.pandadoc.com/public/v1)",
+  "api": "PandaDoc Public API (https://api.pandadoc.com)",
   "docs": "https://developers.pandadoc.com/reference/about",
-  "reviewed_at": "2026-07-03",
-  "scope": "migration: the 3 legacy-parity read streams only (documents, templates, contacts); the full PandaDoc surface (document creation/send/status-change writes, template folders, forms, webhooks, API usage) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion over the current official PandaDoc reference. JSON GET list/detail endpoints are streams; JSON/no-body mutations are write actions; uploads, downloads, OAuth, and token/key/secret operations are excluded with concrete reasons.",
   "endpoints": [
-    { "method": "GET", "path": "/documents", "covered_by": { "stream": "documents" } },
-    { "method": "GET", "path": "/templates", "covered_by": { "stream": "templates" } },
-    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "POST", "path": "/documents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/documents/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/documents/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/documents/{id}/send", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/documents/{id}/download", "excluded": { "category": "binary_payload", "reason": "returns a binary PDF payload, not a syncable JSON record stream" } },
-    { "method": "DELETE", "path": "/documents/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible document deletion, not a read/sync operation" } },
-    { "method": "POST", "path": "/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PUT", "path": "/contacts/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible contact deletion, not a read/sync operation" } },
-    { "method": "GET", "path": "/templates/{id}/details", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api-usage", "excluded": { "category": "non_data_endpoint", "reason": "account usage/quota introspection, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/{document_id}/ai-metadata",
+      "covered_by": {
+        "stream": "documents_document_id_ai_metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/{document_id}/content",
+      "covered_by": {
+        "stream": "documents_document_id_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/beta/documents/{document_id}/docx-export-tasks",
+      "covered_by": {
+        "write": "post_documents_document_id_docx_export_tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/{document_id}/docx-export-tasks/{task_id}",
+      "covered_by": {
+        "stream": "documents_document_id_docx_export_tasks_task_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/{document_id}/summary",
+      "covered_by": {
+        "stream": "documents_document_id_summary"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/beta/documents/ai-metadata",
+      "covered_by": {
+        "write": "post_documents_ai_metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/search",
+      "covered_by": {
+        "stream": "documents_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/contacts",
+      "covered_by": {
+        "write": "post_contacts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/contacts/{id}",
+      "covered_by": {
+        "write": "delete_contacts_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/contacts/{id}",
+      "covered_by": {
+        "stream": "contacts_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/contacts/{id}",
+      "covered_by": {
+        "write": "patch_contacts_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/content-library-items",
+      "covered_by": {
+        "stream": "content_library_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/content-library-items",
+      "covered_by": {
+        "write": "post_content_library_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/content-library-items?upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/content-library-items/{id}",
+      "covered_by": {
+        "stream": "content_library_items_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/content-library-items/{id}/details",
+      "covered_by": {
+        "stream": "content_library_items_id_details"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents",
+      "covered_by": {
+        "write": "delete_documents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents",
+      "covered_by": {
+        "stream": "documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents",
+      "covered_by": {
+        "write": "post_documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents?upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/auto-reminders",
+      "covered_by": {
+        "stream": "documents_document_id_auto_reminders"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{document_id}/auto-reminders",
+      "covered_by": {
+        "write": "patch_documents_document_id_auto_reminders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/auto-reminders/status",
+      "covered_by": {
+        "stream": "documents_document_id_auto_reminders_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/esign-disclosure",
+      "covered_by": {
+        "stream": "documents_document_id_esign_disclosure"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/public/v1/documents/{document_id}/quotes/{quote_id}",
+      "covered_by": {
+        "write": "put_documents_document_id_quotes_quote_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/sections",
+      "covered_by": {
+        "stream": "documents_document_id_sections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/sections",
+      "covered_by": {
+        "write": "post_documents_document_id_sections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/sections?upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{document_id}/sections/{section_id}",
+      "covered_by": {
+        "write": "delete_documents_document_id_sections_section_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/sections/{section_id}",
+      "covered_by": {
+        "stream": "documents_document_id_sections_section_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/sections/uploads/{upload_id}",
+      "covered_by": {
+        "stream": "documents_document_id_sections_uploads_upload_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/send-reminder",
+      "covered_by": {
+        "write": "post_documents_document_id_send_reminder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}",
+      "covered_by": {
+        "write": "delete_documents_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}",
+      "covered_by": {
+        "stream": "documents_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}",
+      "covered_by": {
+        "write": "patch_documents_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/append-content-library-item",
+      "covered_by": {
+        "write": "post_documents_id_append_content_library_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/attachments",
+      "covered_by": {
+        "stream": "documents_id_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/attachments",
+      "covered_by": {
+        "write": "post_documents_id_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/attachments?upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}/attachments/{attachment_id}",
+      "covered_by": {
+        "write": "delete_documents_id_attachments_attachment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/attachments/{attachment_id}",
+      "covered_by": {
+        "stream": "documents_id_attachments_attachment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/attachments/{attachment_id}/download",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Returns a binary file payload rather than a JSON record stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/details",
+      "covered_by": {
+        "stream": "documents_id_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/download",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Returns a binary file payload rather than a JSON record stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/download-protected",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Returns a binary file payload rather than a JSON record stream."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/draft",
+      "covered_by": {
+        "write": "post_documents_id_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/editing-sessions",
+      "covered_by": {
+        "write": "post_documents_id_editing_sessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/fields",
+      "covered_by": {
+        "stream": "documents_id_fields"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/fields",
+      "covered_by": {
+        "write": "patch_documents_id_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/fields",
+      "covered_by": {
+        "write": "post_documents_id_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/linked-objects",
+      "covered_by": {
+        "stream": "documents_id_linked_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/linked-objects",
+      "covered_by": {
+        "write": "post_documents_id_linked_objects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}/linked-objects/{linked_object_id}",
+      "covered_by": {
+        "write": "delete_documents_id_linked_objects_linked_object_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/move-to-folder/{folder_id}",
+      "covered_by": {
+        "write": "post_documents_id_move_to_folder_folder_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/ownership",
+      "covered_by": {
+        "write": "patch_documents_id_ownership"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/recipients",
+      "covered_by": {
+        "write": "post_documents_id_recipients"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}/recipients/{recipient_id}",
+      "covered_by": {
+        "write": "delete_documents_id_recipients_recipient_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/recipients/{recipient_id}/reassign",
+      "covered_by": {
+        "write": "post_documents_id_recipients_recipient_id_reassign"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/recipients/recipient/{recipient_id}",
+      "covered_by": {
+        "write": "patch_documents_id_recipients_recipient_recipient_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/send",
+      "covered_by": {
+        "write": "post_documents_id_send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/session",
+      "covered_by": {
+        "write": "post_documents_id_session"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/status",
+      "covered_by": {
+        "write": "patch_documents_id_status"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/status?upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/folders",
+      "covered_by": {
+        "stream": "documents_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/folders",
+      "covered_by": {
+        "write": "post_documents_folders"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/public/v1/documents/folders/{id}",
+      "covered_by": {
+        "write": "put_documents_folders_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/linked-objects",
+      "covered_by": {
+        "stream": "documents_linked_objects"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/ownership",
+      "covered_by": {
+        "write": "patch_documents_ownership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/forms",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/logs",
+      "covered_by": {
+        "stream": "logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/logs/{id}",
+      "covered_by": {
+        "stream": "logs_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/members/{id}",
+      "covered_by": {
+        "stream": "members_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/members/{member_id}/token",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Creates a member-scoped access token; token-generation endpoints are excluded from ordinary write actions."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/members/current",
+      "covered_by": {
+        "stream": "members_current"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/sms-opt-outs",
+      "covered_by": {
+        "stream": "sms_opt_outs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/templates",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/templates",
+      "covered_by": {
+        "write": "post_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/templates?upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/templates/{id}",
+      "covered_by": {
+        "write": "delete_templates_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/templates/{id}",
+      "covered_by": {
+        "stream": "templates_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/templates/{id}",
+      "covered_by": {
+        "write": "patch_templates_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/templates/{id}/details",
+      "covered_by": {
+        "stream": "templates_id_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/templates/{id}/editing-sessions",
+      "covered_by": {
+        "write": "post_templates_id_editing_sessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/templates/folders",
+      "covered_by": {
+        "stream": "templates_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/templates/folders",
+      "covered_by": {
+        "write": "post_templates_folders"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/public/v1/templates/folders/{id}",
+      "covered_by": {
+        "write": "put_templates_folders_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/users",
+      "covered_by": {
+        "write": "post_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/users/{user_id}",
+      "covered_by": {
+        "stream": "users_user_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/webhook-events",
+      "covered_by": {
+        "stream": "webhook_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/webhook-events/{id}",
+      "covered_by": {
+        "stream": "webhook_events_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/webhook-subscriptions",
+      "covered_by": {
+        "stream": "webhook_subscriptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/webhook-subscriptions",
+      "covered_by": {
+        "write": "post_webhook_subscriptions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/webhook-subscriptions/{id}",
+      "covered_by": {
+        "write": "delete_webhook_subscriptions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/webhook-subscriptions/{id}",
+      "covered_by": {
+        "stream": "webhook_subscriptions_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/webhook-subscriptions/{id}",
+      "covered_by": {
+        "write": "patch_webhook_subscriptions_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/webhook-subscriptions/{id}/shared-key",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Rotates or updates a webhook shared secret; secret material is excluded from ordinary write records and fixtures."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/workspaces",
+      "covered_by": {
+        "write": "post_workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/workspaces/{workspace_id}/api-keys",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Generates a workspace API key secret and requires elevated organization/workspace administration."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/workspaces/{workspace_id}/deactivate",
+      "covered_by": {
+        "write": "post_workspaces_workspace_id_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/workspaces/{workspace_id}/members",
+      "covered_by": {
+        "write": "post_workspaces_workspace_id_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/workspaces/{workspace_id}/members/{member_id}",
+      "covered_by": {
+        "write": "delete_workspaces_workspace_id_members_member_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/workspaces/{workspace_id}/members/{member_id}/role",
+      "covered_by": {
+        "write": "patch_workspaces_workspace_id_members_member_id_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/documents/{document_id}/audit-trail",
+      "covered_by": {
+        "stream": "documents_document_id_audit_trail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/documents/{document_id}/settings",
+      "covered_by": {
+        "stream": "documents_document_id_settings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v2/documents/{document_id}/settings",
+      "covered_by": {
+        "write": "patch_documents_document_id_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/logs",
+      "covered_by": {
+        "stream": "logs_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/logs/{id}",
+      "covered_by": {
+        "stream": "logs_id_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/notary/notaries",
+      "covered_by": {
+        "stream": "notary_notaries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/notary/notarization-requests",
+      "covered_by": {
+        "stream": "notary_notarization_requests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v2/notary/notarization-requests",
+      "covered_by": {
+        "write": "post_notary_notarization_requests"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v2/notary/notarization-requests/{session_request_id}",
+      "covered_by": {
+        "write": "delete_notary_notarization_requests_session_request_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/notary/notarization-requests/{session_request_id}",
+      "covered_by": {
+        "stream": "notary_notarization_requests_session_request_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v2/product-catalog/items",
+      "covered_by": {
+        "write": "post_product_catalog_items"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v2/product-catalog/items/{item_uuid}",
+      "covered_by": {
+        "write": "delete_product_catalog_items_item_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/product-catalog/items/{item_uuid}",
+      "covered_by": {
+        "stream": "product_catalog_items_item_uuid"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v2/product-catalog/items/{item_uuid}",
+      "covered_by": {
+        "write": "patch_product_catalog_items_item_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/product-catalog/items/search",
+      "covered_by": {
+        "stream": "product_catalog_items_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v2/templates/{template_id}/settings",
+      "covered_by": {
+        "stream": "templates_template_id_settings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v2/templates/{template_id}/settings",
+      "covered_by": {
+        "write": "patch_templates_template_id_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/access_token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token exchange endpoint; credential lifecycle is not a connector data stream or reverse-ETL action."
+      }
+    }
   ]
 }

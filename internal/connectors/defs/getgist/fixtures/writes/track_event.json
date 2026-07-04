@@ -1,0 +1,13 @@
+{
+  "record": {
+    "name": "Fixture",
+    "event": "fixture_event"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/events",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

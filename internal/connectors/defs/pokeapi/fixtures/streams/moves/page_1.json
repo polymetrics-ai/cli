@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/move", "query": { "limit": "100", "offset": "0" } },
+  "request": {
+    "method": "GET",
+    "path": "/move",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,7 +14,10 @@
       "next": null,
       "previous": null,
       "results": [
-        { "name": "pound", "url": "https://pokeapi.co/api/v2/move/1/" }
+        {
+          "url": "https://pokeapi.co/api/v2/move/1/",
+          "name": "fixture-move-1"
+        }
       ]
     }
   }

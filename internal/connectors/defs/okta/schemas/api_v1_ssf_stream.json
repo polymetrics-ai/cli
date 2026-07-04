@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "aud": {
+      "type": "string",
+      "format": "uri"
+    },
+    "delivery": {
+      "type": "object",
+      "description": "Contains information about the intended SET delivery method by the receiver",
+      "properties": {
+        "authorization_header": {
+          "type": "string",
+          "description": "The HTTP authorization header that's included for each HTTP POST request"
+        },
+        "endpoint_url": {
+          "type": "string",
+          "description": "The target endpoint URL where the transmitter delivers the SET using HTTP POST requests",
+          "format": "uri"
+        },
+        "method": {
+          "type": "string",
+          "description": "The delivery method that the transmitter uses for delivering a SET",
+          "enum": [
+            "https://schemas.openid.net/secevent/risc/delivery-method/push",
+            "urn:ietf:rfc:8935"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "events_delivered": {
+      "type": "array",
+      "description": "The events (mapped by the array of event type URIs) that the transmitter actually delivers to the SSF stream.\n\nA read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "events_requested": {
+      "type": "array",
+      "description": "The events (mapped by the array of event type URIs) that the receiver wants to receive",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "events_supported": {
+      "type": "array",
+      "description": "An array of event type URIs that the transmitter supports.\n\nA read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "format": {
+      "type": "string",
+      "description": "The subject identifier format expected for any SET transmitted.",
+      "enum": [
+        "iss_sub"
+      ]
+    },
+    "iss": {
+      "type": "string",
+      "description": "The issuer used in security event tokens (SETs). This value is set as `iss` in the claim.\n\nA read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter."
+    },
+    "min_verification_interval": {
+      "type": "integer",
+      "description": "The minimum amount of time, in seconds, between two verification requests.\n\nA read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter."
+    },
+    "stream_id": {
+      "type": "string",
+      "description": "The ID of the SSF stream configuration"
+    }
+  },
+  "additionalProperties": true
+}

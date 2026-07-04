@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets_id_messages_message_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "actorType",
+    "content",
+    "contentType",
+    "isInternal",
+    "occurredAt",
+    "createdAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the message."
+    },
+    "actorType": {
+      "type": "string",
+      "description": "The type of actor who sent the message.",
+      "enum": [
+        "customer",
+        "agent",
+        "system"
+      ]
+    },
+    "agent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "content": {
+      "type": "string",
+      "description": "The message content (shortened for list views)."
+    },
+    "fullContent": {
+      "type": "string",
+      "description": "The full message content."
+    },
+    "contentType": {
+      "type": "string",
+      "description": "The format of the message content.",
+      "enum": [
+        "markdown",
+        "html",
+        "text"
+      ]
+    },
+    "isInternal": {
+      "type": "boolean",
+      "description": "Whether this is an internal note."
+    },
+    "messageId": {
+      "type": "string",
+      "description": "RFC-5322 Message-ID header for email threading."
+    },
+    "inReplyToId": {
+      "type": "string",
+      "description": "RFC-5322 In-Reply-To header for email threading."
+    },
+    "referencesIds": {
+      "type": "array",
+      "description": "RFC-5322 References header for email threading.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "occurredAt": {
+      "type": "string",
+      "description": "When the message was sent.",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "When the message was created.",
+      "format": "date-time"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "sizeBytes": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "variants": [
+      {
+        "name": "Fixture variant"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/relationship_types",
+    "body": {
+      "variants": [
+        {
+          "name": "Fixture variant"
+        }
+      ]
+    }
+  }
+}

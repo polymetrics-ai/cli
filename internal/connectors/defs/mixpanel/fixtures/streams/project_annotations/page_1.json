@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/123/annotations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "results": [
+        {
+          "date": "2026-01-01 12:00:00",
+          "description": "Fixture product launch",
+          "id": 123,
+          "user": {
+            "id": 456,
+            "first_name": "Fixture",
+            "last_name": "User"
+          },
+          "tags": [
+            { "id": 789, "name": "launch" }
+          ]
+        }
+      ]
+    }
+  }
+}

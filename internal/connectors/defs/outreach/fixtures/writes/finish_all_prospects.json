@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "finishallprospects",
+      "attributes": {
+        "name": "Fixture Finish All Prospects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsFinishAll",
+    "body": {
+      "data": {
+        "type": "finishallprospects",
+        "attributes": {
+          "name": "Fixture Finish All Prospects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

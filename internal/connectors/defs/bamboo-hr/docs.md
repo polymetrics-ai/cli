@@ -1,69 +1,24 @@
 # Overview
 
-BambooHR is a read-only HR data source, migrated from the hand-written `internal/connectors/bamboo-hr`
-package to this declarative bundle. It reads the employee directory and three HR metadata
-endpoints (field definitions, list-field options, time off types) through the BambooHR REST API v1
-(`https://<subdomain>.bamboohr.com/api/v1`).
+BambooHR is an HR source and reverse-ETL target backed by the documented BambooHR REST API. This Pass B bundle keeps the legacy employee-directory and metadata streams, then expands the Basic-auth JSON API surface to 84 streams and 101 write actions. The coverage manifest also lists OAuth-only, binary/multipart, deprecated, and read-like POST endpoints with explicit exclusions.
 
 ## Auth setup
 
-Provide your BambooHR account `subdomain` (the `<subdomain>` in `https://<subdomain>.bamboohr.com`)
-and an `api_key` secret (Account settings > API Keys). The API key is sent as the HTTP Basic
-username with a literal `x` password — BambooHR's documented API-key convention — and is never
-logged. There is no `base_url` override in this bundle: `subdomain` is required and directly
-templates the base URL (`https://{{ config.subdomain }}.bamboohr.com/api/v1`), matching legacy's
-`bambooBaseURL` derivation.
+Provide the BambooHR account `subdomain` from `https://<subdomain>.bamboohr.com` and an `api_key` secret. The API key is sent as the HTTP Basic username with a literal `x` password, matching BambooHR's API-key convention. The bundle base URL is `https://{ config.subdomain }.bamboohr.com`; stream paths include `/api/v1`, `/api/v1_1`, `/api/v1_2`, or `/api/v2` as documented.
 
 ## Streams notes
 
-- `employees` reads `employees/directory`, records at `employees`, paginated with `page`/`limit`
-  query params (`pagination.type: page_number`) and BambooHR's own short-page stop rule (a page
-  returning fewer than `page_size` records is the last page) — the same rule legacy's `harvest`
-  loop implements by hand. Primary key `id`.
-- `meta_fields` reads `meta/fields` (a top-level JSON array, `records.path: ""`), single-page
-  (`pagination.type: none`, matching legacy's non-paginated flat-endpoint branch). Primary key `id`.
-- `meta_lists` reads `meta/lists` (also a top-level array), single-page. Primary key `field_id`,
-  sourced from the raw API's `fieldId` via a `computed_fields` rename (schema projection is exact
-  key match only).
-- `time_off_types` reads `meta/time_off/types`, records at the nested `timeOffTypes` key,
-  single-page. Primary key `id`.
-- None of the 4 streams is incremental: legacy declares no `CursorFields` and BambooHR's own API
-  offers no server-side updated-since filter for these endpoints, so every sync is a full read
-  (matching legacy's `InitialState`, which always starts empty and is never advanced by a request
-  param for this connector).
-- **Id stringification parity**: legacy's four record mappers all route their primary-key field
-  through a defensive `stringField` helper that coerces any JSON type (string OR number) to a Go
-  string — `meta/fields`' real wire shape sends `id` as a bare JSON number (`"id": 1`), while
-  `employees`/`time_off_types`/`meta_lists` send it as a string already, but legacy emits a STRING
-  in every case. Each stream's `computed_fields` entry uses `{{ record.<id-field> | last_path_segment }}`
-  rather than a bare `{{ record.<id-field> }}` reference: the engine's typed-extraction rule
-  (bare-reference-only) would otherwise copy `meta_fields`' raw numeric `1` through as a JSON
-  number, diverging from legacy's always-string output. `last_path_segment` is the documented
-  identity filter for any value containing no `/` (every id here), so the string VALUE is
-  unchanged while forcing the stringify path — deliberate reuse of a filter for its documented
-  no-op-on-slash-free-input behavior, not its primary URI-segment purpose.
+The first four streams preserve legacy record DATA: `employees`, `meta_fields`, `meta_lists`, and `time_off_types` keep their snake_case fields and stringified primary keys. New Pass B streams use BambooHR's documented JSON field names directly and are intentionally permissive for account-specific fields. Detail streams with path parameters use optional config values such as `employee_id`, `report_id`, or stream-specific `*_id` fields; those values are only required when reading that stream.
+
+Cursor and next-link list endpoints use `next_url` pagination when BambooHR returns a next URL. Legacy `employees` directory pagination keeps the `page`/`limit` short-page behavior and a full first fixture page.
 
 ## Write actions & risks
 
-None. BambooHR is read-only in this bundle (`capabilities.write: false`), matching legacy exactly
-— `bamboohr.go`'s `Write` is an unconditional `ErrUnsupportedOperation` stub.
+Write actions cover Basic-auth JSON/path POST, PUT, PATCH, and DELETE operations that the declarative write dialect can express. Delete actions are marked destructive and treat 404 as idempotent missing-ok where BambooHR reports not-found. All writes are one HTTP request per input record and require the normal reverse-ETL plan, preview, approval, and execute flow.
 
 ## Known limits
 
-- Full BambooHR API surface (single-employee read/update, custom reports, time off requests,
-  files, benefits, training, webhooks) is out of scope for this wave; see `api_surface.json`'s
-  `excluded` entries. Only the 4 legacy-parity read streams are implemented.
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy accepts optional `page_size`
-  (1-1000, default 100) and `max_pages` (default unlimited) config keys read at request time
-  (`bambooPageSize`/`bambooMaxPages`, `bamboohr.go:305-333`). The engine's `PaginationSpec.PageSize`/
-  `MaxPages` fields are plain fixed JSON integers baked into `streams.json`'s `base.pagination`
-  block — there is no templating/config-driven override mechanism for either. This bundle declares
-  a fixed `page_size: 100` (legacy's own default) and no `max_pages` cap (unbounded, matching
-  legacy's own default). Neither `page_size` nor `max_pages` is declared in `spec.json` (a
-  declared-but-unwireable key is worse than an absent one). The required 2-page conformance
-  fixture (`fixtures/streams/employees/{page_1,page_2}.json`) is sized to match live behavior:
-  page 1 returns a full 100-record page (so the paginator continues to page 2) and page 2 returns
-  the remainder — a fixture-convenience page size is never leaked into the live pagination config.
-- `employees/directory`'s `fields` envelope key (the account's configured custom-field list) is not
-  modeled as a stream — it is directory metadata about the request, not a syncable object
-  collection, matching legacy's own scope (legacy never surfaces it as a stream either).
+- OAuth-only public API operations are excluded as `requires_elevated_scope`; adding OAuth would change the legacy connector's API-key credential model and needs a separate auth design.
+- File, photo, CSV/PDF export, import, and multipart upload endpoints are excluded as `binary_payload` because this bundle is JSON-only.
+- Read-like POST endpoints, including dataset data queries and field-option POSTs, are not exposed as writes. The current declarative read path does not send stream request bodies, so treating those endpoints as reverse-ETL writes would misrepresent their behavior.
+- `api_surface.json` contains 340 documented method/path entries; 155 are explicit exclusions with closed-vocabulary categories.

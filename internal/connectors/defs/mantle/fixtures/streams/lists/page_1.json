@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/lists"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": "",
+      "lists": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "description": "fixture",
+        "customerCount": 1,
+        "contactCount": 1,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

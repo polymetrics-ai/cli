@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "suggestion_id": "suggestion_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/meetings/id_fixture/task-suggestions/suggestion_id_fixture/dismiss"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

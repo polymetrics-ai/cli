@@ -1,0 +1,20 @@
+{
+  "record": {
+    "token": "fixture_value",
+    "platform": "ios",
+    "appVersion": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/devices",
+    "body": {
+      "token": "fixture_value",
+      "platform": "ios",
+      "appVersion": "fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

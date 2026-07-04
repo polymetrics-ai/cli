@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workflow",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isArchived": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "versionId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "triggerCount": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "nodes": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "connections": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "settings": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "tags": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "shared": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}

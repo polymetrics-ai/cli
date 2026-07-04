@@ -1,0 +1,46 @@
+{
+  "record": {
+    "model": "model_fixture",
+    "loras": [
+      {
+        "url": "https://example.invalid/fixture",
+        "scale": 1.25
+      }
+    ],
+    "prompt": "prompt_fixture",
+    "width": 1,
+    "height": 1,
+    "num_inference_steps": 1,
+    "seed": 1,
+    "guidance_scale": 1.25,
+    "negative_prompt": "negative_prompt_fixture",
+    "response_extension": "webp",
+    "response_format": "b64_json"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/images/generations",
+    "body": {
+      "model": "model_fixture",
+      "loras": [
+        {
+          "url": "https://example.invalid/fixture",
+          "scale": 1.25
+        }
+      ],
+      "prompt": "prompt_fixture",
+      "width": 1,
+      "height": 1,
+      "num_inference_steps": 1,
+      "seed": 1,
+      "guidance_scale": 1.25,
+      "negative_prompt": "negative_prompt_fixture",
+      "response_extension": "webp",
+      "response_format": "b64_json"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

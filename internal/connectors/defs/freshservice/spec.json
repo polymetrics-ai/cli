@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Freshservice Connection Specification",
   "type": "object",
-  "required": ["api_key", "domain_name"],
+  "required": [
+    "api_key",
+    "domain_name"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
@@ -31,6 +34,322 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "agent_id": {
+      "type": "string",
+      "description": "Path parameter agent_id for Freshservice stream view_an_agent."
+    },
+    "alert_id": {
+      "type": "string",
+      "description": "Path parameter alert_id for Freshservice stream view_alert."
+    },
+    "announcement_id": {
+      "type": "string",
+      "description": "Path parameter announcement_id for Freshservice stream view_an_announcement."
+    },
+    "application_id": {
+      "type": "string",
+      "description": "Path parameter application_id for Freshservice stream list_users."
+    },
+    "approval_id": {
+      "type": "string",
+      "description": "Path parameter approval_id for Freshservice stream view_a_ticket_approval."
+    },
+    "article_id": {
+      "type": "string",
+      "description": "Path parameter article_id for Freshservice stream view_solution_article."
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "Path parameter asset_id for Freshservice stream view_an_asset_for_freshservice_itam."
+    },
+    "asset_type_id": {
+      "type": "string",
+      "description": "Path parameter asset_type_id for Freshservice stream view_an_asset_type."
+    },
+    "business_hour_id": {
+      "type": "string",
+      "description": "Path parameter business_hour_id for Freshservice stream view_a_business_hour."
+    },
+    "canned_respons_id": {
+      "type": "string",
+      "description": "Path parameter canned_respons_id for Freshservice stream show_canned_response."
+    },
+    "category_id": {
+      "type": "string",
+      "description": "Path parameter category_id for Freshservice stream view_solution_category."
+    },
+    "change_id": {
+      "type": "string",
+      "description": "Path parameter change_id for Freshservice stream view_a_change."
+    },
+    "communication_id": {
+      "type": "string",
+      "description": "Path parameter communication_id for Freshservice stream retrieve_emails_with_id."
+    },
+    "config_id": {
+      "type": "string",
+      "description": "Path parameter config_id for Freshservice stream journey_initiator_config_form."
+    },
+    "contract_id": {
+      "type": "string",
+      "description": "Path parameter contract_id for Freshservice stream view_a_contract."
+    },
+    "contract_type_id": {
+      "type": "string",
+      "description": "Path parameter contract_type_id for Freshservice stream list_all_contract_type_fields."
+    },
+    "department_id": {
+      "type": "string",
+      "description": "Path parameter department_id for Freshservice stream view_a_department."
+    },
+    "device_id": {
+      "type": "string",
+      "description": "Path parameter device_id for Freshservice stream view_a_device."
+    },
+    "display_id": {
+      "type": "string",
+      "description": "Path parameter display_id for Freshservice stream view_an_asset."
+    },
+    "ep_id": {
+      "type": "string",
+      "description": "Path parameter ep_id for Freshservice stream view_a_ep."
+    },
+    "filter_alerts_order_by": {
+      "type": "string",
+      "description": "Query parameter order_by for Freshservice stream filter_alerts."
+    },
+    "filter_alerts_order_type": {
+      "type": "string",
+      "description": "Query parameter order_type for Freshservice stream filter_alerts."
+    },
+    "filter_alerts_query": {
+      "type": "string",
+      "description": "Query parameter query for Freshservice stream filter_alerts."
+    },
+    "filter_all_project_tasks_newgen_query": {
+      "type": "string",
+      "description": "Query parameter query for Freshservice stream filter_all_project_tasks_newgen."
+    },
+    "filter_departments_query": {
+      "type": "string",
+      "description": "Query parameter query for Freshservice stream filter_departments."
+    },
+    "filter_locations_query": {
+      "type": "string",
+      "description": "Query parameter query for Freshservice stream filter_locations."
+    },
+    "filter_name": {
+      "type": "string",
+      "description": "Query parameter filter_name for Freshservice stream filter_releases."
+    },
+    "filter_schedules_query": {
+      "type": "string",
+      "description": "Query parameter query for Freshservice stream filter_schedules."
+    },
+    "filter_tickets_query": {
+      "type": "string",
+      "description": "Query parameter query for Freshservice stream filter_tickets."
+    },
+    "folder_id": {
+      "type": "string",
+      "description": "Path parameter folder_id for Freshservice stream view_solution_folder."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Path parameter group_id for Freshservice stream view_a_group."
+    },
+    "incident_id": {
+      "type": "string",
+      "description": "Path parameter incident_id for Freshservice stream view_incident."
+    },
+    "lifecycle_event_id": {
+      "type": "string",
+      "description": "Path parameter lifecycle_event_id for Freshservice stream view_a_lifecycle_event."
+    },
+    "list_all_approvals_parent": {
+      "type": "string",
+      "description": "Query parameter parent for Freshservice stream list_all_approvals."
+    },
+    "location_id": {
+      "type": "string",
+      "description": "Path parameter location_id for Freshservice stream view_a_location."
+    },
+    "maintenance_id": {
+      "type": "string",
+      "description": "Path parameter maintenance_id for Freshservice stream view_maintenance_from_change."
+    },
+    "maintenance_window_id": {
+      "type": "string",
+      "description": "Path parameter maintenance_window_id for Freshservice stream view_maintenance_from_maintenance_window."
+    },
+    "module_name": {
+      "type": "string",
+      "description": "Path parameter module_name for Freshservice stream view_project_associations."
+    },
+    "note_id": {
+      "type": "string",
+      "description": "Path parameter note_id for Freshservice stream view_alert_note."
+    },
+    "object_id": {
+      "type": "string",
+      "description": "Path parameter object_id for Freshservice stream show_custom_object."
+    },
+    "offboarding_request_id": {
+      "type": "string",
+      "description": "Path parameter offboarding_request_id for Freshservice stream view_offboarding_request."
+    },
+    "onboarding_request_id": {
+      "type": "string",
+      "description": "Path parameter onboarding_request_id for Freshservice stream view_onboarding_request."
+    },
+    "physical_subtype_id": {
+      "type": "string",
+      "description": "Path parameter physical_subtype_id for Freshservice stream view_a_physical_subtype."
+    },
+    "problem_id": {
+      "type": "string",
+      "description": "Path parameter problem_id for Freshservice stream view_a_problem."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Path parameter product_id for Freshservice stream view_a_product."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Path parameter project_id for Freshservice stream view_a_project."
+    },
+    "purchase_order_id": {
+      "type": "string",
+      "description": "Path parameter purchase_order_id for Freshservice stream view_a_purchase_order."
+    },
+    "relationship_id": {
+      "type": "string",
+      "description": "Path parameter relationship_id for Freshservice stream view_a_relationship."
+    },
+    "release_id": {
+      "type": "string",
+      "description": "Path parameter release_id for Freshservice stream view_a_release."
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Path parameter request_id for Freshservice stream view_journey_request."
+    },
+    "requester_group_id": {
+      "type": "string",
+      "description": "Path parameter requester_group_id for Freshservice stream view_a_requester_group."
+    },
+    "requester_id": {
+      "type": "string",
+      "description": "Path parameter requester_id for Freshservice stream view_a_requester."
+    },
+    "resource_id": {
+      "type": "string",
+      "description": "Path parameter resource_id for Freshservice stream view_a_cloud_resource."
+    },
+    "role_id": {
+      "type": "string",
+      "description": "Path parameter role_id for Freshservice stream view_a_role."
+    },
+    "schedule_id": {
+      "type": "string",
+      "description": "Path parameter schedule_id for Freshservice stream view_a_schedule."
+    },
+    "service_component_id": {
+      "type": "string",
+      "description": "Path parameter service_component_id for Freshservice stream view_service_component."
+    },
+    "shared_field_id": {
+      "type": "string",
+      "description": "Path parameter shared_field_id for Freshservice stream retrieve_shared_fields_data."
+    },
+    "shift_id": {
+      "type": "string",
+      "description": "Path parameter shift_id for Freshservice stream view_a_shift."
+    },
+    "start_token": {
+      "type": "string",
+      "description": "Query parameter start_token for Freshservice stream view_alert_logs."
+    },
+    "status_page_id": {
+      "type": "string",
+      "description": "Path parameter status_page_id for Freshservice stream view_incidents."
+    },
+    "subscriber_id": {
+      "type": "string",
+      "description": "Path parameter subscriber_id for Freshservice stream view_a_subscriber."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Path parameter task_id for Freshservice stream view_a_project_task."
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Path parameter template_id for Freshservice stream get_pir_templates_by_id."
+    },
+    "ticket_id": {
+      "type": "string",
+      "description": "Path parameter ticket_id for Freshservice stream view_a_ticket."
+    },
+    "time_entry_id": {
+      "type": "string",
+      "description": "Path parameter time_entry_id for Freshservice stream view_ticket_time_entry."
+    },
+    "type_id": {
+      "type": "string",
+      "description": "Path parameter type_id for Freshservice stream view_project_task_type_fields."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Query parameter user_id for Freshservice stream view_calendar_events_user."
+    },
+    "vendor_id": {
+      "type": "string",
+      "description": "Path parameter vendor_id for Freshservice stream view_a_vendor."
+    },
+    "view_calendar_events_schedule_end_time": {
+      "type": "string",
+      "description": "Query parameter end_time for Freshservice stream view_calendar_events_schedule."
+    },
+    "view_calendar_events_schedule_start_time": {
+      "type": "string",
+      "description": "Query parameter start_time for Freshservice stream view_calendar_events_schedule."
+    },
+    "view_calendar_events_schedule_user_end_time": {
+      "type": "string",
+      "description": "Query parameter end_time for Freshservice stream view_calendar_events_schedule_user."
+    },
+    "view_calendar_events_schedule_user_start_time": {
+      "type": "string",
+      "description": "Query parameter start_time for Freshservice stream view_calendar_events_schedule_user."
+    },
+    "view_calendar_events_shift_end_time": {
+      "type": "string",
+      "description": "Query parameter end_time for Freshservice stream view_calendar_events_shift."
+    },
+    "view_calendar_events_shift_start_time": {
+      "type": "string",
+      "description": "Query parameter start_time for Freshservice stream view_calendar_events_shift."
+    },
+    "view_calendar_events_shift_user_end_time": {
+      "type": "string",
+      "description": "Query parameter end_time for Freshservice stream view_calendar_events_shift_user."
+    },
+    "view_calendar_events_shift_user_start_time": {
+      "type": "string",
+      "description": "Query parameter start_time for Freshservice stream view_calendar_events_shift_user."
+    },
+    "view_calendar_events_user_end_time": {
+      "type": "string",
+      "description": "Query parameter end_time for Freshservice stream view_calendar_events_user."
+    },
+    "view_calendar_events_user_start_time": {
+      "type": "string",
+      "description": "Query parameter start_time for Freshservice stream view_calendar_events_user."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Path parameter workspace_id for Freshservice stream view_all_schedules."
     }
   }
 }

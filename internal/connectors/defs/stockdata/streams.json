@@ -3,7 +3,11 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "api_key_query", "param": "api_token", "value": "{{ secrets.api_token }}" }
+      {
+        "mode": "api_key_query",
+        "param": "api_token",
+        "value": "{{ secrets.api_token }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -12,17 +16,32 @@
       "start_page": 1,
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/news/all", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/news/all",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "stockdata api_token is missing or invalid; re-run pm credentials add stockdata" },
-      { "status": 429, "class": "rate_limited", "hint": "stockdata rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "stockdata api_token is missing or invalid; re-run pm credentials add stockdata"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "stockdata rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "tickers",
       "path": "/data/tickers",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/tickers.json"
     },
     {
@@ -30,10 +49,18 @@
       "path": "/data/eod",
       "query": {
         "symbols": "{{ config.symbols }}",
-        "date_from": { "template": "{{ config.date_from }}", "omit_when_absent": true },
-        "date_to": { "template": "{{ config.date_to }}", "omit_when_absent": true }
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/eod_prices.json"
     },
     {
@@ -41,17 +68,385 @@
       "path": "/data/intraday",
       "query": {
         "symbols": "{{ config.symbols }}",
-        "date_from": { "template": "{{ config.date_from }}", "omit_when_absent": true },
-        "date_to": { "template": "{{ config.date_to }}", "omit_when_absent": true }
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/intraday_prices.json"
     },
     {
       "name": "news",
       "path": "/news/all",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/news.json"
+    },
+    {
+      "name": "quotes",
+      "path": "/data/quote",
+      "query": {
+        "symbols": "{{ config.symbols }}",
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/quotes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "intraday_adjusted_prices",
+      "path": "/data/intraday/adjusted",
+      "query": {
+        "symbols": "{{ config.symbols }}",
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/intraday_adjusted_prices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "splits",
+      "path": "/data/splits",
+      "query": {
+        "symbols": "{{ config.symbols }}",
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/splits.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "dividends",
+      "path": "/data/dividends",
+      "query": {
+        "symbols": "{{ config.symbols }}",
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/dividends.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "news_similar",
+      "path": "/news/similar/{{ fanout.id }}",
+      "query": {
+        "symbols": {
+          "template": "{{ config.symbols }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "published_after": {
+          "template": "{{ config.published_after }}",
+          "omit_when_absent": true
+        },
+        "published_before": {
+          "template": "{{ config.published_before }}",
+          "omit_when_absent": true
+        },
+        "published_on": {
+          "template": "{{ config.published_on }}",
+          "omit_when_absent": true
+        },
+        "countries": {
+          "template": "{{ config.countries }}",
+          "omit_when_absent": true
+        },
+        "interval": {
+          "template": "{{ config.interval }}",
+          "omit_when_absent": true
+        },
+        "group_by": {
+          "template": "{{ config.group_by }}",
+          "omit_when_absent": true
+        },
+        "sentiment_gte": {
+          "template": "{{ config.sentiment_gte }}",
+          "omit_when_absent": true
+        },
+        "sentiment_lte": {
+          "template": "{{ config.sentiment_lte }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "news_uuids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "uuid"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated UUID config this stream needs."
+      },
+      "schema": "schemas/news_similar.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "news_by_uuid",
+      "path": "/news/uuid/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "news_uuids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "uuid"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated UUID config this stream needs."
+      },
+      "schema": "schemas/news_by_uuid.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "news_stats_intraday",
+      "path": "/news/stats/intraday",
+      "query": {
+        "symbols": {
+          "template": "{{ config.symbols }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "published_after": {
+          "template": "{{ config.published_after }}",
+          "omit_when_absent": true
+        },
+        "published_before": {
+          "template": "{{ config.published_before }}",
+          "omit_when_absent": true
+        },
+        "published_on": {
+          "template": "{{ config.published_on }}",
+          "omit_when_absent": true
+        },
+        "countries": {
+          "template": "{{ config.countries }}",
+          "omit_when_absent": true
+        },
+        "interval": {
+          "template": "{{ config.interval }}",
+          "omit_when_absent": true
+        },
+        "group_by": {
+          "template": "{{ config.group_by }}",
+          "omit_when_absent": true
+        },
+        "sentiment_gte": {
+          "template": "{{ config.sentiment_gte }}",
+          "omit_when_absent": true
+        },
+        "sentiment_lte": {
+          "template": "{{ config.sentiment_lte }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/news_stats_intraday.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "news_stats_aggregation",
+      "path": "/news/stats/aggregation",
+      "query": {
+        "symbols": {
+          "template": "{{ config.symbols }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "published_after": {
+          "template": "{{ config.published_after }}",
+          "omit_when_absent": true
+        },
+        "published_before": {
+          "template": "{{ config.published_before }}",
+          "omit_when_absent": true
+        },
+        "published_on": {
+          "template": "{{ config.published_on }}",
+          "omit_when_absent": true
+        },
+        "countries": {
+          "template": "{{ config.countries }}",
+          "omit_when_absent": true
+        },
+        "interval": {
+          "template": "{{ config.interval }}",
+          "omit_when_absent": true
+        },
+        "group_by": {
+          "template": "{{ config.group_by }}",
+          "omit_when_absent": true
+        },
+        "sentiment_gte": {
+          "template": "{{ config.sentiment_gte }}",
+          "omit_when_absent": true
+        },
+        "sentiment_lte": {
+          "template": "{{ config.sentiment_lte }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/news_stats_aggregation.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "news_stats_trending",
+      "path": "/news/stats/trending",
+      "query": {
+        "symbols": {
+          "template": "{{ config.symbols }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "published_after": {
+          "template": "{{ config.published_after }}",
+          "omit_when_absent": true
+        },
+        "published_before": {
+          "template": "{{ config.published_before }}",
+          "omit_when_absent": true
+        },
+        "published_on": {
+          "template": "{{ config.published_on }}",
+          "omit_when_absent": true
+        },
+        "countries": {
+          "template": "{{ config.countries }}",
+          "omit_when_absent": true
+        },
+        "interval": {
+          "template": "{{ config.interval }}",
+          "omit_when_absent": true
+        },
+        "group_by": {
+          "template": "{{ config.group_by }}",
+          "omit_when_absent": true
+        },
+        "sentiment_gte": {
+          "template": "{{ config.sentiment_gte }}",
+          "omit_when_absent": true
+        },
+        "sentiment_lte": {
+          "template": "{{ config.sentiment_lte }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/news_stats_trending.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "entity_search",
+      "path": "/entity/search",
+      "query": {
+        "search": "{{ config.entity_search }}",
+        "types": {
+          "template": "{{ config.entity_types }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/entity_search.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "news_sources",
+      "path": "/news/sources",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "group_domains": {
+          "template": "{{ config.group_domains }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/news_sources.json",
+      "projection": "passthrough"
     }
   ]
 }

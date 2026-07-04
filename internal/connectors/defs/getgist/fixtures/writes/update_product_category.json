@@ -1,0 +1,14 @@
+{
+  "record": {
+    "store_id": "store_id_fixture_1",
+    "category_id": "category_id_fixture_1",
+    "name": "Fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/ecommerce/stores/store_id_fixture_1/categories/category_id_fixture_1",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "type": "fixture_type",
+    "delayInMinutes": 1,
+    "executionMode": "fixture_executionMode",
+    "variants": [],
+    "parentId": 1,
+    "ifConditionPositive": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/sequences/synthetic-conformance-value/steps",
+    "body": {
+      "type": "fixture_type",
+      "delayInMinutes": 1,
+      "executionMode": "fixture_executionMode",
+      "variants": [],
+      "parentId": 1,
+      "ifConditionPositive": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

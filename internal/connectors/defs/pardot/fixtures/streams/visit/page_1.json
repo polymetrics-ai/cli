@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/visits/synthetic-conformance-value",
+    "query": {
+      "fields": "id,visitorId,prospectId,visitorPageViewCount,firstVisitorPageViewAt,lastVisitorPageViewAt,durationInSeconds,campaignParameter,mediumParameter,sourceParameter,contentParameter,termParameter,createdAt,updatedAt"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "visitorId": 1,
+      "prospectId": 1,
+      "visitorPageViewCount": 1,
+      "firstVisitorPageViewAt": "2026-01-01T00:00:00Z",
+      "lastVisitorPageViewAt": "2026-01-01T00:00:00Z",
+      "durationInSeconds": 1,
+      "campaignParameter": "campaignParameter_fixture",
+      "mediumParameter": "mediumParameter_fixture",
+      "sourceParameter": "sourceParameter_fixture",
+      "contentParameter": "contentParameter_fixture",
+      "termParameter": "termParameter_fixture",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

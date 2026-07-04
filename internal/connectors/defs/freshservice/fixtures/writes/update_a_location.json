@@ -1,0 +1,15 @@
+{
+  "record": {
+    "location_id": 123,
+    "name": "Fixture update_a_location",
+    "description": "Fixture update_a_location record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/locations/123",
+    "body": {
+      "name": "Fixture update_a_location",
+      "description": "Fixture update_a_location record"
+    }
+  }
+}

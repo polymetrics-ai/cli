@@ -1,0 +1,13 @@
+{
+  "record": {
+    "task_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tasks/123"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

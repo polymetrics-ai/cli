@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/templates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TemplateId": 100,
+      "Name": "Fixture Template",
+      "Alias": "fixture-template"
+    }
+  }
+}

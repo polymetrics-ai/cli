@@ -1,0 +1,21 @@
+{
+  "record": {
+    "outbound_payment_id": "outbound_payment_id_fixture",
+    "outbound_payments": {
+      "description": "Synthetic update_an_outbound_payment fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/outbound_payments/outbound_payment_id_fixture",
+    "body": {
+      "outbound_payments": {
+        "description": "Synthetic update_an_outbound_payment fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

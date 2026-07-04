@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/calendars/get"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "name": "Fixture Name",
+      "slug": "fixture-slug",
+      "avatar_url": "https://example.invalid/image.png",
+      "url": "https://example.invalid/luma",
+      "description": "Fixture description",
+      "social_image_url": "https://example.invalid/image.png",
+      "cover_image_url": "https://example.invalid/image.png",
+      "is_personal": true,
+      "location": {},
+      "coordinate": {
+        "longitude": -73.9857,
+        "latitude": 40.7484
+      },
+      "instagram_handle": "fixture",
+      "twitter_handle": "fixture",
+      "youtube_handle": "fixture",
+      "website": "fixture"
+    }
+  }
+}

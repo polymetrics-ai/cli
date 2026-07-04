@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/shift-differentials"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "_links": {
+        "next": {
+          "href": "https://example.com/resource"
+        },
+        "prev": {
+          "href": "https://example.com/resource"
+        }
+      },
+      "data": [
+        {
+          "allowAllEmployees": true,
+          "archivedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "deletedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "page": 1001,
+        "pageSize": 1001,
+        "totalItems": 1001,
+        "totalPages": 1001
+      }
+    }
+  }
+}

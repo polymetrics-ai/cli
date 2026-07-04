@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tax_rates",
+    "body": {
+      "name": "Fixture record"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

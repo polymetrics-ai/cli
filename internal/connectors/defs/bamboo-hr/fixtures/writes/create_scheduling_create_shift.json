@@ -1,0 +1,36 @@
+{
+  "record": {
+    "scheduleId": "fixture_id",
+    "status": "planned",
+    "color": "fixture_value",
+    "timezone": "fixture_value",
+    "start": "fixture_value",
+    "end": "fixture_value",
+    "name": "Fixture Name",
+    "employeeIds": [
+      1001
+    ],
+    "capacity": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/scheduling/shifts",
+    "body": {
+      "scheduleId": "fixture_id",
+      "status": "planned",
+      "color": "fixture_value",
+      "timezone": "fixture_value",
+      "start": "fixture_value",
+      "end": "fixture_value",
+      "name": "Fixture Name",
+      "employeeIds": [
+        1001
+      ],
+      "capacity": 1001
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/scopes",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "consent": "FLEXIBLE",
+        "default": true,
+        "description": "description_fixture",
+        "displayName": "display_name_fixture",
+        "id": "id_fixture",
+        "metadataPublish": "ALL_CLIENTS",
+        "name": "name_fixture",
+        "optional": true,
+        "system": true,
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

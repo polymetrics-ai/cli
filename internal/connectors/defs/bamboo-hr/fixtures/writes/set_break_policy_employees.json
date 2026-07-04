@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "employeeIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/time-tracking/break-policies/fixture_id/assign",
+    "body": {
+      "employeeIds": [
+        1001
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

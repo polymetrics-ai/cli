@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "project",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "allEmployeesAssigned": {
+      "type": "boolean"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "billable": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "deletedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employeeIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "hasTasks": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "includeInPayroll": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

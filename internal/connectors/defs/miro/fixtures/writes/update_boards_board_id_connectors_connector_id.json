@@ -1,0 +1,84 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "connector_id": "synthetic-conformance-value",
+    "startItem": {
+      "id": "id_fixture",
+      "position": {
+        "x": "x_fixture",
+        "y": "y_fixture"
+      },
+      "snapTo": "auto"
+    },
+    "endItem": {
+      "id": "id_fixture",
+      "position": {
+        "x": "x_fixture",
+        "y": "y_fixture"
+      },
+      "snapTo": "auto"
+    },
+    "shape": "straight",
+    "captions": [
+      {
+        "content": "content_fixture",
+        "position": "position_fixture",
+        "textAlignVertical": "top"
+      }
+    ],
+    "style": {
+      "color": "#ffffff",
+      "endStrokeCap": "none",
+      "fontSize": "font_size_fixture",
+      "startStrokeCap": "none",
+      "strokeColor": "#ffffff",
+      "strokeStyle": "normal",
+      "strokeWidth": "stroke_width_fixture",
+      "textOrientation": "horizontal"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/boards/synthetic-conformance-value/connectors/synthetic-conformance-value",
+    "body": {
+      "startItem": {
+        "id": "id_fixture",
+        "position": {
+          "x": "x_fixture",
+          "y": "y_fixture"
+        },
+        "snapTo": "auto"
+      },
+      "endItem": {
+        "id": "id_fixture",
+        "position": {
+          "x": "x_fixture",
+          "y": "y_fixture"
+        },
+        "snapTo": "auto"
+      },
+      "shape": "straight",
+      "captions": [
+        {
+          "content": "content_fixture",
+          "position": "position_fixture",
+          "textAlignVertical": "top"
+        }
+      ],
+      "style": {
+        "color": "#ffffff",
+        "endStrokeCap": "none",
+        "fontSize": "font_size_fixture",
+        "startStrokeCap": "none",
+        "strokeColor": "#ffffff",
+        "strokeStyle": "normal",
+        "strokeWidth": "stroke_width_fixture",
+        "textOrientation": "horizontal"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

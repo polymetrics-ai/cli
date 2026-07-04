@@ -1,0 +1,20 @@
+{
+  "record": {
+    "estimate_id": 123,
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/estimates/123/invoice",
+    "body": {
+      "name": "Fixture record"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

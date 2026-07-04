@@ -1,5 +1,11 @@
 {
-  "request": { "method": "GET", "path": "/v1/subscriptions", "query": { "take": "500" } },
+  "request": {
+    "method": "GET",
+    "path": "/v1/subscriptions",
+    "query": {
+      "take": "500"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,12 +13,20 @@
         {
           "id": "sub_fixture_1",
           "active": true,
-          "total": 99.0,
-          "subtotal": 90.0,
-          "presentmentTotal": 99.0,
-          "presentmentSubtotal": 90.0,
-          "plan": { "id": "plan_fixture_1", "name": "Pro" },
-          "lineItems": [{ "id": "li_fixture_1", "amount": 99.0 }],
+          "total": 99,
+          "subtotal": 90,
+          "presentmentTotal": 99,
+          "presentmentSubtotal": 90,
+          "plan": {
+            "id": "plan_fixture_1",
+            "name": "Pro"
+          },
+          "lineItems": [
+            {
+              "id": "li_fixture_1",
+              "amount": 99
+            }
+          ],
           "frozenAt": null,
           "canceledAt": null,
           "activatedAt": "2026-01-01T00:00:00.000Z",

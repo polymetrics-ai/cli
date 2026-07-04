@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Actions.getOutlinks",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "label": "Fixture row 1",
+        "nb_visits": 1,
+        "nb_hits": 2
+      },
+      {
+        "label": "Fixture row 2",
+        "nb_visits": 1,
+        "nb_hits": 2
+      }
+    ]
+  }
+}

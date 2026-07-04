@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "calldisposition",
+      "attributes": {
+        "name": "Fixture Update Call Disposition"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/callDispositions/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "calldisposition",
+        "attributes": {
+          "name": "Fixture Update Call Disposition"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

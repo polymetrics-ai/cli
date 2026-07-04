@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/blacklist/type/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "hasMore": false,
+      "results": [
+        {
+          "id": "blacklist_fixture",
+          "name": "Fixture exclusion",
+          "type": "ip"
+        }
+      ]
+    }
+  }
+}

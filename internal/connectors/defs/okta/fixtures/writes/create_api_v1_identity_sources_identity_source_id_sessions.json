@@ -1,0 +1,13 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/sessions"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

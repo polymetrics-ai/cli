@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "form_field",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "formId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "prospectApiFieldId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dataFormat": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "errorMessage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cssClasses": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isRequired": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isAlwaysDisplay": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isMaintainInitialValue": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isDoNotPrefill": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "sortOrder": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hasDependents": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hasProgressives": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hasValues": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "createdById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updatedById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true
+}

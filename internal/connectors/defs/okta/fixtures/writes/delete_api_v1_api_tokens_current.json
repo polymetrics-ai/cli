@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/api-tokens/current"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

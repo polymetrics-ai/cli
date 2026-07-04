@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/currency_exchange_rates",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "currency_exchange_rates": [
+        {
+          "created_at": "2026-01-01T00:00:00Z",
+          "description": "Synthetic Currency Exchange Rates fixture"
+        }
+      ],
+      "meta": {
+        "cursors": {
+          "before": null,
+          "after": null
+        },
+        "limit": 50
+      }
+    }
+  }
+}

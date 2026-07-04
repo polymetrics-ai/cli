@@ -1,0 +1,14 @@
+{
+  "record": {
+    "authenticator_id": "synthetic-conformance-value",
+    "aaguid": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/authenticators/synthetic-conformance-value/aaguids/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

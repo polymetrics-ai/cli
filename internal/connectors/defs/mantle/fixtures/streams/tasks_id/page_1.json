@@ -1,0 +1,70 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/tasks/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "task": {
+        "id": "id_fixture",
+        "title": "fixture",
+        "description": "fixture",
+        "descriptionHtml": "<p>Fixture</p>",
+        "priority": "low",
+        "status": "new",
+        "dueDate": "2026-01-01T00:00:00Z",
+        "tags": [
+          "fixture"
+        ],
+        "completedAt": "2026-01-01T00:00:00Z",
+        "assignee": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "createdBy": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "deal": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "dealStage": {
+            "id": "id_fixture",
+            "name": "fixture"
+          }
+        },
+        "dealActivity": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "customer": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "dealId": "deal_id_fixture",
+        "dealActivityId": "deal_activity_id_fixture",
+        "customerId": "customer_id_fixture",
+        "contactId": "contact_id_fixture",
+        "contact": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "hasComments": true,
+        "todoItems": [
+          {
+            "id": "id_fixture",
+            "content": "fixture",
+            "completed": true,
+            "completedAt": "2026-01-01T00:00:00Z",
+            "displayOrder": 1
+          }
+        ]
+      }
+    }
+  }
+}

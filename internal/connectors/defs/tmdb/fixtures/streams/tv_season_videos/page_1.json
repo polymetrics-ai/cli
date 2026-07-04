@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tv/synthetic-conformance-value/season/synthetic-conformance-value/videos",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 123,
+          "title": "Fixture tv_season_videos",
+          "name": "Fixture tv_season_videos",
+          "overview": "Deterministic TMDb fixture",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        }
+      ],
+      "page": 1,
+      "total_pages": 1,
+      "total_results": 1
+    }
+  }
+}

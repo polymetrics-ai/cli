@@ -1,0 +1,16 @@
+{
+  "record": {
+    "verifyKnowledgeSecondWhen2faRequired": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/attack-protection/api/v1/authenticator-settings",
+    "body": {
+      "verifyKnowledgeSecondWhen2faRequired": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

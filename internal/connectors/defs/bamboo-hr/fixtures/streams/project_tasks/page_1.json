@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/projects/synthetic-conformance-value/tasks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "billable": true,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "deletedAt": "2026-01-01T00:00:00Z",
+          "name": "Fixture Name",
+          "projectId": 1001,
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

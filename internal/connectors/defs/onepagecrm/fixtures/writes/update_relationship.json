@@ -1,0 +1,26 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "relationship_id": "fixture_id",
+    "relationship_type_id": "fixture_value",
+    "related_contacts": [
+      {
+        "id": "fixture_related_contact_id",
+        "variant_id": "fixture_variant_id"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture_id/relationships/fixture_id",
+    "body": {
+      "relationship_type_id": "fixture_value",
+      "related_contacts": [
+        {
+          "id": "fixture_related_contact_id",
+          "variant_id": "fixture_variant_id"
+        }
+      ]
+    }
+  }
+}

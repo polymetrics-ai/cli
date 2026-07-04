@@ -1,0 +1,1646 @@
+{
+  "actions": [
+    {
+      "name": "create_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/pages",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus status pages; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_page",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/{{ record.page_id }}",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus status pages; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_page",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/{{ record.page_id }}",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus status pages; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "create_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/workspaces",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus workspaces; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_workspace",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/workspaces/{{ record.workspace_id }}",
+      "path_fields": [
+        "workspace_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspace_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus workspaces; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "create_component",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/components",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus components; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_component",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/{{ record.page_id }}/components/{{ record.component_id }}",
+      "path_fields": [
+        "page_id",
+        "component_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "component_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "component_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus components; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_component",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/components/{{ record.component_id }}",
+      "path_fields": [
+        "page_id",
+        "component_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "component_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "component_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus components; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_team_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/team",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus team members; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_team_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/team/{{ record.member_id }}",
+      "path_fields": [
+        "page_id",
+        "member_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "member_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "member_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus team members; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_incident",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/incidents",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incidents; verify target ids and payload before execution."
+    },
+    {
+      "name": "add_incident_with_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/incidents/{{ record.template }}",
+      "path_fields": [
+        "page_id",
+        "template"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "template": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "template"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incidents; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_incident",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/incidents/{{ record.incident_id }}",
+      "path_fields": [
+        "page_id",
+        "incident_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "incident_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incidents; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_incident",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/incidents/{{ record.incident_id }}",
+      "path_fields": [
+        "page_id",
+        "incident_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "incident_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incidents; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_incident_update",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/incidents/{{ record.incident_id }}/incident-updates",
+      "path_fields": [
+        "page_id",
+        "incident_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "incident_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incident updates; verify target ids and payload before execution."
+    },
+    {
+      "name": "resolve_incident_with_template",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/{{ record.page_id }}/incidents/{{ record.incident_id }}/incident-updates/{{ record.template }}",
+      "path_fields": [
+        "page_id",
+        "incident_id",
+        "template"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          },
+          "template": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "incident_id",
+          "template"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incident updates; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_incident_update",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/incidents/{{ record.incident_id }}/incident-updates/{{ record.incident_update_id }}",
+      "path_fields": [
+        "page_id",
+        "incident_id",
+        "incident_update_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          },
+          "incident_update_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "incident_id",
+          "incident_update_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incident updates; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_incident_update",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/incidents/{{ record.incident_id }}/incident-updates/{{ record.incident_update_id }}",
+      "path_fields": [
+        "page_id",
+        "incident_id",
+        "incident_update_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          },
+          "incident_update_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "incident_id",
+          "incident_update_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus incident updates; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_maintenance",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/maintenances",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus maintenances; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_maintenance",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/maintenances/{{ record.maintenance_id }}",
+      "path_fields": [
+        "page_id",
+        "maintenance_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "maintenance_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "maintenance_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus maintenances; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_maintenance",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/maintenances/{{ record.maintenance_id }}",
+      "path_fields": [
+        "page_id",
+        "maintenance_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "maintenance_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "maintenance_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus maintenances; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_maintenance_update",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/maintenances/{{ record.maintenance_id }}/maintenance-updates",
+      "path_fields": [
+        "page_id",
+        "maintenance_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "maintenance_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "maintenance_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus maintenance updates; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_maintenance_update",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/maintenances/{{ record.maintenance_id }}/maintenance-updates/{{ record.maintenance_update_id }}",
+      "path_fields": [
+        "page_id",
+        "maintenance_id",
+        "maintenance_update_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "maintenance_id": {
+            "type": "string"
+          },
+          "maintenance_update_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "maintenance_id",
+          "maintenance_update_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus maintenance updates; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_maintenance_update",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/maintenances/{{ record.maintenance_id }}/maintenance-updates/{{ record.maintenance_update_id }}",
+      "path_fields": [
+        "page_id",
+        "maintenance_id",
+        "maintenance_update_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "maintenance_id": {
+            "type": "string"
+          },
+          "maintenance_update_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "maintenance_id",
+          "maintenance_update_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus maintenance updates; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/templates",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus templates; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/templates/{{ record.template_id }}",
+      "path_fields": [
+        "page_id",
+        "template_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "template_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "template_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus templates; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/templates/{{ record.template_id }}",
+      "path_fields": [
+        "page_id",
+        "template_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "template_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "template_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus templates; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_generic_notice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/generic-notices",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus general notices; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_generic_notice",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/generic-notices/{{ record.generic_notice_id }}",
+      "path_fields": [
+        "page_id",
+        "generic_notice_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "generic_notice_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "generic_notice_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus general notices; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_generic_notice",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/generic-notices/{{ record.generic_notice_id }}",
+      "path_fields": [
+        "page_id",
+        "generic_notice_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "generic_notice_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "generic_notice_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus general notices; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_subscriber",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/subscribers",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus subscribers; verify target ids and payload before execution."
+    },
+    {
+      "name": "add_subscribers_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/subscribers/bulk",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus subscribers; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_subscriber",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/subscribers/{{ record.subscriber_id }}",
+      "path_fields": [
+        "page_id",
+        "subscriber_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "subscriber_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "subscriber_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus subscribers; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_metric",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/metrics",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus metrics; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_metric",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/metrics/{{ record.metric_id }}",
+      "path_fields": [
+        "page_id",
+        "metric_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "metric_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "metric_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus metrics; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_metric",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/metrics/{{ record.metric_id }}",
+      "path_fields": [
+        "page_id",
+        "metric_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "metric_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "metric_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus metrics; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_metric_datapoint",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/metrics/{{ record.metric_id }}",
+      "path_fields": [
+        "page_id",
+        "metric_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "metric_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "metric_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus metric datapoints; verify target ids and payload before execution."
+    },
+    {
+      "name": "add_metric_datapoints",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/metrics/{{ record.metric_id }}/data",
+      "path_fields": [
+        "page_id",
+        "metric_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "metric_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "metric_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus metric datapoints; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_metric_datapoints",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/metrics/{{ record.metric_id }}/data",
+      "path_fields": [
+        "page_id",
+        "metric_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "metric_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "metric_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus metric datapoints; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_audience_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/audience_groups",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus audience groups; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_audience_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/{{ record.page_id }}/audience_groups/{{ record.audience_group_id }}",
+      "path_fields": [
+        "page_id",
+        "audience_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "audience_group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "audience_group_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus audience groups; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_audience_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/{{ record.page_id }}/audience-groups/{{ record.audience_group_id }}",
+      "path_fields": [
+        "page_id",
+        "audience_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "audience_group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "audience_group_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus audience groups; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "regenerate_secure_link",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/{{ record.page_id }}/regenerate-secure-link",
+      "path_fields": [
+        "page_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus private-page secure links; verify target ids and payload before execution.",
+      "body_type": "none"
+    },
+    {
+      "name": "create_monitor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/monitors",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitors; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_monitor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/monitors/{{ record.monitor_id }}",
+      "path_fields": [
+        "monitor_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitor_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitor_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitors; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_monitor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/monitors/{{ record.monitor_id }}",
+      "path_fields": [
+        "monitor_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitor_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitor_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitors; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_monitor_group_assignment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/monitors/{{ record.monitor_id }}/group",
+      "path_fields": [
+        "monitor_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitor_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitor_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor group assignments; verify target ids and payload before execution."
+    },
+    {
+      "name": "create_monitor_alert",
+      "kind": "create",
+      "method": "POST",
+      "path": "/monitor-alerts",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor alerts; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_monitor_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/monitor-alerts/{{ record.monitor_alert_id }}",
+      "path_fields": [
+        "monitor_alert_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitor_alert_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitor_alert_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor alerts; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_monitor_alert",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/monitor-alerts/{{ record.monitor_alert_id }}",
+      "path_fields": [
+        "monitor_alert_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitor_alert_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitor_alert_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor alerts; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "create_monitors_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/monitors-groups",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor groups; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_monitors_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/monitors-groups/{{ record.monitors_group_id }}",
+      "path_fields": [
+        "monitors_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitors_group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitors_group_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor groups; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_monitors_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/monitors-groups/{{ record.monitors_group_id }}",
+      "path_fields": [
+        "monitors_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitors_group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitors_group_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor groups; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_monitors_to_group",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/monitors-groups/{{ record.monitors_group_id }}/monitors",
+      "path_fields": [
+        "monitors_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "monitors_group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "monitors_group_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus monitor groups; verify target ids and payload before execution."
+    },
+    {
+      "name": "create_routing_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/routing-rules",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus routing rules; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_routing_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/routing-rules/{{ record.routing_rule_id }}",
+      "path_fields": [
+        "routing_rule_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "routing_rule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "routing_rule_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus routing rules; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_routing_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/routing-rules/{{ record.routing_rule_id }}",
+      "path_fields": [
+        "routing_rule_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "routing_rule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "routing_rule_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus routing rules; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "create_escalation_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/escalation-policies",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus escalation policies; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_escalation_policy",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/escalation-policies/{{ record.escalation_policy_id }}",
+      "path_fields": [
+        "escalation_policy_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "escalation_policy_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "escalation_policy_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus escalation policies; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_escalation_policy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/escalation-policies/{{ record.escalation_policy_id }}",
+      "path_fields": [
+        "escalation_policy_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "escalation_policy_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "escalation_policy_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus escalation policies; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "create_on_call_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/on-call-schedules",
+      "path_fields": [],
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus on-call schedules; verify target ids and payload before execution."
+    },
+    {
+      "name": "update_on_call_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/on-call-schedules/{{ record.on_call_schedule_id }}",
+      "path_fields": [
+        "on_call_schedule_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "on_call_schedule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "on_call_schedule_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus on-call schedules; verify target ids and payload before execution."
+    },
+    {
+      "name": "delete_on_call_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/on-call-schedules/{{ record.on_call_schedule_id }}",
+      "path_fields": [
+        "on_call_schedule_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "on_call_schedule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "on_call_schedule_id"
+        ],
+        "additionalProperties": true
+      },
+      "risk": "Mutates Instatus on-call schedules; verify target ids and payload before execution.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    }
+  ]
+}

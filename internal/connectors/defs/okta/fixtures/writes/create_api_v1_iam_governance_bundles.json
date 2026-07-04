@@ -1,0 +1,40 @@
+{
+  "record": {
+    "description": "description_fixture",
+    "entitlements": [
+      {
+        "resourceSets": [
+          "resource_set_fixture"
+        ],
+        "role": "role_fixture",
+        "targets": [
+          "target_fixture"
+        ]
+      }
+    ],
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/iam/governance/bundles",
+    "body": {
+      "description": "description_fixture",
+      "entitlements": [
+        {
+          "resourceSets": [
+            "resource_set_fixture"
+          ],
+          "role": "role_fixture",
+          "targets": [
+            "target_fixture"
+          ]
+        }
+      ],
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

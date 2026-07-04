@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webauthn-registration/api/v1/users/synthetic-conformance-value/enrollments",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "factorType": "call",
+        "id": "id_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "profile": {},
+        "provider": "CUSTOM",
+        "status": "ACTIVE",
+        "vendorName": "vendor_name_fixture",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

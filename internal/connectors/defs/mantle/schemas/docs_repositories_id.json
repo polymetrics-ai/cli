@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "docs_repositories_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "handle": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "description": "The public URL where this repository is hosted"
+    },
+    "defaultLocale": {
+      "type": "string"
+    },
+    "supportedLocales": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "title": {
+      "type": "string"
+    },
+    "shortDescription": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string",
+      "description": "Whether the repository is publicly accessible or internal only",
+      "enum": [
+        "public",
+        "internal"
+      ]
+    },
+    "config": {
+      "type": "object",
+      "description": "Repository layout and SEO configuration. Only structural properties are exposed; branding (colors, fonts, CSS) is managed in the dashboard.",
+      "properties": {
+        "settings": {
+          "type": "object",
+          "properties": {
+            "seoTitle": {
+              "type": "string",
+              "description": "SEO title for the docs site"
+            },
+            "seoDescription": {
+              "type": "string",
+              "description": "SEO meta description for the docs site"
+            }
+          }
+        },
+        "homePage": {
+          "type": "object",
+          "properties": {
+            "displayFormat": {
+              "type": "string",
+              "description": "How the docs homepage is rendered",
+              "enum": [
+                "redirect-to-first-collection",
+                "collection-summary",
+                "group-summary",
+                "page-list",
+                "collection-group-summary",
+                "custom"
+              ]
+            },
+            "heroHeading": {
+              "type": "string",
+              "description": "Heading text displayed in the homepage hero section"
+            },
+            "heroDescription": {
+              "type": "string",
+              "description": "Description text displayed in the homepage hero section"
+            }
+          }
+        },
+        "collectionPage": {
+          "type": "object",
+          "properties": {
+            "displayFormat": {
+              "type": "string",
+              "description": "How collection pages are rendered",
+              "enum": [
+                "group-summary",
+                "page-list"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "customDomain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "useCustomDomain": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "locales": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "locale": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "shortDescription": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "collections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A documentation collection",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "handles": {
+            "type": "array",
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "displayOrder": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published"
+            ]
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
+  "description": "A documentation repository"
+}

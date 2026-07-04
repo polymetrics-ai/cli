@@ -1,0 +1,69 @@
+{
+  "record": {
+    "auth_server_id": "synthetic-conformance-value",
+    "alwaysIncludeInToken": true,
+    "claimType": "IDENTITY",
+    "conditions": {
+      "scopes": [
+        "scope_fixture"
+      ]
+    },
+    "group_filter_type": "CONTAINS",
+    "id": "id_fixture",
+    "name": "name_fixture",
+    "status": "ACTIVE",
+    "system": true,
+    "value": "value_fixture",
+    "valueType": "EXPRESSION",
+    "_links": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/claims",
+    "body": {
+      "alwaysIncludeInToken": true,
+      "claimType": "IDENTITY",
+      "conditions": {
+        "scopes": [
+          "scope_fixture"
+        ]
+      },
+      "group_filter_type": "CONTAINS",
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "system": true,
+      "value": "value_fixture",
+      "valueType": "EXPRESSION",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

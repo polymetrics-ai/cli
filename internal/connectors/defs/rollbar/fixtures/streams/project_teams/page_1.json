@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/project/synthetic-conformance-value/teams",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": [
+        {
+          "id": 1,
+          "name": "Fixture project_teams",
+          "title": "Fixture project_teams",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

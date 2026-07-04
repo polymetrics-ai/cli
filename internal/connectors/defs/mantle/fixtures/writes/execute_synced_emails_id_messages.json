@@ -1,0 +1,65 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "messages": [
+      {
+        "externalId": "external_id_fixture",
+        "fromEmail": "fixture@example.com",
+        "fromName": "fixture",
+        "toEmails": [
+          "fixture@example.com"
+        ],
+        "ccEmails": [
+          "fixture@example.com"
+        ],
+        "bccEmails": [
+          "fixture@example.com"
+        ],
+        "subject": "fixture",
+        "snippet": "fixture",
+        "bodyText": "fixture",
+        "bodyHtml": "<p>Fixture</p>",
+        "date": "2026-01-01T00:00:00Z",
+        "isInbound": true,
+        "labelIds": [
+          "label_id_fixture"
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/synced_emails/id_fixture/messages",
+    "body": {
+      "messages": [
+        {
+          "externalId": "external_id_fixture",
+          "fromEmail": "fixture@example.com",
+          "fromName": "fixture",
+          "toEmails": [
+            "fixture@example.com"
+          ],
+          "ccEmails": [
+            "fixture@example.com"
+          ],
+          "bccEmails": [
+            "fixture@example.com"
+          ],
+          "subject": "fixture",
+          "snippet": "fixture",
+          "bodyText": "fixture",
+          "bodyHtml": "<p>Fixture</p>",
+          "date": "2026-01-01T00:00:00Z",
+          "isInbound": true,
+          "labelIds": [
+            "label_id_fixture"
+          ]
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

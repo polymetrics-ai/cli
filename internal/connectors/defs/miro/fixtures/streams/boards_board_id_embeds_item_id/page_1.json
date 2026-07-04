@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/boards/synthetic-conformance-value/embeds/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "data": {
+        "contentType": "content_type_fixture",
+        "description": "description_fixture",
+        "html": "html_fixture",
+        "mode": "inline",
+        "previewUrl": "https://example.invalid/fixture",
+        "providerName": "provider_name_fixture",
+        "providerUrl": "https://example.invalid/fixture",
+        "title": "title_fixture",
+        "url": "https://example.invalid/fixture"
+      },
+      "position": {
+        "origin": "center",
+        "relativeTo": "canvas_center",
+        "x": 1.25,
+        "y": 1.25
+      },
+      "geometry": {
+        "height": 1.25,
+        "rotation": 1.25,
+        "width": 1.25
+      },
+      "createdAt": "2026-01-01T00:00:00Z",
+      "createdBy": {
+        "id": "id_fixture",
+        "type": "type_fixture"
+      },
+      "modifiedAt": "2026-01-01T00:00:00Z",
+      "modifiedBy": {
+        "id": "id_fixture",
+        "type": "type_fixture"
+      },
+      "parent": {
+        "id": "id_fixture",
+        "links": {
+          "self": "self_fixture"
+        }
+      },
+      "links": {
+        "related": "related_fixture",
+        "self": "self_fixture"
+      },
+      "type": "type_fixture"
+    }
+  }
+}

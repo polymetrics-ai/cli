@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hire/preboarding/candiates",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "preboarding_candidates_fixture_1",
+          "firstName": "Fixture preboarding candidates 1",
+          "middleName": null,
+          "lastName": "Fixture preboarding candidates 1",
+          "email": "fixture1@example.invalid",
+          "countryCode": "FIX",
+          "mobileNumber": "+15550100",
+          "jobTitle": null,
+          "gender": 2,
+          "department": null,
+          "workLocation": "fixture_preboarding_candidates_1",
+          "expectedDateOfJoining": "2026-01-01T00:00:00Z",
+          "stage": 5,
+          "status": 1
+        },
+        {
+          "id": "preboarding_candidates_fixture_2",
+          "firstName": "Fixture preboarding candidates 2",
+          "middleName": null,
+          "lastName": "Fixture preboarding candidates 2",
+          "email": "fixture2@example.invalid",
+          "countryCode": "FIX",
+          "mobileNumber": "+15550100",
+          "jobTitle": null,
+          "gender": 1,
+          "department": null,
+          "workLocation": "fixture_preboarding_candidates_2",
+          "expectedDateOfJoining": null,
+          "stage": 1,
+          "status": 1
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/preboarding_candidates",
+      "lastPage": "https://example.invalid/keka/preboarding_candidates",
+      "nextPage": null,
+      "previousPage": null,
+      "totalRecords": 2,
+      "totalPages": 1,
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

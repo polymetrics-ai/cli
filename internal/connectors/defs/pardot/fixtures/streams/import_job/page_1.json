@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/imports/synthetic-conformance-value",
+    "query": {
+      "fields": "id,operation,object,status,isExpired,batchesRef,createdAt,updatedAt,createdById,updatedById,createdCount,updatedCount,errorCount,errorRef"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "operation": "operation_fixture",
+      "object": "object_fixture",
+      "status": "status_fixture",
+      "isExpired": false,
+      "batchesRef": "batchesRef_fixture",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1,
+      "createdCount": 1,
+      "updatedCount": 1,
+      "errorCount": 1,
+      "errorRef": "errorRef_fixture"
+    }
+  }
+}

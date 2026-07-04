@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/benefits/member-benefits",
+    "query": {
+      "calendarYear": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "memberId": "fixture_id",
+          "plans": [
+            {
+              "dateRanges": [
+                {
+                  "endDate": "2026-01-01T00:00:00Z",
+                  "startDate": "2026-01-01T00:00:00Z",
+                  "status": "ENROLLED"
+                }
+              ],
+              "planId": "fixture_id"
+            }
+          ],
+          "subscriberId": "fixture_id"
+        }
+      ]
+    }
+  }
+}

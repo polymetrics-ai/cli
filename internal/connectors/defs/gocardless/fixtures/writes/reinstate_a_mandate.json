@@ -1,0 +1,21 @@
+{
+  "record": {
+    "mandate_id": "mandate_id_fixture",
+    "mandates": {
+      "description": "Synthetic reinstate_a_mandate fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mandates/mandate_id_fixture/actions/reinstate",
+    "body": {
+      "mandates": {
+        "description": "Synthetic reinstate_a_mandate fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "form_handler_fields",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "formHandlerId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "prospectApiFieldId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "fieldLabel": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dataFormat": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isRequired": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updatedById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

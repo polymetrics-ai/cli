@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "callpurpose",
+      "attributes": {
+        "name": "Fixture Create Call Purpose"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/callPurposes",
+    "body": {
+      "data": {
+        "type": "callpurpose",
+        "attributes": {
+          "name": "Fixture Create Call Purpose"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

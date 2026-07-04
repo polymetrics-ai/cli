@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/journeys/requests/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "journey_request": {
+        "id": "view_journey_request",
+        "name": "Fixture view_journey_request",
+        "subject": "Fixture view_journey_request",
+        "description": "Fixture view_journey_request record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/forms/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,campaignId,layoutTemplateId,folderId,trackerDomainId,createdAt,updatedAt,createdById,updatedById,embedCode,isDeleted,isUseRedirectLocation,salesforceCmsId,salesforceId,url"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "campaignId": 1,
+      "layoutTemplateId": 1,
+      "folderId": 1,
+      "trackerDomainId": 1,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1,
+      "embedCode": "embedCode_fixture",
+      "isDeleted": false,
+      "isUseRedirectLocation": false,
+      "salesforceCmsId": 1,
+      "salesforceId": 1,
+      "url": "url_fixture"
+    }
+  }
+}

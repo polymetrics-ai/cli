@@ -1,0 +1,19 @@
+{
+  "record": {
+    "request_id": "fixture_id",
+    "status": "approved",
+    "note": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/time_off/requests/fixture_id/status",
+    "body": {
+      "status": "approved",
+      "note": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

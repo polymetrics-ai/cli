@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/triggers/inboundrules",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 1,
+      "InboundRules": [
+        {
+          "ID": 10,
+          "Rule": "example.com"
+        }
+      ]
+    }
+  }
+}

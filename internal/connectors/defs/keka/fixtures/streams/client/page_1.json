@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/clients/{{ config.client_id }}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "client_fixture_1",
+          "name": "Fixture client"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

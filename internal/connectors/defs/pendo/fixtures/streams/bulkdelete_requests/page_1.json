@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bulkdelete"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "bulk_fixture",
+        "name": "Fixture",
+        "lastUpdatedAt": 1760000000000,
+        "ids": [
+          "visitor_fixture"
+        ],
+        "kind": "visitor"
+      }
+    ]
+  }
+}

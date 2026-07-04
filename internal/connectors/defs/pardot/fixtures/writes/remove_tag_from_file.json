@@ -1,0 +1,11 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record",
+    "tagId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/files/101/do/removeTag"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "library_id": "library_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/libraries/library_id_fixture/labrequeues"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

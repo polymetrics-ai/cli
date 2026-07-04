@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/super-contest-effect/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value"
+    }
+  }
+}

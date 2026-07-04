@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "amr": {
+      "type": "array",
+      "description": "Authentication method reference",
+      "items": {
+        "type": "string",
+        "enum": [
+          "fpt",
+          "geo",
+          "hwk",
+          "kba",
+          "mca",
+          "mfa",
+          "otp",
+          "pwd",
+          "sc",
+          "sms",
+          "swk",
+          "tel"
+        ]
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "description": "A timestamp when the session expires",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "A unique key for the session"
+    },
+    "idp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identity Provider ID. If the `type` is `OKTA`, then the `id` is the org ID."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ACTIVE_DIRECTORY",
+            "FEDERATION",
+            "LDAP",
+            "OKTA",
+            "SOCIAL"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "lastFactorVerification": {
+      "type": "string",
+      "description": "A timestamp when the user last performed multifactor authentication",
+      "format": "date-time"
+    },
+    "lastPasswordVerification": {
+      "type": "string",
+      "description": "A timestamp when the user last performed the primary or step-up authentication with a password",
+      "format": "date-time"
+    },
+    "login": {
+      "type": "string",
+      "description": "A unique identifier for the user (username)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "MFA_ENROLL",
+        "MFA_REQUIRED"
+      ]
+    },
+    "userId": {
+      "type": "string",
+      "description": "A unique key for the user"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

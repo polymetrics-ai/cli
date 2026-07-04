@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/.well-known/app-authenticator-configuration",
+    "query": {
+      "oauthClientId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "appAuthenticatorEnrollEndpoint": "app_authenticator_enroll_endpoint_fixture",
+        "authenticatorId": "authenticator_id_fixture",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "key": "custom_app",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "name": "name_fixture",
+        "orgId": "org_id_fixture",
+        "settings": {
+          "userVerification": "PREFERRED"
+        },
+        "supportedMethods": [
+          {
+            "settings": {
+              "keyProtection": "ANY",
+              "algorithms": [
+                "ES256"
+              ],
+              "transactionTypes": [
+                "CIBA"
+              ]
+            },
+            "status": "ACTIVE",
+            "type": "push"
+          }
+        ],
+        "type": "app"
+      }
+    ]
+  }
+}

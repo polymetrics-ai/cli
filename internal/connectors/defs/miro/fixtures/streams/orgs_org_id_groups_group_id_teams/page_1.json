@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/groups/synthetic-conformance-value/teams"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 100,
+      "size": 100,
+      "data": [
+        {
+          "id": "id_fixture",
+          "role": "member",
+          "type": "user-group-team"
+        }
+      ],
+      "cursor": "cursor_fixture",
+      "type": "cursor-list"
+    }
+  }
+}

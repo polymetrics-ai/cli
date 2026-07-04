@@ -1,0 +1,826 @@
+{
+  "actions": [
+    {
+      "risk": "external mutation; approval required",
+      "name": "create_workflow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workflows",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "nodes",
+          "connections",
+          "settings"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "nodes": {
+            "type": "array"
+          },
+          "connections": {
+            "type": "object"
+          },
+          "settings": {
+            "type": "object"
+          },
+          "projectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "update_workflow",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workflows/{{ record.workflow_id }}",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workflow_id",
+          "name",
+          "nodes",
+          "connections",
+          "settings"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "nodes": {
+            "type": "array"
+          },
+          "connections": {
+            "type": "object"
+          },
+          "settings": {
+            "type": "object"
+          },
+          "versionId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "publish_workflow",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workflows/{{ record.workflow_id }}/activate",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workflow_id"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          },
+          "versionId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "deactivate_workflow",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workflows/{{ record.workflow_id }}/deactivate",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workflow_id"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "archive_workflow",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workflows/{{ record.workflow_id }}/archive",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workflow_id"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "unarchive_workflow",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workflows/{{ record.workflow_id }}/unarchive",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workflow_id"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "transfer_workflow",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workflows/{{ record.workflow_id }}/transfer",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workflow_id",
+          "destinationProjectId"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          },
+          "destinationProjectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "retry_execution",
+      "kind": "update",
+      "method": "POST",
+      "path": "/executions/{{ record.execution_id }}/retry",
+      "path_fields": [
+        "execution_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "execution_id"
+        ],
+        "properties": {
+          "execution_id": {
+            "type": "string"
+          },
+          "loadWorkflow": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "stop_execution",
+      "kind": "update",
+      "method": "POST",
+      "path": "/executions/{{ record.execution_id }}/stop",
+      "path_fields": [
+        "execution_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "execution_id"
+        ],
+        "properties": {
+          "execution_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "stop_executions",
+      "kind": "update",
+      "method": "POST",
+      "path": "/executions/stop",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "array"
+          },
+          "workflowId": {
+            "type": "string"
+          },
+          "startedAfter": {
+            "type": "string"
+          },
+          "startedBefore": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.tag_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id",
+          "name"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "create_variable",
+      "kind": "create",
+      "method": "POST",
+      "path": "/variables",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "update_variable",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/variables/{{ record.variable_id }}",
+      "path_fields": [
+        "variable_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "variable_id",
+          "key",
+          "value"
+        ],
+        "properties": {
+          "variable_id": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.project_id }}",
+      "path_fields": [
+        "project_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id",
+          "name"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "add_project_users",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/users",
+      "path_fields": [
+        "project_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id",
+          "relations"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          },
+          "relations": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "change_project_user_role",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/{{ record.project_id }}/users/{{ record.project_user_id }}",
+      "path_fields": [
+        "project_id",
+        "project_user_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id",
+          "project_user_id",
+          "role"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          },
+          "project_user_id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "create_data_table",
+      "kind": "create",
+      "method": "POST",
+      "path": "/data-tables",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "columns"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "columns": {
+            "type": "array"
+          },
+          "projectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "update_data_table",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/data-tables/{{ record.data_table_id }}",
+      "path_fields": [
+        "data_table_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data_table_id",
+          "name"
+        ],
+        "properties": {
+          "data_table_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "insert_data_table_rows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/data-tables/{{ record.data_table_id }}/rows",
+      "path_fields": [
+        "data_table_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data_table_id",
+          "data"
+        ],
+        "properties": {
+          "data_table_id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array"
+          },
+          "returnType": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "update_data_table_rows",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/data-tables/{{ record.data_table_id }}/rows/update",
+      "path_fields": [
+        "data_table_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data_table_id",
+          "filter",
+          "data"
+        ],
+        "properties": {
+          "data_table_id": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "data": {
+            "type": "object"
+          },
+          "returnData": {
+            "type": "boolean"
+          },
+          "dryRun": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "upsert_data_table_row",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/data-tables/{{ record.data_table_id }}/rows/upsert",
+      "path_fields": [
+        "data_table_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data_table_id",
+          "filter",
+          "data"
+        ],
+        "properties": {
+          "data_table_id": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
+          },
+          "data": {
+            "type": "object"
+          },
+          "returnData": {
+            "type": "boolean"
+          },
+          "dryRun": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "add_data_table_column",
+      "kind": "create",
+      "method": "POST",
+      "path": "/data-tables/{{ record.data_table_id }}/columns",
+      "path_fields": [
+        "data_table_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data_table_id",
+          "name",
+          "type"
+        ],
+        "properties": {
+          "data_table_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "update_data_table_column",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/data-tables/{{ record.data_table_id }}/columns/{{ record.data_table_column_id }}",
+      "path_fields": [
+        "data_table_id",
+        "data_table_column_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "data_table_id",
+          "data_table_column_id",
+          "name"
+        ],
+        "properties": {
+          "data_table_id": {
+            "type": "string"
+          },
+          "data_table_column_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "test_credential",
+      "kind": "update",
+      "method": "POST",
+      "path": "/credentials/{{ record.credential_id }}/test",
+      "path_fields": [
+        "credential_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "credential_id"
+        ],
+        "properties": {
+          "credential_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "transfer_credential",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/credentials/{{ record.credential_id }}/transfer",
+      "path_fields": [
+        "credential_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "credential_id",
+          "destinationProjectId"
+        ],
+        "properties": {
+          "credential_id": {
+            "type": "string"
+          },
+          "destinationProjectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "pull_source_control",
+      "kind": "update",
+      "method": "POST",
+      "path": "/source-control/pull",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "force": {
+            "type": "boolean"
+          },
+          "autoPublish": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "risk": "external mutation; approval required",
+      "name": "generate_audit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/audit",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "additionalOptions": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  ]
+}

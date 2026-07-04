@@ -14,6 +14,10 @@ Auth (Bearer + `developer-token` + optional `login-customer-id`) is fully declar
 (`streams.json`'s `base.auth`/`base.headers`); every stream read is dispatched through
 `internal/connectors/hooks/google-ads/hooks.go`'s `StreamHook`, for two independent
 engine-dialect reasons documented per stream below (never an auth limitation).
+The official REST surface uses custom service methods such as `search`, `searchStream`, and
+`mutate` instead of normal REST list/get/write endpoints, so `api_surface.json` groups the
+remaining API by documented method family rather than pretending every resource is a separate
+traditional REST route.
 
 ## Auth setup
 
@@ -74,6 +78,10 @@ None. `capabilities.write` is `false`; legacy's `Write` always returns
   legacy's own conservative allow-list — arbitrary GAQL, and the full Google Ads resource/reporting
   surface, are deliberately out of scope (both here and in legacy). See `api_surface.json`'s
   `excluded: {category: out_of_scope, ...}` entries.
+- Google Ads `search`/`searchStream` reads and `mutate` writes are all custom methods. Additional
+  GAQL resources would require extending the closed `StreamHook` route table and defining new
+  schemas; generic mutate exposure would violate the bounded-write rule because it accepts
+  heterogeneous create/update/remove operation arrays.
 - All three streams are `StreamHook`-dispatched (`streams.json`'s per-stream
   `conformance.skip_dynamic` markers); `conformance`'s declarative fixture-replay dynamic checks
   cannot exercise a POST-body or scalar-array-response read at all — the hook's own unit tests

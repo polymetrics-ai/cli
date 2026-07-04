@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Live.getCounters",
+      "idSite": "synthetic-conformance-value",
+      "lastMinutes": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "visitors": 2,
+      "visits": 3,
+      "actions": 12,
+      "converted": 1
+    }
+  }
+}

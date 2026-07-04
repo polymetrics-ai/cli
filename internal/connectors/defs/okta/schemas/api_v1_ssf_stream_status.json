@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "description": "The status of the SSF stream configuration",
+      "enum": [
+        "enabled",
+        "disabled"
+      ]
+    },
+    "stream_id": {
+      "type": "string",
+      "description": "The ID of the SSF stream configuration. This corresponds to the value in the query parameter of the request."
+    }
+  },
+  "additionalProperties": true
+}

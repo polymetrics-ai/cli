@@ -1,0 +1,15 @@
+{
+  "record": {
+    "account_id": "synthetic-conformance-value",
+    "highlight_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/accounts/synthetic-conformance-value/highlights/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

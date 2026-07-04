@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messages/outbound/opens/synthetic-conformance-value",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 1,
+      "Opens": [
+        {
+          "FirstOpen": true,
+          "OpenedAt": "2026-01-01T00:00:00Z",
+          "Recipient": "fixture@example.com"
+        }
+      ]
+    }
+  }
+}

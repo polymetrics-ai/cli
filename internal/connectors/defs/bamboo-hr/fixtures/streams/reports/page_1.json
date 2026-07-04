@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/custom-reports",
+    "query": {
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reports": [
+        {
+          "id": 1001,
+          "name": "Fixture Name"
+        }
+      ],
+      "pagination": {
+        "next_page": null
+      }
+    }
+  }
+}

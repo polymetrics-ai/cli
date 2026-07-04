@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "snippet",
+      "attributes": {
+        "name": "Fixture Create Snippet"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/snippets",
+    "body": {
+      "data": {
+        "type": "snippet",
+        "attributes": {
+          "name": "Fixture Create Snippet"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

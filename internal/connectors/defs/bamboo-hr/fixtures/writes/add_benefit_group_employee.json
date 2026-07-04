@@ -1,0 +1,20 @@
+{
+  "record": {
+    "benefitGroupId": "fixture_id",
+    "employeeId": "fixture_id",
+    "endDate": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/benefitgroupemployees",
+    "body": {
+      "benefitGroupId": "fixture_id",
+      "employeeId": "fixture_id",
+      "endDate": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

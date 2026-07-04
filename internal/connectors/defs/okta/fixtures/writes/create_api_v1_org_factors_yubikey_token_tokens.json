@@ -1,0 +1,22 @@
+{
+  "record": {
+    "serialNumber": "serial_number_fixture",
+    "publicId": "public_id_fixture",
+    "privateId": "private_id_fixture",
+    "aesKey": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/org/factors/yubikey_token/tokens",
+    "body": {
+      "serialNumber": "serial_number_fixture",
+      "publicId": "public_id_fixture",
+      "privateId": "private_id_fixture",
+      "aesKey": "fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/audit/logs",
+    "query": {
+      "createdAfter": "synthetic-conformance-value",
+      "createdBefore": "synthetic-conformance-value",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "type_fixture",
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "context": {
+            "ip": "ip_fixture",
+            "team": {
+              "id": "id_fixture",
+              "name": "name_fixture"
+            },
+            "organization": {
+              "id": "id_fixture",
+              "name": "name_fixture"
+            }
+          },
+          "object": {
+            "id": "id_fixture",
+            "name": "name_fixture"
+          },
+          "createdAt": "2026-01-01T00:00:00Z",
+          "details": {},
+          "createdBy": {
+            "type": "user",
+            "id": "id_fixture",
+            "name": "name_fixture",
+            "email": "fixture@example.invalid"
+          },
+          "event": "event_fixture",
+          "category": "category_fixture"
+        }
+      ]
+    }
+  }
+}

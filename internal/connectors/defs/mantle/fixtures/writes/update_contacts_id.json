@@ -1,0 +1,61 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "fixture",
+    "email": "fixture@example.com",
+    "phone": "fixture",
+    "jobTitle": "fixture",
+    "notes": "fixture",
+    "tags": [
+      "fixture"
+    ],
+    "customers": [
+      {
+        "id": "id_fixture",
+        "label": "fixture"
+      }
+    ],
+    "socialProfiles": [
+      {
+        "key": "linkedin",
+        "value": "fixture"
+      }
+    ],
+    "secondaryEmails": [
+      "fixture@example.com"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/contacts/id_fixture",
+    "body": {
+      "name": "fixture",
+      "email": "fixture@example.com",
+      "phone": "fixture",
+      "jobTitle": "fixture",
+      "notes": "fixture",
+      "tags": [
+        "fixture"
+      ],
+      "customers": [
+        {
+          "id": "id_fixture",
+          "label": "fixture"
+        }
+      ],
+      "socialProfiles": [
+        {
+          "key": "linkedin",
+          "value": "fixture"
+        }
+      ],
+      "secondaryEmails": [
+        "fixture@example.com"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

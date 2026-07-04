@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers/synthetic-conformance-value/contacts",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 9001,
+        "object": "contact",
+        "created_at": 1767225600,
+        "updated_at": 1767225601
+      }
+    ]
+  }
+}

@@ -1,0 +1,482 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "meetings_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the meeting."
+    },
+    "externalId": {
+      "type": "string",
+      "description": "External ID from the browser extension."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the meeting."
+    },
+    "summary": {
+      "type": "string",
+      "description": "Summary or description of the meeting."
+    },
+    "platform": {
+      "type": "string",
+      "description": "The meeting platform (google_meet, zoom, teams)."
+    },
+    "platformMeetingId": {
+      "type": "string",
+      "description": "Platform-specific meeting identifier."
+    },
+    "meetingUrl": {
+      "type": "string",
+      "description": "URL to join the meeting."
+    },
+    "startTime": {
+      "type": "string",
+      "description": "Meeting start time.",
+      "format": "date-time"
+    },
+    "endTime": {
+      "type": "string",
+      "description": "Meeting end time.",
+      "format": "date-time"
+    },
+    "duration": {
+      "type": "integer",
+      "description": "Meeting duration in seconds."
+    },
+    "recordingUrl": {
+      "type": "string",
+      "description": "URL to the meeting recording."
+    },
+    "recordingStatus": {
+      "type": "string",
+      "description": "Status of the recording (pending, processing, ready, failed)."
+    },
+    "aiEnrichmentStatus": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "AI enrichment status (pending, processing, completed, failed)."
+    },
+    "aiEnrichedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "When AI enrichment was last completed.",
+      "format": "date-time"
+    },
+    "aiSummary": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "AI-generated meeting summary."
+    },
+    "aiKeyPoints": {
+      "type": "array",
+      "description": "AI-extracted key points from the meeting.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "point": {
+            "type": "string"
+          },
+          "speaker": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timestampMs": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "aiDecisions": {
+      "type": "array",
+      "description": "AI-extracted decisions made during the meeting.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string"
+          },
+          "context": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "aiOpenQuestions": {
+      "type": "array",
+      "description": "AI-extracted open questions from the meeting.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "askedBy": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "aiTopics": {
+      "type": "array",
+      "description": "AI-extracted topics discussed in the meeting.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          },
+          "relevance": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
+    "overallSentiment": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Overall meeting sentiment score (-1 to 1).",
+      "format": "float"
+    },
+    "sentimentTrend": {
+      "type": "array",
+      "description": "Sentiment over time during the meeting.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestampMs": {
+            "type": "integer"
+          },
+          "sentiment": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
+    "aiDealInsights": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "AI-extracted deal-related insights (objections, competitors, buying signals, etc)."
+    },
+    "taskSuggestions": {
+      "type": "array",
+      "description": "AI-suggested tasks from the meeting.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "priority": {
+            "type": "string",
+            "description": "Task priority (low, medium, high, urgent)."
+          },
+          "suggestedAssigneeId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "suggestedDueDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "triggerPhrase": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The phrase from the transcript that triggered this suggestion."
+          },
+          "status": {
+            "type": "string",
+            "description": "Suggestion status (pending, accepted, dismissed)."
+          },
+          "createdTaskId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ID of the task created when accepted."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "deal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "attendees": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string",
+            "description": "Attendee ID from the extension."
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "description": "Hex color for UI display."
+          },
+          "talkTime": {
+            "type": "integer",
+            "description": "Total talk time in milliseconds."
+          },
+          "wordCount": {
+            "type": "integer"
+          },
+          "sentiment": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Attendee sentiment score (-1 to 1). Populated by AI enrichment.",
+            "format": "float"
+          },
+          "engagementScore": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Attendee engagement score (0 to 1). Populated by AI enrichment.",
+            "format": "float"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "email": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "email": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "transcript": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Transcript status (pending, processing, completed, failed)."
+        },
+        "fullText": {
+          "type": "string",
+          "description": "Full text of the transcript."
+        },
+        "externalId": {
+          "type": "string",
+          "description": "External transcript ID (e.g., AssemblyAI)."
+        },
+        "utterances": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "attendeeId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "attendee": {
+                "type": "object"
+              },
+              "text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "startTime": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "endTime": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "sequence": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "confidence": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "words": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Creation timestamp.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Last update timestamp.",
+      "format": "date-time"
+    }
+  }
+}

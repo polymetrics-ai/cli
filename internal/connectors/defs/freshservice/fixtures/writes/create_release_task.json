@@ -1,0 +1,15 @@
+{
+  "record": {
+    "release_id": 123,
+    "name": "Fixture create_release_task",
+    "description": "Fixture create_release_task record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/releases/123/tasks",
+    "body": {
+      "name": "Fixture create_release_task",
+      "description": "Fixture create_release_task record"
+    }
+  }
+}

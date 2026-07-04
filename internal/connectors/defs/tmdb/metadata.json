@@ -1,7 +1,7 @@
 {
   "name": "tmdb",
   "display_name": "TMDb",
-  "description": "Reads movies and search results from The Movie Database API.",
+  "description": "Reads TMDb movie, TV, person, collection, company, keyword, review, account, search, trending, and reference metadata from The Movie Database API.",
   "integration_type": "api",
   "docs_url": "https://developer.themoviedb.org/reference/intro/getting-started",
   "release_stage": "ga",
@@ -17,6 +17,6 @@
     "read_page_size": 20
   },
   "risk": {
-    "read": "external TMDb API read of public movie catalog data"
+    "read": "external TMDb API read of public catalog, search, account-state, and reference metadata"
   }
 }

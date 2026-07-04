@@ -1,0 +1,12 @@
+{
+  "record": {
+    "status_page_id": 123,
+    "subscriber_id": 123,
+    "name": "Fixture delete_subscriber",
+    "description": "Fixture delete_subscriber record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/status/pages/123/subscribers/123"
+  }
+}

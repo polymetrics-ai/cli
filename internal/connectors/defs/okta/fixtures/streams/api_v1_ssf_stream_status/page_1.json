@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/ssf/stream/status",
+    "query": {
+      "stream_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "enabled",
+      "stream_id": "stream_id_fixture"
+    }
+  }
+}

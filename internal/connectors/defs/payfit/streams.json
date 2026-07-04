@@ -3,41 +3,335 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "offset",
       "token_path": "meta.next_offset"
     },
-    "check": { "method": "GET", "path": "/employees", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/v1/employees",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "payfit api_key is missing or invalid; re-run pm credentials add payfit" },
-      { "status": 403, "hint": "payfit account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "payfit rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "payfit api_key is missing or invalid; re-run pm credentials add payfit"
+      },
+      {
+        "status": 403,
+        "hint": "payfit account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "payfit rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "employees",
-      "path": "/employees",
-      "query": { "limit": "{{ config.limit }}" },
-      "records": { "path": "data" },
+      "path": "/v1/employees",
+      "query": {
+        "limit": "{{ config.limit }}"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/employees.json"
     },
     {
       "name": "contracts",
-      "path": "/contracts",
-      "query": { "limit": "{{ config.limit }}" },
-      "records": { "path": "data" },
+      "path": "/v1/contracts",
+      "query": {
+        "limit": "{{ config.limit }}"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/contracts.json"
     },
     {
       "name": "companies",
-      "path": "/companies",
-      "query": { "limit": "{{ config.limit }}" },
-      "records": { "path": "data" },
+      "path": "/v1/companies",
+      "query": {
+        "limit": "{{ config.limit }}"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/companies.json"
+    },
+    {
+      "name": "absences",
+      "path": "/companies/{{ config.company_id }}/absences",
+      "records": {
+        "path": "absences"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/absences.json",
+      "query": {
+        "maxResults": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "meta.nextPageToken"
+      }
+    },
+    {
+      "name": "collaborators",
+      "path": "/companies/{{ config.company_id }}/collaborators",
+      "records": {
+        "path": "collaborators"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collaborators.json",
+      "query": {
+        "maxResults": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "meta.nextPageToken"
+      }
+    },
+    {
+      "name": "collaborator_meal_vouchers",
+      "path": "/companies/{{ config.company_id }}/collaborators/meal-vouchers",
+      "records": {
+        "path": "mealVouchers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collaborator_meal_vouchers.json",
+      "query": {
+        "maxResults": "50",
+        "date": "{{ config.pay_period }}"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "meta.nextPageToken"
+      }
+    },
+    {
+      "name": "collaborator_payslips",
+      "path": "/companies/{{ config.company_id }}/collaborators/{{ config.collaborator_id }}/payslips",
+      "records": {
+        "path": "payslips"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collaborator_payslips.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "company_contracts",
+      "path": "/companies/{{ config.company_id }}/contracts",
+      "records": {
+        "path": "contracts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_contracts.json",
+      "query": {
+        "maxResults": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "meta.nextPageToken"
+      }
+    },
+    {
+      "name": "company_contracts_fr",
+      "path": "/companies/{{ config.company_id }}/contracts-fr",
+      "records": {
+        "path": "contracts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_contracts_fr.json",
+      "query": {
+        "maxResults": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "meta.nextPageToken"
+      }
+    },
+    {
+      "name": "worked_time_by_contract",
+      "path": "/companies/{{ config.company_id }}/contracts/time",
+      "records": {
+        "path": "contracts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/worked_time_by_contract.json",
+      "query": {
+        "maxResults": "50",
+        "date": "{{ config.pay_period }}"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "meta.nextPageToken"
+      }
+    },
+    {
+      "name": "health_insurance_contracts",
+      "path": "/companies/{{ config.company_id }}/health-insurance-contracts",
+      "records": {
+        "path": "contracts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/health_insurance_contracts.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "provident_fund_contracts",
+      "path": "/companies/{{ config.company_id }}/provident-fund-contracts",
+      "records": {
+        "path": "contracts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/provident_fund_contracts.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "auto_enrolment_documents",
+      "path": "/companies/{{ config.company_id }}/auto-enrolment-documents",
+      "records": {
+        "path": "documents"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/auto_enrolment_documents.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "income_tax_documents",
+      "path": "/companies/{{ config.company_id }}/income-taxes-documents",
+      "records": {
+        "path": "documents"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/income_tax_documents.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "accounting_v2_entries",
+      "path": "/companies/{{ config.company_id }}/accounting-v2",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/accounting_v2_entries.json",
+      "query": {
+        "date": "{{ config.pay_period }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "company",
+      "path": "/companies/{{ config.company_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "company_fr",
+      "path": "/companies-fr/{{ config.company_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_fr.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "collaborator",
+      "path": "/companies/{{ config.company_id }}/collaborators/{{ config.collaborator_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collaborator.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "company_contract",
+      "path": "/companies/{{ config.company_id }}/contracts/{{ config.contract_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_contract.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "company_contract_fr",
+      "path": "/companies/{{ config.company_id }}/contracts-fr/{{ config.contract_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_contract_fr.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_status",
+      "path": "/companies/{{ config.company_id }}/payroll-status",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payroll_status.json",
+      "query": {
+        "date": "{{ config.pay_period }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "company_id": "{{ config.company_id }}"
+      }
     }
   ]
 }

@@ -1,23 +1,25 @@
 {
   "name": "gocardless",
   "display_name": "GoCardless",
-  "description": "Reads GoCardless payments, mandates, payouts, and refunds through the GoCardless REST API.",
+  "description": "Reads and writes documented GoCardless REST API resources through the declarative connector engine.",
   "integration_type": "api",
   "docs_url": "https://developer.gocardless.com/api-reference/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external GoCardless API read of payment, mandate, payout, and refund data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external GoCardless API read of payments, mandates, payouts, refunds, and other documented REST resources",
+    "write": "external GoCardless API mutations including creates, updates, cancellations, retries, simulations, and customer/account changes",
+    "approval": "required for every write action; destructive actions are marked confirm: destructive"
   }
 }

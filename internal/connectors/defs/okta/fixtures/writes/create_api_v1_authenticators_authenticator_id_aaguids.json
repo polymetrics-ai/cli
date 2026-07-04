@@ -1,0 +1,37 @@
+{
+  "record": {
+    "authenticator_id": "synthetic-conformance-value",
+    "aaguid": "aaguid_fixture",
+    "attestationRootCertificates": [
+      {
+        "x5c": "x5c_fixture"
+      }
+    ],
+    "authenticatorCharacteristics": {
+      "fipsCompliant": true,
+      "hardwareProtected": true,
+      "platformAttached": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/authenticators/synthetic-conformance-value/aaguids",
+    "body": {
+      "aaguid": "aaguid_fixture",
+      "attestationRootCertificates": [
+        {
+          "x5c": "x5c_fixture"
+        }
+      ],
+      "authenticatorCharacteristics": {
+        "fipsCompliant": true,
+        "hardwareProtected": true,
+        "platformAttached": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

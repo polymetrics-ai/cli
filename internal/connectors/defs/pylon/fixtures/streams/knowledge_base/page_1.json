@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/knowledge-bases/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "title": "fixture-knowledge_base",
+        "slug": "fixture-knowledge_base"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

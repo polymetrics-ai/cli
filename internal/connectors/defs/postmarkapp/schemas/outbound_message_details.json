@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "outbound_message_details",
+  "type": "object",
+  "additionalProperties": true,
+  "x-primary-key": [
+    "MessageID"
+  ],
+  "properties": {
+    "MessageID": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "array",
+        "object",
+        "null"
+      ]
+    }
+  }
+}

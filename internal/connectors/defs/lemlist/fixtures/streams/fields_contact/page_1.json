@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/fields" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "contact": [
+          { "name": "firstName", "label": "First name", "type": "text", "source": "default" }
+        ],
+        "company": [
+          { "name": "name", "label": "Company name", "type": "text", "source": "default" }
+        ]
+      }
+    }
+  }
+}

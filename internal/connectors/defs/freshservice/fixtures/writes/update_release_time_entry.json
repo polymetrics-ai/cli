@@ -1,0 +1,16 @@
+{
+  "record": {
+    "release_id": 123,
+    "time_entry_id": 123,
+    "name": "Fixture update_release_time_entry",
+    "description": "Fixture update_release_time_entry record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/releases/123/time_entries/123",
+    "body": {
+      "name": "Fixture update_release_time_entry",
+      "description": "Fixture update_release_time_entry record"
+    }
+  }
+}

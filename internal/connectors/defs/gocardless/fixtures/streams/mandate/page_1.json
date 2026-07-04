@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/mandates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "mandates": {
+        "id": "MD_fixture_1",
+        "created_at": "2026-01-01T00:00:00Z",
+        "description": "Synthetic Mandate fixture"
+      }
+    }
+  }
+}

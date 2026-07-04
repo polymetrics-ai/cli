@@ -1,14 +1,14 @@
 {
   "name": "onepagecrm",
   "display_name": "OnePageCRM",
-  "description": "Reads OnePageCRM contacts, deals, actions, companies, and users through the OnePageCRM REST API.",
+  "description": "Reads the documented OnePageCRM API v3 CRM surface and exposes declarative write actions for supported JSON/path mutations.",
   "integration_type": "api",
   "docs_url": "https://developer.onepagecrm.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external OnePageCRM API read of CRM contact, deal, and task data"
+    "read": "external OnePageCRM API read of CRM contact, deal, task, account, and configuration data",
+    "write": "external OnePageCRM API mutations can create, update, complete, tag, export, disable, or delete live CRM records and account configuration",
+    "approval": "write actions require explicit approval; reads require none"
   }
 }

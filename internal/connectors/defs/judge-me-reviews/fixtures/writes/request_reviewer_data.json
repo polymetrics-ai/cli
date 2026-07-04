@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customer": {
+      "email": "reviewer@example.com"
+    },
+    "orders_requested": [
+      "order_1",
+      "order_2"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reviewers/data_request",
+    "body": {
+      "customer": {
+        "email": "reviewer@example.com"
+      }
+    }
+  }
+}

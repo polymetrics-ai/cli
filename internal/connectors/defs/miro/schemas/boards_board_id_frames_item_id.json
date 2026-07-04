@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (ID) of an item."
+    },
+    "data": {
+      "type": "object",
+      "description": "Contains frame item data, such as the title, frame type, or frame format.",
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "Only custom frames are supported at the moment.",
+          "enum": [
+            "custom",
+            "desktop",
+            "phone",
+            "tablet",
+            "a4",
+            "letter",
+            "ratio_1x1",
+            "ratio_4x3",
+            "ratio_16x9"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the frame. This title appears at the top of the frame."
+        },
+        "type": {
+          "type": "string",
+          "description": "Only free form frames are supported at the moment.",
+          "enum": [
+            "freeform",
+            "heap",
+            "grid",
+            "rows",
+            "columns"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "style": {
+      "type": "object",
+      "description": "Contains information about the style of a frame item, such as the fill color.",
+      "properties": {
+        "fillColor": {
+          "type": "string",
+          "description": "Fill color for the frame.\nHex values: `#f5f6f8` `#d5f692` `#d0e17a` `#93d275` `#67c6c0` `#23bfe7` `#a6ccf5` `#7b92ff` `#fff9b1` `#f5d128` `#ff9d48` `#f16c7f` `#ea94bb` `#ffcee0` `#b384bb` `#000000`\nDefault: #ffffffff (transparent)."
+        }
+      },
+      "additionalProperties": true
+    },
+    "position": {
+      "type": "object",
+      "description": "Contains location information about the item, such as its x coordinate, y coordinate, and the origin of the x and y coordinates.",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "Area of the item that is referenced by its x and y coordinates. For example, an item with a center origin will have its x and y coordinates point to its center. The center point of the board has x: 0 and y: 0 coordinates.\nCurrently, only one option is supported.",
+          "enum": [
+            "center"
+          ]
+        },
+        "relativeTo": {
+          "type": "string",
+          "enum": [
+            "canvas_center",
+            "parent_top_left"
+          ]
+        },
+        "x": {
+          "type": "number",
+          "description": "X-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+        },
+        "y": {
+          "type": "number",
+          "description": "Y-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+        }
+      },
+      "additionalProperties": true
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Contains geometrical information about the item, such as its width or height.",
+      "properties": {
+        "height": {
+          "type": "number",
+          "description": "Height of the item, in pixels."
+        },
+        "rotation": {
+          "type": "number",
+          "description": "Rotation angle of an item, in degrees, relative to the board. You can rotate items clockwise (right) and counterclockwise (left) by specifying positive and negative values, respectively."
+        },
+        "width": {
+          "type": "number",
+          "description": "Width of the item, in pixels."
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Date and time when the item was created. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "Contains information about the user who created the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "modifiedAt": {
+      "type": "string",
+      "description": "Date and time when the item was last modified. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "modifiedBy": {
+      "type": "object",
+      "description": "Contains information about the user who last modified the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "links": {
+      "type": "object",
+      "description": "Contains applicable links for the item.",
+      "properties": {
+        "related": {
+          "type": "string",
+          "description": "Link to obtain information about the child items related to the frame."
+        },
+        "self": {
+          "type": "string",
+          "description": "Link to obtain information about the current item."
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of item that is returned."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

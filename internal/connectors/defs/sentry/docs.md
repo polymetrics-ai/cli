@@ -65,9 +65,18 @@ None. Sentry is read-only in legacy (`Write` returns `connectors.ErrUnsupportedO
 
 ## Known limits
 
-- Full Sentry API surface (teams, members, alert rules, dashboards, integrations) is out of scope
-  for this pilot; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B
-  capability expansion"}` entries. Only the 4 legacy-parity read streams are implemented.
+- Full Sentry API surface expansion is blocked in this defs-only shard. The current Sentry bundle
+  is Tier-2 hook-backed: `internal/connectors/hooks/sentry/hooks.go` intercepts Sentry reads,
+  implements Sentry's Link-header `results="true"` stop condition, and only routes the four legacy
+  streams (`projects`, `issues`, `events`, `releases`). Adding a non-legacy stream only under
+  `internal/connectors/defs/sentry` would fail at runtime because the hook would see an unknown
+  stream. `api_surface.json` therefore enumerates the current Sentry OpenAPI surface and marks
+  non-legacy endpoints with concrete blocked reasons; the typed blocker is also recorded in
+  `docs/migration/quarantine.json`.
+- Sentry write expansion is deferred with the same blocker entry. Legacy Sentry is read-only, and
+  the current API surface includes destructive/admin mutations, query-parameter mutations, and
+  binary/file endpoints that need hook/dialect and policy review before declarative write actions
+  can be safely exposed.
 - **`hostname` config key dropped; `base_url` is now required.** Legacy derives the API host from a
   `hostname` config value (default `sentry.io`) as `https://<hostname>` when `base_url` is unset
   (`sentryBaseURL`, `sentry.go:293-308`). The engine's spec-default materialization (gap-loop

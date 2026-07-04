@@ -1,0 +1,31 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "email": "fixture@example.com",
+    "recipient": {
+      "name": "fixture",
+      "email": "fixture@example.com",
+      "customFields": {
+        "id": "custom_fields_fixture_id"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/email/campaigns/id_fixture/test",
+    "body": {
+      "email": "fixture@example.com",
+      "recipient": {
+        "name": "fixture",
+        "email": "fixture@example.com",
+        "customFields": {
+          "id": "custom_fields_fixture_id"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

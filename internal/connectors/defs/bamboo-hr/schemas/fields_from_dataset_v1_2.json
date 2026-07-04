@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "fields_from_dataset_v1_2",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "entityName": {
+      "type": "string"
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "label": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "parentName": {
+      "type": "string"
+    },
+    "parentType": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

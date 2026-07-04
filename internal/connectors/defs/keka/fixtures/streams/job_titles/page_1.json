@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/jobtitles",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "Fixture job titles 1",
+          "description": "fixture_job_titles_1",
+          "id": "job_titles_fixture_1"
+        },
+        {
+          "name": "Fixture job titles 2",
+          "description": "fixture_job_titles_2",
+          "id": "job_titles_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/job_titles",
+      "lastPage": "https://example.invalid/keka/job_titles",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

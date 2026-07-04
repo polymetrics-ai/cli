@@ -1,27 +1,49 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "lu.ma Connection Specification",
+  "title": "Luma Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "lu.ma API key, sent as the x-luma-api-key header. Never logged."
+      "description": "Luma API key, sent as the x-luma-api-key header. Never logged."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.lu.ma/public/v1",
-      "description": "lu.ma API base URL override for tests or proxies."
+      "default": "https://public-api.luma.com",
+      "description": "Luma API base URL override for tests or proxies."
     },
     "event_api_id": {
       "type": "string",
-      "description": "lu.ma event api_id; required by the event_guests and event_hosts streams."
+      "description": "Legacy-compatible Luma event ID used by event_guests and event_hosts streams."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Luma event ID used by event detail, guest, coupon, ticket type, and lookup streams."
+    },
+    "guest_id": {
+      "type": "string",
+      "description": "Luma guest ID or accepted guest identifier for the guest detail stream."
+    },
+    "event_ticket_type_id": {
+      "type": "string",
+      "description": "Luma ticket type ID for the ticket type detail stream."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Luma webhook ID for the webhook detail stream."
+    },
+    "slug": {
+      "type": "string",
+      "description": "Luma slug for entity lookup."
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live (default) or fixture for legacy credential-free tests."
     }
   }
 }

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/invites", "query": { "page": "1", "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "invite_fixture_1",
+          "email": "fixture2@example.com",
+          "data": { "domains": ["domain_fixture_1"], "templates": ["template_fixture_1"] },
+          "role": "Custom User",
+          "permissions": ["read-own-templates"],
+          "requires_periodic_password_change": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ]
+    }
+  }
+}

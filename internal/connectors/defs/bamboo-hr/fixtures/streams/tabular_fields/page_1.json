@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/tables"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture_id",
+        "alias": "fixture_value",
+        "fields": [
+          {
+            "type": "fixture_value",
+            "alias": "fixture_value",
+            "id": 1001,
+            "name": "Fixture Name"
+          }
+        ]
+      }
+    ]
+  }
+}

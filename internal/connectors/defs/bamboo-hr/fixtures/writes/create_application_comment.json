@@ -1,0 +1,19 @@
+{
+  "record": {
+    "application_id": "fixture_id",
+    "comment": "fixture_value",
+    "type": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/applicant_tracking/applications/fixture_id/comments",
+    "body": {
+      "comment": "fixture_value",
+      "type": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

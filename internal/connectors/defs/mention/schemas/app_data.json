@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "app_data",
+  "type": "object",
+  "properties": {
+    "languages": { "type": ["object", "null"] },
+    "alert_languages": { "type": ["object", "null"] },
+    "tones": { "type": ["object", "null"] },
+    "sources": { "type": ["object", "null"] },
+    "countries": { "type": ["object", "null"] },
+    "folders": { "type": ["object", "null"] },
+    "actions": { "type": ["object", "null"] },
+    "integrations": { "type": ["object", "null"] },
+    "days": { "type": ["object", "null"] }
+  }
+}

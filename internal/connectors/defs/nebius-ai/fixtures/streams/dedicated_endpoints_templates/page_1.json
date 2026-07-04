@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/dedicated_endpoints/templates"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "name_fixture",
+          "type": "type_fixture",
+          "metadata": {
+            "huggingface_url": "https://example.invalid/fixture",
+            "vendor": "vendor_fixture",
+            "context_window_k": 1,
+            "size_b": 1.25,
+            "license": {
+              "url": "https://example.invalid/fixture",
+              "name": "name_fixture"
+            }
+          },
+          "flavors": {}
+        }
+      ],
+      "object": "object_fixture"
+    }
+  }
+}

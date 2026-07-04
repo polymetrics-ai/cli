@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pms/praise",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "praise_fixture_1",
+        "name": "Fixture praise"
+      },
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/praise",
+      "lastPage": "https://example.invalid/keka/praise",
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

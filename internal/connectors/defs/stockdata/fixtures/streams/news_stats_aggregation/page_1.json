@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/news/stats/aggregation",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "key": "AAPL",
+          "total_documents": 3,
+          "sentiment_avg": 0.25,
+          "score": 12
+        }
+      ]
+    }
+  }
+}

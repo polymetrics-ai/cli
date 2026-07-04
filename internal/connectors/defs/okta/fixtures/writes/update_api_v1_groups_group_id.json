@@ -1,0 +1,23 @@
+{
+  "record": {
+    "group_id": "synthetic-conformance-value",
+    "profile": {
+      "description": "description_fixture",
+      "name": "name_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/groups/synthetic-conformance-value",
+    "body": {
+      "profile": {
+        "description": "description_fixture",
+        "name": "name_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

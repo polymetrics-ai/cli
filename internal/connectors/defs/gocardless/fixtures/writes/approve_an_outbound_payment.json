@@ -1,0 +1,21 @@
+{
+  "record": {
+    "outbound_payment_id": "outbound_payment_id_fixture",
+    "outbound_payments": {
+      "description": "Synthetic approve_an_outbound_payment fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/outbound_payments/outbound_payment_id_fixture/actions/approve",
+    "body": {
+      "outbound_payments": {
+        "description": "Synthetic approve_an_outbound_payment fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

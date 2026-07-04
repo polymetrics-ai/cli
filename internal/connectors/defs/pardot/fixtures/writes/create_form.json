@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture form",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/forms",
+    "body": {
+      "name": "Fixture form",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/contracts" },
+  "request": { "method": "GET", "path": "/v1/contracts" },
   "response": {
     "status": 200,
     "body": {

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture trigger_email",
+    "description": "Fixture trigger_email record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/123/communications",
+    "body": {
+      "name": "Fixture trigger_email",
+      "description": "Fixture trigger_email record"
+    }
+  }
+}

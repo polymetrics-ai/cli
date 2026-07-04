@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "1-leads",
+    "outcomeId": "1-outcomes"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/1-leads/status",
+    "body": {
+      "outcomeId": "1-outcomes"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

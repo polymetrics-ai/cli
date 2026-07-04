@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/boards/synthetic-conformance-value/groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "type": "type_fixture",
+      "data": {
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "description": "description_fixture",
+        "type": "user-group"
+      },
+      "links": {
+        "first": "first_fixture",
+        "last": "last_fixture",
+        "next": "next_fixture",
+        "prev": "prev_fixture",
+        "self": "self_fixture"
+      }
+    }
+  }
+}

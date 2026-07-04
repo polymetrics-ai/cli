@@ -1,0 +1,18 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "mapping_id": "synthetic-conformance-value",
+    "status": "ACTIVE"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/apps/synthetic-conformance-value/group-push/mappings/synthetic-conformance-value",
+    "body": {
+      "status": "ACTIVE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

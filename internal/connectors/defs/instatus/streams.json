@@ -3,7 +3,10 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -12,36 +15,388 @@
       "start_page": 1,
       "page_size": 50
     },
-    "check": { "method": "GET", "path": "/v2/pages" },
+    "check": {
+      "method": "GET",
+      "path": "/v2/pages"
+    },
     "error_map": [
-      { "status": 401, "hint": "instatus api_key is missing or invalid; re-run pm credentials add instatus" },
-      { "status": 429, "class": "rate_limited", "hint": "instatus rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "instatus api_key is missing or invalid; re-run pm credentials add instatus"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "instatus rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "pages",
       "path": "/v2/pages",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/pages.json"
     },
     {
       "name": "components",
       "path": "/v2/{{ config.page_id }}/components",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/components.json"
     },
     {
       "name": "incidents",
       "path": "/v1/{{ config.page_id }}/incidents",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/incidents.json"
     },
     {
       "name": "maintenances",
       "path": "/v2/{{ config.page_id }}/maintenances",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/maintenances.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "workspaces",
+      "path": "/v1/workspaces",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "component_detail",
+      "path": "/v2/{{ config.page_id }}/components/{{ config.component_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/component_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "incident_detail",
+      "path": "/v1/{{ config.page_id }}/incidents/{{ config.incident_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/incident_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "incident_update_detail",
+      "path": "/v1/{{ config.page_id }}/incidents/{{ config.incident_id }}/incident-updates/{{ config.incident_update_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/incident_update_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "maintenance_detail",
+      "path": "/v1/{{ config.page_id }}/maintenances/{{ config.maintenance_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/maintenance_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "maintenance_update_detail",
+      "path": "/v1/{{ config.page_id }}/maintenances/{{ config.maintenance_id }}/maintenance-updates/{{ config.maintenance_update_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/maintenance_update_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "templates",
+      "path": "/v1/{{ config.page_id }}/templates",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "template_detail",
+      "path": "/v1/{{ config.page_id }}/templates/{{ config.template_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/template_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "teammates",
+      "path": "/v1/{{ config.page_id }}/team",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/teammates.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "subscribers",
+      "path": "/v2/{{ config.page_id }}/subscribers",
+      "query": {
+        "search": {
+          "template": "{{ config.subscriber_search }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "metrics",
+      "path": "/v1/{{ config.page_id }}/metrics",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/metrics.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "metric_detail",
+      "path": "/v1/{{ config.page_id }}/metrics/{{ config.metric_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/metric_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "user_profile",
+      "path": "/v1/user",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/user_profile.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "audience_groups",
+      "path": "/v1/{{ config.page_id }}/audience-groups",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/audience_groups.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "audience_group_detail",
+      "path": "/v1/{{ config.page_id }}/audience-groups/{{ config.audience_group_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/audience_group_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "generic_notices",
+      "path": "/v1/{{ config.page_id }}/generic-notices",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/generic_notices.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "generic_notice_detail",
+      "path": "/v1/{{ config.page_id }}/generic-notices/{{ config.generic_notice_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/generic_notice_detail.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "monitors",
+      "path": "/{{ config.page_id }}/monitors",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/monitors.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "monitor_inserted_logs_check",
+      "path": "/monitors/check_inserted_logs",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/monitor_inserted_logs_check.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "monitor_logs",
+      "path": "/monitors/{{ config.monitor_id }}/logs",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/monitor_logs.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "monitor_alerts",
+      "path": "/{{ config.page_id }}/monitor-alerts",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/monitor_alerts.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "routing_rules",
+      "path": "/{{ config.page_id }}/routing-rules",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/routing_rules.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "escalation_policies",
+      "path": "/{{ config.page_id }}/escalation-policies",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/escalation_policies.json"
+    },
+    {
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "name": "on_call_schedule_members",
+      "path": "/on-call-schedules/{{ config.on_call_schedule_id }}/members",
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/on_call_schedule_members.json"
     }
   ]
 }

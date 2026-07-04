@@ -1,0 +1,13 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "status_page_id": 123,
+    "incident_id": 123,
+    "name": "Fixture delete_incident",
+    "description": "Fixture delete_incident record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tickets/123/status/pages/123/incidents/123"
+  }
+}

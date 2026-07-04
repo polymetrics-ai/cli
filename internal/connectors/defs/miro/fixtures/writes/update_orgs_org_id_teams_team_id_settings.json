@@ -1,0 +1,74 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "team_id": "synthetic-conformance-value",
+    "teamAccountDiscoverySettings": {
+      "accountDiscovery": "hidden"
+    },
+    "teamCollaborationSettings": {
+      "coOwnerRole": "enabled"
+    },
+    "teamCopyAccessLevelSettings": {
+      "copyAccessLevel": "anyone",
+      "copyAccessLevelLimitation": "anyone"
+    },
+    "teamInvitationSettings": {
+      "inviteExternalUsers": "allowed",
+      "whoCanInvite": "only_org_admins"
+    },
+    "teamSharingPolicySettings": {
+      "allowListedDomains": [
+        "allow_listed_domain_fixture"
+      ],
+      "createAssetAccessLevel": "company_admins",
+      "defaultBoardAccess": "private",
+      "defaultBoardSharingAccess": "team_members_with_editing_rights",
+      "defaultOrganizationAccess": "private",
+      "defaultProjectAccess": "private",
+      "moveBoardToAccount": "allowed",
+      "restrictAllowedDomains": "enabled",
+      "sharingOnAccount": "allowed",
+      "sharingOnOrganization": "allowed",
+      "sharingViaPublicLink": "allowed"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/settings",
+    "body": {
+      "teamAccountDiscoverySettings": {
+        "accountDiscovery": "hidden"
+      },
+      "teamCollaborationSettings": {
+        "coOwnerRole": "enabled"
+      },
+      "teamCopyAccessLevelSettings": {
+        "copyAccessLevel": "anyone",
+        "copyAccessLevelLimitation": "anyone"
+      },
+      "teamInvitationSettings": {
+        "inviteExternalUsers": "allowed",
+        "whoCanInvite": "only_org_admins"
+      },
+      "teamSharingPolicySettings": {
+        "allowListedDomains": [
+          "allow_listed_domain_fixture"
+        ],
+        "createAssetAccessLevel": "company_admins",
+        "defaultBoardAccess": "private",
+        "defaultBoardSharingAccess": "team_members_with_editing_rights",
+        "defaultOrganizationAccess": "private",
+        "defaultProjectAccess": "private",
+        "moveBoardToAccount": "allowed",
+        "restrictAllowedDomains": "enabled",
+        "sharingOnAccount": "allowed",
+        "sharingOnOrganization": "allowed",
+        "sharingViaPublicLink": "allowed"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

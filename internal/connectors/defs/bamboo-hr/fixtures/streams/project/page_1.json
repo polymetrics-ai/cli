@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/projects/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1001,
+      "allEmployeesAssigned": true,
+      "archived": true,
+      "billable": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "deletedAt": "2026-01-01T00:00:00Z",
+      "employeeIds": [
+        1001
+      ],
+      "hasTasks": true
+    }
+  }
+}

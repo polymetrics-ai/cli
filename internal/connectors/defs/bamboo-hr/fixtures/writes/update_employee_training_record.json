@@ -1,0 +1,27 @@
+{
+  "record": {
+    "employee_training_record_id": "fixture_id",
+    "completed": "fixture_value",
+    "cost": {
+      "amount": "fixture_value",
+      "currency": "fixture_value"
+    },
+    "credits": 12.34
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/training/record/fixture_id",
+    "body": {
+      "completed": "fixture_value",
+      "cost": {
+        "amount": "fixture_value",
+        "currency": "fixture_value"
+      },
+      "credits": 12.34
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

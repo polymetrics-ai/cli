@@ -1,0 +1,21 @@
+{
+  "record": {
+    "customer_id": "customer_id_fixture",
+    "customers": {
+      "description": "Synthetic update_a_customer fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/customer_id_fixture",
+    "body": {
+      "customers": {
+        "description": "Synthetic update_a_customer fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

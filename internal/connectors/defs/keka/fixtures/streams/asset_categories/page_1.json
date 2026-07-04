@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/assets/categories",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "asset_categories_fixture_1",
+          "name": "Fixture asset categories 1"
+        },
+        {
+          "id": "asset_categories_fixture_2",
+          "name": "Fixture asset categories 2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/asset_categories",
+      "lastPage": "https://example.invalid/keka/asset_categories",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

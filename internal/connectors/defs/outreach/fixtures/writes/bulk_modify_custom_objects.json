@@ -1,0 +1,28 @@
+{
+  "record": {
+    "objectName": "synthetic-conformance-value",
+    "data": {
+      "type": "bulkmodifycustomobjects",
+      "attributes": {
+        "name": "Fixture Bulk Modify Custom Objects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/customObjectBulkModify",
+    "body": {
+      "data": {
+        "type": "bulkmodifycustomobjects",
+        "attributes": {
+          "name": "Fixture Bulk Modify Custom Objects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

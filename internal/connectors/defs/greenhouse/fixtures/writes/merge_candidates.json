@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "PUT",
+    "path": "/candidates/merge"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

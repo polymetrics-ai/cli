@@ -1,0 +1,23 @@
+{
+  "record": {
+    "page_id": "page_id_fixture",
+    "prompt": "fixture",
+    "fields": [
+      "title"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/pages/page_id_fixture/generate",
+    "body": {
+      "prompt": "fixture",
+      "fields": [
+        "title"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

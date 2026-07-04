@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/clients",
+    "body": {
+      "name": "Fixture Name",
+      "description": "Fixture description"
+    }
+  }
+}

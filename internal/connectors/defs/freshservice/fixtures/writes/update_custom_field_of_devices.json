@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture update_custom_field_of_devices",
+    "description": "Fixture update_custom_field_of_devices record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/itam/custom_fields/devices",
+    "body": {
+      "name": "Fixture update_custom_field_of_devices",
+      "description": "Fixture update_custom_field_of_devices record"
+    }
+  }
+}

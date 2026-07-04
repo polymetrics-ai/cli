@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "contentcategoryownership",
+      "attributes": {
+        "name": "Fixture Create Content Category Ownership"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contentCategoryOwnerships",
+    "body": {
+      "data": {
+        "type": "contentcategoryownership",
+        "attributes": {
+          "name": "Fixture Create Content Category Ownership"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

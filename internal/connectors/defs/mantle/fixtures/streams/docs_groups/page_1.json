@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/docs/groups",
+    "query": {
+      "collectionId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "groups": {
+        "id": "id_fixture",
+        "handle": "fixture",
+        "title": "fixture",
+        "displayOrder": 1,
+        "status": "draft",
+        "pages": [
+          {
+            "id": "id_fixture",
+            "handle": "fixture",
+            "title": "fixture",
+            "path": "fixture",
+            "depth": 1,
+            "displayOrder": 1,
+            "publishedAt": "2026-01-01T00:00:00Z",
+            "children": [
+              {
+                "id": "children_fixture_id"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

@@ -1,14 +1,742 @@
 {
   "api": "Rollbar API v1 (https://api.rollbar.com/api/1)",
-  "docs": "https://docs.rollbar.com/reference/getting-started",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (items, projects); legacy ships no writes (capabilities.write is false) and the full Rollbar surface (deploys, teams, users, RQL queries, occurrences) is out of scope until Pass B.",
+  "docs": "https://docs.rollbar.com/reference/getting-started-1 and https://docs.rollbar.com/llms.txt",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from the current Rollbar API Reference markdown pages. GET list/detail endpoints are streams except credential-management surfaces; dialect-expressible object/no-body mutations are writes; binary uploads, root-array/query-only writes, credential-bearing operations, and POST-body analytics/query reads are explicitly excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/api/1/items/", "covered_by": { "stream": "items" } },
-    { "method": "GET", "path": "/api/1/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/api/1/deploys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/1/item/{counter}", "excluded": { "category": "out_of_scope", "reason": "single-item lookup, not a syncable list stream; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/1/instances", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/1/item/{counter}/status", "excluded": { "category": "destructive_admin", "reason": "mutates item status; legacy connector never implemented writes" } }
+    {
+      "method": "POST",
+      "path": "/api/1/deploy",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "The documented deploy report body requires an access_token field; writes.json would have to carry a token secret in ordinary records."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/deploy/{deploy_id}",
+      "covered_by": {
+        "stream": "deploy"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/1/deploy/{deploy_id}",
+      "covered_by": {
+        "write": "update_deploy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/deploys",
+      "covered_by": {
+        "stream": "deploys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/dsym",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Documented upload uses multipart/binary payloads, which writes.json cannot construct."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/environment/{environment}/session/{sessionId}/replay/{replayId}",
+      "covered_by": {
+        "write": "delete_session_replay"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/environment/{environment}/session/{sessionId}/replay/{replayId}",
+      "covered_by": {
+        "stream": "session_replay"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/environments",
+      "covered_by": {
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/fluttersymbols",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Documented upload uses multipart/binary payloads, which writes.json cannot construct."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/instance/{instance_id}",
+      "covered_by": {
+        "write": "delete_occurrence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/instance/{instance_id}",
+      "covered_by": {
+        "stream": "occurrence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/instances",
+      "covered_by": {
+        "stream": "occurrences"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/invite/{invite_id}",
+      "covered_by": {
+        "write": "cancel_invitation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/invite/{invite_id}",
+      "covered_by": {
+        "stream": "invitation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/item_by_counter/{counter}",
+      "covered_by": {
+        "stream": "item_by_counter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/item/",
+      "covered_by": {
+        "stream": "item_by_uuid"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/item/",
+      "covered_by": {
+        "write": "create_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/item/{item_id}/instances",
+      "covered_by": {
+        "stream": "item_occurrences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/item/{itemid}",
+      "covered_by": {
+        "stream": "item_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/1/item/{itemid}",
+      "covered_by": {
+        "write": "update_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/items",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/metrics/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Semantic analytics read uses a POST request body; the read engine does not send stream bodies and modeling it as a write would misclassify a report query."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/metrics/occurrences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Semantic analytics read uses a POST request body; the read engine does not send stream bodies and modeling it as a write would misclassify a report query."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/metrics/ttr",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Semantic analytics read uses a POST request body; the read engine does not send stream bodies and modeling it as a write would misclassify a report query."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/email",
+      "covered_by": {
+        "write": "configure_email_notifications"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/notifications/email/rule/{rule_id}",
+      "covered_by": {
+        "write": "delete_email_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/email/rule/{rule_id}",
+      "covered_by": {
+        "stream": "email_notification_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/email/rule/{rule_id}",
+      "covered_by": {
+        "write": "update_email_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/email/rules",
+      "covered_by": {
+        "stream": "email_notification_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/notifications/email/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/email/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/notifications/pagerduty",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/pagerduty",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Notification integration configuration carries third-party webhook/service credentials in the request body."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/notifications/pagerduty/rule/{rule_id}",
+      "covered_by": {
+        "write": "delete_pagerduty_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/pagerduty/rule/{rule_id}",
+      "covered_by": {
+        "stream": "pagerduty_notification_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/pagerduty/rule/{rule_id}",
+      "covered_by": {
+        "write": "update_pagerduty_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/pagerduty/rules",
+      "covered_by": {
+        "stream": "pagerduty_notification_rules"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/pagerduty/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/slack",
+      "covered_by": {
+        "write": "configure_slack_notifications"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/notifications/slack/rule/{rule_id}",
+      "covered_by": {
+        "write": "delete_slack_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/slack/rule/{rule_id}",
+      "covered_by": {
+        "stream": "slack_notification_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/slack/rule/{rule_id}",
+      "covered_by": {
+        "write": "update_slack_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/slack/rules",
+      "covered_by": {
+        "stream": "slack_notification_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/notifications/slack/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/slack/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/webhook",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Notification integration configuration carries third-party webhook/service credentials in the request body."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/notifications/webhook/rule/{rule_id}",
+      "covered_by": {
+        "write": "delete_webhook_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/webhook/rule/{rule_id}",
+      "covered_by": {
+        "stream": "webhook_notification_rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/webhook/rule/{rule_id}",
+      "covered_by": {
+        "write": "update_webhook_notification_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/notifications/webhook/rules",
+      "covered_by": {
+        "stream": "webhook_notification_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/notifications/webhook/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/notifications/webhook/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented request body is a root JSON array, while writes.json can only construct object-shaped JSON bodies from records."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/people/delete_jobs/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Person deletion is driven by query parameters on a POST request, but WriteAction has no query parameter dialect."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/people/delete_jobs/{job_id}",
+      "covered_by": {
+        "stream": "person_deletion_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/proguard",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Documented upload uses multipart/binary payloads, which writes.json cannot construct."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/project/{project_id}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/project/{project_id}",
+      "covered_by": {
+        "stream": "project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/project/{project_id}/access_token",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Project access token endpoints expose or mutate credential material; connector records must not carry Rollbar token secrets."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/1/project/{project_id}/access_token",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Project access token endpoints expose or mutate credential material; connector records must not carry Rollbar token secrets."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/project/{project_id}/access_token/{token_identifier}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Project access token endpoints expose or mutate credential material; connector records must not carry Rollbar token secrets."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/1/project/{project_id}/access_token/{token_identifier}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Project access token endpoints expose or mutate credential material; connector records must not carry Rollbar token secrets."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/project/{project_id}/access_tokens",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Project access token endpoints expose or mutate credential material; connector records must not carry Rollbar token secrets."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/project/{project_id}/access_tokens",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Project access token endpoints expose or mutate credential material; connector records must not carry Rollbar token secrets."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/project/{project_id}/teams",
+      "covered_by": {
+        "stream": "project_teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/reports/activated_counts",
+      "covered_by": {
+        "stream": "activated_counts_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/reports/occurrence_counts",
+      "covered_by": {
+        "stream": "occurrence_counts_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/reports/top_active_items",
+      "covered_by": {
+        "stream": "top_active_items_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/rql/job/{job_id}",
+      "covered_by": {
+        "stream": "rql_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/rql/job/{job_id}/cancel",
+      "covered_by": {
+        "write": "cancel_rql_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/rql/job/{job_id}/result",
+      "covered_by": {
+        "stream": "rql_job_result"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/rql/jobs/",
+      "covered_by": {
+        "stream": "rql_jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/rql/jobs/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "RQL job creation is an arbitrary query submission rather than a record mutation; declarative reads cannot send the required POST body."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/service_links",
+      "covered_by": {
+        "stream": "service_links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/service_links",
+      "covered_by": {
+        "write": "create_service_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/service_links/{id}",
+      "covered_by": {
+        "write": "delete_service_link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/service_links/{id}",
+      "covered_by": {
+        "stream": "service_link"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/service_links/{id}",
+      "covered_by": {
+        "write": "update_service_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/sourcemap",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Documented upload uses multipart/binary payloads, which writes.json cannot construct."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/status/ping",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Connectivity ping returns plain pong and is covered by the connector check fixture instead of a data stream."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/team/{team_id}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/team/{team_id}",
+      "covered_by": {
+        "stream": "team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/team/{team_id}/invites",
+      "covered_by": {
+        "stream": "team_invitations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/team/{team_id}/invites",
+      "covered_by": {
+        "write": "invite_team_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/team/{team_id}/project/{project_id}",
+      "covered_by": {
+        "write": "remove_team_from_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/team/{team_id}/project/{project_id}",
+      "covered_by": {
+        "stream": "team_project_assignment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/team/{team_id}/project/{project_id}",
+      "covered_by": {
+        "write": "assign_team_to_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/team/{team_id}/projects",
+      "covered_by": {
+        "stream": "team_projects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/1/team/{team_id}/user/{user_id}",
+      "covered_by": {
+        "write": "remove_user_from_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/team/{team_id}/user/{user_id}",
+      "covered_by": {
+        "stream": "team_user_assignment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/1/team/{team_id}/user/{user_id}",
+      "covered_by": {
+        "write": "assign_user_to_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/team/{team_id}/users",
+      "covered_by": {
+        "stream": "team_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/1/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/user/{user_id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/user/{user_id}/projects",
+      "covered_by": {
+        "stream": "user_projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/user/{user_id}/teams",
+      "covered_by": {
+        "stream": "user_teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/versions/{version}",
+      "covered_by": {
+        "stream": "version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/1/versions/{version}/items",
+      "covered_by": {
+        "stream": "version_items"
+      }
+    }
   ]
 }

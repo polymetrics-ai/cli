@@ -1,0 +1,14 @@
+{
+  "record": {
+    "candidate_id": "candidate_id_fixture",
+    "field_names": "field_names_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/candidates/candidate_id_fixture/anonymize"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

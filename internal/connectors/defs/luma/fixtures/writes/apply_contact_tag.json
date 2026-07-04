@@ -1,0 +1,12 @@
+{
+  "record": {
+    "tag": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/contact-tags/apply",
+    "body": {
+      "tag": "fixture"
+    }
+  }
+}

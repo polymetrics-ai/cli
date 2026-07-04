@@ -1,16 +1,484 @@
 {
-  "api": "Illumina BaseSpace v1pre3 REST API (https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference)",
+  "api": "Illumina BaseSpace v1pre3 REST API",
   "docs": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (projects, runs, samples, appsessions, datasets); BaseSpace exposes no safe reverse-ETL writes (legacy itself ships none; capabilities.write is false).",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from 62 documented v1pre3 method/path entries plus legacy user-scoped list endpoints. Documented GET endpoints are streams and direct POST/PUT/DELETE endpoints are write actions.",
   "endpoints": [
-    { "method": "GET", "path": "/v1pre3/users/{user}/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/v1pre3/users/{user}/runs", "covered_by": { "stream": "runs" } },
-    { "method": "GET", "path": "/v1pre3/users/{user}/samples", "covered_by": { "stream": "samples" } },
-    { "method": "GET", "path": "/v1pre3/users/{user}/appsessions", "covered_by": { "stream": "appsessions" } },
-    { "method": "GET", "path": "/v1pre3/users/{user}/datasets", "covered_by": { "stream": "datasets" } },
-    { "method": "GET", "path": "/v1pre3/users/{user}", "excluded": { "category": "non_data_endpoint", "reason": "used only by check for auth/connectivity confirmation, not a syncable object stream" } },
-    { "method": "GET", "path": "/v1pre3/runs/{Id}/files", "excluded": { "category": "out_of_scope", "reason": "run file listing/download not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1pre3/appsessions/{Id}/properties", "excluded": { "category": "out_of_scope", "reason": "app session properties not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v1pre3/applications",
+      "covered_by": {
+        "stream": "applications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/applications/{application_id}",
+      "covered_by": {
+        "stream": "application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/applications/{application_id}/qcthresholds",
+      "covered_by": {
+        "stream": "application_qcthresholds"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1pre3/applications/{application_id}/qcthresholds",
+      "covered_by": {
+        "write": "update_applications_id_qcthresholds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/applications/{application_id}/settings",
+      "covered_by": {
+        "stream": "application_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/applications/{application_id}/workflowdependencies",
+      "covered_by": {
+        "stream": "application_workflowdependencies"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1pre3/applications/{application_id}/workflowdependencies",
+      "covered_by": {
+        "write": "update_applications_id_workflowdependencies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/applications/{application_id}/workflows",
+      "covered_by": {
+        "write": "applications_id_workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/appsessions",
+      "covered_by": {
+        "stream": "appsessions_all"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1pre3/appsessions/{appsession_id}",
+      "covered_by": {
+        "write": "delete_appsessions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/appsessions/{appsession_id}",
+      "covered_by": {
+        "stream": "appsession"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/appsessions/{appsession_id}",
+      "covered_by": {
+        "write": "appsessions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/appsessions/{appsession_id}/comments",
+      "covered_by": {
+        "stream": "appsession_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/appsessions/{appsession_id}/logfiles",
+      "covered_by": {
+        "stream": "appsessions_logfiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/appsessions/{appsession_id}/properties",
+      "covered_by": {
+        "stream": "appsession_properties"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/appsessions/{appsession_id}/properties",
+      "covered_by": {
+        "write": "appsessions_id_properties"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}",
+      "covered_by": {
+        "write": "delete_appsessions_id_properties_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}",
+      "covered_by": {
+        "stream": "appsession_property"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}/items",
+      "covered_by": {
+        "stream": "appsession_property_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/appsessions/{appsession_id}/stop",
+      "covered_by": {
+        "write": "appsessions_id_stop"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/biosamples",
+      "covered_by": {
+        "stream": "biosamples"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/biosamples/bulkupdate",
+      "covered_by": {
+        "write": "biosamples_bulkupdate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/biosamples/{biosample_id}/labrequeues",
+      "covered_by": {
+        "stream": "biosample_labrequeues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/biosamples/{biosample_id}",
+      "covered_by": {
+        "stream": "biosample"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/biosamples/{biosample_id}",
+      "covered_by": {
+        "write": "biosamples_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/biosamples/{biosample_id}/libraries",
+      "covered_by": {
+        "stream": "biosample_libraries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/biosamples/{biosample_id}/runlanesummaries",
+      "covered_by": {
+        "stream": "biosample_runlane_summaries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/datasets",
+      "covered_by": {
+        "stream": "datasets_all"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/datasets/{dataset_id}",
+      "covered_by": {
+        "stream": "dataset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/datasets/{dataset_id}",
+      "covered_by": {
+        "write": "datasets_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/datasets/{dataset_id}/comments",
+      "covered_by": {
+        "stream": "dataset_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/datasets/{dataset_id}/files",
+      "covered_by": {
+        "stream": "dataset_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/datasettypes/{datasettype_id}",
+      "covered_by": {
+        "stream": "datasettype"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/instrumentstatistics",
+      "covered_by": {
+        "stream": "instrumentstatistics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/labrequeues",
+      "covered_by": {
+        "stream": "labrequeues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/labrequeues/{labrequeue_id}",
+      "covered_by": {
+        "stream": "labrequeue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/laneqcthresholds",
+      "covered_by": {
+        "stream": "laneqcthresholds"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1pre3/laneqcthresholds",
+      "covered_by": {
+        "write": "update_laneqcthresholds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/lanes/{lane_id}",
+      "covered_by": {
+        "stream": "lane"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/lanes/{lane_id}",
+      "covered_by": {
+        "write": "lanes_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/lanes/{lane_id}/comments",
+      "covered_by": {
+        "stream": "lane_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/libraries",
+      "covered_by": {
+        "stream": "libraries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/libraries/{library_id}/labrequeues",
+      "covered_by": {
+        "write": "libraries_libraryid_labrequeues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/librarypools/{librarypool_id}",
+      "covered_by": {
+        "write": "librarypools_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/librarypools/{librarypool_id}/libraries",
+      "covered_by": {
+        "stream": "librarypool_libraries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/librarypools/{pool_id}/labrequeues",
+      "covered_by": {
+        "write": "librarypools_poolid_labrequeues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/preprequests/{preprequest_id}/labrequeues",
+      "covered_by": {
+        "write": "preprequests_preprequestid_labrequeues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/projects/{project_id}",
+      "covered_by": {
+        "stream": "project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/projects/{project_id}/datasets",
+      "covered_by": {
+        "stream": "project_datasets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/runs/{run_id}/files",
+      "covered_by": {
+        "stream": "run_files"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1pre3/trash",
+      "covered_by": {
+        "write": "delete_trash"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/trash",
+      "covered_by": {
+        "stream": "trash"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/trash/{trash_id}",
+      "covered_by": {
+        "stream": "trash_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/trash/{trash_id}/restorefromtrash",
+      "covered_by": {
+        "write": "trash_id_restorefromtrash"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/current",
+      "covered_by": {
+        "stream": "current_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/current/subscription",
+      "covered_by": {
+        "stream": "current_user_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/current/usage",
+      "covered_by": {
+        "stream": "current_user_usage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/current/workgroups",
+      "covered_by": {
+        "stream": "current_user_workgroups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user_id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user_id}/settings",
+      "covered_by": {
+        "stream": "user_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1pre3/users/{user_id}/settings",
+      "covered_by": {
+        "write": "users_id_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/workgroups/{workgroup_id}",
+      "covered_by": {
+        "stream": "workgroup"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}/runs",
+      "covered_by": {
+        "stream": "runs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}/samples",
+      "covered_by": {
+        "stream": "samples"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}/appsessions",
+      "covered_by": {
+        "stream": "appsessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}/datasets",
+      "covered_by": {
+        "stream": "datasets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}",
+      "covered_by": {
+        "stream": "configured_user"
+      }
+    }
   ]
 }

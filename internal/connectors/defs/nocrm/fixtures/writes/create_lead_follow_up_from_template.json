@@ -1,0 +1,13 @@
+{
+  "record": {
+    "lead_id": "456",
+    "post_sales_template_id": "post-sales-template-1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/456/follow_ups/create_from_template",
+    "body": {
+      "post_sales_template_id": "post-sales-template-1"
+    }
+  }
+}

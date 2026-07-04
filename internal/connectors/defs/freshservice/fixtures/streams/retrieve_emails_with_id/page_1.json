@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tickets/synthetic-conformance-value/communications/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "communication": {
+        "id": "retrieve_emails_with_id",
+        "name": "Fixture retrieve_emails_with_id",
+        "subject": "Fixture retrieve_emails_with_id",
+        "description": "Fixture retrieve_emails_with_id record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

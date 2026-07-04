@@ -1,0 +1,43 @@
+{
+  "record": {
+    "contact_type": "synthetic-conformance-value",
+    "userId": "user_id_fixture",
+    "_links": {
+      "user": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/org/contacts/synthetic-conformance-value",
+    "body": {
+      "userId": "user_id_fixture",
+      "_links": {
+        "user": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

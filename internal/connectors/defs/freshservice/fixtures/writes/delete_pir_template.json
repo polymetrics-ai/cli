@@ -1,0 +1,11 @@
+{
+  "record": {
+    "template_id": 123,
+    "name": "Fixture delete_pir_template",
+    "description": "Fixture delete_pir_template record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/post-incident-reports/templates/123"
+  }
+}

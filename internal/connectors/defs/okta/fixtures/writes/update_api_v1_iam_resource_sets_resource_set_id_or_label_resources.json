@@ -1,0 +1,21 @@
+{
+  "record": {
+    "resource_set_id_or_label": "synthetic-conformance-value",
+    "additions": [
+      "addition_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/iam/resource-sets/synthetic-conformance-value/resources",
+    "body": {
+      "additions": [
+        "addition_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

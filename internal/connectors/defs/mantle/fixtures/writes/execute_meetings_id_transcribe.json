@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "recordingKey": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/meetings/id_fixture/transcribe",
+    "body": {
+      "recordingKey": "fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "user_id": "user_fixture_1",
+    "channel_id": "channel_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations",
+    "body": {
+      "user_id": "user_fixture_1",
+      "channel_id": "channel_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "record": {
+    "case_number": "synthetic-conformance-value",
+    "caseNumber": "case_number_fixture",
+    "impersonation": {
+      "status": "DISABLED",
+      "expiration": "2026-01-01T00:00:00Z"
+    },
+    "selfAssigned": {
+      "status": "APPROVED"
+    },
+    "subject": "subject_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/org/privacy/oktaSupport/cases/synthetic-conformance-value",
+    "body": {
+      "caseNumber": "case_number_fixture",
+      "impersonation": {
+        "status": "DISABLED",
+        "expiration": "2026-01-01T00:00:00Z"
+      },
+      "selfAssigned": {
+        "status": "APPROVED"
+      },
+      "subject": "subject_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

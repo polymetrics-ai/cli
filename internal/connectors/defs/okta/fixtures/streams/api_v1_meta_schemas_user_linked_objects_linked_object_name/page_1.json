@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/schemas/user/linkedObjects/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "associated": {
+        "description": "description_fixture",
+        "name": "name_fixture",
+        "title": "title_fixture",
+        "type": "USER"
+      },
+      "primary": {
+        "description": "description_fixture",
+        "name": "name_fixture",
+        "title": "title_fixture",
+        "type": "USER"
+      },
+      "_links": {
+        "self": {
+          "href": "https://example.invalid/fixture"
+        }
+      }
+    }
+  }
+}

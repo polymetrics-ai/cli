@@ -1,0 +1,421 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "assignmentType": {
+      "type": "string",
+      "description": "Role assignment type",
+      "enum": [
+        "CLIENT",
+        "GROUP",
+        "USER"
+      ]
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the object was created",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Role assignment ID"
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the role assignment"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the object was last updated",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the role assignment",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "| Role type                    | Description                                                 |\n|------------------------------|-------------------------------------------------------------|\n| ACCESS_CERTIFICATIONS_ADMIN  | Access Certifications Administrator IAM-based standard role |\n| ACCESS_REQUESTS_ADMIN        | Access Requests Administrator IAM-based standard role       |\n| API_ACCESS_MANAGEM",
+      "enum": [
+        "ACCESS_CERTIFICATIONS_ADMIN",
+        "ACCESS_REQUESTS_ADMIN",
+        "API_ACCESS_MANAGEMENT_ADMIN",
+        "APP_ADMIN",
+        "CUSTOM",
+        "GROUP_MEMBERSHIP_ADMIN",
+        "HELP_DESK_ADMIN",
+        "ORG_ADMIN",
+        "READ_ONLY_ADMIN",
+        "REPORT_ADMIN",
+        "SUPER_ADMIN",
+        "USER_ADMIN",
+        "WORKFLOWS_ADMIN"
+      ]
+    },
+    "_embedded": {
+      "type": "object",
+      "description": "Optional embedded resources for the role assignment",
+      "properties": {
+        "targets": {
+          "type": "object",
+          "description": "Targets configured for the role assignment",
+          "properties": {
+            "groups": {
+              "type": "array",
+              "description": "Group targets",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "created": {
+                    "type": "string",
+                    "description": "Timestamp when the group was created",
+                    "format": "date-time"
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "Unique ID for the group"
+                  },
+                  "lastMembershipUpdated": {
+                    "type": "string",
+                    "description": "Timestamp when the groups memberships were last updated",
+                    "format": "date-time"
+                  },
+                  "lastUpdated": {
+                    "type": "string",
+                    "description": "Timestamp when the group's profile was last updated",
+                    "format": "date-time"
+                  },
+                  "objectClass": {
+                    "type": "array",
+                    "description": "Determines the group's `profile`",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "profile": {
+                    "type": "object",
+                    "description": "Profile for any group that is not imported from Active Directory. Specifies the standard\nand custom profile properties for a group.\n\nThe `objectClass` for these groups is `okta:user_group`.\n\nYou can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schema",
+                    "properties": {
+                      "description": {
+                        "type": "string",
+                        "description": "Description of the group"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the group"
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Determines how a group's profile and memberships are managed",
+                    "enum": [
+                      "APP_GROUP",
+                      "BUILT_IN",
+                      "OKTA_GROUP"
+                    ]
+                  },
+                  "_embedded": {
+                    "type": "object",
+                    "description": "Embedded resources related to the group",
+                    "properties": {
+                      "stats": {
+                        "type": "object",
+                        "description": "Statistics about the group",
+                        "properties": {
+                          "usersCount": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "appsCount": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "groupPushMappingsCount": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "hasAdminPrivlege": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "app": {
+                        "type": "object",
+                        "description": "If the group is sourced from an app, this object contains information about that app",
+                        "properties": {
+                          "id": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "name": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "signOnMode": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "_links": {
+                    "type": "object",
+                    "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+                    "properties": {
+                      "apps": {
+                        "type": "object",
+                        "properties": {
+                          "hints": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "href": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "name": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "templated": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "type": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "logo": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      },
+                      "source": {
+                        "type": "object",
+                        "properties": {
+                          "hints": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "href": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "name": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "templated": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "type": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "users": {
+                        "type": "object",
+                        "properties": {
+                          "hints": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "href": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "name": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "templated": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "type": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "catalog": {
+              "type": "object",
+              "description": "App targets",
+              "properties": {
+                "apps": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "An app in the OIN catalog",
+                    "properties": {
+                      "category": {
+                        "type": "string",
+                        "description": "Category for the app in the OIN catalog"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Description of the app in the OIN catalog"
+                      },
+                      "displayName": {
+                        "type": "string",
+                        "description": "OIN catalog app display name"
+                      },
+                      "features": {
+                        "type": "array",
+                        "description": "Features supported by the app. See app [features](/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/features).",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "ID of the app instance. Okta returns this property only for apps not in the OIN catalog."
+                      },
+                      "lastUpdated": {
+                        "type": "string",
+                        "description": "Timestamp when the object was last updated",
+                        "format": "date-time"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "App key name. For OIN catalog apps, this is a unique key for the app definition."
+                      },
+                      "signOnModes": {
+                        "type": "array",
+                        "description": "Authentication mode for the app. See app [signOnMode](/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/signonmode).",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "App status",
+                        "enum": [
+                          "ACTIVE",
+                          "INACTIVE"
+                        ]
+                      },
+                      "verificationStatus": {
+                        "type": "string",
+                        "description": "OIN verification status of the catalog app"
+                      },
+                      "website": {
+                        "type": "string",
+                        "description": "Website of the OIN catalog app"
+                      },
+                      "_links": {
+                        "type": "object",
+                        "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification",
+                        "properties": {
+                          "logo": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "self": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification.",
+      "properties": {
+        "assignee": {
+          "type": "object",
+          "description": "Link to the assignee resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

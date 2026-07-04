@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/identities", "query": { "page": "1", "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "identity_fixture_1",
+          "email": "fixture1@example.com",
+          "name": "Fixture Sender",
+          "reply_to_email": null,
+          "reply_to_name": null,
+          "is_verified": true,
+          "resends": 0,
+          "add_note": false,
+          "personal_note": null,
+          "domain": { "id": "domain_fixture_1", "name": "fixture.example.com" }
+        }
+      ]
+    }
+  }
+}

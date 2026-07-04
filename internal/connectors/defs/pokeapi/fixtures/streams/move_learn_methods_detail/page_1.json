@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/move-learn-method/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "name": "fixture-move-learn-method-detail",
+      "names": [
+
+      ]
+    }
+  }
+}

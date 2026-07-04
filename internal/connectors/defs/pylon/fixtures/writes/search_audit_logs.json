@@ -1,0 +1,13 @@
+{
+  "record": {
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/audit-logs/search"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "_id": "cpn_fixture_1",
+          "name": "Fixture Company",
+          "domain": "example.com",
+          "industry": "Software",
+          "size": "11-50",
+          "location": "Remote",
+          "fields": { "name": "Fixture Company" },
+          "createdBy": "usr_fixture_1",
+          "ownerId": "usr_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "crmSync": null
+        }
+      ],
+      "total": 1,
+      "limit": 100,
+      "offset": 0
+    }
+  }
+}

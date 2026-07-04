@@ -1,0 +1,4017 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices",
+    "query": {
+      "page[limit]": "500",
+      "page[page]": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "invoices": [
+        {
+          "id": "1",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/1",
+          "htmlUrl": "https://app.nutshell.com/invoices/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/2",
+          "htmlUrl": "https://app.nutshell.com/invoices/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "3",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/3",
+          "htmlUrl": "https://app.nutshell.com/invoices/3",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "4",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/4",
+          "htmlUrl": "https://app.nutshell.com/invoices/4",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "5",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/5",
+          "htmlUrl": "https://app.nutshell.com/invoices/5",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "6",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/6",
+          "htmlUrl": "https://app.nutshell.com/invoices/6",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "7",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/7",
+          "htmlUrl": "https://app.nutshell.com/invoices/7",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "8",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/8",
+          "htmlUrl": "https://app.nutshell.com/invoices/8",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "9",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/9",
+          "htmlUrl": "https://app.nutshell.com/invoices/9",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "10",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/10",
+          "htmlUrl": "https://app.nutshell.com/invoices/10",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "11",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/11",
+          "htmlUrl": "https://app.nutshell.com/invoices/11",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "12",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/12",
+          "htmlUrl": "https://app.nutshell.com/invoices/12",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "13",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/13",
+          "htmlUrl": "https://app.nutshell.com/invoices/13",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "14",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/14",
+          "htmlUrl": "https://app.nutshell.com/invoices/14",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "15",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/15",
+          "htmlUrl": "https://app.nutshell.com/invoices/15",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "16",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/16",
+          "htmlUrl": "https://app.nutshell.com/invoices/16",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "17",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/17",
+          "htmlUrl": "https://app.nutshell.com/invoices/17",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "18",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/18",
+          "htmlUrl": "https://app.nutshell.com/invoices/18",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "19",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/19",
+          "htmlUrl": "https://app.nutshell.com/invoices/19",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "20",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/20",
+          "htmlUrl": "https://app.nutshell.com/invoices/20",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "21",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/21",
+          "htmlUrl": "https://app.nutshell.com/invoices/21",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "22",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/22",
+          "htmlUrl": "https://app.nutshell.com/invoices/22",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "23",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/23",
+          "htmlUrl": "https://app.nutshell.com/invoices/23",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "24",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/24",
+          "htmlUrl": "https://app.nutshell.com/invoices/24",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "25",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/25",
+          "htmlUrl": "https://app.nutshell.com/invoices/25",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "26",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/26",
+          "htmlUrl": "https://app.nutshell.com/invoices/26",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "27",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/27",
+          "htmlUrl": "https://app.nutshell.com/invoices/27",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "28",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/28",
+          "htmlUrl": "https://app.nutshell.com/invoices/28",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "29",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/29",
+          "htmlUrl": "https://app.nutshell.com/invoices/29",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "30",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/30",
+          "htmlUrl": "https://app.nutshell.com/invoices/30",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "31",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/31",
+          "htmlUrl": "https://app.nutshell.com/invoices/31",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "32",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/32",
+          "htmlUrl": "https://app.nutshell.com/invoices/32",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "33",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/33",
+          "htmlUrl": "https://app.nutshell.com/invoices/33",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "34",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/34",
+          "htmlUrl": "https://app.nutshell.com/invoices/34",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "35",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/35",
+          "htmlUrl": "https://app.nutshell.com/invoices/35",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "36",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/36",
+          "htmlUrl": "https://app.nutshell.com/invoices/36",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "37",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/37",
+          "htmlUrl": "https://app.nutshell.com/invoices/37",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "38",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/38",
+          "htmlUrl": "https://app.nutshell.com/invoices/38",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "39",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/39",
+          "htmlUrl": "https://app.nutshell.com/invoices/39",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "40",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/40",
+          "htmlUrl": "https://app.nutshell.com/invoices/40",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "41",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/41",
+          "htmlUrl": "https://app.nutshell.com/invoices/41",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "42",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/42",
+          "htmlUrl": "https://app.nutshell.com/invoices/42",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "43",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/43",
+          "htmlUrl": "https://app.nutshell.com/invoices/43",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "44",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/44",
+          "htmlUrl": "https://app.nutshell.com/invoices/44",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "45",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/45",
+          "htmlUrl": "https://app.nutshell.com/invoices/45",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "46",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/46",
+          "htmlUrl": "https://app.nutshell.com/invoices/46",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "47",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/47",
+          "htmlUrl": "https://app.nutshell.com/invoices/47",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "48",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/48",
+          "htmlUrl": "https://app.nutshell.com/invoices/48",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "49",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/49",
+          "htmlUrl": "https://app.nutshell.com/invoices/49",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "50",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/50",
+          "htmlUrl": "https://app.nutshell.com/invoices/50",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "51",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/51",
+          "htmlUrl": "https://app.nutshell.com/invoices/51",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "52",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/52",
+          "htmlUrl": "https://app.nutshell.com/invoices/52",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "53",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/53",
+          "htmlUrl": "https://app.nutshell.com/invoices/53",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "54",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/54",
+          "htmlUrl": "https://app.nutshell.com/invoices/54",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "55",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/55",
+          "htmlUrl": "https://app.nutshell.com/invoices/55",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "56",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/56",
+          "htmlUrl": "https://app.nutshell.com/invoices/56",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "57",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/57",
+          "htmlUrl": "https://app.nutshell.com/invoices/57",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "58",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/58",
+          "htmlUrl": "https://app.nutshell.com/invoices/58",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "59",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/59",
+          "htmlUrl": "https://app.nutshell.com/invoices/59",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "60",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/60",
+          "htmlUrl": "https://app.nutshell.com/invoices/60",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "61",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/61",
+          "htmlUrl": "https://app.nutshell.com/invoices/61",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "62",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/62",
+          "htmlUrl": "https://app.nutshell.com/invoices/62",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "63",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/63",
+          "htmlUrl": "https://app.nutshell.com/invoices/63",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "64",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/64",
+          "htmlUrl": "https://app.nutshell.com/invoices/64",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "65",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/65",
+          "htmlUrl": "https://app.nutshell.com/invoices/65",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "66",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/66",
+          "htmlUrl": "https://app.nutshell.com/invoices/66",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "67",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/67",
+          "htmlUrl": "https://app.nutshell.com/invoices/67",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "68",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/68",
+          "htmlUrl": "https://app.nutshell.com/invoices/68",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "69",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/69",
+          "htmlUrl": "https://app.nutshell.com/invoices/69",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "70",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/70",
+          "htmlUrl": "https://app.nutshell.com/invoices/70",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "71",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/71",
+          "htmlUrl": "https://app.nutshell.com/invoices/71",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "72",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/72",
+          "htmlUrl": "https://app.nutshell.com/invoices/72",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "73",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/73",
+          "htmlUrl": "https://app.nutshell.com/invoices/73",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "74",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/74",
+          "htmlUrl": "https://app.nutshell.com/invoices/74",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "75",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/75",
+          "htmlUrl": "https://app.nutshell.com/invoices/75",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "76",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/76",
+          "htmlUrl": "https://app.nutshell.com/invoices/76",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "77",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/77",
+          "htmlUrl": "https://app.nutshell.com/invoices/77",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "78",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/78",
+          "htmlUrl": "https://app.nutshell.com/invoices/78",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "79",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/79",
+          "htmlUrl": "https://app.nutshell.com/invoices/79",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "80",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/80",
+          "htmlUrl": "https://app.nutshell.com/invoices/80",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "81",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/81",
+          "htmlUrl": "https://app.nutshell.com/invoices/81",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "82",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/82",
+          "htmlUrl": "https://app.nutshell.com/invoices/82",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "83",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/83",
+          "htmlUrl": "https://app.nutshell.com/invoices/83",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "84",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/84",
+          "htmlUrl": "https://app.nutshell.com/invoices/84",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "85",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/85",
+          "htmlUrl": "https://app.nutshell.com/invoices/85",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "86",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/86",
+          "htmlUrl": "https://app.nutshell.com/invoices/86",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "87",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/87",
+          "htmlUrl": "https://app.nutshell.com/invoices/87",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "88",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/88",
+          "htmlUrl": "https://app.nutshell.com/invoices/88",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "89",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/89",
+          "htmlUrl": "https://app.nutshell.com/invoices/89",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "90",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/90",
+          "htmlUrl": "https://app.nutshell.com/invoices/90",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "91",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/91",
+          "htmlUrl": "https://app.nutshell.com/invoices/91",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "92",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/92",
+          "htmlUrl": "https://app.nutshell.com/invoices/92",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "93",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/93",
+          "htmlUrl": "https://app.nutshell.com/invoices/93",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "94",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/94",
+          "htmlUrl": "https://app.nutshell.com/invoices/94",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "95",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/95",
+          "htmlUrl": "https://app.nutshell.com/invoices/95",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "96",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/96",
+          "htmlUrl": "https://app.nutshell.com/invoices/96",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "97",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/97",
+          "htmlUrl": "https://app.nutshell.com/invoices/97",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "98",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/98",
+          "htmlUrl": "https://app.nutshell.com/invoices/98",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "99",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/99",
+          "htmlUrl": "https://app.nutshell.com/invoices/99",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "100",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/100",
+          "htmlUrl": "https://app.nutshell.com/invoices/100",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "101",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/101",
+          "htmlUrl": "https://app.nutshell.com/invoices/101",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "102",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/102",
+          "htmlUrl": "https://app.nutshell.com/invoices/102",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "103",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/103",
+          "htmlUrl": "https://app.nutshell.com/invoices/103",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "104",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/104",
+          "htmlUrl": "https://app.nutshell.com/invoices/104",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "105",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/105",
+          "htmlUrl": "https://app.nutshell.com/invoices/105",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "106",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/106",
+          "htmlUrl": "https://app.nutshell.com/invoices/106",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "107",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/107",
+          "htmlUrl": "https://app.nutshell.com/invoices/107",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "108",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/108",
+          "htmlUrl": "https://app.nutshell.com/invoices/108",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "109",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/109",
+          "htmlUrl": "https://app.nutshell.com/invoices/109",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "110",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/110",
+          "htmlUrl": "https://app.nutshell.com/invoices/110",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "111",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/111",
+          "htmlUrl": "https://app.nutshell.com/invoices/111",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "112",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/112",
+          "htmlUrl": "https://app.nutshell.com/invoices/112",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "113",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/113",
+          "htmlUrl": "https://app.nutshell.com/invoices/113",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "114",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/114",
+          "htmlUrl": "https://app.nutshell.com/invoices/114",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "115",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/115",
+          "htmlUrl": "https://app.nutshell.com/invoices/115",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "116",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/116",
+          "htmlUrl": "https://app.nutshell.com/invoices/116",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "117",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/117",
+          "htmlUrl": "https://app.nutshell.com/invoices/117",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "118",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/118",
+          "htmlUrl": "https://app.nutshell.com/invoices/118",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "119",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/119",
+          "htmlUrl": "https://app.nutshell.com/invoices/119",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "120",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/120",
+          "htmlUrl": "https://app.nutshell.com/invoices/120",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "121",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/121",
+          "htmlUrl": "https://app.nutshell.com/invoices/121",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "122",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/122",
+          "htmlUrl": "https://app.nutshell.com/invoices/122",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "123",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/123",
+          "htmlUrl": "https://app.nutshell.com/invoices/123",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "124",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/124",
+          "htmlUrl": "https://app.nutshell.com/invoices/124",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "125",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/125",
+          "htmlUrl": "https://app.nutshell.com/invoices/125",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "126",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/126",
+          "htmlUrl": "https://app.nutshell.com/invoices/126",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "127",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/127",
+          "htmlUrl": "https://app.nutshell.com/invoices/127",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "128",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/128",
+          "htmlUrl": "https://app.nutshell.com/invoices/128",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "129",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/129",
+          "htmlUrl": "https://app.nutshell.com/invoices/129",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "130",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/130",
+          "htmlUrl": "https://app.nutshell.com/invoices/130",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "131",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/131",
+          "htmlUrl": "https://app.nutshell.com/invoices/131",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "132",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/132",
+          "htmlUrl": "https://app.nutshell.com/invoices/132",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "133",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/133",
+          "htmlUrl": "https://app.nutshell.com/invoices/133",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "134",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/134",
+          "htmlUrl": "https://app.nutshell.com/invoices/134",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "135",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/135",
+          "htmlUrl": "https://app.nutshell.com/invoices/135",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "136",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/136",
+          "htmlUrl": "https://app.nutshell.com/invoices/136",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "137",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/137",
+          "htmlUrl": "https://app.nutshell.com/invoices/137",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "138",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/138",
+          "htmlUrl": "https://app.nutshell.com/invoices/138",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "139",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/139",
+          "htmlUrl": "https://app.nutshell.com/invoices/139",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "140",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/140",
+          "htmlUrl": "https://app.nutshell.com/invoices/140",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "141",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/141",
+          "htmlUrl": "https://app.nutshell.com/invoices/141",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "142",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/142",
+          "htmlUrl": "https://app.nutshell.com/invoices/142",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "143",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/143",
+          "htmlUrl": "https://app.nutshell.com/invoices/143",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "144",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/144",
+          "htmlUrl": "https://app.nutshell.com/invoices/144",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "145",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/145",
+          "htmlUrl": "https://app.nutshell.com/invoices/145",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "146",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/146",
+          "htmlUrl": "https://app.nutshell.com/invoices/146",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "147",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/147",
+          "htmlUrl": "https://app.nutshell.com/invoices/147",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "148",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/148",
+          "htmlUrl": "https://app.nutshell.com/invoices/148",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "149",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/149",
+          "htmlUrl": "https://app.nutshell.com/invoices/149",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "150",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/150",
+          "htmlUrl": "https://app.nutshell.com/invoices/150",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "151",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/151",
+          "htmlUrl": "https://app.nutshell.com/invoices/151",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "152",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/152",
+          "htmlUrl": "https://app.nutshell.com/invoices/152",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "153",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/153",
+          "htmlUrl": "https://app.nutshell.com/invoices/153",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "154",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/154",
+          "htmlUrl": "https://app.nutshell.com/invoices/154",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "155",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/155",
+          "htmlUrl": "https://app.nutshell.com/invoices/155",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "156",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/156",
+          "htmlUrl": "https://app.nutshell.com/invoices/156",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "157",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/157",
+          "htmlUrl": "https://app.nutshell.com/invoices/157",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "158",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/158",
+          "htmlUrl": "https://app.nutshell.com/invoices/158",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "159",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/159",
+          "htmlUrl": "https://app.nutshell.com/invoices/159",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "160",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/160",
+          "htmlUrl": "https://app.nutshell.com/invoices/160",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "161",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/161",
+          "htmlUrl": "https://app.nutshell.com/invoices/161",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "162",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/162",
+          "htmlUrl": "https://app.nutshell.com/invoices/162",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "163",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/163",
+          "htmlUrl": "https://app.nutshell.com/invoices/163",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "164",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/164",
+          "htmlUrl": "https://app.nutshell.com/invoices/164",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "165",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/165",
+          "htmlUrl": "https://app.nutshell.com/invoices/165",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "166",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/166",
+          "htmlUrl": "https://app.nutshell.com/invoices/166",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "167",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/167",
+          "htmlUrl": "https://app.nutshell.com/invoices/167",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "168",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/168",
+          "htmlUrl": "https://app.nutshell.com/invoices/168",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "169",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/169",
+          "htmlUrl": "https://app.nutshell.com/invoices/169",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "170",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/170",
+          "htmlUrl": "https://app.nutshell.com/invoices/170",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "171",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/171",
+          "htmlUrl": "https://app.nutshell.com/invoices/171",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "172",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/172",
+          "htmlUrl": "https://app.nutshell.com/invoices/172",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "173",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/173",
+          "htmlUrl": "https://app.nutshell.com/invoices/173",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "174",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/174",
+          "htmlUrl": "https://app.nutshell.com/invoices/174",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "175",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/175",
+          "htmlUrl": "https://app.nutshell.com/invoices/175",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "176",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/176",
+          "htmlUrl": "https://app.nutshell.com/invoices/176",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "177",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/177",
+          "htmlUrl": "https://app.nutshell.com/invoices/177",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "178",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/178",
+          "htmlUrl": "https://app.nutshell.com/invoices/178",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "179",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/179",
+          "htmlUrl": "https://app.nutshell.com/invoices/179",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "180",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/180",
+          "htmlUrl": "https://app.nutshell.com/invoices/180",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "181",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/181",
+          "htmlUrl": "https://app.nutshell.com/invoices/181",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "182",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/182",
+          "htmlUrl": "https://app.nutshell.com/invoices/182",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "183",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/183",
+          "htmlUrl": "https://app.nutshell.com/invoices/183",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "184",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/184",
+          "htmlUrl": "https://app.nutshell.com/invoices/184",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "185",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/185",
+          "htmlUrl": "https://app.nutshell.com/invoices/185",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "186",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/186",
+          "htmlUrl": "https://app.nutshell.com/invoices/186",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "187",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/187",
+          "htmlUrl": "https://app.nutshell.com/invoices/187",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "188",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/188",
+          "htmlUrl": "https://app.nutshell.com/invoices/188",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "189",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/189",
+          "htmlUrl": "https://app.nutshell.com/invoices/189",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "190",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/190",
+          "htmlUrl": "https://app.nutshell.com/invoices/190",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "191",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/191",
+          "htmlUrl": "https://app.nutshell.com/invoices/191",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "192",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/192",
+          "htmlUrl": "https://app.nutshell.com/invoices/192",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "193",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/193",
+          "htmlUrl": "https://app.nutshell.com/invoices/193",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "194",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/194",
+          "htmlUrl": "https://app.nutshell.com/invoices/194",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "195",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/195",
+          "htmlUrl": "https://app.nutshell.com/invoices/195",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "196",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/196",
+          "htmlUrl": "https://app.nutshell.com/invoices/196",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "197",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/197",
+          "htmlUrl": "https://app.nutshell.com/invoices/197",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "198",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/198",
+          "htmlUrl": "https://app.nutshell.com/invoices/198",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "199",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/199",
+          "htmlUrl": "https://app.nutshell.com/invoices/199",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "200",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/200",
+          "htmlUrl": "https://app.nutshell.com/invoices/200",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "201",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/201",
+          "htmlUrl": "https://app.nutshell.com/invoices/201",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "202",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/202",
+          "htmlUrl": "https://app.nutshell.com/invoices/202",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "203",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/203",
+          "htmlUrl": "https://app.nutshell.com/invoices/203",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "204",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/204",
+          "htmlUrl": "https://app.nutshell.com/invoices/204",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "205",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/205",
+          "htmlUrl": "https://app.nutshell.com/invoices/205",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "206",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/206",
+          "htmlUrl": "https://app.nutshell.com/invoices/206",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "207",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/207",
+          "htmlUrl": "https://app.nutshell.com/invoices/207",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "208",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/208",
+          "htmlUrl": "https://app.nutshell.com/invoices/208",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "209",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/209",
+          "htmlUrl": "https://app.nutshell.com/invoices/209",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "210",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/210",
+          "htmlUrl": "https://app.nutshell.com/invoices/210",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "211",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/211",
+          "htmlUrl": "https://app.nutshell.com/invoices/211",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "212",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/212",
+          "htmlUrl": "https://app.nutshell.com/invoices/212",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "213",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/213",
+          "htmlUrl": "https://app.nutshell.com/invoices/213",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "214",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/214",
+          "htmlUrl": "https://app.nutshell.com/invoices/214",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "215",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/215",
+          "htmlUrl": "https://app.nutshell.com/invoices/215",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "216",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/216",
+          "htmlUrl": "https://app.nutshell.com/invoices/216",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "217",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/217",
+          "htmlUrl": "https://app.nutshell.com/invoices/217",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "218",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/218",
+          "htmlUrl": "https://app.nutshell.com/invoices/218",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "219",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/219",
+          "htmlUrl": "https://app.nutshell.com/invoices/219",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "220",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/220",
+          "htmlUrl": "https://app.nutshell.com/invoices/220",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "221",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/221",
+          "htmlUrl": "https://app.nutshell.com/invoices/221",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "222",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/222",
+          "htmlUrl": "https://app.nutshell.com/invoices/222",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "223",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/223",
+          "htmlUrl": "https://app.nutshell.com/invoices/223",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "224",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/224",
+          "htmlUrl": "https://app.nutshell.com/invoices/224",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "225",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/225",
+          "htmlUrl": "https://app.nutshell.com/invoices/225",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "226",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/226",
+          "htmlUrl": "https://app.nutshell.com/invoices/226",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "227",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/227",
+          "htmlUrl": "https://app.nutshell.com/invoices/227",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "228",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/228",
+          "htmlUrl": "https://app.nutshell.com/invoices/228",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "229",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/229",
+          "htmlUrl": "https://app.nutshell.com/invoices/229",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "230",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/230",
+          "htmlUrl": "https://app.nutshell.com/invoices/230",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "231",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/231",
+          "htmlUrl": "https://app.nutshell.com/invoices/231",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "232",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/232",
+          "htmlUrl": "https://app.nutshell.com/invoices/232",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "233",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/233",
+          "htmlUrl": "https://app.nutshell.com/invoices/233",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "234",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/234",
+          "htmlUrl": "https://app.nutshell.com/invoices/234",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "235",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/235",
+          "htmlUrl": "https://app.nutshell.com/invoices/235",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "236",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/236",
+          "htmlUrl": "https://app.nutshell.com/invoices/236",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "237",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/237",
+          "htmlUrl": "https://app.nutshell.com/invoices/237",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "238",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/238",
+          "htmlUrl": "https://app.nutshell.com/invoices/238",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "239",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/239",
+          "htmlUrl": "https://app.nutshell.com/invoices/239",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "240",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/240",
+          "htmlUrl": "https://app.nutshell.com/invoices/240",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "241",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/241",
+          "htmlUrl": "https://app.nutshell.com/invoices/241",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "242",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/242",
+          "htmlUrl": "https://app.nutshell.com/invoices/242",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "243",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/243",
+          "htmlUrl": "https://app.nutshell.com/invoices/243",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "244",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/244",
+          "htmlUrl": "https://app.nutshell.com/invoices/244",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "245",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/245",
+          "htmlUrl": "https://app.nutshell.com/invoices/245",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "246",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/246",
+          "htmlUrl": "https://app.nutshell.com/invoices/246",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "247",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/247",
+          "htmlUrl": "https://app.nutshell.com/invoices/247",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "248",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/248",
+          "htmlUrl": "https://app.nutshell.com/invoices/248",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "249",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/249",
+          "htmlUrl": "https://app.nutshell.com/invoices/249",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "250",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/250",
+          "htmlUrl": "https://app.nutshell.com/invoices/250",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "251",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/251",
+          "htmlUrl": "https://app.nutshell.com/invoices/251",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "252",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/252",
+          "htmlUrl": "https://app.nutshell.com/invoices/252",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "253",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/253",
+          "htmlUrl": "https://app.nutshell.com/invoices/253",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "254",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/254",
+          "htmlUrl": "https://app.nutshell.com/invoices/254",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "255",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/255",
+          "htmlUrl": "https://app.nutshell.com/invoices/255",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "256",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/256",
+          "htmlUrl": "https://app.nutshell.com/invoices/256",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "257",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/257",
+          "htmlUrl": "https://app.nutshell.com/invoices/257",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "258",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/258",
+          "htmlUrl": "https://app.nutshell.com/invoices/258",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "259",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/259",
+          "htmlUrl": "https://app.nutshell.com/invoices/259",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "260",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/260",
+          "htmlUrl": "https://app.nutshell.com/invoices/260",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "261",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/261",
+          "htmlUrl": "https://app.nutshell.com/invoices/261",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "262",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/262",
+          "htmlUrl": "https://app.nutshell.com/invoices/262",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "263",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/263",
+          "htmlUrl": "https://app.nutshell.com/invoices/263",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "264",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/264",
+          "htmlUrl": "https://app.nutshell.com/invoices/264",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "265",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/265",
+          "htmlUrl": "https://app.nutshell.com/invoices/265",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "266",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/266",
+          "htmlUrl": "https://app.nutshell.com/invoices/266",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "267",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/267",
+          "htmlUrl": "https://app.nutshell.com/invoices/267",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "268",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/268",
+          "htmlUrl": "https://app.nutshell.com/invoices/268",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "269",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/269",
+          "htmlUrl": "https://app.nutshell.com/invoices/269",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "270",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/270",
+          "htmlUrl": "https://app.nutshell.com/invoices/270",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "271",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/271",
+          "htmlUrl": "https://app.nutshell.com/invoices/271",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "272",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/272",
+          "htmlUrl": "https://app.nutshell.com/invoices/272",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "273",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/273",
+          "htmlUrl": "https://app.nutshell.com/invoices/273",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "274",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/274",
+          "htmlUrl": "https://app.nutshell.com/invoices/274",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "275",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/275",
+          "htmlUrl": "https://app.nutshell.com/invoices/275",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "276",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/276",
+          "htmlUrl": "https://app.nutshell.com/invoices/276",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "277",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/277",
+          "htmlUrl": "https://app.nutshell.com/invoices/277",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "278",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/278",
+          "htmlUrl": "https://app.nutshell.com/invoices/278",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "279",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/279",
+          "htmlUrl": "https://app.nutshell.com/invoices/279",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "280",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/280",
+          "htmlUrl": "https://app.nutshell.com/invoices/280",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "281",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/281",
+          "htmlUrl": "https://app.nutshell.com/invoices/281",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "282",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/282",
+          "htmlUrl": "https://app.nutshell.com/invoices/282",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "283",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/283",
+          "htmlUrl": "https://app.nutshell.com/invoices/283",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "284",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/284",
+          "htmlUrl": "https://app.nutshell.com/invoices/284",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "285",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/285",
+          "htmlUrl": "https://app.nutshell.com/invoices/285",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "286",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/286",
+          "htmlUrl": "https://app.nutshell.com/invoices/286",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "287",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/287",
+          "htmlUrl": "https://app.nutshell.com/invoices/287",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "288",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/288",
+          "htmlUrl": "https://app.nutshell.com/invoices/288",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "289",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/289",
+          "htmlUrl": "https://app.nutshell.com/invoices/289",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "290",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/290",
+          "htmlUrl": "https://app.nutshell.com/invoices/290",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "291",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/291",
+          "htmlUrl": "https://app.nutshell.com/invoices/291",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "292",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/292",
+          "htmlUrl": "https://app.nutshell.com/invoices/292",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "293",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/293",
+          "htmlUrl": "https://app.nutshell.com/invoices/293",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "294",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/294",
+          "htmlUrl": "https://app.nutshell.com/invoices/294",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "295",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/295",
+          "htmlUrl": "https://app.nutshell.com/invoices/295",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "296",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/296",
+          "htmlUrl": "https://app.nutshell.com/invoices/296",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "297",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/297",
+          "htmlUrl": "https://app.nutshell.com/invoices/297",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "298",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/298",
+          "htmlUrl": "https://app.nutshell.com/invoices/298",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "299",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/299",
+          "htmlUrl": "https://app.nutshell.com/invoices/299",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "300",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/300",
+          "htmlUrl": "https://app.nutshell.com/invoices/300",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "301",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/301",
+          "htmlUrl": "https://app.nutshell.com/invoices/301",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "302",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/302",
+          "htmlUrl": "https://app.nutshell.com/invoices/302",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "303",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/303",
+          "htmlUrl": "https://app.nutshell.com/invoices/303",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "304",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/304",
+          "htmlUrl": "https://app.nutshell.com/invoices/304",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "305",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/305",
+          "htmlUrl": "https://app.nutshell.com/invoices/305",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "306",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/306",
+          "htmlUrl": "https://app.nutshell.com/invoices/306",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "307",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/307",
+          "htmlUrl": "https://app.nutshell.com/invoices/307",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "308",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/308",
+          "htmlUrl": "https://app.nutshell.com/invoices/308",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "309",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/309",
+          "htmlUrl": "https://app.nutshell.com/invoices/309",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "310",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/310",
+          "htmlUrl": "https://app.nutshell.com/invoices/310",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "311",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/311",
+          "htmlUrl": "https://app.nutshell.com/invoices/311",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "312",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/312",
+          "htmlUrl": "https://app.nutshell.com/invoices/312",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "313",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/313",
+          "htmlUrl": "https://app.nutshell.com/invoices/313",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "314",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/314",
+          "htmlUrl": "https://app.nutshell.com/invoices/314",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "315",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/315",
+          "htmlUrl": "https://app.nutshell.com/invoices/315",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "316",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/316",
+          "htmlUrl": "https://app.nutshell.com/invoices/316",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "317",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/317",
+          "htmlUrl": "https://app.nutshell.com/invoices/317",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "318",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/318",
+          "htmlUrl": "https://app.nutshell.com/invoices/318",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "319",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/319",
+          "htmlUrl": "https://app.nutshell.com/invoices/319",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "320",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/320",
+          "htmlUrl": "https://app.nutshell.com/invoices/320",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "321",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/321",
+          "htmlUrl": "https://app.nutshell.com/invoices/321",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "322",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/322",
+          "htmlUrl": "https://app.nutshell.com/invoices/322",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "323",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/323",
+          "htmlUrl": "https://app.nutshell.com/invoices/323",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "324",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/324",
+          "htmlUrl": "https://app.nutshell.com/invoices/324",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "325",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/325",
+          "htmlUrl": "https://app.nutshell.com/invoices/325",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "326",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/326",
+          "htmlUrl": "https://app.nutshell.com/invoices/326",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "327",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/327",
+          "htmlUrl": "https://app.nutshell.com/invoices/327",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "328",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/328",
+          "htmlUrl": "https://app.nutshell.com/invoices/328",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "329",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/329",
+          "htmlUrl": "https://app.nutshell.com/invoices/329",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "330",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/330",
+          "htmlUrl": "https://app.nutshell.com/invoices/330",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "331",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/331",
+          "htmlUrl": "https://app.nutshell.com/invoices/331",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "332",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/332",
+          "htmlUrl": "https://app.nutshell.com/invoices/332",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "333",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/333",
+          "htmlUrl": "https://app.nutshell.com/invoices/333",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "334",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/334",
+          "htmlUrl": "https://app.nutshell.com/invoices/334",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "335",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/335",
+          "htmlUrl": "https://app.nutshell.com/invoices/335",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "336",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/336",
+          "htmlUrl": "https://app.nutshell.com/invoices/336",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "337",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/337",
+          "htmlUrl": "https://app.nutshell.com/invoices/337",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "338",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/338",
+          "htmlUrl": "https://app.nutshell.com/invoices/338",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "339",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/339",
+          "htmlUrl": "https://app.nutshell.com/invoices/339",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "340",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/340",
+          "htmlUrl": "https://app.nutshell.com/invoices/340",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "341",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/341",
+          "htmlUrl": "https://app.nutshell.com/invoices/341",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "342",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/342",
+          "htmlUrl": "https://app.nutshell.com/invoices/342",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "343",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/343",
+          "htmlUrl": "https://app.nutshell.com/invoices/343",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "344",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/344",
+          "htmlUrl": "https://app.nutshell.com/invoices/344",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "345",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/345",
+          "htmlUrl": "https://app.nutshell.com/invoices/345",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "346",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/346",
+          "htmlUrl": "https://app.nutshell.com/invoices/346",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "347",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/347",
+          "htmlUrl": "https://app.nutshell.com/invoices/347",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "348",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/348",
+          "htmlUrl": "https://app.nutshell.com/invoices/348",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "349",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/349",
+          "htmlUrl": "https://app.nutshell.com/invoices/349",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "350",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/350",
+          "htmlUrl": "https://app.nutshell.com/invoices/350",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "351",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/351",
+          "htmlUrl": "https://app.nutshell.com/invoices/351",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "352",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/352",
+          "htmlUrl": "https://app.nutshell.com/invoices/352",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "353",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/353",
+          "htmlUrl": "https://app.nutshell.com/invoices/353",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "354",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/354",
+          "htmlUrl": "https://app.nutshell.com/invoices/354",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "355",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/355",
+          "htmlUrl": "https://app.nutshell.com/invoices/355",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "356",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/356",
+          "htmlUrl": "https://app.nutshell.com/invoices/356",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "357",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/357",
+          "htmlUrl": "https://app.nutshell.com/invoices/357",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "358",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/358",
+          "htmlUrl": "https://app.nutshell.com/invoices/358",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "359",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/359",
+          "htmlUrl": "https://app.nutshell.com/invoices/359",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "360",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/360",
+          "htmlUrl": "https://app.nutshell.com/invoices/360",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "361",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/361",
+          "htmlUrl": "https://app.nutshell.com/invoices/361",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "362",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/362",
+          "htmlUrl": "https://app.nutshell.com/invoices/362",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "363",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/363",
+          "htmlUrl": "https://app.nutshell.com/invoices/363",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "364",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/364",
+          "htmlUrl": "https://app.nutshell.com/invoices/364",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "365",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/365",
+          "htmlUrl": "https://app.nutshell.com/invoices/365",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "366",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/366",
+          "htmlUrl": "https://app.nutshell.com/invoices/366",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "367",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/367",
+          "htmlUrl": "https://app.nutshell.com/invoices/367",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "368",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/368",
+          "htmlUrl": "https://app.nutshell.com/invoices/368",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "369",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/369",
+          "htmlUrl": "https://app.nutshell.com/invoices/369",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "370",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/370",
+          "htmlUrl": "https://app.nutshell.com/invoices/370",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "371",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/371",
+          "htmlUrl": "https://app.nutshell.com/invoices/371",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "372",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/372",
+          "htmlUrl": "https://app.nutshell.com/invoices/372",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "373",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/373",
+          "htmlUrl": "https://app.nutshell.com/invoices/373",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "374",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/374",
+          "htmlUrl": "https://app.nutshell.com/invoices/374",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "375",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/375",
+          "htmlUrl": "https://app.nutshell.com/invoices/375",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "376",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/376",
+          "htmlUrl": "https://app.nutshell.com/invoices/376",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "377",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/377",
+          "htmlUrl": "https://app.nutshell.com/invoices/377",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "378",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/378",
+          "htmlUrl": "https://app.nutshell.com/invoices/378",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "379",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/379",
+          "htmlUrl": "https://app.nutshell.com/invoices/379",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "380",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/380",
+          "htmlUrl": "https://app.nutshell.com/invoices/380",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "381",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/381",
+          "htmlUrl": "https://app.nutshell.com/invoices/381",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "382",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/382",
+          "htmlUrl": "https://app.nutshell.com/invoices/382",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "383",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/383",
+          "htmlUrl": "https://app.nutshell.com/invoices/383",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "384",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/384",
+          "htmlUrl": "https://app.nutshell.com/invoices/384",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "385",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/385",
+          "htmlUrl": "https://app.nutshell.com/invoices/385",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "386",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/386",
+          "htmlUrl": "https://app.nutshell.com/invoices/386",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "387",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/387",
+          "htmlUrl": "https://app.nutshell.com/invoices/387",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "388",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/388",
+          "htmlUrl": "https://app.nutshell.com/invoices/388",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "389",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/389",
+          "htmlUrl": "https://app.nutshell.com/invoices/389",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "390",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/390",
+          "htmlUrl": "https://app.nutshell.com/invoices/390",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "391",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/391",
+          "htmlUrl": "https://app.nutshell.com/invoices/391",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "392",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/392",
+          "htmlUrl": "https://app.nutshell.com/invoices/392",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "393",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/393",
+          "htmlUrl": "https://app.nutshell.com/invoices/393",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "394",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/394",
+          "htmlUrl": "https://app.nutshell.com/invoices/394",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "395",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/395",
+          "htmlUrl": "https://app.nutshell.com/invoices/395",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "396",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/396",
+          "htmlUrl": "https://app.nutshell.com/invoices/396",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "397",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/397",
+          "htmlUrl": "https://app.nutshell.com/invoices/397",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "398",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/398",
+          "htmlUrl": "https://app.nutshell.com/invoices/398",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "399",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/399",
+          "htmlUrl": "https://app.nutshell.com/invoices/399",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "400",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/400",
+          "htmlUrl": "https://app.nutshell.com/invoices/400",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "401",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/401",
+          "htmlUrl": "https://app.nutshell.com/invoices/401",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "402",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/402",
+          "htmlUrl": "https://app.nutshell.com/invoices/402",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "403",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/403",
+          "htmlUrl": "https://app.nutshell.com/invoices/403",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "404",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/404",
+          "htmlUrl": "https://app.nutshell.com/invoices/404",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "405",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/405",
+          "htmlUrl": "https://app.nutshell.com/invoices/405",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "406",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/406",
+          "htmlUrl": "https://app.nutshell.com/invoices/406",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "407",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/407",
+          "htmlUrl": "https://app.nutshell.com/invoices/407",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "408",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/408",
+          "htmlUrl": "https://app.nutshell.com/invoices/408",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "409",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/409",
+          "htmlUrl": "https://app.nutshell.com/invoices/409",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "410",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/410",
+          "htmlUrl": "https://app.nutshell.com/invoices/410",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "411",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/411",
+          "htmlUrl": "https://app.nutshell.com/invoices/411",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "412",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/412",
+          "htmlUrl": "https://app.nutshell.com/invoices/412",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "413",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/413",
+          "htmlUrl": "https://app.nutshell.com/invoices/413",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "414",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/414",
+          "htmlUrl": "https://app.nutshell.com/invoices/414",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "415",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/415",
+          "htmlUrl": "https://app.nutshell.com/invoices/415",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "416",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/416",
+          "htmlUrl": "https://app.nutshell.com/invoices/416",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "417",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/417",
+          "htmlUrl": "https://app.nutshell.com/invoices/417",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "418",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/418",
+          "htmlUrl": "https://app.nutshell.com/invoices/418",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "419",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/419",
+          "htmlUrl": "https://app.nutshell.com/invoices/419",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "420",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/420",
+          "htmlUrl": "https://app.nutshell.com/invoices/420",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "421",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/421",
+          "htmlUrl": "https://app.nutshell.com/invoices/421",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "422",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/422",
+          "htmlUrl": "https://app.nutshell.com/invoices/422",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "423",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/423",
+          "htmlUrl": "https://app.nutshell.com/invoices/423",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "424",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/424",
+          "htmlUrl": "https://app.nutshell.com/invoices/424",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "425",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/425",
+          "htmlUrl": "https://app.nutshell.com/invoices/425",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "426",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/426",
+          "htmlUrl": "https://app.nutshell.com/invoices/426",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "427",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/427",
+          "htmlUrl": "https://app.nutshell.com/invoices/427",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "428",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/428",
+          "htmlUrl": "https://app.nutshell.com/invoices/428",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "429",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/429",
+          "htmlUrl": "https://app.nutshell.com/invoices/429",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "430",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/430",
+          "htmlUrl": "https://app.nutshell.com/invoices/430",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "431",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/431",
+          "htmlUrl": "https://app.nutshell.com/invoices/431",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "432",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/432",
+          "htmlUrl": "https://app.nutshell.com/invoices/432",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "433",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/433",
+          "htmlUrl": "https://app.nutshell.com/invoices/433",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "434",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/434",
+          "htmlUrl": "https://app.nutshell.com/invoices/434",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "435",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/435",
+          "htmlUrl": "https://app.nutshell.com/invoices/435",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "436",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/436",
+          "htmlUrl": "https://app.nutshell.com/invoices/436",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "437",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/437",
+          "htmlUrl": "https://app.nutshell.com/invoices/437",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "438",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/438",
+          "htmlUrl": "https://app.nutshell.com/invoices/438",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "439",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/439",
+          "htmlUrl": "https://app.nutshell.com/invoices/439",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "440",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/440",
+          "htmlUrl": "https://app.nutshell.com/invoices/440",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "441",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/441",
+          "htmlUrl": "https://app.nutshell.com/invoices/441",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "442",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/442",
+          "htmlUrl": "https://app.nutshell.com/invoices/442",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "443",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/443",
+          "htmlUrl": "https://app.nutshell.com/invoices/443",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "444",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/444",
+          "htmlUrl": "https://app.nutshell.com/invoices/444",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "445",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/445",
+          "htmlUrl": "https://app.nutshell.com/invoices/445",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "446",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/446",
+          "htmlUrl": "https://app.nutshell.com/invoices/446",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "447",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/447",
+          "htmlUrl": "https://app.nutshell.com/invoices/447",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "448",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/448",
+          "htmlUrl": "https://app.nutshell.com/invoices/448",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "449",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/449",
+          "htmlUrl": "https://app.nutshell.com/invoices/449",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "450",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/450",
+          "htmlUrl": "https://app.nutshell.com/invoices/450",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "451",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/451",
+          "htmlUrl": "https://app.nutshell.com/invoices/451",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "452",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/452",
+          "htmlUrl": "https://app.nutshell.com/invoices/452",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "453",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/453",
+          "htmlUrl": "https://app.nutshell.com/invoices/453",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "454",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/454",
+          "htmlUrl": "https://app.nutshell.com/invoices/454",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "455",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/455",
+          "htmlUrl": "https://app.nutshell.com/invoices/455",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "456",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/456",
+          "htmlUrl": "https://app.nutshell.com/invoices/456",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "457",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/457",
+          "htmlUrl": "https://app.nutshell.com/invoices/457",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "458",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/458",
+          "htmlUrl": "https://app.nutshell.com/invoices/458",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "459",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/459",
+          "htmlUrl": "https://app.nutshell.com/invoices/459",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "460",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/460",
+          "htmlUrl": "https://app.nutshell.com/invoices/460",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "461",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/461",
+          "htmlUrl": "https://app.nutshell.com/invoices/461",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "462",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/462",
+          "htmlUrl": "https://app.nutshell.com/invoices/462",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "463",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/463",
+          "htmlUrl": "https://app.nutshell.com/invoices/463",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "464",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/464",
+          "htmlUrl": "https://app.nutshell.com/invoices/464",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "465",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/465",
+          "htmlUrl": "https://app.nutshell.com/invoices/465",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "466",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/466",
+          "htmlUrl": "https://app.nutshell.com/invoices/466",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "467",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/467",
+          "htmlUrl": "https://app.nutshell.com/invoices/467",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "468",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/468",
+          "htmlUrl": "https://app.nutshell.com/invoices/468",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "469",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/469",
+          "htmlUrl": "https://app.nutshell.com/invoices/469",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "470",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/470",
+          "htmlUrl": "https://app.nutshell.com/invoices/470",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "471",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/471",
+          "htmlUrl": "https://app.nutshell.com/invoices/471",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "472",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/472",
+          "htmlUrl": "https://app.nutshell.com/invoices/472",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "473",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/473",
+          "htmlUrl": "https://app.nutshell.com/invoices/473",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "474",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/474",
+          "htmlUrl": "https://app.nutshell.com/invoices/474",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "475",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/475",
+          "htmlUrl": "https://app.nutshell.com/invoices/475",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "476",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/476",
+          "htmlUrl": "https://app.nutshell.com/invoices/476",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "477",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/477",
+          "htmlUrl": "https://app.nutshell.com/invoices/477",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "478",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/478",
+          "htmlUrl": "https://app.nutshell.com/invoices/478",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "479",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/479",
+          "htmlUrl": "https://app.nutshell.com/invoices/479",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "480",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/480",
+          "htmlUrl": "https://app.nutshell.com/invoices/480",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "481",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/481",
+          "htmlUrl": "https://app.nutshell.com/invoices/481",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "482",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/482",
+          "htmlUrl": "https://app.nutshell.com/invoices/482",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "483",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/483",
+          "htmlUrl": "https://app.nutshell.com/invoices/483",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "484",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/484",
+          "htmlUrl": "https://app.nutshell.com/invoices/484",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "485",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/485",
+          "htmlUrl": "https://app.nutshell.com/invoices/485",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "486",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/486",
+          "htmlUrl": "https://app.nutshell.com/invoices/486",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "487",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/487",
+          "htmlUrl": "https://app.nutshell.com/invoices/487",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "488",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/488",
+          "htmlUrl": "https://app.nutshell.com/invoices/488",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "489",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/489",
+          "htmlUrl": "https://app.nutshell.com/invoices/489",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "490",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/490",
+          "htmlUrl": "https://app.nutshell.com/invoices/490",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "491",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/491",
+          "htmlUrl": "https://app.nutshell.com/invoices/491",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "492",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/492",
+          "htmlUrl": "https://app.nutshell.com/invoices/492",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "493",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/493",
+          "htmlUrl": "https://app.nutshell.com/invoices/493",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "494",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/494",
+          "htmlUrl": "https://app.nutshell.com/invoices/494",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "495",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/495",
+          "htmlUrl": "https://app.nutshell.com/invoices/495",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "496",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/496",
+          "htmlUrl": "https://app.nutshell.com/invoices/496",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "497",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/497",
+          "htmlUrl": "https://app.nutshell.com/invoices/497",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "498",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/498",
+          "htmlUrl": "https://app.nutshell.com/invoices/498",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "499",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/499",
+          "htmlUrl": "https://app.nutshell.com/invoices/499",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "500",
+          "name": "Fixture invoices",
+          "href": "https://app.nutshell.com/rest/invoices/500",
+          "htmlUrl": "https://app.nutshell.com/invoices/500",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

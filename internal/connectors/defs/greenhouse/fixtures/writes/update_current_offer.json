@@ -1,0 +1,13 @@
+{
+  "record": {
+    "application_id": "application_id_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/applications/application_id_fixture/offers/current_offer"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

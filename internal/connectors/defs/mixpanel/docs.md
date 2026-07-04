@@ -1,10 +1,10 @@
 # Overview
 
-Mixpanel is a Tier-2 declarative-bundle-plus-hook migration. It reads Mixpanel cohorts,
-annotations, and engage (profile) records through the Mixpanel Query API (`2.0`), read-only. This
-bundle is capability-parity migrated from `internal/connectors/mixpanel` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Mixpanel is a Tier-2 declarative-bundle-plus-hook migration. It reads the legacy Mixpanel Query API
+cohorts, annotations, and engage (profile) records through `/api/2.0`, and selected current
+Mixpanel Query/Annotations API list or detail endpoints that fit the same Basic-auth model. This
+bundle is read-only and keeps the hand-written connector's record contract for the original three
+streams; the legacy package stays registered and unchanged until wave6's registry flip.
 
 ## Auth setup
 
@@ -33,9 +33,10 @@ mirroring `mixpanelCredentials` (`mixpanel/mixpanel.go`), field-for-field. `base
 
 ## Streams notes
 
-Three streams: `cohorts` (`GET /cohorts/list`, records at `cohorts`), `annotations`
-(`GET /annotations`, records at `annotations`), `engage` (`GET /engage`, records at `results`).
-Every stream sends `limit={{ config.page_size }}` (default 1000, matching legacy's
+Original legacy-parity streams: `cohorts` (`GET /api/2.0/cohorts/list`, records at `cohorts`),
+`annotations` (`GET /api/2.0/annotations`, records at `annotations`), and `engage`
+(`GET /api/2.0/engage`, records at `results`). Every original stream sends
+`limit={{ config.page_size }}` (default 1000, matching legacy's
 `mixpanelDefaultPageSize`), and pagination follows Mixpanel's own `page`/`next` cursor convention
 (`pagination.type: cursor`, `cursor_param: page`, `token_path: next`) — the next page's `page`
 value is read verbatim from the response body's `next` field, and pagination stops when `next` is
@@ -62,6 +63,22 @@ None of the 3 streams exposes a legacy-recognized incremental cursor field — M
 surfaces cohort/annotation/profile metadata, not an event stream; legacy's own catalog publishes
 no `CursorFields` for any stream. All 3 streams are full-refresh only.
 
+Additional read streams cover current documented object-record GET endpoints:
+
+- `saved_funnels` reads `GET https://mixpanel.com/api/query/funnels/list` (records are the response
+  array; primary key `funnel_id`).
+- `activity_stream` reads `GET https://mixpanel.com/api/query/stream/query` with caller-supplied
+  `distinct_ids`, `from_date`, and `to_date`, and emits `results.events`.
+- `top_events` reads `GET https://mixpanel.com/api/query/events/top` and emits the `events` array.
+- `event_property_names` reads `GET https://mixpanel.com/api/query/events/properties/top`; the
+  keyed-object response is flattened into `{name, count}` records.
+- `project_annotations`, `project_annotation`, and `annotation_tags` read the current Annotations
+  API under `https://mixpanel.com/api/app/projects/{project_id}/annotations...`.
+
+These current-doc streams use fixed standard US hosts because the engine has one connector-wide
+base URL and the original `base_url` remains reserved for legacy `/api/2.0` parity. EU/India
+regional variants are therefore not modeled for the additional current-doc streams in this bundle.
+
 ## Write actions & risks
 
 None. `capabilities.write` is `false`; no `writes.json` is shipped. Legacy itself implements no
@@ -69,9 +86,18 @@ write path for Mixpanel (`Write` returns `connectors.ErrUnsupportedOperation`).
 
 ## Known limits
 
-- Only the 3 legacy-parity read streams are implemented; see `api_surface.json`. Mixpanel's
-  broader documented API surface (JQL, raw event export/import, funnels, retention, insights) is
-  out of scope until Pass B.
+- `api_surface.json` enumerates Mixpanel's current OpenAPI surfaces. Mutating/admin products
+  (ingestion, identity/profile updates, Lexicon schemas, service accounts, warehouse connector
+  management, feature flag management, experiments, GDPR jobs, and data pipelines), raw export
+  downloads, scalar-array Query endpoints, and aggregate report endpoints are excluded with typed
+  reasons rather than exposed through this read-only legacy Query connector.
+- Current Query API `POST /cohorts/list` and `POST /engage` are documented successors to the
+  legacy `/api/2.0` read endpoints, but non-excluded POST endpoints are treated by conformance as
+  write surface. The legacy-compatible GET streams remain the implemented source of cohort/profile
+  record data for this connector.
+- Additional current-doc streams use fixed standard-region `mixpanel.com` hosts. This avoids
+  changing the meaning of the legacy `base_url` override that still controls the original
+  `/api/2.0` reads.
 - **Dynamic conformance checks are skipped at the bundle level** (`metadata.json`'s
   `conformance.skip_dynamic`): the sole `auth` candidate is `mode: custom` with no when-gated
   non-custom fallback, so conformance's synthetic non-secret config (which never populates a real

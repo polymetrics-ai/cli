@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/apps"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "apps": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "displayName": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "iconUrl": "https://example.com/fixture",
+        "slug": "fixture",
+        "development": true,
+        "apiClientId": "api_client_id_fixture",
+        "platform": "fixture"
+      }
+    }
+  }
+}

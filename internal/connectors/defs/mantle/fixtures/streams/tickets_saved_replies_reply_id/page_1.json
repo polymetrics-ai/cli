@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/tickets/saved_replies/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "savedReply": {
+        "id": "id_fixture",
+        "appId": "app_id_fixture",
+        "title": "fixture",
+        "handle": "fixture",
+        "content": {
+          "id": "content_fixture_id"
+        },
+        "defaultLocale": "fixture",
+        "status": "draft",
+        "tags": [
+          "fixture"
+        ],
+        "categoryId": "category_id_fixture",
+        "category": {
+          "id": "id_fixture",
+          "title": "fixture",
+          "parentId": "parent_id_fixture",
+          "sortOrder": 1
+        },
+        "userId": "user_id_fixture",
+        "user": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "roles": [
+          "fixture"
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

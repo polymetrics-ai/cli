@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "prospectnote",
+      "attributes": {
+        "name": "Fixture Create Prospect Note"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/prospectNotes",
+    "body": {
+      "data": {
+        "type": "prospectnote",
+        "attributes": {
+          "name": "Fixture Create Prospect Note"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

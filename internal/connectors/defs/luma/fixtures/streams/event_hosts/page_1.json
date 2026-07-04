@@ -1,21 +1,25 @@
 {
-  "request": { "method": "GET", "path": "/event/get-hosts", "query": { "event_api_id": "synthetic-conformance-value" } },
+  "request": {
+    "method": "GET",
+    "path": "/v1/events/get",
+    "query": {
+      "event_id": "synthetic-conformance-value"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
-      "entries": [
+      "id": "fixture_event_id",
+      "hosts": [
         {
-          "host": {
-            "api_id": "hst_fixture_1",
-            "name": "Fixture Host One",
-            "email": "host1@example.com",
-            "avatar_url": null,
-            "access_level": "admin"
-          }
+          "id": "fixture_id",
+          "email": "fixture@example.invalid",
+          "name": "Fixture Name",
+          "first_name": "Fixture Name",
+          "last_name": "Fixture Name",
+          "avatar_url": "https://example.invalid/image.png"
         }
-      ],
-      "has_more": false,
-      "next_cursor": null
+      ]
     }
   }
 }

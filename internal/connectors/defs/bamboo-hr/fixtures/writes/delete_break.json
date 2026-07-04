@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/time-tracking/breaks/fixture_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

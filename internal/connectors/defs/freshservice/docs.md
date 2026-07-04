@@ -1,62 +1,24 @@
 # Overview
 
-Freshservice is a wave2 fan-out declarative-HTTP migration. It reads Freshservice tickets, agents,
-requesters, assets, and problems through the Freshservice REST API v2
-(`GET https://<domain>/api/v2/<resource>`). This bundle is capability-parity migrated from
-`internal/connectors/freshservice` (the hand-written connector it migrates); the legacy package
-stays registered and unchanged until wave6's registry flip.
+Freshservice is a declarative HTTP connector for the official Freshservice REST API v2. This Pass B bundle preserves the five legacy record projections for `tickets`, `agents`, `requesters`, `assets`, and `problems`, then adds documented JSON list/detail endpoints as passthrough streams plus documented mutation endpoints as write actions.
 
 ## Auth setup
 
-Provide a Freshservice API key via the `api_key` secret; it is sent as the username of HTTP Basic
-auth with the literal password `"X"` (`Authorization: Basic base64(<api_key>:X)`), matching
-legacy's `connsdk.Basic(secret, freshserviceBasicPassword)` (`freshservice.go:232`) exactly, and is
-never logged. `domain_name` (e.g. `acme.freshservice.com`) is required and combined with the fixed
-`/api/v2` path segment to build the base URL, matching legacy's domain-derived
-`freshserviceBaseURL` fallback path.
+Provide a Freshservice API key via the `api_key` secret. The connector sends it as the HTTP Basic username with the literal password `X`, matching the legacy implementation. `domain_name` is the Freshservice account host, for example `acme.freshservice.com`, and the connector appends `/api/v2`.
 
 ## Streams notes
 
-All 5 streams (`tickets`, `agents`, `requesters`, `assets`, `problems`) share `page_number`
-pagination: `page` + `per_page` query params, `page_size: 100` (legacy's own default and max page
-size, `freshserviceDefaultPageSize`/`freshserviceMaxPageSize`), primary key `["id"]`, cursor field
-`updated_at`. A page shorter than 100 records signals the last page, matching legacy's own
-`connsdk.PageNumberPaginator` contract exactly (`freshservice.go:152-163`).
+The legacy streams remain first and keep schema projection so their emitted records match `internal/connectors/freshservice`: `tickets`, `agents`, `requesters`, `assets`, and `problems`. Newly added streams use `projection: passthrough` with permissive schemas because the legacy connector never shaped those records. Streams for detail and singleton endpoints disable pagination; list and filter endpoints use Freshservice page-number pagination with `page` and `per_page` at the documented page size of 100.
 
-`tickets` additionally sends `updated_since` (the resolved incremental lower bound, RFC3339,
-`param_format` default) via the opt-in optional-query dialect
-(`{"template": "{{ incremental.lower_bound }}", "omit_when_absent": true}`) — present only when
-the incremental lower bound resolves (a persisted cursor, or the `start_date` config on a fresh
-sync), omitted entirely on an unfiltered read. This matches legacy's own stream-specific gating
-(`freshservice.go:142-146`: "Tickets support server-side filtering by updated_since; other streams
-would reject the param so it is only applied to tickets"). The other 4 streams (`agents`,
-`requesters`, `assets`, `problems`) declare no `incremental` block and never send `updated_since`,
-matching legacy exactly — only `tickets` supports this server-side filter upstream.
+Path-scoped and filter streams require the corresponding config key named in `spec.json` (for example `ticket_id`, `project_id`, or a stream-specific query key). These keys are intentionally optional globally because they are only needed when the matching stream is selected.
 
 ## Write actions & risks
 
-None. Freshservice is read-only (`capabilities.write: false`, no `writes.json`), matching legacy's
-`Write` returning `connectors.ErrUnsupportedOperation`.
+The bundle declares 263 write actions for documented POST, PUT, PATCH, and DELETE endpoints that the Tier-1 dialect can express as one HTTP request per record. Record schemas require path parameters and allow documented JSON body fields to pass through. DELETE actions send no request body, treat 404 as idempotent missing-ok, and are marked `confirm: destructive`. Reverse ETL must still follow plan, preview, approval, and execute.
 
 ## Known limits
 
-- **`page_size` is not runtime-configurable per the engine dialect.** Legacy exposes `page_size` as
-  a config-driven override (`freshservicePageSize`, `freshservice.go:288-301`, clamped 1-100). The
-  engine's `page_number` paginator's `page_size` is a fixed value baked into `streams.json`'s
-  `base.pagination` block (conventions.md §3: no runtime config-driven page-size override mechanism
-  exists for any pagination type). This bundle bakes in legacy's own default (100), matching
-  legacy's out-of-the-box behavior for every caller that never overrode `page_size`; a caller that
-  previously set a non-default `page_size` would see a documented, out-of-scope config surface
-  narrowing here (`spec.json`'s `page_size` property is declared for documentation/future-wiring
-  purposes only and is not consumed by any template today).
-- **`max_pages` is not modeled.** Legacy's hard request-count cap override
-  (`freshserviceMaxPages`, `freshservice.go:303-316`) has no equivalent knob on the `page_number`
-  paginator; `MaxPages` is a bundle-level engine field this connector does not set, so pagination is
-  bounded only by the short-page stop signal, matching legacy's own unbounded-unless-configured
-  default behavior.
-- The `assets` stream's `impact` field is typed `string` here, matching legacy's own declared
-  catalog field type (`freshserviceAssetFields()`) even though legacy's own fixture-mode stub
-  happens to stamp an integer value for that field — the live Freshservice API returns `impact` as
-  a string label on real asset records, and legacy's fixture-mode data is a fixture-only
-  inconsistency this bundle does not reproduce (fixture-mode-only fields are out of scope per
-  standard migration practice; see the bitly/searxng precedent in `docs/migration/conventions.md`).
+- Download and export helpers, including attachment downloads and on-call calendar/PIR/audit exports, are excluded as `binary_payload` or `non_data_endpoint` in `api_surface.json`; they are not JSON list/detail streams or record mutations.
+- Newly added stream schemas are permissive passthrough schemas derived from documented response wrappers, not hand-curated warehouse schemas. The existing five legacy streams remain narrow to preserve emitted-record parity.
+- The declarative write dialect does not model compound workflows or multipart upload bodies. Actions here cover the direct JSON/form-compatible request shape only; callers must provide body fields accepted by Freshservice for the selected endpoint.
+- `page_size` and `max_pages` remain documented legacy config fields, but this engine bundle uses the fixed declarative pagination size of 100 and does not expose runtime page-size/max-page overrides.

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "contactIds": [],
+    "isBounced": true,
+    "resendEmails": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/contacts/set-bounced",
+    "body": {
+      "contactIds": [],
+      "isBounced": true,
+      "resendEmails": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

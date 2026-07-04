@@ -1,0 +1,23 @@
+{
+  "record": {
+    "resource_set_id_or_label": "synthetic-conformance-value",
+    "members": [
+      "member_fixture"
+    ],
+    "role": "role_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/iam/resource-sets/synthetic-conformance-value/bindings",
+    "body": {
+      "members": [
+        "member_fixture"
+      ],
+      "role": "role_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

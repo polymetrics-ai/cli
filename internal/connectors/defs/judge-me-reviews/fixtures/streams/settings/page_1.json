@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "settings": {
+        "admin_email": "merchant@example.com",
+        "autopublish": true,
+        "widget_star_color": "#339999",
+        "enable_review_pictures": true
+      }
+    }
+  }
+}

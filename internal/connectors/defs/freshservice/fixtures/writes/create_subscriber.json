@@ -1,0 +1,15 @@
+{
+  "record": {
+    "status_page_id": 123,
+    "name": "Fixture create_subscriber",
+    "description": "Fixture create_subscriber record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/status/pages/123/subscribers",
+    "body": {
+      "name": "Fixture create_subscriber",
+      "description": "Fixture create_subscriber record"
+    }
+  }
+}

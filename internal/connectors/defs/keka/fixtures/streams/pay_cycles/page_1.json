@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/paygroups/{{ config.pay_group_id }}/paycycles",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/pay_cycles",
+      "lastPage": "https://example.invalid/keka/pay_cycles",
+      "totalPages": 1,
+      "totalRecords": 0,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "case_id": "synthetic-conformance-value",
+    "name": "name_fixture",
+    "description": "description_fixture",
+    "scope": {
+      "users": [
+        {
+          "email": "fixture@example.invalid"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/orgs/synthetic-conformance-value/cases/synthetic-conformance-value/legal-holds",
+    "body": {
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "scope": {
+        "users": [
+          {
+            "email": "fixture@example.invalid"
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

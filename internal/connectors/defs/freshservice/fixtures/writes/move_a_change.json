@@ -1,0 +1,15 @@
+{
+  "record": {
+    "change_id": 123,
+    "name": "Fixture move_a_change",
+    "description": "Fixture move_a_change record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/move_workspace",
+    "body": {
+      "name": "Fixture move_a_change",
+      "description": "Fixture move_a_change record"
+    }
+  }
+}

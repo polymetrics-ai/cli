@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture create page"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/pages",
+    "body": {
+      "name": "Fixture create page"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "create_page_fixture_response"
+    }
+  }
+}

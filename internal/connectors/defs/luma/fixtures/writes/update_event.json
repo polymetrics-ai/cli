@@ -1,0 +1,12 @@
+{
+  "record": {
+    "event_id": "fixture_event_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/update",
+    "body": {
+      "event_id": "fixture_event_id"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/performance/employees/synthetic-conformance-value/goals/shareOptions",
+    "query": {
+      "search": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "persons": [
+        {
+          "employeeId": 1001,
+          "displayFirstName": "Fixture Name",
+          "lastName": "Fixture Name",
+          "photoUrl": "https://example.com/resource",
+          "userId": 1001
+        }
+      ]
+    }
+  }
+}

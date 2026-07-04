@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customer_bank_accounts": {
+      "description": "Synthetic create_a_customer_bank_account fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customer_bank_accounts",
+    "body": {
+      "customer_bank_accounts": {
+        "description": "Synthetic create_a_customer_bank_account fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

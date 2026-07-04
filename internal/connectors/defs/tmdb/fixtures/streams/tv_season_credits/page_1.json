@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tv/synthetic-conformance-value/season/synthetic-conformance-value/credits"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture tv_season_credits",
+      "name": "Fixture tv_season_credits",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

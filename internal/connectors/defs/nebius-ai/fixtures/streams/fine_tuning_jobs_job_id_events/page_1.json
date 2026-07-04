@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/fine_tuning/jobs/synthetic-conformance-value/events",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "object_fixture",
+      "data": [
+        {
+          "id": "id_fixture",
+          "created_at": 1,
+          "level": "info",
+          "message": "message_fixture",
+          "object": "object_fixture",
+          "data": "data_fixture",
+          "type": "message"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "origin": "origin_fixture",
+    "scopes": [
+      {
+        "allowedOktaApps": [
+          "OKTA_ENDUSER"
+        ],
+        "type": "CORS"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/trustedOrigins",
+    "body": {
+      "name": "name_fixture",
+      "origin": "origin_fixture",
+      "scopes": [
+        {
+          "allowedOktaApps": [
+            "OKTA_ENDUSER"
+          ],
+          "type": "CORS"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

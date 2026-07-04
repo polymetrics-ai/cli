@@ -1,0 +1,25 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "status": "approved",
+    "start": "fixture_value",
+    "end": "fixture_value",
+    "timeOffTypeId": "fixture_id",
+    "amount": 12.34
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/employees/fixture_id/time_off/request",
+    "body": {
+      "status": "approved",
+      "start": "fixture_value",
+      "end": "fixture_value",
+      "timeOffTypeId": "fixture_id",
+      "amount": 12.34
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

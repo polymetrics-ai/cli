@@ -1,7 +1,10 @@
 # Overview
 
-Lemlist is a cold outreach / sales engagement platform. This bundle reads its team (workspace),
-campaigns, activities, and unsubscribes through the Lemlist REST API
+Lemlist is a cold outreach / sales engagement platform. This bundle reads the legacy team,
+campaigns, activities, and unsubscribes streams plus additional no-required-input API collections:
+team senders/credits/CRM users, schedules, People database filters, tasks, inbox labels, contacts,
+contact lists, companies, webhooks, unsubscribe variables, Signal Agent signals, channel status,
+and contact/company field definitions. Requests use the Lemlist REST API
 (`https://api.lemlist.com/api`). It migrates `internal/connectors/lemlist` (the hand-written
 connector); the legacy package stays registered and unchanged until wave6's registry flip.
 
@@ -13,22 +16,28 @@ never logged.
 
 ## Streams notes
 
-`campaigns`, `activities`, and `unsubscribes` are offset/limit list endpoints returning a
-root-level JSON array (`records.path: ""`); pagination advances `offset` by 100 (`limit`/`offset`
-query params) and stops on a short page (fewer than 100 records), matching legacy's
-`harvest`/`RecordsAt(resp.Body, "")` loop exactly. `team` returns a single root-level JSON object
-(no array) — modeled as `records.path: ""` with `single_object: true` and a stream-level
-`pagination: {"type": "none"}` override, since the workspace endpoint is not paged upstream. No
-stream has a legacy incremental filter mechanism — every legacy stream is full-refresh only (no
-`created`/`updatedAt`-based server-side filtering), so no `incremental` block is declared anywhere
-in this bundle. Every Lemlist object exposes a string `_id`, so every schema's `x-primary-key` is
-`["_id"]`.
+`campaigns`, `activities`, `unsubscribes`, `schedules`, `contacts`, `companies`,
+`unsubscribed_variables`, and `watchlist_signals` use offset/limit pagination and stop on a short
+page. `tasks` uses lemlist's page-number shape starting at page 0. Single-object and unpaginated
+array endpoints (`team`, `team_senders`, `team_credits`, `team_crm_users`, `database_filters`,
+`inbox_labels`, `contact_lists`, `webhooks`, `user_channels`, `fields_contact`, and
+`fields_company`) override pagination to `none`.
+
+The legacy streams still preserve the original record contracts: root arrays for `campaigns`,
+`activities`, and `unsubscribes`, and a single root object for `team`. New streams use documented
+response envelopes: `schedules` reads `schedules`, `tasks` reads `results`, CRM contacts/companies
+read `data`, Signal Agent signals read `signals`, and field-definition streams split the `/fields`
+response into `data.contact` and `data.company`. No stream has a legacy incremental filter
+mechanism, so no `incremental` block is declared anywhere in this bundle.
 
 ## Write actions & risks
 
 None. This bundle is read-only (`capabilities.write: false`); Lemlist exposes no reverse-ETL write
 surface here (matches legacy's `Write` returning `connectors.ErrUnsupportedOperation`
-unconditionally).
+unconditionally). Lemlist's documented create/update/delete endpoints can add leads, send messages,
+change campaign/schedule/task state, alter CRM/contact/company records, configure webhooks, manage
+email accounts, or unsubscribe/resubscribe contacts; those mutations are excluded from this
+read-only source bundle with concrete risk categories in `api_surface.json`.
 
 ## Known limits
 
@@ -42,6 +51,9 @@ unconditionally).
   no cap), matching legacy's own default behavior for a caller that never overrides either knob.
   Documented scope narrowing, not a data-shape deviation — the emitted records for any given page
   are identical either way.
-- Full Lemlist API surface (lead add/remove-to-campaign, unsubscribe management, webhooks,
-  schedules, senders) is out of scope for this wave; see `api_surface.json`'s `excluded:
-  {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+- GET endpoints that require caller-supplied IDs or required query parameters are not global
+  streams. Campaign reports require a `campaignIds` query value, CRM filters require CRM/user
+  selectors, inbox conversations require a user/contact ID, and detail endpoints require campaign,
+  schedule, lead, contact, user, export, enrichment, or unsubscribe identifiers.
+- Export endpoints that return or initiate CSV/file downloads are excluded as binary/report
+  payloads rather than JSON object streams.

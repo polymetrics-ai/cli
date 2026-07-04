@@ -1,12 +1,19 @@
 {
-  "request": { "method": "GET", "path": "/api/v5/objects/campaigns", "query": { "limit": "200" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/campaigns",
+    "query": {
+      "limit": "200",
+      "fields": "id,name,createdAt,updatedAt"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "values": [
         {
-          "id": 10,
-          "name": "Fixture Campaign 1",
+          "id": 101,
+          "name": "name_fixture",
           "createdAt": "2026-01-01T00:00:00Z",
           "updatedAt": "2026-01-01T00:00:00Z"
         }

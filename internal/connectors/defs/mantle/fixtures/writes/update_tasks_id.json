@@ -1,0 +1,71 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "title": "fixture",
+    "description": "fixture",
+    "descriptionHtml": "<p>Fixture</p>",
+    "priority": "low",
+    "status": "new",
+    "dueDate": "2026-01-01T00:00:00Z",
+    "timezone": "fixture",
+    "assigneeId": "assignee_id_fixture",
+    "dealActivityId": "deal_activity_id_fixture",
+    "tags": [
+      "fixture"
+    ],
+    "reminders": [
+      {
+        "sendAt": "2026-01-01T00:00:00Z",
+        "timezone": "fixture",
+        "method": "email",
+        "destination": "fixture"
+      }
+    ],
+    "todoItems": [
+      {
+        "id": "id_fixture",
+        "content": "fixture",
+        "completed": true,
+        "displayOrder": 1
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/tasks/id_fixture",
+    "body": {
+      "title": "fixture",
+      "description": "fixture",
+      "descriptionHtml": "<p>Fixture</p>",
+      "priority": "low",
+      "status": "new",
+      "dueDate": "2026-01-01T00:00:00Z",
+      "timezone": "fixture",
+      "assigneeId": "assignee_id_fixture",
+      "dealActivityId": "deal_activity_id_fixture",
+      "tags": [
+        "fixture"
+      ],
+      "reminders": [
+        {
+          "sendAt": "2026-01-01T00:00:00Z",
+          "timezone": "fixture",
+          "method": "email",
+          "destination": "fixture"
+        }
+      ],
+      "todoItems": [
+        {
+          "id": "id_fixture",
+          "content": "fixture",
+          "completed": true,
+          "displayOrder": 1
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

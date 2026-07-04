@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integrations/api/v1/api-services",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "configGuideUrl": "https://example.invalid/fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "createdBy": "2026-01-01T00:00:00Z",
+        "grantedScopes": [
+          "granted_scope_fixture"
+        ],
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "properties": {},
+        "type": "type_fixture",
+        "_links": {
+          "client": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "logo": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

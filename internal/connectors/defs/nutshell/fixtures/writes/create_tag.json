@@ -1,0 +1,30 @@
+{
+  "record": {
+    "tags": [
+      {
+        "name": "Fixture tag",
+        "tagType": "1",
+        "colorType": "1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags",
+    "body": {
+      "tags": [
+        {
+          "name": "Fixture tag",
+          "tagType": "1",
+          "colorType": "1"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

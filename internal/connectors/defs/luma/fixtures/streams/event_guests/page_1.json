@@ -1,34 +1,52 @@
 {
-  "request": { "method": "GET", "path": "/event/get-guests", "query": { "event_api_id": "synthetic-conformance-value" } },
+  "request": {
+    "method": "GET",
+    "path": "/v1/events/guests/list",
+    "query": {
+      "event_id": "synthetic-conformance-value"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "entries": [
         {
-          "guest": {
-            "api_id": "gst_fixture_1",
-            "event_api_id": "evt_fixture_1",
-            "name": "Fixture Guest One",
-            "email": "fixture1@example.com",
-            "approval_status": "approved",
-            "registered_at": "2026-01-01T00:00:00Z",
-            "checked_in_at": null,
-            "user_api_id": "usr_fixture_1",
-            "user_name": "Fixture User One"
-          }
+          "id": "fixture_id",
+          "user_id": "fixture_user_id",
+          "user_email": "fixture@example.invalid",
+          "user_name": "Fixture Name",
+          "user_first_name": "Fixture Name",
+          "user_last_name": "Fixture Name",
+          "approval_status": "2026-01-01T00:00:00Z",
+          "check_in_qr_code": "fixture",
+          "eth_address": "fixture",
+          "invited_at": "2026-01-01T00:00:00Z",
+          "joined_at": "2026-01-01T00:00:00Z",
+          "phone_number": "fixture",
+          "registered_at": "2026-01-01T00:00:00Z",
+          "registration_answers": "2026-01-01T00:00:00Z",
+          "solana_address": "fixture",
+          "utm_source": "fixture",
+          "event_tickets": []
         },
         {
-          "guest": {
-            "api_id": "gst_fixture_2",
-            "event_api_id": "evt_fixture_1",
-            "name": "Fixture Guest Two",
-            "email": "fixture2@example.com",
-            "approval_status": "approved",
-            "registered_at": "2026-01-02T00:00:00Z",
-            "checked_in_at": "2026-01-02T00:30:00Z",
-            "user_api_id": "usr_fixture_2",
-            "user_name": "Fixture User Two"
-          }
+          "id": "event_guests_fixture_2",
+          "user_id": "fixture_user_id",
+          "user_email": "fixture@example.invalid",
+          "user_name": "Fixture Name",
+          "user_first_name": "Fixture Name",
+          "user_last_name": "Fixture Name",
+          "approval_status": "2026-01-01T00:00:00Z",
+          "check_in_qr_code": "fixture",
+          "eth_address": "fixture",
+          "invited_at": "2026-01-01T00:00:00Z",
+          "joined_at": "2026-01-01T00:00:00Z",
+          "phone_number": "fixture",
+          "registered_at": "2026-01-01T00:00:00Z",
+          "registration_answers": "2026-01-01T00:00:00Z",
+          "solana_address": "fixture",
+          "utm_source": "fixture",
+          "event_tickets": []
         }
       ],
       "has_more": false,

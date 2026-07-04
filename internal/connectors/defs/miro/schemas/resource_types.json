@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "description": "An array of URNs that identify the schema(s) that define the structure of this resource type.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "Identifier of the resource type. Since Miro supports Users and Groups, the values are User or Group."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the resource type. Since Miro supports Users and Groups, the values are User or Group."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the resource type. Since Miro supports Users and Groups, the values are User or Group."
+    },
+    "endpoint": {
+      "type": "string",
+      "description": "Endpoint extension of the resource type. Since Miro supports Users and Groups, the values are /Users or /Groups."
+    },
+    "schema": {
+      "type": "string",
+      "description": "Schema URI of the resource type. Since Miro supports Users and Groups, the values are urn:ietf:params:scim:schemas:core:2.0:User or urn:ietf:params:scim:schemas:core:2.0:Group."
+    },
+    "schemaExtensions": {
+      "type": "array",
+      "description": "Schema extensions supported for the resource type.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "type": "string",
+            "description": "Schema extension URI of the resource type."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indicator of whether the schema extension is required."
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "repositoryId": "repository_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/docs/sites/id_fixture/repositories",
+    "body": {
+      "repositoryId": "repository_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

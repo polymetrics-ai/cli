@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/oncall/ws/synthetic-conformance-value/schedules/synthetic-conformance-value/escalation-policies",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "escalation_policies": [
+        {
+          "id": "view_all_ep",
+          "name": "Fixture view_all_ep",
+          "subject": "Fixture view_all_ep",
+          "description": "Fixture view_all_ep record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

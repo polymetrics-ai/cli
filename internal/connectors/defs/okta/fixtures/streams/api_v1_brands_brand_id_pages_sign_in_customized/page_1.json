@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value/pages/sign-in/customized"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contentSecurityPolicySetting": {
+        "mode": "enforced",
+        "reportUri": "https://example.invalid/fixture",
+        "srcList": [
+          "src_list_fixture"
+        ]
+      },
+      "widgetCustomizations": {
+        "signInLabel": "sign_in_label_fixture",
+        "usernameLabel": "username_label_fixture",
+        "usernameInfoTip": "username_info_tip_fixture",
+        "passwordLabel": "fixture",
+        "passwordInfoTip": "fixture",
+        "showPasswordVisibilityToggle": true,
+        "showUserIdentifier": true,
+        "forgotPasswordLabel": "fixture",
+        "forgotPasswordUrl": "https://example.invalid/fixture",
+        "unlockAccountLabel": "unlock_account_label_fixture",
+        "unlockAccountUrl": "https://example.invalid/fixture",
+        "helpLabel": "help_label_fixture",
+        "helpUrl": "https://example.invalid/fixture",
+        "customLink1Label": "https://example.invalid/fixture",
+        "customLink1Url": "https://example.invalid/fixture",
+        "customLink2Label": "https://example.invalid/fixture",
+        "customLink2Url": "https://example.invalid/fixture",
+        "authenticatorPageCustomLinkLabel": "https://example.invalid/fixture",
+        "authenticatorPageCustomLinkUrl": "https://example.invalid/fixture",
+        "classicRecoveryFlowEmailOrUsernameLabel": "fixture@example.invalid",
+        "widgetGeneration": "G2",
+        "postAuthKeepMeSignedInPrompt": {
+          "acceptButtonText": "accept_button_text_fixture",
+          "rejectButtonText": "reject_button_text_fixture",
+          "subtitle": "subtitle_fixture",
+          "title": "title_fixture"
+        },
+        "classicFooterHelpTitle": "classic_footer_help_title_fixture",
+        "gracePeriodRequiredSoon": {
+          "gracePeriodRequiredSoonCustomLinkLabel": "https://example.invalid/fixture",
+          "gracePeriodRequiredSoonCustomLinkUrl": "https://example.invalid/fixture",
+          "gracePeriodRequiredSoonDescription": "grace_period_required_soon_description_fixture"
+        }
+      },
+      "widgetVersion": "widget_version_fixture"
+    }
+  }
+}

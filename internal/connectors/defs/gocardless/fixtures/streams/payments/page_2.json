@@ -2,7 +2,11 @@
   "request": {
     "method": "GET",
     "path": "/payments",
-    "query": { "limit": "50", "created_at[gt]": "2020-01-01T00:00:00Z", "after": "PM_fixture_2" }
+    "query": {
+      "limit": "50",
+      "created_at[gt]": "2020-01-01T00:00:00Z",
+      "after": "PM_fixture_2"
+    }
   },
   "response": {
     "status": 200,
@@ -24,7 +28,12 @@
           }
         }
       ],
-      "meta": { "cursors": { "before": "PM_fixture_1", "after": null } }
+      "meta": {
+        "cursors": {
+          "before": "PM_fixture_1",
+          "after": null
+        }
+      }
     }
   }
 }

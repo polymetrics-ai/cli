@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture update_an_asset_for_freshservice_itam",
+    "description": "Fixture update_an_asset_for_freshservice_itam record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/itam/assets",
+    "body": {
+      "name": "Fixture update_an_asset_for_freshservice_itam",
+      "description": "Fixture update_an_asset_for_freshservice_itam record"
+    }
+  }
+}

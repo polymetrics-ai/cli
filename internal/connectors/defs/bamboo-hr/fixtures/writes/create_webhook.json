@@ -1,0 +1,26 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "url": "https://example.com/resource",
+    "format": "json",
+    "events": [
+      "employee_with_fields.updated"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/webhooks",
+    "body": {
+      "name": "Fixture Name",
+      "url": "https://example.com/resource",
+      "format": "json",
+      "events": [
+        "employee_with_fields.updated"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

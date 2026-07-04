@@ -1,0 +1,12 @@
+{
+  "record": {
+    "Rule": "example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/triggers/inboundrules",
+    "body": {
+      "Rule": "example.com"
+    }
+  }
+}

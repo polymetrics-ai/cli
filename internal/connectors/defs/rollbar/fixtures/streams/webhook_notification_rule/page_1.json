@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/notifications/webhook/rule/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "id": 1,
+        "name": "Fixture webhook_notification_rule",
+        "title": "Fixture webhook_notification_rule",
+        "status": "active"
+      }
+    }
+  }
+}

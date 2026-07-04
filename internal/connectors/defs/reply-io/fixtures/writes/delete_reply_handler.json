@@ -1,0 +1,16 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "reply_handler_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v3/ai-sdr/knowledge-bases/synthetic-conformance-value/reply-handlers/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

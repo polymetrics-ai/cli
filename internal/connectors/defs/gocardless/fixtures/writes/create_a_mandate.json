@@ -1,0 +1,20 @@
+{
+  "record": {
+    "mandates": {
+      "description": "Synthetic create_a_mandate fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mandates",
+    "body": {
+      "mandates": {
+        "description": "Synthetic create_a_mandate fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

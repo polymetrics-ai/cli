@@ -1,32 +1,24 @@
 {
-  "request": { "method": "GET", "path": "/districts" },
+  "request": {
+    "method": "GET",
+    "path": "/districts",
+    "query": {
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": {
-        "01001": {
-          "ags": "01001",
-          "name": "Flensburg",
-          "county": "SK Flensburg",
-          "state": "Schleswig-Holstein",
-          "population": 92000,
-          "cases": 50,
-          "deaths": 1,
-          "recovered": 45,
-          "weekIncidence": 9.5,
-          "casesPer100k": 38.1
-        },
-        "01002": {
-          "ags": "01002",
-          "name": "Kiel",
-          "county": "SK Kiel",
-          "state": "Schleswig-Holstein",
-          "population": 247000,
-          "cases": 80,
-          "deaths": 2,
-          "recovered": 70,
-          "weekIncidence": 8.7,
-          "casesPer100k": 35.5
+        "02000": {
+          "ags": "02000",
+          "name": "Hamburg",
+          "county": "SK Hamburg",
+          "state": "Hamburg",
+          "population": 1892122,
+          "cases": 828126,
+          "deaths": 4380,
+          "recovered": 823738,
+          "weekIncidence": 0.15
         }
       }
     }

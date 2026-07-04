@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "callpurpose",
+      "attributes": {
+        "name": "Fixture Update Call Purpose"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/callPurposes/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "callpurpose",
+        "attributes": {
+          "name": "Fixture Update Call Purpose"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

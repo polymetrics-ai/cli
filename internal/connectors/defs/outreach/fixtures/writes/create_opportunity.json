@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "opportunity",
+      "attributes": {
+        "name": "Fixture Create Opportunity"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/opportunities",
+    "body": {
+      "data": {
+        "type": "opportunity",
+        "attributes": {
+          "name": "Fixture Create Opportunity"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

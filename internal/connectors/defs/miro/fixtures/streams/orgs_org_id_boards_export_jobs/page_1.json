@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/boards/export/jobs",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "boardFormat": "SVG",
+          "status": "status_fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "modifiedAt": "2026-01-01T00:00:00Z",
+          "tasksCount": {
+            "total": 1,
+            "success": 1,
+            "error": 1
+          },
+          "creator": {
+            "id": "id_fixture"
+          }
+        }
+      ],
+      "limit": 50,
+      "size": 1
+    }
+  }
+}

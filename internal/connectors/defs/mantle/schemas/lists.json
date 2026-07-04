@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the list"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the list"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "An optional description of the list"
+    },
+    "customerCount": {
+      "type": "integer",
+      "description": "The number of customers in the list"
+    },
+    "contactCount": {
+      "type": "integer",
+      "description": "The number of contacts in the list"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "When the list was created",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "When the list was last updated",
+      "format": "date-time"
+    }
+  },
+  "description": "A list is a collection of customers and/or contacts."
+}

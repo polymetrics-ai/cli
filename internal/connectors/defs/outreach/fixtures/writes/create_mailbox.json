@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "mailbox",
+      "attributes": {
+        "name": "Fixture Create Mailbox"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mailboxes",
+    "body": {
+      "data": {
+        "type": "mailbox",
+        "attributes": {
+          "name": "Fixture Create Mailbox"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

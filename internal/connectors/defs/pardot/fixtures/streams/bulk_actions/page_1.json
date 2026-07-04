@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/bulk-actions",
+    "query": {
+      "limit": "200",
+      "fields": "id,object,bulkAction,status,origin,count,percentComplete,createdAt,updatedAt,createdById,updatedById,errorCount,errorsRef,fileName,processedCount"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "object": "object_fixture",
+          "bulkAction": "bulkAction_fixture",
+          "status": "status_fixture",
+          "origin": "origin_fixture",
+          "count": 1,
+          "percentComplete": 1,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdById": 1,
+          "updatedById": 1,
+          "errorCount": 1,
+          "errorsRef": "errorsRef_fixture",
+          "fileName": "fileName_fixture",
+          "processedCount": 1
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

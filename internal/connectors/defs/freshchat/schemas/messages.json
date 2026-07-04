@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "conversation_id": { "type": ["string", "null"] },
+    "app_id": { "type": ["string", "null"] },
+    "message_type": { "type": ["string", "null"] },
+    "actor_type": { "type": ["string", "null"] },
+    "actor_id": { "type": ["string", "null"] },
+    "message_parts": { "type": ["array", "null"] },
+    "created_time": { "type": ["string", "null"] },
+    "updated_time": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
+}

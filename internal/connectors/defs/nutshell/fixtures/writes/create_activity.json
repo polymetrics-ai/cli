@@ -1,0 +1,26 @@
+{
+  "record": {
+    "activities": [
+      {
+        "name": "Fixture create_activity"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/activities",
+    "body": {
+      "activities": [
+        {
+          "name": "Fixture create_activity"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

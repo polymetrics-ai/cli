@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_solution_article",
+    "description": "Fixture create_solution_article record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/solutions/articles",
+    "body": {
+      "name": "Fixture create_solution_article",
+      "description": "Fixture create_solution_article record"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sms_message",
+  "type": "object",
+  "x-primary-key": ["MessageID"],
+  "x-cursor-field": "CreationTS",
+  "properties": {
+    "From": { "type": ["string", "null"] },
+    "To": { "type": ["string", "null"] },
+    "MessageID": { "type": ["string", "null"] },
+    "SMSCount": { "type": ["integer", "null"] },
+    "CreationTS": { "type": ["integer", "null"] },
+    "SentTS": { "type": ["integer", "null"] },
+    "status_code": { "type": ["integer", "null"] },
+    "status_name": { "type": ["string", "null"] },
+    "status_description": { "type": ["string", "null"] },
+    "cost_value": { "type": ["number", "null"] },
+    "cost_currency": { "type": ["string", "null"] }
+  }
+}

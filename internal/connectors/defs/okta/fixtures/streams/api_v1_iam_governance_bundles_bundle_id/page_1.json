@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/iam/governance/bundles/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "description": "description_fixture",
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "orn": "orn_fixture",
+      "status": "status_fixture",
+      "_links": {
+        "entitlements": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/flows"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "flows": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "status": "draft",
+        "allowRepeatRuns": true,
+        "blockRepeatsTimeValue": 1,
+        "blockRepeatsTimeUnit": "minutes",
+        "stepsCount": 1,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": ""
+    }
+  }
+}

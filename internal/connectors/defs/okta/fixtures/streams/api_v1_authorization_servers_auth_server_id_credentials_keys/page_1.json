@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/credentials/keys",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "alg": "alg_fixture",
+        "e": "e_fixture",
+        "kid": "kid_fixture",
+        "kty": "kty_fixture",
+        "n": "n_fixture",
+        "status": "status_fixture",
+        "use": "use_fixture",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

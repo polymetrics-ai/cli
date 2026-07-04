@@ -1,0 +1,28 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "locationId": 1001,
+    "startOfWeek": "fixture_value",
+    "employeeIds": [
+      1001
+    ],
+    "earlyClockInThreshold": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/scheduling/schedules",
+    "body": {
+      "name": "Fixture Name",
+      "locationId": 1001,
+      "startOfWeek": "fixture_value",
+      "employeeIds": [
+        1001
+      ],
+      "earlyClockInThreshold": 1001
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

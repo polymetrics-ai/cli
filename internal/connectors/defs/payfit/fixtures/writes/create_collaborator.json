@@ -1,0 +1,22 @@
+{
+  "record": {
+    "company_id": "synthetic-conformance-value",
+    "firstName": "firstName_fixture",
+    "lastName": "lastName_fixture",
+    "personalEmail": "personalEmail_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies/synthetic-conformance-value/collaborators",
+    "body": {
+      "firstName": "firstName_fixture",
+      "lastName": "lastName_fixture",
+      "personalEmail": "personalEmail_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

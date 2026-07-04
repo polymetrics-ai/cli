@@ -1,0 +1,29 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "comment": "fixture",
+    "commentHtml": "<p>Fixture</p>",
+    "taggedUsers": [
+      {
+        "id": "id_fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tasks/id_fixture/comments",
+    "body": {
+      "comment": "fixture",
+      "commentHtml": "<p>Fixture</p>",
+      "taggedUsers": [
+        {
+          "id": "id_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

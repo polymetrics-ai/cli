@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "123",
+    "user_id": "fixture-user@example.invalid"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/teams/123/remove_member",
+    "body": {
+      "user_id": "fixture-user@example.invalid"
+    }
+  }
+}

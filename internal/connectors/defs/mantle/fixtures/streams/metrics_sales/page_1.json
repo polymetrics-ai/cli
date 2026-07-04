@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/metrics/sales"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "metrics_sales_fixture",
+      "value": 1.23
+    }
+  }
+}

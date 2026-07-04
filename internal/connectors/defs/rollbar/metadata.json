@@ -1,14 +1,14 @@
 {
   "name": "rollbar",
   "display_name": "Rollbar",
-  "description": "Reads Rollbar projects and error items through the Rollbar API. Read-only.",
+  "description": "Reads and writes documented Rollbar API v1 resources through the declarative connector engine.",
   "integration_type": "api",
-  "docs_url": "https://docs.rollbar.com/reference/getting-started",
+  "docs_url": "https://docs.rollbar.com/reference/getting-started-1",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Rollbar API read of error-tracking data"
+    "read": "external Rollbar API read of projects, items, occurrences, users, teams, reports, notification rules, service links, versions, and related operational data",
+    "write": "external Rollbar API mutations for items, projects, teams, assignments, invitations, notification settings/rules, service links, occurrences, and session replay deletes; approval required before execution"
   }
 }

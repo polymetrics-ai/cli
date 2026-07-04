@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scheduling_list_timezones",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "name",
+    "offset"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "offset": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "SitesManager.getSitesWithAdminAccess",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idsite": "1",
+        "name": "Fixture Site One",
+        "main_url": "https://fixture1.example.com"
+      },
+      {
+        "idsite": "2",
+        "name": "Fixture Site Two",
+        "main_url": "https://fixture2.example.com"
+      }
+    ]
+  }
+}

@@ -2,18 +2,112 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Mantle Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
+    "agent_id": {
+      "type": "string",
+      "description": "Mantle path parameter agentId."
+    },
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "Mantle API key, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+      "description": "Mantle API key for Bearer authentication. Never logged."
+    },
+    "app_event_id": {
+      "type": "string",
+      "description": "Mantle path parameter appEventId."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "Mantle path parameter appId."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://api.heymantle.com",
       "description": "Mantle API base URL override for tests or proxies."
+    },
+    "checklist_id": {
+      "type": "string",
+      "description": "Mantle path parameter checklistId."
+    },
+    "collection_id": {
+      "type": "string",
+      "description": "Mantle required query parameter collectionId."
+    },
+    "event_name": {
+      "type": "string",
+      "description": "Mantle required query parameter eventName."
+    },
+    "feature_id": {
+      "type": "string",
+      "description": "Mantle path parameter featureId."
+    },
+    "filter_id": {
+      "type": "string",
+      "description": "Mantle path parameter filter_id."
+    },
+    "id": {
+      "type": "string",
+      "description": "Mantle path parameter id."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Mantle path parameter itemId."
+    },
+    "job_key": {
+      "type": "string",
+      "description": "Mantle path parameter jobKey."
+    },
+    "loop_id": {
+      "type": "string",
+      "description": "Mantle path parameter loopId."
+    },
+    "message_id": {
+      "type": "string",
+      "description": "Mantle path parameter messageId."
+    },
+    "page_id": {
+      "type": "string",
+      "description": "Mantle path parameter page_id."
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "Mantle path parameter planId."
+    },
+    "reply_id": {
+      "type": "string",
+      "description": "Mantle path parameter reply_id."
+    },
+    "repository_id": {
+      "type": "string",
+      "description": "Mantle required query parameter repositoryId."
+    },
+    "resource_id": {
+      "type": "string",
+      "description": "Mantle required query parameter resourceId."
+    },
+    "resource_type": {
+      "type": "string",
+      "description": "Mantle required query parameter resourceType."
+    },
+    "review_id": {
+      "type": "string",
+      "description": "Mantle path parameter reviewId."
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Mantle path parameter runId."
+    },
+    "skill_id": {
+      "type": "string",
+      "description": "Mantle path parameter skillId."
+    },
+    "usage_metric_id": {
+      "type": "string",
+      "description": "Mantle required query parameter usageMetricId."
     }
   }
 }

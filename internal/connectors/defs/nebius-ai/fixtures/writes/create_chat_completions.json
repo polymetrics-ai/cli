@@ -1,0 +1,138 @@
+{
+  "record": {
+    "model": "model_fixture",
+    "store": true,
+    "messages": [
+      {
+        "role": "system",
+        "content": "content_fixture",
+        "name": "name_fixture",
+        "tool_calls": [
+          {
+            "id": "id_fixture",
+            "type": "type_fixture",
+            "function": {
+              "name": "name_fixture",
+              "arguments": "arguments_fixture"
+            }
+          }
+        ],
+        "tool_call_id": "tool_call_id_fixture",
+        "reasoning_content": "reasoning_content_fixture",
+        "reasoning": "reasoning_fixture"
+      }
+    ],
+    "max_tokens": 1,
+    "max_completion_tokens": 1,
+    "temperature": 1.25,
+    "top_p": 1.25,
+    "tools": [
+      {
+        "type": "type_fixture",
+        "function": {
+          "name": "name_fixture",
+          "description": "description_fixture",
+          "parameters": {},
+          "strict": true
+        }
+      }
+    ],
+    "tool_choice": "tool_choice_fixture",
+    "reasoning_effort": "none",
+    "n": 1,
+    "stream": true,
+    "stream_options": {},
+    "stop": [
+      "stop_fixture"
+    ],
+    "presence_penalty": 1.25,
+    "frequency_penalty": 1.25,
+    "logit_bias": {},
+    "logprobs": true,
+    "top_logprobs": 1,
+    "user": "user_fixture",
+    "response_format": {
+      "type": "text",
+      "json_schema": {
+        "name": "name_fixture",
+        "description": "description_fixture",
+        "schema": {},
+        "strict": true
+      }
+    },
+    "extra_body": {},
+    "service_tier": "auto"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/chat/completions",
+    "body": {
+      "model": "model_fixture",
+      "store": true,
+      "messages": [
+        {
+          "role": "system",
+          "content": "content_fixture",
+          "name": "name_fixture",
+          "tool_calls": [
+            {
+              "id": "id_fixture",
+              "type": "type_fixture",
+              "function": {
+                "name": "name_fixture",
+                "arguments": "arguments_fixture"
+              }
+            }
+          ],
+          "tool_call_id": "tool_call_id_fixture",
+          "reasoning_content": "reasoning_content_fixture",
+          "reasoning": "reasoning_fixture"
+        }
+      ],
+      "max_tokens": 1,
+      "max_completion_tokens": 1,
+      "temperature": 1.25,
+      "top_p": 1.25,
+      "tools": [
+        {
+          "type": "type_fixture",
+          "function": {
+            "name": "name_fixture",
+            "description": "description_fixture",
+            "parameters": {},
+            "strict": true
+          }
+        }
+      ],
+      "tool_choice": "tool_choice_fixture",
+      "reasoning_effort": "none",
+      "n": 1,
+      "stream": true,
+      "stream_options": {},
+      "stop": [
+        "stop_fixture"
+      ],
+      "presence_penalty": 1.25,
+      "frequency_penalty": 1.25,
+      "logit_bias": {},
+      "logprobs": true,
+      "top_logprobs": 1,
+      "user": "user_fixture",
+      "response_format": {
+        "type": "text",
+        "json_schema": {
+          "name": "name_fixture",
+          "description": "description_fixture",
+          "schema": {},
+          "strict": true
+        }
+      },
+      "extra_body": {},
+      "service_tier": "auto"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

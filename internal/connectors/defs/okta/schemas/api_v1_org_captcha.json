@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "captchaId": {
+      "type": "string",
+      "description": "The unique key of the associated CAPTCHA instance"
+    },
+    "enabledPages": {
+      "type": "array",
+      "description": "An array of pages that have CAPTCHA enabled",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SIGN_IN",
+          "SSPR",
+          "SSR"
+        ]
+      }
+    },
+    "_links": {
+      "type": "object",
+      "description": "Link relations for the CAPTCHA settings object",
+      "properties": {
+        "self": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "consent": {
+      "type": "string",
+      "description": "Indicates whether a consent dialog is needed for the Scope",
+      "enum": [
+        "FLEXIBLE",
+        "IMPLICIT",
+        "REQUIRED"
+      ]
+    },
+    "default": {
+      "type": "boolean",
+      "description": "Indicates if this Scope is a default scope"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the Scope"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Name of the end user displayed in a consent dialog"
+    },
+    "id": {
+      "type": "string",
+      "description": "Scope object ID"
+    },
+    "metadataPublish": {
+      "type": "string",
+      "description": "Indicates whether the Scope is included in the metadata",
+      "enum": [
+        "ALL_CLIENTS",
+        "NO_CLIENTS"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Scope name"
+    },
+    "optional": {
+      "type": "boolean",
+      "description": "Indicates whether the Scope is optional. When set to `true`, the user can skip consent for the scope."
+    },
+    "system": {
+      "type": "boolean",
+      "description": "Indicates if Okta created the Scope"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

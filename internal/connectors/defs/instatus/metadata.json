@@ -1,23 +1,25 @@
 {
   "name": "instatus",
   "display_name": "Instatus",
-  "description": "Reads Instatus status pages, components, incidents, and maintenances through the Instatus REST API.",
+  "description": "Reads and manages Instatus status pages, components, incidents, maintenances, templates, subscribers, metrics, monitors, and related status-page resources through the Instatus REST API.",
   "integration_type": "api",
   "docs_url": "https://instatus.com/help/api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 50
   },
   "risk": {
     "read": "external Instatus API read of status-page configuration and incident data",
-    "approval": "none; read-only status-page API"
+    "approval": "required for write actions; destructive delete actions are marked destructive",
+    "write": "external Instatus API mutations for status pages, incidents, maintenances, subscribers, metrics, monitors, routing rules, escalation policies, on-call schedules, and related resources"
   }
 }

@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/messages/outbound", "query": { "count": "100", "offset": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/messages/outbound",
+    "query": {
+      "count": "100",
+      "offset": "100"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -8,19 +15,16 @@
         {
           "MessageID": "msg-fixture-101",
           "MessageStream": "outbound",
-          "To": [{ "Email": "fixture101@example.com", "Name": null }],
-          "Cc": [],
-          "Bcc": [],
-          "Recipients": ["fixture101@example.com"],
+          "To": [
+            {
+              "Email": "fixture101@example.com",
+              "Name": null
+            }
+          ],
           "From": "\"Fixture Sender\" <sender@example.com>",
           "Subject": "Fixture Subject 101",
-          "ReceivedAt": "2026-01-03T00:00:00Z",
-          "Status": "Sent",
-          "Tag": "",
-          "Attachments": [],
-          "TrackOpens": false,
-          "TrackLinks": "None",
-          "Sandboxed": false
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
         }
       ]
     }

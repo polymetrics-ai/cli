@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/kaiaRecordings",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "kaia_recordings_fixture_1",
+          "type": "kaiaRecording",
+          "attributes": {
+            "name": "Fixture Kaia Recordings",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          },
+          "relationships": {
+          },
+          "links": {
+            "self": "https://api.outreach.io/api/v2/kaiaRecordings"
+          }
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

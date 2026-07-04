@@ -1,0 +1,19 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "assignee_id": "fixture_value",
+    "status": "fixture_value",
+    "text": "Fixture text",
+    "date": "2026-01-01"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/fixture_id/actions",
+    "body": {
+      "assignee_id": "fixture_value",
+      "status": "fixture_value",
+      "text": "Fixture text",
+      "date": "2026-01-01"
+    }
+  }
+}

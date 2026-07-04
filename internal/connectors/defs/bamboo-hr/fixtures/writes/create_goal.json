@@ -1,0 +1,25 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "title": "Fixture Name",
+    "dueDate": "2026-01-01T00:00:00Z",
+    "sharedWithEmployeeIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/performance/employees/fixture_id/goals",
+    "body": {
+      "title": "Fixture Name",
+      "dueDate": "2026-01-01T00:00:00Z",
+      "sharedWithEmployeeIds": [
+        1001
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

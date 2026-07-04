@@ -3,7 +3,10 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -12,48 +15,424 @@
       "start_page": 1,
       "page_size": 50
     },
-    "check": { "method": "GET", "path": "/contacts", "query": { "per_page": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/contacts",
+      "query": {
+        "per_page": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "getgist api_key is missing or invalid; re-run pm credentials add getgist" },
-      { "status": 429, "class": "rate_limited", "hint": "getgist rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "getgist api_key is missing or invalid; re-run pm credentials add getgist"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "getgist rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "contacts",
       "path": "/contacts",
-      "records": { "path": "contacts" },
+      "records": {
+        "path": "contacts"
+      },
       "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "contact_details",
+      "path": "/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": "contact"
+      },
+      "schema": "schemas/contacts.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "contact_batch_status",
+      "path": "/contacts/batch/{{ config.batch_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/contact_batches.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "articles",
+      "path": "/articles",
+      "records": {
+        "path": "articles"
+      },
+      "schema": "schemas/articles.json"
+    },
+    {
+      "name": "article_details",
+      "path": "/articles/{{ config.article_id }}",
+      "records": {
+        "path": "article"
+      },
+      "schema": "schemas/articles.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "article_search",
+      "path": "/articles/search",
+      "records": {
+        "path": "articles"
+      },
+      "schema": "schemas/articles.json",
+      "query": {
+        "query": "{{ config.article_query }}"
+      }
+    },
+    {
+      "name": "article_settings",
+      "path": "/articles/settings",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/article_settings.json",
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "knowledgebase_settings"
+      }
+    },
+    {
+      "name": "collections",
+      "path": "/collections",
+      "records": {
+        "path": "collections"
+      },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "collection_details",
+      "path": "/collections/{{ config.collection_id }}",
+      "records": {
+        "path": "collection"
+      },
+      "schema": "schemas/collections.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": "events"
+      },
+      "schema": "schemas/events.json",
+      "query": {
+        "event_type": {
+          "template": "{{ config.event_type }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "tags",
       "path": "/tags",
-      "records": { "path": "tags" },
+      "records": {
+        "path": "tags"
+      },
       "schema": "schemas/tags.json"
     },
     {
       "name": "segments",
       "path": "/segments",
-      "records": { "path": "segments" },
-      "schema": "schemas/segments.json"
+      "records": {
+        "path": "segments"
+      },
+      "schema": "schemas/segments.json",
+      "query": {
+        "include_count": {
+          "template": "{{ config.include_count }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
-      "name": "campaigns",
-      "path": "/campaigns",
-      "records": { "path": "campaigns" },
-      "schema": "schemas/campaigns.json"
+      "name": "segment_details",
+      "path": "/segments/{{ config.segment_id }}",
+      "records": {
+        "path": "segment"
+      },
+      "schema": "schemas/segments.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "include_count": {
+          "template": "{{ config.include_count }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "forms",
       "path": "/forms",
-      "records": { "path": "forms" },
+      "records": {
+        "path": "forms"
+      },
       "schema": "schemas/forms.json"
+    },
+    {
+      "name": "form_details",
+      "path": "/forms",
+      "records": {
+        "path": "form"
+      },
+      "schema": "schemas/forms.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "form_id": "{{ config.form_id }}"
+      }
+    },
+    {
+      "name": "form_submissions",
+      "path": "/forms/{{ config.form_id }}/submissions",
+      "records": {
+        "path": "submissions"
+      },
+      "schema": "schemas/form_submissions.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": {
+        "path": "campaigns"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "campaign_details",
+      "path": "/campaigns",
+      "records": {
+        "path": "campaign"
+      },
+      "schema": "schemas/campaigns.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "campaign_id": "{{ config.campaign_id }}"
+      }
+    },
+    {
+      "name": "subscription_types",
+      "path": "/subscription_types",
+      "records": {
+        "path": "subscription_types"
+      },
+      "schema": "schemas/subscription_types.json"
+    },
+    {
+      "name": "subscription_type_details",
+      "path": "/subscription_types/{{ config.subscription_type_id }}",
+      "records": {
+        "path": "subscription_type"
+      },
+      "schema": "schemas/subscription_types.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "conversations",
+      "path": "/conversations",
+      "records": {
+        "path": "conversations"
+      },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "conversation_details",
+      "path": "/conversations/{{ config.conversation_id }}",
+      "records": {
+        "path": "conversation"
+      },
+      "schema": "schemas/conversations.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "conversation_messages",
+      "path": "/conversations/{{ config.conversation_id }}/messages",
+      "records": {
+        "path": "messages"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "conversation_global_counts",
+      "path": "/conversations/count",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/conversation_counts.json",
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "scope": "global"
+      }
+    },
+    {
+      "name": "conversation_team_counts",
+      "path": "/conversations/count/teams",
+      "records": {
+        "path": "teams"
+      },
+      "schema": "schemas/conversation_counts.json",
+      "computed_fields": {
+        "scope": "team"
+      }
+    },
+    {
+      "name": "conversation_teammate_counts",
+      "path": "/conversations/count/teammates",
+      "records": {
+        "path": "teammates"
+      },
+      "schema": "schemas/conversation_counts.json",
+      "computed_fields": {
+        "scope": "teammate"
+      }
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": {
+        "path": "teams"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "team_details",
+      "path": "/teams/{{ config.team_id }}",
+      "records": {
+        "path": "team"
+      },
+      "schema": "schemas/teams.json",
+      "pagination": {
+        "type": "none"
+      }
     },
     {
       "name": "teammates",
       "path": "/teammates",
-      "records": { "path": "teammates" },
+      "records": {
+        "path": "teammates"
+      },
       "schema": "schemas/teammates.json"
+    },
+    {
+      "name": "teammate_details",
+      "path": "/teammates/{{ config.teammate_id }}",
+      "records": {
+        "path": "teammate"
+      },
+      "schema": "schemas/teammates.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "token_info",
+      "path": "/token/info",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/token_info.json",
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "id": "token_info"
+      }
+    },
+    {
+      "name": "ecommerce_stores",
+      "path": "/ecommerce/stores",
+      "records": {
+        "path": "stores"
+      },
+      "schema": "schemas/ecommerce_stores.json"
+    },
+    {
+      "name": "ecommerce_store_details",
+      "path": "/ecommerce/stores/{{ config.store_id }}",
+      "records": {
+        "path": "store"
+      },
+      "schema": "schemas/ecommerce_stores.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "ecommerce_customer_details",
+      "path": "/ecommerce/stores/{{ config.store_id }}/customers/{{ config.customer_id }}",
+      "records": {
+        "path": "customer"
+      },
+      "schema": "schemas/ecommerce_customers.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "ecommerce_product_details",
+      "path": "/ecommerce/stores/{{ config.store_id }}/products/{{ config.product_id }}",
+      "records": {
+        "path": "product"
+      },
+      "schema": "schemas/ecommerce_products.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "ecommerce_product_variant_details",
+      "path": "/ecommerce/stores/{{ config.store_id }}/products/{{ config.product_id }}/variants/{{ config.variant_id }}",
+      "records": {
+        "path": "variant"
+      },
+      "schema": "schemas/product_variants.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "ecommerce_product_category_details",
+      "path": "/ecommerce/stores/{{ config.store_id }}/categories/{{ config.category_id }}",
+      "records": {
+        "path": "category"
+      },
+      "schema": "schemas/product_categories.json",
+      "pagination": {
+        "type": "none"
+      }
     }
   ]
 }

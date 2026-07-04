@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_relationships",
+    "description": "Fixture create_relationships record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/relationships/bulk-create",
+    "body": {
+      "name": "Fixture create_relationships",
+      "description": "Fixture create_relationships record"
+    }
+  }
+}

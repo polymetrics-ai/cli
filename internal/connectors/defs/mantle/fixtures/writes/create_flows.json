@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "fixture",
+    "allowRepeatRuns": true,
+    "blockRepeatsTimeValue": 1,
+    "blockRepeatsTimeUnit": "minutes"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/flows",
+    "body": {
+      "name": "fixture",
+      "allowRepeatRuns": true,
+      "blockRepeatsTimeValue": 1,
+      "blockRepeatsTimeUnit": "minutes"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/message-streams/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ID": "outbound",
+      "Name": "Transactional Stream",
+      "MessageStreamType": "Transactional"
+    }
+  }
+}

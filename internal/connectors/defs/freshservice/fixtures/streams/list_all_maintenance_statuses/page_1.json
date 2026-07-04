@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/status/pages/synthetic-conformance-value/maintenances/statuses",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "maintenance_statuses": [
+        {
+          "id": "list_all_maintenance_statuses",
+          "name": "Fixture list_all_maintenance_statuses",
+          "subject": "Fixture list_all_maintenance_statuses",
+          "description": "Fixture list_all_maintenance_statuses record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

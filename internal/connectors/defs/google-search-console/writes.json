@@ -1,0 +1,70 @@
+{
+  "actions": [
+    {
+      "name": "add_site",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/sites/{{ record.site_url | urlencode }}",
+      "path_fields": ["site_url"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["site_url"],
+        "properties": { "site_url": { "type": "string" } }
+      },
+      "risk": "adds a site property to the authenticated Search Console account"
+    },
+    {
+      "name": "delete_site",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sites/{{ record.site_url | urlencode }}",
+      "path_fields": ["site_url"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": ["site_url"],
+        "properties": { "site_url": { "type": "string" } }
+      },
+      "risk": "removes a site property from the authenticated Search Console account"
+    },
+    {
+      "name": "submit_sitemap",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
+      "path_fields": ["site_url", "feedpath"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["site_url", "feedpath"],
+        "properties": {
+          "site_url": { "type": "string" },
+          "feedpath": { "type": "string" }
+        }
+      },
+      "risk": "submits a sitemap URL for a Search Console site property"
+    },
+    {
+      "name": "delete_sitemap",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
+      "path_fields": ["site_url", "feedpath"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": ["site_url", "feedpath"],
+        "properties": {
+          "site_url": { "type": "string" },
+          "feedpath": { "type": "string" }
+        }
+      },
+      "risk": "deletes a sitemap from a Search Console site property"
+    }
+  ]
+}

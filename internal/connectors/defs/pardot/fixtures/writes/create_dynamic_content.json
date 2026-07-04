@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture dynamic_content",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/dynamic-contents",
+    "body": {
+      "name": "Fixture dynamic_content",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

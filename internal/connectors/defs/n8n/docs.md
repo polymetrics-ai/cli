@@ -1,48 +1,57 @@
 # Overview
 
-n8n is a workflow automation platform. This bundle reads workflows, executions, tags, and users
-from a self-hosted or cloud n8n instance through its public REST API. It is read-only, migrating
-`internal/connectors/n8n` (the hand-written legacy connector, which stays registered and unchanged
-until wave6's registry flip) at capability parity.
+n8n is a workflow automation platform. This Pass B bundle covers the current n8n public REST API
+reference under `/api/v1`: workflows, executions, tags, users, variables, projects, data tables,
+credential metadata/schema, credential test/transfer operations, source-control pull, and audit
+generation. The hand-written legacy connector remains registered until wave6's registry flip.
 
 ## Auth setup
 
-Provide the n8n API key via the `api_key` secret; it is sent as the `X-N8N-API-KEY` header on
-every request and is never logged, matching legacy's `connsdk.APIKeyHeader("X-N8N-API-KEY", ...)`
-wiring.
+Provide the n8n API key via the `api_key` secret; it is sent as the `X-N8N-API-KEY` header on every
+request and is never logged, matching legacy's `connsdk.APIKeyHeader("X-N8N-API-KEY", ...)` wiring.
+
+`base_url` must be the fully qualified API URL including `/api/v1`, for example
+`https://your-instance.n8n.cloud/api/v1`.
 
 ## Streams notes
 
-All 4 streams (`workflows`, `executions`, `tags`, `users`) list against
-`{"data":[...],"nextCursor":"..."}`-enveloped n8n endpoints, mapped field-for-field from legacy's
-own `mapRecord` functions (`internal/connectors/n8n/streams.go`). Pagination is `cursor`
-(`cursor_param: "cursor"`, `token_path: "nextCursor"`, no `stop_path` — n8n's `nextCursor` is
-`null`/absent on the final page and that alone stops pagination, matching legacy's own stop
-condition exactly, which never consults a separate boolean flag). Every request sends
-`limit={{ config.page_size | default 100 }}` (matches legacy's default `n8nDefaultPageSize`).
+Cursor-paginated collection streams use n8n's `{"data":[...],"nextCursor":"..."}` envelope with
+`cursor_param: "cursor"` and `token_path: "nextCursor"`: `workflows`, `executions`, `tags`, `users`,
+`variables`, `projects`, `project_members`, `credentials`, `data_tables`, and `data_table_rows`.
+Each request sends `limit={{ config.page_size | default 100 }}`.
+
+Detail and array-root streams are non-paginated: `workflow`, `workflow_version`, `workflow_tags`,
+`execution`, `execution_tags`, `tag`, `user`, `credential`, `credential_schema`, `data_table`, and
+`data_table_columns`. The new detail streams use `projection: "passthrough"` where n8n returns
+nested workflow, execution, credential-schema, table, or row objects beyond the narrow legacy
+projection.
+
+The four legacy streams keep their existing record DATA shape. New streams follow the documented
+n8n response field names directly.
 
 ## Write actions & risks
 
-None. n8n is exposed read-only in this bundle (`capabilities.write: false`), matching legacy's
-`Write` stub that always returns `connectors.ErrUnsupportedOperation`.
+The bundle exposes object-body or no-body mutations that the current write dialect can express:
+
+workflow lifecycle (`create_workflow`, `update_workflow`, `publish_workflow`, `deactivate_workflow`,
+`archive_workflow`, `unarchive_workflow`, `transfer_workflow`), execution controls
+(`retry_execution`, `stop_execution`, `stop_executions`), tag and variable upserts, project and
+project-membership writes, data-table/table-row/column writes, `test_credential`,
+`transfer_credential`, `pull_source_control`, and `generate_audit`.
+
+All write actions require operator approval. Credential create/update are intentionally excluded
+because their request bodies carry write-only credential data; connector rules prohibit requesting
+or storing secret values in ordinary write records or fixtures.
 
 ## Known limits
 
-- **`base_url` is required and must be fully-qualified, including the `/api/v1` version path** —
-  legacy derives its base URL from either an explicit `base_url` OR a bare `host`/instance-URL
-  config value, defaulting the scheme to `https` and appending `/api/v1` automatically when the
-  caller's value doesn't already include it (`n8nBaseURL`, `internal/connectors/n8n/n8n.go:256-284`).
-  The engine's `spec.json` `"default"` materialization mechanism only fills in a FIXED literal
-  default, not one derived/concatenated from another config value at read time — there is no
-  declarative way to express "append `/api/v1` unless already present" without inventing ad hoc Go
-  (a Tier-2 escalation this bundle does not need for anything else). This bundle therefore requires
-  the caller to configure the fully-qualified `base_url` (e.g.
-  `https://your-instance.n8n.cloud/api/v1`) directly. This is a documented config-surface
-  narrowing per `docs/migration/conventions.md` §3's "derived default" guidance, not a silent
-  behavior change to any request this bundle actually sends once configured. The separate `host`
-  config key legacy also accepted is not modeled.
-- Full n8n API surface (workflow create/activate/deactivate/delete, execution retry, credentials,
-  variables, source control, audit logs) is out of scope for this wave; see `api_surface.json`'s
-  `excluded` entries. Only the 4 legacy-parity read streams are implemented.
-- `max_pages` config accepts an integer, `all`, or `unlimited` (0/absent means unbounded), matching
-  legacy's `n8nMaxPages` parsing exactly.
+- `base_url` is still required and must include `/api/v1`. Legacy accepted a bare `host` and
+  appended `/api/v1`; the declarative engine has no derived-default string concatenation.
+- `max_pages` remains declared for legacy compatibility but is not modeled by the declarative
+  cursor paginator.
+- Full write coverage has two typed gaps recorded in `docs/migration/quarantine.json`: n8n's
+  workflow/execution tag update endpoints require a root JSON array body, and data-table row delete
+  requires query parameters on a DELETE request. `writes.json` can construct object bodies but has
+  no root-array body mode or write-side query field.
+- Destructive deletes and elevated user/credential administration writes are excluded in
+  `api_surface.json` with closed categories and concrete reasons.

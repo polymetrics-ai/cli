@@ -1,7 +1,7 @@
 {
   "name": "braintree",
   "display_name": "Braintree",
-  "description": "Reads Braintree transactions, customers, and subscriptions through a read-only HTTP API.",
+  "description": "Reads Braintree transactions, customers, subscriptions, reference data, payment methods, disputes, merchant accounts, and Apple Pay domains through the gateway HTTP API.",
   "integration_type": "api",
   "docs_url": "https://developer.paypal.com/braintree/docs",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Braintree API read of transaction, customer, and subscription data",
+    "read": "external Braintree API read of transaction, customer, subscription, reference, dispute, payment method, and merchant account data",
     "approval": "none; read-only"
   }
 }

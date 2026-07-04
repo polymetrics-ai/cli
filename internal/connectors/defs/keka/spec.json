@@ -2,7 +2,11 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Keka Connection Specification",
   "type": "object",
-  "required": ["base_url", "client_id", "client_secret"],
+  "required": [
+    "base_url",
+    "client_id",
+    "client_secret"
+  ],
   "properties": {
     "client_secret": {
       "type": "string",
@@ -42,6 +46,54 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "attachment_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference attachment_id."
+    },
+    "bgv_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference bgv_id."
+    },
+    "candidate_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference candidate_id."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference document_id."
+    },
+    "document_type_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference document_type_id."
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference employee_id."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference job_id."
+    },
+    "pay_batch_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference pay_batch_id."
+    },
+    "pay_cycle_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference pay_cycle_id."
+    },
+    "pay_group_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference pay_group_id."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference project_id."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference task_id."
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "accountId": "account_fixture",
+    "visitorId": "visitor_fixture",
+    "title": "Fixture feedback"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/feedback",
+    "body": {
+      "accountId": "account_fixture",
+      "visitorId": "visitor_fixture",
+      "title": "Fixture feedback"
+    }
+  }
+}

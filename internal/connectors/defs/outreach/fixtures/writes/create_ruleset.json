@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "ruleset",
+      "attributes": {
+        "name": "Fixture Create Ruleset"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rulesets",
+    "body": {
+      "data": {
+        "type": "ruleset",
+        "attributes": {
+          "name": "Fixture Create Ruleset"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "name": "Fixture",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

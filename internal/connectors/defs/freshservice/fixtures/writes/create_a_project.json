@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_a_project",
+    "description": "Fixture create_a_project record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects",
+    "body": {
+      "name": "Fixture create_a_project",
+      "description": "Fixture create_a_project record"
+    }
+  }
+}

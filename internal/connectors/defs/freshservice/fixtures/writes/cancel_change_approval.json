@@ -1,0 +1,16 @@
+{
+  "record": {
+    "change_id": 123,
+    "approval_id": 123,
+    "name": "Fixture cancel_change_approval",
+    "description": "Fixture cancel_change_approval record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/approvals/123",
+    "body": {
+      "name": "Fixture cancel_change_approval",
+      "description": "Fixture cancel_change_approval record"
+    }
+  }
+}

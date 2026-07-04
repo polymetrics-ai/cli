@@ -1,0 +1,13 @@
+{
+  "record": {
+    "training_type_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/training/type/fixture_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

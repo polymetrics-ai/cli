@@ -1,7 +1,7 @@
 {
   "name": "piwik",
   "display_name": "Piwik / Matomo",
-  "description": "Reads Piwik/Matomo sites, visits, page actions, and goals through the Reporting API.",
+  "description": "Reads Piwik/Matomo sites, recent visits, configured goals, and documented analytics reports through the Reporting API.",
   "integration_type": "api",
   "docs_url": "https://developer.matomo.org/api-reference/reporting-api",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Piwik/Matomo Reporting API read of site analytics data",
+    "read": "external Piwik/Matomo Reporting API read of site analytics, site metadata, and report metadata",
     "approval": "none; read-only analytics sync"
   }
 }

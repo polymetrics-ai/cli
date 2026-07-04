@@ -1,0 +1,13 @@
+{
+  "record": {
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/imports/actions/generateUploadLink"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

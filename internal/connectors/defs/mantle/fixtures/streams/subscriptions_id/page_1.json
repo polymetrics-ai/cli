@@ -1,0 +1,109 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/subscriptions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "subscription": {
+        "id": "id_fixture",
+        "plan": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "description": "fixture",
+          "amount": 1.23,
+          "currencyCode": "fixture",
+          "type": "fixture",
+          "public": true,
+          "visible": true,
+          "interval": "fixture",
+          "trialDays": 1.23,
+          "monthlyRevenue": 1.23,
+          "lifetimeValue": 1.23,
+          "averageLifetimeValue": 1.23,
+          "subscriberCount": 1.23,
+          "activeTrialCount": 1.23,
+          "flexBilling": true,
+          "flexBillingTerms": "fixture",
+          "deprecatedAt": "2026-01-01T00:00:00Z",
+          "features": {
+            "id": "features_fixture_id"
+          },
+          "customerId": "customer_id_fixture",
+          "customerTags": [
+            "fixture"
+          ],
+          "customerExcludeTags": [
+            "fixture"
+          ],
+          "customFields": {
+            "id": "custom_fields_fixture_id"
+          },
+          "shopifyPlans": [
+            "fixture"
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        "lineItems": [
+          {
+            "id": "id_fixture",
+            "type": "fixture",
+            "amount": 1.23,
+            "currencyCode": "fixture",
+            "presentmentAmount": 1.23,
+            "presentmentCurrencyCode": "fixture",
+            "planId": "plan_id_fixture"
+          }
+        ],
+        "active": true,
+        "cancelOn": "2026-01-01T00:00:00Z",
+        "billingCycleAnchor": "2026-01-01T00:00:00Z",
+        "currentPeriodStart": "2026-01-01T00:00:00Z",
+        "currentPeriodEnd": "2026-01-01T00:00:00Z",
+        "trialStartsAt": "2026-01-01T00:00:00Z",
+        "trialExpiresAt": "2026-01-01T00:00:00Z",
+        "activatedAt": "2026-01-01T00:00:00Z",
+        "canceledAt": "2026-01-01T00:00:00Z",
+        "frozenAt": "2026-01-01T00:00:00Z",
+        "features": [
+          {
+            "id": "id_fixture",
+            "name": "fixture",
+            "type": "fixture",
+            "description": "fixture",
+            "value": "fixture",
+            "defaultValue": "fixture",
+            "allowedValues": [
+              "fixture"
+            ],
+            "displayOrder": 1.23
+          }
+        ],
+        "featuresOrder": [
+          "fixture"
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "confirmationUrl": "https://example.com/fixture",
+        "shopifySubscription": {
+          "id": "id_fixture"
+        },
+        "usageCappedAmount": 1.23,
+        "usageBalanceUsed": 1.23,
+        "appliedDiscount": {
+          "id": "id_fixture",
+          "priceAfterDiscount": 1.23,
+          "presentmentPriceAfterDiscount": 1.23,
+          "discountStartsAt": "2026-01-01T00:00:00Z",
+          "discountEndsAt": "2026-01-01T00:00:00Z",
+          "active": true
+        },
+        "subtotal": 1.23,
+        "total": 1.23,
+        "presentmentSubtotal": 1.23,
+        "presentmentTotal": 1.23
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "alert_id": 123,
+    "note_id": 123,
+    "name": "Fixture delete_alert_note",
+    "description": "Fixture delete_alert_note record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ams/alerts/123/notes/123"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sessions",
+    "query": {
+      "limit": "200",
+      "uid": "synthetic-conformance-value",
+      "email": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "session_fixture_1",
+          "uid": "uid_fixture_1",
+          "email": "fixture1@example.com",
+          "app_url": "https://app.fullstory.com/ui/fixture/session_fixture_1",
+          "start_time": "2026-01-01T00:00:00Z",
+          "duration_ms": 12345
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "persona",
+      "attributes": {
+        "name": "Fixture Update Persona"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/personas/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "persona",
+        "attributes": {
+          "name": "Fixture Update Persona"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

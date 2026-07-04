@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "calendar",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "avatar_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "social_image_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cover_image_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_personal": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "coordinate": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "instagram_handle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "twitter_handle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "youtube_handle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "website": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

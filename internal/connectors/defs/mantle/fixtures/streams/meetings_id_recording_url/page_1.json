@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/meetings/synthetic-conformance-value/recording-url"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "recordingUrl": "https://example.com/fixture",
+      "expiresIn": 1
+    }
+  }
+}

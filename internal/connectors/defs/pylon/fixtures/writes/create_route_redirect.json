@@ -1,0 +1,22 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "from_path": "synthetic-conformance-value",
+    "object_id": "synthetic-conformance-value",
+    "object_type": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/knowledge-bases/synthetic-conformance-value/route-redirects",
+    "body": {
+      "from_path": "synthetic-conformance-value",
+      "object_id": "synthetic-conformance-value",
+      "object_type": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

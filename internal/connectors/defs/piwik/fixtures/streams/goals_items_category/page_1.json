@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Goals.getItemsCategory",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "label": "Fixture row 1",
+        "revenue": 1,
+        "quantity": 2,
+        "orders": 3,
+        "nb_visits": 4,
+        "avg_price": 5,
+        "avg_quantity": 6,
+        "conversion_rate": 7
+      },
+      {
+        "label": "Fixture row 2",
+        "revenue": 1,
+        "quantity": 2,
+        "orders": 3,
+        "nb_visits": 4,
+        "avg_price": 5,
+        "avg_quantity": 6,
+        "conversion_rate": 7
+      }
+    ]
+  }
+}

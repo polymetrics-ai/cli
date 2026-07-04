@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_coupons",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "remaining_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "valid_start_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "valid_end_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "percent_off": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "cents_off": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_ticket_type_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

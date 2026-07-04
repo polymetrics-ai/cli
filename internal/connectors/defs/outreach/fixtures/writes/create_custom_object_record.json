@@ -1,0 +1,28 @@
+{
+  "record": {
+    "objectName": "synthetic-conformance-value",
+    "data": {
+      "type": "customobjectrecord",
+      "attributes": {
+        "name": "Fixture Create Custom Object Record"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customObjects/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "customobjectrecord",
+        "attributes": {
+          "name": "Fixture Create Custom Object Record"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

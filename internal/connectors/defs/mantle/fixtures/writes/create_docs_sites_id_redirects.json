@@ -1,0 +1,35 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "redirects": [
+      {
+        "fromPath": "fixture",
+        "toPath": "fixture",
+        "redirectType": "fixture",
+        "enabled": true,
+        "notes": "fixture"
+      }
+    ],
+    "strict": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/sites/id_fixture/redirects",
+    "body": {
+      "redirects": [
+        {
+          "fromPath": "fixture",
+          "toPath": "fixture",
+          "redirectType": "fixture",
+          "enabled": true,
+          "notes": "fixture"
+        }
+      ],
+      "strict": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

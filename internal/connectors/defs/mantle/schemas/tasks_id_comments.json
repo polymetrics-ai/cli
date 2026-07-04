@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks_id_comments",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the comment."
+    },
+    "taskId": {
+      "type": "string",
+      "description": "The task this comment belongs to."
+    },
+    "comment": {
+      "type": "string",
+      "description": "The plain text content of the comment."
+    },
+    "commentHtml": {
+      "type": "string",
+      "description": "The HTML-formatted content of the comment."
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "The user who created this comment.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "taggedUsers": {
+      "type": "array",
+      "description": "Users tagged in this comment.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the comment.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the comment.",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "session_id": "synthetic-conformance-value",
+    "memberships": [
+      {
+        "groupExternalId": "group_external_id_fixture",
+        "memberExternalIds": [
+          "member_external_id_fixture"
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/sessions/synthetic-conformance-value/bulk-group-memberships-upsert",
+    "body": {
+      "memberships": [
+        {
+          "groupExternalId": "group_external_id_fixture",
+          "memberExternalIds": [
+            "member_external_id_fixture"
+          ]
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

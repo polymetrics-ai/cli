@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "Brief description of the feature and what it provides"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this feature"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the feature"
+    },
+    "stage": {
+      "type": "object",
+      "description": "Current release cycle stage of a feature\n\nIf a feature's stage value is `EA`, the state is `null` and not returned. If the value is `BETA`, the state is `OPEN` or `CLOSED` depending on whether the `BETA` feature is manageable.\n\n> **Note:** If a feature's stage is `OPEN BETA`, you can update it only in Preview cells. If a feature's stage is `CLOSED BETA`, you can disable it only in Preview cells.",
+      "properties": {
+        "state": {
+          "type": "string",
+          "description": "Indicates the release state of the feature",
+          "enum": [
+            "CLOSED",
+            "OPEN"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "description": "Current release stage of the feature",
+          "enum": [
+            "BETA",
+            "EA"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "status": {
+      "type": "string",
+      "description": "Setting status",
+      "enum": [
+        "DISABLED",
+        "ENABLED"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of feature",
+      "enum": [
+        "self-service"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "dependents": {
+          "type": "object",
+          "description": "Link to feature dependents",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            }
+          },
+          "additionalProperties": true
+        },
+        "dependencies": {
+          "type": "object",
+          "description": "Link to feature dependencies",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

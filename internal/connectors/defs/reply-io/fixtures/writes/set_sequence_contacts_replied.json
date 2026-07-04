@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "contactIds": [],
+    "isReplied": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/sequences/synthetic-conformance-value/contacts/set-replied",
+    "body": {
+      "contactIds": [],
+      "isReplied": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

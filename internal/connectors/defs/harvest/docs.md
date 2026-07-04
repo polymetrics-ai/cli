@@ -1,10 +1,11 @@
 # Overview
 
-Harvest is a wave2 fan-out declarative-HTTP migration. It reads Harvest clients, projects, tasks,
-users, and time entries through the Harvest v2 REST API (`GET https://api.harvestapp.com/v2/...`).
-This bundle targets capability parity with `internal/connectors/harvest` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Harvest is a declarative-HTTP migration over the Harvest v2 REST API
+(`GET https://api.harvestapp.com/v2/...`). It preserves the legacy connector's five original
+streams and expands the read surface to additional documented list/singleton resources: contacts,
+company settings, task assignments, invoices, estimates, expenses, invoice and estimate item
+categories, expense categories, and roles. The legacy package stays registered and unchanged until
+wave6's registry flip.
 
 ## Auth setup
 
@@ -20,30 +21,33 @@ tests/proxies.
 
 ## Streams notes
 
-All 5 streams (`clients`, `projects`, `tasks`, `users`, `time_entries`) are `GET` list endpoints
-whose records live at the top-level key matching the stream name (`clients`/`projects`/etc.),
-matching legacy's `harvestStreamEndpoints` table (where `resource` and `recordKey` always
-coincide). Pagination follows Harvest's page-number-in-body convention: the response's top-level
-`next_page` field is the next page NUMBER (or `null` when exhausted) — modeled as
+Most streams are `GET` list endpoints whose records live at the top-level key matching the stream
+name (`clients`/`projects`/etc.). `company` is a singleton endpoint modeled with
+`records.single_object: true` and no pagination. Pagination follows Harvest's page-number-in-body
+convention: the response's top-level `next_page` field is the next page NUMBER (or `null` when
+exhausted) — modeled as
 `pagination.type: cursor` with `token_path: "next_page"` and `cursor_param: "page"`, which reads
 the token from the body and resends it as the `page` query param, matching legacy's `parsePage`
 loop exactly (an absent/null/non-advancing `next_page` stops pagination). Primary key is `["id"]`
-and incremental cursor field is `["updated_at"]` across every stream, matching legacy. Every stream
-sends `updated_since={{ incremental.lower_bound }}` (the opt-in optional-query dialect,
+and incremental cursor field is `["updated_at"]` across list streams that expose `updated_at`.
+Those streams send `updated_since={{ incremental.lower_bound }}` (the opt-in optional-query dialect,
 `omit_when_absent: true`) — present with the RFC3339 lower bound (persisted sync cursor, or the
 `start_date` config value on a fresh sync) and omitted entirely on a true full sync with no
 lower bound at all, matching legacy's `incrementalLowerBound`/`harvest` exactly (legacy only sets
 `updated_since` in its base query `if updatedSince != ""`).
 
-`projects` nests its related client as `{"client": {"id":..,"name":..}}`; `time_entries` nests
-`user`/`client`/`project`/`task` the same way. `computed_fields` reaches into `record.client.id`
-(etc.) to promote each nested id/name onto flat top-level columns, matching legacy's `nestedField`
-helper exactly.
+`projects`, `contacts`, `invoices`, `estimates`, `expenses`, `task_assignments`, and
+`time_entries` contain nested relationship objects. `computed_fields` promotes the stable related
+IDs/names used by the flat schemas while preserving the raw nested object where the new stream
+schema includes it.
 
 ## Write actions & risks
 
-None. Harvest is read-only in this connector (`capabilities.write: false`); this bundle ships no
-`writes.json`, matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
+None. Harvest remains read-only in this connector (`capabilities.write: false`); this bundle ships
+no `writes.json`, matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
+Documented POST/PATCH/DELETE endpoints create, mutate, archive, or delete live Harvest business
+records and generally require administrator or manager permissions, so `api_surface.json` excludes
+them with `requires_elevated_scope` or `destructive_admin` reasons instead of exposing broad writes.
 
 ## Known limits
 
@@ -72,5 +76,8 @@ None. Harvest is read-only in this connector (`capabilities.write: false`); this
   affordance, not part of the live record shape. This bundle's schemas and fixtures target the
   live record shape only; the engine's own conformance/fixture-replay harness provides the
   credential-free test affordance legacy's fixture mode was built for.
-- Full Harvest API surface (invoices, estimates, expenses, reports) is out of scope for this wave;
-  see `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
+- Parameterized subresources such as invoice messages/payments, user rates, user project
+  assignments, and project user assignments are not expressible as standalone declarative list
+  streams without caller-supplied IDs or fan-out. They are documented in `api_surface.json`.
+- Report endpoints require explicit date windows or emit aggregate metric rows with
+  permission-sensitive amounts; they are excluded pending a dedicated report-stream contract.

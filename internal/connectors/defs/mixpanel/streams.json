@@ -38,6 +38,75 @@
       "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "results" },
       "schema": "schemas/engage.json"
+    },
+    {
+      "name": "saved_funnels",
+      "path": "https://mixpanel.com/api/query/funnels/list",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/saved_funnels.json"
+    },
+    {
+      "name": "activity_stream",
+      "path": "https://mixpanel.com/api/query/stream/query",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
+        "distinct_ids": "{{ config.distinct_ids }}",
+        "from_date": "{{ config.from_date }}",
+        "to_date": "{{ config.to_date }}"
+      },
+      "records": { "path": "results.events" },
+      "schema": "schemas/activity_stream.json"
+    },
+    {
+      "name": "top_events",
+      "path": "https://mixpanel.com/api/query/events/top",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
+        "type": "{{ config.analysis_type }}",
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
+      "records": { "path": "events" },
+      "schema": "schemas/top_events.json"
+    },
+    {
+      "name": "event_property_names",
+      "path": "https://mixpanel.com/api/query/events/properties/top",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
+        "event": "{{ config.event_name }}",
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "keyed_object": true, "key_field": "name" },
+      "schema": "schemas/event_property_names.json"
+    },
+    {
+      "name": "project_annotations",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations",
+      "query": {
+        "fromDate": { "template": "{{ config.from_date }}", "omit_when_absent": true },
+        "toDate": { "template": "{{ config.to_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/project_annotations.json"
+    },
+    {
+      "name": "project_annotation",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/{{ config.annotation_id }}",
+      "records": { "path": "results", "single_object": true },
+      "schema": "schemas/project_annotation.json"
+    },
+    {
+      "name": "annotation_tags",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/tags",
+      "records": { "path": "." },
+      "schema": "schemas/annotation_tags.json"
     }
   ]
 }

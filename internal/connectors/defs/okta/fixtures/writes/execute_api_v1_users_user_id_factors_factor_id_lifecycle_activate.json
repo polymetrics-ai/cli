@@ -1,0 +1,18 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "factor_id": "synthetic-conformance-value",
+    "passCode": "pass_code_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/users/synthetic-conformance-value/factors/synthetic-conformance-value/lifecycle/activate",
+    "body": {
+      "passCode": "pass_code_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

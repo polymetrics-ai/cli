@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "description": "Identifies which schema(s) this resource uses. In this case it is the SCIM core Groups schema.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "A server-assigned, unique identifier for this Group (team)."
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the resource.",
+      "properties": {
+        "resourceType": {
+          "type": "string",
+          "description": "Type of resource."
+        },
+        "location": {
+          "type": "string",
+          "description": "URI of resource."
+        }
+      },
+      "additionalProperties": true
+    },
+    "displayName": {
+      "type": "string",
+      "description": "A human readable name for the Group (team)."
+    },
+    "members": {
+      "type": "array",
+      "description": "A list of all members that are part of the Group (team).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "A server-assigned, unique identifier for the user (member)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of item - in this case it is User for all members."
+          },
+          "display": {
+            "type": "string",
+            "description": "A human-readable name for the user (member), typically the full name."
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

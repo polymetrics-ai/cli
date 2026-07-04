@@ -1,0 +1,34 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "schema": [
+      {
+        "name": "name_fixture",
+        "type": {
+          "name": "string"
+        }
+      }
+    ],
+    "folder": "folder_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/datasets/uploads",
+    "body": {
+      "name": "name_fixture",
+      "schema": [
+        {
+          "name": "name_fixture",
+          "type": {
+            "name": "string"
+          }
+        }
+      ],
+      "folder": "folder_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

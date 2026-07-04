@@ -1,0 +1,10 @@
+{
+  "record": {
+    "site_url": "https://fixture.example.com/",
+    "feedpath": "https://fixture.example.com/sitemap.xml"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sites/https://fixture.example.com//sitemaps/https://fixture.example.com/sitemap.xml"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "break",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "availabilityEndTime": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "availabilityMaxHoursWorked": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "availabilityMinHoursWorked": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "availabilityStartTime": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "availabilityType": {
+      "enum": [
+        "anytime",
+        "hours_worked",
+        "time_of_day"
+      ]
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "deletedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "duration": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "paid": {
+      "type": "boolean"
+    },
+    "policyId": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/webhooks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "fixture_id",
+          "created": "fixture_value",
+          "lastSent": "fixture_value",
+          "name": "Fixture Name",
+          "url": "https://example.com/resource"
+        }
+      ]
+    }
+  }
+}

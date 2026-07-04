@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/credentials/csrs/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "csr": "csr_fixture",
+      "id": "id_fixture",
+      "kty": "kty_fixture",
+      "_links": {
+        "publish": {
+          "hints": {
+            "allow": [
+              "POST"
+            ]
+          },
+          "href": "https://example.invalid/fixture"
+        },
+        "self": {
+          "hints": {
+            "allow": [
+              "GET"
+            ]
+          },
+          "href": "https://example.invalid/fixture"
+        }
+      }
+    }
+  }
+}

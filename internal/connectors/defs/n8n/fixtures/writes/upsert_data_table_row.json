@@ -1,0 +1,41 @@
+{
+  "record": {
+    "data_table_id": "dt_fixture_1",
+    "filter": {
+      "filters": [
+        {
+          "columnName": "name",
+          "condition": "eq",
+          "value": "Fixture Row"
+        }
+      ]
+    },
+    "data": {
+      "name": "Fixture Row"
+    },
+    "returnData": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/data-tables/dt_fixture_1/rows/upsert",
+    "body": {
+      "filter": {
+        "filters": [
+          {
+            "columnName": "name",
+            "condition": "eq",
+            "value": "Fixture Row"
+          }
+        ]
+      },
+      "data": {
+        "name": "Fixture Row"
+      },
+      "returnData": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

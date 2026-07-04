@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/news/sources",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "source_id": "source_fixture_1",
+          "domain": "example.com",
+          "language": "en"
+        }
+      ]
+    }
+  }
+}

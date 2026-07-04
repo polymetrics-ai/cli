@@ -1,77 +1,77 @@
 # Overview
 
-Qualaroo is a wave2 fan-out declarative-HTTP migration. It reads Qualaroo survey nudges and
-response records through the Qualaroo API v1 (`GET https://api.qualaroo.com/api/v1/...`). This
-bundle migrates `internal/connectors/qualaroo` (the hand-written connector); the legacy package
-stays registered and unchanged until wave6's registry flip.
+Qualaroo is a declarative HTTP bundle for the Qualaroo API v1. It keeps the two read streams that
+the legacy Go connector emits (`nudges`, `responses`) and adds the current documented REST
+Reporting API response stream (`survey_responses`) from
+`https://help.qualaroo.com/the-rest-reporting-api`. The old metadata URL
+`/hc/en-us/articles/201969438-The-Qualaroo-API` now returns a 404, so the bundle's `docs_url` points
+at the live Reporting API article.
+
+The legacy package under `internal/connectors/qualaroo` remains read-only and registered until the
+wave6 registry flip. This bundle also remains read-only: the current public Reporting API
+documentation describes response retrieval, not REST writes.
 
 ## Auth setup
 
-Provide a Qualaroo API key via the `api_key` secret. It is sent as
-`Authorization: Token token="<api_key>"` (`streams.json`'s `base.auth` uses an `api_key_header`
-candidate with `header: Authorization`, `prefix: Token token="`, and a `value` template that
-appends the closing quote), matching legacy's own hand-built header
-(`qualaroo.go:163-165`: `req.Header.Set("Authorization", `Token token="`+secret+`"`)`) exactly. It
-is never logged (`x-secret: true`). `base_url` defaults to `https://api.qualaroo.com/api/v1` and
-may be overridden for tests/proxies (legacy's own `baseURL` helper validates scheme+host the same
-way; the engine's base-URL resolution has no equivalent runtime validation, but every
-parity/conformance fixture only ever points at an httptest server, so this is not exercised
-differently on either side).
+Provide `api_key` as a secret for the legacy `nudges` and `responses` streams. The bundle sends it
+with the same header shape as legacy:
+
+```text
+Authorization: Token token="<api_key>"
+```
+
+For the documented Reporting API stream, also provide `api_secret`. When `api_secret` is present,
+the engine selects HTTP Basic auth with `api_key` as the username and `api_secret` as the password,
+matching the Reporting API documentation. Both values are marked `x-secret: true`.
+
+`base_url` defaults to `https://api.qualaroo.com/api/v1` and may be overridden for tests or local
+proxies. `survey_id` is used only by `survey_responses` and is interpolated into
+`/nudges/{survey_id}/responses.json`.
 
 ## Streams notes
 
-Both streams (`nudges`, `responses`) are simple list endpoints: `GET /nudges` (records at the
-`nudges` key) and `GET /responses` (records at the `responses` key). Pagination is `page_number`
-(`page`/`per_page` query params, 1-based `start_page`, base default `page_size: 100` matching
-legacy's `qualarooDefaultPageSize`) — a page shorter than `per_page` is the last page. Both streams
-use the base's real default (`per_page: 100`); the `nudges` conformance fixture's 2-page shape is
-achieved by returning a full 100-record first page (triggering the paginator to fetch page 2) and
-a short second page, per `docs/migration/conventions.md` §4's 2-page-fixture requirement — the
-live page size is never shrunk to make the fixture small.
+- `nudges` reads `GET /nudges`, extracting records from the `nudges` response key. Its field
+  projection intentionally matches legacy's `nudgeRecord` mapper: `id`, `name`, `status`,
+  `created_at`, and `updated_at`.
+- `responses` reads `GET /responses`, extracting records from the `responses` response key. Its
+  field projection intentionally matches legacy's `responseRecord` mapper: `id`, `nudge_id`,
+  `email`, `created_at`, and `updated_at`.
+- `survey_responses` reads the documented Reporting API endpoint
+  `GET /nudges/{survey_id}/responses.json`. Qualaroo documents a root JSON array of response
+  objects containing respondent metadata, answered questions, and custom properties, so the stream
+  uses root-array extraction (`records.path: ""`) and `projection: "passthrough"` to preserve the
+  full response object.
 
-Legacy's own halt condition additionally reads a `pagination.next_page` value from the response
-body and stops early when it is empty (or does not advance), rather than relying solely on a
-short page (`qualaroo.go:125-135`). The engine's `page_number` paginator has no
-body-driven-next-page-token mechanism (that shape is `pagination.type: cursor` with `token_path`,
-which sends the token back as a *query parameter*, not as a page-number/count-driven cursor) — it
-stops purely on a short page (fewer than `per_page` records returned). For every input where
-Qualaroo's own `per_page` items are actually returned per page (the common case; a short final
-page from Qualaroo already implies `next_page` would have been empty too), both sides terminate
-identically. See Known limits.
+The two legacy streams inherit the base `page_number` paginator (`page`/`per_page`, page size 100),
+matching the legacy connector's default page size. `nudges` has a 100-record first fixture page and
+a short second page so conformance proves the page-number paginator terminates.
 
-Each stream declares a decorative `incremental.cursor_field` (`updated_at` for nudges,
-`created_at` for responses) with no `request_param` — legacy declares the identical `CursorFields`
-on its catalog (`qualarooStreams()`) but never filters server-side either; every read is a full
-refresh on both sides.
+`survey_responses` overrides pagination with `offset_limit` (`offset`/`limit`, page size 500),
+matching the Reporting API documentation's offset and limit parameters. Optional date and order
+parameters are not declared in this pass because the engine's conformance runtime synthesizes values
+for every declared spec property; adding those optional filters would either send invalid synthetic
+Reporting API values in fixtures or require a hook solely for fixture-only sanitization.
 
 ## Write actions & risks
 
 None. Qualaroo's legacy connector implements no writes (`Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+`connectors.ErrUnsupportedOperation`), and the current Reporting API documentation does not publish
+REST write endpoints. `capabilities.write` is `false` and no `writes.json` is shipped.
 
 ## Known limits
 
-- **Fallback field names are not modeled.** Legacy's `nudgeRecord`/`responseRecord` mappers read
-  several fields with a same-or-alternate-key fallback via a small `first(item, keys...)` helper:
-  a nudge's display name falls back from `name` to `title`
-  (`nudgeRecord`, `qualaroo.go:192`); a response's `id` falls back from `id` to `response_id`
-  (`responseRecord`, `qualaroo.go:196`); a response's `nudge_id` falls back from `nudge_id` to
-  `survey_id`. The engine's schema projection matches by exact key name only, and
-  `computed_fields` has no coalesce/fallback filter (only rename, join, static-literal, and typed
-  bare-reference copy) — an `ENGINE_GAP` for expressing a same-or-alternate-key fallback declaratively.
-  Only the PRIMARY key name in each fallback chain (`name`, `id`, `nudge_id` — always tried first
-  by legacy's own `first()` order) is modeled; an account whose API responses use only the
-  alternate key name for one of these fields would see that field (including, worst case, `id`
-  itself) come through as `null` here where legacy would have populated it. This is a documented
-  scope narrowing, not a silent divergence: legacy's own fallback-key defensiveness is preserved as
-  the authoritative base-case behavior, and no fixture or live Qualaroo response encountered during
-  this migration exercised the alternate key names.
-- **`pagination.next_page` body signal is not read.** See Streams notes: the engine's
-  `page_number` paginator stops on a short page only, not on an explicit empty-`next_page` body
-  value. Benign for any real Qualaroo response (a short page and an empty `next_page` co-occur in
-  practice), but not proven identical for a hypothetical page that returns a full `per_page` count
-  with an empty `next_page` value — legacy would stop, this bundle would issue one more (in
-  practice empty, harmless) request.
-- Full Qualaroo API surface beyond the two documented list endpoints (nudges, responses) was never
-  implemented by legacy and is out of scope here too; see `api_surface.json`.
+- **Auth is selected bundle-wide.** The engine chooses one auth candidate for the whole runtime, not
+  per stream. Supplying `api_secret` selects the documented Reporting API Basic auth, which is the
+  intended mode for `survey_responses`; omitting `api_secret` keeps the legacy token-header mode for
+  `nudges` and `responses`.
+- **Check remains legacy-shaped.** `base.check` still calls `GET /nudges` because that is the
+  stable legacy health check. A future engine feature for stream-specific checks could let
+  `survey_responses` use a Reporting API check without changing the legacy check path.
+- **Fallback field names are not modeled.** Legacy's mappers accept alternate keys (`title` for a
+  nudge name, `response_id` for response id, and `survey_id` for response nudge id). The declarative
+  engine does not have a coalesce/fallback expression, so schemas model the first key in each
+  fallback chain, matching the primary legacy output shape.
+- **`pagination.next_page` is not read for legacy streams.** Legacy also looks at
+  `pagination.next_page`; the engine's page-number paginator stops on a short page. In the observed
+  Qualaroo shape, a short final page and an empty next-page value co-occur, so this can at most cause
+  one harmless extra request if Qualaroo ever returns a full final page with no next page.

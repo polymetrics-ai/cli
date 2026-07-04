@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/webhooks/post-fields"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": [
+        {
+          "id": 1001,
+          "alias": "fixture_value",
+          "name": "Fixture Name",
+          "type": "fixture_value",
+          "pageId": 1001,
+          "tableId": 1001
+        }
+      ]
+    }
+  }
+}

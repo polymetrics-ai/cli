@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/monitors",
+    "query": {
+      "page": "1",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "monitor_fixture_1",
+        "name": "Fixture monitor_fixture_1",
+        "status": "UP"
+      }
+    ]
+  }
+}

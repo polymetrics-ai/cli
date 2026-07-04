@@ -1,0 +1,20 @@
+{
+  "record": {
+    "spreadsheet_id": "234",
+    "id": "123",
+    "fields": {
+      "Last name": "Fixture",
+      "Phone": "+15550100"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/spreadsheets/234/rows/123/update_fields",
+    "body": {
+      "fields": {
+        "Last name": "Fixture",
+        "Phone": "+15550100"
+      }
+    }
+  }
+}

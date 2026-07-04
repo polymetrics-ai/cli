@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/custom_data",
+    "query": {
+      "resourceId": "synthetic-conformance-value",
+      "resourceType": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customData": [
+        {
+          "resourceId": "resource_id_fixture",
+          "resourceType": "customer",
+          "key": "fixture",
+          "value": "fixture",
+          "type": "string",
+          "name": "fixture",
+          "options": [
+            "fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

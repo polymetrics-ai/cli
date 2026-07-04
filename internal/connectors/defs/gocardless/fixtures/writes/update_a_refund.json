@@ -1,0 +1,21 @@
+{
+  "record": {
+    "refund_id": "refund_id_fixture",
+    "refunds": {
+      "description": "Synthetic update_a_refund fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/refunds/refund_id_fixture",
+    "body": {
+      "refunds": {
+        "description": "Synthetic update_a_refund fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

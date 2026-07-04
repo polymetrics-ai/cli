@@ -1,10 +1,11 @@
 # Overview
 
 FullStory is a digital-experience analytics platform. This bundle reads FullStory segments, users,
-and events through the FullStory REST API (`https://api.fullstory.com`), migrating
+events, and user-scoped sessions through the FullStory Server API (`https://api.fullstory.com`) and
+can write server-side user attributes and custom events. It migrates
 `internal/connectors/fullstory` (the hand-written legacy connector, which stays registered and
-unchanged until wave6's registry flip) to a declarative bundle at capability parity. FullStory is
-read-only here — no write actions.
+unchanged until wave6's registry flip) to a declarative bundle and expands the Pass B surface where
+the API shape is ordinary JSON.
 
 ## Auth setup
 
@@ -17,23 +18,46 @@ not wired).
 
 ## Streams notes
 
-All 3 streams (`segments`, `users`, `events`) share the same shape: `GET`, records at the
-top-level `results` array, primary key `["id"]`. `segments`/`users` cursor field is `created`;
-`events`' cursor field is `event_time` — both informational only, matching legacy (FullStory's
-analytics API supports only full-refresh sync; no `incremental` block is declared, so no
-server-side filter is ever applied).
+Four streams are declared:
 
-Pagination follows FullStory's `next_page_token`/`pageToken` convention
+- `segments` — saved session filters. The legacy connector uses `/segments/v2`; the current
+  FullStory docs publish the same list/get segment family under `/segments/v1`, so
+  `api_surface.json` records both the documented and legacy path forms.
+- `users` — identified users, records at `results`.
+- `events` — captured/custom events, records at `results`.
+- `sessions` — recent session replay URLs for a supplied `session_uid` and/or `session_email`;
+  FullStory documents that this endpoint is user-scoped and returns a single page.
+
+All streams are `GET` and emit records from the top-level `results` array. `segments`/`users`
+cursor field is `created`; `events`' cursor field is `event_time` — both informational only,
+matching legacy (FullStory's analytics API supports only full-refresh sync; no `incremental` block
+is declared, so no server-side filter is ever applied). The `sessions` stream has no cursor field
+because it is a point lookup/list for a caller-supplied user identity.
+
+The three legacy streams follow FullStory's `next_page_token`/`pageToken` convention
 (`pagination.type: cursor` with `token_path: next_page_token`, `cursor_param: pageToken`):
 the next page's `pageToken` is read from the current response body's `next_page_token`, and
 pagination stops when that field is empty — identical to legacy's `harvest` loop. Every request
 sends `limit=200` (matches legacy's default `page_size`).
 
+The `sessions` stream overrides pagination to `none`, matching FullStory's own statement that the
+session lookup endpoint does not paginate.
+
 ## Write actions & risks
 
-None. FullStory is exposed read-only (`capabilities.write: false`), matching legacy's
-`Capabilities{Write: false}` and its `Write` method returning `connectors.ErrUnsupportedOperation`
-unconditionally.
+Three write actions are exposed because they are documented as ordinary JSON server-side capture
+operations:
+
+- `create_user` — `POST /v2/users`; creates or upserts a FullStory user profile by `uid`.
+- `update_user` — `POST /v2/users/{{ record.id }}`; updates display fields or custom properties
+  for an existing user id.
+- `create_event` — `POST /v2/events`; creates a custom event with optional `user`, `session`, and
+  `properties` objects.
+
+These writes enrich FullStory analytics dimensions and require the normal reverse-ETL plan,
+preview, and approval flow. Destructive user deletion, async batch/stream imports, and generated
+AI/session-summary endpoints are not exposed as writes; each is explicitly excluded in
+`api_surface.json`.
 
 ## Known limits
 
@@ -60,3 +84,11 @@ unconditionally.
   filter for these endpoints, matching legacy (`InitialState` always returns an empty cursor).
   `client_filtered` incremental was considered and rejected: adding client-side cursor filtering
   here would be new behavior legacy never had, not a migration.
+- `sessions` is not a global account-wide session stream. FullStory requires a `uid` and/or
+  `email` query to retrieve recent sessions for one user; this bundle wires optional
+  `session_uid`/`session_email` config values for that documented lookup. Calling the stream
+  without either value will send an unfiltered request and the live API may reject it.
+- Async import/export workflows, raw file downloads, privacy/settings administration, beta
+  element/extraction rule management, and AI-generated context/summary endpoints are enumerated in
+  `api_surface.json` but excluded. They require job polling, binary/download handling, elevated
+  administrative scope, or generated-output semantics beyond this connector's sync/write surface.

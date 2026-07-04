@@ -1,0 +1,14 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "enrollment_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/users/synthetic-conformance-value/authenticator-enrollments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

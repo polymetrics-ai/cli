@@ -1,0 +1,74 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/leavebalance",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "employeeIdentifier": "leave_balances_fixture_1",
+          "employeeNumber": "FIX-1",
+          "employeeName": "Fixture leave balances 1",
+          "leaveBalance": [
+            {
+              "leaveTypeId": "leave_balances_fixture_1",
+              "leaveTypeName": "Fixture leave balances 1",
+              "accruedAmount": 1,
+              "consumedAmount": 1,
+              "availableBalance": 1,
+              "annualQuota": -1
+            },
+            {
+              "leaveTypeId": "leave_balances_fixture_2",
+              "leaveTypeName": "Fixture leave balances 2",
+              "accruedAmount": 1,
+              "consumedAmount": 1,
+              "availableBalance": 1,
+              "annualQuota": 1
+            }
+          ]
+        },
+        {
+          "employeeIdentifier": "leave_balances_fixture_2",
+          "employeeNumber": "FIX-2",
+          "employeeName": "Fixture leave balances 2",
+          "leaveBalance": [
+            {
+              "leaveTypeId": "leave_balances_fixture_1",
+              "leaveTypeName": "Fixture leave balances 1",
+              "accruedAmount": 1,
+              "consumedAmount": 1,
+              "availableBalance": 1,
+              "annualQuota": 5
+            },
+            {
+              "leaveTypeId": "leave_balances_fixture_2",
+              "leaveTypeName": "Fixture leave balances 2",
+              "accruedAmount": 1,
+              "consumedAmount": 1,
+              "availableBalance": 30,
+              "annualQuota": 30
+            }
+          ]
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/leave_balances",
+      "lastPage": "https://example.invalid/keka/leave_balances",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

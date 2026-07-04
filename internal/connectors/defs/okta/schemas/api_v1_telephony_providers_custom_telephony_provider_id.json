@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Indicates whether the provider is enabled and can be used"
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of the custom telephony provider"
+    },
+    "isPrimaryProvider": {
+      "type": "boolean",
+      "description": "Indicates whether the provider is the primary telephony provider"
+    },
+    "providerCapability": {
+      "type": "string",
+      "description": "The types of telephony operations (SMS or Voice) that you use with your telephony provider.\n\n`ALL` is the only valid value. It indicates that your provider can handle both SMS messages and voice calls. You're not required to use both types of telephony operations, but your provider can support both.",
+      "enum": [
+        "ALL"
+      ]
+    },
+    "providerName": {
+      "type": "string",
+      "description": "Name of the telephony provider",
+      "enum": [
+        "TWILIO",
+        "TELESIGN"
+      ]
+    },
+    "providerSettings": {
+      "type": "object",
+      "description": "Settings for custom telephony provider.\n\nThese settings vary based on the telephony provider and the type of telephony operation (SMS or Voice). For `sms` and `call`, you can select one method per telephony operation (`sms` and `call`) for sending messages or voice calls.\n\n> **Note:** Configure your telephony provider settings before selecting the methods for sending SMS messages or making voice c",
+      "properties": {
+        "call": {
+          "type": "object",
+          "properties": {
+            "twilioVerifySid": {
+              "type": "string",
+              "description": "The Twilio Verify Service SID used for sending verification messages or calls. You can find this value in your Twilio console.\n\nThis method uses Twilio's [Verify API](https://www.twilio.com/docs/verify/api)."
+            }
+          },
+          "additionalProperties": true
+        },
+        "sms": {
+          "type": "object",
+          "properties": {
+            "twilioVerifySid": {
+              "type": "string",
+              "description": "The Twilio Verify Service SID used for sending verification messages or calls. You can find this value in your Twilio console.\n\nThis method uses Twilio's [Verify API](https://www.twilio.com/docs/verify/api)."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "providerSid": {
+      "type": "string",
+      "description": "The account string identifier (SID) for your telephony provider account. Your telephony provider gives you this SID."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

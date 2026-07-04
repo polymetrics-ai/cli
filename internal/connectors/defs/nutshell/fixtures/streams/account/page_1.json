@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "id": "1",
+          "name": "Fixture account",
+          "href": "https://app.nutshell.com/rest/account/1",
+          "htmlUrl": "https://app.nutshell.com/account/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture account",
+          "href": "https://app.nutshell.com/rest/account/2",
+          "htmlUrl": "https://app.nutshell.com/account/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

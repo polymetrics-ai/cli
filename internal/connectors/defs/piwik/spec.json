@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Piwik / Matomo Connection Specification",
   "type": "object",
-  "required": ["token_auth"],
+  "required": [
+    "token_auth"
+  ],
   "properties": {
     "token_auth": {
       "type": "string",
@@ -17,17 +19,26 @@
     },
     "site_id": {
       "type": "string",
-      "description": "Matomo idSite; required for the visits, actions, and goals streams."
+      "description": "Matomo idSite; required for site-scoped analytics and detail streams."
     },
     "period": {
       "type": "string",
       "default": "day",
-      "description": "Matomo reporting period (day, week, month, year, range) for the visits, actions, and goals streams."
+      "description": "Matomo reporting period (day, week, month, year, range) for analytics report streams."
     },
     "date": {
       "type": "string",
       "default": "today",
-      "description": "Matomo reporting date (or date range) for the visits, actions, and goals streams."
+      "description": "Matomo reporting date or date range for analytics report streams."
+    },
+    "custom_dimension_id": {
+      "type": "string",
+      "description": "Matomo idDimension for the custom_dimensions_custom_dimension stream."
+    },
+    "last_minutes": {
+      "type": "string",
+      "default": "30",
+      "description": "Lookback window, in minutes, for the live_counters stream."
     },
     "mode": {
       "type": "string",

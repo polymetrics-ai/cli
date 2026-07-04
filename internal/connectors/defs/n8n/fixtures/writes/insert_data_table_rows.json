@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data_table_id": "dt_fixture_1",
+    "data": [
+      {
+        "name": "Fixture Row"
+      }
+    ],
+    "returnType": "all"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/data-tables/dt_fixture_1/rows",
+    "body": {
+      "data": [
+        {
+          "name": "Fixture Row"
+        }
+      ],
+      "returnType": "all"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

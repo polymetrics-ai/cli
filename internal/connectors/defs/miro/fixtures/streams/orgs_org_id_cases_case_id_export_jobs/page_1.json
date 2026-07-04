@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/cases/synthetic-conformance-value/export-jobs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "size": 1,
+      "cursor": "cursor_fixture",
+      "limit": 100,
+      "type": "cursor-list",
+      "data": [
+        {
+          "id": "id_fixture"
+        }
+      ]
+    }
+  }
+}

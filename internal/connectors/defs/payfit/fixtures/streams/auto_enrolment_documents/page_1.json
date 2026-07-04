@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/auto-enrolment-documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "documents": [
+        {
+          "documentId": "auto_enrolment_documents_1",
+          "name": "Fixture auto enrolment documents"
+        }
+      ]
+    }
+  }
+}

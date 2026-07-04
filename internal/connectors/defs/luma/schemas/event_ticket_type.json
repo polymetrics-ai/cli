@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_ticket_type",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "require_approval": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "is_hidden": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "valid_start_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "valid_end_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "max_capacity": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cents": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_flexible": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "min_cents": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

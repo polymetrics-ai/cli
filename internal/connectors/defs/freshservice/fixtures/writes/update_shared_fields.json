@@ -1,0 +1,15 @@
+{
+  "record": {
+    "shared_field_id": 123,
+    "name": "Fixture update_shared_fields",
+    "description": "Fixture update_shared_fields record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/service-catalog/shared-fields/123",
+    "body": {
+      "name": "Fixture update_shared_fields",
+      "description": "Fixture update_shared_fields record"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "audio_collection_id": "audio-collection-id-fixture-1",
+    "items": [
+      {
+        "id": "add_audio_collection_items-item-fixture-1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/audio/collections/audio-collection-id-fixture-1/items",
+    "body": {
+      "items": [
+        {
+          "id": "add_audio_collection_items-item-fixture-1"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

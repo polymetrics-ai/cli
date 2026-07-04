@@ -1,0 +1,7 @@
+{
+  "record": {},
+  "expect": {
+    "method": "PUT",
+    "path": "/server"
+  }
+}

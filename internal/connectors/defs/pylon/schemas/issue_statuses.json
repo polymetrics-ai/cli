@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issue_statuses",
+  "type": "object",
+  "x-primary-key": [
+    "slug"
+  ],
+  "required": [
+    "slug"
+  ],
+  "properties": {
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_archived": {
+      "type": [
+        "boolean",
+        "string",
+        "null"
+      ]
+    },
+    "is_default_status": {
+      "type": [
+        "boolean",
+        "string",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

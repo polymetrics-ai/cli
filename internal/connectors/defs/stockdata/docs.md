@@ -1,11 +1,15 @@
 # Overview
 
-StockData reads tickers, end-of-day prices, intraday prices, and market news through the
-stockdata.org REST API (`https://api.stockdata.org/v1`). This bundle migrates
-`internal/connectors/stockdata` (the hand-written legacy connector) at capability parity; the
-legacy package stays registered and unchanged until wave6's registry flip. StockData is read-only
-here — legacy has no write surface, so `capabilities.write` is `false` and no `writes.json` is
-shipped.
+StockData reads market data and news through the stockdata.org REST API
+(`https://api.stockdata.org/v1`). This bundle migrates `internal/connectors/stockdata` while
+preserving the legacy stream record mappings for `tickers`, `eod_prices`, `intraday_prices`, and
+`news`.
+
+Pass B reviewed the live HTML documentation on 2026-07-04. The current docs expose 16 GET
+endpoints and no documented POST/PUT/PATCH/DELETE endpoints. This bundle covers every documented
+object/list GET endpoint, plus the legacy-only `GET /v1/data/tickers` stream that the current docs
+page no longer lists. Scalar reference-list endpoints for entity types and industries are excluded
+as non-data/reference endpoints in `api_surface.json`.
 
 ## Auth setup
 
@@ -13,45 +17,43 @@ Provide a StockData API access token via the `api_token` secret. It is sent as t
 query parameter on every request (`mode: api_key_query`), matching legacy's
 `connsdk.APIKeyQuery("api_token", token)` exactly; it is never logged.
 
+Market data streams that need symbols use the `symbols` config key. News and stats streams accept
+optional filters such as `language`, `published_after`, `published_before`, `published_on`,
+`countries`, `interval`, `group_by`, `sentiment_gte`, and `sentiment_lte`. UUID-scoped news streams
+use comma-separated `news_uuids` fan-out. The `entity_search` stream requires the `entity_search`
+config value because StockData documents `search` as the lookup term for that endpoint.
+
 ## Streams notes
 
-All 4 streams (`tickers`, `eod_prices`, `intraday_prices`, `news`) share StockData's page-number
-pagination (`pagination.type: page_number`, `page_param: page`, `size_param: limit`, `start_page:
-1`, `page_size: 100`), records at `data`. Default page size is 100 (matches legacy's
-`defaultPageSize`); no stream declares a stream-level `pagination` override, so every stream reads at
-the live default. `tickers`' conformance fixture exercises pagination termination with a full
-100-record `page_1` (`limit=100`) followed by a short `page_2` (1 record), per the page-1-full-page
-fixture convention — it does not rely on a fixture-only page-size override.
+Legacy streams keep their legacy schema-mode projections:
+`tickers` emits `symbol`, `name`, and `exchange`; `eod_prices` and `intraday_prices` emit
+`ticker`, `date`, and `close`; `news` emits `title`, `url`, and `published_at`.
 
-`eod_prices` and `intraday_prices` both require the `symbols` config value (a plain, non-optional
-`{{ config.symbols }}` query template hard-errors if absent, exactly matching legacy's
-`stockdata stream requires config symbols` error for these two streams only); `date_from`/`date_to`
-are optional per-request date-range filters (`omit_when_absent: true`), sent only when configured.
-`tickers` and `news` never reference `symbols`/`date_from`/`date_to` in their `query` blocks, so
-those streams read successfully with none of them set — matching legacy's `needsSymbols: false`
-routing for both.
+New Pass B streams use `projection: "passthrough"` so StockData response fields outside the core
+schema are not dropped. They cover quotes, adjusted intraday prices, splits, dividends, similar
+news, news by UUID, news entity stats, entity search, and news sources. `news_by_uuid` is a
+single-object stream with `pagination.type: none`; list-style endpoints inherit the base
+`page`/`limit` page-number pagination.
 
-Legacy's published stream catalog declares `CursorFields: ["date"]` for `eod_prices`/
-`intraday_prices` (this bundle's schemas mirror that with `x-cursor-field: date`), but legacy never
-actually derives a request filter from a persisted incremental cursor for either stream — the only
-date-range filtering is the static, config-driven `date_from`/`date_to` pair read directly from
-`RuntimeConfig.Config`, never from `req.State`. This bundle reproduces that exactly: neither stream
-declares a streams.json `incremental` block, so both are full-refresh reads (config-driven date
-range only, no cursor-driven repeat-sync narrowing) — declaring `client_filtered`/`incremental` here
-would silently drop records on a repeat sync that legacy would re-emit, an unacceptable behavior
-change.
+`news_similar` and `news_by_uuid` use `fan_out.ids_from.config_key: news_uuids`. If no UUIDs are
+configured, those streams emit no records. With UUIDs configured, the engine runs one request per
+UUID and stamps the UUID onto emitted records.
 
 ## Write actions & risks
 
-None. StockData is read-only in legacy (`Capabilities.Write` is `false`); `Write` always returns
-`connectors.ErrUnsupportedOperation`. No `writes.json` is shipped for this bundle.
+None. StockData is read-only in legacy (`Capabilities.Write` is `false`), and the current
+documentation exposes no POST/PUT/PATCH/DELETE endpoints. No `writes.json` is shipped for this
+bundle.
 
 ## Known limits
 
-- Full StockData API surface (real-time quotes, market status, dividends, splits) is out of scope
-  for this wave; see `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
-- `eod_prices`/`intraday_prices`/`news` are full-refresh only in practice (see Streams notes above)
-  even though their schemas declare `x-cursor-field` for parity with legacy's advertised catalog
-  fields — no `incremental` block is wired for any of them, matching legacy's actual (non-)behavior.
-- `metadata.json` declares no `rate_limit` block: legacy enforces no client-side rate limiting for
-  StockData, so none is added here (matching legacy's real, lack-of, throttling behavior).
+- **Dead runtime pagination config is removed.** Legacy accepts `page_size` and `max_pages`, but
+  the declarative paginator uses bundle-authored values. This bundle keeps StockData's legacy
+  default `limit=100` and does not declare unwired config keys.
+- **Legacy fixture-mode-only fields are not modeled.** Legacy stamps `connector` and `fixture` on
+  synthetic fixture records. Declarative fixture replay replaces that test-only path.
+- **Entity type/industry reference lists are excluded.** These endpoints return static scalar
+  reference arrays, not account/market object records; the current records dialect also does not
+  fan out scalar arrays into records.
+- **No rate-limit block is declared.** Legacy enforces no client-side rate limiting for StockData,
+  so none is added here.

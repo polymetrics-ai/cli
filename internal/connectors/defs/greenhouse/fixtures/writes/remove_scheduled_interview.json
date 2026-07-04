@@ -1,0 +1,13 @@
+{
+  "record": {
+    "scheduled_interview_id": "scheduled_interview_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/scheduled_interviews/scheduled_interview_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

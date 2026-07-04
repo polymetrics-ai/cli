@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/properties/top",
+    "query": { "event": "Viewed Page" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "browser": { "count": 295 },
+      "user_type": { "count": 91 }
+    }
+  }
+}

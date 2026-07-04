@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "defaultMode": {
+      "type": "string",
+      "enum": [
+        "DISABLE",
+        "ENFORCE",
+        "PREVIEW"
+      ]
+    },
+    "useCaseModeOverrides": {
+      "type": "object",
+      "description": "A map of Per-Client Rate Limit Use Case to the applicable PerClientRateLimitMode. Overrides the `defaultMode` property for the specified use cases.",
+      "properties": {
+        "LOGIN_PAGE": {
+          "type": "string",
+          "enum": [
+            "DISABLE",
+            "ENFORCE",
+            "PREVIEW"
+          ]
+        },
+        "OAUTH2_AUTHORIZE": {
+          "type": "string",
+          "enum": [
+            "DISABLE",
+            "ENFORCE",
+            "PREVIEW"
+          ]
+        },
+        "OIE_APP_INTENT": {
+          "type": "string",
+          "enum": [
+            "DISABLE",
+            "ENFORCE",
+            "PREVIEW"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

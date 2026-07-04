@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/status/pages/synthetic-conformance-value/service-components/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "service_component": {
+        "id": "view_service_component",
+        "name": "Fixture view_service_component",
+        "subject": "Fixture view_service_component",
+        "description": "Fixture view_service_component record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

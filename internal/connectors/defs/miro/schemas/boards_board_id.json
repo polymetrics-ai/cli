@@ -1,0 +1,333 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (ID) of the board."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the board."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the board."
+    },
+    "team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Team id"
+        },
+        "name": {
+          "type": "string",
+          "description": "Team name"
+        },
+        "picture": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "description": "Id of the picture"
+            },
+            "imageURL": {
+              "type": "string",
+              "description": "Url of the picture"
+            },
+            "originalUrl": {
+              "type": "string",
+              "description": "Original team picture url for icon generation"
+            },
+            "type": {
+              "type": "string",
+              "description": "Type of the object returned."
+            }
+          },
+          "additionalProperties": true
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the object returned."
+        }
+      },
+      "additionalProperties": true
+    },
+    "project": {
+      "type": "object",
+      "description": "Contains information about the project with which the board is associated.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the project."
+        }
+      },
+      "additionalProperties": true
+    },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Id of the picture"
+        },
+        "imageURL": {
+          "type": "string",
+          "description": "Url of the picture"
+        },
+        "originalUrl": {
+          "type": "string",
+          "description": "Original team picture url for icon generation"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the object returned."
+        }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "description": "Defines the permissions policies and sharing policies for the board.",
+      "properties": {
+        "permissionsPolicy": {
+          "type": "object",
+          "description": "Defines the permissions policies for the board.",
+          "properties": {
+            "collaborationToolsStartAccess": {
+              "type": "string",
+              "description": "Defines who can start or stop timer, voting, video chat, screen sharing, attention management. Others will only be able to join. To change the value for the `collaborationToolsStartAccess` parameter, contact Miro Customer Support.",
+              "enum": [
+                "all_editors",
+                "board_owners_and_coowners"
+              ]
+            },
+            "copyAccess": {
+              "type": "string",
+              "description": "Defines who can copy the board, copy objects, download images, and save the board as a template or PDF.",
+              "enum": [
+                "anyone",
+                "team_members",
+                "team_editors",
+                "board_owner"
+              ]
+            },
+            "sharingAccess": {
+              "type": "string",
+              "description": "Defines who can change access and invite users to this board. To change the value for the `sharingAccess` parameter, contact Miro Customer Support.",
+              "enum": [
+                "team_members_with_editing_rights",
+                "owner_and_coowners"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "sharingPolicy": {
+          "type": "object",
+          "description": "Defines the public-level, organization-level, and team-level access for the board. The access level that a user gets depends on the highest level of access that results from considering the public-level, team-level, organization-level, and direct sharing access.",
+          "properties": {
+            "access": {
+              "type": "string",
+              "description": "Defines the public-level access to the board.",
+              "enum": [
+                "private",
+                "view",
+                "edit",
+                "comment"
+              ]
+            },
+            "accessPasswordRequired": {
+              "type": "boolean",
+              "description": "Defines if a password is required to access the board."
+            },
+            "inviteToAccountAndBoardLinkAccess": {
+              "type": "string",
+              "description": "Defines the user role when inviting a user via the invite to team and board link. For Enterprise users, the `inviteToAccountAndBoardLinkAccess` parameter is always set to `no_access`.",
+              "enum": [
+                "viewer",
+                "commenter",
+                "editor",
+                "coowner",
+                "owner",
+                "guest",
+                "no_access"
+              ]
+            },
+            "organizationAccess": {
+              "type": "string",
+              "description": "Defines the organization-level access to the board. If the board is created for a team that does not belong to an organization, the `organizationAccess` parameter is always set to the default value.",
+              "enum": [
+                "private",
+                "view",
+                "comment",
+                "edit"
+              ]
+            },
+            "teamAccess": {
+              "type": "string",
+              "description": "Defines the team-level access to the board.",
+              "enum": [
+                "private",
+                "view",
+                "comment",
+                "edit"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "viewLink": {
+      "type": "string",
+      "description": "URL to view the board."
+    },
+    "owner": {
+      "type": "object",
+      "description": "Contains information about the user who created the board.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "currentUserMembership": {
+      "type": "object",
+      "description": "Contains the current user's board membership details. The current user could be different from the board owner.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user."
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of the board member.",
+          "enum": [
+            "viewer",
+            "commenter",
+            "editor",
+            "coowner",
+            "owner"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the object that is returned. In this case, `type` returns `board_member`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Date and time when the board was created. Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "Contains information about the user who created the board.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "lastOpenedAt": {
+      "type": "string",
+      "description": "Date and time when the board was last opened by any user. Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "lastOpenedBy": {
+      "type": "object",
+      "description": "Contains information about the user who last opened the board.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "modifiedAt": {
+      "type": "string",
+      "description": "Date and time when the board was last modified. Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "modifiedBy": {
+      "type": "object",
+      "description": "Contains information about the user who created the board.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "links": {
+      "type": "object",
+      "description": "Contains applicable links for the board.",
+      "properties": {
+        "related": {
+          "type": "string",
+          "description": "Link to obtain information about the board members associated with the board."
+        },
+        "self": {
+          "type": "string",
+          "description": "Link to obtain information about the current board."
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object that is returned. In this case, type returns `board`."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

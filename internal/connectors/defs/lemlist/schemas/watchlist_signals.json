@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "watchlist_signals",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "teamId": { "type": ["string", "null"] },
+    "watchListId": { "type": ["string", "null"] },
+    "watchListName": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "receivedAt": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "contact": { "type": ["object", "null"] },
+    "company": { "type": ["object", "null"] },
+    "signalData": { "type": ["object", "null"] }
+  }
+}

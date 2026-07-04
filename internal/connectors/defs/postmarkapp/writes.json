@@ -1,0 +1,849 @@
+{
+  "actions": [
+    {
+      "name": "send_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/email",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "From",
+          "To",
+          "Subject"
+        ],
+        "properties": {
+          "From": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "To": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Subject": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "TextBody": {
+            "type": "string"
+          },
+          "HtmlBody": {
+            "type": "string"
+          },
+          "MessageStream": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "sends a live Postmark email; approval required"
+    },
+    {
+      "name": "send_bulk_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/email/bulk",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "From",
+          "Subject",
+          "Messages"
+        ],
+        "properties": {
+          "From": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Subject": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Messages": {
+            "type": "array"
+          },
+          "MessageStream": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "submits a live Postmark bulk email request; approval required"
+    },
+    {
+      "name": "send_email_with_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/email/withTemplate",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "From",
+          "To"
+        ],
+        "properties": {
+          "From": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "To": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "TemplateAlias": {
+            "type": "string"
+          },
+          "TemplateId": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "TemplateModel": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "sends a live Postmark template email; approval required"
+    },
+    {
+      "name": "edit_current_server",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/server",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {
+          "Name": {
+            "type": "string"
+          },
+          "Color": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "mutates the current Postmark server settings; approval required"
+    },
+    {
+      "name": "activate_bounce",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/bounces/{{ record.bounce_id }}/activate",
+      "body_type": "none",
+      "path_fields": [
+        "bounce_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "bounce_id"
+        ],
+        "properties": {
+          "bounce_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "reactivates a bounced email address in Postmark; approval required"
+    },
+    {
+      "name": "create_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/templates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "Name"
+        ],
+        "properties": {
+          "Name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Subject": {
+            "type": "string"
+          },
+          "HtmlBody": {
+            "type": "string"
+          },
+          "TextBody": {
+            "type": "string"
+          },
+          "Alias": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Postmark template; approval required"
+    },
+    {
+      "name": "edit_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/templates/{{ record.template_id_or_alias }}",
+      "body_type": "json",
+      "path_fields": [
+        "template_id_or_alias"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "template_id_or_alias"
+        ],
+        "properties": {
+          "template_id_or_alias": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Subject": {
+            "type": "string"
+          },
+          "HtmlBody": {
+            "type": "string"
+          },
+          "TextBody": {
+            "type": "string"
+          },
+          "Alias": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "updates a Postmark template; approval required"
+    },
+    {
+      "name": "delete_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/templates/{{ record.template_id_or_alias }}",
+      "body_type": "none",
+      "path_fields": [
+        "template_id_or_alias"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "template_id_or_alias"
+        ],
+        "properties": {
+          "template_id_or_alias": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Postmark template; destructive external mutation"
+    },
+    {
+      "name": "validate_template",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/templates/validate",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [],
+        "properties": {
+          "Subject": {
+            "type": "string"
+          },
+          "HtmlBody": {
+            "type": "string"
+          },
+          "TextBody": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "validates Postmark template content; no persistent mutation expected but still invokes the external API"
+    },
+    {
+      "name": "create_message_stream",
+      "kind": "create",
+      "method": "POST",
+      "path": "/message-streams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "ID",
+          "Name",
+          "MessageStreamType"
+        ],
+        "properties": {
+          "ID": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "MessageStreamType": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Postmark message stream; approval required"
+    },
+    {
+      "name": "edit_message_stream",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/message-streams/{{ record.message_stream_id }}",
+      "body_type": "json",
+      "path_fields": [
+        "message_stream_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "message_stream_id"
+        ],
+        "properties": {
+          "message_stream_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "updates a Postmark message stream; approval required"
+    },
+    {
+      "name": "archive_message_stream",
+      "kind": "update",
+      "method": "POST",
+      "path": "/message-streams/{{ record.message_stream_id }}/archive",
+      "body_type": "none",
+      "path_fields": [
+        "message_stream_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "message_stream_id"
+        ],
+        "properties": {
+          "message_stream_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "archives a Postmark message stream; approval required"
+    },
+    {
+      "name": "unarchive_message_stream",
+      "kind": "update",
+      "method": "POST",
+      "path": "/message-streams/{{ record.message_stream_id }}/unarchive",
+      "body_type": "none",
+      "path_fields": [
+        "message_stream_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "message_stream_id"
+        ],
+        "properties": {
+          "message_stream_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "unarchives a Postmark message stream; approval required"
+    },
+    {
+      "name": "bypass_inbound_message",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/messages/inbound/{{ record.message_id }}/bypass",
+      "body_type": "none",
+      "path_fields": [
+        "message_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "message_id"
+        ],
+        "properties": {
+          "message_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "bypasses inbound blocking for one Postmark message; approval required"
+    },
+    {
+      "name": "retry_inbound_message",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/messages/inbound/{{ record.message_id }}/retry",
+      "body_type": "none",
+      "path_fields": [
+        "message_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "message_id"
+        ],
+        "properties": {
+          "message_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "retries processing for one inbound Postmark message; approval required"
+    },
+    {
+      "name": "create_inbound_rule_trigger",
+      "kind": "create",
+      "method": "POST",
+      "path": "/triggers/inboundrules",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "Rule"
+        ],
+        "properties": {
+          "Rule": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates an inbound rule trigger; approval required"
+    },
+    {
+      "name": "delete_inbound_rule_trigger",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/triggers/inboundrules/{{ record.trigger_id }}",
+      "body_type": "none",
+      "path_fields": [
+        "trigger_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "trigger_id"
+        ],
+        "properties": {
+          "trigger_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes an inbound rule trigger; destructive external mutation"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "Url"
+        ],
+        "properties": {
+          "Url": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "MessageStream": {
+            "type": "string"
+          },
+          "Triggers": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a Postmark webhook endpoint; approval required"
+    },
+    {
+      "name": "edit_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "body_type": "json",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Url": {
+            "type": "string"
+          },
+          "Triggers": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates a Postmark webhook endpoint; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "body_type": "none",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Postmark webhook endpoint; destructive external mutation"
+    },
+    {
+      "name": "create_suppression",
+      "kind": "create",
+      "method": "POST",
+      "path": "/message-streams/{{ record.message_stream_id }}/suppressions",
+      "body_type": "json",
+      "path_fields": [
+        "message_stream_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "message_stream_id",
+          "Suppressions"
+        ],
+        "properties": {
+          "message_stream_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Suppressions": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "adds one or more suppressions to a Postmark message stream; approval required"
+    },
+    {
+      "name": "delete_suppression",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/message-streams/{{ record.message_stream_id }}/suppressions/delete",
+      "body_type": "json",
+      "path_fields": [
+        "message_stream_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "message_stream_id",
+          "Suppressions"
+        ],
+        "properties": {
+          "message_stream_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "Suppressions": {
+            "type": "array"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "removes one or more suppressions from a Postmark message stream; approval required"
+    }
+  ]
+}

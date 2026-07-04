@@ -1,0 +1,37 @@
+{
+  "record": {
+    "custom_telephony_provider_id": "synthetic-conformance-value",
+    "id": "id_fixture",
+    "providerAuthToken": "fixture",
+    "providerSettings": {
+      "call": {
+        "twilioVerifySid": "twilio_verify_sid_fixture"
+      },
+      "sms": {
+        "twilioVerifySid": "twilio_verify_sid_fixture"
+      }
+    },
+    "providerSid": "provider_sid_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/telephony-providers/synthetic-conformance-value",
+    "body": {
+      "id": "id_fixture",
+      "providerAuthToken": "fixture",
+      "providerSettings": {
+        "call": {
+          "twilioVerifySid": "twilio_verify_sid_fixture"
+        },
+        "sms": {
+          "twilioVerifySid": "twilio_verify_sid_fixture"
+        }
+      },
+      "providerSid": "provider_sid_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

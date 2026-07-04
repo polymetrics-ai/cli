@@ -1,0 +1,19 @@
+{
+  "record": {
+    "email_server_id": "synthetic-conformance-value",
+    "fromAddress": "from_address_fixture",
+    "toAddress": "to_address_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/email-servers/synthetic-conformance-value/test",
+    "body": {
+      "fromAddress": "from_address_fixture",
+      "toAddress": "to_address_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

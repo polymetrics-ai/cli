@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "plans",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "billing_frequency": { "type": ["integer", "null"] },
+    "currency_iso_code": { "type": ["string", "null"] }
+  }
+}

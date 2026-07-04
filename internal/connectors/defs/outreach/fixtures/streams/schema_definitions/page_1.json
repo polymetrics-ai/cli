@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/schema"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "definitions": {
+        "fixtureObject": {
+          "type": "object",
+          "stability": "prototype",
+          "definitions": {
+          }
+        }
+      }
+    }
+  }
+}

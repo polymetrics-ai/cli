@@ -1,0 +1,17 @@
+{
+  "record": {
+    "attachment_id": "fixture_id",
+    "attachment": {
+      "custom_filename": "fixture-file.txt"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/attachments/fixture_id",
+    "body": {
+      "attachment": {
+        "custom_filename": "fixture-file.txt"
+      }
+    }
+  }
+}

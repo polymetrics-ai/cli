@@ -1,0 +1,16 @@
+{
+  "record": {
+    "project_id": 123,
+    "module_name": "fixture_module_name",
+    "name": "Fixture create_project_associations",
+    "description": "Fixture create_project_associations record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pm/projects/123/fixture_module_name",
+    "body": {
+      "name": "Fixture create_project_associations",
+      "description": "Fixture create_project_associations record"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/user/synthetic-conformance-value/teams",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "teams": [
+          {
+            "id": 1,
+            "name": "Fixture user_teams",
+            "title": "Fixture user_teams",
+            "status": "active"
+          }
+        ],
+        "page": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

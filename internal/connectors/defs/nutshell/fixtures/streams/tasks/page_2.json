@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tasks",
+    "query": {
+      "page[limit]": "500",
+      "page[page]": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tasks": [
+        {
+          "id": "501",
+          "name": "Fixture tasks",
+          "href": "https://app.nutshell.com/rest/tasks/501",
+          "htmlUrl": "https://app.nutshell.com/tasks/501",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

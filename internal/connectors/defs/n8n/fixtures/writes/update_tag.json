@@ -1,0 +1,17 @@
+{
+  "record": {
+    "tag_id": "tag_fixture_1",
+    "name": "Updated tag"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tags/tag_fixture_1",
+    "body": {
+      "name": "Updated tag"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

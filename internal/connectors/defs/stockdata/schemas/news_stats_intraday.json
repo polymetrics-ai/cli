@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "news_stats_intraday",
+  "type": "object",
+  "x-primary-key": [
+    "date"
+  ],
+  "required": [
+    "date"
+  ],
+  "properties": {
+    "date": {
+      "type": "string"
+    },
+    "data": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "group_id": "synthetic-conformance-value",
+    "role_assignment_id": "synthetic-conformance-value",
+    "app_name": "synthetic-conformance-value",
+    "app_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/groups/synthetic-conformance-value/roles/synthetic-conformance-value/targets/catalog/apps/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account_configuration",
+  "type": "object",
+  "x-primary-key": ["account_id"],
+  "required": ["account_id"],
+  "properties": {
+    "organisation_id": { "type": ["integer", "null"] },
+    "organisation_domain": { "type": ["string", "null"] },
+    "account_id": { "type": "integer" },
+    "account_domain": { "type": ["string", "null"] },
+    "app_id": { "type": ["string", "null"] },
+    "bundle_id": { "type": ["integer", "null"] },
+    "bundle_type": { "type": ["string", "null"] },
+    "plan_type": { "type": ["string", "null"] },
+    "datacenter": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
+}

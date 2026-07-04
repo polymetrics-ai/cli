@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "picture": {
+            "id": 1.25,
+            "imageURL": "https://example.invalid/fixture",
+            "originalUrl": "https://example.invalid/fixture",
+            "type": "picture"
+          },
+          "type": "team"
+        }
+      ],
+      "type": "cursor-list"
+    }
+  }
+}

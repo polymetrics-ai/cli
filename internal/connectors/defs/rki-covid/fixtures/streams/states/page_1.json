@@ -1,30 +1,23 @@
 {
-  "request": { "method": "GET", "path": "/states" },
+  "request": {
+    "method": "GET",
+    "path": "/states",
+    "query": {
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": {
-        "BW": {
-          "id": 1,
-          "name": "Baden-Württemberg",
-          "abbreviation": "BW",
-          "population": 11100000,
-          "cases": 500,
-          "deaths": 5,
-          "recovered": 450,
-          "weekIncidence": 10.1,
-          "casesPer100k": 40.2
-        },
-        "BY": {
+        "HH": {
           "id": 2,
-          "name": "Bayern",
-          "abbreviation": "BY",
-          "population": 13100000,
-          "cases": 600,
-          "deaths": 6,
-          "recovered": 550,
-          "weekIncidence": 11.1,
-          "casesPer100k": 41.2
+          "name": "Hamburg",
+          "population": 1892122,
+          "cases": 828126,
+          "deaths": 4380,
+          "recovered": 823738,
+          "abbreviation": "HH",
+          "weekIncidence": 0.15
         }
       }
     }

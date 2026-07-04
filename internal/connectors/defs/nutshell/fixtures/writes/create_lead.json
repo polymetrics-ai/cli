@@ -1,0 +1,26 @@
+{
+  "record": {
+    "leads": [
+      {
+        "name": "Fixture create_lead"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads",
+    "body": {
+      "leads": [
+        {
+          "name": "Fixture create_lead"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

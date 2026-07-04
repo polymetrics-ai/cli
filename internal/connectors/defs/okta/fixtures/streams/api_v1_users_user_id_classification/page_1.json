@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/classification"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "type": "LITE"
+    }
+  }
+}

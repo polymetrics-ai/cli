@@ -1,0 +1,14 @@
+{
+  "record": {
+    "customer_id": 123,
+    "bank_account_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customers/123/bank_accounts/123"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

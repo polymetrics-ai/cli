@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee_fnf_details",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "employeeNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "panNumber": {
+      "type": [
+        "null"
+      ]
+    },
+    "uanNumber": {
+      "type": [
+        "null"
+      ]
+    },
+    "esiNumber": {
+      "type": [
+        "null"
+      ]
+    },
+    "pfNumber": {
+      "type": [
+        "null"
+      ]
+    },
+    "terminationType": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terminationReason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resignationNote": {
+      "type": [
+        "null"
+      ]
+    },
+    "terminationNoticeDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastWorkingDay": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "okToRehire": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "comments": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lossOfPayDays": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "noOfPayDays": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "leaveEncashmentDays": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "earnings": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "contributions": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "deductions": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "netAmount": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "netRecovery": {
+      "type": [
+        "null"
+      ]
+    },
+    "exitRequestStatus": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "settlementDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payAction": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

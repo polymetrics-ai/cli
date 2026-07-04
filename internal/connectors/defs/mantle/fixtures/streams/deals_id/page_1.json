@@ -1,0 +1,134 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/deals/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "deal": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "amount": 1.23,
+        "amountCurrencyCode": "fixture",
+        "currentAmount": 1.23,
+        "acquisitionChannel": "fixture",
+        "acquisitionSource": "fixture",
+        "notes": "fixture",
+        "firstInteractionAt": "2026-01-01T00:00:00Z",
+        "closingAt": "2026-01-01T00:00:00Z",
+        "closedAt": "2026-01-01T00:00:00Z",
+        "archivedAt": "2026-01-01T00:00:00Z",
+        "dealStage": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "stage": "fixture",
+          "weight": 1.23
+        },
+        "dealFlow": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "description": "fixture",
+          "displayOrder": 1,
+          "defaultAcquisitionChannel": "fixture",
+          "defaultAcquisitionSource": "fixture",
+          "defaultDealOwner": {
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com"
+          },
+          "affiliate": {
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com"
+          },
+          "partnership": {
+            "id": "id_fixture",
+            "displayName": "fixture"
+          },
+          "acquirer": {
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com"
+          },
+          "dealStages": [
+            {
+              "id": "id_fixture",
+              "name": "fixture",
+              "description": "fixture",
+              "displayOrder": 1,
+              "stage": "fixture",
+              "weight": 1.23,
+              "trigger": "fixture",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "deletedAt": "2026-01-01T00:00:00Z"
+        },
+        "customer": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com",
+          "domain": "fixture",
+          "shopifyDomain": "fixture"
+        },
+        "app": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "plan": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "affiliate": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "partnership": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "displayName": "fixture"
+        },
+        "acquirer": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "owners": [
+          {
+            "id": "id_fixture",
+            "userId": "user_id_fixture",
+            "user": {
+              "id": "id_fixture",
+              "name": "fixture",
+              "email": "fixture@example.com"
+            }
+          }
+        ],
+        "contacts": [
+          {
+            "id": "id_fixture",
+            "contactId": "contact_id_fixture",
+            "contact": {
+              "id": "id_fixture",
+              "name": "fixture",
+              "email": "fixture@example.com"
+            }
+          }
+        ],
+        "customData": [
+          {
+            "key": "fixture",
+            "value": "fixture",
+            "type": "fixture",
+            "name": "fixture"
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

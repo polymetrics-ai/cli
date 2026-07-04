@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/outbound/opens/platforms"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Days": [
+        {
+          "Date": "2026-01-01",
+          "Sent": 1,
+          "Tracked": 1
+        }
+      ],
+      "Total": 1
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "hash": "synthetic-conformance-value",
+    "storageKey": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/imports/actions/validateUpload"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

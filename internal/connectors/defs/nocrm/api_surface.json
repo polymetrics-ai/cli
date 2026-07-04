@@ -1,17 +1,580 @@
 {
-  "api": "noCRM API v2 (https://api.nocrm.io/api/v2)",
-  "docs": "https://api.nocrm.io/api/v2/documentation",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full noCRM surface (activities, calls, custom fields, webhooks, tags) is out of scope until Pass B",
+  "api": "noCRM API v2",
+  "docs": "https://www.nocrm.io/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B review of the noCRM API v2 documentation. This bundle covers documented GET JSON list/detail endpoints as streams and declarative POST/PUT/DELETE object-body mutations as write actions. Endpoints requiring binary payloads, GET-based simplified mutations, partner-only per-action headers, write query parameters, or bare-array write bodies are excluded with typed reasons.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/leads", "covered_by": { "stream": "leads" } },
-    { "method": "GET", "path": "/api/v2/pipelines", "covered_by": { "stream": "pipelines" } },
-    { "method": "GET", "path": "/api/v2/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/api/v2/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/api/v2/prospecting_lists", "covered_by": { "stream": "prospecting_lists" } },
-    { "method": "POST", "path": "/api/v2/leads", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/activities", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/calls", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/custom_fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/leads",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/{id}",
+      "covered_by": {
+        "stream": "lead"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/unassigned",
+      "covered_by": {
+        "stream": "unassigned_leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/{lead_id}/comments",
+      "covered_by": {
+        "stream": "lead_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/{lead_id}/duplicates",
+      "covered_by": {
+        "stream": "lead_duplicates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/{lead_id}/attachments",
+      "covered_by": {
+        "stream": "lead_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/{lead_id}/attachments/{id}",
+      "covered_by": {
+        "stream": "lead_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/{lead_id}/action_histories",
+      "covered_by": {
+        "stream": "lead_action_histories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pipelines",
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/steps",
+      "covered_by": {
+        "stream": "steps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/steps/{id}",
+      "covered_by": {
+        "stream": "step"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/clients",
+      "covered_by": {
+        "stream": "client_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/clients/{id}",
+      "covered_by": {
+        "stream": "client_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/predefined_tags",
+      "covered_by": {
+        "stream": "predefined_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/fields",
+      "covered_by": {
+        "stream": "fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/activities",
+      "covered_by": {
+        "stream": "activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/teams/{id}",
+      "covered_by": {
+        "stream": "team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/prospecting_lists (legacy alias)",
+      "covered_by": {
+        "stream": "prospecting_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/spreadsheets",
+      "covered_by": {
+        "stream": "spreadsheets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/spreadsheets/{id}",
+      "covered_by": {
+        "stream": "spreadsheet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/rows",
+      "covered_by": {
+        "stream": "prospects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/rows/called_from",
+      "covered_by": {
+        "stream": "prospects_called"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/follow_ups",
+      "covered_by": {
+        "stream": "post_sales_tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhook_events",
+      "covered_by": {
+        "stream": "webhook_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhook_events/{id}",
+      "covered_by": {
+        "stream": "webhook_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/clients",
+      "covered_by": {
+        "write": "create_client_folder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/clients/{id}",
+      "covered_by": {
+        "write": "update_client_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/clients/{id}",
+      "covered_by": {
+        "write": "delete_client_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/category",
+      "covered_by": {
+        "write": "create_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/predefined_tags",
+      "covered_by": {
+        "write": "create_predefined_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/fields",
+      "covered_by": {
+        "write": "create_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads",
+      "covered_by": {
+        "write": "create_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{id}/duplicate_lead",
+      "covered_by": {
+        "write": "duplicate_lead"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/leads/{id}",
+      "covered_by": {
+        "write": "update_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{id}/assign",
+      "covered_by": {
+        "write": "assign_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{id}/add_to_client",
+      "covered_by": {
+        "write": "add_lead_to_client_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/leads/{id}",
+      "covered_by": {
+        "write": "delete_lead"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/leads/delete_multiple",
+      "covered_by": {
+        "write": "delete_multiple_leads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{lead_id}/comments",
+      "covered_by": {
+        "write": "create_lead_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/leads/{lead_id}/comments/{id}",
+      "covered_by": {
+        "write": "update_lead_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/leads/{lead_id}/comments/{id}",
+      "covered_by": {
+        "write": "delete_lead_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/leads/{lead_id}/attachments/{id}",
+      "covered_by": {
+        "write": "delete_lead_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{lead_id}/emails/send_email_from_template",
+      "covered_by": {
+        "write": "send_lead_email_from_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{lead_id}/follow_ups/create_from_template",
+      "covered_by": {
+        "write": "create_lead_follow_up_from_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/spreadsheets",
+      "covered_by": {
+        "write": "create_prospecting_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/spreadsheets/{id}/assign",
+      "covered_by": {
+        "write": "assign_prospecting_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/comments",
+      "covered_by": {
+        "write": "create_prospecting_list_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/rows/{prospect_id}/comments",
+      "covered_by": {
+        "write": "create_prospect_comment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/rows/{prospect_id}/comments/{id}",
+      "covered_by": {
+        "write": "update_prospect_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/rows",
+      "covered_by": {
+        "write": "create_prospects"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/rows/{id}/update_fields",
+      "covered_by": {
+        "write": "update_prospect_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/rows/{id}/create_lead",
+      "covered_by": {
+        "write": "create_lead_from_prospect"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/rows/{id}",
+      "covered_by": {
+        "write": "delete_prospect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/users/{id}/disable",
+      "covered_by": {
+        "write": "disable_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/teams/{id}",
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/teams/{id}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/teams/{id}/add_member",
+      "covered_by": {
+        "write": "add_team_member"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/teams/{id}/remove_member",
+      "covered_by": {
+        "write": "remove_team_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/webhooks/{id}/activate",
+      "covered_by": {
+        "write": "activate_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/webhooks/{id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ping",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Connectivity/authentication health endpoint; already represented by the bundle check fixture, not a sync stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/auth/log_as, /api/v2/auth/login, /api/v2/auth/logout",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Authentication/session endpoints mint or revoke user tokens and require credential-handling flows outside the connector."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{id}/send_activation_email",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Despite using GET, this endpoint sends an activation email and mutates user onboarding state; the write dialect intentionally covers documented POST/PUT/PATCH/DELETE actions only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/leads/{id}/business_card",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Returns a lead business-card image/link payload rather than a durable JSON record collection."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{lead_id}/attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Attachment upload is multipart/binary CRM mutation and is not expressible by the JSON/form write dialect."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/partners/activate, /api/v2/partners/revoke, /api/v2/email_signatures",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "ENGINE_GAP: these partner-integration endpoints require the X-API-PARTNER-KEY header, but writes.json has no per-action header field; adding the header at base scope would force partner credentials onto ordinary read streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/leads/{lead_id}/call, /api/v2/spreadsheets/{spreadsheet_id}/rows/{id}/call",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "ENGINE_GAP: call-logging endpoints require X-API-PARTNER-KEY per request; the current write dialect cannot attach that header to only these actions."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/follow_ups/{follow_up_id}/tasks/{task_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "ENGINE_GAP: the documented task update sends status/reminder fields as query parameters, while writes.json supports path fields and object bodies but no write query dialect."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/spreadsheets/{spreadsheet_id}/rows/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "ENGINE_GAP: full prospect-row replacement requires a bare JSON array body; writes.json can construct object or form bodies only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/simple/leads/{lead_id}/standby, /api/simple/leads/{lead_id}/won, /api/simple/leads/{lead_id}/cancelled, /api/simple/leads/{lead_id}/lost, /api/simple/leads/{lead_id}/todo, /api/simple/leads/{lead_id}/assign, /api/simple/leads/{lead_id}/assign/random, /api/simple/leads/{lead_id}/assign/random_in_a_team, /api/simple/leads/{lead_id}/assign/round_robin, /api/simple/leads/{lead_id}/assign/weighted_round_robin, /api/simple/leads/{lead_id}/next_step, /api/simple/leads/{lead_id}/move_to_step, /api/simple/leads/{lead_id}/add_tag, /api/simple/leads/{lead_id}/send_email_from_template, /api/simple/leads/{lead_id}/send_email, /api/simple/leads/{lead_id}/add_activity, /api/simple/leads/{lead_id}/follow_ups/create_from_template, /api/simple/rows/{prospect_id}/create_lead, /api/simple/leads/{lead_id}/duplicate_lead, /api/simple/leads/{lead_id}/update_field, /api/simple/leads/{lead_id}/append_to_description",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "The simplified API intentionally performs CRM mutations through GET requests; these are unsafe to expose as read streams and are outside the documented POST/PUT/PATCH/DELETE write expansion rule."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/simple/leads/{lead_id}/delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Simplified delete performs destructive lead deletion through a GET request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/simple/rows/find_prospects",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Simplified prospect search overlaps with the current prospects stream and requires ad hoc field_key/field_value query inputs."
+      }
+    }
   ]
 }

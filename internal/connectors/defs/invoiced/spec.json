@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Invoiced Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
@@ -13,7 +15,7 @@
       "type": "string",
       "format": "uri",
       "default": "https://api.invoiced.com",
-      "description": "Invoiced API base URL override for tests or proxies."
+      "description": "Invoiced API base URL. Use https://api.sandbox.invoiced.com for sandbox accounts or an override for tests/proxies."
     },
     "page_size": {
       "type": "string",
@@ -28,6 +30,70 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Invoiced contact id used for detail or nested read streams."
+    },
+    "coupon_id": {
+      "type": "string",
+      "description": "Invoiced coupon id used for detail or nested read streams."
+    },
+    "credit_balance_adjustment_id": {
+      "type": "string",
+      "description": "Invoiced credit balance adjustment id used for detail or nested read streams."
+    },
+    "credit_note_id": {
+      "type": "string",
+      "description": "Invoiced credit note id used for detail or nested read streams."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Invoiced customer id used for detail or nested read streams."
+    },
+    "estimate_id": {
+      "type": "string",
+      "description": "Invoiced estimate id used for detail or nested read streams."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Invoiced event id used for detail or nested read streams."
+    },
+    "file_id": {
+      "type": "string",
+      "description": "Invoiced file id used for detail or nested read streams."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Invoiced invoice id used for detail or nested read streams."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Invoiced item id used for detail or nested read streams."
+    },
+    "line_item_id": {
+      "type": "string",
+      "description": "Invoiced line item id used for detail or nested read streams."
+    },
+    "payment_id": {
+      "type": "string",
+      "description": "Invoiced payment id used for detail or nested read streams."
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "Invoiced plan id used for detail or nested read streams."
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "Invoiced subscription id used for detail or nested read streams."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Invoiced task id used for detail or nested read streams."
+    },
+    "tax_rate_id": {
+      "type": "string",
+      "description": "Invoiced tax rate id used for detail or nested read streams."
     }
   }
 }

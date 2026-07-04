@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_or_update_custom_field_of_assets_for_freshservice_itam",
+    "description": "Fixture create_or_update_custom_field_of_assets_for_freshservice_itam record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/itam/custom_fields/assets",
+    "body": {
+      "name": "Fixture create_or_update_custom_field_of_assets_for_freshservice_itam",
+      "description": "Fixture create_or_update_custom_field_of_assets_for_freshservice_itam record"
+    }
+  }
+}

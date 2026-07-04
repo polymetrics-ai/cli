@@ -1,0 +1,21 @@
+{
+  "record": {
+    "job_id": "job_id_fixture",
+    "hiring_managers": [
+      1234
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/jobs/job_id_fixture/hiring_team",
+    "body": {
+      "hiring_managers": [
+        1234
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

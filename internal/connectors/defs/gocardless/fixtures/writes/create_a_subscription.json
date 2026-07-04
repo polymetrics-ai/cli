@@ -1,0 +1,20 @@
+{
+  "record": {
+    "subscriptions": {
+      "description": "Synthetic create_a_subscription fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions",
+    "body": {
+      "subscriptions": {
+        "description": "Synthetic create_a_subscription fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

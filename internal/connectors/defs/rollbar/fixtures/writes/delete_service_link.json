@@ -1,0 +1,16 @@
+{
+  "record": {
+    "service_link_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/1/service_links/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Outreach Schema Definition",
+  "type": "object",
+  "x-primary-key": [
+    "name"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "stability": {
+      "type": "string"
+    },
+    "definitions": {
+      "type": "object"
+    }
+  }
+}

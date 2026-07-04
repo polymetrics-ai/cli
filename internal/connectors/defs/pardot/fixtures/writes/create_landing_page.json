@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture landing_page",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/landing-pages",
+    "body": {
+      "name": "Fixture landing_page",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

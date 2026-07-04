@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/iam/governance/bundles",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "bundles": [
+        {
+          "description": "description_fixture",
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "orn": "orn_fixture",
+          "status": "status_fixture",
+          "_links": {
+            "entitlements": {
+              "hints": {
+                "allow": [
+                  {}
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            },
+            "self": {
+              "hints": {
+                "allow": [
+                  {}
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        }
+      ],
+      "_links": {
+        "next": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

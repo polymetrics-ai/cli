@@ -1,0 +1,18 @@
+{
+  "record": {
+    "reference_id": "fixture_value",
+    "reference_type": "fixture_value",
+    "contact_id": "fixture_value",
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/attachments",
+    "body": {
+      "reference_id": "fixture_value",
+      "reference_type": "fixture_value",
+      "contact_id": "fixture_value",
+      "name": "Fixture Name"
+    }
+  }
+}

@@ -1,0 +1,261 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issue",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "account": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "assignee": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "attachment_urls": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "author_unverified": {
+      "type": [
+        "boolean",
+        "string",
+        "null"
+      ]
+    },
+    "body_html": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "business_hours_first_response_seconds": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "business_hours_resolution_seconds": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "business_hours_time_in_status_seconds": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "chat_widget_info": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "child_issues": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "csat_responses": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "custom_fields": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "customer_portal_visible": {
+      "type": [
+        "boolean",
+        "string",
+        "null"
+      ]
+    },
+    "external_issues": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "first_response_breach_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "first_response_seconds": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "first_response_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "latest_message_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "link": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "number": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "number_of_touches": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "parent_issue_group": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "requester": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resolution_breach_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resolution_seconds": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "resolution_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slack": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "snoozed_until_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tags": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "team": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "team_slas": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "time_in_status_seconds": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

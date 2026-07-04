@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/contacts/lists" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "_id": "clt_fixture_1", "name": "Fixture List", "dynamic": false }
+    ]
+  }
+}

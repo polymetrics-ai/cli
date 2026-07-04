@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "Fixture Pardot record",
+    "extension": "fixture_extension",
+    "type": "fixture_type",
+    "email": "fixture@example.com",
+    "value": "fixture",
+    "activityDate": "2026-01-01T00:00:00+00:00"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/external-activities",
+    "body": {
+      "name": "Fixture Pardot record",
+      "extension": "fixture_extension",
+      "type": "fixture_type",
+      "email": "fixture@example.com",
+      "value": "fixture",
+      "activityDate": "2026-01-01T00:00:00+00:00"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "payment_id": "payment_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payments/payment_id_fixture/actions/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

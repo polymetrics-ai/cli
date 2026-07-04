@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/companies"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "nextCursor": "",
+      "previousCursor": "fixture",
+      "companies": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "parentCustomerId": "parent_customer_id_fixture",
+        "customerIds": [
+          "customer_id_fixture"
+        ],
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1
+    }
+  }
+}

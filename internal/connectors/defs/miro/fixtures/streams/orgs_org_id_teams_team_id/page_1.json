@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "picture": {
+        "id": 1.25,
+        "imageURL": "https://example.invalid/fixture",
+        "originalUrl": "https://example.invalid/fixture",
+        "type": "picture"
+      },
+      "type": "team"
+    }
+  }
+}

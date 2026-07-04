@@ -1,0 +1,25 @@
+{
+  "record": {
+    "customer": 1001,
+    "currency": "usd",
+    "amount": 100,
+    "method": "check"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/charges",
+    "body": {
+      "customer": 1001,
+      "currency": "usd",
+      "amount": 100,
+      "method": "check"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

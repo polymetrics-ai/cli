@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "api_core_v1_metrics_payout",
+  "type": "object",
+  "properties": {
+    "format": {
+      "type": "string",
+      "description": "Data format type",
+      "enum": [
+        "money"
+      ]
+    },
+    "period": {
+      "type": "string",
+      "description": "Period used for the query"
+    },
+    "periodStart": {
+      "type": "string",
+      "description": "Start date of the period",
+      "format": "date-time"
+    },
+    "periodEnd": {
+      "type": "string",
+      "description": "End date of the period",
+      "format": "date-time"
+    },
+    "grossAmount": {
+      "type": "number",
+      "description": "Total gross payment amount from subscription and usage sales"
+    },
+    "billedUsageTotal": {
+      "type": "number",
+      "description": "Total billed usage amount"
+    },
+    "upcomingTotal": {
+      "type": "number",
+      "description": "Total upcoming amount (to be paid by end of period)"
+    },
+    "netAmount": {
+      "type": "number",
+      "description": "Total net payout amount (actual amount received)"
+    },
+    "dueTotal": {
+      "type": "number",
+      "description": "Total due amount (billed but not yet collected)"
+    },
+    "fees": {
+      "type": "number",
+      "description": "Total fees for the period (negative values)"
+    },
+    "taxes": {
+      "type": "number",
+      "description": "Total tax amounts for the period (negative values)"
+    },
+    "credits": {
+      "type": "number",
+      "description": "Total credit amounts for the period (negative values)"
+    },
+    "refunds": {
+      "type": "number",
+      "description": "Total refund amounts for the period (negative values)"
+    },
+    "timeSeries": {
+      "type": "array",
+      "description": "Time series data by payout periods (only present if interval=payout).\nEach entry represents a complete payout period that falls entirely within the requested date range.\n",
+      "items": {
+        "type": "object",
+        "properties": {
+          "periodStart": {
+            "type": "string",
+            "description": "Start of this complete payout period",
+            "format": "date-time"
+          },
+          "periodEnd": {
+            "type": "string",
+            "description": "End of this complete payout period",
+            "format": "date-time"
+          },
+          "grossAmount": {
+            "type": "number",
+            "description": "Gross payment amount from subscription and usage sales for this period"
+          },
+          "fees": {
+            "type": "number",
+            "description": "Fees for this period (negative values)"
+          },
+          "taxes": {
+            "type": "number",
+            "description": "Tax amounts for this period (negative values)"
+          },
+          "credits": {
+            "type": "number",
+            "description": "Credit amounts for this period (negative values)"
+          },
+          "refunds": {
+            "type": "number",
+            "description": "Refund amounts for this period (negative values)"
+          },
+          "netAmount": {
+            "type": "number",
+            "description": "Net payout amount (actual amount received) for this period"
+          }
+        }
+      }
+    },
+    "timeSeriesInterval": {
+      "type": "string",
+      "description": "Interval used for time series (only present if interval=payout)"
+    }
+  }
+}

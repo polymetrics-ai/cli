@@ -1,0 +1,35 @@
+{
+  "record": {
+    "app_id": "app_id_fixture",
+    "name": "fixture",
+    "key": "fixture",
+    "type": "boolean",
+    "defaultValue": "fixture",
+    "allowedValues": [
+      "fixture"
+    ],
+    "description": "fixture",
+    "usageMetricId": "usage_metric_id_fixture",
+    "visible": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/apps/app_id_fixture/plans/features",
+    "body": {
+      "name": "fixture",
+      "key": "fixture",
+      "type": "boolean",
+      "defaultValue": "fixture",
+      "allowedValues": [
+        "fixture"
+      ],
+      "description": "fixture",
+      "usageMetricId": "usage_metric_id_fixture",
+      "visible": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

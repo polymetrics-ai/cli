@@ -1,0 +1,15 @@
+{
+  "record": {
+    "product_id": 123,
+    "name": "Fixture update_a_product",
+    "description": "Fixture update_a_product record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/123",
+    "body": {
+      "name": "Fixture update_a_product",
+      "description": "Fixture update_a_product record"
+    }
+  }
+}

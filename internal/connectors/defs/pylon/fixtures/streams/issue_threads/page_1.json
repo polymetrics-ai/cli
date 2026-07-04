@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues/synthetic-conformance-value/threads"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "name": "fixture-issue_threads"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

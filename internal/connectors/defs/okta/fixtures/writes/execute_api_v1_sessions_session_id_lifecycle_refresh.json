@@ -1,0 +1,13 @@
+{
+  "record": {
+    "session_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/sessions/synthetic-conformance-value/lifecycle/refresh"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

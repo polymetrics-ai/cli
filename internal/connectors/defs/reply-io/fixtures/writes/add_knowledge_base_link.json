@@ -1,0 +1,19 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "url": "https://example.com/reply-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/ai-sdr/knowledge-bases/synthetic-conformance-value/links",
+    "body": {
+      "url": "https://example.com/reply-fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

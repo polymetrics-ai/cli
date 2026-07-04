@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/apps/synthetic-conformance-value/usage_metrics/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "usageMetric": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "eventName": "fixture",
+        "calculation": "count",
+        "params": {
+          "id": "params_fixture_id"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/macros/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "name": "fixture-macro",
+        "created_at": "fixture-macro",
+        "updated_at": "fixture-macro"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

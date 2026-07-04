@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "user_fixture_1",
+    "display_name": "Updated Fixture User",
+    "properties": { "plan": "enterprise" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/users/user_fixture_1",
+    "body": {
+      "display_name": "Updated Fixture User",
+      "properties": { "plan": "enterprise" }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "account_fixture",
+      "name": "Fixture",
+      "lastUpdatedAt": 1760000000000,
+      "metadata": {
+        "auto": {
+          "id": "account_fixture"
+        }
+      }
+    }
+  }
+}

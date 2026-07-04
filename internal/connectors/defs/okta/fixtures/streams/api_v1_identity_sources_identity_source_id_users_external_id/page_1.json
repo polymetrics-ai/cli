@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "externalId": "external_id_fixture",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "profile": {
+        "email": "fixture@example.invalid",
+        "firstName": "first_name_fixture",
+        "homeAddress": "home_address_fixture",
+        "lastName": "last_name_fixture",
+        "mobilePhone": "mobile_phone_fixture",
+        "secondEmail": "fixture@example.invalid",
+        "userName": "user_name_fixture"
+      }
+    }
+  }
+}

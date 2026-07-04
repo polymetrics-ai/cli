@@ -1,0 +1,15 @@
+{
+  "record": {
+    "webhook_id": "webhook_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/webhooks/webhook_id_fixture"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": "not_found"
+    }
+  }
+}

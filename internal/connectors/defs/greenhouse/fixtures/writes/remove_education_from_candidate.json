@@ -1,0 +1,14 @@
+{
+  "record": {
+    "candidate_id": "candidate_id_fixture",
+    "education_id": "education_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/candidates/candidate_id_fixture/educations/education_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

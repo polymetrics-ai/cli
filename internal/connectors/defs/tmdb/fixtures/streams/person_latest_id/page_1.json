@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/latest"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture person_latest_id",
+      "name": "Fixture person_latest_id",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

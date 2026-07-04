@@ -1,0 +1,12 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "time_entry_id": 123,
+    "name": "Fixture delete_ticket_time_entry",
+    "description": "Fixture delete_ticket_time_entry record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tickets/123/time_entries/123"
+  }
+}

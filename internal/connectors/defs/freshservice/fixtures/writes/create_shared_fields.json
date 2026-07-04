@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_shared_fields",
+    "description": "Fixture create_shared_fields record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/service-catalog/shared-fields",
+    "body": {
+      "name": "Fixture create_shared_fields",
+      "description": "Fixture create_shared_fields record"
+    }
+  }
+}

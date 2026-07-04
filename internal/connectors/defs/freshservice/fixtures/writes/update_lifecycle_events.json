@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture update_lifecycle_events",
+    "description": "Fixture update_lifecycle_events record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/itam/lifecycle_events",
+    "body": {
+      "name": "Fixture update_lifecycle_events",
+      "description": "Fixture update_lifecycle_events record"
+    }
+  }
+}

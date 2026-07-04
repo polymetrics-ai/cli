@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/leads/synthetic-conformance-value/duplicates", "query": { "offset": "0" } },
+  "response": { "status": 200, "body": [ { "id": 8115, "title": "Fixture Duplicate Lead", "status": "Standby" } ] }
+}

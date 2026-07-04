@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/fine_tuning/jobs/synthetic-conformance-value/checkpoints",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "object_fixture",
+      "data": [
+        {
+          "id": "id_fixture",
+          "created_at": 1,
+          "fine_tuned_model_checkpoint": "fine_tuned_model_checkpoint_fixture",
+          "fine_tuning_job_id": "fine_tuning_job_id_fixture",
+          "metrics": {
+            "full_valid_loss": 1.25,
+            "full_valid_mean_token_accuracy": 1.25,
+            "step": 1.25,
+            "train_loss": 1.25,
+            "train_mean_token_accuracy": 1.25,
+            "valid_loss": 1.25,
+            "valid_mean_token_accuracy": 1.25
+          },
+          "object": "object_fixture",
+          "step_number": 1,
+          "result_files": [
+            "result_file_fixture"
+          ]
+        }
+      ],
+      "first_id": "first_id_fixture",
+      "last_id": "last_id_fixture",
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "record": {
+    "helpDeskNotificationPreferences": [
+      {
+        "event": "fixture",
+        "scope": "fixture",
+        "channels": {
+          "id": "channels_fixture_id"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/notification_preferences",
+    "body": {
+      "helpDeskNotificationPreferences": [
+        {
+          "event": "fixture",
+          "scope": "fixture",
+          "channels": {
+            "id": "channels_fixture_id"
+          }
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

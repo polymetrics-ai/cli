@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/calendars/contacts/list"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "fixture_id",
+          "user_id": "fixture_user_id",
+          "created_at": "2026-01-01T00:00:00Z",
+          "event_approved_count": 1,
+          "event_checked_in_count": 1,
+          "revenue_usd_cents": 1,
+          "tags": [],
+          "membership": {},
+          "name": "Fixture Name",
+          "avatar_url": "https://example.invalid/image.png",
+          "email": "fixture@example.invalid",
+          "first_name": "Fixture Name",
+          "last_name": "Fixture Name"
+        },
+        {
+          "id": "calendar_contacts_fixture_2",
+          "user_id": "fixture_user_id",
+          "created_at": "2026-01-01T00:00:00Z",
+          "event_approved_count": 1,
+          "event_checked_in_count": 1,
+          "revenue_usd_cents": 1,
+          "tags": [],
+          "membership": {},
+          "name": "Fixture Name",
+          "avatar_url": "https://example.invalid/image.png",
+          "email": "fixture@example.invalid",
+          "first_name": "Fixture Name",
+          "last_name": "Fixture Name"
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  }
+}

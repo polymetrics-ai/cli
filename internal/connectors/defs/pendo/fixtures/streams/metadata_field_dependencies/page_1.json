@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metadata/dependencies/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "guides": [
+        "guide_fixture"
+      ],
+      "reports": [],
+      "segments": []
+    }
+  }
+}

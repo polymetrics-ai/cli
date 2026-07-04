@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record",
+    "prospectApiFieldId": "company"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/form-fields/101/do/addProgressive",
+    "body": {
+      "name": "Fixture Pardot record",
+      "prospectApiFieldId": "company"
+    }
+  }
+}

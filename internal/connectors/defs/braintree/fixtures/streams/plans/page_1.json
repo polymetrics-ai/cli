@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/plans"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "plans": [
+        { "id": "plan_fixture_1", "name": "Fixture plan", "price": "19.00", "billing_frequency": 1, "currency_iso_code": "USD" }
+      ]
+    }
+  }
+}

@@ -2,12 +2,34 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "groups",
   "type": "object",
-  "x-primary-key": ["id"],
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "name": { "type": ["string", "null"] },
-    "description": { "type": ["string", "null"] },
-    "created": { "type": ["string", "null"], "format": "date-time" }
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Updated custom_field"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/objects/custom-fields/101",
+    "body": {
+      "name": "Updated custom_field"
+    }
+  }
+}

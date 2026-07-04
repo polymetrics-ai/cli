@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture email_template",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/email-templates",
+    "body": {
+      "name": "Fixture email_template",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

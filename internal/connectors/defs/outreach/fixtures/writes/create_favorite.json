@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "favorite",
+      "attributes": {
+        "name": "Fixture Create Favorite"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/favorites",
+    "body": {
+      "data": {
+        "type": "favorite",
+        "attributes": {
+          "name": "Fixture Create Favorite"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

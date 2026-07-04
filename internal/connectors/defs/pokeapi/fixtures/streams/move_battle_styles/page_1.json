@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/move-battle-style",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "url": "https://pokeapi.co/api/v2/move-battle-style/1/",
+          "name": "fixture-move-battle-style-1"
+        }
+      ]
+    }
+  }
+}

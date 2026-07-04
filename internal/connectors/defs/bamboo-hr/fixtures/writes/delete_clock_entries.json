@@ -1,0 +1,15 @@
+{
+  "record": {
+    "clockEntryIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/time_tracking/clock_entries"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

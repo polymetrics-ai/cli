@@ -1,0 +1,21 @@
+{
+  "record": {
+    "creditor_id": "creditor_id_fixture",
+    "creditors": {
+      "description": "Synthetic update_a_creditor fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/creditors/creditor_id_fixture",
+    "body": {
+      "creditors": {
+        "description": "Synthetic update_a_creditor fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

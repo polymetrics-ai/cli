@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issue-statuses"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "slug": "synthetic-conformance-value"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

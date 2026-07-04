@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom-objects/synthetic-conformance-value",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "name": "fixture-custom_objects",
+          "created_at": "fixture-custom_objects",
+          "updated_at": "fixture-custom_objects"
+        }
+      ],
+      "request_id": "req_fixture",
+      "pagination": {
+        "cursor": null,
+        "has_next_page": false
+      }
+    }
+  }
+}

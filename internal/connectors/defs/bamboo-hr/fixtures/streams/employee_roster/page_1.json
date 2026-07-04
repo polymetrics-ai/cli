@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees",
+    "query": {
+      "page[limit]": "250"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "employeeId": "fixture_id",
+          "_restrictedFields": [
+            "fixture_value"
+          ],
+          "firstName": "Fixture Name",
+          "jobTitleName": "Fixture Name",
+          "lastName": "Fixture Name",
+          "photoUrl": "https://example.com/resource",
+          "preferredName": "Fixture Name",
+          "status": "fixture_value"
+        }
+      ],
+      "_links": {
+        "next": {}
+      }
+    }
+  }
+}

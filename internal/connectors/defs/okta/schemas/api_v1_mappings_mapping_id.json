@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for a profile mapping"
+    },
+    "properties": {
+      "type": "object",
+      "description": "A target property, in string form, that maps to a valid [JSON Schema Draft](https://tools.ietf.org/html/draft-zyp-json-schema-04) document.",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "description": "Combination or single source properties that are mapped to the target property. See [Okta Expression Language](https://developer.okta.com/docs/reference/okta-expression-language/)."
+        },
+        "pushStatus": {
+          "type": "string",
+          "description": "Indicates whether to update target properties for user create and update or just for user create.\n\n- Having a pushStatus of `PUSH` causes properties in the target to be updated on create and update. \n- Having a pushStatus of `DONT_PUSH` causes properties in the target to be updated only on create.",
+          "enum": [
+            "DONT_PUSH",
+            "PUSH"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "source": {
+      "type": "object",
+      "description": "The parameter is the source of a profile mapping and is a valid [JSON Schema Draft 4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04) document with the following properties. The data type can be an app instance or an Okta object.\n\n> **Note:** If the source is Okta and the UserTypes feature isn't enabled, then the source `_links` only has a link to the schema.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the application instance or userType"
+        },
+        "name": {
+          "type": "string",
+          "description": "Variable name of the application instance or name of the referenced UserType"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of user referenced in the mapping"
+        },
+        "_links": {
+          "type": "object",
+          "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+          "properties": {
+            "schema": {
+              "type": "object",
+              "description": "The associated schema",
+              "properties": {
+                "hints": {
+                  "type": "object",
+                  "description": "Describes allowed HTTP verbs for the `href`",
+                  "properties": {
+                    "allow": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "DELETE",
+                          "GET",
+                          "POST",
+                          "PUT"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "href": {
+                  "type": "string",
+                  "description": "Link URI"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Link name"
+                },
+                "templated": {
+                  "type": "boolean",
+                  "description": "Indicates whether the link object's `href` property is a URI template."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "target": {
+      "type": "object",
+      "description": "The parameter is the target of a profile mapping and is a valid [JSON Schema Draft 4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04) document with the following properties. The data type can be an app instance or an Okta object.\n\n > **Note:** If the target is Okta and the UserTypes feature isn't enabled, then the target `_links` only has a link to the schema.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the application instance or UserType"
+        },
+        "name": {
+          "type": "string",
+          "description": "Variable name of the application instance or name of the referenced userType"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of user referenced in the mapping"
+        },
+        "_links": {
+          "type": "object",
+          "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+          "properties": {
+            "schema": {
+              "type": "object",
+              "description": "The associated schema",
+              "properties": {
+                "hints": {
+                  "type": "object",
+                  "description": "Describes allowed HTTP verbs for the `href`",
+                  "properties": {
+                    "allow": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "DELETE",
+                          "GET",
+                          "POST",
+                          "PUT"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "href": {
+                  "type": "string",
+                  "description": "Link URI"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Link name"
+                },
+                "templated": {
+                  "type": "boolean",
+                  "description": "Indicates whether the link object's `href` property is a URI template."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

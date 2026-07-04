@@ -1,0 +1,11 @@
+{
+  "record": {
+    "requester_id": 123,
+    "name": "Fixture forget_a_requester",
+    "description": "Fixture forget_a_requester record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/requesters/123/forget"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sms_export",
+  "type": "object",
+  "x-primary-key": ["ID"],
+  "x-cursor-field": "CreationTS",
+  "properties": {
+    "ID": { "type": ["integer", "null"] },
+    "URL": { "type": ["string", "null"] },
+    "CreationTS": { "type": ["integer", "null"] },
+    "ExpirationTS": { "type": ["integer", "null"] },
+    "status_code": { "type": ["integer", "null"] },
+    "status_name": { "type": ["string", "null"] },
+    "status_description": { "type": ["string", "null"] }
+  }
+}

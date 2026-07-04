@@ -1,0 +1,52 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "feature_name": "synthetic-conformance-value",
+    "create": {
+      "lifecycleCreate": {
+        "status": "DISABLED"
+      }
+    },
+    "update": {
+      "lifecycleDeactivate": {
+        "status": "DISABLED"
+      },
+      "password": {
+        "change": "CHANGE",
+        "seed": "OKTA",
+        "status": "DISABLED"
+      },
+      "profile": {
+        "status": "DISABLED"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/apps/synthetic-conformance-value/features/synthetic-conformance-value",
+    "body": {
+      "create": {
+        "lifecycleCreate": {
+          "status": "DISABLED"
+        }
+      },
+      "update": {
+        "lifecycleDeactivate": {
+          "status": "DISABLED"
+        },
+        "password": {
+          "change": "CHANGE",
+          "seed": "OKTA",
+          "status": "DISABLED"
+        },
+        "profile": {
+          "status": "DISABLED"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

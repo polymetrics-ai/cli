@@ -1,0 +1,14 @@
+{
+  "record": {
+    "conversation_id": "conversation_fixture_1",
+    "rating": 5,
+    "comment": "Fixture rating"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/csat/conversation_fixture_1",
+    "body": {
+      "rating": 5
+    }
+  }
+}

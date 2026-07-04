@@ -1,0 +1,80 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/requisition/requests",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "requisition_requests_fixture_1",
+          "requisitionFor": "fixture_requisition_requests_1",
+          "jobNumber": "FIX-1",
+          "department": "fixture_requisition_requests_1",
+          "subDepartment": null,
+          "requestedBy": "fixture_requisition_requests_1",
+          "requestedOn": "fixture_requisition_requests_1",
+          "locations": [
+            "fixture_requisition_requests_1"
+          ],
+          "status": 3,
+          "isPriority": true,
+          "budget": "fixture_requisition_requests_1",
+          "openPositions": 1,
+          "hired": 1,
+          "requisitionTypes": [
+            1
+          ],
+          "toBeReplaced": [],
+          "jobType": 2,
+          "targetHiringDate": "2026-01-01T00:00:00Z",
+          "isArchived": false,
+          "additionalComments": "fixture_requisition_requests_1",
+          "additionalFields": null
+        },
+        {
+          "id": "requisition_requests_fixture_2",
+          "requisitionFor": "fixture_requisition_requests_2",
+          "jobNumber": "FIX-2",
+          "department": "fixture_requisition_requests_2",
+          "subDepartment": null,
+          "requestedBy": "fixture_requisition_requests_2",
+          "requestedOn": "fixture_requisition_requests_2",
+          "locations": [
+            "fixture_requisition_requests_1"
+          ],
+          "status": 1,
+          "isPriority": false,
+          "budget": "fixture_requisition_requests_2",
+          "openPositions": 4,
+          "hired": 1,
+          "requisitionTypes": [
+            1
+          ],
+          "toBeReplaced": [],
+          "jobType": 2,
+          "targetHiringDate": "2026-01-01T00:00:00Z",
+          "isArchived": false,
+          "additionalComments": null,
+          "additionalFields": null
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/requisition_requests",
+      "lastPage": "https://example.invalid/keka/requisition_requests",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

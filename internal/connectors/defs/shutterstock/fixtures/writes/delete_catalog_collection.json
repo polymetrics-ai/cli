@@ -1,0 +1,13 @@
+{
+  "record": {
+    "catalog_collection_id": "catalog-collection-id-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/catalog/collections/catalog-collection-id-fixture-1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

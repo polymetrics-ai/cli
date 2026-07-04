@@ -1,0 +1,15 @@
+{
+  "record": {
+    "problem_id": 123,
+    "name": "Fixture move_a_problem",
+    "description": "Fixture move_a_problem record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/problems/123/move_workspace",
+    "body": {
+      "name": "Fixture move_a_problem",
+      "description": "Fixture move_a_problem record"
+    }
+  }
+}

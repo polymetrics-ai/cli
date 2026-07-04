@@ -1,0 +1,18 @@
+{
+  "record": {
+    "certificateSourceType": "MANUAL",
+    "domain": "domain_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/domains",
+    "body": {
+      "certificateSourceType": "MANUAL",
+      "domain": "domain_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

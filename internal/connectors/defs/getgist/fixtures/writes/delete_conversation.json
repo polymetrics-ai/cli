@@ -1,0 +1,16 @@
+{
+  "record": {
+    "conversation_id": "conversation_id_fixture_1",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/conversations/conversation_id_fixture_1"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "status": "not_found"
+    }
+  }
+}

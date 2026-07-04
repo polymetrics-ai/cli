@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Nutshell Connection Specification",
   "type": "object",
-  "required": ["username", "password"],
+  "required": [
+    "username",
+    "password"
+  ],
   "properties": {
     "username": {
       "type": "string",
@@ -22,11 +25,95 @@
     "page_size": {
       "type": "string",
       "default": "500",
-      "description": "Records per page (1-500)."
+      "description": "Records per page (1-500) for paginated endpoints."
     },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Optional account id used by the corresponding detail stream."
+    },
+    "activity_id": {
+      "type": "string",
+      "description": "Optional activity id used by the corresponding detail stream."
+    },
+    "competitor_map_id": {
+      "type": "string",
+      "description": "Optional competitor map id used by the corresponding detail stream."
+    },
+    "competitor_id": {
+      "type": "string",
+      "description": "Optional competitor id used by the corresponding detail stream."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Optional contact id used by the corresponding detail stream."
+    },
+    "edition_id": {
+      "type": "string",
+      "description": "Optional edition id used by the corresponding detail stream."
+    },
+    "email_id": {
+      "type": "string",
+      "description": "Optional email id used by the corresponding detail stream."
+    },
+    "form_field_id": {
+      "type": "string",
+      "description": "Optional form field id used by the corresponding detail stream."
+    },
+    "form_id": {
+      "type": "string",
+      "description": "Optional form id used by the corresponding detail stream."
+    },
+    "industry_id": {
+      "type": "string",
+      "description": "Optional industry id used by the corresponding detail stream."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Optional invoice id used by the corresponding detail stream."
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Optional lead id used by the corresponding detail stream."
+    },
+    "market_id": {
+      "type": "string",
+      "description": "Optional market id used by the corresponding detail stream."
+    },
+    "note_id": {
+      "type": "string",
+      "description": "Optional note id used by the corresponding detail stream."
+    },
+    "outcome_id": {
+      "type": "string",
+      "description": "Optional outcome id used by the corresponding detail stream."
+    },
+    "product_category_id": {
+      "type": "string",
+      "description": "Optional product category id used by the corresponding detail stream."
+    },
+    "product_map_id": {
+      "type": "string",
+      "description": "Optional product map id used by the corresponding detail stream."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Optional product id used by the corresponding detail stream."
+    },
+    "quote_id": {
+      "type": "string",
+      "description": "Optional quote id used by the corresponding detail stream."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional task id used by the corresponding detail stream."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Optional user id used by the corresponding detail stream."
     }
   }
 }

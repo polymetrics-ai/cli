@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "income_tax_documents",
+  "type": "object",
+  "x-primary-key": [
+    "documentId"
+  ],
+  "properties": {
+    "documentId": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "null"
+      ]
+    }
+  }
+}

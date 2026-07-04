@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/all_reviews_rating"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rating": 4.8
+    }
+  }
+}

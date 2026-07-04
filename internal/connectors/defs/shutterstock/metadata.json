@@ -1,14 +1,14 @@
 {
   "name": "shutterstock",
   "display_name": "Shutterstock",
-  "description": "Reads Shutterstock image, video, and audio search metadata through the Shutterstock REST API.",
+  "description": "Reads Shutterstock media, collection, license, editorial, catalog, contributor, and subscription metadata; writes collection/lightbox metadata through safe collection endpoints.",
   "integration_type": "api",
   "docs_url": "https://api-reference.shutterstock.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Shutterstock API read of image, video, and audio search metadata",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Shutterstock API read of media, collections, licenses, editorial, catalog, contributor, and subscription metadata",
+    "approval": "required before collection write actions; licensing and download endpoints are not exposed as writes",
+    "write": "external Shutterstock collection/lightbox create, rename, delete, and item-add mutations; licensing/download writes are intentionally excluded"
   }
 }

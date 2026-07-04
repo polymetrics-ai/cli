@@ -1,0 +1,17 @@
+{
+  "record": {
+    "name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts",
+    "body": {
+      "name": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

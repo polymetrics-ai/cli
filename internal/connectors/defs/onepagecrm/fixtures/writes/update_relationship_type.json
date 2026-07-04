@@ -1,0 +1,21 @@
+{
+  "record": {
+    "relationship_type_id": "fixture_id",
+    "variants": [
+      {
+        "name": "Fixture variant"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/relationship_types/fixture_id",
+    "body": {
+      "variants": [
+        {
+          "name": "Fixture variant"
+        }
+      ]
+    }
+  }
+}

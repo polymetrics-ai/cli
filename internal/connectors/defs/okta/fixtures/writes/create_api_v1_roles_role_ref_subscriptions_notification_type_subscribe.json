@@ -1,0 +1,14 @@
+{
+  "record": {
+    "role_ref": "synthetic-conformance-value",
+    "notification_type": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/roles/synthetic-conformance-value/subscriptions/synthetic-conformance-value/subscribe"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

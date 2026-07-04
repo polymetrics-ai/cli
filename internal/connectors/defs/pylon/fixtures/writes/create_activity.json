@@ -1,0 +1,18 @@
+{
+  "record": {
+    "account_id": "synthetic-conformance-value",
+    "slug": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/activities",
+    "body": {
+      "slug": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

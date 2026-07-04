@@ -1,0 +1,16 @@
+{
+  "record": {
+    "workspace_id": 123,
+    "schedule_id": 123,
+    "name": "Fixture reorder_ep",
+    "description": "Fixture reorder_ep record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/oncall/ws/123/schedules/123/escalation-policies/reorder",
+    "body": {
+      "name": "Fixture reorder_ep",
+      "description": "Fixture reorder_ep record"
+    }
+  }
+}

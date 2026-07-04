@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture create_praise"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pms/praise",
+    "body": {
+      "name": "Fixture create_praise"
+    }
+  }
+}

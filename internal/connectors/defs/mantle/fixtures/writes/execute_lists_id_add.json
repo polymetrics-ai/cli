@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "customerIds": [
+      "customer_id_fixture"
+    ],
+    "contactIds": [
+      "contact_id_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/lists/id_fixture/add",
+    "body": {
+      "customerIds": [
+        "customer_id_fixture"
+      ],
+      "contactIds": [
+        "contact_id_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

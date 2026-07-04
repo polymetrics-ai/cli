@@ -1,11 +1,16 @@
 # Overview
 
-Braintree reads transactions, customers, and subscriptions through a read-only HTTP API scoped
-under `merchants/{{ config.merchant_id }}/...`. This bundle migrates
-`internal/connectors/braintree` (the hand-written connector) to a declarative defs bundle at
-capability parity; the legacy package stays registered and unchanged until wave6's registry flip.
-It is a pure Tier-1 declarative migration — legacy is a connsdk-HTTP-based connector with no
-custom auth/stream/write hooks, so no `hooks/braintree/` package is needed.
+Braintree reads transactions, customers, subscriptions, recurring-billing reference data, merchant
+accounts, payment methods, disputes, and Apple Pay registered domains through the gateway HTTP
+surface scoped under `merchants/{{ config.merchant_id }}/...`. This bundle migrates
+`internal/connectors/braintree` (the hand-written connector) to declarative defs and expands the
+read surface where the documented gateway resources fit ordinary JSON list reads. The legacy
+package stays registered and unchanged until wave6's registry flip.
+
+It is a pure Tier-1 declarative bundle for reads. Braintree's documented mutating operations are
+mostly SDK/XML payment, PCI vault, dispute, and account-administration workflows, so they are
+enumerated in `api_surface.json` with concrete exclusions rather than exposed as unsafe or
+incorrect flat writes.
 
 ## Auth setup
 
@@ -30,7 +35,7 @@ an enum-derived choice between two URLs (the same shape already ledgered for
 
 ## Streams notes
 
-Three streams, matching legacy's `endpoints` table exactly:
+Ten streams are declared. The first three match legacy's `endpoints` table exactly:
 
 - `transactions` — `GET /merchants/{{ config.merchant_id }}/transactions`, records at
   `transactions`.
@@ -38,17 +43,34 @@ Three streams, matching legacy's `endpoints` table exactly:
 - `subscriptions` — `GET /merchants/{{ config.merchant_id }}/subscriptions`, records at
   `subscriptions`.
 
-All three send `page_size` (default `100`, matching legacy's `defaultPageSize`) as a static
-per-stream query value templated from `config.page_size`. Pagination is `cursor` with `token_path:
-pagination.next_page` (`cursor_param: page`) — the next page's `page` value is read verbatim from
-the current page's response body at `pagination.next_page`, matching legacy's `readPaged` exactly
-(`next, err := connsdk.StringAt(resp.Body, "pagination.next_page")`; an absent/empty value stops
-pagination). Legacy always sends an explicit `page=1` on the FIRST request too; this bundle's
-`token_path` cursor paginator issues page 1 with no `page` query param at all (the paginator only
-sets `page` from the second request onward, once a `next_page` token is found) — Braintree's own
-API defaults an absent `page` param to page 1, so this never changes which records are returned,
-only whether the literal string `page=1` appears on the wire for the first request (see Known
-limits).
+The Pass B read expansion adds:
+
+- `add_ons` — `GET /merchants/{{ config.merchant_id }}/add_ons`, records at `add_ons`.
+- `discounts` — `GET /merchants/{{ config.merchant_id }}/discounts`, records at `discounts`.
+- `plans` — `GET /merchants/{{ config.merchant_id }}/plans`, records at `plans`.
+- `merchant_accounts` — `GET /merchants/{{ config.merchant_id }}/merchant_accounts`, records at
+  `merchant_accounts`.
+- `payment_methods` — `GET /merchants/{{ config.merchant_id }}/payment_methods`, records at
+  `payment_methods`.
+- `disputes` — `GET /merchants/{{ config.merchant_id }}/disputes`, records at `disputes`.
+- `apple_pay_domains` — `GET /merchants/{{ config.merchant_id }}/apple_pay/registered_domains`,
+  records at `domains`.
+
+The three legacy-parity streams send `page_size` (default `100`, matching legacy's
+`defaultPageSize`) as a per-stream query value templated from `config.page_size`. Pagination is
+`cursor` with `token_path: pagination.next_page` (`cursor_param: page`) — the next page's `page`
+value is read verbatim from the current page's response body at `pagination.next_page`, matching
+legacy's `readPaged` exactly (`next, err := connsdk.StringAt(resp.Body,
+"pagination.next_page")`; an absent/empty value stops pagination). Legacy always sends an explicit
+`page=1` on the FIRST request too; this bundle's `token_path` cursor paginator issues page 1 with
+no `page` query param at all (the paginator only sets `page` from the second request onward, once a
+`next_page` token is found) — Braintree's own API defaults an absent `page` param to page 1, so
+this never changes which records are returned, only whether the literal string `page=1` appears on
+the wire for the first request (see Known limits).
+
+The added reference/configuration streams override pagination to `none`; the documented server-side
+request pages do not publish a cursor contract for those list calls, and their conformance fixtures
+exercise one recorded page.
 
 Every stream declares `projection: "passthrough"`: legacy's `readPaged` emits
 `connectors.Record(rec)` — a verbatim cast of the raw decoded JSON object, not a field-built
@@ -68,13 +90,23 @@ real behavior.
 None. This connector is `capabilities.write: false`; no `writes.json` is shipped, matching
 legacy's `Write` always returning `connectors.ErrUnsupportedOperation`.
 
+The official Braintree docs list many mutating server-side calls (transaction sale/refund/void,
+customer and subscription changes, vaulted payment-method updates, dispute evidence, Apple Pay
+domain registration, merchant account and plan administration). They are not declared as writes
+because the documented wire shape is SDK/XML, PCI/payment workflow, binary upload, or elevated
+account administration rather than a dialect-expressible JSON/form single-record mutation. Each
+one is still enumerated in `api_surface.json` with a concrete closed-category exclusion.
+
 ## Known limits
 
-- Only the 3 legacy-parity read streams are implemented. Braintree's full merchant API (disputes,
-  settlement batch summaries, and any mutation surface) is out of scope for this migration; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
-  entries. Legacy itself never implemented any Braintree write action, so there is no write parity
-  to port.
+- The Pass B bundle covers Braintree's practical JSON list-style gateway reads but still excludes
+  generated reports (`settlement_batch_summary`, transaction-level fees), date-window/payment
+  verification searches, and per-parent sub-resources such as transaction line items. These are
+  parameterized reports or nested workflow data rather than stable list-all streams.
+- Braintree's official XML API examples include an `X-ApiVersion: 4` XML request/response contract
+  for select-partner write calls. The legacy connector never set that header and emitted decoded
+  JSON objects from the direct gateway paths it used. This bundle preserves the legacy JSON reader
+  shape for implemented streams and does not attempt to invent XML parsing or XML write bodies.
 - **`environment`-derived `base_url` is not modeled as a two-way enum.** Legacy accepts an
   `environment` config value (`"production"` selects the production host; anything else, including
   unset, selects sandbox) and derives `base_url` from it in code. The engine's `spec.json`

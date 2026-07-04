@@ -1,0 +1,11 @@
+{
+  "record": {
+    "display_id": 123,
+    "name": "Fixture delete_an_asset",
+    "description": "Fixture delete_an_asset record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/assets/123"
+  }
+}

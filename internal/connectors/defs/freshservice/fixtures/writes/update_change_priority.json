@@ -1,0 +1,15 @@
+{
+  "record": {
+    "change_id": 123,
+    "name": "Fixture update_change_priority",
+    "description": "Fixture update_change_priority record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123",
+    "body": {
+      "name": "Fixture update_change_priority",
+      "description": "Fixture update_change_priority record"
+    }
+  }
+}

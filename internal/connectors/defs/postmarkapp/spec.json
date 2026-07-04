@@ -2,12 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Postmark App Connection Specification",
   "type": "object",
-  "required": ["X-Postmark-Server-Token"],
+  "required": [
+    "X-Postmark-Server-Token"
+  ],
   "properties": {
     "X-Postmark-Server-Token": {
       "type": "string",
       "x-secret": true,
-      "description": "Postmark server token, sent as the X-Postmark-Server-Token header for message-resource streams (outbound_messages, inbound_messages). Never logged."
+      "description": "Postmark server token, sent as the X-Postmark-Server-Token header for server-level endpoints. Never logged."
     },
     "base_url": {
       "type": "string",
@@ -17,7 +19,31 @@
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live (default) or fixture for legacy native connector fixture mode."
+    },
+    "bulk_request_id": {
+      "type": "string",
+      "description": "Postmark bulk request id used by the corresponding detail stream."
+    },
+    "bounce_id": {
+      "type": "string",
+      "description": "Postmark bounce id used by the corresponding detail stream."
+    },
+    "template_id_or_alias": {
+      "type": "string",
+      "description": "Postmark template id or alias used by the corresponding detail stream."
+    },
+    "message_stream_id": {
+      "type": "string",
+      "description": "Postmark message stream id used by the corresponding detail stream."
+    },
+    "message_id": {
+      "type": "string",
+      "description": "Postmark message id used by the corresponding detail stream."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Postmark webhook id used by the corresponding detail stream."
     }
   }
 }

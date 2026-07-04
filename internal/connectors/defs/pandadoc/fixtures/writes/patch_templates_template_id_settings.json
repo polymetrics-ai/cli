@@ -1,0 +1,36 @@
+{
+  "record": {
+    "template_id": "template_id_fixture",
+    "name": "Fixture patch_templates_template_id_settings",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/public/v2/templates/template_id_fixture/settings",
+    "body": {
+      "name": "Fixture patch_templates_template_id_settings",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "patch_templates_template_id_settings_response",
+      "status": "ok"
+    }
+  }
+}

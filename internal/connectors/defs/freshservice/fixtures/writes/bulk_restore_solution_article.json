@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture bulk_restore_solution_article",
+    "description": "Fixture bulk_restore_solution_article record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/solutions/articles/bulk_restore",
+    "body": {
+      "name": "Fixture bulk_restore_solution_article",
+      "description": "Fixture bulk_restore_solution_article record"
+    }
+  }
+}

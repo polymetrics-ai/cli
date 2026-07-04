@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/instances",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "instances": [
+          {
+            "id": 1,
+            "name": "Fixture occurrences",
+            "title": "Fixture occurrences",
+            "status": "active"
+          }
+        ],
+        "page": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

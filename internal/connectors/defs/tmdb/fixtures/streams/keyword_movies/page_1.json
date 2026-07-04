@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/keyword/123/movies",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 123,
+          "title": "Fixture keyword_movies",
+          "name": "Fixture keyword_movies",
+          "overview": "Deterministic TMDb fixture",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        }
+      ],
+      "page": 1,
+      "total_pages": 1,
+      "total_results": 1
+    }
+  }
+}

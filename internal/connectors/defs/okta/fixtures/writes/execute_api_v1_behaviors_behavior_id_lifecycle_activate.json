@@ -1,0 +1,13 @@
+{
+  "record": {
+    "behavior_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/behaviors/synthetic-conformance-value/lifecycle/activate"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

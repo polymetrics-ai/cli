@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "deal_activities_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the deal activity."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the deal activity."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the deal activity."
+    },
+    "icon": {
+      "type": "string",
+      "description": "The icon identifier for the activity."
+    },
+    "timelineTitleTemplate": {
+      "type": "string",
+      "description": "Template for the timeline title when this activity is used."
+    },
+    "timelineDescriptionTemplate": {
+      "type": "string",
+      "description": "Template for the timeline description when this activity is used."
+    },
+    "defaultWeight": {
+      "type": "number",
+      "description": "The default weight/probability impact of this activity (0-100).",
+      "format": "float"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the deal activity.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the deal activity.",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/events/ticket-types/list",
+    "query": {
+      "event_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "name": "Fixture Name",
+          "require_approval": true,
+          "is_hidden": true,
+          "description": "Fixture description",
+          "valid_start_at": "2026-01-01T00:00:00Z",
+          "valid_end_at": "2026-01-01T00:00:00Z",
+          "max_capacity": 1,
+          "type": "fixture_type",
+          "cents": 1,
+          "currency": "usd",
+          "is_flexible": true,
+          "min_cents": 1,
+          "id": "fixture_id"
+        },
+        {
+          "name": "Fixture Name",
+          "require_approval": true,
+          "is_hidden": true,
+          "description": "Fixture description",
+          "valid_start_at": "2026-01-01T00:00:00Z",
+          "valid_end_at": "2026-01-01T00:00:00Z",
+          "max_capacity": 1,
+          "type": "fixture_type",
+          "cents": 1,
+          "currency": "usd",
+          "is_flexible": true,
+          "min_cents": 1,
+          "id": "event_ticket_types_fixture_2"
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  }
+}

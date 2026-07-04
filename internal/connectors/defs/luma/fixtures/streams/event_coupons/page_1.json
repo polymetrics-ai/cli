@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/events/coupons/list",
+    "query": {
+      "event_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "fixture_id",
+          "code": "fixture",
+          "remaining_count": 1,
+          "valid_start_at": "2026-01-01T00:00:00Z",
+          "valid_end_at": "2026-01-01T00:00:00Z",
+          "percent_off": 1,
+          "cents_off": 1,
+          "currency": "usd",
+          "event_ticket_type_id": "fixture_event_ticket_type_id"
+        },
+        {
+          "id": "event_coupons_fixture_2",
+          "code": "fixture",
+          "remaining_count": 1,
+          "valid_start_at": "2026-01-01T00:00:00Z",
+          "valid_end_at": "2026-01-01T00:00:00Z",
+          "percent_off": 1,
+          "cents_off": 1,
+          "currency": "usd",
+          "event_ticket_type_id": "fixture_event_ticket_type_id"
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  }
+}

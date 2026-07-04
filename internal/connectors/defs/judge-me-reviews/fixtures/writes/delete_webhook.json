@@ -1,0 +1,14 @@
+{
+  "record": {
+    "key": "review/created",
+    "url": "https://example.com/webhooks/review-created"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/webhooks",
+    "body": {
+      "key": "review/created",
+      "url": "https://example.com/webhooks/review-created"
+    }
+  }
+}

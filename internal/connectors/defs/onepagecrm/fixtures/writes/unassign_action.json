@@ -1,0 +1,9 @@
+{
+  "record": {
+    "action_id": "fixture_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/actions/fixture_id/unassign"
+  }
+}

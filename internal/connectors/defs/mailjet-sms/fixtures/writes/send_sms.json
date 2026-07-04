@@ -1,0 +1,23 @@
+{
+  "record": {
+    "From": "MJPilot",
+    "To": "+15550002001",
+    "Text": "Fixture SMS message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sms-send",
+    "body": {
+      "From": "MJPilot",
+      "To": "+15550002001",
+      "Text": "Fixture SMS message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "MessageID": "msg_fixture_sent_1",
+      "SMSCount": 1
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "rate": "fixture_value",
+    "rateType": "AMOUNT",
+    "times": [
+      {
+        "end": "fixture_value",
+        "endDay": "MONDAY",
+        "start": "fixture_value",
+        "startDay": "MONDAY"
+      }
+    ],
+    "employeeIds": [
+      1001
+    ],
+    "allowAllEmployees": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time-tracking/shift-differentials",
+    "body": {
+      "name": "Fixture Name",
+      "rate": "fixture_value",
+      "rateType": "AMOUNT",
+      "times": [
+        {
+          "end": "fixture_value",
+          "endDay": "MONDAY",
+          "start": "fixture_value",
+          "startDay": "MONDAY"
+        }
+      ],
+      "employeeIds": [
+        1001
+      ],
+      "allowAllEmployees": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/synthetic-conformance-value/components/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "component_fixture_1",
+      "name": "Fixture component_fixture_1",
+      "status": "OPERATIONAL"
+    }
+  }
+}

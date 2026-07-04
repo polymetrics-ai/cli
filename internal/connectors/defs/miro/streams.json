@@ -3,72 +3,1170 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
-    "pagination": {
-      "type": "offset_limit",
-      "limit_param": "limit",
-      "offset_param": "offset",
-      "page_size": 50
+    "check": {
+      "method": "GET",
+      "path": "/v2/boards"
     },
-    "check": { "method": "GET", "path": "/v2/boards" },
     "error_map": [
-      { "status": 401, "hint": "miro api_key is missing or invalid; re-run pm credentials add miro" },
-      { "status": 429, "class": "rate_limited", "hint": "miro rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "miro api_key is missing or invalid; re-run pm credentials add miro"
+      },
+      {
+        "status": 403,
+        "class": "permission_denied",
+        "hint": "miro token lacks the scope or plan required for this endpoint"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "miro rate limit exceeded; retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "boards",
       "path": "/v2/boards",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 50
+      },
+      "schema": "schemas/boards.json",
       "computed_fields": {
         "view_link": "{{ record.viewLink }}",
         "created_at": "{{ record.createdAt }}",
         "modified_at": "{{ record.modifiedAt }}",
         "owner_id": "{{ record.owner.id }}",
         "team_id": "{{ record.team.id }}"
-      },
-      "schema": "schemas/boards.json"
+      }
     },
     {
       "name": "board_users",
       "path": "/v2/boards/{{ config.board_id }}/members",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 50
+      },
+      "schema": "schemas/board_users.json",
       "computed_fields": {
         "board_id": "{{ config.board_id }}"
-      },
-      "schema": "schemas/board_users.json"
+      }
     },
     {
       "name": "board_items",
       "path": "/v2/boards/{{ config.board_id }}/items",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 50
+      },
+      "schema": "schemas/board_items.json",
       "computed_fields": {
         "board_id": "{{ config.board_id }}",
         "created_at": "{{ record.createdAt }}",
         "modified_at": "{{ record.modifiedAt }}"
-      },
-      "schema": "schemas/board_items.json"
+      }
     },
     {
       "name": "board_tags",
       "path": "/v2/boards/{{ config.board_id }}/tags",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 50
+      },
+      "schema": "schemas/board_tags.json",
       "computed_fields": {
         "board_id": "{{ config.board_id }}",
         "fill_color": "{{ record.fillColor }}"
-      },
-      "schema": "schemas/board_tags.json"
+      }
     },
     {
       "name": "board_connectors",
       "path": "/v2/boards/{{ config.board_id }}/connectors",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 50
+      },
+      "schema": "schemas/board_connectors.json",
       "computed_fields": {
         "board_id": "{{ config.board_id }}"
+      }
+    },
+    {
+      "name": "orgs_org_id_ai_interaction_logs",
+      "path": "/v2/orgs/{{ config.org_id }}/ai-interaction-logs",
+      "records": {
+        "path": "data"
       },
-      "schema": "schemas/board_connectors.json"
+      "schema": "schemas/orgs_org_id_ai_interaction_logs.json",
+      "projection": "passthrough",
+      "query": {
+        "from": "{{ config.from }}",
+        "to": "{{ config.to }}",
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "audit_logs",
+      "path": "/v2/audit/logs",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/audit_logs.json",
+      "projection": "passthrough",
+      "query": {
+        "createdAfter": "{{ config.created_after }}",
+        "createdBefore": "{{ config.created_before }}",
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_data_classification_settings",
+      "path": "/v2/orgs/{{ config.org_id }}/data-classification-settings",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_data_classification_settings.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_data_classification_settings",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/data-classification-settings",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_data_classification_settings.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_boards_board_id_data_classification",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/boards/{{ config.board_id }}/data-classification",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_boards_board_id_data_classification.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_docs_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/docs/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_docs_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_cases",
+      "path": "/v2/orgs/{{ config.org_id }}/cases",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_cases.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_cases_case_id",
+      "path": "/v2/orgs/{{ config.org_id }}/cases/{{ config.case_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_cases_case_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_cases_case_id_legal_holds",
+      "path": "/v2/orgs/{{ config.org_id }}/cases/{{ config.case_id }}/legal-holds",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_cases_case_id_legal_holds.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_cases_case_id_export_jobs",
+      "path": "/v2/orgs/{{ config.org_id }}/cases/{{ config.case_id }}/export-jobs",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_cases_case_id_export_jobs.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_cases_case_id_legal_holds_legal_hold_id",
+      "path": "/v2/orgs/{{ config.org_id }}/cases/{{ config.case_id }}/legal-holds/{{ config.legal_hold_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_cases_case_id_legal_holds_legal_hold_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_cases_case_id_legal_holds_legal_hold_id_content_items",
+      "path": "/v2/orgs/{{ config.org_id }}/cases/{{ config.case_id }}/legal-holds/{{ config.legal_hold_id }}/content-items",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_cases_case_id_legal_holds_legal_hold_id_content_items.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_boards_export_jobs",
+      "path": "/v2/orgs/{{ config.org_id }}/boards/export/jobs",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_boards_export_jobs.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_boards_export_jobs_job_id",
+      "path": "/v2/orgs/{{ config.org_id }}/boards/export/jobs/{{ config.job_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_boards_export_jobs_job_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_boards_export_jobs_job_id_results",
+      "path": "/v2/orgs/{{ config.org_id }}/boards/export/jobs/{{ config.job_id }}/results",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/orgs_org_id_boards_export_jobs_job_id_results.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_boards_export_jobs_job_id_tasks",
+      "path": "/v2/orgs/{{ config.org_id }}/boards/export/jobs/{{ config.job_id }}/tasks",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_boards_export_jobs_job_id_tasks.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_content_logs_items",
+      "path": "/v2/orgs/{{ config.org_id }}/content-logs/items",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_content_logs_items.json",
+      "projection": "passthrough",
+      "query": {
+        "from": "{{ config.from }}",
+        "to": "{{ config.to }}",
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "users",
+      "path": "/Users",
+      "records": {
+        "path": "Resources"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "users_id",
+      "path": "/Users/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/users_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "groups",
+      "path": "/Groups",
+      "records": {
+        "path": "Resources"
+      },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "groups_id",
+      "path": "/Groups/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/groups_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "service_provider_config",
+      "path": "/ServiceProviderConfig",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/service_provider_config.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "resource_types",
+      "path": "/ResourceTypes",
+      "records": {
+        "path": "Resources"
+      },
+      "schema": "schemas/resource_types.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "resource_types_resource",
+      "path": "/ResourceTypes/{{ config.resource }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/resource_types_resource.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "schemas",
+      "path": "/Schemas",
+      "records": {
+        "path": "Resources"
+      },
+      "schema": "schemas/schemas.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "schemas_uri",
+      "path": "/Schemas/{{ config.uri }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/schemas_uri.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id",
+      "path": "/v2/orgs/{{ config.org_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_members",
+      "path": "/v2/orgs/{{ config.org_id }}/members",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_members.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_members_member_id",
+      "path": "/v2/orgs/{{ config.org_id }}/members/{{ config.member_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_members_member_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id",
+      "path": "/v2/boards/{{ config.board_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_app_cards_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/app_cards/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_app_cards_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_cards_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/cards/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_cards_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_connectors_connector_id",
+      "path": "/v2/boards/{{ config.board_id }}/connectors/{{ config.connector_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_connectors_connector_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_documents_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/documents/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_documents_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_embeds_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/embeds/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_embeds_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_images_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/images/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_images_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_items_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/items/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_items_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_members_board_member_id",
+      "path": "/v2/boards/{{ config.board_id }}/members/{{ config.board_member_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_members_board_member_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_shapes_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/shapes/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_shapes_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_sticky_notes_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/sticky_notes/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_sticky_notes_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_texts_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/texts/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_texts_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_frames_item_id",
+      "path": "/v2/boards/{{ config.board_id }}/frames/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_frames_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_platform_containers_items",
+      "path": "/v2/boards/{{ config.board_id_platform_containers }}/items",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/boards_board_id_platform_containers_items.json",
+      "projection": "passthrough",
+      "query": {
+        "parent_item_id": "{{ config.parent_item_id }}",
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "experimental_apps_app_id_metrics",
+      "path": "/v2-experimental/apps/{{ config.app_id }}/metrics",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/experimental_apps_app_id_metrics.json",
+      "projection": "passthrough",
+      "query": {
+        "startDate": "{{ config.start_date }}",
+        "endDate": "{{ config.end_date }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "experimental_apps_app_id_metrics_total",
+      "path": "/v2-experimental/apps/{{ config.app_id }}/metrics-total",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/experimental_apps_app_id_metrics_total.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "experimental_boards_board_id_mindmap_nodes_item_id",
+      "path": "/v2-experimental/boards/{{ config.board_id }}/mindmap_nodes/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/experimental_boards_board_id_mindmap_nodes_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "experimental_boards_board_id_mindmap_nodes",
+      "path": "/v2-experimental/boards/{{ config.board_id }}/mindmap_nodes",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/experimental_boards_board_id_mindmap_nodes.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "experimental_boards_board_id_items",
+      "path": "/v2-experimental/boards/{{ config.board_id }}/items",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/experimental_boards_board_id_items.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "experimental_boards_board_id_items_item_id",
+      "path": "/v2-experimental/boards/{{ config.board_id }}/items/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/experimental_boards_board_id_items_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "experimental_boards_board_id_shapes_item_id",
+      "path": "/v2-experimental/boards/{{ config.board_id }}/shapes/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/experimental_boards_board_id_shapes_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "experimental_boards_board_id_code_widgets",
+      "path": "/v2-experimental/boards/{{ config.board_id }}/code_widgets",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/experimental_boards_board_id_code_widgets.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "experimental_boards_board_id_code_widgets_item_id",
+      "path": "/v2-experimental/boards/{{ config.board_id }}/code_widgets/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/experimental_boards_board_id_code_widgets_item_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_groups",
+      "path": "/v2/boards/{{ config.board_id }}/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/boards_board_id_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "boards_board_id_groups_items",
+      "path": "/v2/boards/{{ config.board_id }}/groups/items",
+      "records": {
+        "path": "data.data"
+      },
+      "schema": "schemas/boards_board_id_groups_items.json",
+      "projection": "passthrough",
+      "query": {
+        "group_item_id": "{{ config.group_item_id }}",
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "boards_board_id_groups_group_id",
+      "path": "/v2/boards/{{ config.board_id }}/groups/{{ config.group_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_groups_group_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_items_item_id_tags",
+      "path": "/v2/boards/{{ config.board_id }}/items/{{ config.item_id }}/tags",
+      "records": {
+        "path": "tags"
+      },
+      "schema": "schemas/boards_board_id_items_item_id_tags.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_tags_tag_id",
+      "path": "/v2/boards/{{ config.board_id }}/tags/{{ config.tag_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/boards_board_id_tags_tag_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "boards_board_id_platform_tags_items",
+      "path": "/v2/boards/{{ config.board_id_platform_tags }}/items",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/boards_board_id_platform_tags_items.json",
+      "projection": "passthrough",
+      "query": {
+        "tag_id": "{{ config.tag_id }}"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 50
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_projects",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/projects",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_projects.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_projects_project_id",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/projects/{{ config.project_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_projects_project_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_projects_project_id_settings",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/projects/{{ config.project_id }}/settings",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_projects_project_id_settings.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_projects_project_id_members",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/projects/{{ config.project_id }}/members",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_projects_project_id_members.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_projects_project_id_members_member_id",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/projects/{{ config.project_id }}/members/{{ config.member_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_projects_project_id_members_member_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams",
+      "path": "/v2/orgs/{{ config.org_id }}/teams",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_teams.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_members",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/members",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_members.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_members_member_id",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/members/{{ config.member_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_members_member_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_default_teams_settings",
+      "path": "/v2/orgs/{{ config.org_id }}/default_teams_settings",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_default_teams_settings.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_settings",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/settings",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_settings.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_groups",
+      "path": "/v2/orgs/{{ config.org_id }}/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_groups.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_groups_group_id",
+      "path": "/v2/orgs/{{ config.org_id }}/groups/{{ config.group_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_groups_group_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_groups_group_id_members",
+      "path": "/v2/orgs/{{ config.org_id }}/groups/{{ config.group_id }}/members",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_groups_group_id_members.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_groups_group_id_members_member_id",
+      "path": "/v2/orgs/{{ config.org_id }}/groups/{{ config.group_id }}/members/{{ config.member_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_groups_group_id_members_member_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_groups_group_id_teams",
+      "path": "/v2/orgs/{{ config.org_id }}/groups/{{ config.group_id }}/teams",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_groups_group_id_teams.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_groups_group_id_teams_team_id",
+      "path": "/v2/orgs/{{ config.org_id }}/groups/{{ config.group_id }}/teams/{{ config.team_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_groups_group_id_teams_team_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_groups",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_groups.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_teams_team_id_groups_group_id",
+      "path": "/v2/orgs/{{ config.org_id }}/teams/{{ config.team_id }}/groups/{{ config.group_id }}",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/orgs_org_id_teams_team_id_groups_group_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_boards_board_id_groups",
+      "path": "/v2/orgs/{{ config.org_id }}/boards/{{ config.board_id }}/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_boards_board_id_groups.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orgs_org_id_projects_project_id_groups",
+      "path": "/v2/orgs/{{ config.org_id }}/projects/{{ config.project_id }}/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orgs_org_id_projects_project_id_groups.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
     }
   ]
 }

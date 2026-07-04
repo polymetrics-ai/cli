@@ -1,0 +1,11 @@
+{
+  "record": {
+    "asset_type_id": 123,
+    "name": "Fixture delete_an_asset_type",
+    "description": "Fixture delete_an_asset_type record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/asset_types/123"
+  }
+}

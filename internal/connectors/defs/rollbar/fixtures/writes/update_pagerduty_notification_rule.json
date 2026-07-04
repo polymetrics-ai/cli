@@ -1,0 +1,42 @@
+{
+  "record": {
+    "rule_id": "synthetic-conformance-value",
+    "trigger": "new_item",
+    "status": "enabled",
+    "filters": [
+      {
+        "type": "level",
+        "operation": "gte",
+        "value": "error"
+      }
+    ],
+    "config": {
+      "channel": "#general"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/1/notifications/pagerduty/rule/synthetic-conformance-value",
+    "body": {
+      "trigger": "new_item",
+      "status": "enabled",
+      "filters": [
+        {
+          "type": "level",
+          "operation": "gte",
+          "value": "error"
+        }
+      ],
+      "config": {
+        "channel": "#general"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

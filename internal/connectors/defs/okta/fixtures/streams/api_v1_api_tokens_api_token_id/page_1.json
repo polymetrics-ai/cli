@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/api-tokens/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "clientName": "client_name_fixture",
+      "created": "2026-01-01T00:00:00Z",
+      "expiresAt": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "network": {
+        "connection": "connection_fixture",
+        "include": [
+          "include_fixture"
+        ],
+        "exclude": [
+          "exclude_fixture"
+        ]
+      },
+      "tokenWindow": "fixture",
+      "userId": "user_id_fixture",
+      "_link": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

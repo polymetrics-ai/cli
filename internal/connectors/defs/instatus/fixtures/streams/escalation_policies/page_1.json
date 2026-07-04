@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/escalation-policies"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "escalation_policy_fixture_1",
+        "name": "Fixture escalation_policy_fixture_1"
+      }
+    ]
+  }
+}

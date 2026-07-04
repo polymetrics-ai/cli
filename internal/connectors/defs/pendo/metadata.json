@@ -1,22 +1,25 @@
 {
   "name": "pendo",
   "display_name": "Pendo",
-  "description": "Reads Pendo visitors, accounts, pages, and features through REST list endpoints.",
+  "description": "Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadata, exclusion lists, servers, and feedback options; exposes safe segment, guide, and feedback mutations.",
   "integration_type": "api",
   "docs_url": "https://engageapi.pendo.io/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Pendo API read of product-analytics visitor and account data"
+    "read": "external Pendo API read of product analytics, visitor/account, guide, report, metadata, segment, and feedback data",
+    "write": "mutates Pendo segments, guide state/seen status, and Listen feedback records",
+    "approval": "reverse ETL writes require plan preview and approval token"
   }
 }

@@ -1,0 +1,26 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "suggestion_id": "suggestion_id_fixture",
+    "title": "fixture",
+    "description": "fixture",
+    "priority": "fixture",
+    "dueDate": "2026-01-01T00:00:00Z",
+    "assigneeId": "assignee_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/meetings/id_fixture/task-suggestions/suggestion_id_fixture/accept",
+    "body": {
+      "title": "fixture",
+      "description": "fixture",
+      "priority": "fixture",
+      "dueDate": "2026-01-01T00:00:00Z",
+      "assigneeId": "assignee_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

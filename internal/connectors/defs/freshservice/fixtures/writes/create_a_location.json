@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_a_location",
+    "description": "Fixture create_a_location record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/locations",
+    "body": {
+      "name": "Fixture create_a_location",
+      "description": "Fixture create_a_location record"
+    }
+  }
+}

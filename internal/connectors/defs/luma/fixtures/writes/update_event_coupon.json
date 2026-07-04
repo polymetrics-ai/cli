@@ -1,0 +1,14 @@
+{
+  "record": {
+    "event_id": "fixture_event_id",
+    "code": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/coupons/update",
+    "body": {
+      "event_id": "fixture_event_id",
+      "code": "fixture"
+    }
+  }
+}

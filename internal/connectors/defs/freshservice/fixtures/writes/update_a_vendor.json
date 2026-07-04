@@ -1,0 +1,15 @@
+{
+  "record": {
+    "vendor_id": 123,
+    "name": "Fixture update_a_vendor",
+    "description": "Fixture update_a_vendor record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/vendors/123",
+    "body": {
+      "name": "Fixture update_a_vendor",
+      "description": "Fixture update_a_vendor record"
+    }
+  }
+}

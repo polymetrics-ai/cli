@@ -1,12 +1,29 @@
 {
-  "request": { "method": "GET", "path": "/accounts", "query": { "limit": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/accounts",
+    "query": {
+      "limit": "100",
+      "updated_after": "2020-01-01T00:00:00Z"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": [
-        { "id": "acc_fixture_1", "title": null, "name": "Fixture Account 1", "state": "active", "email": null, "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+        {
+          "id": "acc_fixture_1",
+          "title": null,
+          "name": "Fixture Account 1",
+          "state": "active",
+          "email": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
       ],
-      "pagination": { "next_cursor": null }
+      "pagination": {
+        "next_cursor": null
+      }
     }
   }
 }

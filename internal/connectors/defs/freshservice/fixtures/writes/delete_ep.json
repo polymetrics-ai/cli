@@ -1,0 +1,13 @@
+{
+  "record": {
+    "workspace_id": 123,
+    "schedule_id": 123,
+    "ep_id": 123,
+    "name": "Fixture delete_ep",
+    "description": "Fixture delete_ep record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/oncall/ws/123/schedules/123/escalation-policies/123"
+  }
+}

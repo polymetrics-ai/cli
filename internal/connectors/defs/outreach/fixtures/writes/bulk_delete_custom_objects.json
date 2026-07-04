@@ -1,0 +1,28 @@
+{
+  "record": {
+    "objectName": "synthetic-conformance-value",
+    "data": {
+      "type": "bulkdeletecustomobjects",
+      "attributes": {
+        "name": "Fixture Bulk Delete Custom Objects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/customObjectBulkDelete",
+    "body": {
+      "data": {
+        "type": "bulkdeletecustomobjects",
+        "attributes": {
+          "name": "Fixture Bulk Delete Custom Objects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

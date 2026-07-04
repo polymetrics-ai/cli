@@ -1,0 +1,448 @@
+{
+  "record": {
+    "created": "2026-01-01T00:00:00Z",
+    "id": "id_fixture",
+    "issuerMode": "CUSTOM_URL",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "policy": {
+      "accountLink": {
+        "action": "AUTO",
+        "filter": {
+          "groups": {
+            "include": [
+              "include_fixture"
+            ]
+          },
+          "users": {
+            "exclude": [
+              "exclude_fixture"
+            ],
+            "excludeAdmins": true
+          }
+        }
+      },
+      "maxClockSkew": 1,
+      "trustClaims": true,
+      "provisioning": {
+        "action": "AUTO",
+        "conditions": {
+          "deprovisioned": {
+            "action": "NONE"
+          },
+          "suspended": {
+            "action": "NONE"
+          }
+        },
+        "groups": {
+          "action": "APPEND",
+          "assignments": [
+            "assignment_fixture"
+          ],
+          "filter": [
+            "filter_fixture"
+          ],
+          "sourceAttributeName": "source_attribute_name_fixture"
+        },
+        "profileMaster": true
+      },
+      "subject": {
+        "filter": "filter_fixture",
+        "matchAttribute": "match_attribute_fixture",
+        "matchType": "CUSTOM_ATTRIBUTE",
+        "userNameTemplate": {
+          "template": "template_fixture"
+        }
+      }
+    },
+    "properties": {
+      "aalValue": "aal_value_fixture",
+      "additionalAmr": [
+        "sc"
+      ],
+      "allowDynamicUserMatching": true,
+      "allowUserUpdates": true,
+      "ialValue": "ial_value_fixture",
+      "idvMetadata": {
+        "vendorDisplayName": "vendor_display_name_fixture",
+        "termsOfUse": "terms_of_use_fixture",
+        "privacyPolicy": "privacy_policy_fixture"
+      },
+      "inquiryTemplateId": "inquiry_template_id_fixture"
+    },
+    "protocol": {
+      "algorithms": {
+        "request": {
+          "digest": "SHA-1",
+          "signature": {
+            "algorithm": "SHA-1",
+            "scope": "NONE"
+          }
+        },
+        "response": {
+          "signature": {
+            "algorithm": "SHA-1",
+            "scope": "ANY"
+          }
+        }
+      },
+      "credentials": {
+        "signing": {
+          "kid": "kid_fixture"
+        },
+        "trust": {
+          "additionalKids": [
+            "additional_kid_fixture"
+          ],
+          "audience": "audience_fixture",
+          "issuer": "issuer_fixture",
+          "kid": "kid_fixture"
+        }
+      },
+      "endpoints": {
+        "acs": {
+          "binding": "HTTP-POST",
+          "type": "INSTANCE"
+        },
+        "slo": {
+          "binding": "HTTP-POST",
+          "url": "https://example.invalid/fixture"
+        },
+        "sso": {
+          "binding": "HTTP-POST",
+          "destination": "destination_fixture",
+          "url": "https://example.invalid/fixture"
+        }
+      },
+      "relayState": {
+        "format": "FROM_URL"
+      },
+      "settings": {
+        "honorPersistentNameId": true,
+        "nameFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+        "participateSlo": true,
+        "sendApplicationContext": true
+      },
+      "type": "SAML2"
+    },
+    "status": "ACTIVE",
+    "type": "AMAZON",
+    "_links": {
+      "acs": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "authorize": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "clientRedirectUri": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "metadata": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "users": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "deactivate": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "activate": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "keys": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/idps",
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "issuerMode": "CUSTOM_URL",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "policy": {
+        "accountLink": {
+          "action": "AUTO",
+          "filter": {
+            "groups": {
+              "include": [
+                "include_fixture"
+              ]
+            },
+            "users": {
+              "exclude": [
+                "exclude_fixture"
+              ],
+              "excludeAdmins": true
+            }
+          }
+        },
+        "maxClockSkew": 1,
+        "trustClaims": true,
+        "provisioning": {
+          "action": "AUTO",
+          "conditions": {
+            "deprovisioned": {
+              "action": "NONE"
+            },
+            "suspended": {
+              "action": "NONE"
+            }
+          },
+          "groups": {
+            "action": "APPEND",
+            "assignments": [
+              "assignment_fixture"
+            ],
+            "filter": [
+              "filter_fixture"
+            ],
+            "sourceAttributeName": "source_attribute_name_fixture"
+          },
+          "profileMaster": true
+        },
+        "subject": {
+          "filter": "filter_fixture",
+          "matchAttribute": "match_attribute_fixture",
+          "matchType": "CUSTOM_ATTRIBUTE",
+          "userNameTemplate": {
+            "template": "template_fixture"
+          }
+        }
+      },
+      "properties": {
+        "aalValue": "aal_value_fixture",
+        "additionalAmr": [
+          "sc"
+        ],
+        "allowDynamicUserMatching": true,
+        "allowUserUpdates": true,
+        "ialValue": "ial_value_fixture",
+        "idvMetadata": {
+          "vendorDisplayName": "vendor_display_name_fixture",
+          "termsOfUse": "terms_of_use_fixture",
+          "privacyPolicy": "privacy_policy_fixture"
+        },
+        "inquiryTemplateId": "inquiry_template_id_fixture"
+      },
+      "protocol": {
+        "algorithms": {
+          "request": {
+            "digest": "SHA-1",
+            "signature": {
+              "algorithm": "SHA-1",
+              "scope": "NONE"
+            }
+          },
+          "response": {
+            "signature": {
+              "algorithm": "SHA-1",
+              "scope": "ANY"
+            }
+          }
+        },
+        "credentials": {
+          "signing": {
+            "kid": "kid_fixture"
+          },
+          "trust": {
+            "additionalKids": [
+              "additional_kid_fixture"
+            ],
+            "audience": "audience_fixture",
+            "issuer": "issuer_fixture",
+            "kid": "kid_fixture"
+          }
+        },
+        "endpoints": {
+          "acs": {
+            "binding": "HTTP-POST",
+            "type": "INSTANCE"
+          },
+          "slo": {
+            "binding": "HTTP-POST",
+            "url": "https://example.invalid/fixture"
+          },
+          "sso": {
+            "binding": "HTTP-POST",
+            "destination": "destination_fixture",
+            "url": "https://example.invalid/fixture"
+          }
+        },
+        "relayState": {
+          "format": "FROM_URL"
+        },
+        "settings": {
+          "honorPersistentNameId": true,
+          "nameFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+          "participateSlo": true,
+          "sendApplicationContext": true
+        },
+        "type": "SAML2"
+      },
+      "status": "ACTIVE",
+      "type": "AMAZON",
+      "_links": {
+        "acs": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "authorize": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "clientRedirectUri": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "metadata": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "users": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "deactivate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "activate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "keys": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

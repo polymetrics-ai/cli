@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "step_id": "synthetic-conformance-value",
+    "ids": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/sequences/synthetic-conformance-value/steps/synthetic-conformance-value/variants/bulk-delete",
+    "body": {
+      "ids": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}
