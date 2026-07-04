@@ -25,8 +25,8 @@
       },
       "records": { "path": "." },
       "computed_fields": {
-        "position_id": "{{ record._id }}",
-        "type": "{{ record.type.name }}",
+        "position_id": "{{ coalesce record._id record.position_id }}",
+        "type": "{{ coalesce record.type.name record.type }}",
         "country_id": "{{ record.location.country.id }}",
         "country_name": "{{ record.location.country.name }}"
       },
@@ -37,7 +37,7 @@
       "path": "/pipelines",
       "records": { "path": "." },
       "computed_fields": {
-        "id": "{{ record._id }}"
+        "id": "{{ coalesce record._id record.id }}"
       },
       "schema": "schemas/pipelines.json"
     },
@@ -61,8 +61,8 @@
         "stamp_field": "position_id"
       },
       "computed_fields": {
-        "id": "{{ record._id }}",
-        "stage": "{{ record.stage.name }}"
+        "id": "{{ coalesce record._id record.id }}",
+        "stage": "{{ coalesce record.stage.name record.stage }}"
       },
       "schema": "schemas/candidates.json"
     },

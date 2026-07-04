@@ -33,6 +33,7 @@
       "path": "/folders/{{ config.box_folder_id }}/items",
       "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "entries" },
+      "projection": "passthrough",
       "schema": "schemas/files.json"
     },
     {

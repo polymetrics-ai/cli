@@ -27,11 +27,8 @@ purely cosmetic for this connector.
 `base_url` defaults to `https://api.sandbox.braintreegateway.com`, matching legacy's default when
 its `environment` config is unset or not `"production"`. Legacy also accepts an `environment` enum
 (`"production"` vs anything else) that derives one of two fixed base URLs at runtime; this bundle
-requires the resolved `base_url` directly instead (documented scope narrowing — see Known limits),
-since the engine's `spec.json` `"default"` mechanism only materializes a single fixed literal, not
-an enum-derived choice between two URLs (the same shape already ledgered for
-`alpaca-broker-api`'s `environment`/`base_url` pair). Set `base_url` to
-`https://api.braintreegateway.com` for production.
+requires the resolved `base_url` directly instead (documented scope narrowing — see Known limits).
+Set `base_url` to `https://api.braintreegateway.com` for production.
 
 ## Streams notes
 
@@ -113,12 +110,10 @@ one is still enumerated in `api_surface.json` with a concrete closed-category ex
   `"default"` mechanism materializes exactly one fixed literal for an absent key, not an
   enum-conditioned choice between two literals — there is no templating dialect for "pick literal A
   or literal B based on another config value" at the config-default layer (`computed_fields` is
-  record-scoped only, not usable for `base_url` resolution). `environment` is still declared in
-  `spec.json` for documentation/acceptance parity (a caller passing it does no harm — it is simply
-  never read by any template) but this bundle requires `base_url` to be set directly for production
-  use rather than deriving it from `environment`. This never changes any emitted record's DATA
-  (a request against the wrong host would simply fail outright, not silently return wrong data),
-  matching this repo's parity-deviation meta-rule (`ACCEPTABLE`, same class as
+  record-scoped only, not usable for `base_url` resolution). This bundle therefore does not declare
+  `environment`; production users must set `base_url` directly. This never changes any emitted
+  record's DATA (a request against the wrong host would simply fail outright, not silently return
+  wrong data), matching this repo's parity-deviation meta-rule (`ACCEPTABLE`, same class as
   `alpaca-broker-api`'s identical `environment`/`base_url` narrowing).
 - **First-page request omits the literal `page=1` query param.** Legacy's `readPaged` always sends
   `page` starting at `"1"` explicitly; this bundle's `cursor`+`token_path` paginator sends no `page`

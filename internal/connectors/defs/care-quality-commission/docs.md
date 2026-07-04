@@ -42,21 +42,10 @@ properties (unlike legacy, which accepts config overrides for both): the `page_n
 mechanism in this dialect to wire a spec property into those fields at all (F6, `conventions.md`:
 a declared-but-unwireable spec property is worse than an absent one). See Known limits.
 
-**Pass B schema enrichment**: `locations` and `providers` were widened from a 2-3-field
-identity-only projection to the full flat (non-nested-array) field set CQC's own documented
-location/provider object shape publishes — registration status/date, address fields, ONSPD
-lat/long, phone, region, local authority, constituency, and (locations only) `numberOfBeds`/
-`careHome`/`providerId`. Every new property is optional (`["<type>", "null"]`, none added to
-`required`), so this is a strictly additive schema widening: no existing record shape becomes
-invalid, and a live response that omits a field a caller's older sync never saw simply projects
-as absent/null exactly as it always would have. Deeply nested array-of-object sub-resources CQC
-also documents on both objects (`relationships`, `locationTypes`/`gacServiceTypes`,
-`regulatedActivities`, `specialisms`, `currentRatings`/`historicRatings`, `reports`) are NOT
-modeled: `computed_fields`' `join:<sep>` filter only joins a flat array of scalars, not an array
-of rating/report objects, and passthrough of the raw nested arrays via plain schema projection
-(`"type": ["array","null"]` with no `items` shape) would silently vary per-record depending on
-which ratings/report fields CQC happens to populate — left out for now rather than declared with
-an under-specified shape.
+`locations` and `providers` intentionally keep legacy's narrow list-view projection even though
+the live CQC response may include more fields. Legacy emits only `locationId`, `locationName`,
+and `postalCode` for locations, and only `providerId` plus `providerName` for providers; the
+bundle schemas mirror that emitted record data instead of widening the output.
 
 ## Write actions & risks
 
@@ -91,6 +80,5 @@ kind (matching legacy's `Write` stub returning `connectors.ErrUnsupportedOperati
   12), and modeling it would require either a `fan_out` fetch-per-id round trip (defeating the
   feed's own purpose — its whole point is letting a caller avoid re-fetching every full record)
   or emitting useless id-only pseudo-records.
-- Deeply nested rating/report/relationship sub-structures on `locations`/`providers` (see Streams
-  notes) are not modeled as schema properties; only the flat, non-array-of-object CQC-documented
-  fields are.
+- Additional flat and nested fields on `locations`/`providers` are not modeled because legacy did
+  not emit them.

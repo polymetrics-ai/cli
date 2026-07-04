@@ -5,7 +5,7 @@
   "x-primary-key": ["id"],
   "required": ["id"],
   "properties": {
-    "id": { "type": "string", "description": "Computed from the raw API's `_id` field (computed_fields rename)." },
+    "id": { "type": "string", "description": "Computed from the raw API's `_id` field, falling back to `id` to match legacy firstString." },
     "name": { "type": ["string", "null"] }
   }
 }

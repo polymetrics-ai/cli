@@ -18,10 +18,6 @@
       "x-secret": true,
       "description": "Braintree private key, sent as the HTTP Basic auth password. Never logged."
     },
-    "environment": {
-      "type": "string",
-      "description": "Legacy accepts 'production' (else sandbox) and derives base_url from it at runtime. This bundle requires the resolved base_url directly instead (see base_url and docs.md); environment is accepted for documentation parity but is not read by any template."
-    },
     "base_url": {
       "type": "string",
       "format": "uri",

@@ -34,17 +34,19 @@ flow at all; see Known limits.
   a bare top-level JSON array, not an enveloped object). Paginated via `pagination.type:
   page_number` (`page_param: page`, `size_param: limit`, `start_page: 1`, `page_size: 100`),
   matching legacy's `harvestPositions` exactly. `position_id` is computed from the raw API's `_id`
-  field (`computed_fields`); `type` is computed from the raw nested `type.name` object field;
+  field with the same legacy fallback to `position_id`; `type` is computed from the raw nested
+  `type.name` object field with the same legacy fallback to an already-scalar `type`;
   `country_id`/`country_name` are computed from the raw nested `location.country.id`/
   `location.country.name` object fields.
 - `pipelines` — `GET /pipelines`, records at the response root, unpaginated. `id` is computed from
-  the raw API's `_id` field.
+  the raw API's `_id` field with the same legacy fallback to `id`.
 - `candidates` — a sub-resource fan-out over positions: `fan_out.ids_from.request` issues the SAME
   paginated `GET /positions` sequence the `positions` stream itself uses, then
   `into.path_var: "position_id"` threads each discovered position id into `/position/{{ fanout.id
   }}/candidates`, and `stamp_field: "position_id"` writes it onto every emitted candidate record
-  after projection. `id` is computed from the raw API's `_id` field; `stage` is computed from the
-  raw nested `stage.name` object field. `query: {"sort": "updated_date"}` matches legacy verbatim.
+  after projection. `id` is computed from the raw API's `_id` field with the same legacy fallback
+  to `id`; `stage` is computed from the raw nested `stage.name` object field with the same legacy
+  fallback to an already-scalar `stage`. `query: {"sort": "updated_date"}` matches legacy verbatim.
 - `departments` **(new this pass)** — `GET /departments`, records at the response root (a bare
   array, matching every other simple-list Breezy endpoint), unpaginated. `id` computed from `_id`.
 - `categories` **(new this pass)** — `GET /categories`, same shape as `departments`.

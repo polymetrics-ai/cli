@@ -5,9 +5,9 @@
   "x-primary-key": ["position_id"],
   "required": ["position_id"],
   "properties": {
-    "position_id": { "type": "string", "description": "Computed from the raw API's `_id` field (computed_fields rename)." },
+    "position_id": { "type": "string", "description": "Computed from the raw API's `_id` field, falling back to `position_id` to match legacy firstString." },
     "name": { "type": ["string", "null"] },
-    "type": { "type": ["string", "null"], "description": "Computed from the raw API's nested `type.name` object field." },
+    "type": { "type": ["string", "null"], "description": "Computed from the raw API's nested `type.name` object field, falling back to scalar `type` to match legacy nestedName." },
     "state": { "type": ["string", "null"] },
     "department": { "type": ["string", "null"] },
     "org_type": { "type": ["string", "null"] },

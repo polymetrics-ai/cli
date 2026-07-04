@@ -6,21 +6,6 @@
   "required": ["providerId"],
   "properties": {
     "providerId": { "type": "string" },
-    "providerName": { "type": ["string", "null"] },
-    "organisationType": { "type": ["string", "null"] },
-    "ownershipType": { "type": ["string", "null"] },
-    "type": { "type": ["string", "null"] },
-    "registrationStatus": { "type": ["string", "null"] },
-    "registrationDate": { "type": ["string", "null"] },
-    "website": { "type": ["string", "null"] },
-    "postalAddressLine1": { "type": ["string", "null"] },
-    "postalAddressTownCity": { "type": ["string", "null"] },
-    "region": { "type": ["string", "null"] },
-    "postalCode": { "type": ["string", "null"] },
-    "onspdLatitude": { "type": ["number", "null"] },
-    "onspdLongitude": { "type": ["number", "null"] },
-    "mainPhoneNumber": { "type": ["string", "null"] },
-    "constituency": { "type": ["string", "null"] },
-    "localAuthority": { "type": ["string", "null"] }
+    "providerName": { "type": ["string", "null"] }
   }
 }

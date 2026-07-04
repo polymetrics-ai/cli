@@ -9,7 +9,6 @@
     "name": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
     "scheduled_date": { "type": ["string", "null"] },
-    "preview_url": { "type": ["string", "null"] },
-    "report_url": { "type": ["string", "null"] }
+    "preview_url": { "type": ["string", "null"] }
   }
 }
