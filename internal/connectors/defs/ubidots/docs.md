@@ -30,12 +30,9 @@ and is a fixed bundle-authored value (see Known limits).
 
 No stream declares `x-cursor-field`: legacy's own `streams()` catalog declares no `CursorFields` for
 any of these four streams either (`ubidots.go:212-220`), so there is nothing to reproduce — this is
-not a scope narrowing, it mirrors legacy's own manifest exactly. `created_at` is still projected as
-a schema property (legacy's `standardRecord` always maps it via `first(item, "created_at",
-"createdAt")`, preferring `created_at` — Ubidots' actual REST API returns `created_at` natively in
-snake_case, so plain schema projection already reproduces the common case field-for-field; the
-`createdAt` camelCase fallback exists in legacy purely as defensive handling for a shape variant this
-bundle does not additionally model, since Ubidots' documented API never emits it — see Known limits).
+not a scope narrowing, it mirrors legacy's own manifest exactly. `created_at` is projected with a
+typed coalesce computed field that preserves legacy's `first(item, "created_at", "createdAt")`
+fallback behavior.
 
 **Pass B additions** (new in this revision, researched against `docs.ubidots.com/reference`):
 - `device_groups` (`GET api/v2.0/device_groups/`) and `device_types` (`GET api/v2.0/device_types/`)
@@ -47,8 +44,8 @@ bundle does not additionally model, since Ubidots' documented API never emits it
   sub-resource once per id, `stamp_field: variable_id` tagging every emitted dot with its source
   variable. Each dot's real wire shape is `{value, timestamp, context}` (`timestamp` a Unix
   milliseconds integer, matching Ubidots' documented Dot object exactly — see `dev.ubidots.com`'s
-  "Devices, variables, and Dots" guide); `x-cursor-field: timestamp` is declared on the schema for
-  manifest-surface completeness only (no `incremental` block — see Known limits).
+  "Devices, variables, and Dots" guide). No cursor metadata is declared because legacy published no
+  cursor fields for Ubidots.
 
 ## Write actions & risks
 
@@ -86,20 +83,10 @@ Bulk/range value-delete and multi-device bulk-delete endpoints are deliberately 
   REVIEW.md; see also searxng's identical precedent), so neither is declared. This bundle bakes in
   legacy's own DEFAULT values instead: `page_size: 100`, `max_pages: 1` — reproducing the exact
   behavior a caller who never overrides either config key already gets from legacy.
-- **`createdAt` (camelCase) fallback is not modeled.** Legacy's `first(item, "created_at",
-  "createdAt")` defensively tolerates a record whose `created_at` key is absent by falling back to a
-  camelCase `createdAt` key instead. This bundle's schema projection copies `created_at` by exact key
-  match only (Ubidots' documented API always emits snake_case `created_at`, matching legacy's own
-  primary/preferred key), so the defensive camelCase fallback path is not reproduced; the
-  `computed_fields` dialect has no "try key A, then key B" fallback-chain primitive (only a single
-  reference per field), and legacy's own precedence prefers `created_at` first in all real traffic,
-  so this narrowing has no observed effect against Ubidots' actual wire shape.
-- **`variable_values` declares no `incremental` block.** `x-cursor-field: timestamp` is descriptive
-  manifest metadata only (parity with how `uppromote`/`uservoice` document a cursor-shaped field
-  without turning on stateful incremental sync) — every read re-fans-out across all variables and
-  re-reads each variable's full first page of values. A future capability-expansion pass could add
-  real incremental support once a stable request-side timestamp filter is confirmed against
-  Ubidots' `v1.6` values endpoint.
+- **`variable_values` declares no cursor or `incremental` block.** Every read re-fans-out across all
+  variables and re-reads each variable's full first page of values. A future capability-expansion
+  pass could add real incremental support once a stable request-side timestamp filter is confirmed
+  against Ubidots' `v1.6` values endpoint.
 - **Organizations, users, tokens, UbiFunctions, Pages, plugins, and dashboard-widget CRUD are
   out of scope** (see `api_surface.json`'s `excluded` entries) — none of these were part of legacy's
   surface, and each is either elevated-scope multi-org admin, non-data account introspection, or

@@ -7,28 +7,6 @@
   "properties": {
     "id": { "type": "string" },
     "name": { "type": ["string", "null"] },
-    "url": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"], "format": "date-time" },
-    "updated_at": { "type": ["string", "null"], "format": "date-time" },
-    "page_description": { "type": ["string", "null"] },
-    "headline": { "type": ["string", "null"] },
-    "subdomain": { "type": ["string", "null"] },
-    "domain": { "type": ["string", "null"] },
-    "support_url": { "type": ["string", "null"] },
-    "hidden_from_search": { "type": ["boolean", "null"] },
-    "allow_page_subscribers": { "type": ["boolean", "null"] },
-    "allow_incident_subscribers": { "type": ["boolean", "null"] },
-    "allow_email_subscribers": { "type": ["boolean", "null"] },
-    "allow_sms_subscribers": { "type": ["boolean", "null"] },
-    "allow_rss_atom_feeds": { "type": ["boolean", "null"] },
-    "allow_webhook_subscribers": { "type": ["boolean", "null"] },
-    "notifications_from_email": { "type": ["string", "null"] },
-    "activity_score": { "type": ["number", "null"] },
-    "viewers_must_be_team_members": { "type": ["boolean", "null"] },
-    "ip_restrictions": { "type": ["string", "null"] },
-    "city": { "type": ["string", "null"] },
-    "state": { "type": ["string", "null"] },
-    "country": { "type": ["string", "null"] },
-    "time_zone": { "type": ["string", "null"] }
+    "url": { "type": ["string", "null"] }
   }
 }

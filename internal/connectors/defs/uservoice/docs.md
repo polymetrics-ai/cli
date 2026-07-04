@@ -51,10 +51,11 @@ at all. This is expressed via the `stream.Query` optional-query dialect
 re-reads `start_date` from config verbatim on every single read, with no stateful "resume from
 last seen" behavior. Declaring a real `incremental` block would introduce genuine new
 state-tracking behavior (the app would begin persisting and replaying a cursor value legacy never
-produces or consumes), which is out of scope for a parity migration. `x-cursor-field` is therefore
-intentionally NOT declared on the schema, even though `created_at` is emitted as a field, matching
-legacy's full-refresh-only functional behavior exactly. This stream applies only to `suggestions`
-itself; the 8 Pass B streams below have real incremental support instead (see next).
+produces or consumes), which is out of scope for a parity migration. `x-cursor-field: created_at`
+is declared for catalog parity because legacy published `CursorFields: []string{"created_at"}`,
+but the stream has no `incremental` block and remains full-refresh at read time. This stream
+applies only to `suggestions` itself; the 8 Pass B streams below have real incremental support
+instead (see next).
 
 **Pass B additions** (new in this revision, all real `/api/v2/admin/...` paths per the OpenAPI
 reference, none constrained by legacy parity since legacy never modeled them): `forums`, `users`,

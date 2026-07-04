@@ -24,24 +24,36 @@
       "name": "devices",
       "path": "api/v2.0/devices/",
       "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/devices.json"
     },
     {
       "name": "variables",
       "path": "api/v2.0/variables/",
       "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/variables.json"
     },
     {
       "name": "dashboards",
       "path": "api/v2.0/dashboards/",
       "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/dashboards.json"
     },
     {
       "name": "events",
       "path": "api/v2.0/events/",
       "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/events.json"
     },
     {

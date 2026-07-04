@@ -3,7 +3,6 @@
   "title": "variable_values",
   "type": "object",
   "x-primary-key": ["variable_id", "timestamp"],
-  "x-cursor-field": "timestamp",
   "required": ["variable_id", "timestamp"],
   "properties": {
     "value": { "type": ["number", "null"] },

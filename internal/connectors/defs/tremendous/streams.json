@@ -24,24 +24,39 @@
       "name": "campaigns",
       "path": "/api/v2/campaigns",
       "records": { "path": "campaigns" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/campaigns.json"
     },
     {
       "name": "orders",
       "path": "/api/v2/orders",
       "records": { "path": "orders" },
+      "computed_fields": {
+        "campaign_id": "{{ coalesce record.campaign_id record.campaignId }}",
+        "payment_status": "{{ coalesce record.payment_status record.paymentStatus }}",
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/orders.json"
     },
     {
       "name": "rewards",
       "path": "/api/v2/rewards",
       "records": { "path": "rewards" },
+      "computed_fields": {
+        "order_id": "{{ coalesce record.order_id record.orderId }}",
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/rewards.json"
     },
     {
       "name": "funding_sources",
       "path": "/api/v2/funding_sources",
       "records": { "path": "funding_sources" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/funding_sources.json"
     },
     {

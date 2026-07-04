@@ -28,10 +28,7 @@
       },
       "records": { "path": "bookings" },
       "computed_fields": {
-        "guest_name": "{{ record.guest.name }}",
-        "guest_id": "{{ record.guest.id }}",
-        "guest_email": "{{ record.guest.email }}",
-        "guest_mobile": "{{ record.guest.mobile }}"
+        "guest_name": "{{ coalesce record.guest_name record.guest.name }}"
       },
       "schema": "schemas/reservations.json"
     },

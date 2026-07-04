@@ -50,12 +50,9 @@ API's documented host; the prior host does not serve any of these endpoints.
   including `auth_hash`/`restid` — is a QUERY parameter, never a body field; `body_type: "none"` for
   the same reason writes below use it). Records are read from the response's `bookings` array
   (`records.path: "bookings"`, not the prior version's fictional `reservations` key). The real wire
-  shape is considerably richer than legacy's narrow `{id, guest_name, date, status}` projection —
-  `amount`/`children_amount`/`start`/`end`/`length`/`arrived`/`placed`/`all_seated`/`comment`/
-  `waitinbar`/`waitinlist`/`meal`/`tables`/`table_ids`/`time` are all now modeled (Pass B's
-  full-surface mandate), alongside a nested `guest` sub-object flattened via `computed_fields` into
-  `guest_name`/`guest_id`/`guest_email`/`guest_mobile` (the raw `guest` object is also passed
-  through unchanged for callers who need the rest of it). `config.start_date` (preserved for
+  shape is richer than legacy, but emitted records stay at legacy parity:
+  `{id, guest_name, date, status}`. `guest_name` is copied from a legacy-shaped top-level
+  `guest_name` when present, or from the real API's nested `guest.name` field. `config.start_date` (preserved for
   config-shape backward compatibility) is now sent as the real API's own `date` query parameter
   (an exact-match date filter, not a lower-bound range) via the optional-query dialect
   (`omit_when_absent: true`) whenever configured.

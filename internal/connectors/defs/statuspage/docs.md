@@ -33,9 +33,8 @@ arrays (`records.path: "."`), matching legacy's `recordsPath: "."` for the origi
 API's documented response shape for every new stream EXCEPT `metrics` (see below).
 
 - `pages`, `components`, `incidents`, `subscribers` — the original 4 legacy-parity streams; schemas
-  were widened from legacy's minimal 3-4-field parity subset to the real API's full documented
-  `Page`/`Component`/`Incident`/`Subscriber` field sets (schema-as-projection additivity — every
-  legacy-emitted field is still present, more real fields are now captured too).
+  intentionally retain the minimal fields emitted by legacy's `copyRecord` mappers. Widening these
+  schema-mode streams to the real API's full objects would emit fields legacy dropped.
 - `component_groups` (`/component-groups`), `metrics_providers` (`/metrics_providers`),
   `page_access_groups` (`/page_access_groups`), `page_access_users` (`/page_access_users`),
   `incident_templates` (`/incident_templates`) — new Pass-B streams, all real top-level JSON array

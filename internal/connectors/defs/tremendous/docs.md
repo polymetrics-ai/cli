@@ -104,18 +104,11 @@ creation) is modeled — see `api_surface.json` for the full excluded-endpoint a
   (`internal/connectors/defs/searxng/fixtures`) — proving 2-page pagination termination would
   require the paginator to fetch a page this connector's declared configuration can never actually
   request.
-- **Legacy's dual-key field fallbacks (`campaignId`/`paymentStatus`/`createdAt`/`orderId`) are not
-  modeled.** Legacy's `namedRecord`/`orderRecord`/`rewardRecord` mapping functions each accept
-  EITHER a snake_case OR a camelCase key via a `first(item, ...)` helper
-  (`tremendous.go:222-238`) — e.g. `campaign_id` OR `campaignId`, `created_at` OR `createdAt` —
-  preferring the snake_case key first. The engine's `computed_fields` dialect has no
-  coalesce/fallback filter (each output field name resolves against exactly one template), so only
-  the snake_case shape legacy's own test suite exercises (`tremendous_test.go:23`:
-  `campaign_id`/`payment_status`/`created_at`) is modeled via plain schema projection. This is a
-  documented scope narrowing, not a data change for any input legacy's own tests demonstrate as the
-  real wire shape; if the live Tremendous API ever sends the camelCase variant instead, this bundle
-  would silently drop that field where legacy would have populated it — flagged here rather than
-  fudged.
+- **Legacy's dual-key field fallbacks are modeled.** Legacy's `namedRecord`/`orderRecord`/
+  `rewardRecord` mapping functions accept either snake_case or camelCase keys via `first(item, ...)`
+  (`tremendous.go:222-238`) — e.g. `campaign_id`/`campaignId`, `payment_status`/`paymentStatus`,
+  `created_at`/`createdAt`, `order_id`/`orderId` — preferring the snake_case key first. The bundle
+  expresses that with `computed_fields` `coalesce` entries on the four legacy-parity streams.
 - **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
   when `config.mode == "fixture"`) stamps a static `connector: "tremendous"` marker and a `fixture:
   true` flag onto two synthesized records per stream (`tremendous.go:121-135`). Neither is part of

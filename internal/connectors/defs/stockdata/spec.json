@@ -23,11 +23,11 @@
     },
     "date_from": {
       "type": "string",
-      "description": "Optional lower-bound date filter (YYYY-MM-DD) sent on market data requests when set."
+      "description": "Optional lower-bound date filter (YYYY-MM-DD) sent on legacy StockData read requests when set."
     },
     "date_to": {
       "type": "string",
-      "description": "Optional upper-bound date filter (YYYY-MM-DD) sent on market data requests when set."
+      "description": "Optional upper-bound date filter (YYYY-MM-DD) sent on legacy StockData read requests when set."
     },
     "news_uuids": {
       "type": "string",

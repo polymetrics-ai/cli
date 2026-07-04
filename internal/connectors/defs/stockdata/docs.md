@@ -17,7 +17,8 @@ Provide a StockData API access token via the `api_token` secret. It is sent as t
 query parameter on every request (`mode: api_key_query`), matching legacy's
 `connsdk.APIKeyQuery("api_token", token)` exactly; it is never logged.
 
-Market data streams that need symbols use the `symbols` config key. News and stats streams accept
+Market data streams that need symbols use the `symbols` config key. The legacy streams pass
+`date_from`/`date_to` through whenever configured, matching legacy's shared `baseQuery`. News and stats streams accept
 optional filters such as `language`, `published_after`, `published_before`, `published_on`,
 `countries`, `interval`, `group_by`, `sentiment_gte`, and `sentiment_lte`. UUID-scoped news streams
 use comma-separated `news_uuids` fan-out. The `entity_search` stream requires the `entity_search`

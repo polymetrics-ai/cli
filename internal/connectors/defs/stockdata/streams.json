@@ -39,6 +39,16 @@
     {
       "name": "tickers",
       "path": "/data/tickers",
+      "query": {
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
+      },
       "records": {
         "path": "data"
       },
@@ -85,6 +95,16 @@
     {
       "name": "news",
       "path": "/news/all",
+      "query": {
+        "date_from": {
+          "template": "{{ config.date_from }}",
+          "omit_when_absent": true
+        },
+        "date_to": {
+          "template": "{{ config.date_to }}",
+          "omit_when_absent": true
+        }
+      },
       "records": {
         "path": "data"
       },
