@@ -47,22 +47,15 @@ unset (`pennylane connector requires secret api_key`), matching this bundle's `r
 
 All 8 streams (`customers`, `customer_invoices`, `suppliers`, `products`, `categories`,
 `supplier_invoices`, `transactions`, `bank_accounts`) share the identical shape: `GET` against the
-Pennylane v2 list endpoint, records at `items`, primary key `["id"]`. Pagination follows the real
-documented cursor-pagination contract (`https://pennylane.readme.io/docs/using-cursor-based-pagination`):
-`pagination.type: cursor` with `cursor_param: cursor`, `token_path: next_cursor`, and (Pass B)
-`stop_path: has_more` — the docs explicitly document `has_more` as the authoritative
-more-results-available signal, distinct from `next_cursor`'s own presence, so this bundle now stops
-on `has_more: false` rather than relying on `next_cursor` absence alone (closing a latent gap: a
-theoretical response with a non-null `next_cursor` but `has_more: false` would previously have kept
-paginating). Every pre-existing 2-page/single-page fixture was updated to include the real
-`has_more` field alongside `next_cursor` so this remains a correctness fix, not a fixture-only
-change. `limit` is sent on every request from `page_size` (default `50`, matching legacy's
+Pennylane v2 list endpoint, records at `items`, primary key `["id"]`. Pagination matches legacy's
+cursor loop: `pagination.type: cursor` with `cursor_param: cursor` and `token_path: next_cursor`;
+the bundle follows `next_cursor` until it is absent/empty. Fixtures still include Pennylane's real
+`has_more` response field, but it is not used as a separate stop signal because legacy did not use
+it. `limit` is sent on every request from `page_size` (default `50`, matching legacy's
 `defaultPageSize` for the 5 legacy streams; the 3 new Pass-B streams use the same shared default).
 
-`supplier_invoices` and `bank_accounts` declare `x-cursor-field: updated_at`/`updated_at`
-respectively (catalog metadata only, mirroring the same convention as the 5 legacy streams — see
-Known limits); `transactions` declares none, since Pennylane's documented sort/filter parameters
-for that endpoint only support `id`, not a timestamp field.
+The 5 legacy streams declare `x-cursor-field: updated_at`, matching legacy's published
+`CursorFields`; the 3 new Pass-B streams do not declare cursor metadata.
 
 All 8 streams declare `"projection": "passthrough"` (post-wave2 review §8 rule 1): none of them is
 built from a field-by-field `mapRecord`-style function, so schema-mode projection would silently
@@ -96,18 +89,18 @@ fix applied to pabbly-subscriptions-billing in this same Pass B increment).
 ## Known limits
 
 - `x-cursor-field: updated_at` is declared on `customers`/`customer_invoices`/`suppliers`/
-  `products`/`categories`/`supplier_invoices`/`bank_accounts` as catalog/candidate-cursor metadata
-  only, mirroring legacy's own `CursorFields: []string{"updated_at"}` declaration for the 5
-  original streams — no stream applies any server-side or client-side incremental filter using
-  this field (no `updated_at[gte]`-style query param, no client-side filtering by cursor value), so
-  no `streams.json` `incremental` block is declared on any of them. This is exact parity for the 5
-  legacy streams, and a deliberate consistency choice for the 3 new ones (Pennylane's own
-  `filter`/`sort` query dialect already lets a caller narrow by date server-side if they choose,
-  via the passthrough `config.filter` value).
-- `page_size`/`max_pages` config validation (legacy's numeric-range and `all`/`unlimited` keyword
-  parsing) is not reproduced at the bundle-config level; the engine treats `page_size` as an opaque
-  string substituted directly into the `limit` query param. This never changes emitted record DATA
-  for any legacy-valid input; it only narrows client-side input validation.
+  `products`/`categories` as catalog/candidate-cursor metadata only, mirroring legacy's own
+  `CursorFields: []string{"updated_at"}` declaration for the 5 original streams. No stream applies
+  any server-side or client-side incremental filter using this field (no `updated_at[gte]`-style
+  query param, no client-side filtering by cursor value), so no `streams.json` `incremental` block
+  is declared.
+- `page_size` config validation (legacy's numeric range) is not reproduced at the bundle-config
+  level; the engine treats `page_size` as an opaque string substituted directly into the `limit`
+  query param. This never changes emitted record DATA for any legacy-valid input; it only narrows
+  client-side input validation.
+- Legacy also accepts a runtime `max_pages` cap, but the declarative engine only supports fixed
+  bundle-authored `pagination.max_pages` integers. This bundle intentionally does not declare an
+  ignored `max_pages` `spec.json` property.
 - Every real Pennylane endpoint documents required OAuth2 scopes (e.g. `customers:all`,
   `supplier_invoices:readonly`) that a live API key must actually hold; this bundle's Bearer-token
   auth has no scope-awareness of its own — an API key missing a required scope surfaces as an

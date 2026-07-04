@@ -15,7 +15,8 @@
       "page_param": "page",
       "size_param": "limit",
       "start_page": 1,
-      "page_size": 100
+      "page_size": 100,
+      "max_pages": 1
     },
     "check": { "method": "GET", "path": "/addressbooks" },
     "error_map": [

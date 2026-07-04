@@ -80,3 +80,9 @@ Net fidelity outcome: **41 defects → 37 fully closed, 1 minor documented devia
 | Connector | Defect | Required engine feature |
 |---|---|---|
 | cal-com | legacy `event_types` flattens `data.eventTypeGroups[].eventTypes[]`; bundle can only select one array/object via `records.path` | **nested-array flatten / chained extraction** (or a stream hook) |
+
+## Additional shard-3 deferred findings (2026-07-04)
+
+| Connector | Defect | Required engine feature |
+|---|---|---|
+| shopwired | legacy fixed-projection streams always emit `sku`/`email`/`status` keys as `null` when the source field is absent; schema projection can drop passthrough extras and restore coalesce fallbacks, but cannot synthesize explicit null-valued absent fields | **per-field emit-null/default-when-absent** projection/computed-field mode |

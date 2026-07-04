@@ -58,11 +58,9 @@ Pagination for every `next_url` stream follows the SavvyCal-documented `links.ne
 convention (`savvycal.go:130`'s `firstStringAt(resp.Body, "links.next", "next")`): the engine's
 `next_url` dialect supports only a single `next_url_path`, so this bundle declares `links.next` and
 does not model legacy's secondary `next` top-level fallback path (never observed in SavvyCal's real
-API responses). `page=1`/`per_page={{ config.page_size }}` (default `100`) is a static per-stream
-`query`, re-sent on every page request; the engine's `next_url` paginator re-merges `stream.Query`
-onto every absolute next-page URL, a benign wire-request-shape divergence from legacy's own
-`path/query = next; query = nil` reset, since SavvyCal's own `links.next` URL already encodes the
-correct pagination state server-side.
+API responses). The initial `page=1`/`per_page={{ config.page_size }}` (default `100`) parameters
+live in each stream path rather than `stream.query` so that the engine follows `links.next` URLs
+as-is on subsequent pages, matching legacy's `path/query = next; query = nil` reset.
 
 `metadata.json` declares no `rate_limit` — legacy's own SavvyCal package enforces no client-side
 rate limiting either, so this bundle adds none, matching legacy's real (lack of) behavior.

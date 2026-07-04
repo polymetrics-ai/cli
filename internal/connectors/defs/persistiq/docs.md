@@ -33,21 +33,17 @@ All 6 legacy-parity streams (`leads`, `users`, `campaigns`, `mailboxes`, `activi
 share the same base shape: `GET` against the PersistIQ v1 list endpoint, records at a top-level key
 matching the stream name, primary key `["id"]`. Pagination is page-number based
 (`pagination.type: page_number`, `page_param: page`, `size_param: per_page`, `start_page: 1`,
-`page_size: 100`), stopping on a short page — identical to legacy's
-`connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "per_page", StartPage: 1, PageSize:
-size}`; this bundle keeps this exact pagination shape unchanged even though the live spec's own
-list-response envelope also carries `has_more`/`next_page` fields (see Known limits — a
-page-number-vs-cursor pagination-shape reconciliation was judged out of scope for a parity stream
-without live-credential verification).
+`page_size: 100`), stopping on a short page — matching legacy's default request shape
+(`page=1`, `per_page=100`) and short-page stop. Legacy can override page size at runtime, but the
+declarative pagination block is fixed at the legacy default; see Known limits.
+This bundle keeps legacy's page-number shape unchanged even though the live spec's own list-response
+envelope also carries `has_more`/`next_page` fields (see Known limits — a page-number-vs-cursor
+pagination-shape reconciliation was judged out of scope for a parity stream without live-credential
+verification).
 
-`leads` declares an `incremental` block (`cursor_field: updated_at`, `request_param:
-updated_after`, `param_format: rfc3339`, `start_config_key: start_date`) — legacy itself never
-implemented this, but `updated_after` is a REAL, live-documented PersistIQ query parameter
-(`GET /v1/leads`'s own parameter list: `page`, `status`, `status_id`, `updated_after`,
-`created_after`, `email`), independently corroborated by the community Singer tap
-(`github.com/NickLeoMartin/tap-persistiq`). This is additive capability expansion, not a parity
-change: a caller who never sets `start_date` gets the exact same full-refresh behavior legacy
-always had. The other 5 legacy streams declare no `incremental` block, matching legacy exactly.
+No legacy stream declares an `incremental` block. Legacy always performs a full refresh for every
+stream and does not publish cursor fields, so this bundle does the same even though `GET /v1/leads`
+documents optional timestamp filters.
 
 All 6 legacy streams declare `"projection": "passthrough"` (post-wave2 review §8 rule 1): legacy's
 `Read` emits `emit(connectors.Record(rec))` — a verbatim type-cast of the raw harvested record,
@@ -152,7 +148,9 @@ the same webhook-URL-mutation caution as every other webhook write in this migra
   live-credential confirmation of its exact semantics (absolute URL? page token? bare page number?
   the schema types it as a bare nullable string with no further detail). Fixture pages use the
   page-number-based `page`/`per_page` request shape throughout, consistent with legacy.
-- `max_pages` is runtime-configurable (`spec.json`'s `max_pages`, unchanged from before this pass).
+- Legacy accepts runtime `page_size` and `max_pages` config values, but the declarative engine only
+  supports fixed bundle-authored pagination integers. This bundle honors the legacy default page
+  size and intentionally does not declare ignored `page_size`/`max_pages` `spec.json` properties.
 - Fixtures use synthetic values only; every new stream's fixture shape mirrors the live spec's own
   documented response schema (field names, nesting, the uniform `has_more`/`next_page`/`status`/
   `errors`/`<resource>` envelope) rather than a guess.

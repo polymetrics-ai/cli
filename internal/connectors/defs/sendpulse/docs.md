@@ -24,9 +24,9 @@ all declare `"projection": "passthrough"` (legacy's `Read` emits every raw decod
 via `connsdk.Harvest`, with no `mapRecord`-style field-building — schema-mode projection would
 silently drop any undeclared field, a parity regression). `GET` against the SendPulse list
 endpoint, records at the JSON body root (`records.path: "."`). Pagination is `page_number`
-(`page_param: page`, `size_param: limit`, `start_page: 1`, `page_size: 100`), `max_pages` left
-unbounded (see Known limits). Primary keys: `addressbooks`/`campaigns` use `id`, `senders` uses
-`email`.
+(`page_param: page`, `size_param: limit`, `start_page: 1`, `page_size: 100`, `max_pages: 1`),
+matching legacy's default one-page cap. Primary keys: `addressbooks`/`campaigns` use `id`,
+`senders` uses `email`.
 
 `blacklist` (`GET /blacklist`) is a new top-level list stream. SendPulse's real blacklist endpoint
 takes NO pagination parameters at all (confirmed against the official PHP client's
@@ -41,8 +41,8 @@ representation instead of sending parameters that do nothing.
 address book id, with no cross-book list endpoint (see Known limits for the excluded cross-book
 `/emails/{email}` global-lookup variant). `fan_out.ids_from.request` issues the SAME paginated `GET
 /addressbooks` request the `addressbooks` stream itself uses (`records_path: "."`, `id_field:
-"id"`, reusing this stream's effective pagination — the base `page_number` spec, unbounded, since
-`emails_in_book` declares no pagination override of its own), then `into.path_var: "id"`
+"id"`, reusing this stream's effective pagination — the base `page_number` spec with `max_pages:
+1`, since `emails_in_book` declares no pagination override of its own), then `into.path_var: "id"`
 threads each discovered book id into `/addressbooks/{{ fanout.id }}/emails`, and `stamp_field:
 "book_id"` writes the source book id (always a STRING — see sendowl's docs.md for the identical
 fan_out-dialect-wide constraint) onto every emitted subscriber record after projection.
@@ -104,12 +104,11 @@ of these resources support a server-side updated-since filter.
   (`blacklist` explicitly via `pagination: {"type": "none"}`; `emails_in_book`'s per-book request
   inherits the base `page_number` spec, unbounded) — matching each endpoint's REAL documented
   parameter set rather than blanket-applying the base spec to every new stream.
-- **`max_pages` is left unbounded** (undeclared in `base.pagination`) rather than baked in at
-  legacy's own default of 1 — see the prior wave2 rationale (unchanged): `PaginationSpec.MaxPages`
-  cannot be wired to config at all, so "leave unbounded" (matching the `elasticemail`-style
-  default elsewhere in this codebase) was chosen over silently truncating every real sync to a
-  single page. This also governs the `emails_in_book` fan-out's id-listing request (walks every
-  page of `/addressbooks`, not just the first 100) and the per-book-id sub-sequence.
+- **`max_pages` is static.** The bundle sets `base.pagination.max_pages: 1`, matching legacy's
+  default hard request-count cap. Legacy also accepted a runtime `max_pages` override (including
+  `0` for unbounded), but `PaginationSpec.MaxPages` cannot be config-templated, so this bundle does
+  not declare a dead `max_pages` spec key. The static cap also governs `emails_in_book`'s
+  address-book id-listing request and each per-book sub-sequence.
 - `token_url`'s default is a fixed literal, not a `base_url`-derived value — unchanged from the
   prior wave2 shape; see that section's original rationale (a caller overriding `base_url` alone
   must also override `token_url` to match).

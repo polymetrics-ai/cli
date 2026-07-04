@@ -8,8 +8,7 @@
     "pagination": {
       "type": "cursor",
       "cursor_param": "cursor",
-      "token_path": "next_cursor",
-      "stop_path": "has_more"
+      "token_path": "next_cursor"
     },
     "check": { "method": "GET", "path": "/customers" },
     "error_map": [
