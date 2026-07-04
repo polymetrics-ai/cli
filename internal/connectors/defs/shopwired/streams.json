@@ -313,9 +313,10 @@
       "records": {
         "path": "."
       },
-      "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.id }}"
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
       },
       "schema": "schemas/categories.json",
       "query": {
@@ -473,9 +474,10 @@
       "records": {
         "path": "."
       },
-      "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.id }}"
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
       },
       "schema": "schemas/customers.json",
       "query": {
@@ -909,9 +911,10 @@
       "records": {
         "path": "."
       },
-      "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.id }}"
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
       },
       "schema": "schemas/orders.json",
       "query": {
@@ -1073,9 +1076,10 @@
       "records": {
         "path": "."
       },
-      "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.id }}"
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
       },
       "schema": "schemas/products.json",
       "query": {

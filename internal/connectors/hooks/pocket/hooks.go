@@ -3,7 +3,6 @@ package pocket
 
 import (
 	"context"
-	"fmt"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
@@ -23,6 +22,10 @@ type Hooks struct {
 func New() engine.Hooks { return Hooks{Connector: legacy.New()} }
 
 func (h Hooks) ConnectorName() string { return "pocket" }
+
+var handledStreams = map[string]struct{}{
+	"items": {},
+}
 
 var streamAliases = map[string]string{}
 
@@ -47,7 +50,10 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 		req.Stream = legacyName
 	}
 	if req.Stream == "" {
-		return true, fmt.Errorf("pocket" + " stream name is required")
+		req.Stream = "items"
+	}
+	if _, ok := handledStreams[req.Stream]; !ok {
+		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

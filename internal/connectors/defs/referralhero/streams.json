@@ -6,11 +6,9 @@
       { "mode": "bearer", "token": "{{ secrets.api_key }}" }
     ],
     "pagination": {
-      "type": "page_number",
-      "page_param": "page",
-      "size_param": "per_page",
-      "start_page": 1,
-      "page_size": 100
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "pagination.next_page"
     },
     "check": { "method": "GET", "path": "/lists", "query": { "page": "1", "per_page": "1" } },
     "error_map": [
@@ -23,12 +21,14 @@
     {
       "name": "lists",
       "path": "/lists",
+      "query": { "page": "1", "per_page": "100" },
       "records": { "path": "data" },
       "schema": "schemas/lists.json"
     },
     {
       "name": "subscribers",
       "path": "/subscribers",
+      "query": { "page": "1", "per_page": "100" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "updated_at"
@@ -38,6 +38,7 @@
     {
       "name": "referrals",
       "path": "/referrals",
+      "query": { "page": "1", "per_page": "100" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "created_at"
@@ -47,6 +48,7 @@
     {
       "name": "rewards",
       "path": "/rewards",
+      "query": { "page": "1", "per_page": "100" },
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "updated_at"

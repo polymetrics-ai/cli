@@ -29,12 +29,11 @@
       "records": { "path": "articles" },
       "incremental": {
         "cursor_field": "pub_date",
-        "start_config_key": "start_date",
-        "client_filtered": true
+        "start_config_key": "start_date"
       },
       "computed_fields": {
-        "article_id": "{{ record.articleId }}",
-        "pub_date": "{{ record.pubDate }}"
+        "article_id": "{{ coalesce record.articleId record.id }}",
+        "pub_date": "{{ coalesce record.pubDate record.publishedAt }}"
       },
       "schema": "schemas/articles.json"
     },

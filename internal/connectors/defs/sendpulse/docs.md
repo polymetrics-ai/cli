@@ -42,7 +42,7 @@ address book id, with no cross-book list endpoint (see Known limits for the excl
 `/emails/{email}` global-lookup variant). `fan_out.ids_from.request` issues the SAME paginated `GET
 /addressbooks` request the `addressbooks` stream itself uses (`records_path: "."`, `id_field:
 "id"`, reusing this stream's effective pagination — the base `page_number` spec, unbounded, since
-`emails_in_book` declares no pagination override of its own), then `into.path_var: "parent_id"`
+`emails_in_book` declares no pagination override of its own), then `into.path_var: "id"`
 threads each discovered book id into `/addressbooks/{{ fanout.id }}/emails`, and `stamp_field:
 "book_id"` writes the source book id (always a STRING — see sendowl's docs.md for the identical
 fan_out-dialect-wide constraint) onto every emitted subscriber record after projection.

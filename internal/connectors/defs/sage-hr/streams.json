@@ -15,7 +15,6 @@
     {
       "name": "employees",
       "path": "/employees",
-      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
       "records": { "path": "data" },
       "schema": "schemas/employees.json",
       "projection": "passthrough"
@@ -23,7 +22,6 @@
     {
       "name": "teams",
       "path": "/teams",
-      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
       "records": { "path": "data" },
       "schema": "schemas/teams.json",
       "projection": "passthrough"
@@ -31,7 +29,6 @@
     {
       "name": "timeoff_requests",
       "path": "/leave-management/requests",
-      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
       "records": { "path": "data" },
       "schema": "schemas/timeoff_requests.json",
       "projection": "passthrough"
@@ -99,7 +96,7 @@
         "ids_from": {
           "request": { "path": "/recruitment/positions", "records_path": "data", "id_field": "id" }
         },
-        "into": { "path_var": "position_id" },
+        "into": { "path_var": "id" },
         "stamp_field": "position_id"
       },
       "schema": "schemas/recruitment_applicants.json",

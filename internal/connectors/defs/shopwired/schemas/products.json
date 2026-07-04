@@ -5,6 +5,7 @@
   "x-primary-key": [
     "id"
   ],
+  "x-cursor-field": "updated_at",
   "properties": {
     "id": {
       "type": [
@@ -15,12 +16,6 @@
       ]
     },
     "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "title": {
       "type": [
         "string",
         "null"
@@ -46,12 +41,6 @@
       ]
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updatedAt": {
       "type": [
         "string",
         "null"

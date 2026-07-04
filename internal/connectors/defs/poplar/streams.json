@@ -22,6 +22,9 @@
       "path": "/campaigns",
       "query": { "page": "1", "per_page": "100" },
       "records": { "path": "data" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
       "schema": "schemas/campaigns.json"
     },
     {
@@ -31,6 +34,10 @@
       "records": { "path": "data" },
       "incremental": {
         "cursor_field": "created_at"
+      },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.campaign_id }}",
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
       },
       "schema": "schemas/orders.json"
     }

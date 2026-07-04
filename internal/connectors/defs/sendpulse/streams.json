@@ -61,7 +61,7 @@
       "projection": "passthrough",
       "fan_out": {
         "ids_from": { "request": { "path": "/addressbooks", "records_path": ".", "id_field": "id" } },
-        "into": { "path_var": "parent_id" },
+        "into": { "path_var": "id" },
         "stamp_field": "book_id"
       }
     }

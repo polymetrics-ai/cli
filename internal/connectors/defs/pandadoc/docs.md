@@ -22,3 +22,4 @@ Legacy `documents`, `templates`, and `contacts` preserve their schema projection
 - Download endpoints are excluded as `binary_payload` because they return files rather than JSON records.
 - OAuth token exchange, member-token creation, API-key generation, and webhook shared-key rotation are excluded because they manage credential or secret material rather than ordinary business records.
 - Some list streams rely on PandaDoc's default paging parameters until a `next` URL is returned; the legacy streams continue to send `count` and `page=1` exactly as before.
+- Legacy accepts a runtime `max_pages` cap, but the declarative engine only supports fixed bundle-authored `pagination.max_pages` integers. This bundle intentionally does not declare an ignored `max_pages` `spec.json` property.

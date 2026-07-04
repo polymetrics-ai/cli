@@ -18,6 +18,9 @@
       "method": "POST",
       "path": "institutions/get",
       "records": { "path": "institutions" },
+      "computed_fields": {
+        "country_codes": "{{ record.country_codes | join:, }}"
+      },
       "schema": "schemas/institutions.json"
     },
     {
@@ -26,6 +29,9 @@
       "path": "categories/get",
       "records": { "path": "categories" },
       "pagination": { "type": "none" },
+      "computed_fields": {
+        "hierarchy": "{{ record.hierarchy | join:, }}"
+      },
       "schema": "schemas/categories.json"
     }
   ]

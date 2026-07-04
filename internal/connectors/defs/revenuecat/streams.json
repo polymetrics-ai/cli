@@ -46,6 +46,7 @@
         "path": "items"
       },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
         "stream": "projects"
       },
       "projection": "passthrough",
@@ -72,6 +73,7 @@
         "path": "items"
       },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
         "stream": "apps"
       },
       "projection": "passthrough",
@@ -98,6 +100,7 @@
         "path": "items"
       },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
         "stream": "products"
       },
       "projection": "passthrough",
@@ -124,6 +127,7 @@
         "path": "items"
       },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
         "stream": "offerings"
       },
       "projection": "passthrough",
@@ -150,6 +154,7 @@
         "path": "items"
       },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
         "stream": "customers"
       },
       "projection": "passthrough",

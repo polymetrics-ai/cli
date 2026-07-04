@@ -2,7 +2,7 @@
 
 ShopWired is a declarative HTTP connector for the documented ShopWired REST API v1. Pass B expands beyond the original products, orders, customers, and categories streams to cover the ReadMe API reference list, detail, and search GET endpoints as streams, and JSON POST/PUT/PATCH/DELETE endpoints as write actions.
 
-The legacy Go connector emitted a fixed six-field projection for its four original streams. This bundle uses passthrough projection for the expanded API so raw documented response fields are preserved; the original stream names remain `products`, `orders`, `customers`, and `categories`.
+The legacy Go connector emitted a fixed six-field projection for its four original streams. This bundle keeps schema projection for `products`, `orders`, `customers`, and `categories`, including the legacy `id`/`name`/`updated_at` fallbacks, while expanded API streams use passthrough so raw documented response fields are preserved.
 
 ## Auth setup
 
@@ -12,7 +12,7 @@ The current ShopWired docs use HTTP Basic authentication where the API key is th
 
 ## Streams notes
 
-Streams are generated from the ReadMe OpenAPI snippets linked by `https://shopwired.readme.io/llms.txt`. List endpoints use documented `count`/`offset` pagination, with a static `count` of 100. Detail endpoints use `pagination.type: none` and require the documented path parameter through config, such as `id`, `product_id`, `sku`, `comment_id`, or `country_id` depending on the stream path.
+Streams are generated from the ReadMe OpenAPI snippets linked by `https://shopwired.readme.io/llms.txt`. List endpoints use documented `count`/`offset` pagination, with a static `count` of 100. The legacy streams project `id`, `name`, `sku`, `email`, `status`, and `updated_at`; detail and expanded list streams preserve passthrough records. Detail endpoints use `pagination.type: none` and require the documented path parameter through config, such as `id`, `product_id`, `sku`, `comment_id`, or `country_id` depending on the stream path.
 
 Count endpoints such as `/products/count` are listed in `api_surface.json` as `non_data_endpoint` because they return aggregate metadata rather than records. Optional documented query parameters are exposed as optional config-backed query values and omitted when absent.
 
@@ -26,4 +26,4 @@ All writes mutate external ShopWired store state and must go through plan, previ
 
 - The current docs use Basic/OAuth authentication and `https://api.ecommerceapi.uk/v1`; the legacy Go connector used `X-API-Key` against `https://api.shopwired.co.uk`. The bundle supports both auth shapes, but defaults to the current documented host.
 - Runtime `page_size`/`max_pages` overrides from legacy are not modeled because engine pagination fields are static. The bundle uses documented `count`/`offset` pagination with `count=100`.
-- Response schemas are intentionally permissive passthrough schemas. The ReadMe OpenAPI snippets define many resource-specific schemas, but preserving raw fields across the broad Pass B surface is safer than projecting a partial field list.
+- Expanded response schemas are intentionally permissive passthrough schemas. The ReadMe OpenAPI snippets define many resource-specific schemas, but preserving raw fields across the broad Pass B surface is safer than projecting a partial field list.

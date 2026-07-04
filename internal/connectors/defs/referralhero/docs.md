@@ -27,7 +27,9 @@ The original legacy-parity streams still read:
 Those streams intentionally retain the old record projections: `lists` (`id`, `name`, `status`,
 `created_at`), `subscribers` (`id`, `email`, `name`, `status`, `referral_code`, `updated_at`),
 `referrals` (`id`, `subscriber_id`, `email`, `status`, `created_at`), and `rewards` (`id`, `name`,
-`status`, `updated_at`).
+`status`, `updated_at`). They also retain legacy pagination semantics: the first request sends
+`page=1&per_page=100`, and subsequent requests follow `pagination.next_page` from the response
+body rather than inferring continuation from page length.
 
 Pass B streams follow ReferralHero's documented v2 envelopes:
 
@@ -65,6 +67,9 @@ records in one API call and have higher blast radius than single-record actions.
 - The legacy-parity streams remain as-is even though ReferralHero's public v2 docs now emphasize
   campaign-scoped envelopes such as `data.subscribers` and `data.rewards`. This preserves legacy
   emitted data until the registry cutover.
+- Legacy accepted runtime `page_size`/`max_pages` config values for the four top-level streams.
+  This bundle keeps the legacy default `per_page=100` and next-page-token behavior, but the engine
+  pagination block is static and does not expose those runtime overrides.
 - The dialect models the documented GET endpoints with explicit config identifiers. It does not
   perform nested discovery from every list to every subscriber/coupon group because the current
   declarative fan-out supports one parent source at a time.

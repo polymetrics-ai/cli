@@ -30,17 +30,14 @@ host) — `base_url` is the mechanism for pointing at a real tenant, tests, or a
 ## Streams notes
 
 **Envelope shape correction (from legacy's untested assumption to the real, documented wire
-shape):** legacy's `employees`/`teams`/`timeoff_requests` streams assumed a bare top-level JSON
-array with `records.path: ""`, based only on `sage_hr_test.go`'s own fixture (which never actually
-exercised the real API). The real Sage HR OpenAPI spec's response examples for every list endpoint
-(`/employees`, `/teams`, `/leave-management/requests`, and every other list stream below) show a
-consistent `{"data": [...], "meta": {"current_page", "next_page", "previous_page", "total_pages",
-"per_page", "total_entries"}}` envelope with page-number pagination (`?page=N`) — this bundle
-corrects `records.path` to `"data"` and declares `page_number` pagination (`page_param: "page"`,
-`size_param: ""` since the real API's list endpoints do not accept a page-size override param) for
-every list stream, superseding the untested `""`/no-pagination assumption. `timeoff_requests`'s
-real path is also corrected from legacy's invented `/timeoff/requests` (which does not exist in the
-documented API) to the real `/leave-management/requests`.
+shape):** legacy's `employees`/`teams`/`timeoff_requests` streams can read a `data` envelope or a
+bare top-level array (`recordsAtAny(resp.Body, "data", "")`) and then emit each raw object
+unchanged. The real Sage HR OpenAPI spec's response examples for these list endpoints show the
+`{"data": [...], "meta": {...}}` envelope, so this bundle uses `records.path: "data"` and
+`projection: "passthrough"` for the same emitted record objects. The three legacy streams remain
+single-response reads, matching legacy's lack of pagination. `timeoff_requests`'s real path is also
+corrected from legacy's invented `/timeoff/requests` (which does not exist in the documented API)
+to the real `/leave-management/requests`.
 
 **All streams declare `"projection": "passthrough"`** (conventions.md §8 rule 1): legacy's `Read`
 performs zero field mapping (`recordsAtAny` + a direct `connectors.Record(rec)` cast, no
@@ -127,3 +124,7 @@ default full-history sync).
 - **No incremental filtering is modeled for any stream**, matching legacy's `Catalog` (no declared
   `CursorFields`) and the real API's lack of a documented updated-since filter parameter on any of
   these list endpoints.
+- Legacy's root-array fallback for the original three streams cannot be expressed alongside the
+  documented `data` envelope in the current `records.path` dialect. The bundle follows the real
+  documented envelope; passthrough projection preserves the emitted record data for that wire
+  shape.

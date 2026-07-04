@@ -14,8 +14,7 @@
   "streams": [
     {
       "name": "events",
-      "path": "/v1/events",
-      "query": { "page": "1", "per_page": "{{ config.page_size }}" },
+      "path": "/v1/events?page=1&per_page={{ config.page_size }}",
       "records": { "path": "data" },
       "pagination": {
         "type": "next_url",
@@ -26,8 +25,7 @@
     },
     {
       "name": "links",
-      "path": "/v1/links",
-      "query": { "page": "1", "per_page": "{{ config.page_size }}" },
+      "path": "/v1/links?page=1&per_page={{ config.page_size }}",
       "records": { "path": "data" },
       "pagination": {
         "type": "next_url",
@@ -38,8 +36,7 @@
     },
     {
       "name": "contacts",
-      "path": "/v1/contacts",
-      "query": { "page": "1", "per_page": "{{ config.page_size }}" },
+      "path": "/v1/contacts?page=1&per_page={{ config.page_size }}",
       "records": { "path": "data" },
       "pagination": {
         "type": "next_url",
@@ -58,8 +55,7 @@
     },
     {
       "name": "webhooks",
-      "path": "/v1/webhooks",
-      "query": { "page": "1", "per_page": "{{ config.page_size }}" },
+      "path": "/v1/webhooks?page=1&per_page={{ config.page_size }}",
       "records": { "path": "data" },
       "pagination": {
         "type": "next_url",
@@ -70,8 +66,7 @@
     },
     {
       "name": "workflows",
-      "path": "/v1/workflows",
-      "query": { "page": "1", "per_page": "{{ config.page_size }}" },
+      "path": "/v1/workflows?page=1&per_page={{ config.page_size }}",
       "records": { "path": "data" },
       "pagination": {
         "type": "next_url",
@@ -89,7 +84,7 @@
         "ids_from": {
           "request": { "path": "/v1/workflows", "records_path": "data", "id_field": "id" }
         },
-        "into": { "path_var": "workflow_id" },
+        "into": { "path_var": "id" },
         "stamp_field": "workflow_id"
       },
       "schema": "schemas/workflow_rules.json",
