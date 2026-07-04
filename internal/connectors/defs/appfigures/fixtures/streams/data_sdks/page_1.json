@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/data/sdks" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture-sdk-1",
+        "code": "fixture_analytics",
+        "name": "Fixture Analytics SDK",
+        "tags": ["analytics"],
+        "active": true,
+        "release_date": "2020-01-01",
+        "started_tracking": "2020-06-01",
+        "description": "fixture SDK description",
+        "notes": null,
+        "tracked_platforms": ["ios", "android"],
+        "external_links": [{ "type": "website", "value": "https://example.com/fixture-sdk" }],
+        "developer": { "name": "Fixture Developer", "links": [] }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "bo_fixture_1",
+    "firstName": "FixtureUpdated"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/beneficial-owners/bo_fixture_1",
+    "body": {
+      "firstName": "FixtureUpdated"
+    }
+  }
+}

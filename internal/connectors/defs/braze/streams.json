@@ -39,6 +39,207 @@
       "path": "/segments/list",
       "records": { "path": "segments" },
       "schema": "schemas/segments.json"
+    },
+    {
+      "name": "campaign_details",
+      "path": "/campaigns/details",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/campaigns/list", "records_path": "campaigns", "id_field": "id" } },
+        "into": { "query_param": "campaign_id" },
+        "stamp_field": "campaign_id"
+      },
+      "computed_fields": {
+        "channels": "{{ record.channels | join:, }}",
+        "tags": "{{ record.tags | join:, }}",
+        "teams": "{{ record.teams | join:, }}"
+      },
+      "schema": "schemas/campaign_details.json"
+    },
+    {
+      "name": "canvas_details",
+      "path": "/canvas/details",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/canvas/list", "records_path": "canvases", "id_field": "id" } },
+        "into": { "query_param": "canvas_id" },
+        "stamp_field": "canvas_id"
+      },
+      "computed_fields": {
+        "tags": "{{ record.tags | join:, }}",
+        "teams": "{{ record.teams | join:, }}"
+      },
+      "schema": "schemas/canvas_details.json"
+    },
+    {
+      "name": "canvas_data_summary",
+      "path": "/canvas/data_summary",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/canvas/list", "records_path": "canvases", "id_field": "id" } },
+        "into": { "query_param": "canvas_id" },
+        "stamp_field": "canvas_id"
+      },
+      "schema": "schemas/canvas_data_summary.json"
+    },
+    {
+      "name": "segment_details",
+      "path": "/segments/details",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/segments/list", "records_path": "segments", "id_field": "id" } },
+        "into": { "query_param": "segment_id" },
+        "stamp_field": "segment_id"
+      },
+      "schema": "schemas/segment_details.json"
+    },
+    {
+      "name": "catalogs",
+      "path": "/catalogs",
+      "pagination": { "type": "none" },
+      "records": { "path": "catalogs" },
+      "computed_fields": {
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/catalogs.json"
+    },
+    {
+      "name": "content_blocks",
+      "path": "/content_blocks/list",
+      "query": {
+        "modified_after": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "content_blocks" },
+      "incremental": { "cursor_field": "last_edited" },
+      "schema": "schemas/content_blocks.json"
+    },
+    {
+      "name": "email_templates",
+      "path": "/templates/email/list",
+      "query": {
+        "modified_after": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "templates" },
+      "incremental": { "cursor_field": "updated_at" },
+      "computed_fields": {
+        "tags": "{{ record.tags | join:, }}"
+      },
+      "schema": "schemas/email_templates.json"
+    },
+    {
+      "name": "feed_cards",
+      "path": "/feed/list",
+      "records": { "path": "cards" },
+      "schema": "schemas/feed_cards.json"
+    },
+    {
+      "name": "email_hard_bounces",
+      "path": "/email/hard_bounces",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "emails" },
+      "incremental": { "cursor_field": "hard_bounced_at", "request_param": "start_date", "param_format": "date" },
+      "schema": "schemas/email_hard_bounces.json"
+    },
+    {
+      "name": "email_unsubscribes",
+      "path": "/email/unsubscribes",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "emails" },
+      "incremental": { "cursor_field": "unsubscribed_at", "request_param": "start_date", "param_format": "date" },
+      "schema": "schemas/email_unsubscribes.json"
+    },
+    {
+      "name": "sms_invalid_phone_numbers",
+      "path": "/sms/invalid_phone_numbers",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "sms" },
+      "incremental": { "cursor_field": "invalid_detected_at", "request_param": "start_date", "param_format": "date" },
+      "schema": "schemas/sms_invalid_phone_numbers.json"
+    },
+    {
+      "name": "kpi_dau",
+      "path": "/kpi/dau/data_series",
+      "pagination": { "type": "none" },
+      "query": { "length": "14" },
+      "records": { "path": "data" },
+      "schema": "schemas/kpi_dau.json"
+    },
+    {
+      "name": "kpi_mau",
+      "path": "/kpi/mau/data_series",
+      "pagination": { "type": "none" },
+      "query": { "length": "14" },
+      "records": { "path": "data" },
+      "schema": "schemas/kpi_mau.json"
+    },
+    {
+      "name": "kpi_new_users",
+      "path": "/kpi/new_users/data_series",
+      "pagination": { "type": "none" },
+      "query": { "length": "14" },
+      "records": { "path": "data" },
+      "schema": "schemas/kpi_new_users.json"
+    },
+    {
+      "name": "kpi_uninstalls",
+      "path": "/kpi/uninstalls/data_series",
+      "pagination": { "type": "none" },
+      "query": { "length": "14" },
+      "records": { "path": "data" },
+      "schema": "schemas/kpi_uninstalls.json"
+    },
+    {
+      "name": "sessions",
+      "path": "/sessions/data_series",
+      "pagination": { "type": "none" },
+      "query": { "length": "14" },
+      "records": { "path": "data" },
+      "schema": "schemas/sessions.json"
+    },
+    {
+      "name": "preference_centers",
+      "path": "/preference_center/v1/list",
+      "pagination": { "type": "none" },
+      "records": { "path": "preference_centers" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/preference_centers.json"
+    },
+    {
+      "name": "scheduled_broadcasts",
+      "path": "/messages/scheduled_broadcasts",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "computed_fields": {
+        "tags": "{{ record.tags | join:, }}"
+      },
+      "schema": "schemas/scheduled_broadcasts.json"
     }
   ]
 }

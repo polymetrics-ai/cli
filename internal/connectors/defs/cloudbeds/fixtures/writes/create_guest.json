@@ -1,0 +1,13 @@
+{
+  "record": {
+    "propertyID": "prop_fixture_1",
+    "reservationID": "res_fixture_1",
+    "guestFirstName": "Fixture",
+    "guestLastName": "Guest"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/postGuest"
+  },
+  "response": { "status": 200, "body": { "success": true, "guestID": "guest_fixture_new" } }
+}

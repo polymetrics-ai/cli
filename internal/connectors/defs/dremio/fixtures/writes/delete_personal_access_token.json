@@ -1,0 +1,10 @@
+{
+  "record": {
+    "user_id": "users_fixture_1",
+    "token_id": "token_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/user/users_fixture_1/token/token_fixture_1"
+  }
+}

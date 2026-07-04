@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/organizations/org_fixture_1/members", "query": { "page": "0", "per_page": "50", "include_totals": "true" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "start": 0,
+      "limit": 50,
+      "length": 1,
+      "total": 1,
+      "members": [
+        {
+          "user_id": "auth0|fixture_user_1",
+          "email": "fixture1@example.com",
+          "picture": "https://example.com/fixture1.png",
+          "name": "Fixture User 1"
+        }
+      ]
+    }
+  }
+}

@@ -9,7 +9,7 @@
     "document_id": { "type": "string" },
     "template_name": { "type": ["string", "null"] },
     "template_description": { "type": ["string", "null"] },
-    "created_date": { "type": ["string", "null"] },
+    "created_date": { "type": ["integer", "null"] },
     "sender_email": { "type": ["string", "null"] },
     "is_shared_template": { "type": ["boolean", "null"] },
     "labels": { "type": ["array", "null"] }

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "key": "fixture_api_key_placeholder",
+    "name": "Fixture API Key Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/api_key/fixture_api_key_placeholder"
+  }
+}

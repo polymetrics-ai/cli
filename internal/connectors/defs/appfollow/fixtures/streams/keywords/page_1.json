@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/aso/keywords",
+    "query": {
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ext_id": "ios:1001",
+        "store": "itunes",
+        "country": "us",
+        "device": "iphone",
+        "date": "2026-01-01",
+        "page": 1,
+        "total": 2,
+        "keyword": "fixture keyword one",
+        "pos": 5,
+        "no_pos": false,
+        "popularity": 60
+      },
+      {
+        "ext_id": "ios:1001",
+        "store": "itunes",
+        "country": "us",
+        "device": "iphone",
+        "date": "2026-01-01",
+        "page": 1,
+        "total": 2,
+        "keyword": "fixture keyword two",
+        "pos": null,
+        "no_pos": true,
+        "popularity": 30
+      }
+    ]
+  }
+}

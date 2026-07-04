@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "convert",
+  "type": "object",
+  "x-primary-key": ["date"],
+  "required": ["date"],
+  "properties": {
+    "date": { "type": "string" },
+    "success": { "type": ["boolean", "null"] },
+    "historical": { "type": ["string", "null"] },
+    "query": { "type": ["object", "null"] },
+    "info": { "type": ["object", "null"] },
+    "result": { "type": ["number", "null"] }
+  }
+}

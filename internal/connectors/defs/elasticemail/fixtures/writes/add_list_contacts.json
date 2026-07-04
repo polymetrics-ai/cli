@@ -1,0 +1,17 @@
+{
+  "record": {
+    "ListName": "Fixture List",
+    "Emails": ["fixture1@example.com", "fixture2@example.com"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/Fixture List/contacts",
+    "body": {
+      "Emails": ["fixture1@example.com", "fixture2@example.com"]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

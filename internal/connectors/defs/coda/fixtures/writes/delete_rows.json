@@ -1,0 +1,17 @@
+{
+  "record": {
+    "table_id": "grid-fixture-1",
+    "rowIds": ["i-fixture-1", "i-fixture-2"]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/docs/synthetic-conformance-value/tables/grid-fixture-1/rows",
+    "body": {
+      "rowIds": ["i-fixture-1", "i-fixture-2"]
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": { "requestId": "req-fixture-4", "rowIds": ["i-fixture-1", "i-fixture-2"] }
+  }
+}

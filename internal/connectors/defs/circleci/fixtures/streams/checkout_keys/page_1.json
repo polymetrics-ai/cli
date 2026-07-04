@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/checkout-key"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "fingerprint": "aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99",
+          "type": "deploy-key",
+          "public-key": "ssh-rsa FIXTURE_PUBLIC_KEY",
+          "preferred": true,
+          "created-at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next_page_token": null
+    }
+  }
+}

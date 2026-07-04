@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/application_key" },
+  "response": {
+    "status": 200,
+    "body": {
+      "application_keys": [
+        {
+          "hash": "fixture_application_key_hash_placeholder0000000",
+          "name": "Fixture Application Key",
+          "owner": "fixture@example.com"
+        }
+      ]
+    }
+  }
+}

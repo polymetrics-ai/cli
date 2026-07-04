@@ -13,6 +13,10 @@
       "type": "string",
       "description": "Clarifai user id all streams are scoped under (users/{user_id}/...)."
     },
+    "app_id": {
+      "type": "string",
+      "description": "Clarifai app id. Required for the create_dataset/delete_dataset write actions, which are scoped under users/{user_id}/apps/{app_id}/datasets."
+    },
     "base_url": {
       "type": "string",
       "format": "uri",

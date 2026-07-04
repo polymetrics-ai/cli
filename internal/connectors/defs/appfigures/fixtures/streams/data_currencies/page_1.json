@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/data/currencies" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "Currency": "USD", "Symbol": "$" },
+      { "Currency": "EUR", "Symbol": "€" }
+    ]
+  }
+}

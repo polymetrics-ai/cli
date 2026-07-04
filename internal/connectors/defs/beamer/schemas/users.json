@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["beamerId"],
+  "required": ["beamerId"],
+  "properties": {
+    "beamerId": { "type": "string" },
+    "userId": { "type": ["string", "null"] },
+    "userEmail": { "type": ["string", "null"] },
+    "userFirstName": { "type": ["string", "null"] },
+    "userLastName": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "filter": { "type": ["string", "null"] },
+    "firstSeen": { "type": ["string", "null"] },
+    "lastSeen": { "type": ["string", "null"] },
+    "ip": { "type": ["string", "null"] },
+    "browser": { "type": ["string", "null"] },
+    "os": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "latitude": { "type": ["string", "null"] },
+    "longitude": { "type": ["string", "null"] }
+  }
+}

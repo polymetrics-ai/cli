@@ -1,14 +1,14 @@
 {
   "name": "appcues",
   "display_name": "Appcues",
-  "description": "Reads Appcues flows, segments, tags, checklists, and banners through the Appcues REST API.",
+  "description": "Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, mobile experiences, launchpads, banners, checklists, embeds, NPS 2.0), audience data (segments, tags), operational resources (offline jobs, SDK authentication keys), and individual end-user/group profiles through the Appcues REST API v2.",
   "integration_type": "api",
   "docs_url": "https://docs.appcues.com/en_US/api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Appcues API read of in-app guidance and audience data"
+    "read": "external Appcues API read of in-app guidance and audience data",
+    "write": "external Appcues API mutation — publishes/unpublishes user-visible in-app experiences, manages segments and SDK keys, and mutates individual end-user/group profiles and event history",
+    "approval": "reverse ETL plan approval required before writes"
   }
 }

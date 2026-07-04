@@ -51,6 +51,84 @@
       "query": { "limit": "{{ config.limit }}" },
       "records": { "path": "." },
       "schema": "schemas/country_info.json"
+    },
+    {
+      "name": "account_activities",
+      "path": "/accounts/activities",
+      "query": {
+        "page_size": "100"
+      },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page_token",
+        "last_record_field": "id"
+      },
+      "schema": "schemas/account_activities.json"
+    },
+    {
+      "name": "journals",
+      "path": "/journals",
+      "records": { "path": "." },
+      "schema": "schemas/journals.json"
+    },
+    {
+      "name": "positions",
+      "path": "/trading/accounts/{{ fanout.id }}/positions",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/accounts", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "account_id" },
+        "stamp_field": "account_id"
+      },
+      "computed_fields": {
+        "id": "{{ record.asset_id }}"
+      },
+      "schema": "schemas/positions.json"
+    },
+    {
+      "name": "watchlists",
+      "path": "/trading/accounts/{{ fanout.id }}/watchlists",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/accounts", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "account_id" },
+        "stamp_field": "account_id"
+      },
+      "schema": "schemas/watchlists.json"
+    },
+    {
+      "name": "orders",
+      "path": "/trading/accounts/{{ fanout.id }}/orders",
+      "query": {
+        "status": "all"
+      },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/accounts", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "account_id" },
+        "stamp_field": "account_id"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "documents",
+      "path": "/accounts/{{ fanout.id }}/documents",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/accounts", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "account_id" },
+        "stamp_field": "account_id"
+      },
+      "schema": "schemas/documents.json"
     }
   ]
 }

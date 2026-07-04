@@ -17,15 +17,15 @@
     },
     "vcs_type": {
       "type": "string",
-      "description": "CircleCI VCS type segment of the project slug (e.g. gh, bb). Required for the projects and pipelines streams."
+      "description": "CircleCI VCS type segment of the project slug (e.g. gh, bb). Required for the projects, pipelines, schedules, checkout_keys, and environment_variables streams, and doubles as the first segment of the contexts stream's derived owner-slug."
     },
     "org": {
       "type": "string",
-      "description": "CircleCI organization/account segment of the project slug (e.g. acme). Required for the projects and pipelines streams."
+      "description": "CircleCI organization/account segment of the project slug (e.g. acme). Required for the projects, pipelines, schedules, checkout_keys, and environment_variables streams, and doubles as the second segment of the contexts stream's derived owner-slug."
     },
     "repo": {
       "type": "string",
-      "description": "CircleCI repository segment of the project slug (e.g. widgets). Required for the projects and pipelines streams."
+      "description": "CircleCI repository segment of the project slug (e.g. widgets). Required for the projects, pipelines, schedules, checkout_keys, environment_variables, and insights_workflow_summary streams."
     },
     "pipeline_id": {
       "type": "string",

@@ -91,6 +91,27 @@
         "resource": "goal"
       },
       "schema": "schemas/goals.json"
+    },
+    {
+      "name": "epics",
+      "path": "/api/v1/epics",
+      "records": { "path": "epics" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "resource": "epic"
+      },
+      "schema": "schemas/epics.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v1/users",
+      "records": { "path": "users" },
+      "computed_fields": {
+        "resource": "user"
+      },
+      "schema": "schemas/users.json"
     }
   ]
 }

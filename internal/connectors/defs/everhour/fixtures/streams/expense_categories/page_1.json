@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/expenses/categories" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 11, "name": "Travel", "color": "#0000aa", "unitBased": false, "unitName": null, "unitPrice": null },
+      { "id": 12, "name": "Software", "color": "#aa00aa", "unitBased": true, "unitName": "license", "unitPrice": 9.99 }
+    ]
+  }
+}

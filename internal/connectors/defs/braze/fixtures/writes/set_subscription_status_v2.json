@@ -1,0 +1,17 @@
+{
+  "record": {
+    "subscription_groups": [
+      { "subscription_group_id": "sub_fixture_1", "subscription_state": "subscribed", "external_ids": ["user_fixture_1"] }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/subscription/status/set",
+    "body": {
+      "subscription_groups": [
+        { "subscription_group_id": "sub_fixture_1", "subscription_state": "subscribed", "external_ids": ["user_fixture_1"] }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

@@ -23,6 +23,10 @@
       "type": "string",
       "format": "date-time",
       "description": "RFC3339 lower bound; only records at or after this date are read on a fresh sync. The engine's param_format=date conversion requires an RFC3339 (or bare Unix-seconds) input value, narrower than legacy's own YYYY-MM-DD-or-RFC3339 acceptance — see docs.md Known limits."
+    },
+    "company_id": {
+      "type": "string",
+      "description": "Optional CallRail company id filter, applied to the integrations, integration_filters, caller_ids, message_flows, and leads streams' company_id query parameter. Omitted from each request entirely when unset (stream.Query's omit_when_absent dialect)."
     }
   }
 }

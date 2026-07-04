@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 4405,
+        "name": "Fixture Tag",
+        "colour": "#300084",
+        "taggings_count": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "pipeline_slug": "fixture-web",
+    "commit": "HEAD",
+    "branch": "main"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/pipelines/fixture-web/builds",
+    "body": {
+      "commit": "HEAD",
+      "branch": "main"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "build_fixture_new",
+      "number": 42
+    }
+  }
+}

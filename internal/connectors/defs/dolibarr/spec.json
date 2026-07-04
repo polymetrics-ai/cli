@@ -23,6 +23,26 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "thirdparty_id": {
+      "type": "string",
+      "description": "Third party (rowid) the 'thirdparty_detail' stream reads a single record for. Required only when reading the 'thirdparty_detail' stream."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Contact (rowid) the 'contact_detail' stream reads a single record for. Required only when reading the 'contact_detail' stream."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product (rowid) the 'product_detail' stream reads a single record for. Required only when reading the 'product_detail' stream."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Invoice (rowid) the 'invoice_detail' stream reads a single record for. Required only when reading the 'invoice_detail' stream."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Order (rowid) the 'order_detail' stream reads a single record for. Required only when reading the 'order_detail' stream."
     }
   }
 }

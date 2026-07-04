@@ -1,0 +1,16 @@
+{
+  "record": {
+    "store": "itunes",
+    "ext_id": "ios:1001",
+    "apps_id": 11
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/account/apps/app",
+    "body": {
+      "store": "itunes",
+      "ext_id": "ios:1001",
+      "apps_id": 11
+    }
+  }
+}

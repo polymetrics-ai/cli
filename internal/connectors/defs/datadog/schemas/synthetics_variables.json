@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "synthetics_variables",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "is_totp": { "type": ["boolean", "null"] },
+    "is_fido": { "type": ["boolean", "null"] },
+    "parse_test_public_id": { "type": ["string", "null"] }
+  }
+}

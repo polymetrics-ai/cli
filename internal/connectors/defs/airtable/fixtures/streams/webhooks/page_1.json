@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/bases/synthetic-conformance-value/webhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "achFixture1",
+          "notificationUrl": "https://example.com/fixture/webhook",
+          "isHookEnabled": true,
+          "areNotificationsEnabled": true,
+          "cursorForNextPayload": 1,
+          "expirationTime": null,
+          "lastSuccessfulNotificationTime": null,
+          "specification": { "options": { "filters": { "dataTypes": ["tableData"] } } }
+        }
+      ]
+    }
+  }
+}

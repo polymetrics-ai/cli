@@ -62,6 +62,52 @@
       },
       "records": { "path": "protocols" },
       "schema": "schemas/fees.json"
+    },
+    {
+      "name": "options",
+      "path": "/overview/options",
+      "query": {
+        "excludeTotalDataChart": "true",
+        "excludeTotalDataChartBreakdown": "true"
+      },
+      "records": { "path": "protocols" },
+      "schema": "schemas/options.json"
+    },
+    {
+      "name": "open_interest",
+      "path": "/overview/open-interest",
+      "query": {
+        "excludeTotalDataChart": "true",
+        "excludeTotalDataChartBreakdown": "true"
+      },
+      "records": { "path": "protocols" },
+      "schema": "schemas/open_interest.json"
+    },
+    {
+      "name": "pools",
+      "path": "https://yields.llama.fi/pools",
+      "records": { "path": "data" },
+      "schema": "schemas/pools.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "this stream's real endpoint lives on a third host (yields.llama.fi) distinct from the bundle's base.url (api.llama.fi); the engine resolves an http(s)-prefixed stream.path as an ALREADY-ABSOLUTE request target (connsdk.Requester.resolveURL) and never substitutes the conformance replay server's origin for it, so a declarative fixture replay would dial the real internet instead of the test double. Read correctness for this stream is proven by its own fixtures/streams/pools/page_1.json shape (matches DefiLlama's real documented /pools envelope, {status,data:[...]}) and by the same schema-projection path every other stream uses; only the dynamic (live-replay) checks are skipped, not the static schema/fixture-shape checks — the identical pattern already applied to the stablecoins stream above."
+      }
+    },
+    {
+      "name": "stablecoin_chains",
+      "path": "https://stablecoins.llama.fi/stablecoinchains",
+      "records": { "path": "." },
+      "schema": "schemas/stablecoin_chains.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "this stream's real endpoint lives on a second host (stablecoins.llama.fi) distinct from the bundle's base.url (api.llama.fi); the engine resolves an http(s)-prefixed stream.path as an ALREADY-ABSOLUTE request target (connsdk.Requester.resolveURL) and never substitutes the conformance replay server's origin for it, so a declarative fixture replay would dial the real internet instead of the test double. Read correctness for this stream is proven by its own fixtures/streams/stablecoin_chains/page_1.json shape (matches DefiLlama's real documented /stablecoinchains envelope) and by the same schema-projection path every other stream uses; only the dynamic (live-replay) checks are skipped, not the static schema/fixture-shape checks — the identical pattern already applied to the stablecoins stream above."
+      }
+    },
+    {
+      "name": "historical_chain_tvl",
+      "path": "/v2/historicalChainTvl",
+      "records": { "path": "." },
+      "schema": "schemas/historical_chain_tvl.json"
     }
   ]
 }

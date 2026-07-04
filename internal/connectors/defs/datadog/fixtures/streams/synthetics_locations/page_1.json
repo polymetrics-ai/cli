@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/synthetics/locations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "locations": [
+        { "id": "aws:us-east-1", "name": "N. Virginia, USA" }
+      ]
+    }
+  }
+}

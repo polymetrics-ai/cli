@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "attribute_groups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "attributes": { "type": ["array", "null"] },
+    "sort_order": { "type": ["integer", "null"] },
+    "labels": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "record": { "reservationID": "res_fixture_1", "adjustmentID": "adjustment_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/deleteAdjustment" },
+  "response": { "status": 200, "body": { "success": true } }
+}

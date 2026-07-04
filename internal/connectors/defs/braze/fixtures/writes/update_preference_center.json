@@ -1,0 +1,20 @@
+{
+  "record": {
+    "preference_center_external_id": "pc_fixture_1",
+    "name": "Fixture Preference Center Updated",
+    "preference_center_title": "Fixture Title Updated",
+    "preference_center_page_html": "<html></html>",
+    "confirmation_page_html": "<html></html>"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/preference_center/v1/pc_fixture_1",
+    "body": {
+      "name": "Fixture Preference Center Updated",
+      "preference_center_title": "Fixture Title Updated",
+      "preference_center_page_html": "<html></html>",
+      "confirmation_page_html": "<html></html>"
+    }
+  },
+  "response": { "status": 200, "body": { "message": "success" } }
+}

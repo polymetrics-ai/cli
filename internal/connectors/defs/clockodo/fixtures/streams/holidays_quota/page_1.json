@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/holidaysquota" },
+  "response": {
+    "status": 200,
+    "body": {
+      "holidaysquota": [
+        { "id": 1, "users_id": 1, "year_since": 2026, "year_until": null, "count": 25.0 }
+      ]
+    }
+  }
+}

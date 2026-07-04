@@ -26,7 +26,9 @@
         "startDate": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
         "endDate": "2099-12-31T23:59:59",
         "dateType": "transaction",
-        "timezone": "UTC"
+        "timezone": "UTC",
+        "status": { "template": "{{ config.transaction_status }}", "omit_when_absent": true },
+        "publisherId": { "template": "{{ config.publisher_id }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
       "incremental": {
@@ -46,6 +48,33 @@
       "path": "/advertisers/{{ config.advertiserId }}/publishers/",
       "records": { "path": "." },
       "schema": "schemas/publishers.json"
+    },
+    {
+      "name": "publisher_performance",
+      "path": "/advertisers/{{ config.advertiserId }}/reports/publisher",
+      "pagination": { "type": "none" },
+      "query": {
+        "startDate": { "template": "{{ config.report_start_date }}", "omit_when_absent": true },
+        "endDate": "2099-12-31",
+        "timezone": "UTC",
+        "dateType": "transaction"
+      },
+      "records": { "path": "." },
+      "schema": "schemas/publisher_performance.json"
+    },
+    {
+      "name": "creative_performance",
+      "path": "/advertisers/{{ config.advertiserId }}/reports/creative",
+      "pagination": { "type": "none" },
+      "query": {
+        "startDate": { "template": "{{ config.report_start_date }}", "default": "2020-01-01" },
+        "endDate": "2099-12-31",
+        "region": { "template": "{{ config.report_region }}", "default": "GB" },
+        "timezone": "UTC",
+        "dateType": "transaction"
+      },
+      "records": { "path": "." },
+      "schema": "schemas/creative_performance.json"
     }
   ]
 }

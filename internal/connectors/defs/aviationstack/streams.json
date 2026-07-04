@@ -11,7 +11,7 @@
       "offset_param": "offset",
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/countries" },
+    "check": { "method": "GET", "path": "/countries", "query": { "limit": "1" } },
     "error_map": [
       { "status": 401, "hint": "aviationstack access_key is missing or invalid; re-run pm credentials add aviationstack" },
       { "status": 429, "class": "rate_limited", "hint": "aviationstack rate limit exceeded; the connector will retry with backoff" }

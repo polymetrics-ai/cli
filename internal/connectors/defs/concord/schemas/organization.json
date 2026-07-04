@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "parent": { "type": ["object", "null"] },
+    "region": { "type": ["string", "null"] },
+    "subsidiaries": { "type": ["array", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "emailDomains": { "type": ["array", "null"] },
+    "askForTags": { "type": ["boolean", "null"] },
+    "allTagsVisible": { "type": ["boolean", "null"] },
+    "canCollaboratorSign": { "type": ["boolean", "null"] },
+    "subscription": { "type": ["object", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "aiEnabled": { "type": ["boolean", "null"] }
+  }
+}

@@ -90,6 +90,27 @@
         }
       },
       "risk": "external mutation; opts in subscribers and triggers a 'form submitted' automation workflow for them, updating subscriber data before any scheduled messages send; approval required"
+    },
+    {
+      "name": "launch_ab_test",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/split.php",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["splits", "list", "size", "win_at"],
+        "properties": {
+          "splits": { "type": "array" },
+          "list": { "type": "string" },
+          "size": { "type": "integer" },
+          "condition": { "type": "string" },
+          "win_at": { "type": "string" },
+          "save_as_draft": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates and, unless save_as_draft is set, immediately launches a real A/B test campaign send to a percentage of a real subscriber list, with the winning variant auto-sent to the remainder at win_at; approval required"
     }
   ]
 }

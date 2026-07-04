@@ -1,0 +1,47 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "page": "1", "count": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "metadata": {
+        "resultset": { "count": 2, "page": 1, "total_count": 2, "total_pages": 1 }
+      },
+      "results": [
+        {
+          "id": 7001,
+          "name": "Fixture User One",
+          "email": "fixture1@example.com",
+          "role": "owner",
+          "active": true,
+          "is_owner": true,
+          "currency": "USD",
+          "region": "US",
+          "timezone": "America/New_York",
+          "last_login": "2026-01-01T00:00:00Z",
+          "date_format": "MM/DD/YYYY",
+          "avatar_url": null,
+          "products": null,
+          "entitlements": [],
+          "account": { "id": 1, "company": "Fixture Co", "auto_import": true, "plan": "pro" }
+        },
+        {
+          "id": 7002,
+          "name": "Fixture User Two",
+          "email": "fixture2@example.com",
+          "role": "member",
+          "active": true,
+          "is_owner": false,
+          "currency": "USD",
+          "region": "US",
+          "timezone": "America/New_York",
+          "last_login": "2026-01-02T00:00:00Z",
+          "date_format": "MM/DD/YYYY",
+          "avatar_url": null,
+          "products": [],
+          "entitlements": [],
+          "account": { "id": 1, "company": "Fixture Co", "auto_import": true, "plan": "pro" }
+        }
+      ]
+    }
+  }
+}

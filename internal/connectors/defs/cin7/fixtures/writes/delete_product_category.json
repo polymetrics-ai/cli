@@ -1,0 +1,11 @@
+{
+  "record": { "ID": "cat_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ref/category"
+  },
+  "response": {
+    "status": 200,
+    "body": { "Success": true }
+  }
+}

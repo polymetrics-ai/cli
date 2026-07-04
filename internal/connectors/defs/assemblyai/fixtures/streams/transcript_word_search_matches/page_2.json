@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/transcript/fixture_transcript_1/word-search",
+    "query": { "words": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_transcript_1",
+      "total_count": 2,
+      "matches": [
+        {
+          "text": "the",
+          "count": 2,
+          "timestamps": [[0, 500], [3000, 3500]],
+          "indexes": [0, 12]
+        }
+      ]
+    }
+  }
+}

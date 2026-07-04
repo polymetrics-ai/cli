@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/orgs" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "summary": "Get organizations",
+      "data": {
+        "orgs": [
+          {
+            "orgId": "org_fixture_1",
+            "orgName": "fixture-org",
+            "orgDesc": "",
+            "createdBy": "fixture1@example.com",
+            "createdByZuId": "zu_fixture_1",
+            "planName": "Premium",
+            "isDefault": true,
+            "numberOfworkspaces": 2,
+            "role": "Account Admin"
+          }
+        ]
+      }
+    }
+  }
+}

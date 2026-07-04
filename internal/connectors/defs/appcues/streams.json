@@ -12,7 +12,12 @@
       "start_page": 1,
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/accounts/{{ config.account_id }}/flows" }
+    "check": { "method": "GET", "path": "/accounts/{{ config.account_id }}/flows" },
+    "error_map": [
+      { "status": 401, "hint": "appcues username/password is missing or invalid; re-run pm credentials add appcues" },
+      { "status": 403, "hint": "appcues account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "appcues rate limit exceeded; the connector will retry with backoff" }
+    ]
   },
   "streams": [
     {
@@ -20,6 +25,12 @@
       "path": "/accounts/{{ config.account_id }}/flows",
       "records": { "path": "" },
       "schema": "schemas/flows.json"
+    },
+    {
+      "name": "flows_v2",
+      "path": "/accounts/{{ config.account_id }}/flows-v2",
+      "records": { "path": "" },
+      "schema": "schemas/flows_v2.json"
     },
     {
       "name": "segments",
@@ -44,6 +55,48 @@
       "path": "/accounts/{{ config.account_id }}/banners",
       "records": { "path": "" },
       "schema": "schemas/banners.json"
+    },
+    {
+      "name": "pins",
+      "path": "/accounts/{{ config.account_id }}/pins",
+      "records": { "path": "" },
+      "schema": "schemas/pins.json"
+    },
+    {
+      "name": "mobile_experiences",
+      "path": "/accounts/{{ config.account_id }}/mobile",
+      "records": { "path": "" },
+      "schema": "schemas/mobile_experiences.json"
+    },
+    {
+      "name": "launchpads",
+      "path": "/accounts/{{ config.account_id }}/launchpads",
+      "records": { "path": "" },
+      "schema": "schemas/launchpads.json"
+    },
+    {
+      "name": "embeds",
+      "path": "/accounts/{{ config.account_id }}/embeds",
+      "records": { "path": "" },
+      "schema": "schemas/embeds.json"
+    },
+    {
+      "name": "nps",
+      "path": "/accounts/{{ config.account_id }}/nps",
+      "records": { "path": "" },
+      "schema": "schemas/nps.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/accounts/{{ config.account_id }}/jobs",
+      "records": { "path": "" },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "sdk_keys",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys",
+      "records": { "path": "" },
+      "schema": "schemas/sdk_keys.json"
     }
   ]
 }

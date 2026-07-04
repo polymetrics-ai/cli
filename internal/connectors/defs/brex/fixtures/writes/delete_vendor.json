@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "vendor_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/vendors/vendor_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/meta/ratings/history",
+    "query": {
+      "store": "synthetic-conformance-value",
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ext_id": "ios:1001",
+        "store": "itunes",
+        "country": "us",
+        "version": "1.0.0",
+        "date": "2026-01-01",
+        "period": "daily",
+        "stars": 29,
+        "stars1": 1,
+        "stars2": 1,
+        "stars3": 2,
+        "stars4": 5,
+        "stars5": 20,
+        "avg_rating": 4.5,
+        "total": 29
+      },
+      {
+        "ext_id": "ios:1001",
+        "store": "itunes",
+        "country": "gb",
+        "version": "1.0.1",
+        "date": "2026-01-02",
+        "period": "daily",
+        "stars": 15,
+        "stars1": 0,
+        "stars2": 1,
+        "stars3": 1,
+        "stars4": 3,
+        "stars5": 10,
+        "avg_rating": 4.2,
+        "total": 15
+      }
+    ]
+  }
+}

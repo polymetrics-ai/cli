@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/locations",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "loc_fixture_1",
+          "name": "HQ",
+          "description": "Fixture headquarters"
+        },
+        {
+          "id": "loc_fixture_2",
+          "name": "Remote",
+          "description": null
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

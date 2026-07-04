@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/connections", "query": { "limit": "100", "cursor": "cursor_fixture_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "conn_fixture_3", "type": "aws", "name": "Fixture AWS Connection 3", "created": 1767225603 }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

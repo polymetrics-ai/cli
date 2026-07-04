@@ -9,6 +9,8 @@
     "name": { "type": ["string", "null"] },
     "timeZone": { "type": ["string", "null"] },
     "isDefault": { "type": ["boolean", "null"] },
-    "ownerId": { "type": ["integer", "null"] }
+    "ownerId": { "type": ["integer", "null"] },
+    "availability": { "type": ["array", "null"] },
+    "overrides": { "type": ["array", "null"] }
   }
 }

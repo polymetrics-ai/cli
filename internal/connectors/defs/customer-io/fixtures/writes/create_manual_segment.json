@@ -1,0 +1,10 @@
+{
+  "record": {
+    "segment": { "name": "Fixture Manual Segment", "description": "A fixture segment" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/segments"
+  },
+  "response": { "status": 200, "body": { "segment": { "id": 42, "name": "Fixture Manual Segment" } } }
+}

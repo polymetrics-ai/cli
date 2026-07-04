@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fires/v1/locate-and-track",
+    "query": {
+      "lat": "synthetic-conformance-value",
+      "lon": "synthetic-conformance-value",
+      "radius": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "EventId": "n2026-V0000001-H0000001-fixture1",
+          "DiscoveryDateTime": "2026-01-01T00:00:00Z",
+          "LastUpdated": "2026-01-01T06:00:00Z",
+          "CurrentLat": 34.05,
+          "CurrentLon": -118.25,
+          "geometry": { "type": "Polygon", "coordinates": [[[-118.26, 34.06], [-118.24, 34.06], [-118.24, 34.04]]] },
+          "CalculatedAcres": 120.5,
+          "MaxCalculatedAcres": 150.2,
+          "ShapeConfidence": 4,
+          "ExistenceConfidence": 5
+        }
+      ]
+    }
+  }
+}

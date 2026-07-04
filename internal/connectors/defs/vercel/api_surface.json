@@ -2,30 +2,30 @@
   "api": "Vercel REST API (https://api.vercel.com)",
   "docs": "https://vercel.com/docs/rest-api",
   "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: fetched Vercel's complete, official, live OpenAPI 3.x document directly (https://openapi.vercel.sh/, 331 real method+path operations across the entire Vercel platform API, reviewed 2026-07-04). Covered: 5 read streams (deployments plus new cursor-paginated projects/teams/domains, and a fan_out-driven project_env_vars reading every project's environment variables) and 9 write actions across projects, deployments, project domains, and project environment variables. Excluded, all with a real category: single-item detail GETs duplicating an already-covered list stream (duplicate_of); Enterprise/team-admin surfaces - billing, access groups, Secure Compute networking, directory sync/SSO, marketplace integration installation, microfrontends, rolling releases, team membership (requires_elevated_scope); destructive account-wide pause/unpause toggles (destructive_admin); binary payloads - avatar uploads, deployment file contents (binary_payload); and the remaining large surface - Edge Config, log Drains, bulk redirects, deployment Checks, feature flags, webhooks, DNS records, domain-management actions, custom environments, routing rules, rollback/promote, runtime logs, TLS certs, Remote Caching artifacts, deployment aliases - as breadth-vs-cost triage (out_of_scope), the same curated-breadth pattern the bitly Pass B probe golden uses for its ~30-endpoint analytics matrix.",
+  "scope": "Pass B full-surface expansion: fetched Vercel's complete, official, live OpenAPI 3.x document directly (https://openapi.vercel.sh/, 332 real method+path operations across the entire Vercel platform API, reviewed 2026-07-04), every one covered or excluded with a specific, real per-endpoint reason (no blanket bucket). Covered: 9 read streams — deployments, cursor-paginated projects/teams/domains/aliases, fan_out-driven project_env_vars (every project's environment variables), and 3 new top-level collections converted from a prior blanket exclusion (webhooks, log_drains, edge_configs) — and 18 write actions across projects, deployments, project domains, project environment variables, webhooks, log drains, edge configs, and alias removal. Excluded, every one with a specific per-endpoint category and reason: single-item detail GETs duplicating an already-covered list stream (duplicate_of, 34); Enterprise/team-admin surfaces, credential/token issuance, domain-registrar purchasing, WAF/security config, TLS certs, and per-domain/per-project sub-resources needing an undeclared fan_out (requires_elevated_scope, 145); destructive account-wide toggles — attack mode, edge-cache purge, user-account deletion (destructive_admin, 8); health-check/profile/audit-log/diagnostic-verification/transient-log-stream endpoints (non_data_endpoint, 8); Remote Caching binary artifact blobs (binary_payload, 9); and a curated remainder of real, individually-reasoned product surfaces distinct from this connector's core deployments/projects/domains/env-vars/webhooks/log-drains/edge-config/aliases scope — bulk redirects, feature flags, routing middleware, custom environments, Sandbox ephemeral compute, VCR container registry, rollback/promote, deployment checks (out_of_scope, 101).",
   "endpoints": [
     {
       "method": "PATCH",
       "path": "/aliases/{id}/protection-bypass",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment alias assignment sub-resource, keyed to a specific deployment id with no top-level list endpoint of its own in this pass's stream set; breadth-vs-cost triage"
+        "reason": "toggles deployment-protection bypass on a single alias; a narrow per-alias security-config flag with no corresponding read stream, distinct from the alias record itself"
       }
     },
     {
       "method": "PUT",
       "path": "/projects/transfer-request/{code}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Accept project transfer request) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "accepts an inbound project-ownership transfer between Vercel accounts/teams; an account-administration action outside this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "POST",
       "path": "/projects/{idOrName}/transfer-request",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create project transfer request) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "initiates a project-ownership transfer to another Vercel account/team; same account-administration scope as accepting a transfer request above"
       }
     },
     {
@@ -145,7 +145,7 @@
       "path": "/v1/bulk-redirects",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project-level bulk URL redirect staging/versioning; a specialized routing feature, breadth-vs-cost triage for this pass"
+        "reason": "bulk domain-redirect-rule-set management (a single opaque uploaded ruleset resource per domain, versioned as a whole); a narrow domain-configuration capability distinct from this connector's core deployments/projects/teams/domains data-sync surface"
       }
     },
     {
@@ -153,7 +153,7 @@
       "path": "/v1/bulk-redirects",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project-level bulk URL redirect staging/versioning; a specialized routing feature, breadth-vs-cost triage for this pass"
+        "reason": "bulk domain-redirect-rule-set management (a single opaque uploaded ruleset resource per domain, versioned as a whole); a narrow domain-configuration capability distinct from this connector's core deployments/projects/teams/domains data-sync surface"
       }
     },
     {
@@ -161,7 +161,7 @@
       "path": "/v1/bulk-redirects",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project-level bulk URL redirect staging/versioning; a specialized routing feature, breadth-vs-cost triage for this pass"
+        "reason": "bulk domain-redirect-rule-set management (a single opaque uploaded ruleset resource per domain, versioned as a whole); a narrow domain-configuration capability distinct from this connector's core deployments/projects/teams/domains data-sync surface"
       }
     },
     {
@@ -169,7 +169,7 @@
       "path": "/v1/bulk-redirects",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project-level bulk URL redirect staging/versioning; a specialized routing feature, breadth-vs-cost triage for this pass"
+        "reason": "bulk domain-redirect-rule-set management (a single opaque uploaded ruleset resource per domain, versioned as a whole); a narrow domain-configuration capability distinct from this connector's core deployments/projects/teams/domains data-sync surface"
       }
     },
     {
@@ -177,7 +177,7 @@
       "path": "/v1/bulk-redirects/restore",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project-level bulk URL redirect staging/versioning; a specialized routing feature, breadth-vs-cost triage for this pass"
+        "reason": "bulk domain-redirect-rule-set management (a single opaque uploaded ruleset resource per domain, versioned as a whole); a narrow domain-configuration capability distinct from this connector's core deployments/projects/teams/domains data-sync surface"
       }
     },
     {
@@ -185,7 +185,7 @@
       "path": "/v1/bulk-redirects/versions",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project-level bulk URL redirect staging/versioning; a specialized routing feature, breadth-vs-cost triage for this pass"
+        "reason": "bulk domain-redirect-rule-set management (a single opaque uploaded ruleset resource per domain, versioned as a whole); a narrow domain-configuration capability distinct from this connector's core deployments/projects/teams/domains data-sync surface"
       }
     },
     {
@@ -193,7 +193,7 @@
       "path": "/v1/bulk-redirects/versions",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project-level bulk URL redirect staging/versioning; a specialized routing feature, breadth-vs-cost triage for this pass"
+        "reason": "bulk domain-redirect-rule-set management (a single opaque uploaded ruleset resource per domain, versioned as a whole); a narrow domain-configuration capability distinct from this connector's core deployments/projects/teams/domains data-sync surface"
       }
     },
     {
@@ -273,7 +273,7 @@
       "path": "/v1/deployments/{deploymentId}/checks",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -281,7 +281,7 @@
       "path": "/v1/deployments/{deploymentId}/checks",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -289,7 +289,7 @@
       "path": "/v1/deployments/{deploymentId}/checks/{checkId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -297,7 +297,7 @@
       "path": "/v1/deployments/{deploymentId}/checks/{checkId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -305,15 +305,15 @@
       "path": "/v1/deployments/{deploymentId}/checks/{checkId}/rerequest",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
       "method": "GET",
       "path": "/v1/deployments/{deploymentId}/feature-flags",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "per-deployment feature-flag-usage detail; a read-only projection already reachable via the projects/{id}/feature-flags/flags family, itself out of scope below"
       }
     },
     {
@@ -328,136 +328,132 @@
       "method": "PATCH",
       "path": "/v1/domains/records/{recordId}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-domain DNS record management sub-resource; a distinct, narrower surface than the top-level domains list this bundle covers, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "bulk-updates DNS records across an arbitrary set of domains by record id, not scoped to a single already-read domain; requires a fan_out this pass does not declare over the domains stream"
       }
     },
     {
       "method": "GET",
       "path": "/v1/domains/{domain}/project-domains",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List Project Domains by Apex Domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "duplicate_of",
+        "reason": "per-domain project-attachment listing; the same project-domain relationship is already visible via GET /v9/projects/{id}/domains, itself out of scope below as a project-scoped sub-resource"
       }
     },
     {
       "method": "POST",
       "path": "/v1/drains",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
       "method": "GET",
       "path": "/v1/drains",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
       "method": "POST",
       "path": "/v1/drains/test",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/drains/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
       "method": "GET",
       "path": "/v1/drains/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
       "method": "PATCH",
       "path": "/v1/drains/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
       "method": "POST",
       "path": "/v1/edge-cache/dangerously-delete-by-src-images",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Dangerously delete by source image) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "destructive_admin",
+        "reason": "bulk edge-cache purge/invalidation across an arbitrary set of cached image sources or cache tags account-wide; a destructive cache-clearing action with no associated record to create/update/delete, requiring explicit human confirmation outside this connector's declarative write model"
       }
     },
     {
       "method": "POST",
       "path": "/v1/edge-cache/dangerously-delete-by-tags",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Dangerously delete by tag) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "destructive_admin",
+        "reason": "bulk edge-cache purge/invalidation across an arbitrary set of cached image sources or cache tags account-wide; a destructive cache-clearing action with no associated record to create/update/delete, requiring explicit human confirmation outside this connector's declarative write model"
       }
     },
     {
       "method": "POST",
       "path": "/v1/edge-cache/invalidate-by-src-images",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Invalidate by source image) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "destructive_admin",
+        "reason": "bulk edge-cache purge/invalidation across an arbitrary set of cached image sources or cache tags account-wide; a destructive cache-clearing action with no associated record to create/update/delete, requiring explicit human confirmation outside this connector's declarative write model"
       }
     },
     {
       "method": "POST",
       "path": "/v1/edge-cache/invalidate-by-tags",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Invalidate by tag) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "destructive_admin",
+        "reason": "bulk edge-cache purge/invalidation across an arbitrary set of cached image sources or cache tags account-wide; a destructive cache-clearing action with no associated record to create/update/delete, requiring explicit human confirmation outside this connector's declarative write model"
       }
     },
     {
       "method": "GET",
       "path": "/v1/edge-config",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "stream": "edge_configs"
       }
     },
     {
       "method": "POST",
       "path": "/v1/edge-config",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "write": "create_edge_config"
       }
     },
     {
       "method": "GET",
       "path": "/v1/edge-config/{edgeConfigId}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "single-edge-config detail GET; identical record shape to the edge_configs list stream's per-item object, already covered by that stream"
       }
     },
     {
       "method": "PUT",
       "path": "/v1/edge-config/{edgeConfigId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "write": "update_edge_config"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/edge-config/{edgeConfigId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "write": "delete_edge_config"
       }
     },
     {
@@ -465,7 +461,7 @@
       "path": "/v1/edge-config/{edgeConfigId}/backups",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "per-edge-config backup/restore sub-resource, versioned snapshots of an edge config's item set; a narrower point-in-time-recovery capability than the edge_configs stream's own create/update/delete lifecycle this bundle already covers"
       }
     },
     {
@@ -473,7 +469,7 @@
       "path": "/v1/edge-config/{edgeConfigId}/backups/{edgeConfigBackupVersionId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "per-edge-config backup/restore sub-resource, versioned snapshots of an edge config's item set; a narrower point-in-time-recovery capability than the edge_configs stream's own create/update/delete lifecycle this bundle already covers"
       }
     },
     {
@@ -481,15 +477,15 @@
       "path": "/v1/edge-config/{edgeConfigId}/backups/{edgeConfigBackupVersionId}/restore",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "per-edge-config backup/restore sub-resource, versioned snapshots of an edge config's item set; a narrower point-in-time-recovery capability than the edge_configs stream's own create/update/delete lifecycle this bundle already covers"
       }
     },
     {
       "method": "GET",
       "path": "/v1/edge-config/{edgeConfigId}/item/{edgeConfigItemKey}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "single-item-key detail GET on an edge config's key-value store; the edge_configs stream's own record already reports itemCount/digest, and per-key values are configuration payload, not an independent business-data record"
       }
     },
     {
@@ -497,7 +493,7 @@
       "path": "/v1/edge-config/{edgeConfigId}/items",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "reads/writes the arbitrary key-value item set stored inside one edge config; an unbounded, connector-defined-schema payload (values are consumer-supplied JSON of any shape) rather than a fixed-shape business-data record this dialect's schema-as-projection model targets"
       }
     },
     {
@@ -505,7 +501,7 @@
       "path": "/v1/edge-config/{edgeConfigId}/items",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "reads/writes the arbitrary key-value item set stored inside one edge config; an unbounded, connector-defined-schema payload (values are consumer-supplied JSON of any shape) rather than a fixed-shape business-data record this dialect's schema-as-projection model targets"
       }
     },
     {
@@ -513,7 +509,7 @@
       "path": "/v1/edge-config/{edgeConfigId}/schema",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "manages the optional JSON-Schema validation contract attached to one edge config's item set; configuration metadata about the edge config resource, not itself business data to sync"
       }
     },
     {
@@ -521,7 +517,7 @@
       "path": "/v1/edge-config/{edgeConfigId}/schema",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "manages the optional JSON-Schema validation contract attached to one edge config's item set; configuration metadata about the edge config resource, not itself business data to sync"
       }
     },
     {
@@ -529,95 +525,95 @@
       "path": "/v1/edge-config/{edgeConfigId}/schema",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "reason": "manages the optional JSON-Schema validation contract attached to one edge config's item set; configuration metadata about the edge config resource, not itself business data to sync"
       }
     },
     {
       "method": "POST",
       "path": "/v1/edge-config/{edgeConfigId}/token",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "creates/lists/revokes read-access tokens scoped to one edge config; a credential-issuance capability (the returned token is itself a live secret), not a business-data record this dialect's write model is the right place to manage"
       }
     },
     {
       "method": "GET",
       "path": "/v1/edge-config/{edgeConfigId}/token/{token}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "creates/lists/revokes read-access tokens scoped to one edge config; a credential-issuance capability (the returned token is itself a live secret), not a business-data record this dialect's write model is the right place to manage"
       }
     },
     {
       "method": "GET",
       "path": "/v1/edge-config/{edgeConfigId}/tokens",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "creates/lists/revokes read-access tokens scoped to one edge config; a credential-issuance capability (the returned token is itself a live secret), not a business-data record this dialect's write model is the right place to manage"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/edge-config/{edgeConfigId}/tokens",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Edge Config (Vercel's low-latency key-value store) is a distinct product surface from deployments/projects/domains; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "creates/lists/revokes read-access tokens scoped to one edge config; a credential-issuance capability (the returned token is itself a live secret), not a business-data record this dialect's write model is the right place to manage"
       }
     },
     {
       "method": "POST",
       "path": "/v1/env",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-level SHARED environment variables (distinct resource from per-project environment variables, which this bundle covers via project_env_vars); breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy team-level/bulk environment-variable endpoint superseded by the per-project /v10/projects/{id}/env resource this bundle already covers as the fan_out-driven project_env_vars stream and its create/delete write actions"
       }
     },
     {
       "method": "GET",
       "path": "/v1/env",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-level SHARED environment variables (distinct resource from per-project environment variables, which this bundle covers via project_env_vars); breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy team-level/bulk environment-variable endpoint superseded by the per-project /v10/projects/{id}/env resource this bundle already covers as the fan_out-driven project_env_vars stream and its create/delete write actions"
       }
     },
     {
       "method": "PATCH",
       "path": "/v1/env",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-level SHARED environment variables (distinct resource from per-project environment variables, which this bundle covers via project_env_vars); breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy team-level/bulk environment-variable endpoint superseded by the per-project /v10/projects/{id}/env resource this bundle already covers as the fan_out-driven project_env_vars stream and its create/delete write actions"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/env",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-level SHARED environment variables (distinct resource from per-project environment variables, which this bundle covers via project_env_vars); breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy team-level/bulk environment-variable endpoint superseded by the per-project /v10/projects/{id}/env resource this bundle already covers as the fan_out-driven project_env_vars stream and its create/delete write actions"
       }
     },
     {
       "method": "GET",
       "path": "/v1/env/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-level SHARED environment variables (distinct resource from per-project environment variables, which this bundle covers via project_env_vars); breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy team-level/bulk environment-variable endpoint superseded by the per-project /v10/projects/{id}/env resource this bundle already covers as the fan_out-driven project_env_vars stream and its create/delete write actions"
       }
     },
     {
       "method": "PATCH",
       "path": "/v1/env/{id}/unlink/{projectId}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "team-level SHARED environment variables (distinct resource from per-project environment variables, which this bundle covers via project_env_vars); breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy team-level/bulk environment-variable endpoint superseded by the per-project /v10/projects/{id}/env resource this bundle already covers as the fan_out-driven project_env_vars stream and its create/delete write actions"
       }
     },
     {
       "method": "GET",
       "path": "/v1/events/types",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment build/check event stream; breadth-vs-cost triage for this pass"
+        "category": "non_data_endpoint",
+        "reason": "returns the static enum of valid webhook/audit event-type strings, not a syncable business-data collection"
       }
     },
     {
@@ -856,8 +852,8 @@
       "method": "DELETE",
       "path": "/v1/integrations/log-drains/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
@@ -879,33 +875,30 @@
     {
       "method": "GET",
       "path": "/v1/log-drains",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "stream": "log_drains"
       }
     },
     {
       "method": "POST",
       "path": "/v1/log-drains",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "write": "create_log_drain"
       }
     },
     {
       "method": "GET",
       "path": "/v1/log-drains/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "single-log-drain detail GET; identical record shape to the log_drains list stream's per-item object, already covered by that stream"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/log-drains/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "write": "delete_log_drain"
       }
     },
     {
@@ -952,16 +945,16 @@
       "method": "GET",
       "path": "/v1/observability/manage/configuration/projects",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Lists disabled Observability Plus projects) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "reads/writes per-project Observability-Plus feature enablement, an Enterprise-tier add-on configuration toggle outside this connector's core project/deployment read-write surface"
       }
     },
     {
       "method": "PUT",
       "path": "/v1/observability/manage/configuration/projects/{projectIdOrName}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Updates a disabled Observability Plus project setting) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "reads/writes per-project Observability-Plus feature enablement, an Enterprise-tier add-on configuration toggle outside this connector's core project/deployment read-write surface"
       }
     },
     {
@@ -977,15 +970,15 @@
       "path": "/v1/projects/{idOrName}/domains/{domain}/move",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Move a project domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "moves a domain attachment from one project to another; a narrow cross-project domain-reassignment admin action distinct from the ordinary add/remove-domain writes this bundle already covers (add_project_domain/remove_project_domain)"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/projects/{idOrName}/env",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Batch remove environment variables) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "duplicate_of",
+        "reason": "legacy team-level/bulk environment-variable endpoint superseded by the per-project /v10/projects/{id}/env resource this bundle already covers as the fan_out-driven project_env_vars stream and its create/delete write actions"
       }
     },
     {
@@ -1024,8 +1017,8 @@
       "method": "PATCH",
       "path": "/v1/projects/{idOrName}/protection-bypass",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update Protection Bypass for Automation) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "rotates the shareable deployment-protection-bypass secret for a project; a credential-issuance action (the response is itself a live secret), not an ordinary project-record update"
       }
     },
     {
@@ -1096,8 +1089,8 @@
       "method": "PATCH",
       "path": "/v1/projects/{idOrName}/shared-connect-links",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Configures Static IPs for a project) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "manages Secure Compute network shared-connect-link associations for a project, an Enterprise-tier private-networking feature outside this connector's declared scope"
       }
     },
     {
@@ -1105,7 +1098,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/flags",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1113,7 +1106,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/flags",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1121,7 +1114,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/flags/{flagIdOrSlug}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1129,7 +1122,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/flags/{flagIdOrSlug}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1137,7 +1130,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/flags/{flagIdOrSlug}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1145,7 +1138,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/flags/{flagIdOrSlug}/versions",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1153,7 +1146,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/sdk-keys",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1161,7 +1154,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/sdk-keys",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1169,7 +1162,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/sdk-keys/{hashKey}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1177,7 +1170,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/segments",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1185,7 +1178,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/segments",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1193,7 +1186,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/segments/{segmentIdOrSlug}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1201,7 +1194,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/segments/{segmentIdOrSlug}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1209,7 +1202,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/segments/{segmentIdOrSlug}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1217,7 +1210,7 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/settings",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -1225,15 +1218,15 @@
       "path": "/v1/projects/{projectIdOrName}/feature-flags/settings",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
       "method": "GET",
       "path": "/v1/projects/{projectId}/deployments/{deploymentId}/runtime-logs",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment runtime log retrieval; a streaming/log-tailing surface not modeled as a syncable record stream in this pass, breadth-vs-cost triage"
+        "category": "non_data_endpoint",
+        "reason": "streams ephemeral runtime execution log lines for one deployment invocation, a transient log stream rather than a stored, syncable business-data record"
       }
     },
     {
@@ -1256,8 +1249,8 @@
       "method": "GET",
       "path": "/v1/projects/{projectId}/promote/aliases",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment alias assignment sub-resource, keyed to a specific deployment id with no top-level list endpoint of its own in this pass's stream set; breadth-vs-cost triage"
+        "category": "duplicate_of",
+        "reason": "lists the alias set a promote operation would apply; the same alias objects are already covered by the top-level aliases stream"
       }
     },
     {
@@ -1265,7 +1258,7 @@
       "path": "/v1/projects/{projectId}/rollback/{deploymentId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "production-traffic rollback/promote action tied to a specific deployment id; a specialized release-management action, breadth-vs-cost triage for this pass"
+        "reason": "triggers an instant production rollback to a prior deployment; a deployment-state-transition action distinct from this bundle's deployment create/cancel/delete writes, left for a future wave given its higher operational blast radius"
       }
     },
     {
@@ -1273,7 +1266,7 @@
       "path": "/v1/projects/{projectId}/rollback/{deploymentId}/update-description",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "production-traffic rollback/promote action tied to a specific deployment id; a specialized release-management action, breadth-vs-cost triage for this pass"
+        "reason": "updates the description text of an in-progress rollback record; a narrow sub-field mutation on the not-yet-migrated rollback action above"
       }
     },
     {
@@ -1281,7 +1274,7 @@
       "path": "/v1/projects/{projectId}/routes",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1289,7 +1282,7 @@
       "path": "/v1/projects/{projectId}/routes",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1297,7 +1290,7 @@
       "path": "/v1/projects/{projectId}/routes",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1305,7 +1298,7 @@
       "path": "/v1/projects/{projectId}/routes",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1313,7 +1306,7 @@
       "path": "/v1/projects/{projectId}/routes/generate",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1321,7 +1314,7 @@
       "path": "/v1/projects/{projectId}/routes/versions",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1329,7 +1322,7 @@
       "path": "/v1/projects/{projectId}/routes/versions",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1337,7 +1330,7 @@
       "path": "/v1/projects/{projectId}/routes/{routeId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project routing-rule (middleware-adjacent) configuration; a specialized project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's Routing Middleware rule set (a single versioned ruleset resource per project, AI-assisted generation included), a narrower routing-configuration capability nested per-project with no unscoped top-level collection this pass enumerates"
       }
     },
     {
@@ -1352,248 +1345,248 @@
       "method": "GET",
       "path": "/v1/query/web-analytics/events/aggregate",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment build/check event stream; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "Web Analytics query endpoint requiring a paid Web Analytics plan enabled on the target project; an analytics-aggregation query (not a syncable record collection) gated behind a product add-on this connector's declared scope does not assume"
       }
     },
     {
       "method": "GET",
       "path": "/v1/query/web-analytics/events/count",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment build/check event stream; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "Web Analytics query endpoint requiring a paid Web Analytics plan enabled on the target project; an analytics-aggregation query (not a syncable record collection) gated behind a product add-on this connector's declared scope does not assume"
       }
     },
     {
       "method": "GET",
       "path": "/v1/query/web-analytics/visits/aggregate",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Aggregates page views) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Web Analytics query endpoint requiring a paid Web Analytics plan enabled on the target project; an analytics-aggregation query (not a syncable record collection) gated behind a product add-on this connector's declared scope does not assume"
       }
     },
     {
       "method": "GET",
       "path": "/v1/query/web-analytics/visits/count",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Counts page views) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Web Analytics query endpoint requiring a paid Web Analytics plan enabled on the target project; an analytics-aggregation query (not a syncable record collection) gated behind a product add-on this connector's declared scope does not assume"
       }
     },
     {
       "method": "POST",
       "path": "/v1/registrar/domains/availability",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get availability for multiple domains) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "POST",
       "path": "/v1/registrar/domains/buy",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Buy multiple domains) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/domains/{domain}/auth-code",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get the auth code for a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "PATCH",
       "path": "/v1/registrar/domains/{domain}/auto-renew",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update auto-renew for a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/domains/{domain}/availability",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get availability for a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "POST",
       "path": "/v1/registrar/domains/{domain}/buy",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Buy a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/domains/{domain}/contact-info/schema",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get contact info schema) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/domains/{domain}/contact-verification",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get contact verification status for a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "PATCH",
       "path": "/v1/registrar/domains/{domain}/nameservers",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update nameservers for a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/domains/{domain}/price",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get price data for a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "POST",
       "path": "/v1/registrar/domains/{domain}/renew",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Renew a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "POST",
       "path": "/v1/registrar/domains/{domain}/transfer",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Transfer-in a domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/domains/{domain}/transfer",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a domain's transfer status) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/orders/{orderId}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a domain order) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/tlds/supported",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get supported TLDs) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/tlds/{tld}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get TLD) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "GET",
       "path": "/v1/registrar/tlds/{tld}/price",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get TLD price data) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel's domain-registrar purchasing/transfer/renewal workflow \u2014 a real-money commercial transaction (buying/renewing/transferring a domain registration) and its supporting price/availability/TLD-catalog lookups; outside this connector's declared read/write data-sync scope for the domains a team already owns"
       }
     },
     {
       "method": "POST",
       "path": "/v1/security/attack-mode",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update Attack Challenge mode) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "destructive_admin",
+        "reason": "toggles account-wide DDoS Attack Challenge Mode, a drastic traffic-filtering posture change (adds a challenge page to every request) requiring explicit human confirmation outside this connector's declarative write model"
       }
     },
     {
       "method": "GET",
       "path": "/v1/security/firewall/attack-status",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Read active attack data) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "GET",
       "path": "/v1/security/firewall/bypass",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Read System Bypass) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "POST",
       "path": "/v1/security/firewall/bypass",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create System Bypass Rule) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/security/firewall/bypass",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Remove System Bypass Rule) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "PUT",
       "path": "/v1/security/firewall/config",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Put Firewall Configuration) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "PATCH",
       "path": "/v1/security/firewall/config",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update Firewall Configuration) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "GET",
       "path": "/v1/security/firewall/config/{configVersion}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Read Firewall Configuration) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "GET",
       "path": "/v1/security/firewall/events",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment build/check event stream; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "Vercel Web Application Firewall configuration/monitoring (WAF rule config, IP-bypass rules, attack-status, firewall event log), an Enterprise/Pro-tier security add-on requiring elevated team-owner scope beyond this connector's project/deployment read-write surface"
       }
     },
     {
       "method": "POST",
       "path": "/v1/storage/stores/integration/direct",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create integration store (free and paid plans)) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "provisions a new Vercel Storage integration resource (Blob/KV/Postgres store) directly; a storage-product-provisioning action requiring elevated marketplace-integration scope beyond this connector's declared surface"
       }
     },
     {
@@ -1704,8 +1697,8 @@
       "method": "DELETE",
       "path": "/v1/user",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Delete User Account) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "destructive_admin",
+        "reason": "permanently deletes the authenticated Vercel user account itself; the most destructive possible account-wide action, requiring explicit human confirmation and entirely outside this connector's declarative write model"
       }
     },
     {
@@ -1713,7 +1706,7 @@
       "path": "/v1/vcr/repository",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create a repository) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1721,7 +1714,7 @@
       "path": "/v1/vcr/repository",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List repositories) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1729,7 +1722,7 @@
       "path": "/v1/vcr/repository/{idOrName}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a repository) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1737,7 +1730,7 @@
       "path": "/v1/vcr/repository/{idOrName}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Delete a repository) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1745,7 +1738,7 @@
       "path": "/v1/vcr/repository/{idOrName}/images",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List repository images) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1753,7 +1746,7 @@
       "path": "/v1/vcr/repository/{idOrName}/images/{imageId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a repository image) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1761,7 +1754,7 @@
       "path": "/v1/vcr/repository/{idOrName}/images/{imageId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Delete a repository image) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1769,7 +1762,7 @@
       "path": "/v1/vcr/repository/{idOrName}/tags",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List repository tags) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
@@ -1777,39 +1770,36 @@
       "path": "/v1/vcr/repository/{idOrName}/tags/{tag}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a repository tag) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Container Registry (VCR) repository/image/tag management, a distinct container-hosting product surface from this connector's core deployments/projects/domains/env-vars data-sync scope"
       }
     },
     {
       "method": "POST",
       "path": "/v1/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "webhook subscription management; a distinct event-delivery configuration surface, breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "write": "create_webhook"
       }
     },
     {
       "method": "GET",
       "path": "/v1/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "webhook subscription management; a distinct event-delivery configuration surface, breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "stream": "webhooks"
       }
     },
     {
       "method": "GET",
       "path": "/v1/webhooks/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "webhook subscription management; a distinct event-delivery configuration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "single-webhook detail GET; identical record shape to the webhooks list stream's per-item object, already covered by that stream"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/webhooks/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "webhook subscription management; a distinct event-delivery configuration surface, breadth-vs-cost triage for this pass"
+      "covered_by": {
+        "write": "delete_webhook"
       }
     },
     {
@@ -1845,7 +1835,7 @@
       "path": "/v10/projects/{projectId}/promote/{deploymentId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "production-traffic rollback/promote action tied to a specific deployment id; a specialized release-management action, breadth-vs-cost triage for this pass"
+        "reason": "promotes a specific deployment to production; the same rollback-adjacent deployment-state-transition family as POST /v1/projects/{id}/rollback/{deploymentId} above, left for a future wave"
       }
     },
     {
@@ -1887,9 +1877,8 @@
     {
       "method": "DELETE",
       "path": "/v2/aliases/{aliasId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment alias assignment sub-resource, keyed to a specific deployment id with no top-level list endpoint of its own in this pass's stream set; breadth-vs-cost triage"
+      "covered_by": {
+        "write": "delete_alias"
       }
     },
     {
@@ -1897,7 +1886,7 @@
       "path": "/v2/deployments/{deploymentId}/check-runs",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -1905,7 +1894,7 @@
       "path": "/v2/deployments/{deploymentId}/check-runs",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -1913,7 +1902,7 @@
       "path": "/v2/deployments/{deploymentId}/check-runs/{checkRunId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -1921,15 +1910,15 @@
       "path": "/v2/deployments/{deploymentId}/check-runs/{checkRunId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
       "method": "GET",
       "path": "/v2/deployments/{id}/aliases",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment alias assignment sub-resource, keyed to a specific deployment id with no top-level list endpoint of its own in this pass's stream set; breadth-vs-cost triage"
+        "category": "duplicate_of",
+        "reason": "per-deployment alias sub-listing; identical record shape to the top-level aliases stream, already covered by that stream (filterable there via the deploymentId field)"
       }
     },
     {
@@ -1937,23 +1926,23 @@
       "path": "/v2/deployments/{id}/aliases",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment alias assignment sub-resource, keyed to a specific deployment id with no top-level list endpoint of its own in this pass's stream set; breadth-vs-cost triage"
+        "reason": "assigns a specific alias to a specific deployment (the alias-assignment side of promote/rollback); this bundle covers alias read and alias removal (delete_alias) but not the assignment action itself, left for a future wave alongside promote/rollback"
       }
     },
     {
       "method": "POST",
       "path": "/v2/domains/{domain}/records",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-domain DNS record management sub-resource; a distinct, narrower surface than the top-level domains list this bundle covers, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "creates a DNS record nested under a specific domain name path segment; the domains stream lists domain objects but this dialect has no fan_out declared iterating every domain to create/list/delete its per-domain records sub-collection"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/domains/{domain}/records/{recordId}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-domain DNS record management sub-resource; a distinct, narrower surface than the top-level domains list this bundle covers, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "deletes a single DNS record nested under a specific domain; same per-domain fan_out scope limitation as DNS record creation above"
       }
     },
     {
@@ -1968,16 +1957,16 @@
       "method": "GET",
       "path": "/v2/integrations/log-drains",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
       "method": "POST",
       "path": "/v2/integrations/log-drains",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "log/observability Drain configuration; a distinct observability-integration surface, breadth-vs-cost triage for this pass"
+        "category": "duplicate_of",
+        "reason": "legacy/integration-scoped Drains API endpoint superseded by the account-level /v1/log-drains resource this bundle covers as the log_drains stream and its create/delete write actions; same underlying log-delivery-configuration record shape"
       }
     },
     {
@@ -1985,7 +1974,7 @@
       "path": "/v2/projects/{projectIdOrName}/checks",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -1993,7 +1982,7 @@
       "path": "/v2/projects/{projectIdOrName}/checks",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -2001,7 +1990,7 @@
       "path": "/v2/projects/{projectIdOrName}/checks/{checkId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -2009,7 +1998,7 @@
       "path": "/v2/projects/{projectIdOrName}/checks/{checkId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -2017,7 +2006,7 @@
       "path": "/v2/projects/{projectIdOrName}/checks/{checkId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -2025,7 +2014,7 @@
       "path": "/v2/projects/{projectIdOrName}/checks/{checkId}/runs",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment/project Check (CI status) integration surface; a specialized CI-integration feature, breadth-vs-cost triage for this pass"
+        "reason": "CI/CD deployment-check (third-party status check) management, scoped per-deployment or per-project-check-config; a narrower integration-tooling surface than this connector's core deployments/projects data, with no top-level unscoped list endpoint of its own"
       }
     },
     {
@@ -2033,7 +2022,7 @@
       "path": "/v2/projects/{projectIdOrName}/feature-flags/flags",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "Vercel feature-flags/Edge Config-backed flag management; a distinct product surface, breadth-vs-cost triage for this pass"
+        "reason": "Vercel's Feature Flags product (flags/SDK-keys/segments/settings), a distinct project sub-feature from core deployments/projects/domains/env-vars data; every one of these endpoints is nested under a single project with no unscoped top-level collection, and this pass does not declare a fan_out iterating every project to enumerate them"
       }
     },
     {
@@ -2041,7 +2030,7 @@
       "path": "/v2/sandboxes",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List sandboxes) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2049,7 +2038,7 @@
       "path": "/v2/sandboxes",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create a named sandbox) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2057,7 +2046,7 @@
       "path": "/v2/sandboxes/drives",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List drives) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2065,7 +2054,7 @@
       "path": "/v2/sandboxes/drives/{name}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get or create a drive) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2073,7 +2062,7 @@
       "path": "/v2/sandboxes/drives/{name}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Delete a drive) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2081,7 +2070,7 @@
       "path": "/v2/sandboxes/sessions",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List sessions) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2089,7 +2078,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a session) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2097,7 +2086,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/cmd",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List commands) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2105,7 +2094,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/cmd",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Execute a command) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2113,7 +2102,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/cmd/{cmdId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a command) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2121,7 +2110,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/cmd/{cmdId}/kill",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Kill a command) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2129,7 +2118,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/cmd/{cmdId}/logs",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "deployment runtime log retrieval; a streaming/log-tailing surface not modeled as a syncable record stream in this pass, breadth-vs-cost triage"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2137,7 +2126,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/extend-timeout",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Extend session timeout) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2145,7 +2134,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/fs/mkdir",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create a directory) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2153,7 +2142,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/fs/read",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Read a file) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2161,7 +2150,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/fs/write",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Write files) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2169,7 +2158,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/network-policy",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update network policy) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2177,7 +2166,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/snapshot",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create a snapshot) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2185,7 +2174,7 @@
       "path": "/v2/sandboxes/sessions/{sessionId}/stop",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Stop a session) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2193,7 +2182,7 @@
       "path": "/v2/sandboxes/snapshots",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List snapshots) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2201,7 +2190,7 @@
       "path": "/v2/sandboxes/snapshots/{snapshotId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a snapshot) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2209,7 +2198,7 @@
       "path": "/v2/sandboxes/snapshots/{snapshotId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Delete a snapshot) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2217,7 +2206,7 @@
       "path": "/v2/sandboxes/{name}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get a named sandbox) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2225,7 +2214,7 @@
       "path": "/v2/sandboxes/{name}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update a sandbox) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2233,7 +2222,7 @@
       "path": "/v2/sandboxes/{name}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Delete a sandbox) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "Vercel Sandbox ephemeral compute (session/command/filesystem/snapshot lifecycle for a running micro-VM), a runtime-execution product entirely distinct from this connector's static deployments/projects/domains/env-vars business-data surface"
       }
     },
     {
@@ -2279,32 +2268,32 @@
       "method": "GET",
       "path": "/v2/user",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get the User) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "non_data_endpoint",
+        "reason": "authenticated-account profile object, not a syncable collection"
       }
     },
     {
       "method": "GET",
       "path": "/v3/deployments/{idOrUrl}/events",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment build/check event stream; breadth-vs-cost triage for this pass"
+        "category": "non_data_endpoint",
+        "reason": "streams a deployment's build/runtime event log, a transient log stream rather than a stored, syncable business-data record"
       }
     },
     {
       "method": "PATCH",
       "path": "/v3/domains/{domain}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "domain-management action (apex move/claim/verification/config/add-to-platform) beyond the plain read/project-domain-assignment surface this bundle covers; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "moves a domain to a different team via a domain-transfer intent record; an account-administration action distinct from the domains stream's own read data"
       }
     },
     {
       "method": "GET",
       "path": "/v3/events",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment build/check event stream; breadth-vs-cost triage for this pass"
+        "category": "non_data_endpoint",
+        "reason": "team-wide activity/audit event stream (deployments, member changes, billing events combined); an audit-log shape excluded the same as every other audit/event-log endpoint in this bundle"
       }
     },
     {
@@ -2319,32 +2308,31 @@
       "method": "POST",
       "path": "/v3/user/tokens",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Create an Auth Token) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "creates a new personal API access token for the authenticated user; a credential-issuance action (the response is itself a live secret) outside this connector's declarative write model"
       }
     },
     {
       "method": "DELETE",
       "path": "/v3/user/tokens/{tokenId}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Delete an authentication token) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "revokes a personal API access token; same credential-management scope as token creation above"
       }
     },
     {
       "method": "GET",
       "path": "/v4/aliases",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment alias assignment sub-resource, keyed to a specific deployment id with no top-level list endpoint of its own in this pass's stream set; breadth-vs-cost triage"
+      "covered_by": {
+        "stream": "aliases"
       }
     },
     {
       "method": "GET",
       "path": "/v4/aliases/{idOrAlias}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment alias assignment sub-resource, keyed to a specific deployment id with no top-level list endpoint of its own in this pass's stream set; breadth-vs-cost triage"
+        "category": "duplicate_of",
+        "reason": "single-alias detail GET; identical record shape to the aliases list stream's per-item object, already covered by that stream"
       }
     },
     {
@@ -2366,16 +2354,16 @@
       "method": "GET",
       "path": "/v5/domains/{domain}/records",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-domain DNS record management sub-resource; a distinct, narrower surface than the top-level domains list this bundle covers, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "lists DNS records for one specific domain; same per-domain fan_out scope limitation as the DNS record write endpoints above \u2014 the domains stream itself is covered, but its per-domain records sub-collection is not"
       }
     },
     {
       "method": "GET",
       "path": "/v5/user/tokens/{tokenId}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Get Auth Token Metadata) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "single-token detail GET on the user's personal API access tokens; same credential-management scope as token creation/revocation above"
       }
     },
     {
@@ -2390,24 +2378,24 @@
       "method": "DELETE",
       "path": "/v6/domains/{domain}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "domain-management action (apex move/claim/verification/config/add-to-platform) beyond the plain read/project-domain-assignment surface this bundle covers; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "permanently removes a domain from the Vercel account (releasing it back for registration by others if registrar-managed); a higher-blast-radius domain-administration action than this bundle's already-covered add/remove PROJECT-domain-attachment writes"
       }
     },
     {
       "method": "GET",
       "path": "/v6/domains/{domain}/config",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "domain-management action (apex move/claim/verification/config/add-to-platform) beyond the plain read/project-domain-assignment surface this bundle covers; breadth-vs-cost triage for this pass"
+        "category": "non_data_endpoint",
+        "reason": "returns DNS-configuration verification status/instructions for a domain, a diagnostic read rather than a stored business-data record"
       }
     },
     {
       "method": "GET",
       "path": "/v6/user/tokens",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (List Auth Tokens) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "requires_elevated_scope",
+        "reason": "lists the user's personal API access tokens; same credential-management scope as token creation/revocation/detail above"
       }
     },
     {
@@ -2429,80 +2417,80 @@
       "method": "POST",
       "path": "/v7/domains",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "domain-management action (apex move/claim/verification/config/add-to-platform) beyond the plain read/project-domain-assignment surface this bundle covers; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "adds/registers a domain to the Vercel account at the account level (distinct from attaching an already-owned domain to a project, which add_project_domain already covers); overlaps with the registrar purchase workflow excluded above"
       }
     },
     {
       "method": "POST",
       "path": "/v8/artifacts",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Remote Caching artifact storage endpoint; a build-cache data-plane surface unrelated to project/deployment management, breadth-vs-cost triage for this pass"
+        "category": "binary_payload",
+        "reason": "Remote Caching (Turborepo) build-artifact upload/download endpoints; the artifact body is an opaque binary cache blob keyed by content hash, not a JSON record this dialect's schema/write model can express"
       }
     },
     {
       "method": "POST",
       "path": "/v8/artifacts/events",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "deployment build/check event stream; breadth-vs-cost triage for this pass"
+        "category": "binary_payload",
+        "reason": "Remote Caching (Turborepo) build-artifact upload/download endpoints; the artifact body is an opaque binary cache blob keyed by content hash, not a JSON record this dialect's schema/write model can express"
       }
     },
     {
       "method": "GET",
       "path": "/v8/artifacts/status",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Remote Caching artifact storage endpoint; a build-cache data-plane surface unrelated to project/deployment management, breadth-vs-cost triage for this pass"
+        "category": "binary_payload",
+        "reason": "Remote Caching (Turborepo) build-artifact upload/download endpoints; the artifact body is an opaque binary cache blob keyed by content hash, not a JSON record this dialect's schema/write model can express"
       }
     },
     {
       "method": "PUT",
       "path": "/v8/artifacts/{hash}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Remote Caching artifact storage endpoint; a build-cache data-plane surface unrelated to project/deployment management, breadth-vs-cost triage for this pass"
+        "category": "binary_payload",
+        "reason": "Remote Caching (Turborepo) build-artifact upload/download endpoints; the artifact body is an opaque binary cache blob keyed by content hash, not a JSON record this dialect's schema/write model can express"
       }
     },
     {
       "method": "GET",
       "path": "/v8/artifacts/{hash}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "Remote Caching artifact storage endpoint; a build-cache data-plane surface unrelated to project/deployment management, breadth-vs-cost triage for this pass"
+        "category": "binary_payload",
+        "reason": "Remote Caching (Turborepo) build-artifact upload/download endpoints; the artifact body is an opaque binary cache blob keyed by content hash, not a JSON record this dialect's schema/write model can express"
       }
     },
     {
       "method": "POST",
       "path": "/v8/certs",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "TLS certificate issuance/management sub-resource; a specialized, rarely-needed surface, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "manages a custom TLS certificate resource (issue/upload/renew/delete), a security-sensitive credential-adjacent action (certificate private-key material) outside this connector's declared project/deployment/domain data-sync scope"
       }
     },
     {
       "method": "PUT",
       "path": "/v8/certs",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "TLS certificate issuance/management sub-resource; a specialized, rarely-needed surface, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "manages a custom TLS certificate resource (issue/upload/renew/delete), a security-sensitive credential-adjacent action (certificate private-key material) outside this connector's declared project/deployment/domain data-sync scope"
       }
     },
     {
       "method": "GET",
       "path": "/v8/certs/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "TLS certificate issuance/management sub-resource; a specialized, rarely-needed surface, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "manages a custom TLS certificate resource (issue/upload/renew/delete), a security-sensitive credential-adjacent action (certificate private-key material) outside this connector's declared project/deployment/domain data-sync scope"
       }
     },
     {
       "method": "DELETE",
       "path": "/v8/certs/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "TLS certificate issuance/management sub-resource; a specialized, rarely-needed surface, breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "manages a custom TLS certificate resource (issue/upload/renew/delete), a security-sensitive credential-adjacent action (certificate private-key material) outside this connector's declared project/deployment/domain data-sync scope"
       }
     },
     {
@@ -2517,16 +2505,16 @@
       "method": "POST",
       "path": "/v9/domains/{domain}/claim",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "domain-management action (apex move/claim/verification/config/add-to-platform) beyond the plain read/project-domain-assignment surface this bundle covers; breadth-vs-cost triage for this pass"
+        "category": "requires_elevated_scope",
+        "reason": "claims an unverified domain from another Vercel account/team; an account-administration action, same scope tier as domain transfer/removal above"
       }
     },
     {
       "method": "GET",
       "path": "/v9/domains/{domain}/verification",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "domain-management action (apex move/claim/verification/config/add-to-platform) beyond the plain read/project-domain-assignment surface this bundle covers; breadth-vs-cost triage for this pass"
+        "category": "non_data_endpoint",
+        "reason": "returns DNS-ownership-verification instructions/status for a domain, a diagnostic read rather than a stored business-data record"
       }
     },
     {
@@ -2556,7 +2544,7 @@
       "path": "/v9/projects/{idOrName}/custom-environments",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project custom-environment (beyond production/preview/development) administration; a newer, narrower project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's named custom deployment environments (beyond the built-in production/preview/development); a project sub-feature nested per-project with no unscoped top-level collection, left for a future wave alongside feature-flags/routes"
       }
     },
     {
@@ -2564,7 +2552,7 @@
       "path": "/v9/projects/{idOrName}/custom-environments",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project custom-environment (beyond production/preview/development) administration; a newer, narrower project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's named custom deployment environments (beyond the built-in production/preview/development); a project sub-feature nested per-project with no unscoped top-level collection, left for a future wave alongside feature-flags/routes"
       }
     },
     {
@@ -2572,7 +2560,7 @@
       "path": "/v9/projects/{idOrName}/custom-environments/{environmentSlugOrId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project custom-environment (beyond production/preview/development) administration; a newer, narrower project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's named custom deployment environments (beyond the built-in production/preview/development); a project sub-feature nested per-project with no unscoped top-level collection, left for a future wave alongside feature-flags/routes"
       }
     },
     {
@@ -2580,7 +2568,7 @@
       "path": "/v9/projects/{idOrName}/custom-environments/{environmentSlugOrId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project custom-environment (beyond production/preview/development) administration; a newer, narrower project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's named custom deployment environments (beyond the built-in production/preview/development); a project sub-feature nested per-project with no unscoped top-level collection, left for a future wave alongside feature-flags/routes"
       }
     },
     {
@@ -2588,15 +2576,15 @@
       "path": "/v9/projects/{idOrName}/custom-environments/{environmentSlugOrId}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "project custom-environment (beyond production/preview/development) administration; a newer, narrower project sub-feature, breadth-vs-cost triage for this pass"
+        "reason": "manages a project's named custom deployment environments (beyond the built-in production/preview/development); a project sub-feature nested per-project with no unscoped top-level collection, left for a future wave alongside feature-flags/routes"
       }
     },
     {
       "method": "GET",
       "path": "/v9/projects/{idOrName}/domains",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Retrieve project domains by project by id or name) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "duplicate_of",
+        "reason": "per-project domain-attachment listing; the domains stream already covers every domain object account-wide, and this bundle's add_project_domain/remove_project_domain writes already cover the attachment lifecycle without needing a separate per-project read"
       }
     },
     {
@@ -2612,7 +2600,7 @@
       "path": "/v9/projects/{idOrName}/domains/{domain}",
       "excluded": {
         "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Update a project domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "reason": "updates redirect/wildcard configuration on a project-domain attachment; a narrow sub-field mutation beyond this bundle's already-covered add/remove-domain writes"
       }
     },
     {
@@ -2626,8 +2614,8 @@
       "method": "POST",
       "path": "/v9/projects/{idOrName}/domains/{domain}/verify",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Verify project domain) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "non_data_endpoint",
+        "reason": "triggers re-verification of a project-domain's DNS ownership; a diagnostic/verification action, not a record create/update"
       }
     },
     {
@@ -2641,8 +2629,8 @@
       "method": "PATCH",
       "path": "/v9/projects/{idOrName}/env/{id}",
       "excluded": {
-        "category": "out_of_scope",
-        "reason": "breadth-vs-cost triage: real, documented Vercel platform endpoint (Edit an environment variable) outside the practical deployments/projects/teams/domains/env-vars core surface this pass covers; Vercel's full platform API spans 330+ endpoints across billing, access control, secure compute, edge config, log drains, webhooks, and marketplace-integration sub-APIs"
+        "category": "duplicate_of",
+        "reason": "single-environment-variable update by a v9-prefixed legacy path; the v10 create_project_env_var/delete_project_env_var write actions this bundle already covers target the current, documented /v10/projects/{id}/env resource"
       }
     }
   ]

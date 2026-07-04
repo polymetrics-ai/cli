@@ -1,0 +1,11 @@
+{
+  "record": { "customerNumber": 1 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customers/1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

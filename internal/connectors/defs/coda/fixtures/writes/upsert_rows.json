@@ -1,0 +1,31 @@
+{
+  "record": {
+    "table_id": "grid-fixture-1",
+    "rows": [
+      {
+        "cells": [
+          { "column": "c-fixture-1", "value": "Feed Baker" }
+        ]
+      }
+    ],
+    "keyColumns": ["c-fixture-1"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/docs/synthetic-conformance-value/tables/grid-fixture-1/rows",
+    "body": {
+      "rows": [
+        {
+          "cells": [
+            { "column": "c-fixture-1", "value": "Feed Baker" }
+          ]
+        }
+      ],
+      "keyColumns": ["c-fixture-1"]
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": { "requestId": "req-fixture-1", "addedRowIds": ["i-fixture-1"] }
+  }
+}

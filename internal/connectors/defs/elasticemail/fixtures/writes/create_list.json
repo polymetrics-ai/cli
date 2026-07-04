@@ -1,0 +1,18 @@
+{
+  "record": {
+    "ListName": "Fixture List",
+    "AllowUnsubscribe": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists",
+    "body": {
+      "ListName": "Fixture List",
+      "AllowUnsubscribe": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

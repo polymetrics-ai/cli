@@ -1,14 +1,14 @@
 {
   "name": "customerly",
   "display_name": "Customerly",
-  "description": "Reads Customerly users and leads through the Customerly v1 REST API.",
+  "description": "Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/attribute/company mutations through the Customerly v1 REST API.",
   "integration_type": "api",
   "docs_url": "https://docs.customerly.io",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external Customerly API read of user and lead contact data",
-    "approval": "none; read-only"
+    "read": "external Customerly API read of user, lead, and account contact data",
+    "write": "external mutation of live Customerly users/leads/tags/messages/attributes/companies, including irreversible user and lead deletion; approval required",
+    "approval": "read: none; write: required"
   }
 }

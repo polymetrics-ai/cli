@@ -1,20 +1,21 @@
 {
   "name": "veeqo",
   "display_name": "Veeqo",
-  "description": "Reads orders from the Veeqo API. Read-only.",
+  "description": "Reads orders, products, customers, warehouses, suppliers, purchase orders, sales channels, delivery methods, and tags from the Veeqo API, and writes orders, products, customers, suppliers, warehouses, delivery methods, tags, sales channels, product properties, payments, and shipments.",
   "integration_type": "api",
   "docs_url": "https://developers.veeqo.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external Veeqo API read of order data",
-    "approval": "none; read-only orders API"
+    "read": "external Veeqo API read of order, product, customer, and inventory data",
+    "write": "external mutation of Veeqo orders, products, customers, suppliers, warehouses, delivery methods, tags, sales channels, product properties, payments, and shipments; approval required",
+    "approval": "read: none; write: required for every action"
   }
 }

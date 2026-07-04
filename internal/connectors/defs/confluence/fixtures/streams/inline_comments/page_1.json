@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/inline-comments", "query": { "limit": "25", "body-format": "storage" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "ic_fixture_1",
+          "status": "current",
+          "title": "re: Fixture Page 1",
+          "pageId": "pages_fixture_1",
+          "blogPostId": "",
+          "parentCommentId": "",
+          "resolutionStatus": "open",
+          "version": { "number": 1 }
+        },
+        {
+          "id": "ic_fixture_2",
+          "status": "current",
+          "title": "re: Fixture Page 1",
+          "pageId": "pages_fixture_1",
+          "blogPostId": "",
+          "parentCommentId": "",
+          "resolutionStatus": "resolved",
+          "version": { "number": 1 }
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

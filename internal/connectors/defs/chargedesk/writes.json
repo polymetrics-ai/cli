@@ -1,0 +1,248 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "customer_id": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "country": { "type": "string" },
+          "phone": { "type": "string" },
+          "tax_number": { "type": "string" }
+        }
+      },
+      "risk": "external mutation creating a new ChargeDesk customer record; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}",
+      "path_fields": ["customer_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "country": { "type": "string" },
+          "phone": { "type": "string" },
+          "delinquent": { "type": "string" }
+        }
+      },
+      "risk": "external mutation updating an existing ChargeDesk customer record; approval required"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}",
+      "path_fields": ["customer_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id"],
+        "properties": {
+          "customer_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible deletion of a customer record (and, by ChargeDesk's own default, all associated charges/tickets); approval required"
+    },
+    {
+      "name": "update_charge",
+      "kind": "update",
+      "method": "POST",
+      "path": "/charges/{{ record.charge_id }}",
+      "path_fields": ["charge_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["charge_id"],
+        "properties": {
+          "charge_id": { "type": "string" },
+          "amount": { "type": "string" },
+          "currency": { "type": "string" },
+          "status": { "type": "string" },
+          "customer_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation updating an existing charge record's stored data; approval required"
+    },
+    {
+      "name": "delete_charge",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/charges/{{ record.charge_id }}",
+      "path_fields": ["charge_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["charge_id"],
+        "properties": {
+          "charge_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible deletion of a charge record; approval required"
+    },
+    {
+      "name": "refund_charge",
+      "kind": "update",
+      "method": "POST",
+      "path": "/gateway/charges/{{ record.charge_id }}/refund",
+      "path_fields": ["charge_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["charge_id"],
+        "properties": {
+          "charge_id": { "type": "string" },
+          "amount": { "type": "string" },
+          "log_reason": { "type": "string" }
+        }
+      },
+      "risk": "gateway method; irreversibly refunds a charge (full or partial) on the originating payment gateway as well as ChargeDesk; approval required"
+    },
+    {
+      "name": "capture_charge",
+      "kind": "update",
+      "method": "POST",
+      "path": "/gateway/charges/{{ record.charge_id }}/capture",
+      "path_fields": ["charge_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["charge_id"],
+        "properties": {
+          "charge_id": { "type": "string" },
+          "amount": { "type": "string" }
+        }
+      },
+      "risk": "gateway method; captures (settles) a previously authorized charge on the originating payment gateway; approval required"
+    },
+    {
+      "name": "void_charge",
+      "kind": "update",
+      "method": "POST",
+      "path": "/gateway/charges/{{ record.charge_id }}/void",
+      "path_fields": ["charge_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["charge_id"],
+        "properties": {
+          "charge_id": { "type": "string" }
+        }
+      },
+      "risk": "gateway method; voids an authorized charge or cancels an outstanding payment request on the originating payment gateway; approval required"
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/gateway/subscriptions/{{ record.subscription_id }}/cancel",
+      "path_fields": ["subscription_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscription_id"],
+        "properties": {
+          "subscription_id": { "type": "string" },
+          "log_reason": { "type": "string" }
+        }
+      },
+      "risk": "gateway method; irreversibly cancels future recurring charges for a subscription on the originating payment gateway as well as ChargeDesk; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url"],
+        "properties": {
+          "url": { "type": "string" },
+          "all": { "type": "string" },
+          "notifications": { "type": "string" }
+        }
+      },
+      "risk": "external mutation creating a new outbound webhook subscription that will POST ChargeDesk event data to a third-party URL; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "path_fields": ["webhook_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhook_id"],
+        "properties": {
+          "webhook_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible removal of an outbound webhook subscription; approval required"
+    },
+    {
+      "name": "create_agent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/agents",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "email", "role"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "role": { "type": "string" }
+        }
+      },
+      "risk": "external mutation inviting a new support agent (or updating an existing agent's role) with account access to ChargeDesk; approval required"
+    },
+    {
+      "name": "delete_agent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agents/{{ record.email }}",
+      "path_fields": ["email"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible removal of a support agent's ChargeDesk account access; approval required"
+    }
+  ]
+}

@@ -58,6 +58,64 @@
       "path": "/teams",
       "records": { "path": "data" },
       "schema": "schemas/teams.json"
+    },
+    {
+      "name": "fields",
+      "path": "/fields",
+      "records": { "path": "data" },
+      "schema": "schemas/fields.json"
+    },
+    {
+      "name": "event_contacts",
+      "path": "/events/{{ fanout.id }}/contacts",
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/events", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "event_id" },
+        "stamp_field": "event_id"
+      },
+      "schema": "schemas/event_contacts.json"
+    },
+    {
+      "name": "event_staff",
+      "path": "/events/{{ fanout.id }}/staff",
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/events", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "event_id" },
+        "stamp_field": "event_id"
+      },
+      "schema": "schemas/event_staff.json"
+    },
+    {
+      "name": "event_expenses",
+      "path": "/events/{{ fanout.id }}/expenses",
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/events", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "event_id" },
+        "stamp_field": "event_id"
+      },
+      "schema": "schemas/event_expenses.json"
+    },
+    {
+      "name": "company_contacts",
+      "path": "/companies/{{ fanout.id }}/contacts",
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/companies", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "company_id" },
+        "stamp_field": "company_id"
+      },
+      "schema": "schemas/company_contacts.json"
     }
   ]
 }

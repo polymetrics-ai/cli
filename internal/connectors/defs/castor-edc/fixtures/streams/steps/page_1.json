@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/step",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "steps": [
+          {
+            "id": "step_fixture_1",
+            "name": "Vitals",
+            "phase_id": "phase_fixture_1",
+            "step_order": 1,
+            "step_description": "Vital signs collection"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

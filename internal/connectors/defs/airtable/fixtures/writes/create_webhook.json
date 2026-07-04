@@ -1,0 +1,18 @@
+{
+  "record": {
+    "notificationUrl": "https://example.com/fixture/webhook",
+    "specification": { "options": { "filters": { "dataTypes": ["tableData"] } } }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bases/synthetic-conformance-value/webhooks",
+    "body": {
+      "notificationUrl": "https://example.com/fixture/webhook",
+      "specification": { "options": { "filters": { "dataTypes": ["tableData"] } } }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "achFixtureNew", "expirationTime": "2026-02-01T00:00:00.000Z" }
+  }
+}

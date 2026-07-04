@@ -1,0 +1,17 @@
+{
+  "record": {
+    "senderId": 5,
+    "name": "Fixture Sender Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/senders/5",
+    "body": {
+      "name": "Fixture Sender Updated"
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

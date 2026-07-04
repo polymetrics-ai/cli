@@ -1,20 +1,49 @@
 {
   "api": "ConvertKit (Kit) v3 REST API (https://api.convertkit.com/v3)",
-  "docs": "https://developers.convertkit.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "legacy-parity migration: the 5 legacy read streams only (subscribers, forms, sequences, tags, broadcasts); the full ConvertKit v3/v4 surface (custom fields, purchases, webhooks, segments, courses, account) is out of scope until Pass B",
+  "docs": "https://developers.kit.com/api-reference/v3/overview",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-reviewed against the live v3 API reference (developers.kit.com/api-reference/v3/*, fetched 2026-07-04; the v3 API is deprecated in favor of v4 but Kit's own docs confirm v3 remains live and documented, and this bundle's api_secret-query-param auth is v3-specific and not compatible with v4's API-key-header/OAuth2 scheme, so this expansion stays within v3 rather than rewriting the connector onto an incompatible auth model). 7 read streams (the 5 wave1-pilot streams retained, plus custom_fields/purchases) and 12 write actions covering subscriber/tag/form/sequence/broadcast/custom-field/purchase/webhook lifecycle mutations. Every endpoint below is covered_by a stream/write action XOR excluded with a real category and reason. Exclusions favor breadth of real mutations over: subscription-list sub-resource reads that duplicate the subscribers stream's record shape filtered a different way (duplicate_of); the account endpoint (non_data_endpoint, an account metadata snapshot); and the one genuinely destructive global mutation (unsubscribe, destructive_admin).",
   "endpoints": [
     { "method": "GET", "path": "/v3/subscribers", "covered_by": { "stream": "subscribers" } },
-    { "method": "GET", "path": "/v3/forms", "covered_by": { "stream": "forms" } },
-    { "method": "GET", "path": "/v3/sequences", "covered_by": { "stream": "sequences" } },
+    { "method": "GET", "path": "/v3/subscribers/{subscriber_id}", "excluded": { "category": "duplicate_of", "reason": "single-subscriber detail; identical record shape to the subscribers list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/v3/subscribers/{subscriber_id}", "covered_by": { "write": "update_subscriber" } },
+    { "method": "GET", "path": "/v3/subscribers/{subscriber_id}/tags", "excluded": { "category": "duplicate_of", "reason": "per-subscriber tag list; identical record shape to the global tags stream, just filtered to one subscriber" } },
+    { "method": "DELETE", "path": "/v3/subscribers/{subscriber_id}/tags/{tag_id}", "covered_by": { "write": "remove_tag_from_subscriber" } },
+    { "method": "PUT", "path": "/v3/unsubscribe", "excluded": { "category": "destructive_admin", "reason": "globally unsubscribes an email address from every form/sequence/tag in the account at once; irreversible-in-effect (Kit requires manual resubscribe) marketing-consent action, no reverse-ETL use case for this port" } },
+
     { "method": "GET", "path": "/v3/tags", "covered_by": { "stream": "tags" } },
+    { "method": "POST", "path": "/v3/tags", "covered_by": { "write": "create_tag" } },
+    { "method": "POST", "path": "/v3/tags/{tag_id}/subscribe", "covered_by": { "write": "tag_subscriber" } },
+    { "method": "POST", "path": "/v3/tags/{tag_id}/unsubscribe", "excluded": { "category": "out_of_scope", "reason": "breadth-vs-cost triage: remove_tag_from_subscriber (the ID-addressed DELETE variant) already covers tag removal; this email-addressed POST variant is a duplicate mutation path, not a distinct capability" } },
+    { "method": "GET", "path": "/v3/tags/{tag_id}/subscriptions", "excluded": { "category": "duplicate_of", "reason": "per-tag subscriber list; identical record shape to the global subscribers stream, just filtered to one tag" } },
+
+    { "method": "GET", "path": "/v3/forms", "covered_by": { "stream": "forms" } },
+    { "method": "POST", "path": "/v3/forms/{form_id}/subscribe", "covered_by": { "write": "subscribe_to_form" } },
+    { "method": "GET", "path": "/v3/forms/{form_id}/subscriptions", "excluded": { "category": "duplicate_of", "reason": "per-form subscriber list; identical record shape to the global subscribers stream, just filtered to one form" } },
+
+    { "method": "GET", "path": "/v3/sequences", "covered_by": { "stream": "sequences" } },
+    { "method": "POST", "path": "/v3/sequences/{sequence_id}/subscribe", "covered_by": { "write": "subscribe_to_sequence" } },
+    { "method": "GET", "path": "/v3/sequences/{sequence_id}/subscriptions", "excluded": { "category": "duplicate_of", "reason": "per-sequence subscriber list; identical record shape to the global subscribers stream, just filtered to one sequence" } },
+
     { "method": "GET", "path": "/v3/broadcasts", "covered_by": { "stream": "broadcasts" } },
-    { "method": "GET", "path": "/v3/account", "excluded": { "category": "non_data_endpoint", "reason": "account metadata snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/v3/custom_fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/tags/{id}/subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v3/forms/{id}/subscribe", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v3/tags/{id}/subscribe", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PUT", "path": "/v3/subscribers/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/v3/subscribers/{id}/unsubscribe", "excluded": { "category": "destructive_admin", "reason": "destructive write, no reverse-ETL use case for this port" } }
+    { "method": "POST", "path": "/v3/broadcasts", "covered_by": { "write": "create_broadcast" } },
+    { "method": "GET", "path": "/v3/broadcasts/{broadcast_id}", "excluded": { "category": "duplicate_of", "reason": "single-broadcast detail; identical record shape to the broadcasts list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/v3/broadcasts/{broadcast_id}", "covered_by": { "write": "update_broadcast" } },
+    { "method": "DELETE", "path": "/v3/broadcasts/{broadcast_id}", "covered_by": { "write": "delete_broadcast" } },
+    { "method": "GET", "path": "/v3/broadcasts/{broadcast_id}/stats", "excluded": { "category": "non_data_endpoint", "reason": "engagement-metrics snapshot (opens/clicks/unsubscribes) for one broadcast, not a syncable object list" } },
+
+    { "method": "GET", "path": "/v3/custom_fields", "covered_by": { "stream": "custom_fields" } },
+    { "method": "POST", "path": "/v3/custom_fields", "covered_by": { "write": "create_custom_field" } },
+    { "method": "PUT", "path": "/v3/custom_fields/{custom_field_id}", "covered_by": { "write": "update_custom_field" } },
+    { "method": "DELETE", "path": "/v3/custom_fields/{custom_field_id}", "excluded": { "category": "destructive_admin", "reason": "permanently removes the field AND all associated subscriber data for every subscriber (per Kit's own docs), no reverse-ETL use case for this port" } },
+
+    { "method": "GET", "path": "/v3/purchases", "covered_by": { "stream": "purchases" } },
+    { "method": "GET", "path": "/v3/purchases/{purchase_id}", "excluded": { "category": "duplicate_of", "reason": "single-purchase detail; identical record shape to the purchases list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v3/purchases", "covered_by": { "write": "create_purchase" } },
+
+    { "method": "POST", "path": "/v3/automations/hooks", "covered_by": { "write": "create_webhook" } },
+    { "method": "DELETE", "path": "/v3/automations/hooks/{rule_id}", "covered_by": { "write": "delete_webhook" } },
+
+    { "method": "GET", "path": "/v3/account", "excluded": { "category": "non_data_endpoint", "reason": "account metadata snapshot (name, primary email), not a syncable object stream" } }
   ]
 }

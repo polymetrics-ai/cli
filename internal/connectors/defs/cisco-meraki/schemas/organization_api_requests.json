@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_api_requests",
+  "type": "object",
+  "x-primary-key": ["organizationId", "ts", "path", "method"],
+  "x-cursor-field": "ts",
+  "required": ["organizationId", "ts"],
+  "properties": {
+    "organizationId": { "type": "string" },
+    "ts": { "type": "string" },
+    "adminId": { "type": ["string", "null"] },
+    "method": { "type": ["string", "null"] },
+    "host": { "type": ["string", "null"] },
+    "path": { "type": ["string", "null"] },
+    "queryString": { "type": ["string", "null"] },
+    "userAgent": { "type": ["string", "null"] },
+    "responseCode": { "type": ["integer", "null"] },
+    "sourceIp": { "type": ["string", "null"] },
+    "version": { "type": ["integer", "null"] },
+    "operationId": { "type": ["string", "null"] },
+    "client": { "type": ["object", "null"] }
+  }
+}

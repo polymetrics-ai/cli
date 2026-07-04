@@ -49,6 +49,133 @@
       "path": "/getTransactions",
       "records": { "path": "data" },
       "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "rate_plans",
+      "path": "/getRatePlans",
+      "query": {
+        "startDate": "{{ config.rate_plans_start_date }}",
+        "endDate": "{{ config.rate_plans_end_date }}"
+      },
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/rate_plans.json"
+    },
+    {
+      "name": "room_types",
+      "path": "/getRoomTypes",
+      "records": { "path": "data" },
+      "schema": "schemas/room_types.json"
+    },
+    {
+      "name": "items",
+      "path": "/getItems",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/items.json"
+    },
+    {
+      "name": "item_categories",
+      "path": "/getItemCategories",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/item_categories.json"
+    },
+    {
+      "name": "taxes_and_fees",
+      "path": "/getTaxesAndFees",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/taxes_and_fees.json"
+    },
+    {
+      "name": "sources",
+      "path": "/getSources",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/sources.json"
+    },
+    {
+      "name": "groups",
+      "path": "/getGroups",
+      "query": { "propertyID": "{{ config.property_id }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "house_accounts",
+      "path": "/getHouseAccountList",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/house_accounts.json"
+    },
+    {
+      "name": "housekeepers",
+      "path": "/getHousekeepers",
+      "records": { "path": "data" },
+      "schema": "schemas/housekeepers.json"
+    },
+    {
+      "name": "housekeeping_status",
+      "path": "/getHousekeepingStatus",
+      "records": { "path": "data" },
+      "schema": "schemas/housekeeping_status.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/getCustomFields",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "payment_methods",
+      "path": "/getPaymentMethods",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/payment_methods.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/getWebhooks",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "allotment_blocks",
+      "path": "/getAllotmentBlocks",
+      "query": { "propertyID": "{{ config.property_id }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/allotment_blocks.json"
+    },
+    {
+      "name": "guest_notes",
+      "path": "/getGuestNotes",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/getGuestList", "records_path": "data", "id_field": "guestID" }
+        },
+        "into": { "query_param": "guestID" },
+        "stamp_field": "guestID"
+      },
+      "schema": "schemas/guest_notes.json"
+    },
+    {
+      "name": "reservation_notes",
+      "path": "/getReservationNotes",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/getReservations", "records_path": "data", "id_field": "reservationID" }
+        },
+        "into": { "query_param": "reservationID" },
+        "stamp_field": "reservationID"
+      },
+      "schema": "schemas/reservation_notes.json"
     }
   ]
 }

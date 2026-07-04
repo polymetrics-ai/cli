@@ -27,6 +27,10 @@
       "type": "string",
       "description": "Optional stock-screener filter: maximum market capitalization."
     },
+    "symbols": {
+      "type": "string",
+      "description": "Comma-separated stock ticker symbols to fan out over for the per-symbol streams (company_profile, quote, historical_price, income_statement, balance_sheet_statement, cash_flow_statement, key_metrics, financial_ratios). Required for those streams only; the aggregate/list streams (stocks, etfs, stock_screener, delisted_companies, market_indexes, sp500_constituent, earnings_calendar) do not reference it."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

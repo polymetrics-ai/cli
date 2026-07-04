@@ -1,0 +1,16 @@
+{
+  "record": {
+    "event": "invoice.paid",
+    "customerId": "cus_fixture_1",
+    "eventData": { "amount": 4900 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/api/events/new",
+    "body": {
+      "event": "invoice.paid",
+      "customerId": "cus_fixture_1",
+      "eventData": { "amount": 4900 }
+    }
+  }
+}

@@ -50,6 +50,112 @@
       },
       "records": { "path": "data" },
       "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "opt_fields": "gid,name,resource_type,email",
+        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "teams",
+      "path": "/workspaces/{{ config.workspace_id }}/teams",
+      "query": {
+        "opt_fields": "gid,name,resource_type,description,visibility"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "query": {
+        "opt_fields": "gid,name,resource_type,color,notes,created_at",
+        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "sections",
+      "path": "/projects/{{ fanout.id }}/sections",
+      "query": {
+        "opt_fields": "gid,name,resource_type,created_at"
+      },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/projects", "records_path": "data", "id_field": "gid" }
+        },
+        "into": { "path_var": "project_gid" },
+        "stamp_field": "project_gid"
+      },
+      "schema": "schemas/sections.json"
+    },
+    {
+      "name": "stories",
+      "path": "/tasks/{{ fanout.id }}/stories",
+      "query": {
+        "opt_fields": "gid,resource_type,created_at,resource_subtype,text,type,created_by.gid,created_by.name"
+      },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/tasks", "records_path": "data", "id_field": "gid" }
+        },
+        "into": { "path_var": "task_gid" },
+        "stamp_field": "task_gid"
+      },
+      "schema": "schemas/stories.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/workspaces/{{ config.workspace_id }}/custom_fields",
+      "query": {
+        "opt_fields": "gid,name,resource_type,type,enabled,description"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "project_statuses",
+      "path": "/projects/{{ fanout.id }}/project_statuses",
+      "query": {
+        "opt_fields": "gid,resource_type,title,text,color,created_at,modified_at"
+      },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/projects", "records_path": "data", "id_field": "gid" }
+        },
+        "into": { "path_var": "project_gid" },
+        "stamp_field": "project_gid"
+      },
+      "schema": "schemas/project_statuses.json"
+    },
+    {
+      "name": "team_memberships",
+      "path": "/team_memberships",
+      "query": {
+        "opt_fields": "gid,resource_type,is_guest,is_admin,is_limited_access,user.gid,user.name,team.gid,team.name",
+        "team": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/team_memberships.json"
+    },
+    {
+      "name": "workspace_memberships",
+      "path": "/workspaces/{{ config.workspace_id }}/workspace_memberships",
+      "query": {
+        "opt_fields": "gid,resource_type,is_active,is_admin,is_guest,user.gid,user.name"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/workspace_memberships.json"
     }
   ]
 }

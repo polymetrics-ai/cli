@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/reports/ads" },
+  "response": {
+    "status": 200,
+    "body": {
+      "revenue": "10.00",
+      "requests": 10000,
+      "impressions": 9500,
+      "requests_filled": 9500,
+      "ecpm": "1.05",
+      "fillrate": 0.95,
+      "ctr": 0.02,
+      "clicks": 190
+    }
+  }
+}

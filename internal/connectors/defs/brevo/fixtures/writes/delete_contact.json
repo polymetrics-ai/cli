@@ -1,0 +1,13 @@
+{
+  "record": {
+    "identifier": "fixture-new@example.com"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/fixture-new@example.com"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

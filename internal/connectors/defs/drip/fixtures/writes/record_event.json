@@ -1,0 +1,28 @@
+{
+  "record": {
+    "events": [
+      {
+        "email": "fixture1@example.com",
+        "action": "fixture-viewed-pricing-page",
+        "properties": { "plan": "pro" }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/events",
+    "body": {
+      "events": [
+        {
+          "email": "fixture1@example.com",
+          "action": "fixture-viewed-pricing-page",
+          "properties": { "plan": "pro" }
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,14 +1,14 @@
 {
   "name": "cisco-meraki",
   "display_name": "Cisco Meraki",
-  "description": "Reads Cisco Meraki organizations, networks, devices, and admins from the Meraki Dashboard API v1.",
+  "description": "Reads and writes Cisco Meraki organizations, networks, devices, admins, licenses, configuration templates, policy objects, branding policies, SAML roles, and organization audit logs from the Meraki Dashboard API v1.",
   "integration_type": "api",
   "docs_url": "https://developer.cisco.com/meraki/api-v1/",
   "release_stage": "beta",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 1000
   },
   "risk": {
-    "read": "external Cisco Meraki Dashboard API read of organization, network, device, and admin configuration/state"
+    "read": "external Cisco Meraki Dashboard API read of organization, network, device, admin, license, configuration-template, policy-object, branding-policy, SAML-role, and audit-log configuration/state",
+    "write": "external mutation of Meraki network/device/admin/policy-object/configuration-template configuration; affects live network management state an operator relies on"
   }
 }

@@ -3,11 +3,12 @@
 Finage is a real-time market-data API. This bundle reads all 6 legacy streams — the 4
 non-partitioned US market-information streams (most active stocks, top gainers, top losers, sector
 performance), delisted companies, and the symbol-partitioned `market_news` stream — at capability
-parity with `internal/connectors/finage` (the hand-written connector it migrates). The legacy
-package stays registered and unchanged until wave6's registry flip. `market_news`'s symbol
-partitioning, previously blocked (`ENGINE_GAP`, no fan-out mechanism), is now expressed via
-`streams.json`'s `fan_out.ids_from.config_key` dialect (S4 engine mini-wave item 2); see Streams
-notes.
+parity with `internal/connectors/finage` (the hand-written connector it migrates), PLUS two Pass B
+full-surface-expansion additions within the same Fundamentals product family: `earnings_calendar`
+and `ipo_calendar`. The legacy package stays registered and unchanged until wave6's registry flip.
+`market_news`'s symbol partitioning, previously blocked (`ENGINE_GAP`, no fan-out mechanism), is now
+expressed via `streams.json`'s `fan_out.ids_from.config_key` dialect (S4 engine mini-wave item 2);
+see Streams notes.
 
 ## Auth setup
 
@@ -45,6 +46,22 @@ incremental state, and rate-limiting are independent per symbol, mirroring legac
 per-symbol `fetchPage` call — this stream declares no pagination (Finage's news endpoint returns a
 full array per symbol, no pagination) and no `incremental` block (legacy's `market_news` reads no
 date-window filter either).
+
+`earnings_calendar` (`GET /fnd/earning-calendar`, Pass B addition) and `ipo_calendar`
+(`GET /fnd/ipo-calendar`, Pass B addition) are both unpaginated, top-level-array GETs in the same
+`/fnd/*` Fundamentals family as `delisted_companies`, requiring a `from`/`to` (`YYYY-MM-DD`)
+date-range window — plain (non-optional) `{{ config.calendar_from }}`/`{{ config.calendar_to }}`
+query templates, so omitting either hard-errors exactly like every other required-but-unset
+`config.*` reference in this dialect (no `omit_when_absent`/`default` — there is no sane default
+date range to fall back to, and Finage's own docs never document one). Field names for both streams
+are derived from a documented real-world usage example of these exact endpoints (not guessed —
+`earnings_calendar`: `symbol`/`date`/`time`/`eps`/`estimated_eps`/`revenue`/`estimated_revenue`,
+with `eps`/`revenue` nullable per that sample; `ipo_calendar`:
+`symbol`/`date`/`company`/`exchange`/`status`/`shares`/`price_range`/`market_cap`), since Finage's
+own documentation site renders its endpoint reference pages client-side (every URL fetched returned
+identical generic template content, not the actual per-endpoint reference) and no OpenAPI/Postman
+spec is publicly published. Neither stream has a legacy counterpart to derive fields from — legacy
+never modeled either endpoint at all.
 
 ## Write actions & risks
 

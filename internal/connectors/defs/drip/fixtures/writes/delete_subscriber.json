@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sub_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/synthetic-conformance-value/subscribers/sub_fixture_1"
+  }
+}

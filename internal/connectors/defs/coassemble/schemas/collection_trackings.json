@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "collection_trackings",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "string"] },
+    "identifier": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "commenced": { "type": ["string", "null"] },
+    "completed": { "type": ["string", "null"] },
+    "progressPercent": { "type": ["number", "null"] },
+    "totalTime": { "type": ["number", "null"] },
+    "courses": { "type": ["array", "null"] },
+    "collection_id": { "type": ["string", "null"] }
+  }
+}

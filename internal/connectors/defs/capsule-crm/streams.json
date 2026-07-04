@@ -89,6 +89,90 @@
         "updated_at": "{{ record.updatedAt }}"
       },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "tags" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/customfields",
+      "records": { "path": "definitions" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "entity_type": "{{ record.entityType }}",
+        "restricted_to_type": "{{ record.restrictedToType }}"
+      },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "teams" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipelines",
+      "records": { "path": "pipelines" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "display_order": "{{ record.displayOrder }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "milestones",
+      "path": "/milestones",
+      "records": { "path": "milestones" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "pipeline_id": "{{ record.pipeline.id }}"
+      },
+      "schema": "schemas/milestones.json"
+    },
+    {
+      "name": "lost_reasons",
+      "path": "/lostreasons",
+      "records": { "path": "lostReasons" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/lost_reasons.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "records": { "path": "categories" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "boards",
+      "path": "/boards",
+      "records": { "path": "boards" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "entity_type": "{{ record.entityType }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/boards.json"
+    },
+    {
+      "name": "stages",
+      "path": "/stages",
+      "records": { "path": "stages" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "display_order": "{{ record.displayOrder }}",
+        "board_id": "{{ record.board.id }}"
+      },
+      "schema": "schemas/stages.json"
     }
   ]
 }

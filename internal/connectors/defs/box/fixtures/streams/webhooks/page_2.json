@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhooks",
+    "query": { "marker": "webhooks_marker_page_2", "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "webhook_fixture_2",
+          "type": "webhook",
+          "target": { "id": "folder_fixture_2", "type": "folder" },
+          "address": "https://example.com/webhooks/2",
+          "triggers": ["FILE.DELETED"],
+          "created_by": { "id": "users_fixture_2", "type": "user" },
+          "created_at": "2026-01-02T00:00:00-08:00"
+        }
+      ],
+      "limit": 2,
+      "next_marker": null
+    }
+  }
+}

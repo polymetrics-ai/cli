@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sessions",
+  "type": "object",
+  "x-primary-key": ["time"],
+  "x-cursor-field": "time",
+  "required": ["time"],
+  "properties": {
+    "time": { "type": "string" },
+    "sessions": { "type": ["integer", "null"] }
+  }
+}

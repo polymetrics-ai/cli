@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "statistics_channels",
+  "type": "object",
+  "x-primary-key": ["ChannelName"],
+  "required": ["ChannelName"],
+  "properties": {
+    "ChannelName": { "type": "string" },
+    "Recipients": { "type": ["integer", "null"] },
+    "EmailTotal": { "type": ["integer", "null"] },
+    "SmsTotal": { "type": ["integer", "null"] },
+    "Delivered": { "type": ["integer", "null"] },
+    "Bounced": { "type": ["integer", "null"] },
+    "InProgress": { "type": ["integer", "null"] },
+    "Opened": { "type": ["integer", "null"] },
+    "Clicked": { "type": ["integer", "null"] },
+    "Unsubscribed": { "type": ["integer", "null"] },
+    "Complaints": { "type": ["integer", "null"] },
+    "Inbound": { "type": ["integer", "null"] },
+    "ManualCancel": { "type": ["integer", "null"] },
+    "NotDelivered": { "type": ["integer", "null"] }
+  }
+}

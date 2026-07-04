@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stale_flags",
+  "type": "object",
+  "x-primary-key": ["productId"],
+  "required": ["productId"],
+  "properties": {
+    "productId": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "configs": { "type": ["array", "null"] },
+    "environments": { "type": ["array", "null"] }
+  }
+}

@@ -1,15 +1,16 @@
 # Overview
 
-Reads CoinMarketCap's latest aggregate global cryptocurrency market metrics from the Pro API
-(`GET /v1/global-metrics/quotes/latest`), migrating `internal/connectors/coinmarketcap` (the legacy
-hand-written connector, which stays registered and unchanged until wave6's registry flip) at
-capability parity for its `global_metrics` stream only. This bundle is an **unblock re-review**, not
-a fresh migration: the connector was previously quarantined entirely (`ENGINE_GAP`,
-`docs/migration/quarantine.json`) for its 4 paginated streams' 1-based `start`/`limit` pagination
-shape. Re-reviewed against the new dialect additions (`fan_out`, `keyed_object`, `start_page: 0`,
-oauth2 `extra_params`, date-only incremental bounds) — none of those apply to the pagination gap
-these 4 streams share; they remain blocked. The API is read-only; this bundle exposes no write
-actions.
+Reads CoinMarketCap's Pro API: global aggregate market metrics, id/slug/symbol-keyed cryptocurrency
+detail lookups, price conversion, fear-and-greed index, and altcoin season index. Migrates
+`internal/connectors/coinmarketcap` (the legacy hand-written connector, which stays registered and
+unchanged until wave6's registry flip) at capability parity for its `global_metrics` stream, then
+this Pass B full-surface expansion adds every other dialect-expressible (non-1-based-start/limit)
+GET endpoint CoinMarketCap documents: 9 streams total. The connector's 4 originally-quarantined
+paginated streams (`map`/`listings_latest`/`categories`/`fiat`) remain blocked — re-reviewed against
+every dialect addition through the S4 engine mini-wave (`fan_out`, `keyed_object`, `start_page: 0`,
+oauth2 `extra_params`, date-only incremental bounds) and again for this Pass B pass; none apply to
+the pagination gap these 4 streams (and every sibling `start`/`limit`-paginated list endpoint the
+wider API surface documents) share. The API is read-only; this bundle exposes no write actions.
 
 ## Auth setup
 
@@ -21,22 +22,54 @@ when empty, no anonymous/public mode exists for this API). `base_url` defaults t
 
 ## Streams notes
 
-Only `global_metrics` is implemented. It reads `GET /v1/global-metrics/quotes/latest`, not
-paginated (`endpoint.paginated: false` in legacy's routing table — `readSingle` issues exactly one
-request), not incremental (legacy publishes no `CursorFields`). CoinMarketCap wraps every payload
-in `{status:{...}, data:...}`; `data` is a single object here, so `records.path: "data"` (via
+`global_metrics` reads `GET /v1/global-metrics/quotes/latest`, not paginated
+(`endpoint.paginated: false` in legacy's routing table — `readSingle` issues exactly one request),
+not incremental (legacy publishes no `CursorFields`). CoinMarketCap wraps every payload in
+`{status:{...}, data:...}`; `data` is a single object here, so `records.path: "data"` (via
 `connsdk.RecordsAt`'s object-becomes-one-record behavior) yields exactly one record per read,
 matching legacy's `readSingle` + `globalMetricsRecord` field set (`active_cryptocurrencies`,
 `total_cryptocurrencies`, `active_market_pairs`, `active_exchanges`, `total_exchanges`,
 `btc_dominance`, `eth_dominance`, `last_updated`, `quote`). `x-primary-key` is
 `active_cryptocurrencies`, matching legacy's own declared (not-really-unique, single-record-stream)
 `PrimaryKey` choice verbatim — not "fixed" here, since this bundle targets parity with legacy's
-existing behavior, not a design improvement.
+existing behavior, not a design improvement. It also sends an optional `convert` query param
+(`config.convert`, defaulting `"USD"`) via the opt-in optional-query dialect.
+
+The 8 Pass B streams added this pass, all genuinely non-paginated (parameterless single-object
+responses, or id/slug/symbol-keyed lookups CoinMarketCap itself never paginates):
+
+- `global_metrics_quotes_historical` (`GET /v1/global-metrics/quotes/historical`): records at
+  `data.quotes` (a bare array under the object envelope). Optional `time_start`/`time_end`/`count`/
+  `interval`/`convert` config-driven passthrough filters, all `omit_when_absent`. Deliberately NOT
+  modeled as `incremental` — the endpoint's own `count`/`interval` snapshot-window semantics don't
+  map cleanly onto "records newer than the last-seen cursor" without risking a silent behavior
+  guess; full-refresh only, `x-primary-key: timestamp` with no `x-cursor-field` declared.
+- `cryptocurrency_info` (`GET /v2/cryptocurrency/info`) and `cryptocurrency_quotes_latest`
+  (`GET /v3/cryptocurrency/quotes/latest`): both take a required `id` query param
+  (`config.cryptocurrency_ids`, comma-separated CMC ids) and return `data` as a JSON object KEYED BY
+  the requested id (`{"1": {...}, "1027": {...}}`, confirmed against CoinMarketCap's own documented
+  response shape for bundling-capable endpoints) — modeled with `records.keyed_object: true`,
+  `key_field: cmc_id` so each exploded record carries its own source map key alongside the API's own
+  `id` field.
+- `price_conversion` (`GET /v2/tools/price-conversion`): single-object `data` response; requires
+  `amount` (`config.price_conversion_amount`) plus exactly one of `id`/`symbol`
+  (`config.price_conversion_id`/`config.price_conversion_symbol`, both `omit_when_absent` — the
+  caller is responsible for setting exactly one, matching CoinMarketCap's own "one of id or symbol
+  required" rule; the engine has no `anyOf`-equivalent to enforce this at the config layer, so this
+  is documented operator guidance, not a validated constraint).
+- `fear_and_greed_latest` (`GET /v3/fear-and-greed/latest`), `altcoin_season_index_latest`
+  (`GET /v1/altcoin-season-index/latest`), `key_info` (`GET /v1/key/info`): all three are
+  parameterless, single-object `data` responses.
+- `altcoin_season_index_historical` (`GET /v1/altcoin-season-index/historical`): `data` is an
+  object with a `timeframe` field plus a `points` array — `records.path: "data.points"`. Optional
+  `timeframe` config (`config.altcoin_season_timeframe`, default `"7d"`, matching CoinMarketCap's
+  own documented default).
 
 ## Write actions & risks
 
 None. CoinMarketCap is `capabilities.write: false`; no `writes.json` is shipped, matching legacy's
-`Write` always returning `connectors.ErrUnsupportedOperation`.
+`Write` always returning `connectors.ErrUnsupportedOperation`. Every documented CoinMarketCap Pro
+API endpoint is itself read-only (GET); the Pro API has no write/mutation surface at all.
 
 ## Known limits
 
@@ -68,5 +101,18 @@ None. CoinMarketCap is `capabilities.write: false`; no `writes.json` is shipped,
     `page_number`'s now-pointer-typed `start_page`) or a Tier-2 `StreamHook`/hand-rolled paginator;
     filed as `ENGINE_GAP` rather than escalated to a hooks package, since a hook here would exist
     for pagination alone with no other Tier-2 trigger in this connector.
-- Full CoinMarketCap API surface (historical quotes, OHLCV, exchange listings/info, DEX/on-chain
-  endpoints) is out of scope until Pass B; see `api_surface.json`.
+- **Not covered this pass (deliberately narrowed, not silently dropped — see `api_surface.json`
+  for the per-endpoint reason)**: every remaining `start`/`limit`-paginated list endpoint across
+  Cryptocurrency/Exchange/Global-Metrics/Content categories shares the identical `ENGINE_GAP` above
+  (market-pairs/latest, trending/*, airdrops, exchange map/listings/market-pairs,
+  fear-and-greed/historical, content/latest). A second, narrower group of id/slug/symbol-keyed
+  detail endpoints in the SAME families as the newly covered streams
+  (`quotes/historical`/`ohlcv/latest`/`ohlcv/historical`/`price-performance-stats/latest`,
+  `category`/`airdrop` singular lookups, every `exchange/*` detail endpoint) is dialect-expressible
+  in principle but not implemented this pass — each is a distinct response shape not yet reviewed,
+  or (for the `exchange/*` family) depends on an id list sourced from the very
+  `start`/`limit`-paginated `exchange/map` this connector cannot page through. DEX Data, Derivatives,
+  CMC Index, and Content/Community (cursor-by-score pagination, a different shape from the
+  `start`/`limit` gap) are distinct product surfaces out of scope for this connector's core
+  cryptocurrency/exchange/global-metrics streams. The 21-endpoint Deprecated bucket (Flipside
+  Crypto FCAS, legacy blockchain/statistics) is excluded as `deprecated`, not a coverage gap.

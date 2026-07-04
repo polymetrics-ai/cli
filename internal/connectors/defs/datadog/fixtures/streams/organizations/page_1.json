@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/org" },
+  "response": {
+    "status": 200,
+    "body": {
+      "orgs": [
+        {
+          "public_id": "fixture-org-1",
+          "name": "Fixture Org",
+          "description": "conformance fixture organization",
+          "created": "2026-01-01T00:00:00Z",
+          "trial": false
+        }
+      ]
+    }
+  }
+}

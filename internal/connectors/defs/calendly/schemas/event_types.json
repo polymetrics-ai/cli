@@ -14,6 +14,14 @@
     "duration": { "type": ["integer", "null"] },
     "kind": { "type": ["string", "null"] },
     "scheduling_url": { "type": ["string", "null"] },
+    "booking_method": { "type": ["string", "null"] },
+    "pooling_type": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "description_plain": { "type": ["string", "null"] },
+    "description_html": { "type": ["string", "null"] },
+    "secret": { "type": ["boolean", "null"] },
+    "deleted_at": { "type": ["string", "null"], "format": "date-time" },
     "created_at": { "type": ["string", "null"], "format": "date-time" },
     "updated_at": { "type": ["string", "null"], "format": "date-time" }
   }

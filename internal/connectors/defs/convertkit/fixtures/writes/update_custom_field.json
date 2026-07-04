@@ -1,0 +1,12 @@
+{
+  "record": { "id": 3, "label": "Fixture Field (renamed)" },
+  "expect": {
+    "method": "PUT",
+    "path": "/custom_fields/3",
+    "body": { "label": "Fixture Field (renamed)" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "custom_field": { "id": 3, "name": "ck_field_3_fixture_field", "key": "fixture_field", "label": "Fixture Field (renamed)" } }
+  }
+}

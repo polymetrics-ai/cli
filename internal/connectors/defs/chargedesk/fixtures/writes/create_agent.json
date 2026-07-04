@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture Agent",
+    "email": "agent-fixture@example.com",
+    "role": "agent"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/agents"
+  }
+}

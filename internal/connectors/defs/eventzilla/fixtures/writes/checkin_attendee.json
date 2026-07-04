@@ -1,0 +1,25 @@
+{
+  "record": {
+    "barcode": "FIXTURE-BARCODE-1",
+    "eventcheckin": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/attendees/checkin",
+    "body": {
+      "barcode": "FIXTURE-BARCODE-1",
+      "eventcheckin": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "first_name": "Fixture",
+      "last_name": "Attendee1",
+      "eventtitle": "Fixture Launch",
+      "orderef": "REF-101",
+      "email": "attendee1@example.com",
+      "status": "Check In"
+    }
+  }
+}

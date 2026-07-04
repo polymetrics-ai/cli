@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "historical_price",
+  "type": "object",
+  "x-primary-key": ["symbol", "date"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "open": { "type": ["number", "null"] },
+    "high": { "type": ["number", "null"] },
+    "low": { "type": ["number", "null"] },
+    "close": { "type": ["number", "null"] },
+    "adj_close": { "type": ["number", "null"] },
+    "volume": { "type": ["integer", "null"] },
+    "change": { "type": ["number", "null"] },
+    "change_percent": { "type": ["number", "null"] },
+    "vwap": { "type": ["number", "null"] }
+  }
+}

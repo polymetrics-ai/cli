@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": 1,
+    "product": {
+      "title": "Updated Fixture Product"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/1"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/message-flows.json",
+    "query": {
+      "page": "1",
+      "per_page": "100",
+      "company_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 100,
+      "total_pages": 1,
+      "total_records": 1,
+      "message-flows": [
+        {
+          "id": "MFL_fixture_1",
+          "name": "Fixture message flow",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "tracker_ids": ["TRK_fixture_1"]
+        }
+      ]
+    }
+  }
+}

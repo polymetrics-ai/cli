@@ -1,0 +1,18 @@
+{
+  "record": {
+    "productID": 1,
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/certificates",
+    "body": {
+      "productID": 1,
+      "email": "fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 1, "certificate": "FIXTURE1", "productID": 1 }
+  }
+}

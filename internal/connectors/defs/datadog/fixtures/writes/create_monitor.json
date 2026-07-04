@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Monitor",
+    "type": "metric alert",
+    "query": "avg(last_5m):avg:system.cpu.user{*} > 90",
+    "message": "fixture monitor alert"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/monitor"
+  }
+}

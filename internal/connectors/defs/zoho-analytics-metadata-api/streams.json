@@ -50,6 +50,55 @@
       "records": { "path": "data" },
       "schema": "schemas/tables.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "organizations",
+      "path": "/orgs",
+      "records": { "path": "data.orgs" },
+      "schema": "schemas/organizations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recent_views",
+      "path": "/recentviews",
+      "records": { "path": "data.views" },
+      "schema": "schemas/recent_views.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "shared_workspaces",
+      "path": "/workspaces/shared",
+      "records": { "path": "data.workspaces" },
+      "schema": "schemas/shared_workspaces.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "shared_dashboards",
+      "path": "/dashboards/shared",
+      "records": { "path": "data.views" },
+      "schema": "schemas/shared_dashboards.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "folders",
+      "path": "/workspaces/{{ config.workspace_id }}/folders",
+      "records": { "path": "data.folders" },
+      "schema": "schemas/folders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "query_tables",
+      "path": "/workspaces/{{ config.workspace_id }}/querytables",
+      "records": { "path": "data.queryTables" },
+      "schema": "schemas/query_tables.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "datasources",
+      "path": "/workspaces/{{ config.workspace_id }}/datasources",
+      "records": { "path": "data.dataSources" },
+      "schema": "schemas/datasources.json",
+      "projection": "passthrough"
     }
   ]
 }

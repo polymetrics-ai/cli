@@ -1,0 +1,34 @@
+{
+  "record": {
+    "supplierNumber": 201,
+    "name": "Fixture Supplier ApS",
+    "currency": "DKK",
+    "email": "fixture-supplier@example.com",
+    "city": "Odense",
+    "zip": "5000",
+    "country": "Denmark",
+    "address": "3 Fixture Street",
+    "supplierGroup": { "supplierGroupNumber": 1 },
+    "vatZone": { "vatZoneNumber": 1 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/suppliers",
+    "body": {
+      "supplierNumber": 201,
+      "name": "Fixture Supplier ApS",
+      "currency": "DKK",
+      "email": "fixture-supplier@example.com",
+      "city": "Odense",
+      "zip": "5000",
+      "country": "Denmark",
+      "address": "3 Fixture Street",
+      "supplierGroup": { "supplierGroupNumber": 1 },
+      "vatZone": { "vatZoneNumber": 1 }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "supplierNumber": 201, "self": "https://restapi.e-conomic.com/suppliers/201" }
+  }
+}

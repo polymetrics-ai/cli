@@ -1,0 +1,9 @@
+{
+  "record": {
+    "vendor[name]": "Fixture Vendor"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/vendors.api"
+  }
+}

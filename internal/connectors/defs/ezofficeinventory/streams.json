@@ -67,6 +67,52 @@
       "path": "/locations/get_line_item_locations.api",
       "records": { "path": "locations" },
       "schema": "schemas/locations.json"
+    },
+    {
+      "name": "groups",
+      "path": "/assets/classification_view.api",
+      "query": {
+        "show_document_details": "true"
+      },
+      "records": { "path": "groups" },
+      "computed_fields": {
+        "id": "{{ record.group.id }}",
+        "name": "{{ record.group.name }}",
+        "description": "{{ record.group.description }}",
+        "active": "{{ record.group.active }}",
+        "asset_depreciation_mode": "{{ record.group.asset_depreciation_mode }}",
+        "assets_count": "{{ record.group.assets_count }}",
+        "company_id": "{{ record.group.company_id }}",
+        "hidden_on_web_store": "{{ record.group.hidden_on_web_store }}",
+        "created_at": "{{ record.group.created_at }}",
+        "updated_at": "{{ record.group.updated_at }}"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "vendors",
+      "path": "/assets/vendors.api",
+      "query": {
+        "include_custom_fields": "true"
+      },
+      "records": { "path": "vendors" },
+      "computed_fields": {
+        "id": "{{ record.vendor.id }}",
+        "name": "{{ record.vendor.name }}",
+        "company_id": "{{ record.vendor.company_id }}",
+        "assets_count": "{{ record.vendor.assets_count }}",
+        "services_count": "{{ record.vendor.services_count }}",
+        "status": "{{ record.vendor.status }}",
+        "created_at": "{{ record.vendor.created_at }}",
+        "updated_at": "{{ record.vendor.updated_at }}"
+      },
+      "schema": "schemas/vendors.json"
+    },
+    {
+      "name": "purchase_orders",
+      "path": "/purchase_orders.api",
+      "records": { "path": "purchase_orders" },
+      "schema": "schemas/purchase_orders.json"
     }
   ]
 }

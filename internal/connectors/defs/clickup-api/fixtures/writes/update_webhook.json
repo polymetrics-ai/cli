@@ -1,0 +1,8 @@
+{
+  "record": { "id": "webhook_fixture_1", "status": "active" },
+  "expect": {
+    "method": "PUT",
+    "path": "/webhook/webhook_fixture_1",
+    "body": { "status": "active" }
+  }
+}

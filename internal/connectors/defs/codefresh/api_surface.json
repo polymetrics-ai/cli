@@ -1,16 +1,3340 @@
 {
-  "api": "Codefresh REST API (https://g.codefresh.io/api)",
+  "api": "Codefresh REST API (https://g.codefresh.io/api, OpenAPI spec at https://g.codefresh.io/api/openapi.json)",
   "docs": "https://g.codefresh.io/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "legacy-parity migration: the 4 legacy-parity read streams only (projects, pipelines, agents, contexts); Codefresh is read-only in this connector (no reverse-ETL writes), so there are no write endpoints in or out of scope",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: reviewed the complete live OpenAPI spec (312 paths / 419 method+path operations, fetched from https://g.codefresh.io/api/openapi.json). 10 read streams and 10 write actions now cover the full practical, documented, non-admin data surface: projects/pipelines/agents/contexts (legacy parity) plus builds (GET /workflow), images, registries, triggers, trigger_events, and annotations (new in this pass), and create/update/delete/run actions for projects/pipelines/contexts/agents. The remaining ~400 operations are genuinely out of scope: deep Kubernetes/Helm cluster-proxy passthrough, GitOps/Argo CD environment-v2 integration, account/customer/IDP/ABAC/service-user administration, and a handful of resources (team, clusters, step-types, runtime-environments, audit) whose GET response bodies the API's own OpenAPI spec documents only as a bare {type: object} placeholder with no field list -- no field-accurate schema/fixture can be authored for those honestly from the published spec alone.",
   "endpoints": [
-    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/pipelines", "covered_by": { "stream": "pipelines" } },
-    { "method": "GET", "path": "/agents", "covered_by": { "stream": "agents" } },
-    { "method": "GET", "path": "/contexts", "covered_by": { "stream": "contexts" } },
-    { "method": "POST", "path": "/pipelines/run/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/pipelines/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible pipeline deletion, not a syncable read" } },
-    { "method": "GET", "path": "/builds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/user", "excluded": { "category": "non_data_endpoint", "reason": "current-user identity probe, not a syncable object stream" } }
+    {
+      "method": "GET",
+      "path": "/abac",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/abac",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/abac/batch",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/abac/resource/{resource}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/abac/tags/rule/{rule}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/abac/tags/rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/abac/team/{teamId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/abac/teamRules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/abac/{rule}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/abac/{rule}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account-settings",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/account-settings",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{accountId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{accountId}/adduser",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{accountId}/update",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{accountId}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{accountId}/{userId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{accountId}/{userId}/adduser",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{accountId}/{userId}/admin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{accountId}/{userId}/admin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{accountId}/{userId}/resendInvite",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{accountId}/{userId}/updateuser",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/accounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/accounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/accounts/addpendinguser",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/accounts/archive/list",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/accounts/{accountId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/accounts/{accountId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/accounts/{accountId}/segment/{segmentType}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/accounts/{id}/rename",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/accounts/{id}/update",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/analytic/addAccount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/approval/approve",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/customers",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/customers/{customerId}/updateCustomerLimits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/customers/{customerId}/{accountId}/assignAccountToCustomer",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/customers/{customerId}/{accountId}/detachAccountFromCustomer",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/customers/{customerId}/{userId}/addCustomerAdmin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/customers/{customerId}/{userId}/removeCustomerAdmin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/idp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/idp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/idp/addAccount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/idp/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/runtime-environments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/runtime-environments/account/default/{account}/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/runtime-environments/account/modify/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/runtime-environments/account/modify/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/runtime-environments/account/{account}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/runtime-environments/default/{plan}/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/runtime-environments/health-check",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/runtime-environments/{plan}/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/runtime-environments/{plan}/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/runtime-environments/{plan}/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/runtime-environments/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/runtime-environments/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/runtime-environments/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/user/account",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/user/adminRole",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/user/localProvider",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/user/localProvider",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/user/loginAsUser",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/user/{userId}/activate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/user/{userName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agent/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agent/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/agent/{agentId}",
+      "covered_by": {
+        "write": "delete_agent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agent/{agentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agent/{agentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agent/{agentId}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agent/{agentId}/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/agent/{agentId}/tasks/{taskId}/statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/agents",
+      "covered_by": {
+        "write": "create_agent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/name/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/etl/${etlType}/lastSuccessTime",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/reports/{reportName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/annotations",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/annotations",
+      "covered_by": {
+        "stream": "annotations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/annotations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/annotations/keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/annotations/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/annotations/values/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/annotations/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/annotations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/argo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/argo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/argo-agent/{integrationName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/argo-agent/{integrationName}/heartbeat",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/argo-runtime",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/argo-runtime/adminUsers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/argo-runtime/csdpSettings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/argo-runtime/markCsdpSettingsAsValidated",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/argo-runtime/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/argo-runtime/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/argo-runtime/{name}/storeKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/argo/resources/{integrationName}/{type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/argo/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/argo/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/argo/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/argo/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account audit-log retrieval; GET /audit has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit/download",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account audit-log retrieval; GET /audit has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit/entitiesList",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account audit-log retrieval; GET /audit has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account audit-log retrieval; GET /audit has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/key",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/key/service-user/{serviceUserId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/key/service-user/{serviceUserId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/auth/key/service-user/{serviceUserId}/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/key/service-user/{serviceUserId}/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/auth/key/service-user/{serviceUserId}/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/auth/key/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/key/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/auth/key/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/keys",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/builds/rebuild-debug/{buildId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/builds/rebuild/{buildId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/builds/tree/{buildId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/builds/{buildId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/charts/{repo}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clusters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/clusters/*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clusters/*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/clusters/*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/clusters/*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/clusters/*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clusters/byPermissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/clusters/local/cluster",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/clusters/revoke/{provider}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clusters/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clusters/{clusterId}/credentials",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clusters/{clusterId}/helm-version",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clusters/{clusterId}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/clusters/{clusterId}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/clusters/{provider}/cluster",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/clusters/{provider}/cluster/{clusterId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Kubernetes cluster registration/credentials management; GET /clusters has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder) and the resource is a cluster-credential store, not sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/compositions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/compositions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/compositions/{identifier}/run",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/compositions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/compositions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/compositions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/compositions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/compositions/{id}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh Compositions (docker-compose-based preview environments), a distinct legacy feature area not covered by this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contexts",
+      "covered_by": {
+        "stream": "contexts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contexts",
+      "covered_by": {
+        "write": "create_context"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contexts/{name}",
+      "covered_by": {
+        "write": "delete_context"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contexts/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contexts/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contexts/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contexts/{name}/default",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contexts/{name}/prepare",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customerId}/createAccount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customerId}/{accountId}/updateAccountLimits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customerId}/{userId}/addCustomerAdmin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customerId}/{userId}/removeCustomerAdmin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments-v2",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/environments-v2",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments-v2/activity/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/environments-v2/argo/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/environments-v2/argo/provision",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/environments-v2/{environmentName}/activity/{activityName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/environments-v2/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments-v2/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/environments-v2/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments-v2/{name}/chart",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments-v2/{name}/filters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments-v2/{name}/kubernetes/statistic",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/environments-v2/{name}/reset/new",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/environments-v2/{name}/rollback",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/environments-v2/{name}/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/all/terminate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{envId}/rename/{newName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/environments/{envId}/rename/{newName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{id}/pause",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{id}/start",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{id}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{id}/stop",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{id}/terminate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/environments/{id}/unpause",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy (v1) environment/release lifecycle control surface (start/stop/pause/terminate), operational control rather than a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/execution-contexts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/execution-contexts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/execution-contexts-default",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/execution-contexts-default/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/execution-contexts-tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/execution-contexts/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/execution-contexts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/execution-contexts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/execution-contexts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/execution-contexts/{id}/assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline execution-context (shared runtime config) management, out of scope for this migration pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/favorites",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "per-user UI favorites/bookmarks bookkeeping, not a syncable account data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/favorites",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "per-user UI favorites/bookmarks bookkeeping, not a syncable account data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/favorites/type/{type}/entity/{entityId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "per-user UI favorites/bookmarks bookkeeping, not a syncable account data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/favorites/{type}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "per-user UI favorites/bookmarks bookkeeping, not a syncable account data resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/features/switchOff/{accountId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/features/{accountId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/features/{accountId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/form-metadata/activate/{groupId}/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "UI form-metadata configuration for the Codefresh dashboard, not an account data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/form-metadata/create",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "UI form-metadata configuration for the Codefresh dashboard, not an account data resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/form-metadata/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "UI form-metadata configuration for the Codefresh dashboard, not an account data resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/form-metadata/{name}/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "UI form-metadata configuration for the Codefresh dashboard, not an account data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/github-action",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/github-action/context/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gitops/application",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gitops/application",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gitops/application/all/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gitops/application/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gitops/application/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gitops/application/{name}/set/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gitops/application/{name}/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gitops/argocd/{name}/rollbackToStable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gitops/environment/{environmentId}/resources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gitops/filters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gitops/system/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GitOps/Argo CD environment-v2 integration surface (a distinct product area with its own activity/resource model), out of scope for this connector's read/write surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/helm/boards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/boards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/boards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/boards/name/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/boards/sections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/boards/sections/helm-board-pipelines-config/{sectionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/boards/sections/helm-board-pipelines-config/{sectionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/boards/sections/reorder",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/helm/boards/sections/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/boards/sections/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/helm/boards/sections/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/helm/boards/sections/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/helm/boards/{boardId}/sections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/boards/{boardId}/sections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/boards/{boardId}/sections/name/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/helm/boards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/boards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/helm/boards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/helm/boards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/cluster-config/{selector}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/cluster-config/{selector}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/release-config/{selector}/{releaseName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/release-config/{selector}/{releaseName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/releases/force-refresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/releases/refresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/repos",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/helm/repos",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/helm/repos/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/helm/repos/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/helm/repos/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Helm board/release/chart management UI backend, not a syncable Codefresh data resource for this migration pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hermes/events",
+      "covered_by": {
+        "stream": "trigger_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hermes/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hermes/events/{event}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hermes/events/{event}/{context}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hermes/triggers",
+      "covered_by": {
+        "stream": "triggers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hermes/triggers/event/{event}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hermes/triggers/pipeline/{pipeline}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hermes/triggers/{event}/{pipeline}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hermes/triggers/{event}/{pipeline}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hermes/types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hermes/types/{type}/{kind}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/idp/account",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/idp/account",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/idp/account",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/idp/customer/{customerId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/idp/customer/{customerId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/idp/customer/{customerId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/idp/customer/{customerId}/addAccounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/idp/customer/{customerId}/deleteAccounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/images",
+      "covered_by": {
+        "stream": "images"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/images/external",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/images/{dockerImageId}/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/images/{dockerImageId}/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/images/{dockerImageId}/metadata/{keyName}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/images/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/images/{id}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/images/{imageId}/promote",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/images/{imageId}/tag/{tagName}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/images/{imageId}/tag/{tagName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/k8s/chart",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/k8s/releases/withoutSecrets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/k8s/releases/{releaseName}/{revision}/chart",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/k8s/releases/{releaseName}/{revision}/values",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/kubernetes*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/kubernetes*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/kubernetes*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/chart/install",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/chart/install/helm3",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/chart/promote",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/chart/promote/helm3",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/deployments/{name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/namespaces",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/nodes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/podGroups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/release/service",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/releases",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/releases/{releaseName}/delete",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/releases/{releaseName}/test",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/rollback/builds/{selector}/{release}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/rollback/{release}/{revision}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/secrets/imagePullSecret",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes/services",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/test",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes/test/{selector}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw Kubernetes cluster proxy passthrough (arbitrary K8s API forwarding through the connected cluster's credentials), not a Codefresh-native data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/oidc/id-token/{workflowId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OIDC token-minting endpoint for pipeline workload identity, not a data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines",
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines",
+      "covered_by": {
+        "write": "create_pipeline"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pipelines/clone/variables/{name}/{originPipelineName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/debug/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/exist",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/invalidTriggers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pipelines/invalidTriggers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/labels/{label}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/names",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/projects/all",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/run",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/run/{name}",
+      "covered_by": {
+        "write": "run_pipeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/templates/deploy-images",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/templates/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/templates/{name}/setAsTemplate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/triggers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/utils/extractVariables",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/yaml/test-url",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/yaml/validator",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pipelines/{name}",
+      "covered_by": {
+        "write": "delete_pipeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pipelines/{name}",
+      "covered_by": {
+        "write": "update_pipeline"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pipelines/{name}/execution-context",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pipelines/{name}/execution-context",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/{name}/extractVariables",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/{name}/preview-run-input",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/{name}/project-vars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipelines/{name}/triggers/{triggerId}/verify",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines/{name}/volume-image",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/progress/download/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kubernetes/helm deployment progress-tracking sub-resource, tied to the excluded Kubernetes/Helm proxy surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/progress/download/{id}/services",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kubernetes/helm deployment progress-tracking sub-resource, tied to the excluded Kubernetes/Helm proxy surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/progress/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kubernetes/helm deployment progress-tracking sub-resource, tied to the excluded Kubernetes/Helm proxy surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/progress/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kubernetes/helm deployment progress-tracking sub-resource, tied to the excluded Kubernetes/Helm proxy surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/name/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{id}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/providers/azure-devops/hook/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "inbound git-provider webhook receiver endpoint (Codefresh is the webhook consumer here), not a connector-initiated read or write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/providers/bitbucket/hook/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "inbound git-provider webhook receiver endpoint (Codefresh is the webhook consumer here), not a connector-initiated read or write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/providers/bitbucket_server/hook/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "inbound git-provider webhook receiver endpoint (Codefresh is the webhook consumer here), not a connector-initiated read or write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/providers/gerrit/hook/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "inbound git-provider webhook receiver endpoint (Codefresh is the webhook consumer here), not a connector-initiated read or write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/providers/github/hook/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "inbound git-provider webhook receiver endpoint (Codefresh is the webhook consumer here), not a connector-initiated read or write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/providers/gitlab/hook/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "inbound git-provider webhook receiver endpoint (Codefresh is the webhook consumer here), not a connector-initiated read or write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/registries",
+      "covered_by": {
+        "stream": "registries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/registries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/registries/test",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/registries/{registryId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible delete of a live Codefresh resource beyond this pass's write surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/registries/{registryId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/registries/{registryId}/default",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "container-registry credential/token issuance or primary-registry account-wide reassignment, a sensitive administrative action beyond ordinary registry CRUD"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/registries/{registryId}/internal",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "container-registry credential/token issuance or primary-registry account-wide reassignment, a sensitive administrative action beyond ordinary registry CRUD"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/registries/{registryId}/primary",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "container-registry credential/token issuance or primary-registry account-wide reassignment, a sensitive administrative action beyond ordinary registry CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/registry/auth/token",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "container-registry credential/token issuance or primary-registry account-wide reassignment, a sensitive administrative action beyond ordinary registry CRUD"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/registry/auth/token/{registryId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "container-registry credential/token issuance or primary-registry account-wide reassignment, a sensitive administrative action beyond ordinary registry CRUD"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/existing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/refresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repos/refresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/settings/{repoOwner}/{repoName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/webhooks/{repoOwner}/{repoName}/{provider}/{context}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/runner-installation",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "runner-installation wizard session/progress bookkeeping, not a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/runner-installation/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "runner-installation wizard session/progress bookkeeping, not a syncable data resource"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/runner-installation/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "runner-installation wizard session/progress bookkeeping, not a syncable data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/runtime-environments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh runtime-environment (build infrastructure) provisioning/administration; GET /runtime-environments has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/runtime-environments/default/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh runtime-environment (build infrastructure) provisioning/administration; GET /runtime-environments has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/runtime-environments/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh runtime-environment (build infrastructure) provisioning/administration; GET /runtime-environments has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/runtime-environments/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh runtime-environment (build infrastructure) provisioning/administration; GET /runtime-environments has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/runtime-environments/{runtimeEnvironmentName}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh runtime-environment (build infrastructure) provisioning/administration; GET /runtime-environments has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/runtime-environments/{runtimeEnvironmentName}/base-images",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh runtime-environment (build infrastructure) provisioning/administration; GET /runtime-environments has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/service-users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service-users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/service-users/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/service-users/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/service-users/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service-users/{id}/setStatus",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/services",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/services/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "git-provider/service-catalog integration browsing (proxies the connected git provider's own API), not Codefresh's own account data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/step-types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/step-types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/step-types/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/step-types/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/step-types/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/step-types/{name}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline step-type catalog/marketplace management; GET /step-types has no documented response schema in the live OpenAPI spec (bare {type: object} placeholder)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/team",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/team",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/team/group/synchronize/name/{name}/type/{type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/team/{teamId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/team/{teamId}/renameTeam",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/team/{teamId}/{userId}/assignUserToTeam",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/team/{teamId}/{userId}/deleteUserFromTeam",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/team/{userId}/findTeamsByUser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team membership administration; the live API's own OpenAPI spec documents no response schema for GET /team (bare {type: object} placeholder) so no field-accurate schema/fixture can be authored honestly"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verification/sms/check",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verification/sms/start",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Codefresh account/customer/IDP/ABAC/service-user administration requiring account-owner or reseller-admin privilege, not ordinary API-key data access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/views/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/types/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/types/names",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/types/{type}/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/types/{type}/fields/{field}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/views/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/views/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Codefresh dashboard analytics/custom-views reporting surface, a UI-facing aggregation feature not modeled as a syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflow",
+      "covered_by": {
+        "stream": "builds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflow/{requestId}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflow/{workflowId}/pending-approval/approve",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflow/{workflowId}/pending-approval/deny",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflow/{workflowId}/useDebugger",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflow/{workflowId}/useDebugger",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation beyond this pass's implemented write surface; the corresponding read (if any) is covered separately"
+      }
+    }
   ]
 }

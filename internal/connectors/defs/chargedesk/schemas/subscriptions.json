@@ -3,19 +3,29 @@
   "title": "subscriptions",
   "type": "object",
   "x-primary-key": ["subscription_id"],
-  "x-cursor-field": "occurred",
+  "x-cursor-field": "first_seen",
   "required": ["subscription_id"],
   "properties": {
     "subscription_id": { "type": "string" },
     "object": { "type": ["string", "null"] },
-    "occurred": { "type": "integer" },
+    "first_seen": { "type": "integer" },
     "customer_id": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
     "amount": { "type": ["string", "null"] },
     "currency": { "type": ["string", "null"] },
     "interval": { "type": ["string", "null"] },
+    "interval_count": { "type": ["integer", "null"] },
+    "quantity": { "type": ["integer", "null"] },
     "current_period_start": { "type": ["integer", "null"] },
     "current_period_end": { "type": ["integer", "null"] },
-    "product_id": { "type": ["string", "null"] }
+    "canceled_at": { "type": ["integer", "null"] },
+    "ended_at": { "type": ["integer", "null"] },
+    "trial_start": { "type": ["integer", "null"] },
+    "trial_end": { "type": ["integer", "null"] },
+    "trial_period_days": { "type": ["integer", "null"] },
+    "product_id": { "type": ["string", "null"] },
+    "gateway_id": { "type": ["string", "null"] },
+    "manage_url": { "type": ["string", "null"] },
+    "metadata": { "type": ["object", "null"] }
   }
 }

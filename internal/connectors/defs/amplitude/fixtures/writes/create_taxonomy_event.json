@@ -1,0 +1,24 @@
+{
+  "record": {
+    "event_type": "fixture_event_created",
+    "category": "Fixture Category",
+    "description": "fixture event created by conformance",
+    "is_active": true,
+    "tags": ["fixture"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/2/taxonomy/event",
+    "body": {
+      "event_type": "fixture_event_created",
+      "category": "Fixture Category",
+      "description": "fixture event created by conformance",
+      "is_active": true,
+      "tags": ["fixture"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

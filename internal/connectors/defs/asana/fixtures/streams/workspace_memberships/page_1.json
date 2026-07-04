@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/workspace_memberships" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_wm_1", "resource_type": "workspace_membership", "is_active": true, "is_admin": true, "is_guest": false },
+        { "gid": "fixture_wm_2", "resource_type": "workspace_membership", "is_active": true, "is_admin": false, "is_guest": true }
+      ],
+      "next_page": null
+    }
+  }
+}

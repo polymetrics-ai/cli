@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "earnings_calendar",
+  "type": "object",
+  "x-primary-key": ["symbol", "date"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "eps_estimated": { "type": ["number", "null"] },
+    "eps": { "type": ["number", "null"] },
+    "revenue_estimated": { "type": ["number", "null"] },
+    "revenue": { "type": ["number", "null"] },
+    "updated_from_date": { "type": ["string", "null"] },
+    "fiscal_date_ending": { "type": ["string", "null"] },
+    "time": { "type": ["string", "null"] }
+  }
+}

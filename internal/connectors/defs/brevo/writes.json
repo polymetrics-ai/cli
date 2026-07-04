@@ -1,0 +1,286 @@
+{
+  "actions": [
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "ext_id": { "type": "string" },
+          "attributes": { "type": "object" },
+          "emailBlacklisted": { "type": "boolean" },
+          "smsBlacklisted": { "type": "boolean" },
+          "listIds": { "type": "array", "items": { "type": "integer" } },
+          "updateEnabled": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new marketing contact; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.identifier }}",
+      "path_fields": ["identifier"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["identifier"],
+        "properties": {
+          "identifier": { "type": "string" },
+          "attributes": { "type": "object" },
+          "ext_id": { "type": "string" },
+          "emailBlacklisted": { "type": "boolean" },
+          "smsBlacklisted": { "type": "boolean" },
+          "listIds": { "type": "array", "items": { "type": "integer" } },
+          "unlinkListIds": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "mutates an existing contact's attributes, list membership, or blacklist status; changing emailBlacklisted/smsBlacklisted affects real send eligibility"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.identifier }}",
+      "path_fields": ["identifier"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["identifier"],
+        "properties": {
+          "identifier": { "type": "string" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently removes a contact and its engagement history; irreversible"
+    },
+    {
+      "name": "create_contacts_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/lists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "folderId"],
+        "properties": {
+          "name": { "type": "string" },
+          "folderId": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new contact list under an existing folder; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_sender",
+      "kind": "create",
+      "method": "POST",
+      "path": "/senders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "email"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "ips": { "type": "array" }
+        }
+      },
+      "risk": "registers a new verified-sending identity; Brevo emails a verification link to the address before it can send"
+    },
+    {
+      "name": "update_sender",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/senders/{{ record.senderId }}",
+      "path_fields": ["senderId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["senderId"],
+        "properties": {
+          "senderId": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "ips": { "type": "array" }
+        }
+      },
+      "risk": "mutates an existing sender's from-name, email, or dedicated-IP pool; affects all campaigns using this sender going forward"
+    },
+    {
+      "name": "delete_sender",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/senders/{{ record.senderId }}",
+      "path_fields": ["senderId"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["senderId"],
+        "properties": {
+          "senderId": { "type": "integer" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently removes a sending identity; any scheduled campaign still referencing it will fail to send"
+    },
+    {
+      "name": "create_company",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "attributes": { "type": "object" },
+          "countryCode": { "type": "integer" },
+          "linkedContactsIds": { "type": "array", "items": { "type": "integer" } },
+          "linkedDealsIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new CRM company record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_company",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/companies/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "attributes": { "type": "object" },
+          "countryCode": { "type": "integer" },
+          "linkedContactsIds": { "type": "array", "items": { "type": "integer" } },
+          "linkedDealsIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing CRM company's name, attributes, or linked contact/deal set"
+    },
+    {
+      "name": "create_deal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/crm/deals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "attributes": { "type": "object" },
+          "linkedContactsIds": { "type": "array", "items": { "type": "integer" } },
+          "linkedCompaniesIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new CRM deal record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_deal",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/crm/deals/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "attributes": { "type": "object" },
+          "linkedContactsIds": { "type": "array", "items": { "type": "integer" } },
+          "linkedCompaniesIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing CRM deal's stage, amount, or linked contact/company set"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "events"],
+        "properties": {
+          "url": { "type": "string" },
+          "description": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "registers live event delivery (opens/clicks/bounces/unsubscribes) to an external endpoint of the caller's choosing; review the target before enabling, per metadata.json risk.write"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.webhookId }}",
+      "path_fields": ["webhookId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhookId"],
+        "properties": {
+          "webhookId": { "type": "integer" },
+          "url": { "type": "string" },
+          "description": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "re-points an already-registered webhook's delivery URL or event set; redirects live event delivery immediately"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhookId }}",
+      "path_fields": ["webhookId"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhookId"],
+        "properties": {
+          "webhookId": { "type": "integer" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently removes a webhook subscription; irreversible"
+    }
+  ]
+}

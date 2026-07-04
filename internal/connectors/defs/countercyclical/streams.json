@@ -35,6 +35,24 @@
       "path": "/memos",
       "records": { "path": "." },
       "schema": "schemas/memos.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "." },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "assumptions",
+      "path": "/assumptions",
+      "records": { "path": "." },
+      "schema": "schemas/assumptions.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipelines",
+      "records": { "path": "." },
+      "schema": "schemas/pipelines.json"
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/messages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "messages": [
+        { "id": "msg_fixture_1", "customer_id": "cust_fixture_1", "recipient": "fixture1@example.com", "subject": "Fixture Subject", "type": "email", "created": 1767225601, "campaign_id": 1, "action_id": 11, "newsletter_id": null, "broadcast_id": null, "content_id": null, "failure_message": null },
+        { "id": "msg_fixture_2", "customer_id": "cust_fixture_2", "recipient": "fixture2@example.com", "subject": "Fixture Subject Two", "type": "email", "created": 1767225602, "campaign_id": null, "action_id": null, "newsletter_id": 5, "broadcast_id": null, "content_id": 7, "failure_message": null }
+      ]
+    }
+  }
+}

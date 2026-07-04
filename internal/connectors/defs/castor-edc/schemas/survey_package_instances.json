@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "survey_package_instances",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "record_id": { "type": ["string", "null"] },
+    "survey_package_id": { "type": ["string", "null"] },
+    "ccr_patient_id": { "type": ["string", "null"] },
+    "email_address": { "type": ["string", "null"] },
+    "locked": { "type": ["boolean", "null"] },
+    "progress": { "type": ["integer", "null"] },
+    "started_on": { "type": ["string", "null"] },
+    "finished_on": { "type": ["string", "null"] },
+    "created_on": { "type": ["string", "null"] },
+    "updated_on": { "type": ["string", "null"] }
+  }
+}

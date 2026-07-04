@@ -1,0 +1,17 @@
+{
+  "record": {
+    "aliases_to_identify": [
+      { "external_id": "user_fixture_1", "user_alias": { "alias_name": "fixture_alias", "alias_label": "fixture_label" } }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/identify",
+    "body": {
+      "aliases_to_identify": [
+        { "external_id": "user_fixture_1", "user_alias": { "alias_name": "fixture_alias", "alias_label": "fixture_label" } }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

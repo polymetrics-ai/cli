@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "program_enrolments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "subject_id": { "type": ["string", "null"] },
+    "program": { "type": ["string", "null"] },
+    "enrolment_date_time": { "type": ["string", "null"] },
+    "exit_date_time": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

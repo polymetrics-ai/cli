@@ -1,0 +1,22 @@
+{
+  "record": {
+    "Name": "Fixture Customer",
+    "Currency": "USD",
+    "PaymentTerm": "30 days",
+    "AccountReceivable": "610",
+    "RevenueAccount": "200",
+    "TaxRule": "Tax Exempt"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customer",
+    "body": {
+      "Name": "Fixture Customer",
+      "Currency": "USD",
+      "PaymentTerm": "30 days",
+      "AccountReceivable": "610",
+      "RevenueAccount": "200",
+      "TaxRule": "Tax Exempt"
+    }
+  }
+}

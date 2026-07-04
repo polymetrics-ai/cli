@@ -1,0 +1,40 @@
+{
+  "request": { "method": "GET", "path": "/getAllotmentBlocks", "query": { "propertyID": "synthetic-conformance-value", "pageNumber": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "allotmentBlockId": "block_fixture_1",
+          "propertyID": "prop_fixture_1",
+          "allotmentBlockCode": "BLOCK1",
+          "allotmentBlockStatus": "active",
+          "allotmentBlockName": "Fixture Block",
+          "rateType": "fixed",
+          "ratePlanId": "rate_fixture_1",
+          "ratePlan": "Fixture Rate Plan",
+          "allotmentType": "group",
+          "groupId": "group_fixture_1",
+          "groupCode": "group_fixture_1",
+          "eventId": null,
+          "eventCode": null,
+          "bookingCodeUrl": null,
+          "isAutoRelease": false,
+          "autoRelease": null,
+          "releaseStatus": "not_released",
+          "releaseScheduleStatus": "scheduled",
+          "releaseScheduleType": "date",
+          "releaseDate": "2026-02-01",
+          "reservationsCount": 3,
+          "roomsHeld": 10,
+          "roomsPickedUp": 3,
+          "roomsRemaining": 7,
+          "allotmentIntervals": [],
+          "resources": []
+        }
+      ],
+      "count": 1
+    }
+  }
+}

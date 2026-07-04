@@ -3,18 +3,28 @@
   "title": "customers",
   "type": "object",
   "x-primary-key": ["customer_id"],
-  "x-cursor-field": "occurred",
+  "x-cursor-field": "first_seen",
   "required": ["customer_id"],
   "properties": {
     "customer_id": { "type": "string" },
     "object": { "type": ["string", "null"] },
-    "occurred": { "type": "integer" },
+    "first_seen": { "type": "integer" },
     "email": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "username": { "type": ["string", "null"] },
     "country": { "type": ["string", "null"] },
     "phone": { "type": ["string", "null"] },
-    "currency": { "type": ["string", "null"] },
-    "delinquent": { "type": ["boolean", "null"] },
-    "tax_number": { "type": ["string", "null"] }
+    "delinquent": { "type": ["integer", "null"] },
+    "tax_number": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "company": { "type": ["string", "null"] },
+    "customer_company": { "type": ["string", "null"] },
+    "billing_address": { "type": ["string", "null"] },
+    "shipping_address": { "type": ["string", "null"] },
+    "charges": { "type": ["integer", "null"] },
+    "gateway_id": { "type": ["string", "null"] },
+    "manage_url": { "type": ["string", "null"] },
+    "metadata": { "type": ["object", "null"] }
   }
 }

@@ -1,0 +1,26 @@
+{
+  "record": {
+    "table_id": "grid-fixture-1",
+    "row_id": "i-fixture-1",
+    "row": {
+      "cells": [
+        { "column": "c-fixture-1", "value": "Get groceries from Whole Foods" }
+      ]
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/docs/synthetic-conformance-value/tables/grid-fixture-1/rows/i-fixture-1",
+    "body": {
+      "row": {
+        "cells": [
+          { "column": "c-fixture-1", "value": "Get groceries from Whole Foods" }
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": { "requestId": "req-fixture-2", "id": "i-fixture-1" }
+  }
+}

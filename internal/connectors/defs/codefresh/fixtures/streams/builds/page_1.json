@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workflow",
+    "query": {
+      "limit": "50",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "workflows": {
+        "docs": [
+          {
+            "id": "602d23ce8d78ab0000000001",
+            "project": "fixture-org/fixture-repo",
+            "projectId": "5f8a1c2b3d4e5f6a7b8c9d01",
+            "pipelineName": "fixture-org/fixture-repo",
+            "repoOwner": "fixture-org",
+            "repoName": "fixture-repo",
+            "status": "success",
+            "progress": "100",
+            "trigger": "build",
+            "triggerType": "GIT",
+            "triggeredBy": "fixture-user",
+            "branchName": "main",
+            "revision": "0000000000000000000000000000000000fix1",
+            "commitMessage": "fixture commit 1",
+            "committer": "fixture-user",
+            "provider": "github",
+            "created": "2026-01-01T00:01:00Z",
+            "finished": "2026-01-01T00:05:00Z"
+          },
+          {
+            "id": "602d23ce8d78ab0000000002",
+            "project": "fixture-org/fixture-repo",
+            "projectId": "5f8a1c2b3d4e5f6a7b8c9d01",
+            "pipelineName": "fixture-org/fixture-repo",
+            "repoOwner": "fixture-org",
+            "repoName": "fixture-repo",
+            "status": "running",
+            "progress": "45",
+            "trigger": "build",
+            "triggerType": "GIT",
+            "triggeredBy": "fixture-user",
+            "branchName": "main",
+            "revision": "0000000000000000000000000000000000fix2",
+            "commitMessage": "fixture commit 2",
+            "committer": "fixture-user",
+            "provider": "github",
+            "created": "2026-01-01T00:10:00Z",
+            "finished": ""
+          }
+        ]
+      },
+      "pagination": {
+        "sessionId": "fixture-session",
+        "page": 1,
+        "pageSize": 50,
+        "nextPage": false,
+        "prevPage": false
+      }
+    }
+  }
+}

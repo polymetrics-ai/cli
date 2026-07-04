@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/webhooks"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "wh_fixture_1",
+        "url": "https://example.com/hooks/vercel",
+        "events": [
+          "deployment.created"
+        ],
+        "projectIds": [
+          "prj_fixture_1"
+        ],
+        "ownerId": "owner_fixture_1",
+        "createdAt": 1767225600000,
+        "updatedAt": 1767225600000
+      }
+    ]
+  }
+}

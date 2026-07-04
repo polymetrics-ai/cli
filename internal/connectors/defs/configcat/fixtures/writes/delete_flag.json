@@ -1,0 +1,7 @@
+{
+  "record": { "settingId": 1 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/settings/1"
+  }
+}

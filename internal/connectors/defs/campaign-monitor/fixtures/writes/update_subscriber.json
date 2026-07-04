@@ -1,0 +1,14 @@
+{
+  "record": {
+    "ListID": "list_fixture_1",
+    "CurrentEmailAddress": "fixture@example.com",
+    "EmailAddress": "fixture-new@example.com",
+    "Name": "Renamed Fixture Subscriber"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/subscribers/list_fixture_1.json",
+    "body": { "EmailAddress": "fixture-new@example.com", "Name": "Renamed Fixture Subscriber" }
+  },
+  "response": { "status": 200, "body": {} }
+}

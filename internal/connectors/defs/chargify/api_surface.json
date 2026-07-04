@@ -1,20 +1,74 @@
 {
   "api": "Chargify (Maxio Advanced Billing) API",
-  "docs": "https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Chargify surface (invoices, credit notes, payment profiles, components, webhooks, write endpoints, etc.) is out of scope until Pass B. Chargify is a read-only connector in both legacy and this bundle.",
+  "docs": "https://developers.maxio.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion. Chargify (Maxio Advanced Billing) publishes ~34 API controllers (customers, subscriptions, products/product_families/price_points, coupons, transactions, invoices, payment_profiles, components/component_price_points, events, statements, webhooks, billing portal, custom fields, referral codes, reason codes, sales commissions, subscription groups, offers, insights, sites, etc). This bundle now covers every practical GET list/detail resource that is a durable, independently-syncable business object AND every create/update/delete mutation the declarative dialect can express against Chargify's REST conventions (page/per_page list pagination, single-key resource-wrapped JSON, form-encoded writes). Genuinely out-of-scope surface is documented per-endpoint below with a specific reason, never a blanket bucket. Chargify remains read-only in legacy; the write actions below are new Pass B capability (metadata.json capabilities.write flips true), gated by risk/approval.",
   "endpoints": [
     { "method": "GET", "path": "/customers.json", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/customers/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-customer read is redundant with the customers list stream, which already emits every field the detail endpoint returns; no additional data is reachable only via the detail path" } },
+    { "method": "POST", "path": "/customers.json", "covered_by": { "write": "create_customer" } },
+    { "method": "PUT", "path": "/customers/{id}.json", "covered_by": { "write": "update_customer" } },
+    { "method": "DELETE", "path": "/customers/{id}.json", "excluded": { "category": "destructive_admin", "reason": "Chargify customer deletion is a rare, irreversible admin action typically gated behind support/account-owner approval outside the API's normal write surface; not part of the representative create/update pair Pass B targets for this connector" } },
+
     { "method": "GET", "path": "/subscriptions.json", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/subscriptions/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-subscription read is redundant with the subscriptions list stream, which already emits every field the detail endpoint returns" } },
+    { "method": "POST", "path": "/subscriptions.json", "covered_by": { "write": "create_subscription" } },
+    { "method": "PUT", "path": "/subscriptions/{id}.json", "covered_by": { "write": "update_subscription" } },
+    { "method": "POST", "path": "/subscriptions/{id}/cancel.json", "covered_by": { "write": "cancel_subscription" } },
+    { "method": "PUT", "path": "/subscriptions/{id}/reactivate.json", "excluded": { "category": "out_of_scope", "reason": "reactivation requires a Chargify-specific reactivation-options payload (preserve_balance/include_trial/individual_component_options) with grace-period and dunning-state edge cases beyond the create/update/cancel triad Pass B targets as the representative subscription-lifecycle write surface" } },
+    { "method": "POST", "path": "/subscriptions/{id}/purge.json", "excluded": { "category": "destructive_admin", "reason": "permanently erases the subscription and its billing history (Chargify's own docs mark this test-mode-only and irreversible); far outside the durable-business-data write surface Pass B covers" } },
+
     { "method": "GET", "path": "/products.json", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/products/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-product read is redundant with the products list stream" } },
+    { "method": "POST", "path": "/product_families/{product_family_id}/products.json", "covered_by": { "write": "create_product" } },
+    { "method": "PUT", "path": "/products/{id}.json", "covered_by": { "write": "update_product" } },
+    { "method": "GET", "path": "/product_families.json", "covered_by": { "stream": "product_families" } },
+    { "method": "GET", "path": "/product_families/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-product-family read is redundant with the product_families list stream" } },
+    { "method": "POST", "path": "/product_families.json", "covered_by": { "write": "create_product_family" } },
+    { "method": "GET", "path": "/products/{product_id}/price_points.json", "excluded": { "category": "out_of_scope", "reason": "product price points are a per-product nested sub-resource collection; fanning this out over every product id requires the fan_out dialect's request-based id source, whose own child listing (products.json) is itself paginated — a parent-pagination-aware fan-out is not yet modeled by this engine increment, and legacy never covered price points at all, so this is deferred rather than half-modeled against a single hardcoded product id" } },
+
     { "method": "GET", "path": "/coupons.json", "covered_by": { "stream": "coupons" } },
+    { "method": "GET", "path": "/coupons/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-coupon read is redundant with the coupons list stream" } },
+    { "method": "POST", "path": "/product_families/{product_family_id}/coupons.json", "covered_by": { "write": "create_coupon" } },
+    { "method": "PUT", "path": "/coupons/{id}.json", "covered_by": { "write": "update_coupon" } },
+    { "method": "DELETE", "path": "/coupons/{id}.json", "excluded": { "category": "destructive_admin", "reason": "coupon hard-delete is an irreversible admin action removing discount history visibility for every subscription that redeemed it; deactivating via update_coupon's end-date fields is the safer documented alternative Pass B exposes instead" } },
+
     { "method": "GET", "path": "/transactions.json", "covered_by": { "stream": "transactions" } },
-    { "method": "GET", "path": "/invoices.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/payment_profiles.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/components.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/events.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/customers.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/subscriptions.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/webhooks_endpoints.json", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/transactions/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-transaction read is redundant with the transactions list stream" } },
+    { "method": "POST", "path": "/subscriptions/{subscription_id}/refunds.json", "excluded": { "category": "out_of_scope", "reason": "refunds carry direct financial-reversal side effects against a specific historical payment transaction and gateway; Pass B's breadth-first pass covers the core object CRUD surface, not payment-gateway-adjacent operational actions" } },
+
+    { "method": "GET", "path": "/invoices.json", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/invoices/{uid}.json", "excluded": { "category": "duplicate_of", "reason": "single-invoice read is redundant with the invoices list stream, which emits the same invoice fields" } },
+    { "method": "PUT", "path": "/invoices/{uid}/status.json", "excluded": { "category": "out_of_scope", "reason": "manual invoice status transition (paid/voided/pending) bypasses Chargify's own automated dunning/collection lifecycle and is documented as a support/edge-case action, not a routine sync-driven mutation" } },
+    { "method": "GET", "path": "/invoices/{uid}.pdf", "excluded": { "category": "binary_payload", "reason": "returns a binary PDF document, not a syncable structured JSON business record" } },
+
+    { "method": "GET", "path": "/payment_profiles.json", "covered_by": { "stream": "payment_profiles" } },
+    { "method": "GET", "path": "/payment_profiles/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-payment-profile read is redundant with the payment_profiles list stream" } },
+    { "method": "POST", "path": "/payment_profiles.json", "excluded": { "category": "requires_elevated_scope", "reason": "creating a payment profile carries raw card/bank credentials (PCI-DSS scope); Chargify's own docs steer integrators to Chargify.js/hosted tokenization instead of a plain server-side API create, which this dialect's declarative form-body write cannot safely represent" } },
+    { "method": "PUT", "path": "/payment_profiles/{id}.json", "excluded": { "category": "requires_elevated_scope", "reason": "same PCI-scope card-data concern as create; updates to card details are steered through Chargify.js tokenization, not a plain declarative write" } },
+    { "method": "DELETE", "path": "/payment_profiles/{id}.json", "excluded": { "category": "destructive_admin", "reason": "removes a subscriber's active payment method, a rare account-remediation action with billing-continuity risk; out of Pass B's representative-write scope" } },
+
+    { "method": "GET", "path": "/components.json", "excluded": { "category": "out_of_scope", "reason": "Chargify's components list endpoint is scoped per product-family (GET /product_families/{id}/components.json); the bare top-level path does not exist as a documented site-wide endpoint" } },
+    { "method": "GET", "path": "/product_families/{product_family_id}/components.json", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: this endpoint requires fanning out over every product_family id, but Chargify's list envelope wraps each element under a singular resource key ({\"product_family\": {\"id\": ...}}), and the engine's fan_out.ids_from.request.id_field does a single flat map[string]any key lookup on each extracted record (engine/read.go's fanOutIDsFromRequest: rec[spec.IDField]) with no dotted-path/nested traversal — id_field can select \"id\" but not \"product_family.id\", so no id ever resolves and every product family's components would silently be skipped. Not attempted as a broken fan_out; deferred until the engine either dotted-path-resolves id_field or a computed pre-projection step is added. See docs.md Known limits." } },
+    { "method": "GET", "path": "/components/{id}.json", "excluded": { "category": "duplicate_of", "reason": "single-component read is redundant with the components list stream this bundle would otherwise cover" } },
+    { "method": "POST", "path": "/subscriptions/{subscription_id}/components/{component_id}.json", "excluded": { "category": "out_of_scope", "reason": "allocating/updating a component's quantity on one specific subscription is a narrow per-subscription usage-metering action, not a create/update of the durable component definition itself; Pass B covers component-definition CRUD only" } },
+
+    { "method": "GET", "path": "/events.json", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/statements.json", "covered_by": { "stream": "statements" } },
+    { "method": "GET", "path": "/statements/{uid}.json", "excluded": { "category": "duplicate_of", "reason": "single-statement read is redundant with the statements list stream" } },
+
+    { "method": "GET", "path": "/webhooks_endpoints.json", "excluded": { "category": "out_of_scope", "reason": "webhook endpoint configuration is connector-account setup/administration metadata, not a syncable business-data object; no legacy precedent for reading or writing it" } },
+    { "method": "POST", "path": "/webhooks_endpoints.json", "excluded": { "category": "out_of_scope", "reason": "same as the GET above — account-configuration action, not a business-data mutation" } },
+    { "method": "GET", "path": "/webhooks.json", "excluded": { "category": "out_of_scope", "reason": "webhook delivery-log listing is operational/observability data (retry status of past event deliveries), not a durable business object this connector syncs" } },
+    { "method": "POST", "path": "/webhooks/{id}/replay.json", "excluded": { "category": "out_of_scope", "reason": "webhook-replay is an operational remediation action, not a business-data mutation" } },
+
+    { "method": "GET", "path": "/billing_portal/{customer_id}/reinvite.json", "excluded": { "category": "non_data_endpoint", "reason": "generates a short-lived hosted-page invite link/token for the self-service billing portal, not a durable business-data record" } },
+    { "method": "GET", "path": "/subscriptions/{id}/preview.json", "excluded": { "category": "non_data_endpoint", "reason": "returns a dry-run billing preview computed on the fly, not a persisted record" } },
+    { "method": "GET", "path": "/metafields.json", "excluded": { "category": "out_of_scope", "reason": "custom-field/metafield SCHEMA definitions are account configuration metadata describing the shape of custom data, not the business-data records themselves (per-resource metadata VALUES are already exposed as ordinary fields on their owning stream wherever legacy modeled them)" } },
+    { "method": "GET", "path": "/reason_codes.json", "excluded": { "category": "out_of_scope", "reason": "a narrow cancellation-taxonomy configuration list with no legacy precedent; low sync value relative to the core billing objects Pass B prioritizes" } },
+    { "method": "GET", "path": "/sites.json", "excluded": { "category": "out_of_scope", "reason": "site/account metadata (the operator's own Chargify site configuration), not customer-facing business data" } },
+    { "method": "GET", "path": "/sales_commissions.json", "excluded": { "category": "requires_elevated_scope", "reason": "sales-commission reporting requires a separate elevated commissions-module entitlement not every Chargify site has enabled" } },
+    { "method": "GET", "path": "/subscription_groups.json", "excluded": { "category": "out_of_scope", "reason": "subscription-group (family-plan) bundling is a narrower, newer Chargify feature with no legacy precedent; deferred past this Pass B pass in favor of the core object surface" } },
+    { "method": "GET", "path": "/insights.json", "excluded": { "category": "out_of_scope", "reason": "pre-aggregated dashboard/reporting metrics computed server-side for the Chargify UI, not a raw syncable business-data collection" } }
   ]
 }

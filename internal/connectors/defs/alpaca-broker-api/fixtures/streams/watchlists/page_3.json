@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/trading/accounts/acct_fixture_2/watchlists" },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

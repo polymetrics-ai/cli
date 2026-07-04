@@ -1,0 +1,80 @@
+{
+  "actions": [
+    {
+      "name": "reply_to_review",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reviews/{{ record.id }}/response",
+      "path_fields": ["id"],
+      "body_fields": ["content"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "content"],
+        "properties": {
+          "id": { "type": "string" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "publishes a developer response to a customer review, visible on the public app store listing"
+    },
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/events/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["caption", "date"],
+        "properties": {
+          "caption": { "type": "string" },
+          "date": { "type": "string" },
+          "details": { "type": "string" },
+          "products": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a release/marketing event marker overlaid on every Appfigures analytics chart"
+    },
+    {
+      "name": "update_event",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/events/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "caption": { "type": "string" },
+          "date": { "type": "string" },
+          "products": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing release/marketing event marker overlaid on every Appfigures analytics chart"
+    },
+    {
+      "name": "delete_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/events/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "permanently deletes an event marker from every Appfigures analytics chart"
+    }
+  ]
+}

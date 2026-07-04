@@ -1,0 +1,22 @@
+{
+  "record": {
+    "url": "https://example.com/fixture/new-webhook",
+    "events": ["invitee.created"],
+    "organization": "https://api.calendly.com/organizations/fixture_org",
+    "scope": "organization"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook_subscriptions"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "resource": {
+        "uri": "https://api.calendly.com/webhook_subscriptions/fixture_webhook_new",
+        "callback_url": "https://example.com/fixture/new-webhook",
+        "state": "active"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "company_id": "CMP_fixture_1",
+    "customer_phone_number": "+15555550300",
+    "tracking_number": "+15555550100",
+    "content": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/text-messages.json",
+    "body": {
+      "company_id": "CMP_fixture_1",
+      "customer_phone_number": "+15555550300",
+      "tracking_number": "+15555550100",
+      "content": "Fixture message"
+    }
+  },
+  "response": { "status": 201, "body": { "id": "SMS_fixture_2" } }
+}

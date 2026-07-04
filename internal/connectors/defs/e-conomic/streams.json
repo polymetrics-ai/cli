@@ -122,6 +122,130 @@
         "self": "{{ record.self }}"
       },
       "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "invoices_drafts",
+      "path": "/invoices/drafts",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "draft_invoice_number": "{{ record.draftInvoiceNumber }}",
+        "date": "{{ record.date }}",
+        "currency": "{{ record.currency }}",
+        "net_amount": "{{ record.netAmount }}",
+        "gross_amount": "{{ record.grossAmount }}",
+        "vat_amount": "{{ record.vatAmount }}",
+        "due_date": "{{ record.dueDate }}",
+        "customer_number": "{{ record.customer.customerNumber }}",
+        "payment_terms_number": "{{ record.paymentTerms.paymentTermsNumber }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/invoices_drafts.json"
+    },
+    {
+      "name": "customer_groups",
+      "path": "/customer-groups",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "customer_group_number": "{{ record.customerGroupNumber }}",
+        "name": "{{ record.name }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/customer_groups.json"
+    },
+    {
+      "name": "product_groups",
+      "path": "/product-groups",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "product_group_number": "{{ record.productGroupNumber }}",
+        "name": "{{ record.name }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/product_groups.json"
+    },
+    {
+      "name": "supplier_groups",
+      "path": "/supplier-groups",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "supplier_group_number": "{{ record.supplierGroupNumber }}",
+        "name": "{{ record.name }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/supplier_groups.json"
+    },
+    {
+      "name": "payment_terms",
+      "path": "/payment-terms",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "payment_terms_number": "{{ record.paymentTermsNumber }}",
+        "name": "{{ record.name }}",
+        "days_of_credit": "{{ record.daysOfCredit }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/payment_terms.json"
+    },
+    {
+      "name": "vat_zones",
+      "path": "/vat-zones",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "vat_zone_number": "{{ record.vatZoneNumber }}",
+        "name": "{{ record.name }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/vat_zones.json"
+    },
+    {
+      "name": "currencies",
+      "path": "/currencies",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "code": "{{ record.code }}",
+        "name": "{{ record.name }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/currencies.json"
+    },
+    {
+      "name": "orders_drafts",
+      "path": "/orders/drafts",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "draft_order_number": "{{ record.draftOrderNumber }}",
+        "date": "{{ record.date }}",
+        "currency": "{{ record.currency }}",
+        "net_amount": "{{ record.netAmount }}",
+        "gross_amount": "{{ record.grossAmount }}",
+        "customer_number": "{{ record.customer.customerNumber }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/orders_drafts.json"
+    },
+    {
+      "name": "orders_archived",
+      "path": "/orders/archived",
+      "query": { "skippages": "0", "pagesize": "100" },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "order_number": "{{ record.orderNumber }}",
+        "date": "{{ record.date }}",
+        "currency": "{{ record.currency }}",
+        "net_amount": "{{ record.netAmount }}",
+        "gross_amount": "{{ record.grossAmount }}",
+        "customer_number": "{{ record.customer.customerNumber }}",
+        "self": "{{ record.self }}"
+      },
+      "schema": "schemas/orders_archived.json"
     }
   ]
 }

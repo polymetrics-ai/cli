@@ -1,14 +1,14 @@
 {
   "name": "chargify",
   "display_name": "Chargify",
-  "description": "Reads Chargify (Maxio Advanced Billing) customers, subscriptions, products, coupons, and transactions through the Chargify REST API.",
+  "description": "Reads and writes Chargify (Maxio Advanced Billing) customers, subscriptions, products, product families, coupons, transactions, invoices, payment profiles, events, and statements through the Chargify REST API.",
   "integration_type": "api",
-  "docs_url": "https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api",
+  "docs_url": "https://developers.maxio.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Chargify API read of customer and billing data"
+    "read": "external Chargify API read of customer and billing data",
+    "write": "external mutation of Chargify billing data (customers, subscriptions, product catalog, coupons); subscription create/update/cancel actions have direct billing side effects and require approval"
   }
 }

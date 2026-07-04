@@ -1,0 +1,12 @@
+{
+  "record": {
+    "url": "https://example.com/hooks/vercel",
+    "events": [
+      "deployment.created"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/webhooks"
+  }
+}

@@ -1,0 +1,1315 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/products",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture product 1",
+        "model_number": "MN-1",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 2,
+        "name": "Fixture product 2",
+        "model_number": "MN-2",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 3,
+        "name": "Fixture product 3",
+        "model_number": "MN-3",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 4,
+        "name": "Fixture product 4",
+        "model_number": "MN-4",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 5,
+        "name": "Fixture product 5",
+        "model_number": "MN-5",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 6,
+        "name": "Fixture product 6",
+        "model_number": "MN-6",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 7,
+        "name": "Fixture product 7",
+        "model_number": "MN-7",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 8,
+        "name": "Fixture product 8",
+        "model_number": "MN-8",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 9,
+        "name": "Fixture product 9",
+        "model_number": "MN-9",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 10,
+        "name": "Fixture product 10",
+        "model_number": "MN-10",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 11,
+        "name": "Fixture product 11",
+        "model_number": "MN-11",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 12,
+        "name": "Fixture product 12",
+        "model_number": "MN-12",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 13,
+        "name": "Fixture product 13",
+        "model_number": "MN-13",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 14,
+        "name": "Fixture product 14",
+        "model_number": "MN-14",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 15,
+        "name": "Fixture product 15",
+        "model_number": "MN-15",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 16,
+        "name": "Fixture product 16",
+        "model_number": "MN-16",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 17,
+        "name": "Fixture product 17",
+        "model_number": "MN-17",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 18,
+        "name": "Fixture product 18",
+        "model_number": "MN-18",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 19,
+        "name": "Fixture product 19",
+        "model_number": "MN-19",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 20,
+        "name": "Fixture product 20",
+        "model_number": "MN-20",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 21,
+        "name": "Fixture product 21",
+        "model_number": "MN-21",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 22,
+        "name": "Fixture product 22",
+        "model_number": "MN-22",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 23,
+        "name": "Fixture product 23",
+        "model_number": "MN-23",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 24,
+        "name": "Fixture product 24",
+        "model_number": "MN-24",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 25,
+        "name": "Fixture product 25",
+        "model_number": "MN-25",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 26,
+        "name": "Fixture product 26",
+        "model_number": "MN-26",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 27,
+        "name": "Fixture product 27",
+        "model_number": "MN-27",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 28,
+        "name": "Fixture product 28",
+        "model_number": "MN-28",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 29,
+        "name": "Fixture product 29",
+        "model_number": "MN-29",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 30,
+        "name": "Fixture product 30",
+        "model_number": "MN-30",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 31,
+        "name": "Fixture product 31",
+        "model_number": "MN-31",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 32,
+        "name": "Fixture product 32",
+        "model_number": "MN-32",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 33,
+        "name": "Fixture product 33",
+        "model_number": "MN-33",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 34,
+        "name": "Fixture product 34",
+        "model_number": "MN-34",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 35,
+        "name": "Fixture product 35",
+        "model_number": "MN-35",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 36,
+        "name": "Fixture product 36",
+        "model_number": "MN-36",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 37,
+        "name": "Fixture product 37",
+        "model_number": "MN-37",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 38,
+        "name": "Fixture product 38",
+        "model_number": "MN-38",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 39,
+        "name": "Fixture product 39",
+        "model_number": "MN-39",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 40,
+        "name": "Fixture product 40",
+        "model_number": "MN-40",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 41,
+        "name": "Fixture product 41",
+        "model_number": "MN-41",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 42,
+        "name": "Fixture product 42",
+        "model_number": "MN-42",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 43,
+        "name": "Fixture product 43",
+        "model_number": "MN-43",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 44,
+        "name": "Fixture product 44",
+        "model_number": "MN-44",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 45,
+        "name": "Fixture product 45",
+        "model_number": "MN-45",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 46,
+        "name": "Fixture product 46",
+        "model_number": "MN-46",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 47,
+        "name": "Fixture product 47",
+        "model_number": "MN-47",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 48,
+        "name": "Fixture product 48",
+        "model_number": "MN-48",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 49,
+        "name": "Fixture product 49",
+        "model_number": "MN-49",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 50,
+        "name": "Fixture product 50",
+        "model_number": "MN-50",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

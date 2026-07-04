@@ -1,0 +1,9 @@
+{
+  "record": {
+    "job_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/jobs/1/rerun/"
+  }
+}

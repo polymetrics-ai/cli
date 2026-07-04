@@ -35,6 +35,18 @@
       "schema": "schemas/schedules.json"
     },
     {
+      "name": "event_types",
+      "path": "/v2/event-types",
+      "records": { "path": "data" },
+      "schema": "schemas/event_types.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v2/webhooks",
+      "records": { "path": "data" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
       "name": "my_profile",
       "path": "/v2/me",
       "records": { "path": "data" },

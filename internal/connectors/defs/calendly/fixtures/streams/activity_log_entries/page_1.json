@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/activity_log_entries" },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "uri": "https://api.calendly.com/activity_log_entries/fixture_entry_1",
+          "occurred_at": "2026-01-01T00:00:00Z",
+          "organization": "https://api.calendly.com/organizations/fixture_org",
+          "actor": { "uri": "https://api.calendly.com/users/fixture_user_1", "display_name": "Fixture User" },
+          "action": "event_type.created",
+          "namespace": "event_type"
+        }
+      ],
+      "pagination": { "count": 1, "next_page": null }
+    }
+  }
+}

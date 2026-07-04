@@ -1,0 +1,14 @@
+{
+  "record": {
+    "title": "Fixture Collection",
+    "countries": "us,gb"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/account/apps",
+    "body": {
+      "title": "Fixture Collection",
+      "countries": "us,gb"
+    }
+  }
+}

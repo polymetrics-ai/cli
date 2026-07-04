@@ -87,6 +87,173 @@
         "tag_id": "{{ record.tagId }}"
       },
       "schema": "schemas/tags.json"
+    },
+    {
+      "name": "config",
+      "path": "/v1/configs/{{ config.config_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/config.json"
+    },
+    {
+      "name": "environment",
+      "path": "/v1/environments/{{ config.environment_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/environment.json"
+    },
+    {
+      "name": "settings",
+      "path": "/v1/configs/{{ config.config_id }}/settings",
+      "records": { "path": "" },
+      "schema": "schemas/settings.json"
+    },
+    {
+      "name": "setting",
+      "path": "/v1/settings/{{ config.setting_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/setting.json"
+    },
+    {
+      "name": "deleted_settings",
+      "path": "/v1/configs/{{ config.config_id }}/deleted-settings",
+      "records": { "path": "" },
+      "schema": "schemas/deleted_settings.json"
+    },
+    {
+      "name": "sdk_keys",
+      "path": "/v1/configs/{{ config.config_id }}/environments/{{ config.environment_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/sdk_keys.json"
+    },
+    {
+      "name": "config_setting_values",
+      "path": "/v1/configs/{{ config.config_id }}/environments/{{ config.environment_id }}/values",
+      "records": { "path": "" },
+      "schema": "schemas/config_setting_values.json"
+    },
+    {
+      "name": "segments",
+      "path": "/v1/products/{{ fanout.id }}/segments",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/products", "records_path": "", "id_field": "productId" }
+        },
+        "into": { "path_var": "product_id" },
+        "stamp_field": "product_id"
+      },
+      "computed_fields": {
+        "segment_id": "{{ record.segmentId }}"
+      },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "segment",
+      "path": "/v1/segments/{{ config.segment_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/segment.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/products/{{ fanout.id }}/webhooks",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/products", "records_path": "", "id_field": "productId" }
+        },
+        "into": { "path_var": "product_id" },
+        "stamp_field": "product_id"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "webhook",
+      "path": "/v1/webhooks/{{ config.webhook_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/webhook.json"
+    },
+    {
+      "name": "permission_groups",
+      "path": "/v1/products/{{ fanout.id }}/permissions",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/products", "records_path": "", "id_field": "productId" }
+        },
+        "into": { "path_var": "product_id" },
+        "stamp_field": "product_id"
+      },
+      "schema": "schemas/permission_groups.json"
+    },
+    {
+      "name": "permission_group",
+      "path": "/v1/permissions/{{ config.permission_group_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/permission_group.json"
+    },
+    {
+      "name": "integrations",
+      "path": "/v1/products/{{ config.product_id }}/integrations",
+      "records": { "path": "integrations" },
+      "schema": "schemas/integrations.json"
+    },
+    {
+      "name": "integration",
+      "path": "/v1/integrations/{{ config.integration_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/integration.json"
+    },
+    {
+      "name": "proxy_profiles",
+      "path": "/v1/organizations/{{ config.organization_id }}/proxy-profiles",
+      "records": { "path": "profiles" },
+      "schema": "schemas/proxy_profiles.json"
+    },
+    {
+      "name": "proxy_profile",
+      "path": "/v1/proxy-profiles/{{ config.proxy_profile_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/proxy_profile.json"
+    },
+    {
+      "name": "members",
+      "path": "/v1/organizations/{{ config.organization_id }}/members",
+      "records": { "path": "" },
+      "schema": "schemas/members.json"
+    },
+    {
+      "name": "audit_logs",
+      "path": "/v1/products/{{ fanout.id }}/auditlogs",
+      "query": {
+        "configId": { "template": "{{ config.audit_log_config_id }}", "omit_when_absent": true },
+        "environmentId": { "template": "{{ config.audit_log_environment_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/products", "records_path": "", "id_field": "productId" }
+        },
+        "into": { "path_var": "product_id" },
+        "stamp_field": "product_id"
+      },
+      "schema": "schemas/audit_logs.json"
+    },
+    {
+      "name": "stale_flags",
+      "path": "/v1/products/{{ config.product_id }}/staleflags",
+      "records": { "path": "" },
+      "schema": "schemas/stale_flags.json"
+    },
+    {
+      "name": "me",
+      "path": "/v1/me",
+      "records": { "path": "" },
+      "schema": "schemas/me.json"
+    },
+    {
+      "name": "tag",
+      "path": "/v1/tags/{{ config.tag_id }}",
+      "records": { "path": "" },
+      "schema": "schemas/tag.json"
     }
   ]
 }

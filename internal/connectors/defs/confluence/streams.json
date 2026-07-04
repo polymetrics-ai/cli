@@ -58,6 +58,43 @@
       "query": { "limit": "25" },
       "records": { "path": "results" },
       "schema": "schemas/attachments.json"
+    },
+    {
+      "name": "footer_comments",
+      "path": "/footer-comments",
+      "query": { "limit": "25", "body-format": "storage" },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "version": "{{ record.version.number }}"
+      },
+      "schema": "schemas/footer_comments.json"
+    },
+    {
+      "name": "inline_comments",
+      "path": "/inline-comments",
+      "query": { "limit": "25", "body-format": "storage" },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "version": "{{ record.version.number }}"
+      },
+      "schema": "schemas/inline_comments.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "query": { "limit": "25", "body-format": "storage" },
+      "records": { "path": "results" },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "custom_content",
+      "path": "/custom-content",
+      "query": { "limit": "25", "type": "{{ config.custom_content_type }}" },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "version": "{{ record.version.number }}"
+      },
+      "schema": "schemas/custom_content.json"
     }
   ]
 }

@@ -1,0 +1,4 @@
+{
+  "record": { "id": "oppo_fixture_1", "value": 5000 },
+  "expect": { "method": "PUT", "path": "/opportunity/oppo_fixture_1" }
+}

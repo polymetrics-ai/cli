@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account_info",
+  "type": "object",
+  "x-primary-key": ["user_id"],
+  "required": ["user_id"],
+  "properties": {
+    "user_id": { "type": ["integer", "null"] },
+    "user_name": { "type": ["string", "null"] },
+    "user_email": { "type": ["string", "null"] },
+    "daily_used": { "type": ["integer", "null"] },
+    "daily_limit": { "type": ["integer", "null"] },
+    "version": { "type": ["string", "null"] },
+    "sequence": { "type": ["integer", "null"] }
+  }
+}

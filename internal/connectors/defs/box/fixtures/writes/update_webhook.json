@@ -1,0 +1,11 @@
+{
+  "record": {
+    "id": "webhook_fixture_1",
+    "address": "https://example.com/webhooks/updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/webhooks/webhook_fixture_1",
+    "body": { "address": "https://example.com/webhooks/updated" }
+  }
+}

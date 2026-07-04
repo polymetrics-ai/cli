@@ -1,14 +1,14 @@
 {
   "name": "cloudbeds",
   "display_name": "Cloudbeds",
-  "description": "Reads Cloudbeds guests, hotels, rooms, reservations, and transactions through the Cloudbeds v1.2 REST API.",
+  "description": "Reads Cloudbeds guests, hotels, rooms, reservations, transactions, rate plans, room types, items, taxes/fees, sources, groups, house accounts, housekeeping, custom fields, payment methods, webhooks, allotment blocks, and guest/reservation notes, and writes guest, reservation, payment, folio, housekeeping, house-account, webhook, and room-block actions, through the Cloudbeds v1.2 REST API.",
   "integration_type": "api",
   "docs_url": "https://hotels.cloudbeds.com/api/docs/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Cloudbeds API read of guest, hotel, room, reservation, and transaction data",
-    "approval": "none; read-only source connector"
+    "read": "external Cloudbeds API read of guest, hotel, room, reservation, transaction, rate, inventory, and operational (housekeeping/webhook/notes) data",
+    "write": "external mutation of Cloudbeds guests, reservations, payments/folio items, house accounts, housekeeping state, groups, webhooks, and room blocks — several actions are real financial transactions (post_payment, void_payment, post_adjustment, post_item, void_item) or irreversible deletions",
+    "approval": "financial-transaction and delete-kind actions (post_payment/void_payment/post_adjustment/delete_adjustment/post_item/void_item/delete_guest_note/delete_reservation_note/delete_webhook/delete_room_block) require approval; profile/note/status/assignment/create-kind actions do not"
   }
 }

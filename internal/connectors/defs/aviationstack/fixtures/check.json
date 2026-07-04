@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/countries" },
+  "request": { "method": "GET", "path": "/countries", "query": { "limit": "1" } },
   "response": {
     "status": 200,
     "body": {

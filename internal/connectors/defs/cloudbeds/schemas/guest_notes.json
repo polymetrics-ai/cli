@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "guest_notes",
+  "type": "object",
+  "x-primary-key": ["guestNoteID"],
+  "required": ["guestNoteID"],
+  "properties": {
+    "guestNoteID": { "type": "string" },
+    "userName": { "type": ["string", "null"] },
+    "dateCreated": { "type": ["string", "null"] },
+    "dateModified": { "type": ["string", "null"] },
+    "guestNote": { "type": ["string", "null"] },
+    "guestID": { "type": ["string", "null"] }
+  }
+}

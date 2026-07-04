@@ -49,6 +49,49 @@
         "stamp_field": "project_id"
       },
       "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "sections",
+      "path": "/projects/{{ fanout.id }}/sections",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/projects", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/sections.json"
+    },
+    {
+      "name": "time_off_types",
+      "path": "/resource-planner/time-off-types",
+      "records": { "path": "" },
+      "schema": "schemas/time_off_types.json"
+    },
+    {
+      "name": "allocations",
+      "path": "/allocations",
+      "records": { "path": "" },
+      "schema": "schemas/allocations.json"
+    },
+    {
+      "name": "expense_categories",
+      "path": "/expenses/categories",
+      "records": { "path": "" },
+      "schema": "schemas/expense_categories.json"
+    },
+    {
+      "name": "expenses",
+      "path": "/expenses",
+      "records": { "path": "" },
+      "schema": "schemas/expenses.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "records": { "path": "" },
+      "schema": "schemas/invoices.json"
     }
   ]
 }

@@ -1,0 +1,26 @@
+{
+  "record": {
+    "connection": "Username-Password-Authentication",
+    "email": "fixture1@example.com",
+    "name": "Fixture User"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/users",
+    "body": {
+      "connection": "Username-Password-Authentication",
+      "email": "fixture1@example.com",
+      "name": "Fixture User"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "user_id": "auth0|fixture_user_new",
+      "email": "fixture1@example.com",
+      "email_verified": false,
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

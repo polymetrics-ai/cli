@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "measure_families",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "standard_unit_code": { "type": ["string", "null"] },
+    "units": { "type": ["object", "null"] }
+  }
+}

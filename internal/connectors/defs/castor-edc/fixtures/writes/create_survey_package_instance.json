@@ -1,0 +1,11 @@
+{
+  "record": {
+    "survey_package_id": "pkg_fixture_1",
+    "record_id": "rec_fixture_1",
+    "email_address": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/study/synthetic-conformance-value/surveypackageinstance"
+  }
+}

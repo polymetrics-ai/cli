@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "suppressions_unsubscribes",
+  "type": "object",
+  "x-primary-key": ["Email"],
+  "required": ["Email"],
+  "properties": {
+    "Email": { "type": "string" },
+    "FriendlyErrorMessage": { "type": ["string", "null"] },
+    "ErrorCode": { "type": ["integer", "null"] },
+    "DateUpdated": { "type": ["string", "null"] }
+  }
+}

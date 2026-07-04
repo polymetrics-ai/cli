@@ -1,0 +1,20 @@
+{
+  "record": {
+    "ListID": "list_fixture_1",
+    "Title": "Fixture Segment",
+    "RuleGroups": [
+      { "Rules": [ { "RuleType": "EmailAddress", "Clause": "CONTAINS @example.com" } ] }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/segments/list_fixture_1.json",
+    "body": {
+      "Title": "Fixture Segment",
+      "RuleGroups": [
+        { "Rules": [ { "RuleType": "EmailAddress", "Clause": "CONTAINS @example.com" } ] }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": "segment_fixture_1" }
+}

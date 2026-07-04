@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/webhook", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "WebhookID": "webhook_fixture_1", "Name": "fixture-webhook-1", "DateCreated": "2026-01-01T00:00:00Z", "DateUpdated": "2026-01-01T00:00:00Z", "URL": "https://example.com/hooks/elasticemail", "NotifyOncePerEmail": true, "NotificationForSent": true, "NotificationForOpened": true, "NotificationForClicked": false, "NotificationForUnsubscribed": true, "NotificationForAbuseReport": true, "NotificationForError": true, "IsEnabled": true }
+    ]
+  }
+}

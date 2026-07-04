@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/linked_accounts",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "bankconn_fixture_1",
+          "bank_details": {
+            "name": "Fixture Bank",
+            "type": "CHECKING"
+          },
+          "brex_account_id": "cash_fixture_1",
+          "last_four": "5678",
+          "available_balance": {
+            "amount": 1000000,
+            "currency": "USD"
+          },
+          "current_balance": {
+            "amount": 1000000,
+            "currency": "USD"
+          }
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

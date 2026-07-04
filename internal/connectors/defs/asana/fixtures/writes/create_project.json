@@ -1,0 +1,15 @@
+{
+  "record": {
+    "data": {
+      "name": "Fixture project",
+      "workspace": "fixture_workspace_1"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects",
+    "body": {
+      "data": { "name": "Fixture project", "workspace": "fixture_workspace_1" }
+    }
+  }
+}

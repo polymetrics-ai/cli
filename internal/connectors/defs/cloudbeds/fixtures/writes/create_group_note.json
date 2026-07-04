@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "groupCode": "group_fixture_1", "groupNote": "Fixture note" },
+  "expect": { "method": "POST", "path": "/postGroupNote" },
+  "response": { "status": 200, "body": { "success": true } }
+}

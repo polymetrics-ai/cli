@@ -1,0 +1,13 @@
+{
+  "record": {
+    "post_id": "post_fixture_1",
+    "reaction": "positive"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/posts/post_fixture_1/reactions",
+    "body": {
+      "reaction": "positive"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/v2/aggregates/users/me" },
+  "response": {
+    "status": 200,
+    "body": {
+      "user": { "id": 1, "name": "Fixture User One", "email": "fixture1@example.com" },
+      "company": {
+        "id": 1,
+        "name": "Fixture Company",
+        "timezone_default": "Etc/UTC",
+        "currency": "EUR",
+        "module_absence": true,
+        "module_work_time": true,
+        "module_target_hours": false,
+        "module_user_reports": true
+      },
+      "workTimeRegulation": {
+        "id": 1,
+        "add_to_worktime": true,
+        "weekly_max": 40,
+        "daily_max": 8,
+        "interval_max": null,
+        "rules": []
+      }
+    }
+  }
+}

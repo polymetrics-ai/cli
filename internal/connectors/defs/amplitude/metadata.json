@@ -1,14 +1,14 @@
 {
   "name": "amplitude",
   "display_name": "Amplitude",
-  "description": "Reads Amplitude behavioral cohorts, chart annotations, and event types through the Amplitude Analytics REST API.",
+  "description": "Reads and manages Amplitude behavioral cohorts, chart annotations, annotation categories, event lists, and the governed taxonomy (event/category definitions) through the Amplitude Analytics REST API.",
   "integration_type": "api",
   "docs_url": "https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Amplitude API read of behavioral analytics data"
+    "read": "external Amplitude API read of behavioral analytics data",
+    "write": "external Amplitude API mutation of chart annotations, annotation categories, and governed taxonomy event/category definitions — never behavioral event data itself",
+    "approval": "reverse ETL plan approval required before writes"
   }
 }

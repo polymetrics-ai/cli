@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retention_policies",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "policy_name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "policy_type": { "type": ["string", "null"] },
+    "retention_type": { "type": ["string", "null"] },
+    "retention_length": { "type": ["string", "null"] },
+    "disposition_action": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "can_owner_extend_retention": { "type": ["boolean", "null"] },
+    "are_owners_notified": { "type": ["boolean", "null"] },
+    "custom_notification_recipients": { "type": ["array", "null"] },
+    "created_by": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "modified_at": { "type": ["string", "null"] }
+  }
+}

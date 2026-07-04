@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/family-variants", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          {
+            "code": "shoes_by_size",
+            "labels": { "en_US": "Shoes by size" },
+            "attributes": ["name", "size"],
+            "variant_attribute_sets": [{ "level": 1, "axes": ["size"], "attributes": ["size"] }]
+          }
+        ]
+      }
+    }
+  }
+}

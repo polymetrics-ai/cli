@@ -8,14 +8,14 @@
           "id": "contact_fixture_1",
           "name": "Fixture Contact 1",
           "email": "contact1@example.com",
-          "phoneNumber": "+15555550100",
+          "phoneNumber": { "countryCode": "+1", "number": "5555550100" },
           "companyName": "Fixture Co"
         },
         {
           "id": "contact_fixture_2",
           "name": "Fixture Contact 2",
           "email": "contact2@example.com",
-          "phoneNumber": "+15555550101",
+          "phoneNumber": { "countryCode": "+1", "number": "5555550101" },
           "companyName": "Fixture Co"
         }
       ],

@@ -34,6 +34,23 @@
       "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "entries" },
       "schema": "schemas/files.json"
+    },
+    {
+      "name": "file_details",
+      "path": "/files/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/folders/{{ config.box_folder_id }}/items",
+            "records_path": "entries",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "id" },
+        "stamp_field": "file_id"
+      },
+      "schema": "schemas/file_details.json"
     }
   ]
 }

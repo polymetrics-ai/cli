@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "list_fixture_1",
+    "name": "Renamed Fixture List"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/lists/list_fixture_1",
+    "body": {
+      "name": "Renamed Fixture List"
+    }
+  }
+}

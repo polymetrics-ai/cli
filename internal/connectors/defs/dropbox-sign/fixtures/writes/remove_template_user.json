@@ -1,0 +1,13 @@
+{
+  "record": {
+    "template_id": "tmpl_fixture_1",
+    "email_address": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/template/remove_user/tmpl_fixture_1",
+    "body": {
+      "email_address": "fixture1@example.com"
+    }
+  }
+}

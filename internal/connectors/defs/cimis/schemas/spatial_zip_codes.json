@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "spatial_zip_codes",
+  "type": "object",
+  "x-primary-key": ["ZipCode"],
+  "required": ["ZipCode"],
+  "properties": {
+    "ZipCode": { "type": "string" },
+    "ConnectDate": { "type": ["string", "null"] },
+    "DisconnectDate": { "type": ["string", "null"] },
+    "IsActive": { "type": ["string", "null"] }
+  }
+}

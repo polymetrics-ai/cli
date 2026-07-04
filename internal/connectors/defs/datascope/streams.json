@@ -42,6 +42,25 @@
       "path": "/notifications",
       "records": { "path": "." },
       "schema": "schemas/notifications.json"
+    },
+    {
+      "name": "task_assigns",
+      "path": "/task_assigns",
+      "records": { "path": "task_assigns" },
+      "schema": "schemas/task_assigns.json"
+    },
+    {
+      "name": "findings",
+      "path": "/findings/list",
+      "records": { "path": "." },
+      "schema": "schemas/findings.json"
+    },
+    {
+      "name": "files",
+      "path": "/files",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/files.json"
     }
   ]
 }

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/headless/collection/trackings",
+    "query": { "id": "2001", "page": "0", "length": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 3101,
+        "identifier": "fixture-user-1",
+        "name": "Fixture Learner One",
+        "commenced": "2026-01-01T00:00:00.000Z",
+        "completed": "2026-01-03T00:00:00.000Z",
+        "progressPercent": 100,
+        "totalTime": 3600,
+        "courses": [1001, 1002]
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "Name": "Fixture Supplier",
+    "Currency": "USD",
+    "PaymentTerm": "30 days",
+    "AccountPayable": "800",
+    "TaxRule": "Tax Exempt"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/supplier",
+    "body": {
+      "Name": "Fixture Supplier",
+      "Currency": "USD",
+      "PaymentTerm": "30 days",
+      "AccountPayable": "800",
+      "TaxRule": "Tax Exempt"
+    }
+  }
+}

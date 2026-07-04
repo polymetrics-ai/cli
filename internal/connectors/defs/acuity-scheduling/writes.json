@@ -1,0 +1,107 @@
+{
+  "actions": [
+    {
+      "name": "create_appointment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/appointments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["datetime", "appointmentTypeID", "firstName", "lastName", "email"],
+        "properties": {
+          "datetime": { "type": "string" },
+          "appointmentTypeID": { "type": "integer" },
+          "calendarID": { "type": "integer" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "timezone": { "type": "string" },
+          "certificate": { "type": "string" }
+        }
+      },
+      "risk": "creates a live appointment booking on the calendar and, depending on account settings, sends the client a confirmation email/SMS; external mutation, approval required"
+    },
+    {
+      "name": "update_appointment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/appointments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "updates a live appointment's client-facing details from Acuity's white-list of updatable attributes; external mutation, approval required"
+    },
+    {
+      "name": "cancel_appointment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/appointments/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "cancelNote": { "type": "string" },
+          "noShow": { "type": "boolean" }
+        }
+      },
+      "risk": "permanently cancels a live scheduled appointment; irreversible (Acuity's own docs: it is not possible to un-cancel), and by default sends the client a cancellation notification. External mutation, approval required"
+    },
+    {
+      "name": "create_block",
+      "kind": "create",
+      "method": "POST",
+      "path": "/blocks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start", "end", "calendarID"],
+        "properties": {
+          "start": { "type": "string" },
+          "end": { "type": "string" },
+          "calendarID": { "type": "integer" },
+          "notes": { "type": "string" },
+          "recurring": { "type": "string" }
+        }
+      },
+      "risk": "blocks off a time range on a live calendar, preventing clients from booking appointments in it; external mutation, approval required"
+    },
+    {
+      "name": "create_certificate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/certificates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "productID": { "type": "integer" },
+          "couponID": { "type": "integer" },
+          "certificate": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "issues a live, redeemable package or coupon certificate code; external mutation, approval required"
+    }
+  ]
+}

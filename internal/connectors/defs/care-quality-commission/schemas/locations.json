@@ -6,7 +6,22 @@
   "required": ["locationId"],
   "properties": {
     "locationId": { "type": "string" },
+    "providerId": { "type": ["string", "null"] },
+    "organisationType": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
     "locationName": { "type": ["string", "null"] },
-    "postalCode": { "type": ["string", "null"] }
+    "registrationStatus": { "type": ["string", "null"] },
+    "registrationDate": { "type": ["string", "null"] },
+    "numberOfBeds": { "type": ["integer", "null"] },
+    "postalAddressLine1": { "type": ["string", "null"] },
+    "postalAddressTownCity": { "type": ["string", "null"] },
+    "region": { "type": ["string", "null"] },
+    "postalCode": { "type": ["string", "null"] },
+    "onspdLatitude": { "type": ["number", "null"] },
+    "onspdLongitude": { "type": ["number", "null"] },
+    "careHome": { "type": ["string", "null"] },
+    "mainPhoneNumber": { "type": ["string", "null"] },
+    "constituency": { "type": ["string", "null"] },
+    "localAuthority": { "type": ["string", "null"] }
   }
 }

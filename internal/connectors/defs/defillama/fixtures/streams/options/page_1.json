@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/overview/options",
+    "query": { "excludeTotalDataChart": "true", "excludeTotalDataChartBreakdown": "true" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "protocols": [
+        {
+          "defillamaId": "1",
+          "name": "Fixture Options",
+          "displayName": "Fixture Options",
+          "category": "Options",
+          "chains": ["Ethereum"],
+          "total24h": 100000.0,
+          "total7d": 700000.0,
+          "total30d": 3000000.0,
+          "totalAllTime": 99999999.0,
+          "change_1d": 1.2
+        },
+        {
+          "defillamaId": "2",
+          "name": "Fixture Options Two",
+          "displayName": "Fixture Options Two",
+          "category": "Options",
+          "chains": ["Arbitrum"],
+          "total24h": 50000.0,
+          "total7d": 350000.0,
+          "total30d": 1500000.0,
+          "totalAllTime": 49999999.0,
+          "change_1d": -0.8
+        }
+      ]
+    }
+  }
+}

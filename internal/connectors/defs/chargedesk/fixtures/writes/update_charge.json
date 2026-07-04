@@ -1,0 +1,10 @@
+{
+  "record": {
+    "charge_id": "chg_fixture_1",
+    "status": "paid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/charges/chg_fixture_1"
+  }
+}

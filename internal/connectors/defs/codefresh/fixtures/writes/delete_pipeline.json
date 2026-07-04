@@ -1,0 +1,13 @@
+{
+  "record": {
+    "name": "fixture-org/fixture-pipeline"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/pipelines/fixture-org/fixture-pipeline"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

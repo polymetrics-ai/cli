@@ -87,6 +87,34 @@
       },
       "records": { "path": "Rows" },
       "schema": "schemas/statistics.json"
+    },
+    {
+      "name": "mpo_advertisers",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/mpo_advertisers.json"
+    },
+    {
+      "name": "mpo_sellers",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/sellers",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/mpo_sellers.json"
+    },
+    {
+      "name": "mpo_budgets",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/budgets",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/mpo_budgets.json"
+    },
+    {
+      "name": "mpo_seller_campaigns",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/seller-campaigns",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/mpo_seller_campaigns.json"
     }
   ]
 }

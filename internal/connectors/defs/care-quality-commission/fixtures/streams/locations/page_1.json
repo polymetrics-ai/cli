@@ -17,8 +17,23 @@
       "locations": [
         {
           "locationId": "1-fixture-loc-1",
+          "providerId": "1-fixture-prov-1",
+          "organisationType": "Location",
+          "type": "Social Care Org",
           "locationName": "Fixture Care Home 1",
-          "postalCode": "AB1 2CD"
+          "registrationStatus": "Registered",
+          "registrationDate": "2026-01-01",
+          "numberOfBeds": 20,
+          "postalAddressLine1": "1 Fixture Street",
+          "postalAddressTownCity": "Fixture Town",
+          "region": "South East",
+          "postalCode": "AB1 2CD",
+          "onspdLatitude": 51.5,
+          "onspdLongitude": -0.1,
+          "careHome": "Y",
+          "mainPhoneNumber": "01234567890",
+          "constituency": "Fixture Constituency",
+          "localAuthority": "Fixture Council"
         },
         {
           "locationId": "1-fixture-loc-2",

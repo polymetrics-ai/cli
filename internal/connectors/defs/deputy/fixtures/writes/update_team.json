@@ -1,0 +1,19 @@
+{
+  "record": { "Id": 1, "LeaderEmployee": 3 },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/resource/Team/1",
+    "body": { "LeaderEmployee": 3 }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": 1,
+      "Name": "Fixture Team",
+      "LeaderEmployee": 3,
+      "Creator": 1,
+      "Created": "2026-01-01T00:00:00",
+      "Modified": "2026-01-01T00:05:00"
+    }
+  }
+}

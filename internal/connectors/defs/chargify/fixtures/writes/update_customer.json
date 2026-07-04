@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "1",
+    "customer": {
+      "phone": "+15550100"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/1.json",
+    "body": {
+      "customer": {
+        "phone": "+15550100"
+      }
+    }
+  }
+}

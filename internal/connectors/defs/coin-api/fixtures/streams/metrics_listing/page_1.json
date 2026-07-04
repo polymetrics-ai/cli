@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/metrics/listing"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "metric_id": "TRADE_COUNT_SPOT",
+        "description": "Number of trades executed on spot markets."
+      },
+      {
+        "metric_id": "PRICE_CLOSE_SPOT_USD_ALL_EXCHANGES",
+        "description": "Closing price in USD aggregated across all spot exchanges."
+      }
+    ]
+  }
+}

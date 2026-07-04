@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segment_rules",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "filter_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscribers_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "filter_data": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}

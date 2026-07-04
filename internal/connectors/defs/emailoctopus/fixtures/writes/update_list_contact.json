@@ -1,0 +1,14 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "member_id": "contact_fixture_1",
+    "status": "UNSUBSCRIBED"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/lists/list_fixture_1/contacts/contact_fixture_1",
+    "body": {
+      "status": "UNSUBSCRIBED"
+    }
+  }
+}

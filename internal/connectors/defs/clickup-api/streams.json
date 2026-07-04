@@ -81,6 +81,27 @@
         "space_id": "{{ record.space.id }}"
       },
       "schema": "schemas/lists.json"
+    },
+    {
+      "name": "goals",
+      "path": "/team/{{ config.team_id }}/goal",
+      "records": { "path": "goals" },
+      "schema": "schemas/goals.json"
+    },
+    {
+      "name": "space_tags",
+      "path": "/space/{{ config.space_id }}/tag",
+      "records": { "path": "tags" },
+      "computed_fields": {
+        "space_id": "{{ config.space_id }}"
+      },
+      "schema": "schemas/space_tags.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/team/{{ config.team_id }}/webhook",
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

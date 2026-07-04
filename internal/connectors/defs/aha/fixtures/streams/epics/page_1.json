@@ -1,0 +1,441 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/epics",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "epics": [
+        {
+          "id": "epic_fixture_1",
+          "reference_num": "FIX-E-1",
+          "name": "Fixture epic 1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/1"
+        },
+        {
+          "id": "epic_fixture_2",
+          "reference_num": "FIX-E-2",
+          "name": "Fixture epic 2",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/2"
+        },
+        {
+          "id": "epic_fixture_3",
+          "reference_num": "FIX-E-3",
+          "name": "Fixture epic 3",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/3"
+        },
+        {
+          "id": "epic_fixture_4",
+          "reference_num": "FIX-E-4",
+          "name": "Fixture epic 4",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/4"
+        },
+        {
+          "id": "epic_fixture_5",
+          "reference_num": "FIX-E-5",
+          "name": "Fixture epic 5",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/5"
+        },
+        {
+          "id": "epic_fixture_6",
+          "reference_num": "FIX-E-6",
+          "name": "Fixture epic 6",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/6"
+        },
+        {
+          "id": "epic_fixture_7",
+          "reference_num": "FIX-E-7",
+          "name": "Fixture epic 7",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/7"
+        },
+        {
+          "id": "epic_fixture_8",
+          "reference_num": "FIX-E-8",
+          "name": "Fixture epic 8",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/8"
+        },
+        {
+          "id": "epic_fixture_9",
+          "reference_num": "FIX-E-9",
+          "name": "Fixture epic 9",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/9"
+        },
+        {
+          "id": "epic_fixture_10",
+          "reference_num": "FIX-E-10",
+          "name": "Fixture epic 10",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/10"
+        },
+        {
+          "id": "epic_fixture_11",
+          "reference_num": "FIX-E-11",
+          "name": "Fixture epic 11",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/11"
+        },
+        {
+          "id": "epic_fixture_12",
+          "reference_num": "FIX-E-12",
+          "name": "Fixture epic 12",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/12"
+        },
+        {
+          "id": "epic_fixture_13",
+          "reference_num": "FIX-E-13",
+          "name": "Fixture epic 13",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/13"
+        },
+        {
+          "id": "epic_fixture_14",
+          "reference_num": "FIX-E-14",
+          "name": "Fixture epic 14",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/14"
+        },
+        {
+          "id": "epic_fixture_15",
+          "reference_num": "FIX-E-15",
+          "name": "Fixture epic 15",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/15"
+        },
+        {
+          "id": "epic_fixture_16",
+          "reference_num": "FIX-E-16",
+          "name": "Fixture epic 16",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/16"
+        },
+        {
+          "id": "epic_fixture_17",
+          "reference_num": "FIX-E-17",
+          "name": "Fixture epic 17",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/17"
+        },
+        {
+          "id": "epic_fixture_18",
+          "reference_num": "FIX-E-18",
+          "name": "Fixture epic 18",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/18"
+        },
+        {
+          "id": "epic_fixture_19",
+          "reference_num": "FIX-E-19",
+          "name": "Fixture epic 19",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/19"
+        },
+        {
+          "id": "epic_fixture_20",
+          "reference_num": "FIX-E-20",
+          "name": "Fixture epic 20",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/20"
+        },
+        {
+          "id": "epic_fixture_21",
+          "reference_num": "FIX-E-21",
+          "name": "Fixture epic 21",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/21"
+        },
+        {
+          "id": "epic_fixture_22",
+          "reference_num": "FIX-E-22",
+          "name": "Fixture epic 22",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/22"
+        },
+        {
+          "id": "epic_fixture_23",
+          "reference_num": "FIX-E-23",
+          "name": "Fixture epic 23",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/23"
+        },
+        {
+          "id": "epic_fixture_24",
+          "reference_num": "FIX-E-24",
+          "name": "Fixture epic 24",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/24"
+        },
+        {
+          "id": "epic_fixture_25",
+          "reference_num": "FIX-E-25",
+          "name": "Fixture epic 25",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/25"
+        },
+        {
+          "id": "epic_fixture_26",
+          "reference_num": "FIX-E-26",
+          "name": "Fixture epic 26",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/26"
+        },
+        {
+          "id": "epic_fixture_27",
+          "reference_num": "FIX-E-27",
+          "name": "Fixture epic 27",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/27"
+        },
+        {
+          "id": "epic_fixture_28",
+          "reference_num": "FIX-E-28",
+          "name": "Fixture epic 28",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/28"
+        },
+        {
+          "id": "epic_fixture_29",
+          "reference_num": "FIX-E-29",
+          "name": "Fixture epic 29",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/29"
+        },
+        {
+          "id": "epic_fixture_30",
+          "reference_num": "FIX-E-30",
+          "name": "Fixture epic 30",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/epics/30"
+        }
+      ],
+      "pagination": {
+        "total_records": 31,
+        "total_pages": 2,
+        "current_page": 1
+      }
+    }
+  }
+}

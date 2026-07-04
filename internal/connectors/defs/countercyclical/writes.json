@@ -1,0 +1,20 @@
+{
+  "actions": [
+    {
+      "name": "create_investment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/make/actions/investments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tickerSymbol"],
+        "properties": {
+          "tickerSymbol": { "type": "string" }
+        }
+      },
+      "risk": "creates a new Investment in the caller's Countercyclical workspace via the Make-integration action endpoint (the only documented general-purpose creation endpoint; the functionally-identical Zapier-integration endpoint is not separately exposed, see api_surface.json); external mutation, no approval required"
+    }
+  ]
+}

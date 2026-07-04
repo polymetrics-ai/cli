@@ -8,7 +8,8 @@
         "name": "Fixture Campaign 1",
         "status": "sent",
         "scheduled_date": "2026-01-01",
-        "preview_url": "https://example.com/preview/1"
+        "preview_url": "https://example.com/preview/1",
+        "report_url": "https://example.com/report/1"
       }
     ]
   }

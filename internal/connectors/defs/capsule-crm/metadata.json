@@ -1,14 +1,14 @@
 {
   "name": "capsule-crm",
   "display_name": "Capsule CRM",
-  "description": "Reads Capsule CRM parties, opportunities, cases, tasks, and users through the Capsule v2 REST API.",
+  "description": "Reads Capsule CRM parties, opportunities, cases, tasks, users, tags, custom field definitions, teams, pipelines, milestones, lost reasons, task categories, boards, and stages, and writes party/opportunity/case/task create, update, and delete actions, through the Capsule v2 REST API.",
   "integration_type": "api",
   "docs_url": "https://developer.capsulecrm.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external Capsule CRM API read of CRM records"
+    "read": "external Capsule CRM API read of CRM records and account configuration (tags, custom fields, pipelines)",
+    "write": "external mutation of live Capsule CRM parties, opportunities, cases, and tasks including irreversible deletes; approval required for every write action"
   }
 }

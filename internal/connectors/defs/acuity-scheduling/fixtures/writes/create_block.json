@@ -1,0 +1,20 @@
+{
+  "record": {
+    "start": "2026-02-01T09:00:00-0800",
+    "end": "2026-02-01T10:00:00-0800",
+    "calendarID": 7
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/blocks",
+    "body": {
+      "start": "2026-02-01T09:00:00-0800",
+      "end": "2026-02-01T10:00:00-0800",
+      "calendarID": 7
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 2001, "notes": "" }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/advertisers/synthetic-conformance-value/reports/publisher",
+    "query": { "endDate": "2099-12-31", "timezone": "UTC", "dateType": "transaction" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "advertiserId": 42,
+        "advertiserName": "Fixture Advertiser",
+        "publisherId": 7,
+        "publisherName": "Fixture Publisher",
+        "region": "GB",
+        "currency": "GBP",
+        "impressions": 1000,
+        "clicks": 100,
+        "pendingNo": 2,
+        "pendingValue": 20.0,
+        "pendingComm": 2.0,
+        "confirmedNo": 8,
+        "confirmedValue": 80.0,
+        "confirmedComm": 8.0,
+        "bonusNo": 0,
+        "bonusValue": 0.0,
+        "bonusComm": 0.0,
+        "declinedNo": 0,
+        "declinedValue": 0.0,
+        "declinedComm": 0.0,
+        "totalNo": 10,
+        "totalValue": 100.0,
+        "totalComm": 10.0,
+        "tags": []
+      }
+    ]
+  }
+}

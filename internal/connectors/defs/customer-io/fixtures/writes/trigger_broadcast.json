@@ -1,0 +1,11 @@
+{
+  "record": {
+    "broadcast_id": 2,
+    "data": { "headline": "Fixture broadcast headline" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns/2/triggers"
+  },
+  "response": { "status": 200, "body": { "id": 100 } }
+}

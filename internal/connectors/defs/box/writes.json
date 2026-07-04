@@ -1,0 +1,183 @@
+{
+  "actions": [
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "provenance": { "type": "string" },
+          "external_sync_identifier": { "type": "string" },
+          "description": { "type": "string" },
+          "invitability_level": { "type": "string", "enum": ["admins_only", "admins_and_members", "all_managed_users"] },
+          "member_viewability_level": { "type": "string", "enum": ["admins_only", "admins_and_members", "all_managed_users"] }
+        }
+      },
+      "risk": "external mutation; creates a new Box enterprise group; approval required"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/groups/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "provenance": { "type": "string" },
+          "external_sync_identifier": { "type": "string" },
+          "description": { "type": "string" },
+          "invitability_level": { "type": "string", "enum": ["admins_only", "admins_and_members", "all_managed_users"] },
+          "member_viewability_level": { "type": "string", "enum": ["admins_only", "admins_and_members", "all_managed_users"] }
+        }
+      },
+      "risk": "external mutation; updates an existing Box enterprise group's settings; approval required"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; permanently deletes a Box enterprise group; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["target", "address", "triggers"],
+        "properties": {
+          "target": { "type": "object" },
+          "address": { "type": "string" },
+          "triggers": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; creates a new Box webhook subscription that will POST event payloads to an external address; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "target": { "type": "object" },
+          "address": { "type": "string" },
+          "triggers": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; updates an existing Box webhook's target/address/triggers; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; permanently deletes a Box webhook subscription; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_collaboration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/collaborations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["item", "accessible_by", "role"],
+        "properties": {
+          "item": { "type": "object" },
+          "accessible_by": { "type": "object" },
+          "role": { "type": "string", "enum": ["editor", "viewer", "previewer", "uploader", "previewer uploader", "viewer uploader", "co-owner"] },
+          "is_access_only": { "type": "boolean" },
+          "can_view_path": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; grants a user or group access to a Box file/folder; approval required"
+    },
+    {
+      "name": "update_collaboration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/collaborations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "role": { "type": "string", "enum": ["editor", "viewer", "previewer", "uploader", "previewer uploader", "viewer uploader", "co-owner", "owner"] },
+          "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+          "can_view_path": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; changes an existing Box collaboration's role, or accepts/rejects a pending invitation; approval required"
+    },
+    {
+      "name": "delete_collaboration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/collaborations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; permanently revokes a user or group's access to a Box file/folder; approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

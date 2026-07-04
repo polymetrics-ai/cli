@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": 301,
+    "name": "Fixture Schedule (Updated)"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/schedules/301"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "data": { "id": 301, "name": "Fixture Schedule (Updated)" } }
+  }
+}

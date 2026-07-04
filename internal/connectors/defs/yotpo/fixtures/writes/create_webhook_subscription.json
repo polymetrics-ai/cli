@@ -1,0 +1,21 @@
+{
+  "record": {
+    "webhook_subscription": {
+      "target_id": 9876,
+      "filter_id": 6792,
+      "active": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/webhooks/subscriptions",
+    "body": {
+      "webhook_subscription": {
+        "target_id": 9876,
+        "filter_id": 6792,
+        "active": true
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "webhook_subscription": { "yotpo_id": 222222 } } }
+}

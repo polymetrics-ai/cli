@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/team/synthetic-conformance-value/goal" },
+  "response": {
+    "status": 200,
+    "body": {
+      "goals": [
+        {
+          "id": "goal_fixture_1",
+          "name": "Fixture Goal 1",
+          "team_id": "team_fixture_1",
+          "creator": 1,
+          "color": "#32a852",
+          "date_created": "1767225600000",
+          "start_date": null,
+          "due_date": "1769904000000",
+          "description": "Fixture goal description",
+          "private": false,
+          "archived": false,
+          "multiple_owners": true,
+          "percent_completed": 0
+        }
+      ],
+      "folders": []
+    }
+  }
+}

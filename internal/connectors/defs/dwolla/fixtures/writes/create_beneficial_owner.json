@@ -1,0 +1,33 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "firstName": "Fixture",
+    "lastName": "Owner",
+    "dateOfBirth": "1970-01-01",
+    "ssn": "6789",
+    "address": {
+      "address1": "1 Fixture St",
+      "city": "Fixtureville",
+      "stateProvinceRegion": "IA",
+      "country": "US",
+      "postalCode": "50309"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/cus_fixture_1/beneficial-owners",
+    "body": {
+      "firstName": "Fixture",
+      "lastName": "Owner",
+      "dateOfBirth": "1970-01-01",
+      "ssn": "6789",
+      "address": {
+        "address1": "1 Fixture St",
+        "city": "Fixtureville",
+        "stateProvinceRegion": "IA",
+        "country": "US",
+        "postalCode": "50309"
+      }
+    }
+  }
+}

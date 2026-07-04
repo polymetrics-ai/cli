@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/resource-planner/time-off-types" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Vacation", "color": "#00aa00", "paid": true, "description": "Paid time off" },
+      { "id": 2, "name": "Sick Leave", "color": "#aa0000", "paid": true, "description": "Paid sick leave" }
+    ]
+  }
+}

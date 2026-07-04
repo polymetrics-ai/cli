@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "query_tables",
+  "type": "object",
+  "x-primary-key": ["viewId"],
+  "required": ["viewId"],
+  "properties": {
+    "viewId": { "type": "string" },
+    "viewName": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "parentViewId": { "type": ["string", "null"] },
+    "folderId": { "type": ["string", "null"] },
+    "createdTime": { "type": ["string", "null"] },
+    "createdBy": { "type": ["string", "null"] },
+    "lastModifiedTime": { "type": ["string", "null"] },
+    "lastModifiedBy": { "type": ["string", "null"] },
+    "isFavorite": { "type": ["boolean", "null"] },
+    "sharedBy": { "type": ["string", "null"] },
+    "workspaceId": { "type": ["string", "null"] },
+    "orgId": { "type": ["string", "null"] }
+  }
+}

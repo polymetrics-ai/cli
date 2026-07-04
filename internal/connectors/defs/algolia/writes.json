@@ -1,0 +1,47 @@
+{
+  "actions": [
+    {
+      "name": "update_index_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/1/indexes/{{ record.index_name }}/settings",
+      "path_fields": ["index_name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["index_name"],
+        "properties": {
+          "index_name": { "type": "string" },
+          "searchableAttributes": { "type": "array", "items": { "type": "string" } },
+          "attributesForFaceting": { "type": "array", "items": { "type": "string" } },
+          "customRanking": { "type": "array", "items": { "type": "string" } },
+          "hitsPerPage": { "type": "integer" }
+        }
+      },
+      "risk": "overwrites the named index's search settings (ranking, faceting, searchable attributes); settings not included in the submitted record are left unchanged, but any included field replaces its current value immediately for live search traffic"
+    },
+    {
+      "name": "create_api_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/1/keys",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["acl"],
+        "properties": {
+          "acl": { "type": "array", "items": { "type": "string" } },
+          "description": { "type": "string" },
+          "indexes": { "type": "array", "items": { "type": "string" } },
+          "maxHitsPerQuery": { "type": "integer" },
+          "maxQueriesPerIPPerHour": { "type": "integer" },
+          "validity": { "type": "integer" },
+          "referers": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new live Algolia API key with the requested ACL/index scope; a broadly-scoped key (e.g. admin-level ACLs) is a new standing credential that must be tracked and rotated like any other secret"
+    }
+  ]
+}

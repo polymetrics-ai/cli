@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/ref/paymentterm", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "PaymentTermList": [
+        {
+          "ID": "term_fixture_1",
+          "Name": "30 days",
+          "Duration": 30,
+          "Method": "number of days",
+          "IsActive": true,
+          "IsDefault": true
+        },
+        {
+          "ID": "term_fixture_2",
+          "Name": "Last day of the month",
+          "Duration": 10,
+          "Method": "last day of next month",
+          "IsActive": true,
+          "IsDefault": false
+        }
+      ]
+    }
+  }
+}

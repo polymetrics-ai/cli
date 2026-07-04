@@ -1,0 +1,42 @@
+{
+  "request": { "method": "GET", "path": "/ref/account", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "AccountsList": [
+        {
+          "Code": "800",
+          "Status": "ACTIVE",
+          "Name": "Accounts Payable",
+          "Type": "CURRLIAB",
+          "Description": "Outstanding invoices the company has received from suppliers but has not yet paid",
+          "Class": "LIABILITY",
+          "SystemAccount": "Accounts payable",
+          "SystemAccountCode": "CREDITORS",
+          "BankAccountNumber": null,
+          "BankAccountId": null,
+          "ForPayments": false,
+          "DisplayName": "800: Accounts Payable",
+          "OldCode": null
+        },
+        {
+          "Code": "400",
+          "Status": "ACTIVE",
+          "Name": "Advertising",
+          "Type": "EXPENSE",
+          "Description": "Expenses incurred for advertising while trying to increase sales",
+          "Class": "EXPENSE",
+          "SystemAccount": null,
+          "SystemAccountCode": null,
+          "BankAccountNumber": null,
+          "BankAccountId": null,
+          "ForPayments": false,
+          "DisplayName": "400: Advertising",
+          "OldCode": null
+        }
+      ]
+    }
+  }
+}

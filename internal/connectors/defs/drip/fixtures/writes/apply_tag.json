@@ -1,0 +1,17 @@
+{
+  "record": {
+    "subscriber_id": "sub_fixture_1",
+    "tags": [{ "tag": "vip" }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/subscribers/sub_fixture_1/tags",
+    "body": {
+      "tags": [{ "tag": "vip" }]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

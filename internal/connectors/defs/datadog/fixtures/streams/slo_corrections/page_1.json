@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/slo/correction",
+    "query": { "offset": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "fixture-correction-1",
+          "type": "correction",
+          "attributes": {
+            "slo_id": "fixture-slo-1",
+            "category": "Scheduled Maintenance",
+            "description": "Fixture SLO correction",
+            "start": 1767225600,
+            "end": 1767229200,
+            "duration": 3600,
+            "timezone": "UTC",
+            "created_at": 1767225600,
+            "modified_at": 1767225600
+          }
+        }
+      ]
+    }
+  }
+}

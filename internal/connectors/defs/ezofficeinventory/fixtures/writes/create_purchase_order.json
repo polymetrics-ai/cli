@@ -1,0 +1,9 @@
+{
+  "record": {
+    "vendor_id": 20
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchase_orders.api"
+  }
+}

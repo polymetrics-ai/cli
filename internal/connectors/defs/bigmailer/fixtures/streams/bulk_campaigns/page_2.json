@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_1/bulk-campaigns", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "bulk_campaign_fixture_1",
+          "brand_id": "brand_fixture_1",
+          "created": 1767225601,
+          "name": "Fixture Bulk Campaign",
+          "subject": "Fixture Subject",
+          "from": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "reply_to": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "segment_id": "segment_fixture_1",
+          "message_type_id": "message_type_fixture_1",
+          "list_ids": ["list_fixture_1"],
+          "excluded_list_ids": [],
+          "scheduled_for": 1767225700,
+          "suppression_list_id": "suppression_list_fixture_1",
+          "num_sent": 10,
+          "num_rejected": 0,
+          "num_clicks": 2,
+          "num_total_clicks": 3,
+          "num_opens": 5,
+          "status": "sent"
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

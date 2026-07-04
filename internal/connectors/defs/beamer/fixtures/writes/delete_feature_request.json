@@ -1,0 +1,7 @@
+{
+  "record": { "id": "fr_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/feature-requests/fr_fixture_1"
+  }
+}

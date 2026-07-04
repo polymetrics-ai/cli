@@ -66,6 +66,32 @@
       "records": { "path": "" },
       "pagination": { "type": "none" },
       "schema": "schemas/forms.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "query": { "max": "100" },
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "first_name": "{{ record.firstName }}",
+        "last_name": "{{ record.lastName }}"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "labels",
+      "path": "/labels",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/labels.json"
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "email_unsubscribes",
+  "type": "object",
+  "x-primary-key": ["email", "unsubscribed_at"],
+  "x-cursor-field": "unsubscribed_at",
+  "required": ["email"],
+  "properties": {
+    "email": { "type": "string" },
+    "unsubscribed_at": { "type": ["string", "null"] }
+  }
+}

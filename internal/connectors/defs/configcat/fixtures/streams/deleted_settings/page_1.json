@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/v1/configs/synthetic-conformance-value/deleted-settings" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "key": "oldFixtureFlag", "name": "Old Fixture Flag", "hint": "deleted", "settingType": "boolean" }
+    ]
+  }
+}

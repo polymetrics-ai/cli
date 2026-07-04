@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/calls/CAL_fixture_1/page_views.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page_views": [
+        {
+          "referrer_url": "https://example.com/prior-page",
+          "page_url": "https://example.com/landing",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

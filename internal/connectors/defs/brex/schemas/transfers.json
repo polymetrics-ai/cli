@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transfers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "counterparty": { "type": ["object", "null"] },
+    "description": { "type": ["string", "null"] },
+    "payment_type": { "type": ["string", "null"] },
+    "amount": { "type": ["object", "null"] },
+    "process_date": { "type": ["string", "null"] },
+    "originating_account": { "type": ["object", "null"] },
+    "status": { "type": ["string", "null"] },
+    "cancellation_reason": { "type": ["string", "null"] },
+    "estimated_delivery_date": { "type": ["string", "null"] },
+    "creator_user_id": { "type": ["string", "null"] }
+  }
+}

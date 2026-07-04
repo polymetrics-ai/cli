@@ -1,0 +1,32 @@
+{
+  "record": {
+    "customerId": "cus_fixture_1",
+    "users": [
+      {
+        "userId": "user_fixture_1",
+        "data": {
+          "email": "fixture1@example.com",
+          "name": "Fixture User",
+          "billingAdmin": true
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/api/events/customer-update/set-users",
+    "body": {
+      "customerId": "cus_fixture_1",
+      "users": [
+        {
+          "userId": "user_fixture_1",
+          "data": {
+            "email": "fixture1@example.com",
+            "name": "Fixture User",
+            "billingAdmin": true
+          }
+        }
+      ]
+    }
+  }
+}

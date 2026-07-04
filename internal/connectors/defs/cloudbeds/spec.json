@@ -14,6 +14,20 @@
       "format": "uri",
       "default": "https://api.cloudbeds.com/api/v1.2",
       "description": "Cloudbeds API base URL override for tests or proxies."
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Cloudbeds property (hotel) ID. Required for the groups and allotment_blocks streams specifically (Cloudbeds itself requires propertyID for GET /getGroups and /getAllotmentBlocks); ignored by every other stream, which reads across all accessible properties."
+    },
+    "rate_plans_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Inclusive start date (YYYY-MM-DD) for the rate_plans stream's rate-availability window. Required by the rate_plans stream specifically (Cloudbeds itself requires startDate/endDate for GET /getRatePlans); ignored by every other stream."
+    },
+    "rate_plans_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Exclusive end date (YYYY-MM-DD) for the rate_plans stream's rate-availability window. Required by the rate_plans stream specifically; ignored by every other stream."
     }
   }
 }

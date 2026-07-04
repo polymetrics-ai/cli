@@ -1,0 +1,14 @@
+{
+  "record": {
+    "email_address": "fixture1@example.com",
+    "role": "Member"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/team/add_member",
+    "body": {
+      "email_address": "fixture1@example.com",
+      "role": "Member"
+    }
+  }
+}

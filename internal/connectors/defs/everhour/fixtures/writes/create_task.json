@@ -1,0 +1,19 @@
+{
+  "record": {
+    "project_id": "as:1001",
+    "name": "Fixture New Task",
+    "section": 401
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/as:1001/tasks",
+    "body": {
+      "name": "Fixture New Task",
+      "section": 401
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "t_fixture_new", "name": "Fixture New Task" }
+  }
+}

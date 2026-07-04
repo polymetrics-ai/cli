@@ -1,14 +1,14 @@
 {
   "name": "algolia",
   "display_name": "Algolia",
-  "description": "Reads Algolia indices, API keys, and index settings through the Algolia Search REST API.",
+  "description": "Reads Algolia indices, API keys, index settings, dictionaries, security sources, and logs, and writes index settings/API keys, through the Algolia Search REST API.",
   "integration_type": "api",
   "docs_url": "https://www.algolia.com/doc/rest-api/search/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Algolia API read of index/key configuration metadata"
+    "read": "external Algolia API read of index/key/dictionary/security/log configuration metadata",
+    "write": "external mutation: overwrites live index search settings (update_index_settings) or creates a new standing API key credential (create_api_key); approval required",
+    "approval": "required for both write actions"
   }
 }

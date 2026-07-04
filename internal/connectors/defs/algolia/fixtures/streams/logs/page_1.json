@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/1/logs", "query": { "offset": "0", "length": "10" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "logs": [
+        {
+          "timestamp": "2026-01-01T00:00:00Z",
+          "method": "GET",
+          "answer_code": "200",
+          "query_body": "",
+          "answer": "{}",
+          "url": "/1/indexes",
+          "ip": "10.0.0.1",
+          "query_headers": "fixture-header: 1",
+          "sha1": "fixture_log_1",
+          "processing_time_ms": "2",
+          "index": "fixture_index_1",
+          "query_params": "query=fixture",
+          "query_nb_hits": "1"
+        }
+      ]
+    }
+  }
+}

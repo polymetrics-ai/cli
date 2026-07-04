@@ -1,0 +1,17 @@
+{
+  "record": {
+    "page_id": "canvas-fixture-1",
+    "name": "New Page Name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/docs/synthetic-conformance-value/pages/canvas-fixture-1",
+    "body": {
+      "name": "New Page Name"
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": { "requestId": "req-fixture-7", "id": "canvas-fixture-1" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "job_id": "job_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/jobs/job_fixture_1/retry"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "gid": "fixture_proj_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/fixture_proj_1"
+  }
+}

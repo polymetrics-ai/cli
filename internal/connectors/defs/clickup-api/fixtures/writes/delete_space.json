@@ -1,0 +1,7 @@
+{
+  "record": { "id": "space_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/space/space_fixture_1"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "key": { "type": ["object", "null"] },
+    "event": { "type": ["object", "null"] },
+    "owner": { "type": ["object", "null"] },
+    "subscriptionType": { "type": ["string", "null"] },
+    "subscriptionData": { "type": ["object", "null"] }
+  }
+}

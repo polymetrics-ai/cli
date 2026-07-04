@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/email-settings" },
+  "response": {
+    "status": 200,
+    "body": {
+      "email_settings": [
+        { "id": "es_fixture_1", "name": "fixture1@example.com", "created_at": "2026-01-01T00:00:00Z" },
+        { "id": "es_fixture_2", "name": "fixture2@example.com", "created_at": "2026-01-02T00:00:00Z" }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

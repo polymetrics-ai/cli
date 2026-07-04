@@ -1,14 +1,14 @@
 {
   "name": "dbt",
   "display_name": "dbt Cloud",
-  "description": "Reads dbt Cloud projects, runs, repositories, users, and environments through the dbt Cloud Administrative API v2.",
+  "description": "Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites, licenses, notifications, and SSH tunnels, and writes job/notification/SSH-tunnel mutations and run-control actions (trigger/retry/cancel), through the dbt Cloud Administrative API v2.",
   "integration_type": "api",
   "docs_url": "https://docs.getdbt.com/dbt-cloud/api-v2",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external dbt Cloud API read of account projects, runs, repositories, users, and environments"
+    "read": "external dbt Cloud API read of account projects, runs, repositories, users, environments, jobs, invites, licenses, notifications, and SSH tunnel configuration",
+    "write": "external mutation of dbt Cloud job/notification/SSH-tunnel definitions and job/run control actions; trigger_job_run/retry_failed_job/retry_run run real warehouse queries and cancel_run stops one mid-execution, so every write ships an explicit per-action risk string",
+    "approval": "required for delete_job/delete_notification/delete_ssh_tunnel (irreversible) and for trigger_job_run/retry_failed_job/retry_run/cancel_run (real warehouse side effects); create_job/create_notification are low-risk"
   }
 }

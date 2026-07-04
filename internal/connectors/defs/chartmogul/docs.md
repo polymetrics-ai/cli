@@ -1,10 +1,12 @@
 # Overview
 
-ChartMogul is a wave2 fan-out Tier-1 declarative migration. It reads ChartMogul customers,
-subscription activities, customer-count metrics, and account details through the ChartMogul REST
-API. This bundle targets capability parity with `internal/connectors/chartmogul` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry
-flip. ChartMogul is read-only in both legacy and this bundle (no `writes.json`).
+ChartMogul is a wave2 fan-out Tier-1 declarative migration, expanded in Pass B to the full
+practical API surface reachable with a plain (non-CRM-seat) API key. It reads ChartMogul customers,
+contacts, subscription activities, plans, invoices, tasks, customer-count metrics, and account
+details through the ChartMogul REST API, and writes customers (create/update). This bundle
+originally targeted capability parity with `internal/connectors/chartmogul` (the hand-written
+connector it migrates, read-only); the legacy package stays registered and unchanged until wave6's
+registry flip. Pass B's customer write actions are new capability beyond legacy parity.
 
 ## Auth setup
 
@@ -53,18 +55,45 @@ field is `["customer-since"]`/`["date"]`/`["date"]` for `customers`/`activities`
 respectively (`account` has none); `customers` declares `x-cursor-field` for catalog-derived
 sync-mode purposes only, since (as above) no request ever actually filters by it.
 
+**Pass B new streams** (same cursor/`has_more` pagination shape as `customers`/`activities` above):
+`plans` (`GET /plans`, records wrapper key `"plans"` — ChartMogul's own docs show plans using their
+own resource name as the wrapper, unlike the `"entries"` convention every other new stream here
+uses), `contacts` (`GET /contacts`, wrapper `"entries"`, primary key `["uuid"]`), `tasks`
+(`GET /tasks`, wrapper `"entries"`; primary key is `["task_uuid"]` — NOT `uuid`, ChartMogul's task
+object uses a differently-named id field per its own documented response shape — cursor field
+`updated_at`), and `invoices` (`GET /invoices`, wrapper `"invoices"`, primary key `["uuid"]`; no
+incremental cursor declared — ChartMogul's documented invoice object carries no
+consistently-populated update timestamp to filter by). None of these 4 streams have legacy
+precedent; they are wholly new Pass B capability, verified against ChartMogul's own current API
+reference (`dev.chartmogul.com/reference`).
+
 ## Write actions & risks
 
-None — ChartMogul is exposed as a read-only source connector in both legacy (`chartmogul.go`'s
-`Write` returns `connectors.ErrUnsupportedOperation`) and this bundle (`metadata.json`'s
-`capabilities.write: false`, no `writes.json` file at all).
+Pass B adds write capability (new beyond legacy, which was read-only): `create_customer`
+(`POST /customers`, requires `data_source_uuid` + `external_id`) and `update_customer`
+(`PUT /customers/{uuid}`). ChartMogul's customer body is flat JSON (no wrapper envelope, unlike
+Chargify), so it maps directly onto the write dialect's default body construction. Both actions
+carry `"risk": "external mutation; approval required"`; `metadata.json`'s `capabilities.write` is
+now `true`.
+
+Contact, task, and plan create/update/delete are deliberately NOT covered by this pass — see
+`api_surface.json`'s per-endpoint reasons (narrower CRM/catalog write surfaces than the customer
+object Pass B prioritizes as the representative write target).
 
 ## Known limits
 
-- Full ChartMogul API surface (invoices, plans, subscriptions import, tasks, tags/custom
-  attributes, write endpoints) is out of scope for wave2; see `api_surface.json`'s `excluded:
-  {category: out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 4
-  legacy-parity streams are implemented.
+- Full ChartMogul API surface has been reviewed against the current API reference; every
+  out-of-scope endpoint carries a specific, non-blanket reason in `api_surface.json` (narrow
+  CRM-module writes, invoice/line-item/transaction sub-object writes that only exist inside a
+  bulk-import payload, destructive deletes, CRM-seat-gated Opportunities, and dashboard-shaped
+  metrics endpoints beyond the already-covered `customer_count`).
+- **Opportunities are excluded entirely (`requires_elevated_scope`)**: ChartMogul's own
+  documentation states the Opportunities endpoints require an API key created by a user with a CRM
+  seat — not every account/API key configured against this connector can reach that surface, so it
+  is not modeled as an ordinary stream/write at all.
+- **Subscriptions have no top-level list endpoint** (`GET /v1/customers/{id}/subscriptions` is
+  per-customer only) — covering it would require a fan-out over every customer id, deferred (same
+  class of gap as chargify's per-product-family `components`, documented in `api_surface.json`).
 - **`ENGINE_GAP` (documented deviation, not a blocker — see parity-deviation ledger; awin-advertiser
   carries the identical shape)**: the engine's interpolation dialect
   (`internal/connectors/engine/interpolate.go`) has no "current time"/`now()` reference anywhere

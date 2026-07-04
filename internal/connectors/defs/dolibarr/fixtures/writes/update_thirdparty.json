@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "name": "Fixture Thirdparty Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/thirdparties/1"
+  }
+}

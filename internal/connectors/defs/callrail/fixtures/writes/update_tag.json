@@ -1,0 +1,9 @@
+{
+  "record": { "id": "TAG_fixture_1", "name": "Renamed Tag" },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/tags/TAG_fixture_1.json",
+    "body": { "name": "Renamed Tag" }
+  },
+  "response": { "status": 200, "body": { "id": "TAG_fixture_1", "name": "Renamed Tag" } }
+}

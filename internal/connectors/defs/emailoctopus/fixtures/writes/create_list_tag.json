@@ -1,0 +1,17 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "tag": "vip"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/list_fixture_1/tags",
+    "body": {
+      "tag": "vip"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "tag": "vip" }
+  }
+}

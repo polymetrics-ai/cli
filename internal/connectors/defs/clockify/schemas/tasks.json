@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "projectId": { "type": ["string", "null"] },
+    "assigneeId": { "type": ["string", "null"] },
+    "assigneeIds": { "type": ["array", "null"] },
+    "userGroupIds": { "type": ["array", "null"] },
+    "billable": { "type": ["boolean", "null"] },
+    "status": { "type": ["string", "null"] },
+    "budgetEstimate": { "type": ["object", "null", "number"] },
+    "duration": { "type": ["string", "null"] },
+    "estimate": { "type": ["string", "null"] },
+    "hourlyRate": { "type": ["object", "null"] },
+    "costRate": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/transactional" },
+  "response": {
+    "status": 200,
+    "body": {
+      "messages": [
+        { "id": 1, "name": "Fixture Transactional One", "description": "Password reset", "send_to_unsubscribed": true, "link_tracking": true, "open_tracking": true, "hide_message_body": false, "queue_drafts": false, "created_at": 1767225601, "updated_at": 1767225602 },
+        { "id": 2, "name": "Fixture Transactional Two", "description": "Receipt", "send_to_unsubscribed": false, "link_tracking": true, "open_tracking": true, "hide_message_body": false, "queue_drafts": false, "created_at": 1767225603, "updated_at": 1767225604 }
+      ]
+    }
+  }
+}

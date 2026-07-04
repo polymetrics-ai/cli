@@ -1,7 +1,7 @@
 {
   "name": "coinmarketcap",
   "display_name": "CoinMarketCap",
-  "description": "Reads latest aggregate global cryptocurrency market metrics from the CoinMarketCap Pro API (GET /v1/global-metrics/quotes/latest). Read-only.",
+  "description": "Reads CoinMarketCap Pro API global market metrics, id/slug/symbol-keyed cryptocurrency detail and quote lookups, price conversion, fear-and-greed index, and altcoin season index. Read-only.",
   "integration_type": "api",
   "docs_url": "https://coinmarketcap.com/api/documentation/v1/",
   "release_stage": "beta",

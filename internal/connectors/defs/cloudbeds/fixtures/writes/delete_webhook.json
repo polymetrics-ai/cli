@@ -1,0 +1,5 @@
+{
+  "record": { "subscriptionID": "webhook_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/deleteWebhook" },
+  "response": { "status": 200, "body": { "success": true } }
+}

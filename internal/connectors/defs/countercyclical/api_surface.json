@@ -1,11 +1,21 @@
 {
   "api": "Countercyclical API v1 (https://api.countercyclical.io/v1)",
-  "docs": "https://countercyclical.io/docs/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "legacy-parity migration: the 3 legacy read streams only (investments, valuations, memos), matching the upstream manifest-only source-countercyclical connector's exact stream set; no other endpoints are documented as part of that source",
+  "docs": "https://docs.countercyclical.io/developers/endpoints",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-reviewed against the live developer docs (docs.countercyclical.io/developers/*, fetched 2026-07-04, which document a materially larger surface than the upstream Airbyte-source-shaped legacy connector's 3-stream manifest): 6 read streams (the 3 legacy streams retained, plus teams/assumptions/pipelines) and 1 write action (create_investment). Every documented endpoint is covered_by a stream/write action XOR excluded with a real category and reason. Webhooks are documented as a settings-UI-managed Enterprise feature with no CRUD API endpoint at all (non_data_endpoint); the two integration-specific investment-creation actions (Zapier and Make) are functionally identical (same apiKey query-param auth every other endpoint uses, same tickerSymbol-only request body) so only one is exposed as a write action to avoid declaring two write actions with byte-identical behavior.",
   "endpoints": [
     { "method": "GET", "path": "/v1/investments", "covered_by": { "stream": "investments" } },
     { "method": "GET", "path": "/v1/valuations", "covered_by": { "stream": "valuations" } },
-    { "method": "GET", "path": "/v1/memos", "covered_by": { "stream": "memos" } }
+    { "method": "GET", "path": "/v1/memos", "covered_by": { "stream": "memos" } },
+    { "method": "GET", "path": "/v1/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/v1/assumptions", "covered_by": { "stream": "assumptions" } },
+    { "method": "GET", "path": "/v1/pipelines", "covered_by": { "stream": "pipelines" } },
+    { "method": "POST", "path": "/v1/integrations/make/actions/investments", "covered_by": { "write": "create_investment" } },
+    { "method": "GET", "path": "/v1/integrations/make/auth", "excluded": { "category": "non_data_endpoint", "reason": "Make-app credential-validation probe, not a syncable object or a record mutation" } },
+    { "method": "GET", "path": "/v1/integrations/make/triggers/investments", "excluded": { "category": "duplicate_of", "reason": "Make-scenario-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream" } },
+    { "method": "POST", "path": "/v1/integrations/zapier/actions/investments", "excluded": { "category": "duplicate_of", "reason": "functionally identical to create_investment (POST .../make/actions/investments): same apiKey auth, same tickerSymbol-only request body, same investment-creation effect; declaring both would be two write actions with byte-identical behavior differing only in URL path" } },
+    { "method": "GET", "path": "/v1/integrations/zapier/auth", "excluded": { "category": "non_data_endpoint", "reason": "Zapier-app credential-validation probe, not a syncable object or a record mutation" } },
+    { "method": "GET", "path": "/v1/integrations/zapier/triggers/investments", "excluded": { "category": "duplicate_of", "reason": "Zapier-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream" } },
+    { "method": "POST", "path": "/v1/webhooks", "excluded": { "category": "non_data_endpoint", "reason": "webhook management is documented as a Settings-UI-only Enterprise feature (Settings > Workspace > Advanced > Developers); no CRUD API endpoint is published for creating/listing/deleting webhooks" } }
   ]
 }

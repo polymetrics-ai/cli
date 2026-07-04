@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/v1/template/list", "query": { "Page": "1", "PageSize": "50" } },
+  "request": {
+    "method": "GET",
+    "path": "/v1/template/list",
+    "query": {
+      "Page": "1",
+      "PageSize": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -8,22 +15,27 @@
           "documentId": "tmpl_fixture_1",
           "templateName": "Fixture Template 1",
           "templateDescription": "fixture template description",
-          "createdDate": "2026-01-01T00:00:00Z",
+          "createdDate": 1767225600,
           "senderEmail": "sender1@example.com",
           "isSharedTemplate": false,
-          "labels": ["nda"]
+          "labels": [
+            "nda"
+          ]
         },
         {
           "documentId": "tmpl_fixture_2",
           "templateName": "Fixture Template 2",
           "templateDescription": "another fixture template",
-          "createdDate": "2026-01-02T00:00:00Z",
+          "createdDate": 1767312000,
           "senderEmail": "sender2@example.com",
           "isSharedTemplate": true,
           "labels": []
         }
       ],
-      "pageDetails": { "page": 1, "totalPages": 1 }
+      "pageDetails": {
+        "page": 1,
+        "totalPages": 1
+      }
     }
   }
 }

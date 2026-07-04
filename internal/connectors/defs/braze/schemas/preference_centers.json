@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "preference_centers",
+  "type": "object",
+  "x-primary-key": ["preference_center_api_id"],
+  "x-cursor-field": "updated_at",
+  "required": ["preference_center_api_id"],
+  "properties": {
+    "preference_center_api_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

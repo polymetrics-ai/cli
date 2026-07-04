@@ -54,6 +54,12 @@
       },
       "records": { "path": "data" },
       "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams/org",
+      "records": { "path": "data" },
+      "schema": "schemas/teams.json"
     }
   ]
 }

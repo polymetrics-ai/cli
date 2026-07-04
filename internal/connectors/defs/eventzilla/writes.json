@@ -1,0 +1,38 @@
+{
+  "actions": [
+    {
+      "name": "checkin_attendee",
+      "kind": "update",
+      "method": "POST",
+      "path": "/attendees/checkin",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["barcode", "eventcheckin"],
+        "properties": {
+          "barcode": { "type": "string" },
+          "eventcheckin": { "type": "boolean" }
+        }
+      },
+      "risk": "marks an attendee checked in or reverts check-in at the door; low-risk operational mutation, no approval required"
+    },
+    {
+      "name": "toggle_event_sales",
+      "kind": "update",
+      "method": "POST",
+      "path": "/events/togglesales",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["eventid", "status"],
+        "properties": {
+          "eventid": { "type": "integer" },
+          "status": { "type": "boolean" }
+        }
+      },
+      "risk": "publishes or unpublishes an event's public sales page; setting status false immediately stops new ticket sales for that event, approval required"
+    }
+  ]
+}

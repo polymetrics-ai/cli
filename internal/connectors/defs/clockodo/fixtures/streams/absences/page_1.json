@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/absences",
+    "query": { "year": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "absences": [
+        {
+          "id": 1,
+          "users_id": 1,
+          "date_since": "2026-01-05",
+          "date_until": "2026-01-06",
+          "status": 0,
+          "type": 1,
+          "note": "conformance fixture absence",
+          "count_days": 2,
+          "count_hours": 0,
+          "sick_note": false,
+          "date_enquired": "2026-01-01",
+          "date_approved": null,
+          "approved_by": null
+        }
+      ]
+    }
+  }
+}

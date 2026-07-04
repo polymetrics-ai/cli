@@ -1,0 +1,278 @@
+{
+  "actions": [
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/product",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["SKU", "Name", "Category", "CostingMethod", "UOM", "Status"],
+        "properties": {
+          "SKU": { "type": "string" },
+          "Name": { "type": "string" },
+          "Category": { "type": "string" },
+          "Brand": { "type": "string" },
+          "Type": { "type": "string" },
+          "CostingMethod": { "type": "string" },
+          "DefaultLocation": { "type": "string" },
+          "UOM": { "type": "string" },
+          "Barcode": { "type": "string" },
+          "PriceTier1": { "type": "number" },
+          "Description": { "type": "string" },
+          "Status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Cin7 Core product-catalog entry; approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/product",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ID"],
+        "properties": {
+          "ID": { "type": "string" },
+          "SKU": { "type": "string" },
+          "Name": { "type": "string" },
+          "Category": { "type": "string" },
+          "Brand": { "type": "string" },
+          "UOM": { "type": "string" },
+          "Barcode": { "type": "string" },
+          "PriceTier1": { "type": "number" },
+          "Description": { "type": "string" },
+          "Status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites live Cin7 Core product-catalog fields; approval required"
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customer",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "Currency", "PaymentTerm", "AccountReceivable", "RevenueAccount", "TaxRule"],
+        "properties": {
+          "Name": { "type": "string" },
+          "DisplayName": { "type": "string" },
+          "Status": { "type": "string" },
+          "Currency": { "type": "string" },
+          "PaymentTerm": { "type": "string" },
+          "AccountReceivable": { "type": "string" },
+          "RevenueAccount": { "type": "string" },
+          "TaxRule": { "type": "string" },
+          "PriceTier": { "type": "string" },
+          "Carrier": { "type": "string" },
+          "Location": { "type": "string" },
+          "Discount": { "type": "integer" },
+          "Comments": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Cin7 Core customer record used for future sales; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customer",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ID"],
+        "properties": {
+          "ID": { "type": "string" },
+          "Name": { "type": "string" },
+          "Status": { "type": "string" },
+          "Currency": { "type": "string" },
+          "PaymentTerm": { "type": "string" },
+          "TaxRule": { "type": "string" },
+          "Discount": { "type": "integer" },
+          "Comments": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites live Cin7 Core customer fields (billing terms, tax rule, credit settings); approval required"
+    },
+    {
+      "name": "create_supplier",
+      "kind": "create",
+      "method": "POST",
+      "path": "/supplier",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "Currency", "PaymentTerm", "AccountPayable", "TaxRule"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Status": { "type": "string" },
+          "Currency": { "type": "string" },
+          "PaymentTerm": { "type": "string" },
+          "AccountPayable": { "type": "string" },
+          "TaxRule": { "type": "string" },
+          "Discount": { "type": "integer" },
+          "Comments": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Cin7 Core supplier record used for future purchases; approval required"
+    },
+    {
+      "name": "update_supplier",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/supplier",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ID"],
+        "properties": {
+          "ID": { "type": "string" },
+          "Name": { "type": "string" },
+          "Status": { "type": "string" },
+          "Currency": { "type": "string" },
+          "PaymentTerm": { "type": "string" },
+          "AccountPayable": { "type": "string" },
+          "TaxRule": { "type": "string" },
+          "Discount": { "type": "integer" },
+          "Comments": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites live Cin7 Core supplier fields (billing terms, tax rule); approval required"
+    },
+    {
+      "name": "create_product_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ref/category",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Cin7 Core product category, immediately selectable on any product; approval required"
+    },
+    {
+      "name": "update_product_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ref/category",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ID", "Name"],
+        "properties": {
+          "ID": { "type": "string" },
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; renames a live Cin7 Core product category referenced by existing products; approval required"
+    },
+    {
+      "name": "delete_product_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ref/category?ID={{ record.ID }}",
+      "path_fields": ["ID"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ID"],
+        "properties": {
+          "ID": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Cin7 Core product category; approval required"
+    },
+    {
+      "name": "create_brand",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ref/brand",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Cin7 Core product brand, immediately selectable on any product; approval required"
+    },
+    {
+      "name": "update_brand",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ref/brand",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ID", "Name"],
+        "properties": {
+          "ID": { "type": "string" },
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; renames a live Cin7 Core product brand referenced by existing products; approval required"
+    },
+    {
+      "name": "create_payment_term",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ref/paymentterm",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Duration": { "type": "integer" },
+          "Method": { "type": "string" },
+          "IsActive": { "type": "boolean" },
+          "IsDefault": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a live Cin7 Core payment term, immediately selectable on customers/suppliers; approval required"
+    },
+    {
+      "name": "update_payment_term",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ref/paymentterm",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ID", "Name"],
+        "properties": {
+          "ID": { "type": "string" },
+          "Name": { "type": "string" },
+          "Duration": { "type": "integer" },
+          "Method": { "type": "string" },
+          "IsActive": { "type": "boolean" },
+          "IsDefault": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Cin7 Core payment term's duration/method, affecting due-date calculation on future customer/supplier transactions; approval required"
+    }
+  ]
+}

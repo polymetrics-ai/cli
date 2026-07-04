@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sms_threads",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "notes": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "value": { "type": ["number", "null"] },
+    "lead_qualification": { "type": ["string", "null"] },
+    "company_id": { "type": ["string", "null"] },
+    "initial_tracker_id": { "type": ["string", "null"] },
+    "current_tracker_id": { "type": ["string", "null"] },
+    "customer_name": { "type": ["string", "null"] },
+    "customer_phone_number": { "type": ["string", "null"] },
+    "initial_tracking_number": { "type": ["string", "null"] },
+    "current_tracking_number": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "company_time_zone": { "type": ["string", "null"] }
+  }
+}

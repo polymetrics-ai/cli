@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": 4,
+    "name": "Fixture Webhook Updated",
+    "endpoint": "https://example.com/fixture-webhook-updated",
+    "events": ["email_sent", "email_opened"]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/reporting_webhooks/4",
+    "body": {
+      "name": "Fixture Webhook Updated"
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

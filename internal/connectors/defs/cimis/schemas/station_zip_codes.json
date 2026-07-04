@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "station_zip_codes",
+  "type": "object",
+  "x-primary-key": ["StationNbr", "ZipCode"],
+  "required": ["StationNbr", "ZipCode"],
+  "properties": {
+    "StationNbr": { "type": ["integer", "string"] },
+    "ZipCode": { "type": "string" },
+    "ConnectDate": { "type": ["string", "null"] },
+    "DisconnectDate": { "type": ["string", "null"] },
+    "IsActive": { "type": ["string", "null"] }
+  }
+}

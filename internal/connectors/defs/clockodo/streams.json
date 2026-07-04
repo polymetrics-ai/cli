@@ -51,6 +51,99 @@
       "pagination": { "type": "none" },
       "records": { "path": "users" },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "current_user_settings",
+      "path": "/v2/aggregates/users/me",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "schema": "schemas/current_user_settings.json"
+    },
+    {
+      "name": "teams",
+      "path": "/v2/teams",
+      "pagination": { "type": "none" },
+      "records": { "path": "team" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "surcharges",
+      "path": "/v2/surcharges",
+      "pagination": { "type": "none" },
+      "records": { "path": "surcharges" },
+      "schema": "schemas/surcharges.json"
+    },
+    {
+      "name": "lumpsum_services",
+      "path": "/v2/lumpsumservices",
+      "pagination": { "type": "none" },
+      "records": { "path": "lumpSumServices" },
+      "schema": "schemas/lumpsum_services.json"
+    },
+    {
+      "name": "nonbusiness_groups",
+      "path": "/nonbusinessgroups",
+      "pagination": { "type": "none" },
+      "records": { "path": "nonbusinessgroups" },
+      "schema": "schemas/nonbusiness_groups.json"
+    },
+    {
+      "name": "nonbusiness_days",
+      "path": "/nonbusinessdays",
+      "pagination": { "type": "none" },
+      "query": {
+        "year": "{{ config.nonbusinessdays_year }}"
+      },
+      "records": { "path": "nonbusinessdays" },
+      "schema": "schemas/nonbusiness_days.json"
+    },
+    {
+      "name": "holidays_carry",
+      "path": "/holidayscarry",
+      "pagination": { "type": "none" },
+      "records": { "path": "holidayscarry" },
+      "schema": "schemas/holidays_carry.json"
+    },
+    {
+      "name": "holidays_quota",
+      "path": "/holidaysquota",
+      "pagination": { "type": "none" },
+      "records": { "path": "holidaysquota" },
+      "schema": "schemas/holidays_quota.json"
+    },
+    {
+      "name": "overtime_carry",
+      "path": "/overtimecarry",
+      "pagination": { "type": "none" },
+      "records": { "path": "overtimecarry" },
+      "schema": "schemas/overtime_carry.json"
+    },
+    {
+      "name": "target_hours",
+      "path": "/targethours",
+      "pagination": { "type": "none" },
+      "records": { "path": "targethours" },
+      "schema": "schemas/target_hours.json"
+    },
+    {
+      "name": "absences",
+      "path": "/absences",
+      "pagination": { "type": "none" },
+      "query": {
+        "year": "{{ config.absences_year }}"
+      },
+      "records": { "path": "absences" },
+      "schema": "schemas/absences.json"
+    },
+    {
+      "name": "entries",
+      "path": "/v2/entries",
+      "query": {
+        "time_since": "{{ config.entries_time_since }}",
+        "time_until": "{{ config.entries_time_until }}"
+      },
+      "records": { "path": "entries" },
+      "schema": "schemas/entries.json"
     }
   ]
 }

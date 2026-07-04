@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Engineer",
+    "description": "Fixture position description",
+    "type": "fullTime",
+    "location": { "country": "US", "state": "CA", "city": "San Francisco", "is_remote": "no" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/positions",
+    "body": {
+      "name": "Fixture Engineer",
+      "description": "Fixture position description",
+      "type": "fullTime",
+      "location": { "country": "US", "state": "CA", "city": "San Francisco", "is_remote": "no" }
+    }
+  },
+  "response": { "status": 201, "body": { "_id": "pos_fixture_1", "name": "Fixture Engineer" } }
+}

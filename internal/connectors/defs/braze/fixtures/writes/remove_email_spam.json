@@ -1,0 +1,13 @@
+{
+  "record": {
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/email/spam/remove",
+    "body": {
+      "email": "fixture@example.com"
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/schedule"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "sched_fixture_1",
+          "name": "nightly-build",
+          "description": "Fixture nightly schedule",
+          "project-slug": "gh/fixture-org/fixture-repo",
+          "timetable": { "per-hour": 1, "hours-of-day": [0], "days-of-week": ["MON"] },
+          "parameters": { "branch": "main" },
+          "actor": { "id": "actor_fixture_1", "login": "fixture-actor", "name": "Fixture Actor", "avatar_url": null },
+          "created-at": "2026-01-01T00:00:00Z",
+          "updated-at": "2026-01-01T01:00:00Z"
+        }
+      ],
+      "next_page_token": null
+    }
+  }
+}

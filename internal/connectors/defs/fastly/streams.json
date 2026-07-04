@@ -51,6 +51,34 @@
         "page_size": 2
       },
       "schema": "schemas/datacenters.json"
+    },
+    {
+      "name": "service_details",
+      "path": "/service/{{ fanout.id }}/details",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/service", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "service_id" },
+        "stamp_field": "service_id"
+      },
+      "schema": "schemas/service_details.json"
+    },
+    {
+      "name": "users",
+      "path": "/customer/{{ fanout.id }}/users",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/current_customer", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "customer_id" },
+        "stamp_field": "customer_id"
+      },
+      "schema": "schemas/users.json"
     }
   ]
 }

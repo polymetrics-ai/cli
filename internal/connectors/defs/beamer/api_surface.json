@@ -1,12 +1,65 @@
 {
   "api": "Beamer REST API v0 (https://api.getbeamer.com/v0)",
   "docs": "https://www.getbeamer.com/api/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "the 4 legacy-parity read streams only (nps, posts, feature_requests, comments); Beamer is a read-only feedback/changelog surface with no reverse-ETL write target, matching legacy",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion. Beamer's official docs page (getbeamer.com/api/docs, getbeamer.com/api) renders no static endpoint reference reachable by an automated fetch; the full endpoint/parameter/response inventory below was cross-checked against a third-party reverse-engineered API reference (getbeamer-api.pages.dev) AND this bundle's own legacy Go implementation (internal/connectors/beamer/*.go), which is the authoritative parity source whenever the two disagree. Two disagreements were found and resolved in legacy's favor: (1) legacy's tested/parity-verified feature-request path is /feature-requests, not /requests as the third-party reference names it -- every feature-request-scoped endpoint below (including the new feature_request_votes stream and its writes) uses /feature-requests; (2) the third-party reference documents a Beamer-Api-Key header while legacy's tested implementation and its own passing unit test (beamer_test.go:55, asserting 'Authorization: Bearer beamer_secret_123') use Authorization: Bearer -- this bundle keeps Bearer auth unchanged (a parity-locked, already-correct read path is not re-litigated by a third-party doc during a surface-expansion pass). New in this pass: post_reactions and feature_request_votes read streams (fan_out over posts/feature-requests respectively), a users read stream (Scale-plan-only per Beamer's docs, included since the endpoint itself is unconditional), and a full writes.json covering every JSON-bodied create/update/delete on posts, feature requests, their comments, reactions, and votes -- capabilities.write flips to true.",
   "endpoints": [
     { "method": "GET", "path": "/v0/nps", "covered_by": { "stream": "nps" } },
+    { "method": "GET", "path": "/v0/nps/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of the nps stream; no additional record data" } },
+    { "method": "GET", "path": "/v0/nps/check", "excluded": { "category": "non_data_endpoint", "reason": "a stateful eligibility check for whether a given end user should currently see the NPS prompt widget, not a data record" } },
+    { "method": "POST", "path": "/v0/nps/email", "excluded": { "category": "destructive_admin", "reason": "sends a real NPS survey email to a real end user immediately" } },
+    { "method": "GET", "path": "/v0/nps/link", "excluded": { "category": "non_data_endpoint", "reason": "returns a one-time NPS survey URL for a given user, not a data record" } },
+
     { "method": "GET", "path": "/v0/posts", "covered_by": { "stream": "posts" } },
+    { "method": "GET", "path": "/v0/posts/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of the posts stream; no additional record data" } },
+    { "method": "GET", "path": "/v0/posts/{postId}", "excluded": { "category": "duplicate_of", "reason": "single-post lookup by id; fully covered by the posts list stream" } },
+    { "method": "POST", "path": "/v0/posts", "covered_by": { "write": "create_post" } },
+    { "method": "PUT", "path": "/v0/posts/{postId}", "covered_by": { "write": "update_post" } },
+    { "method": "DELETE", "path": "/v0/posts/{postId}", "covered_by": { "write": "delete_post" } },
+
+    { "method": "GET", "path": "/v0/posts/{postId}/comments", "covered_by": { "stream": "comments" } },
+    { "method": "GET", "path": "/v0/posts/{postId}/comments/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of a post's comments; no additional record data" } },
+    { "method": "GET", "path": "/v0/posts/{postId}/comments/{commentId}", "excluded": { "category": "duplicate_of", "reason": "single-comment lookup by id; fully covered by the comments list stream" } },
+    { "method": "POST", "path": "/v0/posts/{postId}/comments", "covered_by": { "write": "create_post_comment" } },
+    { "method": "DELETE", "path": "/v0/posts/{postId}/comments/{commentId}", "covered_by": { "write": "delete_post_comment" } },
+
+    { "method": "GET", "path": "/v0/posts/{postId}/reactions", "covered_by": { "stream": "post_reactions" } },
+    { "method": "GET", "path": "/v0/posts/{postId}/reactions/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of a post's reactions; no additional record data" } },
+    { "method": "GET", "path": "/v0/posts/{postId}/reactions/{reactionId}", "excluded": { "category": "duplicate_of", "reason": "single-reaction lookup by id; fully covered by the post_reactions stream" } },
+    { "method": "POST", "path": "/v0/posts/{postId}/reactions", "covered_by": { "write": "create_post_reaction" } },
+    { "method": "DELETE", "path": "/v0/posts/{postId}/reactions/{reactionId}", "covered_by": { "write": "delete_post_reaction" } },
+
+    { "method": "GET", "path": "/v0/unread", "excluded": { "category": "duplicate_of", "reason": "a filtered, stateful view over the posts stream (which posts this specific end user has not yet seen); defaults to marking those posts as read as a GET-time side effect, which a read-only sync connector must never trigger implicitly" } },
+    { "method": "GET", "path": "/v0/unread/count", "excluded": { "category": "duplicate_of", "reason": "count-only aggregate of the unread view; same reasoning as /unread" } },
+
     { "method": "GET", "path": "/v0/feature-requests", "covered_by": { "stream": "feature_requests" } },
-    { "method": "GET", "path": "/v0/comments", "covered_by": { "stream": "comments" } }
+    { "method": "GET", "path": "/v0/feature-requests/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of the feature_requests stream; no additional record data" } },
+    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}", "excluded": { "category": "duplicate_of", "reason": "single-feature-request lookup by id; fully covered by the feature_requests list stream" } },
+    { "method": "POST", "path": "/v0/feature-requests", "covered_by": { "write": "create_feature_request" } },
+    { "method": "PUT", "path": "/v0/feature-requests/{featureRequestId}", "covered_by": { "write": "update_feature_request" } },
+    { "method": "DELETE", "path": "/v0/feature-requests/{featureRequestId}", "covered_by": { "write": "delete_feature_request" } },
+
+    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/comments", "excluded": { "category": "duplicate_of", "reason": "comments here are already unified into the bundle's single comments stream (matching legacy's own combined /comments endpoint, which serves both post and feature-request comments); the per-feature-request comments listing is redundant surface, kept read-side to the single comments stream while its write actions are still modeled separately below since Beamer's write API is genuinely split by parent resource" } },
+    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/comments/count", "excluded": { "category": "duplicate_of", "reason": "count-only aggregate; see /feature-requests/{featureRequestId}/comments" } },
+    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}", "excluded": { "category": "duplicate_of", "reason": "single-comment lookup by id; see /feature-requests/{featureRequestId}/comments" } },
+    { "method": "POST", "path": "/v0/feature-requests/{featureRequestId}/comments", "covered_by": { "write": "create_feature_request_comment" } },
+    { "method": "DELETE", "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}", "covered_by": { "write": "delete_feature_request_comment" } },
+
+    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/votes", "covered_by": { "stream": "feature_request_votes" } },
+    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/votes/count", "excluded": { "category": "duplicate_of", "reason": "a count-only aggregate of a feature request's votes; no additional record data" } },
+    { "method": "GET", "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}", "excluded": { "category": "duplicate_of", "reason": "single-vote lookup by id; fully covered by the feature_request_votes stream" } },
+    { "method": "POST", "path": "/v0/feature-requests/{featureRequestId}/votes", "covered_by": { "write": "create_feature_request_vote" } },
+    { "method": "DELETE", "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}", "covered_by": { "write": "delete_feature_request_vote" } },
+
+    { "method": "GET", "path": "/v0/users", "covered_by": { "stream": "users" } },
+    { "method": "POST", "path": "/v0/users", "excluded": { "category": "requires_elevated_scope", "reason": "Scale-plan-only end-user identity registration; creates/overwrites Beamer's own end-user profile store, a distinct concern from this connector's post/feature-request/NPS data sync and gated behind a specific paid plan tier not universally available" } },
+    { "method": "PUT", "path": "/v0/users", "excluded": { "category": "requires_elevated_scope", "reason": "bulk end-user profile update, addressed by a query-string filter (userId/beamerId/userEmail) rather than a single record id; see POST /users" } },
+    { "method": "DELETE", "path": "/v0/users", "excluded": { "category": "destructive_admin", "reason": "bulk end-user deletion by semicolon-separated id list, addressed by a query-string filter rather than a single record id; irreversible end-user data removal" } },
+
+    { "method": "POST", "path": "/v0/team", "excluded": { "category": "requires_elevated_scope", "reason": "invites a new BigMailer-account-style team member into the Beamer workspace itself (account administration, not product data); the third-party reference could not fully document its body schema, and legacy has no precedent for it" } },
+    { "method": "PUT", "path": "/v0/team", "excluded": { "category": "requires_elevated_scope", "reason": "changes a team member's role/permissions; account administration, not product data; see POST /team" } },
+    { "method": "DELETE", "path": "/v0/team", "excluded": { "category": "destructive_admin", "reason": "removes a team member from the Beamer workspace; account administration with no data-record shape, irreversible" } },
+
+    { "method": "DELETE", "path": "/v0/privacy", "excluded": { "category": "destructive_admin", "reason": "a GDPR/CCPA-style irreversible erasure of a specific end user's data across the whole Beamer account; a compliance action, not a routine reverse-ETL data mutation" } }
   ]
 }

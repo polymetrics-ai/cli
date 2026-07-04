@@ -1,0 +1,18 @@
+{
+  "record": {
+    "eventid": 1,
+    "status": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/events/togglesales",
+    "body": {
+      "eventid": 1,
+      "status": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "eventstatus": "unpublished" }
+  }
+}

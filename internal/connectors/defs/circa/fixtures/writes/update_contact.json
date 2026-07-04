@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "contact_fixture_1",
+    "company": "Fixture Updated Co"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/contacts/contact_fixture_1"
+  }
+}

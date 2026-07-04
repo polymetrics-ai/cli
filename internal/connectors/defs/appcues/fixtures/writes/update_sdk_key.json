@@ -1,0 +1,12 @@
+{
+  "record": { "id": "key_fixture_1", "tag_field": "environment" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/synthetic-conformance-value/sdk_keys/key_fixture_1",
+    "body": { "tag_field": "environment" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "key_fixture_1", "tag_field": "environment" }
+  }
+}

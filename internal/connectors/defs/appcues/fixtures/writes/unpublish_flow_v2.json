@@ -1,0 +1,8 @@
+{
+  "record": { "id": "flow2_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/flows-v2/flow2_fixture_1/unpublish"
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

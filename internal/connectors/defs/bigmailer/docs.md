@@ -1,13 +1,19 @@
 # Overview
 
-BigMailer is a wave2 fan-out declarative-HTTP migration. It reads BigMailer brands, account users,
-and brand-scoped contacts, lists, and custom fields through the BigMailer REST API
-(`GET https://api.bigmailer.io/v1/<resource>`). This bundle is migrated from
+BigMailer is a wave2 fan-out declarative-HTTP migration, expanded to full API-surface coverage
+(reads and writes) in Pass B. It reads BigMailer brands, account users, connections, and
+brand-scoped contacts, lists, custom fields, message types, segments, senders, templates,
+suppression lists, and campaign metadata (bulk/RSS/transactional/test) through the BigMailer REST
+API (`GET https://api.bigmailer.io/v1/<resource>`), and writes brands, contacts, lists, fields,
+message types, segments, senders, templates, and account users. This bundle is migrated from
 `internal/connectors/bigmailer` (the hand-written connector); the legacy package stays registered
-and unchanged until wave6's registry flip. All 5 legacy streams are now migrated: the 2 top-level
-collections (`brands`, `users`) plus the 3 brand-scoped substreams (`contacts`, `lists`, `fields`),
-which use the engine's `fan_out` dialect (S4 engine mini-wave item 2) — the `ENGINE_GAP` that
-previously blocked these three streams is closed.
+and unchanged until wave6's registry flip. The original 5 legacy streams (`brands`, `users`,
+`contacts`, `lists`, `fields`) use the engine's `fan_out` dialect (S4 engine mini-wave item 2) for
+the 3 brand-scoped substreams — the `ENGINE_GAP` that previously blocked them is closed. Pass B
+adds 10 more streams (`connections` top-level; `message_types`/`segments`/`senders`/`templates`/
+`suppression_lists`/`bulk_campaigns`/`rss_campaigns`/`transactional_campaigns`/`test_campaigns`
+brand-scoped, same `fan_out` shape) and a full `writes.json` (`capabilities.write` flips to
+`true`).
 
 ## Auth setup
 
@@ -30,6 +36,23 @@ with `cursor=<value>` from the response body's `cursor` field, and pagination st
 `hasMore != "true" || strings.TrimSpace(next) == ""` stop rule (`bigmailer.go:187`) via the
 engine's `stop_path`-on-`tokenPathCursor` mechanism (conventions.md §3).
 
+`connections` (`GET /connections`) is a new top-level collection, identical shape to `brands`/
+`users` (records at `data`, `cursor` pagination, no incremental filter — BigMailer's list API
+supports only cursor pagination).
+
+`message_types`, `segments`, `senders`, `templates`, `suppression_lists`, `bulk_campaigns`,
+`rss_campaigns`, `transactional_campaigns`, and `test_campaigns` are new brand-scoped substreams,
+following the identical `fan_out` shape documented below for `contacts`/`lists`/`fields`: list
+every brand id via `GET /brands`, then paginate `GET /brands/{brand_id}/<resource>` once per
+brand, stamping `brand_id` onto every emitted record. The 4 campaign streams
+(`bulk_campaigns`/`rss_campaigns`/`transactional_campaigns`/`test_campaigns`) declare
+`x-cursor-field: created` (a genuine Unix-seconds creation timestamp on every campaign object) but
+no `incremental` block — BigMailer's campaign list endpoints support only cursor pagination, no
+server-side time filter, matching every other stream in this bundle. RSS campaigns' auto-generated
+per-feed-update sub-resource (`GET .../rss-campaigns/{id}/updates`) is not modeled as a further
+fan-out level (`api_surface.json`: `non_data_endpoint` — those records are derived campaign
+instances, not independently authored data).
+
 `contacts`, `lists`, and `fields` are brand-scoped substreams: legacy's `harvestSubstream`
 (`bigmailer.go:195-214`) first lists every brand id (`listBrandIDs`, bounded defensively by
 `bigmailerMaxBrands = 1000`), then paginates `GET /brands/{brand_id}/<resource>` once per brand,
@@ -51,9 +74,41 @@ fixture/conformance surface.
 
 ## Write actions & risks
 
-None. BigMailer is read-only in legacy (no safe reverse-ETL action set is exposed);
-`capabilities.write` is `false` and this bundle ships no `writes.json`, matching legacy's `Write`
-returning `connectors.ErrUnsupportedOperation`.
+BigMailer's legacy connector was read-only, but Pass B's full-surface research found BigMailer's
+CRUD mutation surface for every covered resource is plain-JSON-bodied and fully dialect-expressible
+— `capabilities.write` now flips to `true` and this bundle ships a full `writes.json`. Every action
+requires operator approval (external mutation) per its own `risk` string:
+
+- `create_brand` / `update_brand` — creates/updates a BigMailer brand (sending identity). Does not
+  itself send email.
+- `create_contact` / `update_contact` / `upsert_contact` / `delete_contact` — full contact CRUD in
+  a brand. `delete_contact` is idempotent (`missing_ok_status: [404]`).
+- `create_list` / `update_list` / `delete_list` — contact list CRUD. Deleting a list does not
+  delete its contacts (BigMailer's own semantics).
+- `create_field` / `update_field` / `delete_field` — custom contact field CRUD.
+- `create_message_type` / `update_message_type` / `delete_message_type` — message-type (unsubscribe
+  category) CRUD.
+- `create_segment` / `update_segment` / `delete_segment` — contact segment CRUD.
+- `create_sender` / `update_sender` / `delete_sender` — sender domain/email identity CRUD. Does not
+  perform DNS verification (see Known limits).
+- `create_template` / `update_template` / `delete_template` — campaign template CRUD.
+- `create_user` / `update_user` / `delete_user` — account user CRUD (invites/removes BigMailer
+  console users, not contacts).
+
+Every path-parameterized action (all except `create_user`) requires the record to carry `brand_id`
+(and, for update/delete, the resource's own `id`) as ordinary record fields — the engine's
+`path_fields` mechanism excludes them from the request body automatically, matching every other
+two-path-var write in this repo (e.g. webflow's `update_collection_item`).
+
+**Not modeled — see `api_surface.json` for the full per-endpoint breakdown**: campaign
+create/update/send actions (bulk/RSS/transactional/test campaigns) are `destructive_admin` —
+BigMailer campaigns dispatch real outbound email to real recipients once scheduled/sent, and this
+is the one write shape a data-integration connector should never expose without a human explicitly
+composing and reviewing the send in BigMailer's own console. RSS campaign pause/unpause are the
+same class (immediately affects a live recurring send schedule). Contact-batch upload and
+suppression-list upload are `requires_elevated_scope` (multipart file upload, no async-job-polling
+mechanism in the write dialect). Sender/bounce-domain DNS verification are `requires_elevated_scope`
+(external DNS side effects with no data record to write).
 
 ## Known limits
 
@@ -77,3 +132,10 @@ returning `connectors.ErrUnsupportedOperation`.
   representation of BigMailer's real wire format for `brands`/`users` — this bundle's schemas and
   fixtures instead use the real `{data:[...], has_more, cursor}` envelope legacy's live `harvest`
   path actually decodes.
+- **Every campaign send/lifecycle action, contact-batch upload, suppression-list upload, and
+  sender/bounce-domain DNS verification is out of scope** (`api_surface.json`: `destructive_admin`
+  / `requires_elevated_scope`). See "Write actions & risks" above for the full reasoning per
+  action.
+- **Brand `properties` (an account-configuration key/value namespace) is not modeled as a
+  stream or write surface.** It is settings metadata, not a contact/CRM/campaign data resource
+  meaningfully synced alongside the rest of this bundle.

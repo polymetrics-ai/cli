@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/log/cancellations", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "offset": 0,
+      "data": [
+        {
+          "subscription_id": "sub_fixture_1",
+          "customer_id": "cus_fixture_1",
+          "email": "fixture1@example.com",
+          "action": "cancel",
+          "method": "at_period_end",
+          "reason": "Fixture cancellation for demonstration purposes",
+          "ip": "203.0.113.1",
+          "occurred": 1767225604
+        }
+      ]
+    }
+  }
+}

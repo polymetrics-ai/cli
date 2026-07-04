@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "rate_plans",
+  "type": "object",
+  "x-primary-key": ["ratePlanID"],
+  "required": ["ratePlanID"],
+  "properties": {
+    "ratePlanID": { "type": "string" },
+    "rateID": { "type": ["string", "null"] },
+    "isDerived": { "type": ["boolean", "null"] },
+    "roomRate": { "type": ["number", "null"] },
+    "totalRate": { "type": ["number", "null"] },
+    "roomsAvailable": { "type": ["integer", "null"] },
+    "roomTypeID": { "type": ["string", "null"] },
+    "roomTypeName": { "type": ["string", "null"] },
+    "propertyID": { "type": ["string", "null"] },
+    "ratePlanNamePublic": { "type": ["string", "null"] },
+    "ratePlanNamePrivate": { "type": ["string", "null"] },
+    "promoCode": { "type": ["string", "null"] },
+    "derivedType": { "type": ["string", "null"] },
+    "derivedValue": { "type": ["number", "null"] },
+    "baseRate": { "type": ["number", "null"] },
+    "parentRateID": { "type": ["string", "null"] },
+    "parentRatePlanID": { "type": ["string", "null"] },
+    "parentRatePlanNamePublic": { "type": ["string", "null"] },
+    "parentRatePlanNamePrivate": { "type": ["string", "null"] },
+    "daysOfWeek": { "type": ["object", "null"] },
+    "addOns": { "type": ["array", "null"] },
+    "roomRateDetailed": { "type": ["array", "null"] }
+  }
+}

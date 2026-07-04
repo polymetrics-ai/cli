@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/warehouses"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 123,
+        "name": "Fixture Warehouse",
+        "city": "Swansea",
+        "country": "GB",
+        "post_code": "SA1 1NW"
+      }
+    ]
+  }
+}

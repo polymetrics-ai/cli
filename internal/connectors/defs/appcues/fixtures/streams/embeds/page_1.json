@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/embeds", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "emb_fixture_1",
+        "name": "Fixture Embed One",
+        "state": "PUBLISHED",
+        "published": true,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "emb_fixture_2",
+        "name": "Fixture Embed Two",
+        "state": "DRAFT",
+        "published": false,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

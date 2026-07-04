@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/sms-threads.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 100,
+      "total_pages": 1,
+      "total_records": 1,
+      "sms_threads": [
+        {
+          "id": "SMS_fixture_1",
+          "notes": null,
+          "tags": ["Fixture"],
+          "value": 5.0,
+          "lead_qualification": "good_lead",
+          "company_id": "CMP_fixture_1",
+          "initial_tracker_id": "TRK_fixture_1",
+          "current_tracker_id": "TRK_fixture_1",
+          "customer_name": "Fixture Customer",
+          "customer_phone_number": "+15550000001",
+          "initial_tracking_number": "+15555550100",
+          "current_tracking_number": "+15555550100",
+          "state": "active",
+          "company_time_zone": "America/New_York"
+        }
+      ]
+    }
+  }
+}

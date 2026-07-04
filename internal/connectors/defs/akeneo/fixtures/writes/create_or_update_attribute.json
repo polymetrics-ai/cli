@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_attribute",
+    "type": "pim_catalog_text",
+    "group": "marketing",
+    "localizable": false,
+    "scopable": false,
+    "labels": { "en_US": "Fixture Attribute" }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/attributes/fixture_attribute",
+    "body": {
+      "type": "pim_catalog_text",
+      "group": "marketing",
+      "localizable": false,
+      "scopable": false,
+      "labels": { "en_US": "Fixture Attribute" }
+    }
+  },
+  "response": { "status": 201, "body": {} }
+}

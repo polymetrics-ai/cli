@@ -1,17 +1,24 @@
 # Overview
 
-Brex is a wave2 fan-out declarative-HTTP migration. It reads Brex card transactions, users, card
-expenses, vendors, and budgets through the Brex Platform REST API
-(`GET https://platform.brexapis.com/...`). This bundle migrates `internal/connectors/brex` (the
-hand-written connector); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Brex is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full practical
+read/write surface. It reads Brex card transactions, users, card expenses, vendors, budgets,
+departments, locations, titles, legal entities, cards, card/cash accounts, card statements, linked
+bank accounts, transfers, and webhooks through the Brex Platform REST API
+(`https://platform.brexapis.com/...`), and writes vendor/department/location/title/user/card/
+expense/webhook lifecycle mutations. This bundle originally migrated `internal/connectors/brex`
+(the hand-written connector, read-only); the legacy package stays registered and unchanged until
+wave6's registry flip.
 
 ## Auth setup
 
 Provide a Brex API user access token via the `user_token` secret; it is sent as a Bearer token
 (`Authorization: Bearer <user_token>`, matching legacy's `connsdk.Bearer(secret)`) and is never
-logged. `base_url` defaults to `https://platform.brexapis.com` and may be overridden for
-tests/proxies.
+logged. `base_url` defaults to `https://platform.brexapis.com` — Brex's pre-unification API host,
+still live and documented by third-party integrations (Retool, Fivetran) alongside the
+newer-branded `https://api.brex.com`; both serve the identical `/v1`/`/v2` path surface this
+bundle targets, so the existing default is kept unchanged (parity-preserving: switching it would
+be an accepted-input behavior change to every already-migrated stream, not a Pass B addition) —
+and may be overridden for tests/proxies.
 
 ## Streams notes
 
@@ -33,10 +40,37 @@ fresh sync, the RFC3339 `start_date` config value — matching legacy's `increme
 Budgets use `budget_id` (not `id`) as the primary key, matching Brex's own budget object shape and
 legacy's `PrimaryKey: []string{"budget_id"}`.
 
+**Pass B additions.** `departments`, `locations`, `titles`, `legal_entities`, `cards`,
+`accounts_cash`, `card_statements`, `linked_accounts`, `transfers`, and `webhooks` all follow the
+identical `cursor`/`next_cursor` pagination convention as the 5 original streams (`query: {"limit":
+"100"}`, `records.path: "items"`), none have an incremental cursor (Brex's Team/Payments/Webhooks
+API list endpoints accept no server-side modified-since filter). `accounts_card`
+(`GET /v2/accounts/card`) is the one exception: it returns a bare top-level JSON array with NO
+`items`/`next_cursor` pagination envelope at all (`records.path: ""`, no `pagination` block,
+matching the engine's `none` default) — Brex's own OpenAPI spec declares this endpoint's response
+as `type: array` directly, unlike every other list endpoint in this bundle.
+
 ## Write actions & risks
 
-None. Brex is a read-only financial source in this connector (legacy's own package doc: "no safe
-reverse-ETL writes"); `capabilities.write` is `false` and this bundle ships no `writes.json`.
+Fourteen write actions, none present in legacy (legacy shipped `capabilities.write: false`):
+
+- **`update_vendor`** / **`delete_vendor`** — vendor lifecycle (no `create_vendor`; see Known
+  limits' Idempotency-Key gap below).
+- **`create_department`** / **`create_location`** / **`create_title`** — org-directory entry
+  creation (no update/delete endpoints exist in the API for these three resources).
+- **`create_user`** / **`update_user`** — user directory lifecycle. `create_user` sends a real
+  invitation email; `update_user`'s `status` field can revoke account access.
+- **`update_card`** / **`lock_card`** / **`unlock_card`** / **`terminate_card`** — card lifecycle
+  (no `create_card`; see Known limits). `lock_card`/`unlock_card` take effect on the physical/
+  virtual card immediately; `terminate_card` is irreversible.
+- **`update_expense`** — card-expense memo update (the only mutable field Brex exposes on an
+  already-posted expense).
+- **`update_webhook`** / **`delete_webhook`** — webhook subscription lifecycle (no
+  `create_webhook`; see Known limits). Updating a webhook's `url`/`event_types`/`status` redirects
+  live event delivery immediately; `delete_webhook` is irreversible.
+
+Every action's per-record `risk` string in `writes.json` is the authoritative, reviewable summary;
+`metadata.json`'s `risk.write`/`risk.approval` roll these up for the connector as a whole.
 
 ## Known limits
 
@@ -68,3 +102,26 @@ reverse-ETL writes"); `capabilities.write` is `false` and this bundle ships no `
   `config.mode == "fixture"`) are not modeled; this bundle's schemas and parity target the live
   wire shape only, matching this repo's established convention for a legacy in-code fixture path
   now superseded by the engine's own conformance/fixture-replay harness.
+- **`ENGINE_GAP`: no write action can attach a request header, so every Brex write endpoint whose
+  OpenAPI definition marks `Idempotency-Key` `required: true` is unreachable as a declarative write
+  action.** `engine.WriteAction` (bundle.go) has no `headers` field, and `write.go`'s
+  `executeWriteRecord` calls `rt.Requester.Do`/`DoForm` with an unconditional `nil` headers
+  argument — unlike reads (`read.go`'s `resolveHeaders` reads `b.HTTP.Headers`), a write request in
+  this engine can NEVER carry any header at all, dynamic or static. Brex requires this header
+  specifically (not merely accepts it) on `create_vendor`, `create_transfer`,
+  `create_incoming_transfer`, `create_card`, `create_budget`/`update_budget` (both v1 and v2),
+  `create_spend_limit`/`update_spend_limit`, and `create_webhook`/`create_webhook_group` — sending
+  any of these without the header is rejected by Brex's own API (`developer.brex.com/guides/
+  idempotency.md`: "For endpoints where erroneous duplicate processing would be especially bad...
+  we require an idempotency key"), so there is no honest way to implement these as plain
+  declarative writes: a fixed/static header value would violate Brex's own collision-avoidance
+  contract (the same key reused across genuinely-different requests), and there is no dialect
+  mechanism to mint a fresh value (e.g. a UUID) per write call. All of these are excluded in
+  `api_surface.json` as `requires_elevated_scope` rather than approximated. The REST of each
+  affected resource's lifecycle (read, update, delete, lock/unlock/terminate) is fully modeled
+  where Brex's own spec marks the header optional on that specific operation — only the
+  create-shaped, highest-consequence half of the vendor/transfer/card/budget/webhook surface is
+  affected. Closing this gap requires an engine dialect addition (a `headers` field on
+  `WriteAction`, or a `uuid4`-shaped interpolation filter analogous to `const:<value>`) — out of
+  scope for a Pass B connector-only expansion per this task's own instructions (no engine changes,
+  no new hook packages).

@@ -1,16 +1,77 @@
 {
   "api": "Algolia Search REST API (https://<application_id>.algolia.net)",
   "docs": "https://www.algolia.com/doc/rest-api/search/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 gap-loop repair: all 3 legacy-parity read streams now migrated (indices, api_keys, index_settings) following the S4 engine mini-wave's start_page:0 support; index records/search, ACL mutation, and analytics endpoints remain out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every endpoint in Algolia's published Search API OpenAPI spec (algolia/api-clients-automation, specs/search/spec.yml) is enumerated below. 7 read streams (indices, api_keys, index_settings, vault_sources, dictionary_settings, dictionary_languages, logs) and 2 writes (update_index_settings, create_api_key) are now covered. Every remaining endpoint is excluded with a specific reason: record/object CRUD and search-query endpoints are a data-plane (not config-plane) surface out of scope for this metadata connector; synonyms/rules/dictionary-entry 'search'-style list endpoints require a POST body the engine's declarative stream dialect cannot send (streams.json's StreamSpec.Body field is accepted by the loader's schema but never read by the read-path engine, read.go's declarative loop always sends a nil body regardless — a real ENGINE_GAP, documented per endpoint below rather than silently worked around); multi-cluster endpoints are deprecated by Algolia's own OpenAPI spec; key/source/dictionary mutation and index copy/move/task-status endpoints are destructive or credential-management admin actions kept out of the reverse-ETL write surface.",
   "endpoints": [
     { "method": "GET", "path": "/1/indexes", "covered_by": { "stream": "indices" } },
     { "method": "GET", "path": "/1/keys", "covered_by": { "stream": "api_keys" } },
     { "method": "GET", "path": "/1/indexes/{indexName}/settings", "covered_by": { "stream": "index_settings" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/settings", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/1/indexes/{indexName}/query", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/1/keys", "excluded": { "category": "requires_elevated_scope", "reason": "API key creation is an admin mutation, not a read stream" } },
-    { "method": "DELETE", "path": "/1/keys/{key}", "excluded": { "category": "destructive_admin", "reason": "API key deletion is a destructive admin action" } },
-    { "method": "GET", "path": "/1/indexes/{indexName}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/1/security/sources", "covered_by": { "stream": "vault_sources" } },
+    { "method": "GET", "path": "/1/dictionaries/*/settings", "covered_by": { "stream": "dictionary_settings" } },
+    { "method": "GET", "path": "/1/dictionaries/*/languages", "covered_by": { "stream": "dictionary_languages" } },
+    { "method": "GET", "path": "/1/logs", "covered_by": { "stream": "logs" } },
+    { "method": "PUT", "path": "/1/indexes/{indexName}/settings", "covered_by": { "write": "update_index_settings" } },
+    { "method": "POST", "path": "/1/keys", "covered_by": { "write": "create_api_key" } },
+
+    { "method": "GET", "path": "/{path}", "excluded": { "category": "non_data_endpoint", "reason": "generic custom-request passthrough helper (customRequest.yml), not a resource endpoint of its own" } },
+
+    { "method": "POST", "path": "/1/indexes/{indexName}/query", "excluded": { "category": "out_of_scope", "reason": "full-text search query execution is a data-plane read (arbitrary query params, not a stable list/detail resource); this connector reads index/key/settings metadata, not search results" } },
+    { "method": "POST", "path": "/1/indexes/*/queries", "excluded": { "category": "out_of_scope", "reason": "multi-index federated search query execution; same data-plane scope narrowing as searchSingleIndex" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/facets/{facetName}/query", "excluded": { "category": "out_of_scope", "reason": "facet-value search query execution; data-plane, not a metadata resource" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/browse", "excluded": { "category": "out_of_scope", "reason": "bulk record browse/export of index contents; this connector's records are index/key/settings CONFIGURATION, not the underlying search records themselves (a genuinely different, much larger data surface deferred to a future dedicated records connector)" } },
+
+    { "method": "POST", "path": "/1/indexes/{indexName}", "excluded": { "category": "out_of_scope", "reason": "adds/replaces a single search record (addObject); record-level write on the data plane, not a config-plane mutation this connector's writes.json covers" } },
+    { "method": "DELETE", "path": "/1/indexes/{indexName}", "excluded": { "category": "destructive_admin", "reason": "deletes an entire index and all its records/settings" } },
+    { "method": "GET", "path": "/1/indexes/{indexName}/{objectID}", "excluded": { "category": "out_of_scope", "reason": "single search-record retrieval; data-plane, not a metadata resource this connector streams" } },
+    { "method": "PUT", "path": "/1/indexes/{indexName}/{objectID}", "excluded": { "category": "out_of_scope", "reason": "creates/replaces a single search record by objectID; record-level data-plane write" } },
+    { "method": "DELETE", "path": "/1/indexes/{indexName}/{objectID}", "excluded": { "category": "destructive_admin", "reason": "deletes a single search record" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/deleteByQuery", "excluded": { "category": "destructive_admin", "reason": "bulk-deletes every record matching a query filter; irreversible mass deletion" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/clear", "excluded": { "category": "destructive_admin", "reason": "deletes every record in the index while keeping settings; irreversible" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/{objectID}/partial", "excluded": { "category": "out_of_scope", "reason": "partial record update; record-level data-plane write" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/batch", "excluded": { "category": "out_of_scope", "reason": "batched record add/update/delete operations; record-level data-plane write, and a batch body shape the dialect's single-record write action model doesn't fit" } },
+    { "method": "POST", "path": "/1/indexes/*/batch", "excluded": { "category": "out_of_scope", "reason": "multi-index batched record operations; same data-plane/batch-shape scope narrowing as the single-index batch endpoint" } },
+    { "method": "POST", "path": "/1/indexes/*/objects", "excluded": { "category": "out_of_scope", "reason": "bulk multi-object retrieval by objectID; data-plane read, not a metadata list/detail resource" } },
+
+    { "method": "PUT", "path": "/1/indexes/{indexName}/synonyms/{objectID}", "excluded": { "category": "out_of_scope", "reason": "creates/replaces a single synonym rule; a narrow per-record config-plane write not yet worth a dedicated action alongside searchSynonyms' read gap below" } },
+    { "method": "GET", "path": "/1/indexes/{indexName}/synonyms/{objectID}", "excluded": { "category": "out_of_scope", "reason": "single-synonym detail lookup by objectID, not a list resource; listing synonyms requires searchSynonyms (see below)" } },
+    { "method": "DELETE", "path": "/1/indexes/{indexName}/synonyms/{objectID}", "excluded": { "category": "destructive_admin", "reason": "deletes a single synonym rule, changing live search relevance for the index" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/synonyms/batch", "excluded": { "category": "out_of_scope", "reason": "batched synonym save; batch-shape scope narrowing, same as object batch" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/synonyms/clear", "excluded": { "category": "destructive_admin", "reason": "deletes every synonym rule for the index" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/synonyms/search", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: the only way to list ALL synonyms is this POST-with-body 'search' endpoint (empty query returns everything, page/hitsPerPage paginated); the engine's declarative stream dialect has no wired mechanism to send a stream-level request body (streams.json's StreamSpec.Body field is accepted by the schema but never read by the read-path engine -- read.go's declarative loop always sends a nil body) -- implementing this as a real list stream would require either an engine change (wiring stream.Body through) or a Tier-2 StreamHook, both out of scope for this Pass B pass; documented here rather than silently worked around" } },
+
+    { "method": "GET", "path": "/1/indexes/{indexName}/rules/{objectID}", "excluded": { "category": "out_of_scope", "reason": "single-rule detail lookup by objectID, not a list resource; same searchRules POST-body gap as synonyms below" } },
+    { "method": "PUT", "path": "/1/indexes/{indexName}/rules/{objectID}", "excluded": { "category": "out_of_scope", "reason": "creates/replaces a single query rule; per-record config-plane write" } },
+    { "method": "DELETE", "path": "/1/indexes/{indexName}/rules/{objectID}", "excluded": { "category": "destructive_admin", "reason": "deletes a single query rule, changing live search behavior for the index" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/rules/batch", "excluded": { "category": "out_of_scope", "reason": "batched rule save; batch-shape scope narrowing, same as object batch" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/rules/clear", "excluded": { "category": "destructive_admin", "reason": "deletes every query rule for the index" } },
+    { "method": "POST", "path": "/1/indexes/{indexName}/rules/search", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical POST-with-body 'list all rules via empty query' gap as searchSynonyms above -- stream.Body is unwired in the declarative read path" } },
+
+    { "method": "POST", "path": "/1/keys/{key}/restore", "excluded": { "category": "requires_elevated_scope", "reason": "restores a previously-deleted API key; admin-ACL credential-lifecycle action, not a routine reverse-ETL write" } },
+    { "method": "GET", "path": "/1/keys/{key}", "excluded": { "category": "out_of_scope", "reason": "single-key detail lookup by key value; api_keys already streams every key's full object from the list endpoint, so this adds no new data, only a redundant per-key path" } },
+    { "method": "PUT", "path": "/1/keys/{key}", "excluded": { "category": "requires_elevated_scope", "reason": "rotates/reconfigures an existing live API key's ACL and scope; a credential-management action riskier than creating a brand-new key" } },
+    { "method": "DELETE", "path": "/1/keys/{key}", "excluded": { "category": "destructive_admin", "reason": "permanently revokes a live API key; any integration still using it starts failing immediately" } },
+
+    { "method": "POST", "path": "/1/dictionaries/{dictionaryName}/batch", "excluded": { "category": "out_of_scope", "reason": "batched custom-dictionary-entry save/delete; record-level data-plane write with a batch body shape, not a single-resource mutation this connector's writes.json models" } },
+    { "method": "POST", "path": "/1/dictionaries/{dictionaryName}/search", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same POST-with-body 'list custom dictionary entries via empty query' gap as searchSynonyms/searchRules above" } },
+    { "method": "PUT", "path": "/1/dictionaries/*/settings", "excluded": { "category": "out_of_scope", "reason": "toggles standard stop-word dictionary entries on/off per language; a narrow settings-flag write not yet paired with a dedicated action in this pass" } },
+
+    { "method": "POST", "path": "/1/clusters/mapping", "excluded": { "category": "deprecated", "reason": "Algolia's OpenAPI spec marks every multi-cluster (userID mapping) endpoint deprecated: true" } },
+    { "method": "GET", "path": "/1/clusters/mapping", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster listUserIds endpoint" } },
+    { "method": "POST", "path": "/1/clusters/mapping/batch", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster batchAssignUserIds endpoint" } },
+    { "method": "GET", "path": "/1/clusters/mapping/top", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster getTopUserIds endpoint" } },
+    { "method": "GET", "path": "/1/clusters/mapping/{userID}", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster getUserId endpoint" } },
+    { "method": "DELETE", "path": "/1/clusters/mapping/{userID}", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster removeUserId endpoint" } },
+    { "method": "GET", "path": "/1/clusters", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster listClusters endpoint" } },
+    { "method": "POST", "path": "/1/clusters/mapping/search", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster searchUserIds endpoint" } },
+    { "method": "GET", "path": "/1/clusters/mapping/pending", "excluded": { "category": "deprecated", "reason": "deprecated multi-cluster hasPendingMappings endpoint" } },
+
+    { "method": "POST", "path": "/1/security/sources/append", "excluded": { "category": "requires_elevated_scope", "reason": "appends a new allowed source IP range to the application's security allowlist; admin-ACL network-security config change" } },
+    { "method": "DELETE", "path": "/1/security/sources/{source}", "excluded": { "category": "destructive_admin", "reason": "removes an allowed source IP range; can immediately block legitimate traffic from that range if misapplied" } },
+
+    { "method": "GET", "path": "/1/task/{taskID}", "excluded": { "category": "out_of_scope", "reason": "polls the status of a single async application-level task by taskID; a taskID is only known transiently right after issuing a mutation, so there is no stable id list to stream against" } },
+    { "method": "GET", "path": "/1/indexes/{indexName}/task/{taskID}", "excluded": { "category": "out_of_scope", "reason": "polls the status of a single async per-index indexing task by taskID; same no-stable-id-list scope narrowing as getAppTask" } },
+
+    { "method": "POST", "path": "/1/indexes/{indexName}/operation", "excluded": { "category": "destructive_admin", "reason": "copies or moves (renames) an entire index, overwriting the destination index's existing data/settings" } }
   ]
 }

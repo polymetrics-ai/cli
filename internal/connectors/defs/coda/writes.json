@@ -1,0 +1,197 @@
+{
+  "actions": [
+    {
+      "name": "upsert_rows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows",
+      "path_fields": ["table_id"],
+      "body_fields": ["rows", "keyColumns"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["table_id", "rows"],
+        "properties": {
+          "table_id": { "type": "string" },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["cells"],
+              "properties": {
+                "cells": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["column", "value"],
+                    "properties": {
+                      "column": { "type": "string" },
+                      "value": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "keyColumns": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "inserts new rows, or upserts existing ones when keyColumns is set, into a Coda table; queued for async processing (202) and generally applied within seconds"
+    },
+    {
+      "name": "update_row",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}",
+      "path_fields": ["table_id", "row_id"],
+      "body_fields": ["row"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["table_id", "row_id", "row"],
+        "properties": {
+          "table_id": { "type": "string" },
+          "row_id": { "type": "string" },
+          "row": {
+            "type": "object",
+            "required": ["cells"],
+            "properties": {
+              "cells": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["column", "value"],
+                  "properties": {
+                    "column": { "type": "string" },
+                    "value": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "overwrites cell values on an existing row; queued for async processing (202) and generally applied within seconds"
+    },
+    {
+      "name": "delete_row",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}",
+      "path_fields": ["table_id", "row_id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["table_id", "row_id"],
+        "properties": {
+          "table_id": { "type": "string" },
+          "row_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a row from a Coda table; irreversible, queued for async processing (202)"
+    },
+    {
+      "name": "delete_rows",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows",
+      "path_fields": ["table_id"],
+      "body_fields": ["rowIds"],
+      "body_type": "json",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["table_id", "rowIds"],
+        "properties": {
+          "table_id": { "type": "string" },
+          "rowIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "permanently removes multiple rows from a Coda table in one request; irreversible, queued for async processing (202)"
+    },
+    {
+      "name": "push_button",
+      "kind": "update",
+      "method": "POST",
+      "path": "/docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}/buttons/{{ record.column_id }}",
+      "path_fields": ["table_id", "row_id", "column_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["table_id", "row_id", "column_id"],
+        "properties": {
+          "table_id": { "type": "string" },
+          "row_id": { "type": "string" },
+          "column_id": { "type": "string" }
+        }
+      },
+      "risk": "pushes a button on a row; the underlying button can perform ANY action the doc's formulas define, including writes to other tables and Pack actions outside this connector's declared surface — high blast-radius, approval required"
+    },
+    {
+      "name": "create_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/docs/{{ config.doc_id }}/pages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "name": { "type": "string" },
+          "subtitle": { "type": "string" },
+          "iconName": { "type": "string" },
+          "imageUrl": { "type": "string" },
+          "parentPageId": { "type": "string" }
+        }
+      },
+      "risk": "creates a new page in the configured doc; requires Doc Maker access in the workspace, queued for async processing (202)"
+    },
+    {
+      "name": "update_page",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/docs/{{ config.doc_id }}/pages/{{ record.page_id }}",
+      "path_fields": ["page_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["page_id"],
+        "properties": {
+          "page_id": { "type": "string" },
+          "name": { "type": "string" },
+          "subtitle": { "type": "string" },
+          "iconName": { "type": "string" },
+          "imageUrl": { "type": "string" },
+          "isHidden": { "type": "boolean" }
+        }
+      },
+      "risk": "renames, hides, or restyles an existing page; renaming/re-iconing requires Doc Maker access in the workspace, queued for async processing (202)"
+    },
+    {
+      "name": "delete_page",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/docs/{{ config.doc_id }}/pages/{{ record.page_id }}",
+      "path_fields": ["page_id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["page_id"],
+        "properties": {
+          "page_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a page (and its subpages/content) from the doc; irreversible, queued for async processing (202)"
+    }
+  ]
+}

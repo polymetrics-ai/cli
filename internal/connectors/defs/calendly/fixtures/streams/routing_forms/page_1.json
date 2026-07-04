@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/routing_forms" },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "uri": "https://api.calendly.com/routing_forms/fixture_form_1",
+          "name": "Fixture Routing Form",
+          "organization": "https://api.calendly.com/organizations/fixture_org",
+          "questions": [],
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": { "count": 1, "next_page": null }
+    }
+  }
+}

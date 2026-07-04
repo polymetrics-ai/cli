@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/clauses/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "version": 1,
+      "title": "Fixture Clause 1",
+      "description": "Deterministic fixture record.",
+      "presignedUrl": "https://example.com/clause1",
+      "numberOfTemplatesLinked": 2,
+      "createdAt": 1735689600000
+    }
+  }
+}

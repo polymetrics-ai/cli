@@ -56,6 +56,57 @@
       "records": { "path": "items" },
       "computed_fields": { "doc_id": "{{ config.doc_id }}" },
       "schema": "schemas/controls.json"
+    },
+    {
+      "name": "columns",
+      "path": "/docs/{{ config.doc_id }}/tables/{{ fanout.id }}/columns",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "25" } },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/docs/{{ config.doc_id }}/tables",
+            "records_path": "items",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "table_id" },
+        "stamp_field": "table_id"
+      },
+      "computed_fields": { "doc_id": "{{ config.doc_id }}" },
+      "schema": "schemas/columns.json"
+    },
+    {
+      "name": "rows",
+      "path": "/docs/{{ config.doc_id }}/tables/{{ fanout.id }}/rows",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "25" },
+        "valueFormat": "simpleWithArrays"
+      },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/docs/{{ config.doc_id }}/tables",
+            "records_path": "items",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "table_id" },
+        "stamp_field": "table_id"
+      },
+      "computed_fields": { "doc_id": "{{ config.doc_id }}" },
+      "schema": "schemas/rows.json"
     }
   ]
 }

@@ -50,6 +50,20 @@
       "query": { "per_page": "100" },
       "records": { "path": "" },
       "schema": "schemas/agents.json"
+    },
+    {
+      "name": "teams",
+      "path": "/organizations/{{ config.organization }}/teams",
+      "query": { "per_page": "100" },
+      "records": { "path": "" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "clusters",
+      "path": "/organizations/{{ config.organization }}/clusters",
+      "query": { "per_page": "100" },
+      "records": { "path": "" },
+      "schema": "schemas/clusters.json"
     }
   ]
 }

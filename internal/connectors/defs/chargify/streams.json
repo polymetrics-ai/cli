@@ -133,6 +133,98 @@
         "cursor_field": "created_at"
       },
       "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "product_families",
+      "path": "/product_families.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.product_family.id }}",
+        "name": "{{ record.product_family.name }}",
+        "handle": "{{ record.product_family.handle }}",
+        "description": "{{ record.product_family.description }}",
+        "accounting_code": "{{ record.product_family.accounting_code }}",
+        "created_at": "{{ record.product_family.created_at }}",
+        "updated_at": "{{ record.product_family.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/product_families.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices.json",
+      "records": { "path": "invoices" },
+      "computed_fields": {
+        "id": "{{ record.uid }}",
+        "number": "{{ record.number }}",
+        "state": "{{ record.status }}",
+        "customer_id": "{{ record.customer.id }}",
+        "subscription_id": "{{ record.subscription_id }}",
+        "total_amount": "{{ record.total_amount }}",
+        "paid_amount": "{{ record.paid_amount }}",
+        "due_amount": "{{ record.due_amount }}",
+        "currency": "{{ record.currency }}",
+        "issue_date": "{{ record.issue_date }}",
+        "due_date": "{{ record.due_date }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "payment_profiles",
+      "path": "/payment_profiles.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.payment_profile.id }}",
+        "customer_id": "{{ record.payment_profile.customer_id }}",
+        "payment_type": "{{ record.payment_profile.payment_type }}",
+        "card_type": "{{ record.payment_profile.card_type }}",
+        "last_four": "{{ record.payment_profile.last_four }}",
+        "expiration_month": "{{ record.payment_profile.expiration_month }}",
+        "expiration_year": "{{ record.payment_profile.expiration_year }}",
+        "current_vault": "{{ record.payment_profile.current_vault }}",
+        "created_at": "{{ record.payment_profile.created_at }}",
+        "updated_at": "{{ record.payment_profile.updated_at }}"
+      },
+      "schema": "schemas/payment_profiles.json"
+    },
+    {
+      "name": "events",
+      "path": "/events.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.event.id }}",
+        "key": "{{ record.event.key }}",
+        "message": "{{ record.event.message }}",
+        "customer_id": "{{ record.event.customer_id }}",
+        "subscription_id": "{{ record.event.subscription_id }}",
+        "created_at": "{{ record.event.created_at }}"
+      },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "statements",
+      "path": "/statements.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.statement.id }}",
+        "uid": "{{ record.statement.uid }}",
+        "subscription_id": "{{ record.statement.subscription_id }}",
+        "customer_id": "{{ record.statement.customer_id }}",
+        "settlement_date": "{{ record.statement.settlement_date }}",
+        "closing_balance_in_cents": "{{ record.statement.closing_balance_in_cents }}",
+        "created_at": "{{ record.statement.created_at }}"
+      },
+      "schema": "schemas/statements.json"
     }
   ]
 }

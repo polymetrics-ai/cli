@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/projects/as:1001/sections" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 401,
+        "name": "Fixture Backlog",
+        "position": 1,
+        "status": "active"
+      }
+    ]
+  }
+}

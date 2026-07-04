@@ -1,14 +1,14 @@
 {
   "name": "dropbox-sign",
   "display_name": "Dropbox Sign",
-  "description": "Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and account details through the Dropbox Sign REST API.",
+  "description": "Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and account details, and writes signature-request/template/team/account lifecycle mutations, through the Dropbox Sign REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.hellosign.com/api/reference/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Dropbox Sign API read of signature requests, templates, team members, and account data"
+    "read": "external Dropbox Sign API read of signature requests, templates, team members, and account data",
+    "write": "external mutation of signature requests (update/cancel/remind/release_hold/remove), templates (delete/add_user/remove_user), teams (create/update/add_member/remove_member), and account settings; several actions are destructive/not reversible (cancel_signature_request, remove_signature_request, delete_template, remove_team_member) and require approval"
   }
 }

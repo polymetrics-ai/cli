@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/transfers",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "transfer_fixture_1",
+          "counterparty": {
+            "vendor_id": "vendor_fixture_1"
+          },
+          "description": "Fixture wire transfer",
+          "payment_type": "WIRE",
+          "amount": {
+            "amount": 100000,
+            "currency": "USD"
+          },
+          "process_date": "2026-01-05",
+          "originating_account": {
+            "cash_account_id": "cash_fixture_1"
+          },
+          "status": "COMPLETED",
+          "cancellation_reason": null,
+          "estimated_delivery_date": "2026-01-06",
+          "creator_user_id": "user_fixture_1"
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

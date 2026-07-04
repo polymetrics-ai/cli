@@ -1,14 +1,14 @@
 {
   "name": "assemblyai",
   "display_name": "AssemblyAI",
-  "description": "Reads AssemblyAI transcripts and per-transcript sentence, paragraph, and subtitle references through the AssemblyAI REST API.",
+  "description": "Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and word-search matches, and submits new transcription jobs, through the AssemblyAI REST API.",
   "integration_type": "api",
   "docs_url": "https://www.assemblyai.com/docs",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external AssemblyAI API read of transcript metadata and references"
+    "read": "external AssemblyAI API read of transcript metadata, per-transcript detail/sentences/paragraphs/word-search matches, fanned out over every listed transcript",
+    "write": "submits a new transcription job (POST /v2/transcript) against a caller-supplied audio_url; consumes account balance/quota"
   }
 }

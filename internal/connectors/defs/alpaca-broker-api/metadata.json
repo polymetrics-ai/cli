@@ -1,7 +1,7 @@
 {
   "name": "alpaca-broker-api",
   "display_name": "Alpaca Broker API",
-  "description": "Reads Alpaca Broker API accounts, assets, market calendar, clock, and country info over the Broker REST API (read-only).",
+  "description": "Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).",
   "integration_type": "api",
   "docs_url": "https://docs.alpaca.markets/docs/broker-api",
   "release_stage": "ga",
@@ -17,6 +17,6 @@
     "read_page_size": 20
   },
   "risk": {
-    "read": "external Alpaca Broker API read of account/asset/market metadata"
+    "read": "external Alpaca Broker API read of account/asset/market metadata, plus per-account trading positions, orders, watchlists, and document metadata (financial PII adjacent; no document content is downloaded, only listing metadata)"
   }
 }

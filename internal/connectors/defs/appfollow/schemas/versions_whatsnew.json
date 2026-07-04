@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "versions_whatsnew",
+  "type": "object",
+  "x-primary-key": ["ext_id", "version", "country"],
+  "required": ["ext_id"],
+  "properties": {
+    "ext_id": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "whats_new": { "type": ["string", "null"] },
+    "last_modified": { "type": ["string", "null"] }
+  }
+}

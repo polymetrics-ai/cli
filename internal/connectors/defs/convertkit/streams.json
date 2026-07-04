@@ -63,6 +63,26 @@
       "records": { "path": "broadcasts" },
       "incremental": { "cursor_field": "created_at" },
       "schema": "schemas/broadcasts.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom_fields",
+      "records": { "path": "custom_fields" },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "purchases",
+      "path": "/purchases",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "records": { "path": "purchases" },
+      "incremental": { "cursor_field": "transaction_time" },
+      "schema": "schemas/purchases.json"
     }
   ]
 }

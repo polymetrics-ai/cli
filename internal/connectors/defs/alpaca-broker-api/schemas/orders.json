@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "account_id": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "asset_class": { "type": ["string", "null"] },
+    "qty": { "type": ["string", "null"] },
+    "notional": { "type": ["string", "null"] },
+    "filled_qty": { "type": ["string", "null"] },
+    "filled_avg_price": { "type": ["string", "null"] },
+    "order_class": { "type": ["string", "null"] },
+    "order_type": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "side": { "type": ["string", "null"] },
+    "time_in_force": { "type": ["string", "null"] },
+    "limit_price": { "type": ["string", "null"] },
+    "stop_price": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "submitted_at": { "type": ["string", "null"] },
+    "filled_at": { "type": ["string", "null"] },
+    "canceled_at": { "type": ["string", "null"] }
+  }
+}

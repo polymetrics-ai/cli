@@ -1,0 +1,14 @@
+{
+  "record": {
+    "pipeline_slug": "fixture-web",
+    "number": 41
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/pipelines/fixture-web/builds/41/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

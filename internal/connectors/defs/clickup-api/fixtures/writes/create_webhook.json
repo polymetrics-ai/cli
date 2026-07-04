@@ -1,0 +1,9 @@
+{
+  "record": { "endpoint": "https://example.com/fixture-webhook", "events": ["taskCreated"] },
+  "expect": {
+    "method": "POST",
+    "path": "/team/synthetic-conformance-value/webhook",
+    "body": { "endpoint": "https://example.com/fixture-webhook", "events": ["taskCreated"] }
+  },
+  "response": { "status": 200, "body": { "id": "webhook_fixture_new", "webhook": { "id": "webhook_fixture_new" } } }
+}

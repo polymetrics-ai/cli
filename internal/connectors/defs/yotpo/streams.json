@@ -3,7 +3,7 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      { "mode": "api_key_header", "header": "X-Yotpo-Token", "value": "{{ secrets.access_token }}" }
     ],
     "pagination": {
       "type": "page_number",
@@ -25,13 +25,40 @@
       "path": "/core/v3/stores/{{ config.store_id }}/products",
       "records": { "path": "products" },
       "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
       "schema": "schemas/products.json"
+    },
+    {
+      "name": "product_variants",
+      "path": "/core/v3/stores/{{ config.store_id }}/products/{{ config.product_id }}/variants",
+      "records": { "path": "variants" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/product_variants.json"
+    },
+    {
+      "name": "collections",
+      "path": "/core/v3/stores/{{ config.store_id }}/collections",
+      "records": { "path": "collections" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/collections.json"
     },
     {
       "name": "customers",
       "path": "/core/v3/stores/{{ config.store_id }}/customers",
       "records": { "path": "customers" },
       "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.external_id }}",
+        "updated_at": "{{ record.account_updated_at }}"
+      },
       "schema": "schemas/customers.json"
     },
     {
@@ -39,7 +66,44 @@
       "path": "/core/v3/stores/{{ config.store_id }}/orders",
       "records": { "path": "orders" },
       "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}",
+        "updated_at": "{{ record.order_date }}"
+      },
       "schema": "schemas/orders.json"
+    },
+    {
+      "name": "webhook_targets",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/targets",
+      "records": { "path": "webhook_targets" },
+      "projection": "passthrough",
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/webhook_targets.json"
+    },
+    {
+      "name": "webhook_filters",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/filters",
+      "records": { "path": "webhook_filters" },
+      "projection": "passthrough",
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/webhook_filters.json"
+    },
+    {
+      "name": "webhook_subscriptions",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/subscriptions",
+      "records": { "path": "webhook_subscriptions" },
+      "projection": "passthrough",
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/webhook_subscriptions.json"
     }
   ]
 }

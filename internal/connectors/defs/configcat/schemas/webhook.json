@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhook",
+  "type": "object",
+  "x-primary-key": ["webhookId"],
+  "required": ["webhookId"],
+  "properties": {
+    "webhookId": { "type": "integer" },
+    "url": { "type": ["string", "null"] },
+    "httpMethod": { "type": ["string", "null"] },
+    "content": { "type": ["string", "null"] },
+    "webHookHeaders": { "type": ["array", "null"] },
+    "config": { "type": ["object", "null"] },
+    "environment": { "type": ["object", "null"] }
+  }
+}

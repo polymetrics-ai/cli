@@ -1,0 +1,14 @@
+{
+  "record": {
+    "amount": 10.99,
+    "payment_attributes": {
+      "payment_type": "credit_card",
+      "order_id": 1,
+      "reference_number": "P-FIXTURE-1"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payments"
+  }
+}

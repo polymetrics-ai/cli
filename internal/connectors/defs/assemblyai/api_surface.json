@@ -1,19 +1,29 @@
 {
   "api": "AssemblyAI API v2 (https://api.assemblyai.com)",
   "docs": "https://www.assemblyai.com/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (all backed by the single GET /v2/transcript list endpoint); the full AssemblyAI surface (submit transcript, poll status, LeMUR, real-time streaming, redaction, webhooks) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, verified against the live AssemblyAI API reference (assemblyai.com/docs/api-reference/transcripts/*). AssemblyAI's real documented surface is small and entirely transcript-centric: one list endpoint, one detail endpoint, three per-transcript sub-resource reads (sentences/paragraphs/word-search), one text-format sub-resource (subtitles, not JSON), one create endpoint, one delete endpoint, and the separate LeMUR generative-task product. Every JSON-shaped GET is now covered: the 4 legacy-parity list-backed streams, a fan_out transcript_detail stream (GET /v2/transcript/{id}, ids listed from the transcript list endpoint), fan_out transcript_sentence_items/transcript_paragraph_items streams (flattening each transcript's sentence/paragraph array into its own row, stamped with transcript_id), and a fan_out transcript_word_search_matches stream (GET /v2/transcript/{id}/word-search, keyword list from config.word_search_terms). create_transcript is now a write action (POST /v2/transcript, audio_url required). Real-time/streaming transcription (a separate WebSocket protocol, not REST) and LeMUR (a generative-summarization task over already-transcribed text, not a transcript-domain CRUD resource) remain out of scope; subtitles and redacted audio remain excluded for real, closed reasons below (not a blanket bucket) — see Known limits.",
   "endpoints": [
     { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript" } },
     { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_sentences" } },
     { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_paragraphs" } },
     { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_subtitle" } },
-    { "method": "GET", "path": "/v2/transcript/{id}/sentences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/transcript/{id}/paragraphs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/transcript/{id}/subtitles/{format}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/transcript", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/transcript/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/v2/transcript/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes source transcript data; not a syncable read" } },
-    { "method": "POST", "path": "/lemur/v3/generate/task", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_detail" } },
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_sentence_items" } },
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_paragraph_items" } },
+    { "method": "GET", "path": "/v2/transcript", "covered_by": { "stream": "transcript_word_search_matches" } },
+    { "method": "GET", "path": "/v2/transcript/{transcript_id}", "covered_by": { "stream": "transcript_detail" } },
+    { "method": "GET", "path": "/v2/transcript/{transcript_id}/sentences", "covered_by": { "stream": "transcript_sentence_items" } },
+    { "method": "GET", "path": "/v2/transcript/{transcript_id}/paragraphs", "covered_by": { "stream": "transcript_paragraph_items" } },
+    { "method": "GET", "path": "/v2/transcript/{transcript_id}/word-search", "covered_by": { "stream": "transcript_word_search_matches" } },
+    { "method": "POST", "path": "/v2/transcript", "covered_by": { "write": "create_transcript" } },
+    { "method": "GET", "path": "/v2/transcript/{transcript_id}/{subtitle_format}", "excluded": { "category": "binary_payload", "reason": "returns a raw text/plain SRT or VTT caption document, not a JSON record; the engine's declarative read path decodes only JSON response bodies (connsdk.RecordsAt), so this endpoint has no schema-shaped record to project" } },
+    { "method": "GET", "path": "/v2/transcript/{transcript_id}/redacted-audio", "excluded": { "category": "binary_payload", "reason": "returns a redacted audio/wav or audio/mp3 binary media stream, not a JSON record" } },
+    { "method": "DELETE", "path": "/v2/transcript/{transcript_id}", "excluded": { "category": "destructive_admin", "reason": "permanently deletes the transcript's text/pii and associated data; not a syncable read or a safe autonomous mutation" } },
+    { "method": "POST", "path": "/lemur/v3/generate/task", "excluded": { "category": "out_of_scope", "reason": "LeMUR is a generative-summarization/QA task over already-transcribed text (an LLM prompt-completion product), not a transcript-domain CRUD resource; no transcript-shaped record to read or write" } },
+    { "method": "POST", "path": "/lemur/v3/generate/summary", "excluded": { "category": "out_of_scope", "reason": "LeMUR generative endpoint; see /lemur/v3/generate/task" } },
+    { "method": "POST", "path": "/lemur/v3/generate/question-answer", "excluded": { "category": "out_of_scope", "reason": "LeMUR generative endpoint; see /lemur/v3/generate/task" } },
+    { "method": "DELETE", "path": "/lemur/v3/{request_id}", "excluded": { "category": "out_of_scope", "reason": "purges a LeMUR request's stored data; out of scope alongside the rest of the LeMUR product surface" } },
+    { "method": "WS", "path": "/v2/realtime/ws", "excluded": { "category": "out_of_scope", "reason": "real-time streaming transcription is a stateful WebSocket protocol (audio frames in, partial/final transcript events out), not a REST resource this engine's declarative HTTP dialect can express" } }
   ]
 }

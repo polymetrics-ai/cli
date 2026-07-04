@@ -1,0 +1,13 @@
+{
+  "record": {
+    "item": { "id": "folder_fixture_1", "type": "folder" },
+    "accessible_by": { "id": "users_fixture_2", "type": "user" },
+    "role": "editor"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/collaborations",
+    "body": { "role": "editor" }
+  },
+  "response": { "status": 201, "body": { "id": "collaboration_fixture_new", "type": "collaboration" } }
+}

@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "name": "create_transcript",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/transcript",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["audio_url"],
+        "properties": {
+          "audio_url": { "type": "string" },
+          "language_code": { "type": "string" },
+          "language_detection": { "type": "boolean" },
+          "punctuate": { "type": "boolean" },
+          "format_text": { "type": "boolean" },
+          "speaker_labels": { "type": "boolean" },
+          "speakers_expected": { "type": "integer" },
+          "auto_chapters": { "type": "boolean" },
+          "auto_highlights": { "type": "boolean" },
+          "entity_detection": { "type": "boolean" },
+          "sentiment_analysis": { "type": "boolean" },
+          "summarization": { "type": "boolean" },
+          "redact_pii": { "type": "boolean" },
+          "webhook_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; submits a new transcription job against a caller-supplied audio_url and consumes AssemblyAI account balance/quota; approval required"
+    }
+  ]
+}

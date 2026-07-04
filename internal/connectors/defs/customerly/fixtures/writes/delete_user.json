@@ -1,0 +1,8 @@
+{
+  "record": { "user_id": "1001" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users"
+  },
+  "response": { "status": 200, "body": { "data": [] } }
+}

@@ -8,7 +8,7 @@
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,8 +17,9 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Castor EDC API read of clinical-trial study/user/audit-trail data",
-    "approval": "none; read-only"
+    "read": "external Castor EDC API read of clinical-trial study/user/audit-trail/record/field/form/survey/site/role data",
+    "write": "external mutations creating clinical-trial study participant records, sites, roles, survey-package invitations, report instances, and record randomization; every write action requires approval",
+    "approval": "read: none; write: required for every action"
   },
   "conformance": {
     "skip_dynamic": true,

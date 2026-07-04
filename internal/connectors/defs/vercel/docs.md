@@ -1,14 +1,15 @@
 # Overview
 
 Vercel is a frontend deployment platform. This bundle reads deployments, projects, teams, domains,
-and per-project environment variables from the Vercel REST API (`{base_url}`, default
-`https://api.vercel.com`), and writes create/update/delete mutations for projects, deployments,
-project domains, and project environment variables. It originally migrated
-`internal/connectors/vercel` (132 loc, a read-only single-stream connector), which stays
-registered and unchanged until wave6's registry flip; this Pass B pass expands the bundle using
-Vercel's full, official, live OpenAPI 3.x specification fetched directly from
-`https://openapi.vercel.sh/` (331 real method+path operations spanning the entire Vercel platform
-API, reviewed 2026-07-04).
+aliases, webhooks, log drains, edge configs, and per-project environment variables from the
+Vercel REST API (`{base_url}`, default `https://api.vercel.com`), and writes create/update/delete
+mutations for projects, deployments, project domains, project environment variables, webhooks,
+log drains, edge configs, and alias removal. It originally migrated `internal/connectors/vercel`
+(132 loc, a read-only single-stream connector), which stays registered and unchanged until wave6's
+registry flip; this Pass B pass expands the bundle using Vercel's full, official, live OpenAPI 3.x
+specification fetched directly from `https://openapi.vercel.sh/` (332 real method+path operations
+spanning the entire Vercel platform API, reviewed 2026-07-04) — every endpoint covered or excluded
+with a specific, real per-endpoint reason (no blanket bucket).
 
 ## Auth setup
 
@@ -56,10 +57,18 @@ Every other stream is new in this Pass B pass:
   requested in decrypted form (`decrypt` query param is not set), so `value`/`vsmValue` are not
   projected onto this schema — only metadata (`id`, `key`, `type`, `target`, timestamps) is
   modeled, avoiding any risk of a secret value flowing into synced record data.
+- `aliases` (`GET /v4/aliases`) — the same `pagination.next`/`until` cursor shape as
+  projects/teams/domains; `records.path: "aliases"`.
+- `webhooks` (`GET /v1/webhooks`) and `log_drains` (`GET /v1/log-drains`) and `edge_configs`
+  (`GET /v1/edge-config`) — all three converted in this pass from a prior blanket exclusion into
+  real streams. Each returns a BARE top-level JSON array (confirmed from the OpenAPI document's
+  response schema — no envelope key, no pagination parameters documented on any of the three list
+  endpoints), so `records.path: "."` and no `pagination` block is declared, matching each
+  endpoint's actual documented shape.
 
 ## Write actions & risks
 
-9 write actions, all `body_type: json` (flat top-level bodies, confirmed from the OpenAPI
+18 write actions, all `body_type: json` (flat top-level bodies, confirmed from the OpenAPI
 document's request-body schemas for each endpoint):
 
 - **projects**: `create_project` (`POST /v11/projects`, only `name` required),
@@ -76,6 +85,20 @@ document's request-body schemas for each endpoint):
   requires only the base triple, matching the dialect's draft-07 `anyOf` limitation documented in
   the stripe golden's parity-deviation ledger item 1: strictly more permissive, never stricter),
   `delete_project_env_var` (`DELETE /v9/projects/{project_id}/env/{id}`, idempotent).
+- **webhooks**: `create_webhook` (`POST /v1/webhooks`, requires `url`/`events[]`),
+  `delete_webhook` (`DELETE /v1/webhooks/{id}`, idempotent; Vercel documents no `PATCH`/`PUT`
+  single-webhook-update endpoint).
+- **log drains**: `create_log_drain` (`POST /v1/log-drains`, requires
+  `deliveryFormat`/`url`/`sources[]`), `delete_log_drain` (`DELETE /v1/log-drains/{id}`,
+  idempotent; Vercel documents no update endpoint for an existing log drain).
+- **edge configs**: `create_edge_config` (`POST /v1/edge-config`, requires `slug`),
+  `update_edge_config` (`PUT /v1/edge-config/{id}`, renames `slug`), `delete_edge_config`
+  (`DELETE /v1/edge-config/{id}`, idempotent). The edge config's own key-value item store
+  (`PATCH /v1/edge-config/{id}/items`) is a separate, unbounded connector-defined-schema payload —
+  see Known limits.
+- **aliases**: `delete_alias` (`DELETE /v2/aliases/{id}`, idempotent) — removing an alias
+  assignment; Vercel's alias-CREATE action (`POST /v2/deployments/{id}/aliases`) is not modeled,
+  see Known limits.
 
 All actions carry `"risk": "external mutation; approval required"` (destructive deletes add
 `"confirm": "destructive"`).
@@ -84,16 +107,35 @@ All actions carry `"risk": "external mutation; approval required"` (destructive 
 
 - Full API-surface classification lives in `api_surface.json` (332 endpoint entries reviewed
   2026-07-04, including a manually-added `/v6/deployments` entry not present in the live OpenAPI
-  document since Vercel's docs have moved on to `/v7/`): 5 read streams, 9 write actions, and every
-  remaining endpoint excluded with a real category — `duplicate_of` for single-item detail GETs
-  and the newer `/v7/deployments` version; `requires_elevated_scope` for Enterprise/team-admin
-  surfaces (billing, access groups, Secure Compute networking, directory sync/SSO, marketplace
-  integration installation, microfrontends, rolling releases, team membership);
-  `destructive_admin` for the project-wide pause/unpause traffic toggle; `binary_payload` for
-  avatar uploads and deployment file contents; and `out_of_scope` breadth-vs-cost triage for the
-  remaining large surface (Edge Config, log Drains, bulk redirects, deployment Checks, feature
-  flags, webhooks, DNS records, domain-management actions, custom environments, routing rules,
-  rollback/promote, runtime logs, TLS certs, Remote Caching artifacts, deployment aliases).
+  document since Vercel's docs have moved on to `/v7/`): 9 read streams, 18 write actions, and
+  every remaining endpoint excluded with a specific, real per-endpoint category and reason (no
+  blanket bucket) — `duplicate_of` (34 endpoints) for single-item detail GETs, the newer
+  `/v7/deployments` version, and legacy endpoints superseded by a now-covered resource (the old
+  team-level `/v1/env`, the old `/v1/drains`/`/v1/integrations/log-drains` Drains API now
+  superseded by `/v1/log-drains`); `requires_elevated_scope` (145 endpoints) for Enterprise/
+  team-admin surfaces (billing, access groups, Secure Compute networking, directory sync/SSO,
+  marketplace integration installation, microfrontends, rolling releases, team membership,
+  Web Analytics query, WAF/security config, TLS certs), credential/token issuance (personal
+  access tokens, edge-config read tokens, protection-bypass secrets), domain-registrar purchasing/
+  transfer/renewal, and per-domain/per-project sub-resources (DNS records, custom environments'
+  Enterprise gate) needing a fan_out this pass does not declare; `destructive_admin` (8 endpoints)
+  for account-wide attack-mode/edge-cache-purge/user-deletion actions; `non_data_endpoint`
+  (8 endpoints) for profile/audit-log/diagnostic-verification/transient-log-stream endpoints;
+  `binary_payload` (9 endpoints) for avatar uploads, deployment file contents, and Remote Caching
+  artifact blobs; and `out_of_scope` (101 endpoints) for real, individually-reasoned product
+  surfaces distinct from this connector's core scope — bulk redirects, feature flags, routing
+  middleware, custom environments, Sandbox ephemeral compute, VCR container registry, rollback/
+  promote, legacy/duplicate deployment-checks families, edge config's item/schema/backup
+  sub-resources, and alias-assignment creation.
+- **Edge config's key-value item store is intentionally not modeled** (`GET`/`PATCH
+  /v1/edge-config/{id}/items`, `GET /v1/edge-config/{id}/item/{key}`): its values are an
+  unbounded, connector-defined-schema JSON payload (any shape the caller stores there) rather than
+  a fixed business-data record shape this dialect's schema-as-projection model targets; the
+  edge_configs stream's own record still reports `itemCount`/`digest` metadata.
+- **Alias assignment (`POST /v2/deployments/{id}/aliases`) is not modeled** — only alias read
+  (the `aliases` stream) and alias removal (`delete_alias`) are covered; assigning a specific
+  alias to a specific deployment is the same product family as the not-yet-migrated
+  rollback/promote actions, left for a future wave.
 - **`project_env_vars`' fan_out preliminary id-listing request re-reads `GET /v10/projects` with NO
   pagination** (the fan_out dialect uses the fan-out STREAM's own pagination spec for its
   id-listing request, and `project_env_vars` declares none) — on an account with more projects than

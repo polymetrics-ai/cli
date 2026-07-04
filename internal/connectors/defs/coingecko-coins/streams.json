@@ -24,6 +24,22 @@
       },
       "records": { "path": "." },
       "schema": "schemas/coin.json"
+    },
+    {
+      "name": "tickers",
+      "path": "/coins/{{ config.coin_id }}/tickers",
+      "records": { "path": "tickers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "market_identifier": "{{ record.market.identifier }}"
+      },
+      "schema": "schemas/tickers.json"
     }
   ]
 }

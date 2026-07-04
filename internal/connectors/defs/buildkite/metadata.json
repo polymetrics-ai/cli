@@ -1,14 +1,14 @@
 {
   "name": "buildkite",
   "display_name": "Buildkite",
-  "description": "Reads Buildkite organizations, pipelines, builds, and agents through the Buildkite REST API v2.",
+  "description": "Reads and writes Buildkite organizations, pipelines, builds, agents, teams, and clusters through the Buildkite REST API v2.",
   "integration_type": "api",
   "docs_url": "https://buildkite.com/docs/apis/rest-api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Buildkite API read of organization, pipeline, build, and agent data",
-    "approval": "none; read-only, no reverse-ETL writes shipped"
+    "read": "external Buildkite API read of organization, pipeline, build, agent, team, and cluster data",
+    "write": "external mutation of pipeline lifecycle, build triggering/cancellation, job control, agent lifecycle, and team management; create_build/rebuild_build run arbitrary pipeline-defined commands on real agent capacity",
+    "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
   }
 }

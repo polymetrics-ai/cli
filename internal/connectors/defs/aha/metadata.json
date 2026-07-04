@@ -1,7 +1,7 @@
 {
   "name": "aha",
   "display_name": "Aha!",
-  "description": "Reads Aha! features, products, ideas, releases, initiatives, and goals through the Aha! REST API (read-only).",
+  "description": "Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and users through the Aha! REST API (read-only).",
   "integration_type": "api",
   "docs_url": "https://www.aha.io/api",
   "release_stage": "ga",

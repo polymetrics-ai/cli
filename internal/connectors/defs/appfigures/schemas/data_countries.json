@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "data_countries",
+  "type": "object",
+  "x-primary-key": ["iso"],
+  "required": ["iso"],
+  "properties": {
+    "iso": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "apple_store_no": { "type": ["string", "null"] }
+  }
+}

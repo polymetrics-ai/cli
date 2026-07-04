@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "reservationID": "res_fixture_1", "reservationRoomID": "resroom_fixture_1", "newRoomID": "room_fixture_2" },
+  "expect": { "method": "POST", "path": "/postRoomAssign" },
+  "response": { "status": 200, "body": { "success": true } }
+}

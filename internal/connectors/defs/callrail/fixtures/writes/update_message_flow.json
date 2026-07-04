@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "MFL_fixture_1",
+    "initial_step_id": "tag-01",
+    "steps": { "tag-01": { "id": "tag-01", "type": "tag", "next_step_id": null, "tag_ids": [1, 2] } }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/message-flows.json",
+    "body": {
+      "id": "MFL_fixture_1",
+      "initial_step_id": "tag-01",
+      "steps": { "tag-01": { "id": "tag-01", "type": "tag", "next_step_id": null, "tag_ids": [1, 2] } }
+    }
+  },
+  "response": { "status": 200, "body": { "id": "MFL_fixture_1" } }
+}

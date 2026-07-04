@@ -1,0 +1,18 @@
+{
+  "record": {
+    "formId": "fillout_form_fixture_1",
+    "url": "https://example.com/hooks/fillout"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook/create",
+    "body": {
+      "formId": "fillout_form_fixture_1",
+      "url": "https://example.com/hooks/fillout"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 9001 }
+  }
+}

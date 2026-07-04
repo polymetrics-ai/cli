@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pools",
+  "type": "object",
+  "x-primary-key": ["pool"],
+  "required": ["pool"],
+  "properties": {
+    "pool": { "type": "string" },
+    "chain": { "type": ["string", "null"] },
+    "project": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "tvlUsd": { "type": ["number", "null"] },
+    "apyBase": { "type": ["number", "null"] },
+    "apyReward": { "type": ["number", "null"] },
+    "apy": { "type": ["number", "null"] },
+    "apyPct1D": { "type": ["number", "null"] },
+    "apyPct7D": { "type": ["number", "null"] },
+    "apyPct30D": { "type": ["number", "null"] },
+    "stablecoin": { "type": ["boolean", "null"] },
+    "ilRisk": { "type": ["string", "null"] },
+    "exposure": { "type": ["string", "null"] },
+    "poolMeta": { "type": ["string", "null"] },
+    "underlyingTokens": { "type": ["array", "null"] },
+    "rewardTokens": { "type": ["array", "null"] }
+  }
+}

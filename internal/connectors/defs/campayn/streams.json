@@ -29,6 +29,10 @@
       "name": "reports",
       "path": "/reports/calendar.json",
       "records": { "path": "" },
+      "query": {
+        "from": { "template": "{{ config.report_from }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.report_to }}", "omit_when_absent": true }
+      },
       "schema": "schemas/reports.json"
     },
     {
@@ -59,3 +63,4 @@
     }
   ]
 }
+

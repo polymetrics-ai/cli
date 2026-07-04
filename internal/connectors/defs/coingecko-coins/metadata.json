@@ -1,7 +1,7 @@
 {
   "name": "coingecko-coins",
   "display_name": "CoinGecko Coins",
-  "description": "Reads a coin's current metadata/market snapshot from the CoinGecko REST API (GET /coins/{id}). Read-only; unauthenticated by default, an optional pro api_key unlocks the pro base URL and higher limits.",
+  "description": "Reads a coin's current metadata/market snapshot and exchange tickers from the CoinGecko REST API (GET /coins/{id}, GET /coins/{id}/tickers). Read-only; unauthenticated by default, an optional pro api_key unlocks the pro base URL and higher limits.",
   "integration_type": "api",
   "docs_url": "https://docs.coingecko.com/reference/introduction",
   "release_stage": "beta",

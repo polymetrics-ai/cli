@@ -49,6 +49,30 @@
       "projection": "passthrough"
     },
     {
+      "name": "segment_rules",
+      "path": "api/list.php",
+      "records": { "path": "" },
+      "schema": "schemas/segment_rules.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "segment_subscribers",
+      "path": "api/contact.php",
+      "query": {
+        "list": { "template": "{{ config.segment_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/segment_subscribers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "ab_tests",
+      "path": "api/split.php",
+      "records": { "path": "" },
+      "schema": "schemas/ab_tests.json",
+      "projection": "passthrough"
+    },
+    {
       "name": "organization_users",
       "path": "api/organizations/users.php",
       "pagination": {

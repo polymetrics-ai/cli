@@ -1,14 +1,14 @@
 {
   "name": "akeneo",
   "display_name": "Akeneo",
-  "description": "Reads Akeneo PIM products, categories, families, attributes, and channels through the Akeneo REST API (OAuth2 password grant).",
+  "description": "Reads Akeneo PIM products, categories, families, attributes, channels, product models, family variants, attribute groups, association types, locales, currencies, and measure families, and writes create-or-update upserts for the 9 catalog-structure resources, through the Akeneo REST API (OAuth2 password grant).",
   "integration_type": "api",
-  "docs_url": "https://api.akeneo.com/documentation/authentication.html",
+  "docs_url": "https://api.akeneo.com/api-reference.html",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,8 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Akeneo PIM API read of product, category, family, attribute, and channel data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL write surface"
+    "read": "external Akeneo PIM API read of product, category, family, attribute, channel, product-model, family-variant, attribute-group, association-type, locale, currency, and measure-family data",
+    "write": "external Akeneo PIM API upsert (create-or-update, PATCH-based) of products, categories, families, attributes, channels, product models, family variants, attribute groups, and association types; schema-shaping mutations (family/attribute/attribute-group) affect every product referencing them, approval required"
   },
   "conformance": {
     "skip_dynamic": true,

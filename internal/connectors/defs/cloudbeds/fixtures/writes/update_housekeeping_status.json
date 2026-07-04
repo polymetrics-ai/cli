@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "roomID": "room_fixture_1", "roomCondition": "clean" },
+  "expect": { "method": "POST", "path": "/postHousekeepingStatus" },
+  "response": { "status": 200, "body": { "success": true } }
+}

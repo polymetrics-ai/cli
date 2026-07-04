@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "cust_fixture_1"
+  },
+  "expect": {
+    "method": "GET",
+    "path": "/app/dao/v6/customers"
+  }
+}

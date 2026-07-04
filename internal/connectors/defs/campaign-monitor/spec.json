@@ -21,7 +21,7 @@
     },
     "client_id": {
       "type": "string",
-      "description": "Campaign Monitor client id, required for the 'campaigns', 'lists', and 'suppressionlist' streams (substituted into their paths)."
+      "description": "Campaign Monitor client id, required for every client-scoped stream ('campaigns', 'lists', 'suppressionlist', 'segments', 'templates') and every list-scoped fan-out stream ('list_custom_fields', 'list_webhooks', 'active_subscribers', 'unconfirmed_subscribers', 'unsubscribed_subscribers', 'bounced_subscribers', 'deleted_subscribers'), which fan out over this client's own lists."
     }
   }
 }

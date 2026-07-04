@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/getGuestList" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "guestID": "guest_fixture_1",
+          "guestName": "Fixture Guest 1",
+          "guestEmail": "fixture1@example.com",
+          "propertyID": "prop_fixture_1",
+          "reservationID": "res_fixture_1",
+          "isMainGuest": true,
+          "isAnonymized": false,
+          "dateCreated": "2026-01-01 12:00:00",
+          "dateModified": "2026-01-02 09:00:00"
+        }
+      ],
+      "count": 1
+    }
+  }
+}

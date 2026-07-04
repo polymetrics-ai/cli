@@ -15,7 +15,7 @@
   "streams": [
     {
       "name": "symbols",
-      "path": "/v1/symbols",
+      "path": "/v1/symbols/{{ config.exchange_id }}/active",
       "records": { "path": "" },
       "pagination": { "type": "none" },
       "schema": "schemas/symbols.json"
@@ -83,6 +83,40 @@
         "symbol_id": "{{ config.symbol_id }}"
       },
       "schema": "schemas/trades_historical_data.json"
+    },
+    {
+      "name": "exchange_rates",
+      "path": "/v1/exchangerate/{{ config.asset_id_base }}",
+      "records": { "path": "rates" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "asset_id_base": "{{ config.asset_id_base }}",
+        "asset_id_quote": "{{ record.asset_id_quote }}",
+        "time": "{{ record.time }}",
+        "rate": "{{ record.rate }}"
+      },
+      "schema": "schemas/exchange_rates.json"
+    },
+    {
+      "name": "quotes_current",
+      "path": "/v1/quotes/{{ config.symbol_id }}/current",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/quotes_current.json"
+    },
+    {
+      "name": "orderbook_current",
+      "path": "/v1/orderbooks/{{ config.symbol_id }}/current",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/orderbook_current.json"
+    },
+    {
+      "name": "metrics_listing",
+      "path": "/v1/metrics/listing",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/metrics_listing.json"
     }
   ]
 }

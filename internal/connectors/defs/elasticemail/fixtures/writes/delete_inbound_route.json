@@ -1,0 +1,9 @@
+{
+  "record": {
+    "PublicId": "route_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/inboundroute/route_fixture_1"
+  }
+}

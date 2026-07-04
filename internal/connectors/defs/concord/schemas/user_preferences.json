@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "user_preferences",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "properties": {
+    "mobile": { "type": ["string", "null"] },
+    "mobileCode": { "type": ["string", "null"] },
+    "deadlinesNotificationDays": { "type": ["integer", "null"] },
+    "deadlinesNotificationEnabled": { "type": ["boolean", "null"] },
+    "name": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "phoneCode": { "type": ["string", "null"] },
+    "dateFormat": { "type": ["string", "null"] }
+  }
+}

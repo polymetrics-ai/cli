@@ -1,0 +1,12 @@
+{
+  "record": { "id": 6001, "category": "Fixture Category Renamed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/3/annotation-categories/6001",
+    "body": { "category": "Fixture Category Renamed" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": 6001, "category": "Fixture Category Renamed" } }
+  }
+}

@@ -66,6 +66,19 @@
         "stamp_field": "event_id"
       },
       "schema": "schemas/tickets.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/events/{{ fanout.id }}/transactions",
+      "records": { "path": "transactions" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/events", "records_path": "events", "id_field": "id" }
+        },
+        "into": { "path_var": "event_id" },
+        "stamp_field": "event_id"
+      },
+      "schema": "schemas/transactions.json"
     }
   ]
 }

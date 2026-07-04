@@ -1,0 +1,17 @@
+{
+  "record": {
+    "catalogs": [
+      { "name": "fixture_catalog", "description": "Fixture catalog", "fields": [{ "name": "id", "type": "string" }] }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/catalogs",
+    "body": {
+      "catalogs": [
+        { "name": "fixture_catalog", "description": "Fixture catalog", "fields": [{ "name": "id", "type": "string" }] }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

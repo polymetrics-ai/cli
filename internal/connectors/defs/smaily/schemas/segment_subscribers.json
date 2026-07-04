@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segment_subscribers",
+  "type": "object",
+  "x-primary-key": [
+    "email"
+  ],
+  "required": [
+    "email"
+  ],
+  "properties": {
+    "email": {
+      "type": "string"
+    },
+    "is_unsubscribed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscribed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "modified_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_open_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_opens": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_click_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_clicks": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/v1/organizations/synthetic-conformance-value/members" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "userId": "user_fixture_1", "fullName": "Fixture User", "email": "fixture@example.com", "twoFactorEnabled": true }
+    ]
+  }
+}

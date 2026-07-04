@@ -1,0 +1,32 @@
+{
+  "record": {
+    "title": "Fixture Offer",
+    "description": "Fixture offer description.",
+    "terms": "Fixture offer terms.",
+    "type": "promotion",
+    "url": "https://fixture.example.com/offer",
+    "startDate": "2026-01-01",
+    "endDate": "2026-01-31",
+    "appliesToAllRegions": true,
+    "promotionCategories": [12]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/promotion/advertiser/synthetic-conformance-value",
+    "body": {
+      "title": "Fixture Offer",
+      "description": "Fixture offer description.",
+      "terms": "Fixture offer terms.",
+      "type": "promotion",
+      "url": "https://fixture.example.com/offer",
+      "startDate": "2026-01-01",
+      "endDate": "2026-01-31",
+      "appliesToAllRegions": true,
+      "promotionCategories": [12]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success" }
+  }
+}

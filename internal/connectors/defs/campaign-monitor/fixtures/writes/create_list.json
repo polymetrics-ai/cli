@@ -1,0 +1,9 @@
+{
+  "record": { "Title": "Fixture List" },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/synthetic-conformance-value.json",
+    "body": { "Title": "Fixture List" }
+  },
+  "response": { "status": 201, "body": "list_fixture_1" }
+}

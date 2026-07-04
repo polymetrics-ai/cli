@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/meta/rankings",
+    "query": {
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ext_id": "ios:1001",
+        "country": "us",
+        "device": "iphone",
+        "genre_id": "6005",
+        "date": "2026-01-01",
+        "position": 12,
+        "category": "Top Free"
+      },
+      {
+        "ext_id": "ios:1001",
+        "country": "gb",
+        "device": "iphone",
+        "genre_id": "6005",
+        "date": "2026-01-01",
+        "position": 34,
+        "category": "Top Free"
+      }
+    ]
+  }
+}

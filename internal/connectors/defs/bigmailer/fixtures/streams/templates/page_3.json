@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_2/templates", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "template_fixture_2", "brand_id": "brand_fixture_2", "name": "Fixture Newsletter Template 2", "type": "page", "shared_with_account": false, "created": 1767225602 }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

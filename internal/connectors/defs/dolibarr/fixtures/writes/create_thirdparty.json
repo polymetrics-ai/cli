@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Thirdparty",
+    "email": "fixture-new@example.com",
+    "client": "1",
+    "code_client": "auto"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/thirdparties"
+  }
+}

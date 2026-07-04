@@ -1,14 +1,14 @@
 {
   "name": "ding-connect",
   "display_name": "Ding Connect",
-  "description": "Reads DingConnect reference catalogs (countries, currencies, regions, providers, and products) through the DingConnect REST API.",
+  "description": "Reads DingConnect reference catalogs (countries, currencies, regions, providers, products, product descriptions, promotions, provider status, error code descriptions, account balance) through the DingConnect REST API, and sends real-money mobile top-up transfers.",
   "integration_type": "api",
   "docs_url": "https://docs.ding.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external DingConnect API read of reference/catalog data",
-    "approval": "none; read-only reference-data source connector"
+    "read": "external DingConnect API read of reference/catalog data and distributor account balance",
+    "write": "external mutation; sends a real-money mobile top-up/airtime transfer and deducts the distributor's live DingConnect balance",
+    "approval": "required for the send_transfer write action; read streams remain unapproved"
   }
 }

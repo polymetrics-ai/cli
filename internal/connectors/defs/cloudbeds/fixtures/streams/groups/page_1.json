@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/getGroups", "query": { "propertyID": "synthetic-conformance-value", "pageNumber": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "groupCode": "group_fixture_1",
+          "name": "Fixture Group",
+          "type": "block",
+          "status": "active",
+          "created": "2026-01-01T00:00:00Z",
+          "sourceID": "source_fixture_1",
+          "sourceName": "Fixture Source",
+          "address1": "123 Fixture St",
+          "address2": null,
+          "city": "Fixture City",
+          "zip": "00000",
+          "state": "FX",
+          "countryCode": "US",
+          "commissionType": "none",
+          "taxDocumentType": null,
+          "taxIdNumber": null,
+          "legalName": "Fixture Group LLC",
+          "contacts": []
+        }
+      ],
+      "count": 1
+    }
+  }
+}

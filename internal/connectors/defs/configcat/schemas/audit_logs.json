@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "audit_logs",
+  "type": "object",
+  "x-primary-key": ["auditLogId"],
+  "required": ["auditLogId"],
+  "properties": {
+    "auditLogId": { "type": "string" },
+    "auditLogDateTime": { "type": ["string", "null"] },
+    "auditLogTypeEnum": { "type": ["string", "null"] },
+    "truncated": { "type": ["boolean", "null"] },
+    "modelVersion": { "type": ["integer", "null"] },
+    "auditLogType": { "type": ["string", "null"] },
+    "userEmail": { "type": ["string", "null"] },
+    "userName": { "type": ["string", "null"] },
+    "where": { "type": ["object", "null"] },
+    "why": { "type": ["object", "null"] },
+    "actionTarget": { "type": ["object", "null"] },
+    "details": { "type": ["object", "null"] }
+  }
+}

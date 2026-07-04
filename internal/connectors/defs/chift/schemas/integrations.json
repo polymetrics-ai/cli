@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "integrations",
+  "type": "object",
+  "x-primary-key": ["integrationid"],
+  "required": ["integrationid"],
+  "properties": {
+    "integrationid": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "api": { "type": ["string", "null"] },
+    "logo_url": { "type": ["string", "null"] },
+    "icon_url": { "type": ["string", "null"] },
+    "local_agent": { "type": ["boolean", "null"] }
+  }
+}

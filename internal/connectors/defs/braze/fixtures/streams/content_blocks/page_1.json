@@ -1,0 +1,1218 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/content_blocks/list",
+    "query": {
+      "offset": "0",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 100,
+      "content_blocks": [
+        {
+          "content_block_id": "cb_fixture_1",
+          "name": "Fixture Content Block 1",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_1' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:01.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_2",
+          "name": "Fixture Content Block 2",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_2' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:02.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_3",
+          "name": "Fixture Content Block 3",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_3' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:03.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_4",
+          "name": "Fixture Content Block 4",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_4' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:04.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_5",
+          "name": "Fixture Content Block 5",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_5' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:05.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_6",
+          "name": "Fixture Content Block 6",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_6' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:06.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_7",
+          "name": "Fixture Content Block 7",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_7' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:07.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_8",
+          "name": "Fixture Content Block 8",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_8' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:08.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_9",
+          "name": "Fixture Content Block 9",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_9' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:09.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_10",
+          "name": "Fixture Content Block 10",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_10' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:10.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_11",
+          "name": "Fixture Content Block 11",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_11' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:11.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_12",
+          "name": "Fixture Content Block 12",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_12' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:12.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_13",
+          "name": "Fixture Content Block 13",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_13' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:13.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_14",
+          "name": "Fixture Content Block 14",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_14' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:14.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_15",
+          "name": "Fixture Content Block 15",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_15' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:15.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_16",
+          "name": "Fixture Content Block 16",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_16' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:16.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_17",
+          "name": "Fixture Content Block 17",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_17' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:17.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_18",
+          "name": "Fixture Content Block 18",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_18' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:18.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_19",
+          "name": "Fixture Content Block 19",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_19' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:19.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_20",
+          "name": "Fixture Content Block 20",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_20' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:20.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_21",
+          "name": "Fixture Content Block 21",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_21' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:21.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_22",
+          "name": "Fixture Content Block 22",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_22' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:22.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_23",
+          "name": "Fixture Content Block 23",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_23' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:23.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_24",
+          "name": "Fixture Content Block 24",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_24' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:24.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_25",
+          "name": "Fixture Content Block 25",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_25' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:25.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_26",
+          "name": "Fixture Content Block 26",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_26' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:26.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_27",
+          "name": "Fixture Content Block 27",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_27' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:27.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_28",
+          "name": "Fixture Content Block 28",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_28' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:28.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_29",
+          "name": "Fixture Content Block 29",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_29' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:29.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_30",
+          "name": "Fixture Content Block 30",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_30' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:30.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_31",
+          "name": "Fixture Content Block 31",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_31' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:31.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_32",
+          "name": "Fixture Content Block 32",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_32' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:32.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_33",
+          "name": "Fixture Content Block 33",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_33' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:33.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_34",
+          "name": "Fixture Content Block 34",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_34' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:34.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_35",
+          "name": "Fixture Content Block 35",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_35' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:35.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_36",
+          "name": "Fixture Content Block 36",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_36' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:36.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_37",
+          "name": "Fixture Content Block 37",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_37' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:37.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_38",
+          "name": "Fixture Content Block 38",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_38' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:38.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_39",
+          "name": "Fixture Content Block 39",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_39' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:39.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_40",
+          "name": "Fixture Content Block 40",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_40' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:40.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_41",
+          "name": "Fixture Content Block 41",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_41' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:41.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_42",
+          "name": "Fixture Content Block 42",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_42' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:42.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_43",
+          "name": "Fixture Content Block 43",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_43' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:43.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_44",
+          "name": "Fixture Content Block 44",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_44' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:44.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_45",
+          "name": "Fixture Content Block 45",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_45' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:45.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_46",
+          "name": "Fixture Content Block 46",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_46' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:46.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_47",
+          "name": "Fixture Content Block 47",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_47' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:47.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_48",
+          "name": "Fixture Content Block 48",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_48' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:48.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_49",
+          "name": "Fixture Content Block 49",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_49' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:49.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_50",
+          "name": "Fixture Content Block 50",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_50' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:50.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_51",
+          "name": "Fixture Content Block 51",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_51' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:51.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_52",
+          "name": "Fixture Content Block 52",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_52' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:52.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_53",
+          "name": "Fixture Content Block 53",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_53' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:53.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_54",
+          "name": "Fixture Content Block 54",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_54' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:54.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_55",
+          "name": "Fixture Content Block 55",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_55' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:55.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_56",
+          "name": "Fixture Content Block 56",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_56' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:56.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_57",
+          "name": "Fixture Content Block 57",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_57' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:57.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_58",
+          "name": "Fixture Content Block 58",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_58' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:58.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_59",
+          "name": "Fixture Content Block 59",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_59' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:59.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_60",
+          "name": "Fixture Content Block 60",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_60' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:00.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_61",
+          "name": "Fixture Content Block 61",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_61' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:01.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_62",
+          "name": "Fixture Content Block 62",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_62' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:02.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_63",
+          "name": "Fixture Content Block 63",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_63' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:03.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_64",
+          "name": "Fixture Content Block 64",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_64' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:04.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_65",
+          "name": "Fixture Content Block 65",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_65' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:05.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_66",
+          "name": "Fixture Content Block 66",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_66' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:06.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_67",
+          "name": "Fixture Content Block 67",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_67' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:07.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_68",
+          "name": "Fixture Content Block 68",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_68' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:08.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_69",
+          "name": "Fixture Content Block 69",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_69' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:09.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_70",
+          "name": "Fixture Content Block 70",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_70' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:10.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_71",
+          "name": "Fixture Content Block 71",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_71' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:11.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_72",
+          "name": "Fixture Content Block 72",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_72' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:12.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_73",
+          "name": "Fixture Content Block 73",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_73' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:13.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_74",
+          "name": "Fixture Content Block 74",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_74' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:14.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_75",
+          "name": "Fixture Content Block 75",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_75' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:15.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_76",
+          "name": "Fixture Content Block 76",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_76' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:16.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_77",
+          "name": "Fixture Content Block 77",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_77' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:17.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_78",
+          "name": "Fixture Content Block 78",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_78' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:18.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_79",
+          "name": "Fixture Content Block 79",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_79' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:19.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_80",
+          "name": "Fixture Content Block 80",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_80' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:20.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_81",
+          "name": "Fixture Content Block 81",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_81' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:21.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_82",
+          "name": "Fixture Content Block 82",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_82' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:22.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_83",
+          "name": "Fixture Content Block 83",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_83' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:23.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_84",
+          "name": "Fixture Content Block 84",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_84' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:24.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_85",
+          "name": "Fixture Content Block 85",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_85' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:25.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_86",
+          "name": "Fixture Content Block 86",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_86' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:26.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_87",
+          "name": "Fixture Content Block 87",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_87' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:27.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_88",
+          "name": "Fixture Content Block 88",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_88' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:28.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_89",
+          "name": "Fixture Content Block 89",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_89' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:29.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_90",
+          "name": "Fixture Content Block 90",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_90' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:30.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_91",
+          "name": "Fixture Content Block 91",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_91' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:31.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_92",
+          "name": "Fixture Content Block 92",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_92' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:32.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_93",
+          "name": "Fixture Content Block 93",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_93' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:33.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_94",
+          "name": "Fixture Content Block 94",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_94' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:34.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_95",
+          "name": "Fixture Content Block 95",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_95' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:35.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_96",
+          "name": "Fixture Content Block 96",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_96' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:36.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_97",
+          "name": "Fixture Content Block 97",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_97' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:37.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_98",
+          "name": "Fixture Content Block 98",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_98' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:38.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_99",
+          "name": "Fixture Content Block 99",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_99' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:39.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "content_block_id": "cb_fixture_100",
+          "name": "Fixture Content Block 100",
+          "content_type": "html",
+          "liquid_tag": "{% include 'content_block_cb_fixture_100' %}",
+          "inclusion_count": 0,
+          "created_at": "2026-01-01T00:00:00.000000",
+          "last_edited": "2026-01-01T00:00:40.000000",
+          "tags": [
+            "fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

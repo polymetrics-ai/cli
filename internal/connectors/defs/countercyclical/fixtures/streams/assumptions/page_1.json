@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/assumptions", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "assumption_fixture_1", "name": "Base Case", "discountRate": "10.5" },
+      { "id": "assumption_fixture_2", "name": "Bull Case", "discountRate": "8.0" }
+    ]
+  }
+}

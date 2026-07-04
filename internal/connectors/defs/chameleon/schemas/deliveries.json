@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "deliveries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "model_id": { "type": ["string", "null"] },
+    "model_kind": { "type": ["string", "null"] },
+    "profile_id": { "type": ["string", "null"] },
+    "idempotency_key": { "type": ["string", "null"] },
+    "options": { "type": ["object", "null"] },
+    "from": { "type": ["string", "null"], "format": "date-time" },
+    "until": { "type": ["string", "null"], "format": "date-time" },
+    "use_segmentation": { "type": ["boolean", "null"] },
+    "once": { "type": ["boolean", "null"] },
+    "at": { "type": ["string", "null"], "format": "date-time" },
+    "at_href": { "type": ["string", "null"] },
+    "interaction_id": { "type": ["string", "null"] },
+    "group_kind": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

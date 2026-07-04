@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "5f8a1c2b3d4e5f6a7b8c9d99"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/5f8a1c2b3d4e5f6a7b8c9d99"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "carrier_id": 1,
+    "notify_customer": false,
+    "update_remote_order": false,
+    "allocation_id": 1,
+    "order_id": 1,
+    "shipment": {
+      "tracking_number_attributes": {
+        "tracking_number": "FIXTURE-TRACK-1"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shipments"
+  }
+}

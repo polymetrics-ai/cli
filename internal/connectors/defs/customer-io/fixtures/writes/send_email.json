@@ -1,0 +1,15 @@
+{
+  "record": {
+    "to": "fixture1@example.com",
+    "transactional_message_id": 1,
+    "identifiers": { "id": "cust_fixture_1" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/send/email",
+    "body": {
+      "to": "fixture1@example.com"
+    }
+  },
+  "response": { "status": 200, "body": { "delivery_id": "dgo_fixture_1", "queued_at": 1767225601 } }
+}

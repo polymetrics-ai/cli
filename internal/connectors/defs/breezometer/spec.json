@@ -35,6 +35,18 @@
       "type": "string",
       "description": "Optional `days` query param for the pollen_forecast stream (number of daily forecast points to return)."
     },
+    "weather_days_to_forecast": {
+      "type": "string",
+      "description": "Optional `days` query param for the weather_daily_forecast stream (number of daily weather forecast points to return, 1-5)."
+    },
+    "wildfire_radius_km": {
+      "type": "string",
+      "description": "Required `radius` query param (kilometers) for the wildfire_active_tracking and wildfire_burnt_area streams: desired search radius from latitude/longitude, 5-100 km."
+    },
+    "wildfire_days_from_extinguish": {
+      "type": "string",
+      "description": "Optional `daysFromExtinguish` query param for the wildfire_burnt_area stream (days since a fire was marked extinguished to still include its burnt area)."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

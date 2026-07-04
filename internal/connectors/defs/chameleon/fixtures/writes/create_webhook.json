@@ -1,0 +1,10 @@
+{
+  "record": {
+    "url": "https://hooks.example.com/fixture",
+    "topics": "tour_completed"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/edit/webhooks"
+  }
+}

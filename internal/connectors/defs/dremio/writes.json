@@ -1,0 +1,227 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/user",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "creates a new Dremio user account with instance-wide access, scoped by whatever role assignment follows; external mutation, approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/user/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "active": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing Dremio user account, including its active flag which can lock the user out; external mutation, approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/user/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a Dremio user account and revokes its access; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/role",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new Dremio role; low external mutation risk on its own until members/grants are attached"
+    },
+    {
+      "name": "update_role",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/role/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing Dremio role's name/description; external mutation, approval required"
+    },
+    {
+      "name": "delete_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/role/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a Dremio role and its grants for every member; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_reflection",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reflection/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing reflection's definition (name/enabled/tag); disabling a reflection removes its query-acceleration benefit until re-enabled and rebuilt; external mutation, approval required"
+    },
+    {
+      "name": "refresh_reflection",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/reflection/{{ record.id }}/refresh",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "forces an immediate reflection rebuild, consuming cluster compute; low external-mutation risk, no data loss, no approval required"
+    },
+    {
+      "name": "delete_reflection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reflection/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a reflection definition; any query relying on it for acceleration falls back to the raw dataset; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_personal_access_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/user/{{ record.user_id }}/token",
+      "path_fields": ["user_id"],
+      "body_type": "json",
+      "body_fields": ["label", "millisToExpire"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id", "label"],
+        "properties": {
+          "user_id": { "type": "string" },
+          "label": { "type": "string" },
+          "millisToExpire": { "type": "integer" }
+        }
+      },
+      "risk": "mints a new long-lived Personal Access Token credential for the named user; the response body carries the plaintext token exactly once and must never be logged; external mutation, approval required"
+    },
+    {
+      "name": "delete_personal_access_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/user/{{ record.user_id }}/token/{{ record.token_id }}",
+      "path_fields": ["user_id", "token_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id", "token_id"],
+        "properties": {
+          "user_id": { "type": "string" },
+          "token_id": { "type": "string" }
+        }
+      },
+      "risk": "revokes a single Personal Access Token, immediately invalidating any client still using it; destructive to that credential's holders, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

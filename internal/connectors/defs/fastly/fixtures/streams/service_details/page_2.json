@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/service/svc_fixture_1/details" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "svc_fixture_1",
+      "name": "Fixture Service 1",
+      "type": "vcl",
+      "customer_id": "cus_fixture_1",
+      "comment": "conformance fixture service",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-02T00:00:00Z",
+      "deleted_at": null,
+      "version": {
+        "service_id": "svc_fixture_1",
+        "active": true,
+        "testing": false,
+        "number": 2
+      },
+      "versions": [
+        { "number": 1, "active": false },
+        { "number": 2, "active": true }
+      ]
+    }
+  }
+}

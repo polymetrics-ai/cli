@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "balance_sheet_statement",
+  "type": "object",
+  "x-primary-key": ["symbol", "date", "period"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "period": { "type": ["string", "null"] },
+    "reported_currency": { "type": ["string", "null"] },
+    "fiscal_year": { "type": ["string", "null"] },
+    "filling_date": { "type": ["string", "null"] },
+    "accepted_date": { "type": ["string", "null"] },
+    "calendar_year": { "type": ["string", "null"] },
+    "cash_and_cash_equivalents": { "type": ["number", "null"] },
+    "total_current_assets": { "type": ["number", "null"] },
+    "total_assets": { "type": ["number", "null"] },
+    "total_current_liabilities": { "type": ["number", "null"] },
+    "total_liabilities": { "type": ["number", "null"] },
+    "total_equity": { "type": ["number", "null"] },
+    "total_liabilities_and_total_equity": { "type": ["number", "null"] }
+  }
+}

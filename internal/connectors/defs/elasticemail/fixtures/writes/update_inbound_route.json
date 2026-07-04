@@ -1,0 +1,13 @@
+{
+  "record": {
+    "PublicId": "route_fixture_1",
+    "HttpAddress": "https://example.com/inbound-v2"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/inboundroute/route_fixture_1",
+    "body": {
+      "HttpAddress": "https://example.com/inbound-v2"
+    }
+  }
+}

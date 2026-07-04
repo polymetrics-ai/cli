@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/leads/PER_fixture_1/timeline.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "lead": {
+        "customer_name": "Fixture Lead",
+        "customer_phone_number": "+15550000001",
+        "total_interactions": 1,
+        "first_touch": { "touchpoint_type": "organic_search", "source": "google" },
+        "last_touch": { "touchpoint_type": "direct" },
+        "source": "google",
+        "medium": "organic",
+        "campaign": null,
+        "voice_assist": false,
+        "transcript": false,
+        "tags": []
+      }
+    }
+  }
+}

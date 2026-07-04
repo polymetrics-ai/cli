@@ -1,11 +1,16 @@
 # Overview
 
-CircleCI is a wave2 fan-out declarative-HTTP migration. It reads CircleCI projects, pipelines,
-workflows, and jobs through the CircleCI v2 REST API (`GET https://circleci.com/api/v2/...`). This
-bundle targets capability parity with `internal/connectors/circleci` (the hand-written connector it
-migrates); the legacy package stays registered and unchanged until wave6's registry flip. The
-connector is read-only: CircleCI's write surface (trigger pipeline, cancel workflow, approve job)
-mutates live CI state and is not a safe reverse-ETL target, matching legacy exactly.
+CircleCI is a Pass B full-surface declarative-HTTP migration. It reads and writes CircleCI
+projects, pipelines, workflows, jobs, contexts, schedules, checkout keys, environment variables,
+and per-workflow insight summaries through the CircleCI v2 REST API
+(`https://circleci.com/api/v2/...`), verified against the real OpenAPI 3.0.3 spec fetched from
+`https://circleci.com/api/v2/openapi.json` on 2026-07-04. This bundle originally targeted capability
+parity with `internal/connectors/circleci` (the hand-written connector it migrates, read-only); the
+legacy package stays registered and unchanged until wave6's registry flip. CircleCI's
+live-CI-state mutation surface (trigger pipeline, cancel workflow, approve job, rerun workflow)
+remains permanently out of scope — it mutates live CI state and is not a safe reverse-ETL
+target — but this bundle now covers CircleCI's safe project-CONFIGURATION mutation surface
+(schedules, environment variables, checkout keys) that legacy never implemented.
 
 ## Auth setup
 
@@ -35,12 +40,39 @@ sync-mode eligibility without ever being requested, the same shape as this wave'
 field via `computed_fields` (bare `{{ record.vcs_info.default_branch }}` reference), matching
 legacy's `circleciProjectRecord` nesting-flatten.
 
+`contexts`/`schedules`/`checkout_keys`/`environment_variables`/`insights_workflow_summary` are new
+Pass B streams sharing the same `{"items":[...],"next_page_token":...}` cursor-pagination envelope
+as `pipelines`/`workflows`/`jobs`. `contexts` is org-scoped, not project-scoped: it derives its
+required `owner-slug` query parameter from `{{ config.vcs_type }}/{{ config.org }}` (the same two
+config segments already used to build the project slug) since this bundle has no separate org-only
+config key. `schedules`/`checkout_keys`/`environment_variables`/`insights_workflow_summary` are
+project-scoped exactly like `projects`/`pipelines`. `schedules` publishes `x-cursor-field:
+updated-at` (CircleCI's own hyphenated field name — schema projection is exact key-match, so the
+property is declared as `"updated-at"`, not renamed); the other 4 new streams are full-refresh only.
+`checkout_keys`' primary key is `fingerprint` (there is no `id` field on this resource);
+`environment_variables`' primary key is `name`; `insights_workflow_summary`'s primary key is `name`
+(one row per workflow name per project in the current aggregation window — CircleCI's own
+`project_id`/`window_start`/`window_end` fields are preserved as opaque columns, not decomposed
+further).
+
 ## Write actions & risks
 
-None. CircleCI's mutation endpoints (trigger pipeline, cancel workflow, approve job) affect live CI
-state and are not safe reverse-ETL targets; `capabilities.write` is `false` and this bundle ships no
-`writes.json`, matching legacy's `Write` unconditionally returning
-`connectors.ErrUnsupportedOperation`.
+`capabilities.write` is `true`. Seven actions cover CircleCI's project-CONFIGURATION mutation
+surface — deliberately excluding every live-CI-state mutation (trigger/cancel/approve/rerun),
+which remains out of scope exactly as legacy left it:
+`create_schedule`/`update_schedule`/`delete_schedule` (a scheduled-pipeline trigger's timetable and
+pipeline parameters), `create_environment_variable`/`delete_environment_variable` (project
+environment variables — CircleCI's API only supports create-or-overwrite and delete, never a
+partial update of an existing variable's value), and `create_checkout_key`/`delete_checkout_key`
+(project deploy/checkout SSH keys). All three delete-kind actions declare `delete.missing_ok_status:
+[404]` (idempotent delete). `delete_environment_variable`/`delete_checkout_key` path-interpolate
+`{{ record.name }}`/`{{ record.fingerprint }}` respectively — a checkout-key fingerprint's `:`
+characters pass through the engine's default per-segment `urlencode` filter unescaped (Go's
+`url.QueryEscape`, which the engine wraps for path-segment encoding, does not escape `:`;
+confirmed empirically against the write-replay harness). This exceeds legacy's own read-only scope
+(`Write` unconditionally returned `ErrUnsupportedOperation`) — a deliberate Pass B capability
+expansion targeting only configuration writes, never anything that starts, stops, or approves a CI
+run.
 
 ## Known limits
 
@@ -69,5 +101,14 @@ state and are not safe reverse-ETL targets; `capabilities.write` is `false` and 
   projects the top-level `vcs_url` field directly (present on every real CircleCI project response);
   the nested fallback, which legacy defends against for a hypothetical response shape never observed
   in practice, is not reproduced. ACCEPTABLE per conventions.md §5's meta-rule.
-- Full CircleCI v2 API surface (contexts, insights, schedules, pipeline-trigger, workflow
-  approval/cancel) is out of scope for this wave; see `api_surface.json`'s `excluded` entries.
+- **Webhook management (`/webhook*`), pipeline-definitions/triggers, and project/org-level OIDC
+  claims are out of scope**: each requires a project UUID (`scope-id`/`project_id`/`projectID`)
+  that CircleCI's API exposes no slug-to-UUID lookup endpoint for; this bundle's config only ever
+  carries the human-readable `vcs_type`/`org`/`repo` project-slug triple, never the underlying
+  UUID, so these endpoints have no declarative resolution path. See `api_surface.json`'s
+  `requires_elevated_scope`-categorized entries.
+- **Org/account-tier administration is out of scope**: organizations, groups, URL Orb allow-lists,
+  usage-export jobs, OTel exporters, and OPA policy/decision-audit endpoints all operate above this
+  connector's per-project scope; see `api_surface.json`.
+- Full CircleCI v2 API surface breakdown (every documented endpoint's covered/excluded disposition
+  and reason) is recorded in `api_surface.json`.

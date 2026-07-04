@@ -1,0 +1,17 @@
+{
+  "record": {
+    "record_id": "rec_fixture_1",
+    "text": "Fixture comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1/comments",
+    "body": {
+      "text": "Fixture comment"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "comFixtureNew", "text": "Fixture comment", "createdTime": "2026-01-01T00:00:00.000Z" }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "subscriber_id": 1,
+    "tag_id": 100
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/subscribers/1/tags/100"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

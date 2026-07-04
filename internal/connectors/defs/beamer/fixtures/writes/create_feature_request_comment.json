@@ -1,0 +1,13 @@
+{
+  "record": {
+    "feature_request_id": "fr_fixture_1",
+    "text": "Fixture comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/feature-requests/fr_fixture_1/comments",
+    "body": {
+      "text": "Fixture comment"
+    }
+  }
+}

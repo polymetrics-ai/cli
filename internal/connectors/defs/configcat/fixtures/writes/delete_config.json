@@ -1,0 +1,7 @@
+{
+  "record": { "configId": "config_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/configs/config_fixture_1"
+  }
+}

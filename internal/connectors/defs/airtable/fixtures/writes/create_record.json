@@ -1,0 +1,16 @@
+{
+  "record": {
+    "fields": { "Name": "Fixture Record", "Score": 42 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/synthetic-conformance-value",
+    "body": {
+      "fields": { "Name": "Fixture Record", "Score": 42 }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "rec_fixture_new", "createdTime": "2026-01-01T00:00:00.000Z", "fields": { "Name": "Fixture Record", "Score": 42 } }
+  }
+}

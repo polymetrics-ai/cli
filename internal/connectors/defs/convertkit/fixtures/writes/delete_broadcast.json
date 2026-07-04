@@ -1,0 +1,11 @@
+{
+  "record": { "id": 200 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/broadcasts/200"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

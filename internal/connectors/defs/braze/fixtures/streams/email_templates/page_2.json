@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/templates/email/list",
+    "query": {
+      "offset": "100",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "templates": [
+        {
+          "email_template_id": "tpl_fixture_101",
+          "template_name": "Fixture Template 101",
+          "created_at": "2026-01-01T00:01:00.000000",
+          "updated_at": "2026-01-01T00:01:01.000000",
+          "tags": [
+            "fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

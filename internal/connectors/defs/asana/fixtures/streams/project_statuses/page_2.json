@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/projects/fixture_proj_1/project_statuses" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_status_1", "resource_type": "project_status", "title": "On track", "text": "Fixture status text", "color": "green", "created_at": "2026-01-01T00:00:00Z", "modified_at": "2026-01-01T00:00:00Z" }
+      ],
+      "next_page": null
+    }
+  }
+}

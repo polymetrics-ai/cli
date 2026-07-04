@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Delivery Method",
+    "cost": "0.0"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/delivery_methods"
+  }
+}

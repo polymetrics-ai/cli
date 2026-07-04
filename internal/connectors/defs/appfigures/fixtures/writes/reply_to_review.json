@@ -1,0 +1,9 @@
+{
+  "record": { "id": "review_fixture_1", "content": "Thanks for the feedback!" },
+  "expect": {
+    "method": "POST",
+    "path": "/reviews/review_fixture_1/response",
+    "body": { "content": "Thanks for the feedback!" }
+  },
+  "response": { "status": 202, "body": {} }
+}

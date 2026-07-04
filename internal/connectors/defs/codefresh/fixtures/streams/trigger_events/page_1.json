@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hermes/events"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "endpoint": "https://g.codefresh.io/nomios/dockerhub?account=fixtureacct&secret=fixtureval",
+        "description": "Docker Hub fixture-org/fixture-image push event",
+        "status": "active",
+        "help": "Docker Hub webhooks fire when an image is built in, pushed or a new tag is added to your repository.",
+        "uri": "registry:dockerhub:fixture-org:fixture-image:push:fixtureacct",
+        "type": "registry",
+        "kind": "dockerhub",
+        "account": "fixtureacct",
+        "secret": "fixtureval"
+      }
+    ]
+  }
+}

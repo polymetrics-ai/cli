@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/edit/tags",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "id": "tag_fixture_1",
+          "uid": "new_features",
+          "name": "New Features",
+          "description": "Any feature announcement",
+          "models_count": 3,
+          "disabled_at": null,
+          "last_seen_at": "2026-01-02T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

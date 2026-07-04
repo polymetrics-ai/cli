@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v2/transcript/fixture_transcript_1/paragraphs" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_transcript_1",
+      "confidence": 0.97,
+      "audio_duration": 12.5,
+      "paragraphs": [
+        {
+          "text": "This is a fixture paragraph.",
+          "start": 0,
+          "end": 2500,
+          "confidence": 0.97,
+          "speaker": null,
+          "channel": null
+        }
+      ]
+    }
+  }
+}

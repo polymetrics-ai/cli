@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/targethours" },
+  "response": {
+    "status": 200,
+    "body": {
+      "targethours": [
+        {
+          "id": 1,
+          "type": "weekly",
+          "date_since": "2026-01-01",
+          "date_until": null,
+          "compensation_monthly": 0,
+          "users_id": 1,
+          "monday": 8,
+          "tuesday": 8,
+          "wednesday": 8,
+          "thursday": 8,
+          "friday": 8,
+          "saturday": 0,
+          "sunday": 0,
+          "absence_fixed_credit": true,
+          "compensation_daily": 8
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/status/lead/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "stat_1", "label": "Potential", "organization_id": "orga_fixture" }
+      ]
+    }
+  }
+}

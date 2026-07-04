@@ -22,7 +22,7 @@
     },
     "symbol_id": {
       "type": "string",
-      "description": "CoinAPI symbol identifier (e.g. BITSTAMP_SPOT_BTC_USD), required for the ohlcv_historical_data and trades_historical_data streams."
+      "description": "CoinAPI symbol identifier (e.g. BITSTAMP_SPOT_BTC_USD), required for the ohlcv_historical_data, trades_historical_data, quotes_current, and orderbook_current streams."
     },
     "period": {
       "type": "string",
@@ -42,6 +42,14 @@
       "type": "string",
       "default": "100",
       "description": "Records per page for historical streams (1-100000)."
+    },
+    "exchange_id": {
+      "type": "string",
+      "description": "CoinAPI exchange identifier (e.g. BITSTAMP), required for the symbols stream. CoinAPI retired the bare all-exchanges GET /v1/symbols listing; symbols are now listed per-exchange via GET /v1/symbols/{exchange_id}/active."
+    },
+    "asset_id_base": {
+      "type": "string",
+      "description": "CoinAPI base asset identifier (e.g. BTC), required for the exchange_rates stream."
     }
   }
 }

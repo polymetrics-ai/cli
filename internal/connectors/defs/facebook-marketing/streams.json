@@ -50,6 +50,51 @@
       },
       "records": { "path": "data" },
       "schema": "schemas/ads.json"
+    },
+    {
+      "name": "ad_sets",
+      "path": "/{{ config.ad_account_id }}/adsets",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,campaign_id,status,effective_status,daily_budget,lifetime_budget,billing_event,optimization_goal,bid_amount,start_time,end_time,created_time,updated_time"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ad_sets.json"
+    },
+    {
+      "name": "ad_creatives",
+      "path": "/{{ config.ad_account_id }}/adcreatives",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,object_story_id,object_type,thumbnail_url,status"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ad_creatives.json"
+    },
+    {
+      "name": "custom_audiences",
+      "path": "/{{ config.ad_account_id }}/customaudiences",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,subtype,description,approximate_count_lower_bound,approximate_count_upper_bound,operation_status,time_created,time_updated"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/custom_audiences.json"
+    },
+    {
+      "name": "insights",
+      "path": "/{{ config.ad_account_id }}/insights",
+      "query": {
+        "limit": "100",
+        "level": "ad",
+        "fields": "campaign_id,campaign_name,adset_id,adset_name,ad_id,ad_name,impressions,clicks,spend,reach,frequency,cpc,cpm,ctr,date_start,date_stop",
+        "date_preset": "last_30d"
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.ad_id }}{{ record.date_start }}"
+      },
+      "schema": "schemas/insights.json"
     }
   ]
 }

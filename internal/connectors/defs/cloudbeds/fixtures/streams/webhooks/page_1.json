@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/getWebhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": "webhook_fixture_1",
+          "key": { "type": "property", "id": "prop_fixture_1" },
+          "event": { "entity": "reservation", "action": "created" },
+          "owner": { "type": "app", "id": "app_fixture_1" },
+          "subscriptionType": "webhook",
+          "subscriptionData": { "endpoint": "https://example.com/fixture/webhook" }
+        }
+      ],
+      "count": 1
+    }
+  }
+}

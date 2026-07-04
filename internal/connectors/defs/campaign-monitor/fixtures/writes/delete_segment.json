@@ -1,0 +1,8 @@
+{
+  "record": { "SegmentID": "segment_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/segments/segment_fixture_1.json"
+  },
+  "response": { "status": 200, "body": {} }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "comment_threads",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "published_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "video_id": { "type": ["string", "null"], "description": "Stamped by the fan_out driving this stream (config.video_ids)." },
+    "text": { "type": ["string", "null"], "description": "Top-level comment display text (snippet.topLevelComment.snippet.textDisplay)." },
+    "published_at": { "type": ["string", "null"] }
+  }
+}

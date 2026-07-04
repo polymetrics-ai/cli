@@ -21,6 +21,40 @@
       },
       "records": { "path": ".", "single_object": true },
       "schema": "schemas/latest.json"
+    },
+    {
+      "name": "convert",
+      "path": "/convert",
+      "query": {
+        "from": "{{ config.convert_from }}",
+        "to": "{{ config.convert_to }}",
+        "amount": "{{ config.convert_amount }}",
+        "date": { "template": "{{ config.convert_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/convert.json"
+    },
+    {
+      "name": "timeseries",
+      "path": "/timeseries",
+      "query": {
+        "start_date": "{{ config.timeseries_start_date }}",
+        "end_date": "{{ config.timeseries_end_date }}",
+        "base": { "template": "{{ config.base }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/timeseries.json"
+    },
+    {
+      "name": "fluctuation",
+      "path": "/fluctuation",
+      "query": {
+        "start_date": "{{ config.fluctuation_start_date }}",
+        "end_date": "{{ config.fluctuation_end_date }}",
+        "base": { "template": "{{ config.base }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/fluctuation.json"
     }
   ]
 }

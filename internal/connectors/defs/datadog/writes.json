@@ -1,0 +1,540 @@
+{
+  "actions": [
+    {
+      "name": "create_monitor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/monitor",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "type", "query", "message"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "query": { "type": "string" },
+          "message": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "priority": { "type": "integer" },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "creates a new alerting monitor; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_monitor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/monitor/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "query": { "type": "string" },
+          "message": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "priority": { "type": "integer" },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing monitor's alert condition/notification message; a changed query/threshold affects live alerting behavior, approval required"
+    },
+    {
+      "name": "delete_monitor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/monitor/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversibly removes a monitor and its alerting history reference; approval required"
+    },
+    {
+      "name": "create_dashboard",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/dashboard",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "layout_type", "widgets"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "layout_type": { "type": "string" },
+          "widgets": { "type": "array" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "notify_list": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new dashboard; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_dashboard",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/dashboard/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "title", "layout_type", "widgets"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "layout_type": { "type": "string" },
+          "widgets": { "type": "array" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "notify_list": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "replaces an existing dashboard's full widget layout; external mutation, approval required"
+    },
+    {
+      "name": "delete_dashboard",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/dashboard/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversibly removes a dashboard; approval required"
+    },
+    {
+      "name": "create_dashboard_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/dashboard/lists/manual",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new dashboard list (folder); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_dashboard_list",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/dashboard/lists/manual/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing dashboard list; external mutation, approval required"
+    },
+    {
+      "name": "delete_dashboard_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/dashboard/lists/manual/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversibly removes a dashboard list (folder); the dashboards themselves are unaffected, approval required"
+    },
+    {
+      "name": "create_downtime",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/downtime",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["scope"],
+        "properties": {
+          "scope": { "type": "array", "items": { "type": "string" } },
+          "monitor_id": { "type": "integer" },
+          "monitor_tags": { "type": "array", "items": { "type": "string" } },
+          "message": { "type": "string" },
+          "start": { "type": "integer" },
+          "end": { "type": "integer" },
+          "timezone": { "type": "string" },
+          "recurrence": { "type": "object" }
+        }
+      },
+      "risk": "schedules a downtime that silences monitor alerts for the given scope; suppresses real alerting during the window, approval required"
+    },
+    {
+      "name": "update_downtime",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/downtime/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "scope": { "type": "array", "items": { "type": "string" } },
+          "message": { "type": "string" },
+          "start": { "type": "integer" },
+          "end": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing downtime's window/scope; changes which alerts are currently suppressed, approval required"
+    },
+    {
+      "name": "cancel_downtime",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/downtime/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "cancels a scheduled/active downtime; alerting resumes immediately for its scope, approval required"
+    },
+    {
+      "name": "create_notebook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/notebooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "cells", "time"],
+        "properties": {
+          "name": { "type": "string" },
+          "cells": { "type": "array" },
+          "time": { "type": "object" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "creates a new notebook; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_notebook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/notebooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "cells", "time"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "cells": { "type": "array" },
+          "time": { "type": "object" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "replaces an existing notebook's content; external mutation, approval required"
+    },
+    {
+      "name": "delete_notebook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/notebooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversibly removes a notebook; approval required"
+    },
+    {
+      "name": "create_slo",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/slo",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "type", "thresholds"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "monitor_ids": { "type": "array", "items": { "type": "integer" } },
+          "query": { "type": "object" },
+          "thresholds": { "type": "array" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new SLO target; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_slo",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/slo/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "thresholds": { "type": "array" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing SLO's target thresholds; affects SLO burn-rate alerting, approval required"
+    },
+    {
+      "name": "delete_slo",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/slo/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversibly removes an SLO and its historical error-budget tracking; approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/user",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "access_role": { "type": "string" }
+        }
+      },
+      "risk": "invites a new user into the Datadog organization with the given role; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/user/{{ record.handle }}",
+      "path_fields": ["handle"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["handle"],
+        "properties": {
+          "handle": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "access_role": { "type": "string" },
+          "disabled": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing user's role/profile; a changed access_role directly changes that user's permissions, approval required"
+    },
+    {
+      "name": "disable_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/user/{{ record.handle }}",
+      "path_fields": ["handle"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["handle"],
+        "properties": {
+          "handle": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "disables a user's access to the Datadog organization; approval required"
+    },
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/events",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "text"],
+        "properties": {
+          "title": { "type": "string" },
+          "text": { "type": "string" },
+          "alert_type": { "type": "string" },
+          "priority": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "host": { "type": "string" },
+          "date_happened": { "type": "integer" },
+          "aggregation_key": { "type": "string" }
+        }
+      },
+      "risk": "posts a custom event into the Datadog event stream; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_synthetics_api_test",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/api",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "type", "config", "locations"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "subtype": { "type": "string" },
+          "config": { "type": "object" },
+          "locations": { "type": "array", "items": { "type": "string" } },
+          "message": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "creates a new Synthetics API test that begins actively probing the configured URL/host on a schedule; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_synthetics_api_test",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/synthetics/tests/api/{{ record.public_id }}",
+      "path_fields": ["public_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["public_id"],
+        "properties": {
+          "public_id": { "type": "string" },
+          "name": { "type": "string" },
+          "config": { "type": "object" },
+          "locations": { "type": "array", "items": { "type": "string" } },
+          "message": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing Synthetics API test's request target/assertions; changes what is actively probed, approval required"
+    },
+    {
+      "name": "create_api_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/api_key",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new organization API key with full agent-submission scope; a newly-minted long-lived credential, approval required"
+    },
+    {
+      "name": "update_api_key",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/api_key/{{ record.key }}",
+      "path_fields": ["key"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key", "name"],
+        "properties": {
+          "key": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing API key; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_api_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/api_key/{{ record.key }}",
+      "path_fields": ["key"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key"],
+        "properties": {
+          "key": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversibly revokes an organization API key; every agent/integration still using it immediately loses ingest access, approval required"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/expenses/categories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        {
+          "id": "ec_fixture_1",
+          "name": "Fixture Category One",
+          "workspaceId": "ws_fixture_1",
+          "archived": false,
+          "hasUnitPrice": true,
+          "unit": "piece",
+          "priceInCents": 1000
+        }
+      ],
+      "count": 1
+    }
+  }
+}

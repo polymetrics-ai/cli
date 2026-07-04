@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/audits",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 51,
+        "audit_date": "2026-01-01",
+        "next_audit_date": "2027-01-01",
+        "scheduled": false,
+        "completed": true,
+        "asset_id": 51,
+        "location_id": 4,
+        "user_id": 8,
+        "notes": null,
+        "audit_status": "passed",
+        "audit_failed_reason": null,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

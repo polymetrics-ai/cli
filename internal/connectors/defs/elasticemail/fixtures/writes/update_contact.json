@@ -1,0 +1,13 @@
+{
+  "record": {
+    "Email": "fixture1@example.com",
+    "Status": "Unsubscribed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture1@example.com",
+    "body": {
+      "Status": "Unsubscribed"
+    }
+  }
+}

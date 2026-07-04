@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture Customer" },
+  "expect": { "method": "POST", "path": "/v2/customers" }
+}

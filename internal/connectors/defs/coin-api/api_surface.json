@@ -1,20 +1,399 @@
 {
-  "api": "CoinAPI REST API v1 (https://rest.coinapi.io/v1, sandbox https://rest-sandbox.coinapi.io/v1)",
+  "api": "CoinAPI Market Data REST API v1/v2 (https://rest.coinapi.io, sandbox https://rest-sandbox.coinapi.io)",
   "docs": "https://docs.coinapi.io/",
-  "reviewed_at": "2026-07-03",
-  "scope": "migration parity with legacy internal/connectors/coin-api: the 3 metadata reference streams and 2 symbol-scoped historical streams legacy implements; the full CoinAPI surface (quotes, orderbooks, indexes, metrics, exchange rates) is out of scope until Pass B capability expansion",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: reviewed the current, live CoinAPI Market Data REST API OpenAPI spec (50 method+path operations across v1 and v2, fetched from https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml -- the canonical source CoinAPI's own docs page links to; the docs.coinapi.io site itself blocks automated fetches, so this spec, plus a live unauthenticated probe of https://rest.coinapi.io to confirm host/auth-gate behavior, was the review source). CoinAPI is entirely read-only (every documented operation is GET; there is no write/mutation surface at all, consistent with legacy). 9 streams now cover the practical surface: the original 5 (symbols, exchanges, assets, ohlcv_historical_data, trades_historical_data -- symbols' endpoint corrected from the retired bare GET /v1/symbols to the current documented GET /v1/symbols/{exchange_id}/active, see docs.md) plus 4 new in this pass (exchange_rates, quotes_current, orderbook_current, metrics_listing). The remaining ~41 operations are genuinely out of scope: latest/current/history variants of already-covered resources (duplicate_of), per-entity metrics values requiring iteration over the large metrics catalog, order-book depth/v3-envelope/history variants, options-chain data, blockchain-chain metadata, and icon image binaries.",
   "endpoints": [
-    { "method": "GET", "path": "/v1/symbols", "covered_by": { "stream": "symbols" } },
-    { "method": "GET", "path": "/v1/exchanges", "covered_by": { "stream": "exchanges" } },
-    { "method": "GET", "path": "/v1/assets", "covered_by": { "stream": "assets" } },
-    { "method": "GET", "path": "/v1/ohlcv/{symbol_id}/history", "covered_by": { "stream": "ohlcv_historical_data" } },
-    { "method": "GET", "path": "/v1/trades/{symbol_id}/history", "covered_by": { "stream": "trades_historical_data" } },
-    { "method": "GET", "path": "/v1/ohlcv/{symbol_id}/latest", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/trades/{symbol_id}/latest", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/quotes/current", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/orderbooks/current", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/exchangerate/{asset_id_base}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/indexes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/metrics/list", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v1/assets",
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assets/icons/{size}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns branding icon image binaries (PNG), not structured market data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assets/{asset_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/chains",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/chains/{chain_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchangerate/history/periods",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static enumeration of valid timeseries period identifiers for the exchange-rate history endpoint, not itself market data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchangerate/{asset_id_base}",
+      "covered_by": {
+        "stream": "exchange_rates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single quote-asset exchange rate is a strict subset of the covered all-current-rates stream for the same base asset (same fields, client-side filterable)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "historical exchange-rate timeseries for one base/quote pair; Pass B full-surface expansion covers the current-rate snapshot only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchanges",
+      "covered_by": {
+        "stream": "exchanges"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchanges/icons/{size}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns branding icon image binaries (PNG), not structured market data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchanges/{exchange_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-exchange detail is a strict subset of the covered exchanges list stream (same fields, client-side filterable); not implemented as a separate stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/asset/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/asset/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/asset/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/exchange/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/exchange/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/exchange/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/listing",
+      "covered_by": {
+        "stream": "metrics_listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/symbol/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/symbol/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/symbol/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ohlcv/exchanges/{exchange_id}/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "exchange-wide aggregated OHLCV history (a distinct resource from the covered per-symbol ohlcv_historical_data stream); out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ohlcv/periods",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static enumeration of valid OHLCV period identifiers, not itself market data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ohlcv/{symbol_id}/history",
+      "covered_by": {
+        "stream": "ohlcv_historical_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ohlcv/{symbol_id}/latest",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "latest OHLCV bars are a strict subset of the covered historical OHLCV stream (same fields, most-recent window); not implemented as a separate stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/options/{exchange_id}/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "options-chain current data, a distinct instrument-type surface from this connector's spot/futures-oriented streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/orderbooks/{symbol_id}/current",
+      "covered_by": {
+        "stream": "orderbook_current"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/orderbooks/{symbol_id}/depth/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/orderbooks/{symbol_id}/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/orderbooks3/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/orderbooks3/{symbol_id}/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/quotes/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/quotes/latest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/quotes/{symbol_id}/current",
+      "covered_by": {
+        "stream": "quotes_current"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/quotes/{symbol_id}/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/quotes/{symbol_id}/latest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/symbols/map/{exchange_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-exchange historical/mapping symbol variants of the covered symbols stream; Pass B full-surface expansion covers the active-symbols listing only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/symbols/{exchange_id}/active",
+      "covered_by": {
+        "stream": "symbols"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/symbols/{exchange_id}/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-exchange historical/mapping symbol variants of the covered symbols stream; Pass B full-surface expansion covers the active-symbols listing only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/trades/latest",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/trades/{symbol_id}/history",
+      "covered_by": {
+        "stream": "trades_historical_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/trades/{symbol_id}/latest",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/asset/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/asset/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/chain/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/chain/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/exchange/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/exchange/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/listing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      }
+    }
   ]
 }

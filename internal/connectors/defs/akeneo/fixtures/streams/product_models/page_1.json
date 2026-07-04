@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/product-models", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          {
+            "code": "model_fixture_1",
+            "family_variant": "shoes_by_size",
+            "parent": null,
+            "categories": ["cat_1"],
+            "values": {},
+            "created": "2026-01-01T00:00:00+00:00",
+            "updated": "2026-01-01T00:00:00+00:00"
+          }
+        ]
+      }
+    }
+  }
+}

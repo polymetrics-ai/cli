@@ -46,6 +46,97 @@
         "stamp_field": "ext_id"
       },
       "schema": "schemas/ratings.json"
+    },
+    {
+      "name": "reviews",
+      "path": "/reviews",
+      "records": { "path": "" },
+      "query": {
+        "from": "{{ config.report_from }}",
+        "to": "{{ config.report_to }}"
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/reviews.json"
+    },
+    {
+      "name": "reviews_summary",
+      "path": "/reviews/summary",
+      "records": { "path": "" },
+      "query": {
+        "from": { "template": "{{ config.report_from }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.report_to }}", "omit_when_absent": true }
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/reviews_summary.json"
+    },
+    {
+      "name": "keywords",
+      "path": "/aso/keywords",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/keywords.json"
+    },
+    {
+      "name": "rankings",
+      "path": "/meta/rankings",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/rankings.json"
+    },
+    {
+      "name": "versions",
+      "path": "/meta/versions",
+      "records": { "path": "" },
+      "query": {
+        "country": "{{ config.report_country }}"
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/versions.json"
+    },
+    {
+      "name": "versions_whatsnew",
+      "path": "/meta/versions/whatsnew",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/versions_whatsnew.json"
+    },
+    {
+      "name": "ratings_history",
+      "path": "/meta/ratings/history",
+      "records": { "path": "" },
+      "query": {
+        "store": "{{ config.report_store }}"
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "ext_ids" },
+        "into": { "query_param": "ext_id" },
+        "stamp_field": "ext_id"
+      },
+      "schema": "schemas/ratings_history.json"
     }
   ]
 }

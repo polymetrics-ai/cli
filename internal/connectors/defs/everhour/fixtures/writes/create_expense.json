@@ -1,0 +1,24 @@
+{
+  "record": {
+    "category": 11,
+    "date": "2026-01-05",
+    "amount": 125.50,
+    "billable": true,
+    "project": "as:1001"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/expenses",
+    "body": {
+      "category": 11,
+      "date": "2026-01-05",
+      "amount": 125.50,
+      "billable": true,
+      "project": "as:1001"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": 502, "category": 11, "date": "2026-01-05", "amount": 125.50 }
+  }
+}

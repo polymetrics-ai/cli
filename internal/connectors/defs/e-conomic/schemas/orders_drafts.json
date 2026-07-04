@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders_drafts",
+  "type": "object",
+  "x-primary-key": ["draft_order_number"],
+  "required": ["draft_order_number"],
+  "properties": {
+    "draft_order_number": { "type": "integer" },
+    "date": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "net_amount": { "type": ["number", "null"] },
+    "gross_amount": { "type": ["number", "null"] },
+    "customer_number": { "type": ["integer", "null"] },
+    "self": { "type": ["string", "null"] }
+  }
+}

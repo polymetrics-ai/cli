@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/orders/archived", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "orderNumber": 1,
+          "date": "2025-12-01T00:00:00Z",
+          "currency": "DKK",
+          "netAmount": 700,
+          "grossAmount": 875,
+          "customer": { "customerNumber": 1 },
+          "self": "https://restapi.e-conomic.com/orders/archived/1"
+        },
+        {
+          "orderNumber": 2,
+          "date": "2025-12-02T00:00:00Z",
+          "currency": "DKK",
+          "netAmount": 800,
+          "grossAmount": 1000,
+          "customer": { "customerNumber": 2 },
+          "self": "https://restapi.e-conomic.com/orders/archived/2"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "departments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "number_of_assets": { "type": ["integer", "null"] },
+    "number_of_accessories": { "type": ["integer", "null"] },
+    "number_of_components": { "type": ["integer", "null"] },
+    "number_of_consumables": { "type": ["integer", "null"] },
+    "number_of_licenses": { "type": ["integer", "null"] },
+    "number_of_employees": { "type": ["integer", "null"] },
+    "assets": { "type": ["array", "null"] },
+    "accessories": { "type": ["array", "null"] },
+    "components": { "type": ["array", "null"] },
+    "consumables": { "type": ["array", "null"] },
+    "licenses": { "type": ["array", "null"] },
+    "employees": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

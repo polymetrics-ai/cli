@@ -49,6 +49,80 @@
       "path": "/v1/workspaces/{{ config.workspace_id }}/users",
       "records": { "path": "." },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "current_user",
+      "path": "/v1/user",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "schema": "schemas/current_user.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/custom-fields",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "user_groups",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/user-groups",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "schema": "schemas/user_groups.json"
+    },
+    {
+      "name": "holidays",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/holidays",
+      "records": { "path": "." },
+      "schema": "schemas/holidays.json"
+    },
+    {
+      "name": "expense_categories",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/expenses/categories",
+      "pagination": { "type": "none" },
+      "records": { "path": "categories" },
+      "schema": "schemas/expense_categories.json"
+    },
+    {
+      "name": "time_off_policies",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/time-off/policies",
+      "records": { "path": "." },
+      "schema": "schemas/time_off_policies.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ fanout.id }}/tasks",
+      "records": { "path": "." },
+      "schema": "schemas/tasks.json",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/workspaces/{{ config.workspace_id }}/projects",
+            "records_path": ".",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "projectId"
+      }
+    },
+    {
+      "name": "time_entries",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/user/{{ fanout.id }}/time-entries",
+      "records": { "path": "." },
+      "schema": "schemas/time_entries.json",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/workspaces/{{ config.workspace_id }}/users",
+            "records_path": ".",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "user_id" },
+        "stamp_field": "userId"
+      }
     }
   ]
 }

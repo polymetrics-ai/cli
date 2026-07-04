@@ -1,0 +1,21 @@
+{
+  "record": { "Topic": "Employee.Insert", "Address": "https://example.com/webhooks/fixture", "Type": "URL" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/resource/Webhook",
+    "body": { "Topic": "Employee.Insert", "Address": "https://example.com/webhooks/fixture", "Type": "URL" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": 1,
+      "Topic": "Employee.Insert",
+      "Address": "https://example.com/webhooks/fixture",
+      "Type": "URL",
+      "Enabled": true,
+      "Creator": 1,
+      "Created": "2026-01-01T00:00:00",
+      "Modified": "2026-01-01T00:00:00"
+    }
+  }
+}

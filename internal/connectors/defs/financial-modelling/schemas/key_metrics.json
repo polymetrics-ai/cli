@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "key_metrics",
+  "type": "object",
+  "x-primary-key": ["symbol", "date", "period"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "period": { "type": ["string", "null"] },
+    "calendar_year": { "type": ["string", "null"] },
+    "market_cap": { "type": ["number", "null"] },
+    "enterprise_value": { "type": ["number", "null"] },
+    "pe_ratio": { "type": ["number", "null"] },
+    "pb_ratio": { "type": ["number", "null"] },
+    "current_ratio": { "type": ["number", "null"] },
+    "debt_to_equity": { "type": ["number", "null"] },
+    "roe": { "type": ["number", "null"] },
+    "free_cash_flow_yield": { "type": ["number", "null"] },
+    "revenue_per_share": { "type": ["number", "null"] }
+  }
+}

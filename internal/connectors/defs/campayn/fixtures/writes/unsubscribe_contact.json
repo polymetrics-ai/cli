@@ -1,0 +1,14 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "id": "contact_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/list_fixture_1/unsubscribe.json",
+    "body": {
+      "id": "contact_fixture_1"
+    }
+  },
+  "response": { "status": 200, "body": { "success": 1 } }
+}

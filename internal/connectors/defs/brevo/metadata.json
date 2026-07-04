@@ -1,14 +1,14 @@
 {
   "name": "brevo",
   "display_name": "Brevo",
-  "description": "Reads Brevo (formerly Sendinblue) contacts, email campaigns, contact lists, and senders through the Brevo REST API.",
+  "description": "Reads and writes Brevo (formerly Sendinblue) contacts, email campaigns, contact lists, segments, senders, sender domains, CRM companies/deals, and webhooks through the Brevo REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.brevo.com/reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Brevo API read of contact and campaign data",
-    "approval": "none; read-only, no reverse-ETL writes shipped"
+    "read": "external Brevo API read of contact, campaign, CRM, and sender data",
+    "write": "external mutation of contacts, contact lists, senders, CRM companies/deals, and webhooks; webhook writes register live event delivery to a caller-chosen URL",
+    "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
   }
 }

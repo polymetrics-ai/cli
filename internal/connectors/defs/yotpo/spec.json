@@ -7,11 +7,15 @@
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Yotpo API access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+      "description": "Yotpo API access token, sent as the X-Yotpo-Token header (Yotpo Core API v3's own documented auth scheme; generate via POST /core/v3/stores/{store_id}/access_tokens using your store ID and API secret, per https://core-api.yotpo.com/reference/yotpo-authentication — that token-exchange step is outside this connector's scope and must be performed once out-of-band). Never logged."
     },
     "store_id": {
       "type": "string",
-      "description": "Yotpo store ID; substituted into every stream's store-scoped path."
+      "description": "Yotpo store ID (app_key); substituted into every stream's store-scoped path."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Yotpo product ID (yotpo_id) scoping the product_variants stream's path (/products/{product_id}/variants); required only when reading that stream."
     },
     "base_url": {
       "type": "string",

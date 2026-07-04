@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/trading/accounts/acct_fixture_1/positions" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "asset_id": "asset_fixture_1",
+        "symbol": "FIX1",
+        "exchange": "NASDAQ",
+        "asset_class": "us_equity",
+        "avg_entry_price": "100.00",
+        "qty": "10",
+        "qty_available": "10",
+        "side": "long",
+        "market_value": "1050.00",
+        "cost_basis": "1000.00",
+        "unrealized_pl": "50.00",
+        "unrealized_plpc": "0.05",
+        "current_price": "105.00",
+        "lastday_price": "104.00",
+        "change_today": "0.01"
+      }
+    ]
+  }
+}

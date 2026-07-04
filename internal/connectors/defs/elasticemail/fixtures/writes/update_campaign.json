@@ -1,0 +1,13 @@
+{
+  "record": {
+    "Name": "Fixture Campaign",
+    "Recipients": { "ListNames": ["Fixture List", "Second Fixture List"] }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/campaigns/Fixture Campaign",
+    "body": {
+      "Recipients": { "ListNames": ["Fixture List", "Second Fixture List"] }
+    }
+  }
+}

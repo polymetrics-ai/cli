@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "notrigger": 0
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orders/1/validate"
+  }
+}

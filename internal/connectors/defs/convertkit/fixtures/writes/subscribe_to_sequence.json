@@ -1,0 +1,15 @@
+{
+  "record": {
+    "sequence_id": 20,
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sequences/20/subscribe",
+    "body": { "email": "fixture@example.com" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "subscription": { "id": 1, "state": "active" } }
+  }
+}

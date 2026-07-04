@@ -1,0 +1,9 @@
+{
+  "record": { "user_id": "USR_fixture_1", "tracker_id": "TRK_fixture_1", "call_enabled": true },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/notifications.json",
+    "body": { "user_id": "USR_fixture_1", "tracker_id": "TRK_fixture_1", "call_enabled": true }
+  },
+  "response": { "status": 201, "body": { "id": 1, "user_id": "USR_fixture_1" } }
+}

@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/invoices/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "1",
+      "ref": "INV_FIXTURE_1",
+      "socid": "1",
+      "type": "0",
+      "total_ht": "100.00",
+      "total_tva": "20.00",
+      "total_ttc": "120.00",
+      "remise_percent": "0",
+      "paye": "0",
+      "status": "1",
+      "note_public": "",
+      "note_private": "",
+      "date": 1767225600,
+      "date_lim_reglement": 1769904000,
+      "date_creation": 1767225600,
+      "date_modification": 1767225601
+    }
+  }
+}

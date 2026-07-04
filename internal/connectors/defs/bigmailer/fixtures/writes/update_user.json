@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "user_fixture_1",
+    "role": "campaign_viewer"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/user_fixture_1",
+    "body": {
+      "role": "campaign_viewer"
+    }
+  }
+}

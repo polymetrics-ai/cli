@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "entries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "customers_id": { "type": ["integer", "null"] },
+    "projects_id": { "type": ["integer", "null"] },
+    "users_id": { "type": ["integer", "null"] },
+    "billable": { "type": ["integer", "null"] },
+    "texts_id": { "type": ["integer", "null"] },
+    "time_since": { "type": ["string", "null"] },
+    "time_until": { "type": ["string", "null"] },
+    "time_insert": { "type": ["string", "null"] },
+    "time_last_change": { "type": ["string", "null"] },
+    "type": { "type": ["integer", "null"] },
+    "services_id": { "type": ["integer", "null"] },
+    "duration": { "type": ["integer", "null"] },
+    "offset": { "type": ["integer", "null"] },
+    "clocked": { "type": ["boolean", "null"] },
+    "clocked_offline": { "type": ["boolean", "null"] },
+    "time_clocked_since": { "type": ["string", "null"] },
+    "time_last_change_worktime": { "type": ["string", "null"] },
+    "hourly_rate": { "type": ["number", "null"] },
+    "lumpsum": { "type": ["number", "null"] },
+    "lumpsum_services_id": { "type": ["integer", "null"] },
+    "lumpsum_services_amount": { "type": ["number", "null"] },
+    "lumpsum_services_price": { "type": ["number", "null"] }
+  }
+}

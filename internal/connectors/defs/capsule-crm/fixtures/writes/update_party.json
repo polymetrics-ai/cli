@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "1",
+    "party": { "jobTitle": "Updated Title" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/parties/1",
+    "body": {
+      "party": { "jobTitle": "Updated Title" }
+    }
+  }
+}

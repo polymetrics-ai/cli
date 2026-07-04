@@ -1,0 +1,24 @@
+{
+  "record": {
+    "Name": "Fixture Route",
+    "Filter": "support@example.com",
+    "FilterType": "MatchTo",
+    "ActionType": "Url",
+    "HttpAddress": "https://example.com/inbound"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/inboundroute",
+    "body": {
+      "Name": "Fixture Route",
+      "Filter": "support@example.com",
+      "FilterType": "MatchTo",
+      "ActionType": "Url",
+      "HttpAddress": "https://example.com/inbound"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "PublicId": "route_fixture_1" }
+  }
+}

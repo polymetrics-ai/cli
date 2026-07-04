@@ -1,14 +1,14 @@
 {
   "name": "box",
   "display_name": "Box",
-  "description": "Reads Box users, groups, collections, and folder items through the Box REST API using the OAuth2 client-credentials grant.",
+  "description": "Reads Box users, groups, collections, folder items, webhooks, retention policies, legal hold policies, storage policies, sign requests, terms of services, metadata templates, and pending collaborations, and writes group/webhook/collaboration lifecycle mutations, through the Box REST API using the OAuth2 client-credentials grant.",
   "integration_type": "api",
   "docs_url": "https://developer.box.com/reference/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,11 +17,12 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Box API read of enterprise users, groups, collections, and folder items",
-    "approval": "none; read-only source connector"
+    "read": "external Box API read of enterprise users, groups, collections, folder items, webhooks, retention policies, legal hold policies, storage policies, sign requests, terms of services, metadata templates, and pending collaborations",
+    "write": "external mutation of Box enterprise groups, webhook subscriptions, and file/folder collaborations (access grants); includes 3 destructive (irreversible-effect) actions (delete_group, delete_webhook, delete_collaboration)",
+    "approval": "required for every write action; read remains unapproved"
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "oauth2_client_credentials auth's token_url is a separate declared config.token_url property; conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"token_url\"] itself, so the token_url template still resolves to the synthetic non-secret value (\"synthetic-conformance-value\"), an unreachable non-URL — the OAuth token exchange fails before any declarative stream/check request is ever issued, so every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass. This bundle has no Tier-2 AuthHook (auth is fully declarative oauth2_client_credentials), so there is no paritytest/box package for this wave; the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/box instead. Matches clazar's/sendpulse's/kyriba's identical documented precedent."
+    "reason": "oauth2_client_credentials auth's token_url is a separate declared config.token_url property; conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"token_url\"] itself, so the token_url template still resolves to the synthetic non-secret value (\"synthetic-conformance-value\"), an unreachable non-URL — the OAuth token exchange fails before any declarative stream/check request is ever issued, so every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass. This bundle has no Tier-2 AuthHook (auth is fully declarative oauth2_client_credentials), so there is no paritytest/box package for this wave; the read/pagination/schema-projection/write-request shapes are proven by structural review against Box's published OpenAPI spec instead. Matches clazar's/sendpulse's/kyriba's identical documented precedent."
   }
 }

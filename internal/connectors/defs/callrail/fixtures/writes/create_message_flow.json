@@ -1,0 +1,19 @@
+{
+  "record": {
+    "company_id": "CMP_fixture_1",
+    "name": "Fixture message flow",
+    "initial_step_id": "tag-01",
+    "steps": { "tag-01": { "id": "tag-01", "type": "tag", "next_step_id": null, "tag_ids": [1] } }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/message-flows.json",
+    "body": {
+      "company_id": "CMP_fixture_1",
+      "name": "Fixture message flow",
+      "initial_step_id": "tag-01",
+      "steps": { "tag-01": { "id": "tag-01", "type": "tag", "next_step_id": null, "tag_ids": [1] } }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "MFL_fixture_1", "name": "Fixture message flow" } }
+}

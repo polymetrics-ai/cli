@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/registries"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "602bd48b2294b2b7437acca3",
+        "name": "fixture_dockerhub_registry",
+        "provider": "dockerhub",
+        "kind": "standard",
+        "behindFirewall": false,
+        "primary": true,
+        "default": false,
+        "internal": false,
+        "denyCompositeDomain": false,
+        "domain": "docker.io",
+        "username": "fixture-user"
+      }
+    ]
+  }
+}

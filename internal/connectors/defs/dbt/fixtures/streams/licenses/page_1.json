@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/licenses/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "account_id": 1,
+          "developer": { "limited": false, "over_limit": false, "total": 10, "in_use": 3, "available": 7, "assigned": 3 },
+          "explorer": { "limited": false, "over_limit": false, "total": 5, "in_use": 1, "available": 4, "assigned": 1 },
+          "read_only": { "limited": false, "over_limit": false, "total": 20, "in_use": 5, "available": 15, "assigned": 5 },
+          "it": { "limited": false, "over_limit": false, "total": 2, "in_use": 0, "available": 2, "assigned": 0 },
+          "analyst": { "limited": false, "over_limit": false, "total": 5, "in_use": 2, "available": 3, "assigned": 2 }
+        }
+      ],
+      "status": { "code": 200, "is_success": true },
+      "extra": { "filters": {}, "pagination": { "count": 1, "total_count": 1 } }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "productNumber": "P-101",
+    "name": "Fixture Widget v2",
+    "description": "An updated fixture test widget",
+    "salesPrice": 219.0,
+    "costPrice": 109.5,
+    "barred": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/P-101",
+    "body": {
+      "name": "Fixture Widget v2",
+      "description": "An updated fixture test widget",
+      "salesPrice": 219.0,
+      "costPrice": 109.5,
+      "barred": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "productNumber": "P-101", "self": "https://restapi.e-conomic.com/products/P-101" }
+  }
+}

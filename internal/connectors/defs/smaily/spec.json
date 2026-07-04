@@ -17,6 +17,10 @@
       "type": "string",
       "x-secret": true,
       "description": "Smaily API password, sent as the HTTP Basic auth password. Never logged."
+    },
+    "segment_id": {
+      "type": "string",
+      "description": "Optional Smaily segment id used to scope the segment_subscribers stream to one segment's members (sent as the list query parameter on GET api/contact.php). When unset, segment_subscribers reads the account's full contact list unfiltered."
     }
   }
 }

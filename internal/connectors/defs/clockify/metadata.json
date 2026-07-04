@@ -1,14 +1,14 @@
 {
   "name": "clockify",
   "display_name": "Clockify",
-  "description": "Reads Clockify workspaces, clients, projects, tags, and users through the Clockify REST API v1.",
+  "description": "Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, custom fields, user groups, holidays, expense categories, and time-off policies, and writes clients/projects/tags/tasks through the Clockify REST API v1.",
   "integration_type": "api",
   "docs_url": "https://docs.clockify.me/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external Clockify API read of workspace, client, project, tag, and user data",
-    "approval": "none; read-only source connector"
+    "read": "external Clockify API read of workspace, client, project, tag, user, task, time entry, and workspace-configuration data",
+    "write": "external mutation; creates/updates/deletes live Clockify clients, projects, tags, and tasks",
+    "approval": "required for all write actions; reads remain none"
   }
 }

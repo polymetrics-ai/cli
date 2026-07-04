@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/workspaces" },
+  "response": {
+    "status": 200,
+    "body": {
+      "workspaces": [
+        { "id": 1, "name": "Fixture Workspace", "messages_sent": 1000, "billable_messages_sent": 900, "people": 5000, "object_types": 2, "objects": 200 }
+      ]
+    }
+  }
+}

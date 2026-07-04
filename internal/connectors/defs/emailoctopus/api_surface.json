@@ -1,15 +1,45 @@
 {
-  "api": "EmailOctopus API v1.6",
+  "api": "EmailOctopus API v1.6 (https://emailoctopus.com/api-documentation)",
   "docs": "https://emailoctopus.com/api-documentation",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only, matching internal/connectors/emailoctopus's exact endpoint set; the full EmailOctopus surface (campaign/list/contact mutation, campaign reports) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: 6 read streams (lists, campaigns, list_contacts plus the wave2 3-stream base; list_tags and campaign_summary_reports new this pass, the latter a fan_out stream over every campaign id) and 13 write actions covering list/contact/tag/custom-field lifecycle plus automation enrollment. This IS the full documented v1.6 surface — v1.6 is EmailOctopus's legacy API version (v2 exists and is recommended for new integrations per the docs banner, but this connector targets v1.6 per its existing base_url/spec, and Pass B stays within that version rather than silently migrating to a different API version). Excluded: the per-recipient campaign engagement-detail reports (bounced/clicked/complained/opened/sent/unsubscribed/not-clicked/not-opened contact lists — a large per-recipient analytics breakdown distinct from the aggregate summary report), the bulk multi-contact update endpoint, and single-object detail-by-id endpoints that duplicate an already-covered list stream's record shape.",
   "endpoints": [
     { "method": "GET", "path": "/lists", "covered_by": { "stream": "lists" } },
+    { "method": "POST", "path": "/lists", "covered_by": { "write": "create_list" } },
+    { "method": "GET", "path": "/lists/{id}", "excluded": { "category": "duplicate_of", "reason": "single-list detail; identical record shape to the lists list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/lists/{id}", "covered_by": { "write": "update_list" } },
+    { "method": "DELETE", "path": "/lists/{id}", "covered_by": { "write": "delete_list" } },
+    { "method": "GET", "path": "/lists/{id}/tags", "covered_by": { "stream": "list_tags" } },
+    { "method": "POST", "path": "/lists/{id}/tags", "covered_by": { "write": "create_list_tag" } },
+    { "method": "PUT", "path": "/lists/{id}/tags/{tag}", "covered_by": { "write": "update_list_tag" } },
+    { "method": "DELETE", "path": "/lists/{id}/tags/{tag}", "covered_by": { "write": "delete_list_tag" } },
+    { "method": "POST", "path": "/lists/{id}/fields", "covered_by": { "write": "create_list_field" } },
+    { "method": "PUT", "path": "/lists/{id}/fields/{tag}", "covered_by": { "write": "update_list_field" } },
+    { "method": "DELETE", "path": "/lists/{id}/fields/{tag}", "covered_by": { "write": "delete_list_field" } },
+
+    { "method": "GET", "path": "/lists/{id}/contacts/{email}", "excluded": { "category": "duplicate_of", "reason": "single-contact detail; identical record shape to the list_contacts list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/lists/{id}/contacts", "covered_by": { "stream": "list_contacts" } },
+    { "method": "GET", "path": "/lists/{id}/contacts/subscribed", "excluded": { "category": "duplicate_of", "reason": "the list_contacts stream already reads every contact regardless of status; this is a status-filtered view of the same underlying record set, not a distinct resource shape" } },
+    { "method": "GET", "path": "/lists/{id}/contacts/unsubscribed", "excluded": { "category": "duplicate_of", "reason": "the list_contacts stream already reads every contact regardless of status; this is a status-filtered view of the same underlying record set, not a distinct resource shape" } },
+    { "method": "GET", "path": "/lists/{id}/contacts/tagged/{tag}", "excluded": { "category": "duplicate_of", "reason": "the list_contacts stream already reads every contact regardless of tag; this is a tag-filtered view of the same underlying record set, not a distinct resource shape" } },
+    { "method": "POST", "path": "/lists/{id}/contacts", "covered_by": { "write": "create_list_contact" } },
+    { "method": "PUT", "path": "/lists/{id}/contacts/{member_id}", "covered_by": { "write": "update_list_contact" } },
+    { "method": "DELETE", "path": "/lists/{id}/contacts/{member_id}", "covered_by": { "write": "delete_list_contact" } },
+    { "method": "PUT", "path": "/lists/{id}/contacts/bulk", "excluded": { "category": "out_of_scope", "reason": "bulk multi-contact update over an array of up to 100 contact objects in one call; update_list_contact already covers the per-record mutation shape this dialect expresses, the batch form is narrower breadth-vs-cost triage this pass" } },
+
     { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/lists/{list_id}/contacts", "covered_by": { "stream": "list_contacts" } },
-    { "method": "POST", "path": "/lists", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/campaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/lists/{list_id}/contacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/campaigns/{campaign_id}/reports/summary", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/campaigns/{id}", "excluded": { "category": "duplicate_of", "reason": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/summary", "covered_by": { "stream": "campaign_summary_reports" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/links", "excluded": { "category": "out_of_scope", "reason": "per-link click-count breakdown for one campaign; a secondary analytics cut beyond the aggregate summary report, breadth-vs-cost triage this pass" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/bounced", "excluded": { "category": "out_of_scope", "reason": "per-recipient bounced-contact list for one campaign; a large per-recipient analytics breakdown distinct from the aggregate summary report already covered, breadth-vs-cost triage this pass" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/clicked", "excluded": { "category": "out_of_scope", "reason": "per-recipient clicked-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/complained", "excluded": { "category": "out_of_scope", "reason": "per-recipient complained-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/opened", "excluded": { "category": "out_of_scope", "reason": "per-recipient opened-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/sent", "excluded": { "category": "out_of_scope", "reason": "per-recipient sent-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/unsubscribed", "excluded": { "category": "out_of_scope", "reason": "per-recipient unsubscribed-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/not-clicked", "excluded": { "category": "out_of_scope", "reason": "per-recipient not-clicked-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix" } },
+    { "method": "GET", "path": "/campaigns/{campaignId}/reports/not-opened", "excluded": { "category": "out_of_scope", "reason": "per-recipient not-opened-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix" } },
+
+    { "method": "POST", "path": "/automations/{automationId}/queue", "covered_by": { "write": "start_automation" } }
   ]
 }

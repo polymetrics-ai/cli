@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "shoes",
+    "attribute_as_label": "name",
+    "attributes": ["name", "size"],
+    "labels": { "en_US": "Shoes" }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/families/shoes",
+    "body": {
+      "attribute_as_label": "name",
+      "attributes": ["name", "size"],
+      "labels": { "en_US": "Shoes" }
+    }
+  },
+  "response": { "status": 204, "body": {} }
+}

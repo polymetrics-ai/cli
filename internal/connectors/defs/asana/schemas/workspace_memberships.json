@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workspace_memberships",
+  "type": "object",
+  "x-primary-key": ["gid"],
+  "required": ["gid"],
+  "properties": {
+    "gid": { "type": "string" },
+    "resource_type": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "is_admin": { "type": ["boolean", "null"] },
+    "is_guest": { "type": ["boolean", "null"] }
+  }
+}

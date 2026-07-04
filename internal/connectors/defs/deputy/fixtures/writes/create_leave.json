@@ -1,0 +1,22 @@
+{
+  "record": { "Employee": 1, "DateStart": "2026-02-01T00:00:00", "DateEnd": "2026-02-03T00:00:00" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/resource/Leave",
+    "body": { "Employee": 1, "DateStart": "2026-02-01T00:00:00", "DateEnd": "2026-02-03T00:00:00" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": 1,
+      "Employee": 1,
+      "DateStart": "2026-02-01T00:00:00",
+      "DateEnd": "2026-02-03T00:00:00",
+      "Days": 2.0,
+      "Status": 0,
+      "Creator": 1,
+      "Created": "2026-01-01T00:00:00",
+      "Modified": "2026-01-01T00:00:00"
+    }
+  }
+}

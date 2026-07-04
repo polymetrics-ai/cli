@@ -1,10 +1,11 @@
 # Overview
 
-BoldSign is a wave2 fan-out declarative-HTTP migration. It reads BoldSign documents, templates,
-teams, contacts, and brands through the BoldSign REST API
-(`GET https://api.boldsign.com/v1/<resource>/list`). This bundle is migrated from
-`internal/connectors/boldsign` (the hand-written connector); the legacy package stays registered
-and unchanged until wave6's registry flip.
+BoldSign is a declarative-HTTP connector reading and writing through the BoldSign REST API
+(`https://api.boldsign.com`, OpenAPI 3.0.4 spec at `https://api.boldsign.com/swagger/v1/swagger.json`).
+This bundle originally migrated `internal/connectors/boldsign` (the hand-written legacy connector,
+read-only); this Pass B revision expands to the full documented API surface (see `api_surface.json`
+for every one of the 85 endpoints, each `covered_by` a stream/write or `excluded` with a reason).
+The legacy package stays registered and unchanged until wave6's registry flip.
 
 ## Auth setup
 
@@ -15,39 +16,72 @@ Provide a BoldSign API key via the `api_key` secret; it is sent as the `X-API-KE
 
 ## Streams notes
 
-All five streams are page-numbered list endpoints (`Page`/`PageSize` query params, `page_size: 50`
-— legacy's own `boldsignDefaultPageSize`); the engine stops on a short/empty page, matching
-legacy's own `len(records) < pageSize` stop rule. Four streams (`documents`, `templates`,
-`contacts`, `brands`) wrap their records in a `result` envelope; `teams` is the documented
-exception using `results` (legacy's own comment, `boldsign/streams.go:11`) — each stream's
-`records.path` captures this per-stream difference exactly as legacy's per-endpoint
-`recordsPath` table does.
+8 read streams, all page-numbered list endpoints (`Page`/`PageSize` query params, `page_size: 50`
+— legacy's own `boldsignDefaultPageSize`); the engine stops on a short/empty page.
+
+- `documents` (`/v1/document/list`), `templates` (`/v1/template/list`), `teams`
+  (`/v1/teams/list`), `contacts` (`/v1/contacts/list`), `brands` (`/v1/brand/list`) are the 5
+  original legacy-parity streams. Four wrap records in a `result` envelope; `teams` is the
+  documented exception using `results`.
+- `users` (`/v1/users/list`), `contact_groups` (`/v1/contactGroups/list`), and
+  `sender_identities` (`/v1/senderIdentities/list`) are new Pass B streams with no legacy
+  counterpart; their schemas are derived directly from BoldSign's published OpenAPI response
+  schemas (`UsersDetails`, `GroupContact`, `SenderIdentityViewModel`).
 
 Every stream's record mapper renames camelCase raw API fields to this bundle's snake_case schema
-fields via `computed_fields` (e.g. `document_id` from `record.documentId`, `sender_email` from
-`record.senderEmail`); each is a bare single `{{ record.<path> }}` reference, so the engine's typed
-extraction preserves the raw JSON type for `is_deleted`/`enable_signing_order`/`is_shared_template`/
-`is_default` (booleans) and `sender_detail` (object), `signer_details`/`labels`/`users` (arrays) —
-matching legacy's `mapRecord` functions field-for-field. Fields whose raw and schema names already
-match (`status`, `labels`, `users`) pass through via plain schema projection with no
-`computed_fields` entry needed.
+fields via `computed_fields`; each is a bare single `{{ record.<path> }}` reference, so the
+engine's typed extraction preserves the raw JSON type. **Corrected in this revision**:
+`documents.created_date`/`expiry_date` and `templates.created_date`/`teams.created_date` are
+BoldSign's real wire type — Unix-seconds **integers** (confirmed against the published OpenAPI
+spec and `developers.boldsign.com`'s documented sample response), not the RFC3339 strings the
+prior fixtures happened to use (an artifact of legacy's own test stub, which never asserted a real
+wire shape since legacy's mapper just passes `item["createdDate"]` through verbatim regardless of
+type). Schemas and fixtures are now `"integer"`-typed end to end, matching the Stripe `created`
+cursor precedent (§5 of `docs/migration/conventions.md`). Likewise `contacts.phone_number` is now
+schema-typed `object` (BoldSign's real `{countryCode, number}` shape), not the bare string the
+prior fixture used.
 
 `documents` and `templates` declare `created_date` as `x-cursor-field`, matching legacy's
-`CursorFields: []string{"created_date"}`; `teams` likewise declares `created_date`. None of the
-three actually filter server-side or client-side (legacy declares the cursor field for
-manifest-surface parity only — BoldSign's list endpoints have no incremental filter parameter),
-so no `incremental` block is declared on any stream, matching legacy exactly. `contacts` and
-`brands` declare no cursor field at all, matching legacy (`PrimaryKey` only, no `CursorFields`).
+`CursorFields: []string{"created_date"}`; `teams` and `users` likewise declare `created_date`.
+None of these actually filter server-side or client-side (BoldSign's list endpoints have no
+incremental filter parameter), so no `incremental` block is declared on any stream — full refresh
+only. `contacts`, `brands`, `contact_groups`, and `sender_identities` declare no cursor field.
 
 ## Write actions & risks
 
-None. BoldSign's write surface (sending signature requests, uploading documents) is not a safe
-generic reverse-ETL target; legacy's own package doc makes this explicit. `capabilities.write` is
-`false` and this bundle ships no `writes.json`. Legacy's `Write` additionally returns
-`RecordsFailed: len(records)` alongside `ErrUnsupportedOperation` (`boldsign.go:96-98`) — a detail
-of legacy's in-process error-accounting contract with no declarative equivalent (the engine's own
-unsupported-write path for a `capabilities.write: false` bundle governs this uniformly across
-every read-only connector), not modeled here.
+8 write actions (`capabilities.write` is now `true`):
+
+- `create_team`/`update_team` — create/rename a BoldSign team (`POST /v1/teams/create`,
+  `PUT /v1/teams/update`).
+- `update_contact`/`delete_contact` — update or permanently delete a contact
+  (`PUT /v1/contacts/update?id=...`, `DELETE /v1/contacts/delete?id=...`; delete is idempotent,
+  404 counts as written).
+- `create_contact_group`/`update_contact_group`/`delete_contact_group` — manage a BoldSign
+  contact group (`POST`/`PUT`/`DELETE /v1/contactGroups/*`).
+- `revoke_document` — permanently revokes a document's signature request
+  (`POST /v1/document/revoke?documentId=...`); destructive (`confirm: "destructive"`).
+- `remind_document` — sends an email/SMS reminder to pending signers
+  (`POST /v1/document/remind?documentId=...`).
+- `delete_document` — trashes or (when `deletePermanently: true`) permanently deletes a document
+  (`DELETE /v1/document/delete?documentId=...&deletePermanently=...`); destructive, idempotent.
+- `add_document_tags`/`delete_document_tags` — manage a document's label tags
+  (`PATCH`/`DELETE /v1/document/addTags` `/deleteTags`).
+- `update_user`/`change_user_team` — change a user's role/active-status, or move them to a
+  different team (`PUT /v1/users/update`, `PUT /v1/users/changeTeam?userId=...`).
+
+Every write action requires operator approval (`metadata.json`'s `risk.approval`); `revoke_document`,
+`delete_document`, `delete_contact`, and `delete_contact_group` additionally set
+`confirm: "destructive"`.
+
+**Not implemented — `create_contact` and `create_user` (`ENGINE_GAP`)**: BoldSign's real wire
+request body for both `POST /v1/contacts/create` and `POST /v1/users/create` is a JSON **array**
+of objects (`[{...}]`), confirmed against the published OpenAPI spec and
+`developers.boldsign.com/contacts/create-contact/`'s documented sample request. The engine's write
+dialect (`write.go`'s `executeWriteRecord`) only ever sends a single JSON object (or form-encoded
+body) per record — there is no array-wrapping body option in `writes.json` today. Modeling either
+write would either send a malformed single-object body BoldSign's API would reject outright, or
+require inventing an undeclared wrapping behavior the dialect doesn't support. See
+`api_surface.json`'s excluded entries for both endpoints.
 
 ## Known limits
 
@@ -56,20 +90,19 @@ every read-only connector), not modeled here.
   an alternate-cased key (e.g. `documentId` OR `documentID`) when the primary key is absent. The
   engine's `computed_fields` dialect has no multi-path fallback filter (only a single `{{ record.
   <path> }}` reference per field). This bundle wires the PRIMARY key observed in every available
-  fixture/test (`documentId`/`teamId`/`brandId`/`id` — camelCase, confirmed against legacy's own
-  `boldsign_test.go` fixtures, which never exercise the alternate-cased fallback), and does not
-  model the defensive alternate-casing fallback. If BoldSign's live API ever emits the alternate
-  casing for a given record, that record's primary-key field would resolve to `null` here where
-  legacy would have recovered it — an `ACCEPTABLE` deviation only because the fallback is
-  observably dead in every test/fixture on record; flagged here rather than silently dropped.
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy exposes `page_size`
-  (1-100, default 50) and `max_pages` (0/all/unlimited default) as config-driven overrides
-  (`boldsignPageSize`/`boldsignMaxPages`, `boldsign.go:274-302`). The engine's `page_number`
-  paginator's `page_size`/`max_pages` are fixed values baked into `streams.json`'s
-  `base.pagination` block at bundle-author time, matching the identical, already-documented
-  searxng/bitly precedent. Neither is declared in `spec.json` (F6, REVIEW.md).
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only
-  reached when `config.mode == "fixture"`) stamps `connector: "boldsign"`, `fixture: true`, and a
-  conditional `previous_cursor` onto every fixture-mode record (`boldsign.go:213-219`). None of
-  these are part of the LIVE record shape; this bundle's schemas and fixtures target the live
-  `harvest` path only.
+  fixture/test and BoldSign's published OpenAPI response schemas (camelCase only — the OpenAPI spec
+  never documents an alternate-cased variant), and does not model the defensive alternate-casing
+  fallback. ACCEPTABLE deviation, unchanged from the pre-expansion bundle.
+- **`page_size`/`max_pages` config overrides are not modeled.** Same as pre-expansion: fixed values
+  baked into `streams.json`'s `base.pagination` block at bundle-author time.
+- **`create_contact`/`create_user` are not migrated** — see Write actions & risks above;
+  `ENGINE_GAP`, not a silently-dropped write.
+- **Document/template sending, embedded-URL generation, and binary downloads are out of scope**
+  (see `api_surface.json`'s 63 excluded entries): multipart file-upload flows
+  (`document/send`, `document/create`, `template/create`, `template/send`, `document/edit`,
+  `template/edit`), embedded interactive-session URL generators (Designer, editor, sign, preview),
+  raw byte-stream downloads (document/template PDF, audit trail, ID-verification image/report),
+  brand asset management, custom fields, per-signer authentication controls, and sender-identity
+  verification workflows. None of these were part of legacy's read-only surface either.
+- `documents`/`templates`/`teams`/`users` are full-refresh only (no server-side incremental filter
+  parameter on any BoldSign list endpoint), even though each declares a schema cursor candidate.

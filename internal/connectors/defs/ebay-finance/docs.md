@@ -83,6 +83,10 @@ unconditionally; `capabilities.write` is `false` and this bundle ships no `write
   knob (a bare host that legacy suffixes with `/sell/finances/v1`) in favor of a single directly
   settable `base_url` (default `https://apiz.ebay.com/sell/finances/v1`) — functionally
   equivalent, a config-surface narrowing rather than an emitted-data change.
-- The full eBay Sell Finances API surface (transaction summary reports, per-currency funds
-  detail, single-resource lookups) is out of scope for this wave; see `api_surface.json`'s
-  `excluded` entries.
+- **Pass B full-surface review (2026-07-04): already_full.** The eBay Sell Finances API's entire
+  documented surface is exactly 8 endpoints across 4 resources; this bundle's 4 streams already
+  cover every syncable record shape. The remaining 4 endpoints (`getTransactionSummary`,
+  `getPayoutSummary`, `getPayout`, `getTransfer`) are aggregate-summary objects or single-object-
+  by-id lookups that duplicate an already-covered stream's record shape — see `api_surface.json`'s
+  `excluded` entries for the specific reason per endpoint. The API has no write/mutation method at
+  all in this resource group, so `capabilities.write` stays `false` with no `writes.json`.

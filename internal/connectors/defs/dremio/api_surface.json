@@ -1,16 +1,81 @@
 {
-  "api": "Dremio REST API (https://docs.dremio.com/software/rest-api/)",
+  "api": "Dremio REST API v3 (https://docs.dremio.com/software/rest-api/, redirects to https://docs.dremio.com/current/reference/api/)",
   "docs": "https://docs.dremio.com/software/rest-api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (catalog, reflections, sources, users); Dremio's write endpoints (source/reflection create/update/delete, SQL job submission) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-researched against the live docs tree (docs.dremio.com/current/reference/api/{catalog,reflections,source,user,roles,job,sql,personal-access-token,engine-management,search,scripts,wlm}). All paths below are relative to config.base_url exactly as legacy/this bundle already resolves it (the /api/v3 or Cloud /v0 version segment lives inside base_url, not in these declared paths) — this preserves the 4 pre-existing parity-locked streams' exact wire paths (catalog/reflections/source/user, including legacy's own plural 'reflections' naming) unchanged. New in this pass: the roles read stream, and 10 write actions covering user/role/reflection/personal-access-token lifecycle mutation (the real API's singular 'reflection'/'role' path segments are used for these NEW writes, matching the documented v3 shape exactly, since they are not constrained by any pre-existing parity-locked path). Excluded: arbitrary SQL job submission (code-execution capability, not a record mutation), job/search/script/engine/workload-management/external-token-provider/LDAP-cache surfaces (admin/operational tooling with no natural record-list or record-mutation shape this dialect targets), and the AWS-Glue-specific permission-cache endpoint (narrow, source-type-gated operational action).",
   "endpoints": [
     { "method": "GET", "path": "/catalog", "covered_by": { "stream": "catalog" } },
+    { "method": "GET", "path": "/catalog/{id}", "excluded": { "category": "duplicate_of", "reason": "single catalog-entry detail; identical record shape to the catalog list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/catalog/by-path/{path}", "excluded": { "category": "duplicate_of", "reason": "catalog-entry lookup by path instead of id; same record shape as the catalog list stream" } },
+    { "method": "POST", "path": "/catalog", "excluded": { "category": "requires_elevated_scope", "reason": "creates a new catalog object (source/space/folder/dataset) with type-specific config payloads (connection credentials for sources, SQL for views); the shape varies per catalog object type and cannot be expressed as one uniform writes.json action without a type-dispatch the dialect has no primitive for" } },
+    { "method": "PUT", "path": "/catalog/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "updates a catalog object's type-specific config (e.g. a source's connection credentials); same type-dispatch limitation as create, and risks storing/echoing source connection secrets through a generic record body" } },
+    { "method": "DELETE", "path": "/catalog/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes an arbitrary catalog object (source/space/folder/table/view); a single generic delete-by-id here could remove an entire configured source and every dataset beneath it, a much larger blast radius than the other modeled deletes" } },
+    { "method": "POST", "path": "/catalog/{id}/refresh", "excluded": { "category": "out_of_scope", "reason": "forces catalog metadata refresh for a dataset/source; an operational cache-invalidation action, not a syncable record mutation" } },
+    { "method": "GET", "path": "/catalog/{id}/graph", "excluded": { "category": "out_of_scope", "reason": "dataset lineage graph; a derived relationship view, not a syncable object list" } },
+    { "method": "GET", "path": "/catalog/{id}/collaboration/tag", "excluded": { "category": "out_of_scope", "reason": "catalog-object tag sub-resource; narrow per-object metadata with no natural top-level list endpoint to enumerate across the catalog" } },
+    { "method": "POST", "path": "/catalog/{id}/collaboration/tag", "excluded": { "category": "out_of_scope", "reason": "sets tags on one catalog object at a time; narrow per-object metadata mutation, not a general syncable-collection write" } },
+    { "method": "GET", "path": "/catalog/{id}/collaboration/wiki", "excluded": { "category": "out_of_scope", "reason": "catalog-object wiki/description sub-resource; narrow per-object metadata with no top-level list endpoint" } },
+    { "method": "POST", "path": "/catalog/{id}/collaboration/wiki", "excluded": { "category": "out_of_scope", "reason": "sets the wiki/description on one catalog object at a time; narrow per-object metadata mutation" } },
+
     { "method": "GET", "path": "/reflections", "covered_by": { "stream": "reflections" } },
+    { "method": "GET", "path": "/reflection/{id}", "excluded": { "category": "duplicate_of", "reason": "single-reflection detail; identical record shape to the reflections list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/dataset/{datasetId}/reflection", "excluded": { "category": "duplicate_of", "reason": "reflections for one dataset, filtered view of the same records the reflections stream already reads in full" } },
+    { "method": "POST", "path": "/reflection", "excluded": { "category": "requires_elevated_scope", "reason": "creates a new reflection with type-specific field configuration (dimensionFields/measureFields for aggregation, displayFields for raw); the shape is dataset-schema-dependent and not a fixed record layout this dialect can express as one action" } },
+    { "method": "PUT", "path": "/reflection/{id}", "covered_by": { "write": "update_reflection" } },
+    { "method": "POST", "path": "/reflection/{id}/refresh", "covered_by": { "write": "refresh_reflection" } },
+    { "method": "DELETE", "path": "/reflection/{id}", "covered_by": { "write": "delete_reflection" } },
+
     { "method": "GET", "path": "/source", "covered_by": { "stream": "sources" } },
+    { "method": "GET", "path": "/source/{id}", "excluded": { "category": "duplicate_of", "reason": "single-source detail; identical record shape to the sources list stream's per-item object, already covered by that stream" } },
+    { "method": "DELETE", "path": "/source/{name}/permission-cache", "excluded": { "category": "out_of_scope", "reason": "clears the AWS Lake Formation permission cache; narrow, source-type-gated (AWS Glue Data Catalog sources only) operational cache-invalidation action, not a data mutation" } },
+
     { "method": "GET", "path": "/user", "covered_by": { "stream": "users" } },
-    { "method": "POST", "path": "/sql", "excluded": { "category": "out_of_scope", "reason": "SQL job submission is not a syncable object stream; legacy connector never implemented it" } },
-    { "method": "POST", "path": "/source", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented source create/update; Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/source/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive source deletion; not modeled by legacy" } },
-    { "method": "POST", "path": "/reflections", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented reflection create/update; Pass B capability expansion" } }
+    { "method": "GET", "path": "/user/{id}", "excluded": { "category": "duplicate_of", "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/user/by-name/{name}", "excluded": { "category": "duplicate_of", "reason": "user lookup by name instead of id; same record shape as the users list stream" } },
+    { "method": "POST", "path": "/user", "covered_by": { "write": "create_user" } },
+    { "method": "PUT", "path": "/user/{id}", "covered_by": { "write": "update_user" } },
+    { "method": "DELETE", "path": "/user/{id}", "covered_by": { "write": "delete_user" } },
+    { "method": "GET", "path": "/user/{user-id}/token", "excluded": { "category": "requires_elevated_scope", "reason": "lists a user's Personal Access Token metadata; enumerating PAT labels/ids per user requires a user-id fan-out this dialect can express for writes but not as a first-class read stream without an id-source config the operator would have to hand-maintain" } },
+    { "method": "POST", "path": "/user/{user-id}/token", "covered_by": { "write": "create_personal_access_token" } },
+    { "method": "DELETE", "path": "/user/{user-id}/token/{token-id}", "covered_by": { "write": "delete_personal_access_token" } },
+    { "method": "DELETE", "path": "/user/{user-id}/token", "excluded": { "category": "destructive_admin", "reason": "revokes every PAT belonging to one user in a single call, immediately invalidating all of that user's API clients; broader blast radius than the single-token delete this bundle models" } },
+    { "method": "DELETE", "path": "/token", "excluded": { "category": "destructive_admin", "reason": "revokes every Personal Access Token in the entire Dremio instance; system-wide credential invalidation, far outside a reverse-ETL write's intended scope" } },
+
+    { "method": "GET", "path": "/role", "covered_by": { "stream": "roles" } },
+    { "method": "GET", "path": "/role/{id}", "excluded": { "category": "duplicate_of", "reason": "single-role detail; identical record shape to the roles list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/role/by-name/{name}", "excluded": { "category": "duplicate_of", "reason": "role lookup by name instead of id; same record shape as the roles list stream" } },
+    { "method": "POST", "path": "/role", "covered_by": { "write": "create_role" } },
+    { "method": "PUT", "path": "/role/{id}", "covered_by": { "write": "update_role" } },
+    { "method": "PATCH", "path": "/role/{id}/member", "excluded": { "category": "out_of_scope", "reason": "adds/removes role members via a diff-shaped add/remove list body, not a single-record create/update/delete this dialect's uniform write shapes target" } },
+    { "method": "DELETE", "path": "/role/{id}", "covered_by": { "write": "delete_role" } },
+
+    { "method": "POST", "path": "/sql", "excluded": { "category": "requires_elevated_scope", "reason": "submits arbitrary caller-supplied SQL for execution on the Dremio cluster; an arbitrary-code-execution capability (can run DDL/DML against any accessible source depending on grants), not a bounded record mutation — legacy never implemented this either" } },
+    { "method": "GET", "path": "/job/{id}", "excluded": { "category": "out_of_scope", "reason": "job status/metadata lookup for a job id obtained from a SQL submission this bundle does not implement; no reachable id source without submit_sql" } },
+    { "method": "GET", "path": "/job/{id}/results", "excluded": { "category": "out_of_scope", "reason": "paginated SQL result-set rows for a job id obtained from a SQL submission this bundle does not implement; no reachable id source without submit_sql" } },
+    { "method": "POST", "path": "/job/{id}/cancel", "excluded": { "category": "out_of_scope", "reason": "cancels a running SQL job; unreachable without submit_sql, which is itself excluded as requires_elevated_scope" } },
+
+    { "method": "GET", "path": "/scripts", "excluded": { "category": "out_of_scope", "reason": "saved-SQL-script management; operational SQL-authoring tooling, not a syncable data object relevant to a reverse-ETL/read connector" } },
+    { "method": "POST", "path": "/scripts", "excluded": { "category": "out_of_scope", "reason": "creates a saved SQL script; SQL-authoring tooling, not a data mutation" } },
+    { "method": "GET", "path": "/scripts/{id}", "excluded": { "category": "out_of_scope", "reason": "single saved-script detail; same scope narrowing as the scripts list" } },
+    { "method": "PATCH", "path": "/scripts/{id}", "excluded": { "category": "out_of_scope", "reason": "updates a saved SQL script; SQL-authoring tooling" } },
+    { "method": "DELETE", "path": "/scripts/{id}", "excluded": { "category": "out_of_scope", "reason": "deletes a saved SQL script; SQL-authoring tooling" } },
+    { "method": "GET", "path": "/scripts/{id}/grants", "excluded": { "category": "out_of_scope", "reason": "script-level privilege grants; narrow admin metadata on an already-excluded resource" } },
+    { "method": "PUT", "path": "/scripts/{id}/grants", "excluded": { "category": "out_of_scope", "reason": "updates script-level privilege grants; narrow admin metadata on an already-excluded resource" } },
+
+    { "method": "POST", "path": "/search", "excluded": { "category": "out_of_scope", "reason": "full-text/entity search across tables, views, reflections, jobs, functions, scripts, and folders; a query-shaped operation, not a syncable list-all stream" } },
+    { "method": "GET", "path": "/search/status", "excluded": { "category": "non_data_endpoint", "reason": "search-index health/status snapshot, not a syncable object stream" } },
+    { "method": "POST", "path": "/search/recovery/removeDocuments", "excluded": { "category": "destructive_admin", "reason": "triggers removal of every indexed search document/artifact and an async cluster reindex" } },
+
+    { "method": "GET", "path": "/engines", "excluded": { "category": "out_of_scope", "reason": "Dremio Cloud-specific compute-engine management; not part of Dremio Software's surface, and this bundle's flat unscoped paths target the Software/legacy-compatible shape" } },
+    { "method": "POST", "path": "/engines", "excluded": { "category": "out_of_scope", "reason": "Dremio Cloud-specific compute-engine creation; not part of Dremio Software's surface" } },
+    { "method": "PUT", "path": "/engines/{id}/start", "excluded": { "category": "out_of_scope", "reason": "Dremio Cloud-specific compute-engine lifecycle control; not part of Dremio Software's surface" } },
+    { "method": "PUT", "path": "/engines/{id}/stop", "excluded": { "category": "out_of_scope", "reason": "Dremio Cloud-specific compute-engine lifecycle control; not part of Dremio Software's surface" } },
+    { "method": "DELETE", "path": "/engines/{id}", "excluded": { "category": "out_of_scope", "reason": "Dremio Cloud-specific compute-engine deletion; not part of Dremio Software's surface" } },
+
+    { "method": "GET", "path": "/wlm/queue", "excluded": { "category": "out_of_scope", "reason": "workload-management queue configuration; cluster-tuning admin surface, not a syncable data object" } },
+    { "method": "GET", "path": "/wlm/rule", "excluded": { "category": "out_of_scope", "reason": "workload-management rule configuration; cluster-tuning admin surface, not a syncable data object" } },
+
+    { "method": "GET", "path": "/external-token-providers", "excluded": { "category": "requires_elevated_scope", "reason": "external identity-token-provider configuration for SSO integration; identity-provider credential surface, not syncable data" } },
+    { "method": "GET", "path": "/ldap/refreshUserCache", "excluded": { "category": "non_data_endpoint", "reason": "LDAP authorization cache control, an operational admin toggle rather than a data object" } }
   ]
 }

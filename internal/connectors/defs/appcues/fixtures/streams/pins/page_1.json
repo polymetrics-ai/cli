@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/pins", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "pin_fixture_1",
+        "name": "Fixture Pin One",
+        "type": "persistent",
+        "published": true,
+        "frequency": "once",
+        "tag_ids": [],
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "pin_fixture_2",
+        "name": "Fixture Pin Two",
+        "type": "persistent",
+        "published": true,
+        "frequency": "always",
+        "tag_ids": ["tag_fixture_2"],
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

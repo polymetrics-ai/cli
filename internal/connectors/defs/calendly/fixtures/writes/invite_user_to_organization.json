@@ -1,0 +1,20 @@
+{
+  "record": {
+    "organization_uuid": "fixture_org",
+    "email": "fixture-invitee@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/fixture_org/invitations"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "resource": {
+        "uri": "https://api.calendly.com/organizations/fixture_org/invitations/fixture_invitation_1",
+        "email": "fixture-invitee@example.com",
+        "status": "pending"
+      }
+    }
+  }
+}

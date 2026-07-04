@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/channels"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 45465,
+        "name": "Fixture Channel",
+        "type_code": "direct",
+        "state": "active"
+      }
+    ]
+  }
+}

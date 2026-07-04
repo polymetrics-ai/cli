@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "senders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "brand_id": { "type": ["string", "null"] },
+    "identity_type": { "type": ["string", "null"] },
+    "identity": { "type": ["string", "null"] },
+    "bounce_domain": { "type": ["string", "null"] },
+    "dns_records": { "type": ["object", "null"] },
+    "bounce_dns_records": { "type": ["object", "null"] },
+    "share_type": { "type": ["string", "null"] },
+    "verified": { "type": ["boolean", "null"] },
+    "bounce_verified": { "type": ["boolean", "null"] },
+    "created": { "type": ["integer", "null"] }
+  }
+}

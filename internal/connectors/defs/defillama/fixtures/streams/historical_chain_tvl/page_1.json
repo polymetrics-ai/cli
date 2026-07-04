@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/historicalChainTvl"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "date": 1735689600, "tvl": 50000000000.0 },
+      { "date": 1735776000, "tvl": 50500000000.0 }
+    ]
+  }
+}

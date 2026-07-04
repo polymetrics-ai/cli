@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 123,
+        "email": "fixture1@example.com",
+        "phone": "01234 567890",
+        "notes": "Fixture note"
+      },
+      {
+        "id": 124,
+        "email": "fixture2@example.com",
+        "phone": null,
+        "notes": null
+      }
+    ]
+  }
+}

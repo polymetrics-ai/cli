@@ -1,10 +1,12 @@
 # Overview
 
-Brevo (formerly Sendinblue) is a wave2 fan-out declarative-HTTP migration. It reads Brevo contacts,
-email campaigns, contact lists, and senders through the Brevo REST API v3
-(`GET https://api.brevo.com/v3/...`). This bundle migrates `internal/connectors/brevo` (the
-hand-written connector); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Brevo (formerly Sendinblue) is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to
+the full practical read/write surface. It reads Brevo contacts, email campaigns, contact lists,
+contact segments, senders, sender domains, CRM companies, CRM deals, and webhooks through the
+Brevo REST API v3 (`https://api.brevo.com/v3/...`), and writes contact/list/sender/company/deal/
+webhook lifecycle mutations. This bundle originally migrated `internal/connectors/brevo` (the
+hand-written connector, read-only); the legacy package stays registered and unchanged until
+wave6's registry flip.
 
 ## Auth setup
 
@@ -28,11 +30,57 @@ false`). `senders` (`GET /senders`, records at `senders`) is a single-request, n
 endpoint (legacy's `paginated: false`) — no `pagination` block is declared for it, matching the
 engine's `none` default.
 
+**Pass B additions.** `senders_domains` (`GET /senders/domains`, records at `domains`) is
+single-request, non-paginated, no incremental filter. `contacts_segments` (`GET
+/contacts/segments`, records at `segments`) is offset/limit paginated like `contacts_lists`, no
+incremental filter (Brevo's segments endpoint has no `modifiedSince`-equivalent). `webhooks` (`GET
+/webhooks`, records at `webhooks`) is single-request, non-paginated; its schema declares
+`x-cursor-field: modifiedAt` (a genuinely sortable field present on every record) but the stream
+itself has no `incremental` block since Brevo's `/webhooks` GET accepts no server-side
+modified-since filter (§8 rule 2: no server-side filter → no `incremental` block, keep
+`x-cursor-field` in the schema only). `companies` (`GET /companies`, records at `items`) is
+Brevo's one `page`-numbered (not offset/limit) list endpoint in this bundle
+(`pagination.type: page_number`, `page_param: page`, `size_param: limit`, `start_page: 1`) and
+supports `modifiedSince`; its cursor value lives at the nested `attributes.last_updated_at` path,
+which the engine's `incremental.cursor_field`/`x-cursor-field` machinery requires to be a
+TOP-LEVEL schema property (flat `raw[cursorField]` map lookup, both
+`conformance`'s `checkCursorAdvances` and the client-filtered read path) — a `computed_fields`
+entry (`"last_updated_at": "{{ record.attributes.last_updated_at }}"`) lifts it to a top-level
+field via typed bare-reference extraction before projection, exactly matching the "cursor field
+must be a top-level schema property" convention. `crm_deals` (`GET /crm/deals`, records at
+`items`) is offset/limit paginated and supports `modifiedSince`; its cursor value similarly lives
+at the nested `attributes.last_updated_date` path and is lifted the same way
+(`computed_fields.last_updated_date`).
+
 ## Write actions & risks
 
-None. Brevo is read-only in this connector (legacy's own `Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+Fourteen write actions, none present in legacy (legacy shipped `capabilities.write: false`):
+
+- **`create_contact`** / **`update_contact`** / **`delete_contact`** — contact lifecycle.
+  `update_contact` mutates attributes, list membership (`listIds`/`unlinkListIds`), or blacklist
+  status — changing `emailBlacklisted`/`smsBlacklisted` affects real send eligibility immediately.
+  `delete_contact` is irreversible (removes engagement history too); `delete.missing_ok_status:
+  [404]` treats an already-absent contact as a successful idempotent delete.
+- **`create_contacts_list`** — creates a new list under an existing folder (no update/delete
+  endpoint exists in the API for lists; see `api_surface.json`'s `duplicate_of`/`destructive_admin`
+  entries for why those are excluded rather than modeled).
+- **`create_sender`** / **`update_sender`** / **`delete_sender`** — sender identity lifecycle.
+  `create_sender` triggers a real verification email to the target address; `update_sender`
+  affects every campaign that references the sender going forward; `delete_sender` is irreversible.
+- **`create_company`** / **`update_company`** — CRM company lifecycle (no delete write modeled;
+  `DELETE /companies/{id}` is `requires_elevated_scope`-excluded pending admin-role review, per
+  `api_surface.json`).
+- **`create_deal`** / **`update_deal`** — CRM deal lifecycle (same delete-exclusion reasoning as
+  companies).
+- **`create_webhook`** / **`update_webhook`** / **`delete_webhook`** — webhook subscription
+  lifecycle. Creating or updating a webhook's `url`/`events` registers/redirects live event
+  delivery (opens/clicks/bounces/unsubscribes/list-additions) to an external endpoint of the
+  caller's choosing — review the target before enabling, per `metadata.json`'s `risk.write`.
+  `delete_webhook` is irreversible; `delete.missing_ok_status: [404]` treats an already-absent
+  webhook as a successful idempotent delete.
+
+Every action's per-record `risk` string in `writes.json` is the authoritative, reviewable summary;
+`metadata.json`'s `risk.write`/`risk.approval` roll these up for the connector as a whole.
 
 ## Known limits
 
@@ -57,4 +105,20 @@ None. Brevo is read-only in this connector (legacy's own `Write` returns
   page_2}.json`) uses a full 100-record page 1 (matching the real `page_size: 100`) followed by a
   1-record short page 2, so pagination truly terminates on Brevo's own short-page signal rather than
   an artificially-lowered page size — this keeps the fixture's wire shape identical to a real
-  production page count instead of trading fixture verbosity for behavioral accuracy.
+  production page count instead of trading fixture verbosity for behavioral accuracy. The
+  Pass B `contacts_segments`/`companies`/`crm_deals` 2-page fixtures follow the identical
+  full-page/short-page pattern.
+- **No write action deletes a CRM company or deal.** `DELETE /companies/{id}` and
+  `DELETE /crm/deals/{id}` both exist in Brevo's API but are excluded (`api_surface.json`,
+  `requires_elevated_scope`) rather than modeled as `delete_company`/`delete_deal` write actions —
+  irreversible CRM-record deletion is gated behind the CRM admin/owner role in Brevo's own
+  permission model, and this pass draws the write-surface line at create/update for CRM objects
+  pending a dedicated elevated-scope review. Contact, sender, and webhook deletes ARE modeled
+  (`delete_contact`/`delete_sender`/`delete_webhook`) since those are ordinary account-level
+  mutations with no equivalent elevated-role gate in Brevo's docs.
+- **No write action creates a webhook filtered by `channel`/scoped update beyond url/description/
+  events.** Brevo's `updateWebhook` body accepts the same field set as `createWebhook` minus
+  `type` (immutable after creation); `update_webhook`'s `record_schema` reflects this — a record
+  attempting to change `type` post-creation is simply ignored by the body-construction rule (not
+  included in the allow-checked field set), matching the API's own immutability, not silently
+  dropped data.

@@ -73,6 +73,139 @@
         "stamp_field": "brand_id"
       },
       "schema": "schemas/fields.json"
+    },
+    {
+      "name": "connections",
+      "path": "/connections",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/connections.json"
+    },
+    {
+      "name": "message_types",
+      "path": "/brands/{{ fanout.id }}/message-types",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/message_types.json"
+    },
+    {
+      "name": "segments",
+      "path": "/brands/{{ fanout.id }}/segments",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "senders",
+      "path": "/brands/{{ fanout.id }}/senders",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/senders.json"
+    },
+    {
+      "name": "templates",
+      "path": "/brands/{{ fanout.id }}/templates",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "suppression_lists",
+      "path": "/brands/{{ fanout.id }}/suppression-lists",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/suppression_lists.json"
+    },
+    {
+      "name": "bulk_campaigns",
+      "path": "/brands/{{ fanout.id }}/bulk-campaigns",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/bulk_campaigns.json"
+    },
+    {
+      "name": "rss_campaigns",
+      "path": "/brands/{{ fanout.id }}/rss-campaigns",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/rss_campaigns.json"
+    },
+    {
+      "name": "transactional_campaigns",
+      "path": "/brands/{{ fanout.id }}/transactional-campaigns",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/transactional_campaigns.json"
+    },
+    {
+      "name": "test_campaigns",
+      "path": "/brands/{{ fanout.id }}/test-campaigns",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/brands", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "brand_id" },
+        "stamp_field": "brand_id"
+      },
+      "schema": "schemas/test_campaigns.json"
     }
   ]
 }

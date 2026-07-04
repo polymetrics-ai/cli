@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/v2/event-types", "query": { "take": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "id": 201,
+          "title": "Fixture Event Type 1",
+          "slug": "fixture-event-type-1",
+          "description": "conformance fixture event type",
+          "lengthInMinutes": 30,
+          "hidden": false,
+          "locations": [],
+          "bookingFields": [],
+          "scheduleId": 301,
+          "ownerId": 501,
+          "bookingUrl": "https://cal.com/fixtureuser/fixture-event-type-1"
+        }
+      ]
+    }
+  }
+}

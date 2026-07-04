@@ -1,0 +1,12 @@
+{
+  "record": {
+    "ref": "PROD_FIXTURE_NEW",
+    "label": "Fixture Product",
+    "type": "0",
+    "price": "50.00"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products"
+  }
+}

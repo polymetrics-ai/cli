@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1/comments" },
+  "response": {
+    "status": 200,
+    "body": {
+      "comments": [
+        {
+          "id": "comFixture1",
+          "text": "Fixture comment",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "lastUpdatedTime": null,
+          "author": { "id": "usrFixture1", "email": "fixture@example.com" }
+        }
+      ]
+    }
+  }
+}

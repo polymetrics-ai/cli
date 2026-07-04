@@ -43,6 +43,58 @@
       "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "transcripts" },
       "schema": "schemas/transcript_subtitle.json"
+    },
+    {
+      "name": "transcript_detail",
+      "path": "/v2/transcript/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v2/transcript", "records_path": "transcripts", "id_field": "id" }
+        },
+        "into": { "path_var": "transcript_id" }
+      },
+      "schema": "schemas/transcript_detail.json"
+    },
+    {
+      "name": "transcript_sentence_items",
+      "path": "/v2/transcript/{{ fanout.id }}/sentences",
+      "records": { "path": "sentences" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v2/transcript", "records_path": "transcripts", "id_field": "id" }
+        },
+        "into": { "path_var": "transcript_id" },
+        "stamp_field": "transcript_id"
+      },
+      "schema": "schemas/transcript_sentence_items.json"
+    },
+    {
+      "name": "transcript_paragraph_items",
+      "path": "/v2/transcript/{{ fanout.id }}/paragraphs",
+      "records": { "path": "paragraphs" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v2/transcript", "records_path": "transcripts", "id_field": "id" }
+        },
+        "into": { "path_var": "transcript_id" },
+        "stamp_field": "transcript_id"
+      },
+      "schema": "schemas/transcript_paragraph_items.json"
+    },
+    {
+      "name": "transcript_word_search_matches",
+      "path": "/v2/transcript/{{ fanout.id }}/word-search",
+      "query": { "words": "{{ config.word_search_terms }}" },
+      "records": { "path": "matches" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v2/transcript", "records_path": "transcripts", "id_field": "id" }
+        },
+        "into": { "path_var": "transcript_id" },
+        "stamp_field": "transcript_id"
+      },
+      "schema": "schemas/transcript_word_search_matches.json"
     }
   ]
 }

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/ev_fixture_1/expenses",
+    "query": { "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "expense_fixture_1",
+          "name": "Drinks",
+          "note": "",
+          "actual_amount": 1000,
+          "paid_amount": 500,
+          "budget_category": "F&B",
+          "team_allocations": [
+            { "team_id": "team_fixture_1", "team_name": "Fixture Team", "actual_amount": 1000, "paid_amount": 500 }
+          ]
+        }
+      ]
+    }
+  }
+}

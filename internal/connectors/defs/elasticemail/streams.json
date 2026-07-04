@@ -56,6 +56,74 @@
       "path": "/templates",
       "records": { "path": "" },
       "schema": "schemas/templates.json"
+    },
+    {
+      "name": "domains",
+      "path": "/domains",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/domains.json"
+    },
+    {
+      "name": "suppressions",
+      "path": "/suppressions",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions.json"
+    },
+    {
+      "name": "suppressions_bounces",
+      "path": "/suppressions/bounces",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions_bounces.json"
+    },
+    {
+      "name": "suppressions_complaints",
+      "path": "/suppressions/complaints",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions_complaints.json"
+    },
+    {
+      "name": "suppressions_unsubscribes",
+      "path": "/suppressions/unsubscribes",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions_unsubscribes.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhook",
+      "records": { "path": "" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "files",
+      "path": "/files",
+      "records": { "path": "" },
+      "schema": "schemas/files.json"
+    },
+    {
+      "name": "inbound_routes",
+      "path": "/inboundroute",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/inbound_routes.json"
+    },
+    {
+      "name": "sub_accounts",
+      "path": "/subaccounts",
+      "records": { "path": "" },
+      "schema": "schemas/sub_accounts.json"
+    },
+    {
+      "name": "statistics_campaigns",
+      "path": "/statistics/campaigns",
+      "records": { "path": "" },
+      "schema": "schemas/statistics_campaigns.json"
+    },
+    {
+      "name": "statistics_channels",
+      "path": "/statistics/channels",
+      "records": { "path": "" },
+      "schema": "schemas/statistics_channels.json"
     }
   ]
 }

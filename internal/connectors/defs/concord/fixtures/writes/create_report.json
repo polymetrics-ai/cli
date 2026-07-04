@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture Report", "description": "Deterministic fixture record." },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/reports"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_types",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "lengthInMinutes": { "type": ["integer", "null"] },
+    "lengthInMinutesOptions": { "type": ["array", "null"], "items": { "type": "integer" } },
+    "hidden": { "type": ["boolean", "null"] },
+    "locations": { "type": ["array", "null"] },
+    "bookingFields": { "type": ["array", "null"] },
+    "disableGuests": { "type": ["boolean", "null"] },
+    "slotInterval": { "type": ["integer", "null"] },
+    "minimumBookingNotice": { "type": ["integer", "null"] },
+    "beforeEventBuffer": { "type": ["integer", "null"] },
+    "afterEventBuffer": { "type": ["integer", "null"] },
+    "price": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "seatsPerTimeSlot": { "type": ["integer", "null"] },
+    "isInstantEvent": { "type": ["boolean", "null"] },
+    "scheduleId": { "type": ["integer", "null"] },
+    "ownerId": { "type": ["integer", "null"] },
+    "bookingUrl": { "type": ["string", "null"] }
+  }
+}

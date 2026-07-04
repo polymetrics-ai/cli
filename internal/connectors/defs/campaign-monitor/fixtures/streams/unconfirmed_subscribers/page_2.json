@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/list_fixture_1/unconfirmed.json",
+    "query": { "page": "1", "pagesize": "1000" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Results": [
+        {
+          "EmailAddress": "unconfirmed1@example.com",
+          "Name": "Fixture Unconfirmed",
+          "ListJoinedDate": "2026-01-01 00:00:00",
+          "Date": "2026-01-01 00:00:00",
+          "State": "Unconfirmed",
+          "CustomFields": [],
+          "ConsentToTrack": "Yes"
+        }
+      ],
+      "ResultsOrderedBy": "email",
+      "OrderDirection": "asc",
+      "PageNumber": 1,
+      "PageSize": 1000,
+      "RecordsOnThisPage": 1,
+      "TotalNumberOfRecords": 1,
+      "NumberOfPages": 1
+    }
+  }
+}

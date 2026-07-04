@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/v3/cryptocurrency/quotes/latest" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": { "timestamp": "2026-01-01T00:00:00.000Z", "error_code": 0, "error_message": null, "credit_count": 1 },
+      "data": {
+        "1": {
+          "id": 1,
+          "name": "Fixture Coin One",
+          "symbol": "FIX1",
+          "slug": "fixture-coin-one",
+          "cmc_rank": 1,
+          "circulating_supply": 19500000.0,
+          "total_supply": 21000000.0,
+          "max_supply": 21000000.0,
+          "last_updated": "2026-01-01T00:00:00.000Z",
+          "quote": { "USD": { "price": 65000.5, "market_cap": 1250000000000.0, "volume_24h": 30000000000.0 } }
+        },
+        "1027": {
+          "id": 1027,
+          "name": "Fixture Coin Two",
+          "symbol": "FIX2",
+          "slug": "fixture-coin-two",
+          "cmc_rank": 2,
+          "circulating_supply": 120000000.0,
+          "total_supply": 120000000.0,
+          "max_supply": null,
+          "last_updated": "2026-01-01T00:00:00.000Z",
+          "quote": { "USD": { "price": 3500.25, "market_cap": 420000000000.0, "volume_24h": 15000000000.0 } }
+        }
+      }
+    }
+  }
+}

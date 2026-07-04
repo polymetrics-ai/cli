@@ -1,0 +1,13 @@
+{
+  "record": {
+    "uuid": "cus_fixture_1",
+    "company": "Fixture Co Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/cus_fixture_1",
+    "body": {
+      "company": "Fixture Co Renamed"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "1",
+    "subscription": {
+      "cancellation_message": "Customer requested cancellation"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/1/cancel.json",
+    "body": {
+      "subscription": {
+        "cancellation_message": "Customer requested cancellation"
+      }
+    }
+  }
+}

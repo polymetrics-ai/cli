@@ -1,0 +1,44 @@
+{
+  "actions": [
+    {
+      "name": "create_offer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/promotion/advertiser/{{ config.advertiserId }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "terms",
+          "type",
+          "url",
+          "startDate",
+          "endDate",
+          "appliesToAllRegions",
+          "promotionCategories"
+        ],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "terms": { "type": "string" },
+          "type": { "type": "string", "enum": ["promotion", "voucher"] },
+          "voucherCode": { "type": "string" },
+          "url": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "startTime": { "type": "string" },
+          "endTime": { "type": "string" },
+          "timeZone": { "type": "string" },
+          "appliesToAllRegions": { "type": "boolean" },
+          "regions": { "type": "array", "items": { "type": "integer" } },
+          "promotionCategories": { "type": "array", "items": { "type": "integer" } },
+          "campaign": { "type": "string" }
+        }
+      },
+      "risk": "creates a new promotion or voucher offer in the advertiser's MyOffers system, visible to publishers immediately; external mutation, approval required"
+    }
+  ]
+}

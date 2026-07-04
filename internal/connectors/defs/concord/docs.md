@@ -1,10 +1,18 @@
 # Overview
 
-Concord is a contract lifecycle management platform. This bundle reads Concord agreements, user
-organizations, folders, reports, and tags through the Concord REST API. It migrates
+Concord is a contract lifecycle management platform. This bundle reads and writes Concord contract
+lifecycle management data through the Concord REST API: the 5 legacy-parity streams (agreements,
+user organizations, folders, reports, tags) plus, as of this Pass B full-surface expansion, 20
+additional read streams (organization/folder/report/clause/approval detail lookups, clauses,
+approvals, groups, members, events, subscription, branding, automated templates, the authenticated
+user's own profile/preferences/webhook-integrations, and 7 agreement sub-resources fanned out from
+the agreements list) and 13 write actions (create/update/delete for folders, reports, and clauses;
+create/update/delete for company approvals; create for groups). It migrates
 `internal/connectors/concord` (the hand-written legacy connector), which stays registered and
-unchanged until wave6's registry flip. Read-only: Concord's API is full-refresh only upstream,
-matching legacy's `Capabilities.Write = false`.
+unchanged until wave6's registry flip, at parity for the original 5 streams; every Pass B addition
+is new coverage with no legacy counterpart to match, verified directly against Concord's published
+OpenAPI 3.1 spec (`https://api.doc.concordnow.com/concord-openapi-bundled.yaml`, rendered at the
+`docs_url` above).
 
 This bundle was UNBLOCKED from `docs/migration/quarantine.json` once the engine's `page_number`
 paginator gained an explicit 0-indexed `start_page: 0` (S4 engine mini-wave item 1) — legacy's
@@ -59,15 +67,103 @@ full-refresh sync upstream (legacy's own catalog publishes no `CursorFields` for
 implementation exactly (listing the authenticated user's organizations confirms auth and
 connectivity without mutating anything and without needing an org id).
 
+### Pass B streams (20 new, all `pagination: {"type": "none"}` overrides unless noted)
+
+Detail lookups (config-driven id, one request each): `organization`
+(`GET /organizations/{organization_id}`), `folder`/`folder_agreements`
+(`GET .../folders/{folder_id}` and `.../folders/{folder_id}/agreements`, both needing
+`config.folder_id`), `report` (`GET .../reports/{report_id}`), `clause`
+(`GET .../clauses/{clause_id}`), `approval` (`GET .../approvals/{approval_id}`), `agreement`
+(`GET .../agreements/{agreement_uid}`).
+
+List endpoints: `clauses` (`GET .../clauses`, real `offset`/`limit` pagination — modeled as
+`offset_limit`, records at `organizationClauses`), `members` (`GET .../members`, real `start`/
+`limit` pagination — modeled as `offset_limit` with `offset_param: start`, records at `members`),
+`approvals`/`groups` (unpaginated, records at `approvals`/`groups`), `events` (unpaginated,
+requires `config.events_start_date`/`events_end_date`, a `yyyy-MM-dd` range Concord caps at 7
+days — this bundle sends both as plain required query params and lets Concord's own validation
+enforce the range; records at `events`), `subscription`/`branding`/`automated_templates`
+(unpaginated org-level singletons/lists), `user_me`/`user_preferences` (the authenticated user's
+own profile/settings, no organization scoping), `webhooks_integrations`
+(`GET /users/me/integrations/webhooks`, the authenticated user's own webhook integrations).
+
+7 agreement sub-resources use `fan_out.ids_from.request` against
+`/organizations/{organization_id}/agreements` (`id_field: "uid"`, matching this bundle's own
+pre-existing `agreements` stream schema field — see the discrepancy note under Known limits) and
+`into.path_var` to substitute `{{ fanout.id }}` into each sub-resource's path:
+`agreement_metadata`, `agreement_summary` (single-object sub-resources, `stamp_field:
+agreement_uid`), `agreement_comments` (a keyed-object response — `records.keyed_object: true`,
+`key_field: comment_uuid`, `stamp_field: agreement_id`), `agreement_activities`/
+`agreement_members`/`agreement_versions`/`agreement_attachments` (array sub-resources,
+`stamp_field: agreement_id`). `agreement_members`' real per-record shape has no independent unique
+id, so `member_id` is derived via a bare-single-reference `computed_fields` typed extraction
+(`{{ record.user.id }}`) and `x-primary-key` is the composite `["agreement_id", "member_id"]`.
+Because each sub-resource stream's own `pagination` override (`"type": "none"`) also governs its
+fan_out id-listing preliminary request (`fanOutIDsFromRequest` reads `stream.Pagination`, falling
+back to `b.HTTP.Pagination` only when the stream declares none at all), the preliminary agreements
+listing for these 7 streams issues exactly one unpaginated request, not Concord's real page-by-page
+listing — acceptable here since the goal is enumerating every agreement uid to fan out over, not
+reproducing the base `agreements` stream's own pagination contract a second time.
+
 ## Write actions & risks
 
-None. `capabilities.write` is `false`; no `writes.json` is shipped. Legacy itself implements no
-write path for Concord (`Write` is a stub returning `ErrUnsupportedOperation`).
+13 actions across 5 resource families, all templating `{{ config.organization_id }}` into the
+path (`capabilities.write` is now `true`; `metadata.json`'s `risk.write` summarizes the shared
+external-mutation exposure):
+
+- **Folders** (`create_folder`/`update_folder`/`delete_folder`): `POST .../folders`,
+  `PUT .../folders/{{ record.id }}`, `DELETE .../folders/{{ record.id }}`. `delete_folder` declares
+  `delete.missing_ok_status: [404]` (idempotent delete).
+- **Reports** (`create_report`/`update_report`/`delete_report`): `update_report`'s body mirrors
+  Concord's `ReportDto` PUT contract, which requires `id`/`name`/`description`/`filters` together
+  (a full-replace PUT, not a partial patch) — `record_schema` marks all four `required`, matching
+  the real API's own requirement, not just this bundle's convenience.
+- **Clauses** (`create_clause`/`update_clause`/`delete_clause`): `create_clause` requires
+  `title`+`content` (Concord's own `PostOrganizationClauseDto` contract); `update_clause` accepts
+  an optional `version` field for optimistic-concurrency, matching `PutOrganizationClauseDto`.
+- **Groups** (`create_group` only): Concord's API exposes no single-group DELETE at all (only a
+  bulk `PATCH .../groups` membership-update endpoint, out of scope this pass — see
+  `api_surface.json`) and no single-group PUT/replace either, so `create_group` is the only
+  write action modeled for this resource.
+- **Approvals** (`create_approval`/`update_approval`/`delete_approval`): `update_approval` is a
+  `POST` (not PUT), matching Concord's own "Update a Company Approval" endpoint shape exactly
+  (`POST .../approvals/{{ record.id }}`) — this is Concord's real wire convention, not a bundle
+  authoring inconsistency.
+
+Every action's risk mutates shared organization-level CLM configuration (folder structure, saved
+reports, reusable clause templates, user groups, approval workflows) but none touches agreement
+CONTENT itself (no create/sign/renew-agreement write is modeled — see Known limits).
 
 ## Known limits
 
-- Only the 5 legacy-parity read streams are implemented; see `api_surface.json`. Concord's
-  broader documented API surface is out of scope until Pass B.
+- **Pre-existing discrepancy, not introduced or fixed this pass**: this bundle's pre-existing
+  `agreements` stream reads `GET /organizations/{organization_id}/agreements` with
+  `records.path: ""` (a bare top-level array) and a schema field named `uid`. Concord's currently
+  published OpenAPI spec documents NO GET method at all on that exact path (only POST, for
+  creating an agreement) — the real list-agreements GET lives at
+  `/user/me/organizations/{organizationId}/agreements`, returns an `AgreementListDto` envelope
+  (`{items: [...], numberOfItems, page, total, ...}`, not a bare array), and each item's real id
+  field is `uuid`, not `uid`. This predates Pass B (it is this bundle's original wave1/wave2
+  legacy-parity choice, `api_surface.json`'s pre-existing `covered_by` entry) and is left
+  UNCHANGED here — Pass B's mandate is full-surface EXPANSION, not an unreviewed behavior change to
+  an already-shipped, already-tested stream. The 7 new `fan_out`-driven agreement sub-resource
+  streams deliberately reuse this bundle's own `agreements`-stream field convention
+  (`id_field: "uid"`) for consistency with what this bundle already ships, not the live API's
+  actual `uuid` field — if the base `agreements` stream is ever corrected to the real path/shape in
+  a future pass, these 7 fan_out `id_field` declarations should be revisited in the same change.
+  `folders`' pre-existing stream has an analogous discrepancy (real folders list returns a
+  `FolderTreeDto`, not a bare array) — also left unchanged for the same reason.
+- Every remaining documented Concord endpoint not implemented this pass is excluded with a
+  specific, closed-vocabulary reason in `api_surface.json` — see that file rather than duplicating
+  the full list here. The largest excluded category is agreement-CONTENT mutation (create/patch
+  agreement, clause/field/version/member/comment/attachment/signature/renewal actions on a live
+  agreement): Concord's `AgreementCreate` schema alone is a deeply nested templating/
+  source-agreement/parameter-replacement shape not safely reducible to a flat JSON write action,
+  and every signature/renewal/negotiation-membership action is legally consequential — both
+  judged out of scope for this pass rather than risking a silent mis-mapping of binding contract
+  data. Binary-payload endpoints (PDF/DOCX export, attachment/logo upload) and
+  organization-admin-only surfaces (branding, permission groups, integrations, proxy profiles,
+  member/invitation management) are excluded as `binary_payload`/`requires_elevated_scope`.
 - Legacy's config-overridable `max_pages` (a per-read hard page-count cap, defaulting to
   unlimited) has no engine-dialect equivalent: `PaginationSpec.MaxPages` is a static integer
   declared in `streams.json`, not a templated/config-driven value (the same limitation documented
@@ -86,5 +182,10 @@ write path for Concord (`Write` is a stub returning `ErrUnsupportedOperation`).
   rule).
 - `fixtures/streams/agreements/page_1.json` ships a FULL 100-record page (matching the static
   `page_size: 100` pagination threshold) plus a 1-record `page_2.json`, satisfying
-  `conformance`'s `pagination_terminates` 2-page requirement; the other 4 streams ship a
-  single-page fixture each (pagination is already proven by `agreements`).
+  `conformance`'s `pagination_terminates` 2-page requirement; the other 4 legacy-parity streams
+  ship a single-page fixture each (pagination is already proven by `agreements`). All 20 Pass B
+  streams declare `pagination: {"type": "none"}` (single-request detail/list lookups), so none
+  need a 2-page fixture under the §4 rule; the 7 `fan_out` sub-resource streams each ship exactly
+  2 fixture pages regardless — one for the preliminary agreements id-listing request, one for the
+  per-agreement sub-resource request itself — which is a fan_out-shape necessity (both requests
+  hit the SAME replay server), not a pagination proof.

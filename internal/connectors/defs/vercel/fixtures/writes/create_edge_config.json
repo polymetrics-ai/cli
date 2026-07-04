@@ -1,0 +1,9 @@
+{
+  "record": {
+    "slug": "fixture-config"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/edge-config"
+  }
+}

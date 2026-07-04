@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/record",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "records": [
+          {
+            "record_id": "rec_fixture_1",
+            "ccr_patient_id": null,
+            "institute_id": "inst_fixture_1",
+            "email_address": "fixture1@example.com",
+            "randomization_group": null,
+            "randomization_group_name": null,
+            "randomization_datetime": null,
+            "status": "open",
+            "archived": false,
+            "archived_reason": null,
+            "progress": 50,
+            "locked": false,
+            "created_on": "2026-01-01T00:00:00Z",
+            "updated_on": "2026-01-01T00:00:00Z"
+          },
+          {
+            "record_id": "rec_fixture_2",
+            "ccr_patient_id": null,
+            "institute_id": "inst_fixture_1",
+            "email_address": "fixture2@example.com",
+            "randomization_group": "A",
+            "randomization_group_name": "Arm A",
+            "randomization_datetime": "2026-01-02T00:00:00Z",
+            "status": "open",
+            "archived": false,
+            "archived_reason": null,
+            "progress": 80,
+            "locked": false,
+            "created_on": "2026-01-02T00:00:00Z",
+            "updated_on": "2026-01-02T00:00:00Z"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 2,
+      "total_items": 3
+    }
+  }
+}

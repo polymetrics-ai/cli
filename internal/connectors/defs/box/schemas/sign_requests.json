@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sign_requests",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "sender_email": { "type": ["string", "null"] },
+    "signers": { "type": ["array", "null"] },
+    "source_files": { "type": ["array", "null"] },
+    "sign_files": { "type": ["object", "null"] },
+    "parent_folder": { "type": ["object", "null"] },
+    "prepare_url": { "type": ["string", "null"] },
+    "signing_log": { "type": ["object", "null"] },
+    "auto_expire_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "finished_at": { "type": ["string", "null"] }
+  }
+}

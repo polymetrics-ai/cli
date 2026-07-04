@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "page_views",
+  "type": "object",
+  "x-primary-key": ["call_id", "created_at"],
+  "x-cursor-field": "created_at",
+  "required": ["call_id", "created_at"],
+  "properties": {
+    "call_id": { "type": "string" },
+    "referrer_url": { "type": ["string", "null"] },
+    "page_url": { "type": ["string", "null"] },
+    "created_at": { "type": "string" }
+  }
+}

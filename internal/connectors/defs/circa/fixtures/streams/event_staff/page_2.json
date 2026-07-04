@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/ev_fixture_1/staff",
+    "query": { "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "first_name": "John",
+          "last_name": "Doe",
+          "email": "fixture.staff1@example.com",
+          "based": "On-site",
+          "custom_fields": [
+            { "field_id": "field_fixture_1", "field_label": "Confirmed", "value": true }
+          ]
+        },
+        {
+          "first_name": "Jane",
+          "last_name": "Doe",
+          "email": "fixture.staff2@example.com",
+          "based": "Remote",
+          "custom_fields": [
+            { "field_id": "field_fixture_1", "field_label": "Confirmed", "value": false }
+          ]
+        }
+      ]
+    }
+  }
+}

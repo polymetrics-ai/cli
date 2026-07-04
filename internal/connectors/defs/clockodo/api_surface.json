@@ -1,15 +1,641 @@
 {
   "api": "Clockodo API v2 (https://my.clockodo.com/api)",
   "docs": "https://www.clockodo.com/en/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Clockodo surface (time entries, absences, teams CRUD, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented Clockodo endpoint is enumerated below, covered by a stream/write or explicitly excluded with a specific reason.",
   "endpoints": [
-    { "method": "GET", "path": "/v2/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/v2/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/v2/services", "covered_by": { "stream": "services" } },
-    { "method": "GET", "path": "/v2/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/v2/entries", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/absences", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v2/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-customer detail already reachable via the customers stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{id}",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/projects/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-project detail already reachable via the projects stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/projects/{id}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/projects/{id}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/services",
+      "covered_by": {
+        "stream": "services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/services/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-service detail already reachable via the services stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/services",
+      "covered_by": {
+        "write": "create_service"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/services/{id}",
+      "covered_by": {
+        "write": "update_service"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/services/{id}",
+      "covered_by": {
+        "write": "delete_service"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user detail already reachable via the users stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invites/provisions a new co-worker seat, a billing-seat-consuming admin action distinct from ordinary record creation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/users/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a co-worker's role/access-control settings (e.g. can_add_customers, boss); an admin-scoped action, no demonstrated write demand for ordinary sync"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/users/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly disables a co-worker's access to the account, a billing-seat/access-revocation admin action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/aggregates/users/me",
+      "covered_by": {
+        "stream": "current_user_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/teams/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-team detail already reachable via the teams stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/teams/{id}",
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/teams/{id}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/surcharges",
+      "covered_by": {
+        "stream": "surcharges"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/surcharges/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-surcharge-model detail already reachable via the surcharges stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/surcharges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new surcharge model; no demonstrated write demand alongside the read-only surcharges stream (narrow payroll-configuration object)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/surcharges/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a surcharge model; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/surcharges/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a surcharge model; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/lumpsumservices",
+      "covered_by": {
+        "stream": "lumpsum_services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/lumpsumservices/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-lump-sum-service detail already reachable via the lumpsum_services stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/lumpsumservices",
+      "covered_by": {
+        "write": "create_lumpsum_service"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/lumpsumservices/{id}",
+      "covered_by": {
+        "write": "update_lumpsum_service"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/lumpsumservices/{id}",
+      "covered_by": {
+        "write": "delete_lumpsum_service"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/entries",
+      "covered_by": {
+        "stream": "entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/entries/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-entry detail already reachable via the entries stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a time entry; the polymorphic entry body (plain time entry / lump-sum value / lump-sum-service variants, discriminated by 'type') has no single dialect-expressible record_schema shape yet, deferred pending a decided per-type write strategy"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/entries/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a time entry; deferred alongside the polymorphic create-body decision above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/entries/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a time entry; deferred alongside the polymorphic create/update decision above so create/update/delete land together in a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/entriesTexts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "queries free-text descriptions used across time/lump-sum entries; a narrow autocomplete-style lookup resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/entrygroups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a mandatory (time_since, time_until, grouping) triple with no natural default; grouped/aggregated entry view layered over the entries stream already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/entrygroups",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk-edits every time entry matching a filter across a date range in one call"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/entrygroups",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk-deletes every time entry matching a filter across a date range in one irreversible call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/holidayscarry",
+      "covered_by": {
+        "stream": "holidays_carry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/holidayscarry/{users_id}/{year}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-carryover-row detail already reachable via the holidays_carry stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/holidayscarry",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a holiday-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand alongside the read-only holidays_carry stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/holidayscarry/{users_id}/{year}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a holiday-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/holidayscarry/{users_id}/{year}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a holiday-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/holidaysquota",
+      "covered_by": {
+        "stream": "holidays_quota"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/holidaysquota/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-quota-row detail already reachable via the holidays_quota stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/holidaysquota",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a holiday-quota row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand alongside the read-only holidays_quota stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/holidaysquota/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a holiday-quota row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/holidaysquota/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a holiday-quota row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/overtimecarry",
+      "covered_by": {
+        "stream": "overtime_carry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/overtimecarry/{users_id}/{year}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-carryover-row detail already reachable via the overtime_carry stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/overtimecarry",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an overtime-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand alongside the read-only overtime_carry stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/overtimecarry/{users_id}/{year}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an overtime-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/overtimecarry/{users_id}/{year}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an overtime-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/targethours",
+      "covered_by": {
+        "stream": "target_hours"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/targethours/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-target-hours-row detail already reachable via the target_hours stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/targethours",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a target-hours (planned-hours) configuration row; HR/payroll-adjacent configuration mutation, no demonstrated write demand alongside the read-only target_hours stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/targethours/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a target-hours configuration row; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/targethours/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a target-hours configuration row; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/nonbusinessdays",
+      "covered_by": {
+        "stream": "nonbusiness_days"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/nonbusinessgroups",
+      "covered_by": {
+        "stream": "nonbusiness_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usersNonbusinessGroups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "manages per-user holiday-group-period assignment history; narrow HR-configuration join resource, no demonstrated read/write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/absences",
+      "covered_by": {
+        "stream": "absences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/absences/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-absence detail already reachable via the absences stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/absences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an absence (vacation/sick-leave) request; sensitive HR-workflow mutation, no demonstrated write demand alongside the read-only absences stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/absences/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates/approves an absence request; sensitive HR-workflow mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/absences/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an absence request; sensitive HR-workflow mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/clock",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "controls the live stopwatch (start/stop a running timer via GET-as-action, per Clockodo's own docs); an imperative device-control action, not a data listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{users_id}/access/customers-projects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user customer/project access-rights lookup; narrow authorization-introspection resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{users_id}/access/services",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user service access-rights lookup; narrow authorization-introspection resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/userreports",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated co-worker report document, not a listing of underlying records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/register",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "creates a brand-new Clockodo account (an org-level admin/billing action, not per-record data), and API-key-scoped connections are conventionally already bound to one account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workTimes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "queries computed work-time totals derived from entries already covered by the entries stream; an aggregated-view resource, no demonstrated additional read demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workTimes/changeRequests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "queries work-time change requests; HR-workflow object, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/workTimes/changeRequests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "submits a work-time change request; HR-workflow action, not ordinary record data sync"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/workTimes/changeRequests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "approves/rejects a work-time change request; HR-workflow action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook subscription management; push-delivery configuration, not a pollable data resource this connector's pull-sync model reads"
+      }
+    }
   ]
 }

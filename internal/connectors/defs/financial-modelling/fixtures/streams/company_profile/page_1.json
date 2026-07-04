@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/profile/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "synthetic-conformance-value",
+        "companyName": "Fixture Company 1",
+        "currency": "USD",
+        "exchange": "NASDAQ Global Select",
+        "exchangeShortName": "NASDAQ",
+        "industry": "Software",
+        "sector": "Technology",
+        "country": "US",
+        "mktCap": 1000000000,
+        "lastDiv": 0.5,
+        "price": 101.0,
+        "beta": 1.01,
+        "volAvg": 1000000,
+        "isEtf": false,
+        "isActivelyTrading": true,
+        "isAdr": false,
+        "isFund": false,
+        "fullTimeEmployees": "5000",
+        "ipoDate": "2001-01-01",
+        "ceo": "Fixture CEO",
+        "description": "Fixture company description.",
+        "website": "https://example.com",
+        "image": "https://example.com/logo.png"
+      }
+    ]
+  }
+}

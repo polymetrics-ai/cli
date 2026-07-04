@@ -1,0 +1,23 @@
+{
+  "record": {
+    "name": "Fixture Pipeline",
+    "cluster_id": "cluster_fixture_1",
+    "repository": "git@github.com:fixture-org/fixture-repo.git"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/pipelines",
+    "body": {
+      "name": "Fixture Pipeline",
+      "cluster_id": "cluster_fixture_1",
+      "repository": "git@github.com:fixture-org/fixture-repo.git"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "pipe_fixture_new",
+      "slug": "fixture-pipeline"
+    }
+  }
+}

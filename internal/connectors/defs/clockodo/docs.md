@@ -1,9 +1,18 @@
 # Overview
 
-Clockodo is a wave2 fan-out declarative-HTTP migration. It reads Clockodo customers, projects,
-services, and users through the Clockodo REST API (`GET https://my.clockodo.com/api/v2/...`). This
-bundle targets capability parity with `internal/connectors/clockodo` (the hand-written connector
-it migrates); the legacy package stays registered and unchanged until wave6's registry flip.
+Clockodo is a wave2 fan-out declarative-HTTP migration, expanded to the full documented Clockodo
+API surface in Pass B. It reads Clockodo customers, projects, services, users, current-user/company
+settings, time entries, absences, teams, surcharge models, lump-sum services, nonbusiness groups
+and days, holiday and overtime carryovers, and target-hours configurations; it writes customers,
+projects, services, teams, and lump-sum services (create/update/delete) through the Clockodo REST
+API (`https://my.clockodo.com/api/...`). This bundle targets capability parity with
+`internal/connectors/clockodo` (the hand-written connector it migrates) for its original 4 streams;
+the legacy package stays registered and unchanged until wave6's registry flip. The Pass B streams/
+writes (`current_user_settings`, `entries`, `absences`, `teams`, `surcharges`, `lumpsum_services`,
+`nonbusiness_groups`, `nonbusiness_days`, `holidays_carry`, `holidays_quota`, `overtime_carry`,
+`target_hours`, and every `writes.json` action) are new coverage beyond legacy's own scope — legacy
+never implemented them — so there is no parity constraint on their record shape; schemas are
+derived directly from Clockodo's published API documentation (`https://www.clockodo.com/en/api/`).
 
 ## Auth setup
 
@@ -47,16 +56,47 @@ returns after the first request) — this bundle overrides `pagination` to `{"ty
 stream level for both, matching legacy exactly (`streams.json`'s per-stream `pagination` replaces
 the base spec wholesale per conventions.md §3).
 
-None of Clockodo's four list endpoints expose an incremental cursor field (legacy's own
+None of Clockodo's four legacy list endpoints expose an incremental cursor field (legacy's own
 `clockodoStreams` comment: "Clockodo administrative resources are keyed by an integer `id` and have
 no natural incremental cursor, so all are full-refresh") — this bundle declares no `incremental`
-block for any stream, matching legacy exactly.
+block for any stream, matching legacy exactly. None of the Pass B streams below expose one either.
+
+**Pass B streams**: `current_user_settings` (`GET /v2/aggregates/users/me`, single-object,
+`pagination.type: none`, no `x-primary-key` — it is a singleton settings object, not a record
+collection) and `teams`/`surcharges`/`lumpsum_services`/`nonbusiness_groups`/`holidays_carry`/
+`holidays_quota`/`overtime_carry`/`target_hours` (all `pagination.type: none` — none of these
+Clockodo endpoints paginate) read directly with a `records.path` matching each endpoint's own
+top-level envelope key (`team`, `surcharges`, `lumpSumServices`, `nonbusinessgroups`,
+`holidayscarry`, `holidaysquota`, `overtimecarry`, `targethours` respectively — Clockodo is not
+uniform about singular/plural/camelCase naming across its own endpoints). `nonbusiness_days` and
+`absences` both require a Clockodo-mandated `year` query parameter with no natural default or
+computed value; this bundle adds two new optional `spec.json` config properties
+(`nonbusinessdays_year`, `absences_year`) templated directly into each stream's `query.year` — an
+absent value hard-errors only when that specific stream is read (same "declared-but-optional,
+required-in-practice" pattern as `workspace_id` on the clockify bundle). `entries` (Clockodo's time
+entries) similarly requires a mandatory `time_since`/`time_until` window; this bundle adds
+`entries_time_since`/`entries_time_until` config properties for the same reason, and otherwise
+reuses the shared base `page_number` pagination (Clockodo's `entries` list endpoint returns the same
+`paging`/envelope shape as `customers`/`projects`).
 
 ## Write actions & risks
 
-None. Clockodo is read-only (legacy's `Write` always returns
-`connectors.ErrUnsupportedOperation` wrapped with a read-only message, `clockodo.go:120-125`);
-`capabilities.write` is `false` and this bundle ships no `writes.json`.
+`create_customer`/`update_customer`/`delete_customer`,
+`create_project`/`update_project`/`delete_project`,
+`create_service`/`update_service`/`delete_service`, `create_team`/`update_team`/`delete_team`, and
+`create_lumpsum_service`/`update_lumpsum_service`/`delete_lumpsum_service` are new Pass B writes
+(legacy never implemented any Clockodo write path — legacy's `Write` always returns
+`connectors.ErrUnsupportedOperation`, and this bundle now supersedes that for these 5 resources).
+Every action is a live external mutation against the real Clockodo account; `risk` on each action
+requires approval. `capabilities.write` is now `true`.
+
+Entries, absences, users, surcharges, holiday/overtime carryovers, holiday quotas, and target-hours
+configurations have no write action in this bundle: entries accept a polymorphic body (plain time
+entry / lump-sum value / lump-sum-service variants, discriminated by a `type` field) with no single
+dialect-expressible `record_schema` shape decided yet; the HR/payroll-adjacent resources (absences,
+holiday/overtime carryovers, holiday quotas, target hours) are sensitive mutations with no
+demonstrated write demand; user writes require elevated (admin/billing-seat) scope. See
+`api_surface.json` for the itemized reason on every excluded endpoint.
 
 ## Known limits
 

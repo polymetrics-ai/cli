@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/holidayscarry" },
+  "response": {
+    "status": 200,
+    "body": {
+      "holidayscarry": [
+        { "users_id": 1, "year": 2026, "count": 2.5, "note": "conformance fixture carry" }
+      ]
+    }
+  }
+}

@@ -1,14 +1,14 @@
 {
   "name": "configcat",
   "display_name": "ConfigCat",
-  "description": "Reads ConfigCat organizations, products, configs, environments, and tags through the ConfigCat Public Management API.",
+  "description": "Reads and writes ConfigCat feature-flag platform data: organizations, products, configs, environments, settings/feature flags, deleted settings, SDK keys, segments, webhooks, permission groups, integrations, proxy profiles, members, audit logs, stale flags, tags, and the authenticated user's own profile through the ConfigCat Public Management API.",
   "integration_type": "api",
   "docs_url": "https://api.configcat.com/docs/",
   "release_stage": "beta",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 0
   },
   "risk": {
-    "read": "external ConfigCat Public Management API read of organization, product, config, environment, and tag metadata",
-    "approval": "none; read-only source connector"
+    "read": "external ConfigCat Public Management API read of organization/product/config/environment/setting metadata plus segments, webhooks, permission groups, integrations, proxy profiles, members, and audit logs",
+    "write": "external mutation of ConfigCat configs, environments, feature flags/settings, and tags (create/update/delete); does not change a feature flag's evaluated VALUE in any environment (see docs.md)",
+    "approval": "required for delete_config/delete_environment/delete_flag/delete_tag (destructive, cascades to dependent data); create/update actions are lower risk but still mutate shared product configuration"
   }
 }

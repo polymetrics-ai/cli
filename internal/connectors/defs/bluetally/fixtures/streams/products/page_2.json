@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/products",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 51,
+        "name": "Fixture product 51",
+        "model_number": "MN-51",
+        "end_of_life_date": "2027-01-01",
+        "end_of_life_type": "Individual by Asset",
+        "end_of_life_months": 12,
+        "default_purchase_cost": 100,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "depreciation_id": 1,
+        "logo": "www.test.com",
+        "notes": "",
+        "archived": false,
+        "custom_fields": [
+          {
+            "Screen Size": "13 Inch"
+          }
+        ],
+        "number_of_assets": 1,
+        "number_of_deployable_assets": 1,
+        "minimum_quantity": 0,
+        "assets": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

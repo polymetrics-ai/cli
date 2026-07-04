@@ -1,10 +1,15 @@
 {
   "api": "CIMIS Web API (https://et.water.ca.gov/api)",
-  "docs": "https://cimis.water.ca.gov/WSNReportCriteria.aspx",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: only the stations stream is Tier-1 expressible; daily/hourly are a nested-array-of-arrays-plus-dynamic-key-flatten shape the engine's declarative record extraction cannot express (see docs.md Known limits) and remain on the legacy connector.",
+  "docs": "https://et.water.ca.gov/Rest/Index, https://cimis.water.ca.gov/WSNReportCriteria.aspx",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented CIMIS Web API GET resource that the engine's declarative record extraction can express is covered — station metadata plus both zip-code reference lists (station zip codes and spatial/SCS zip codes), all served without an appKey. CIMIS exposes no write/mutation endpoints at all (a public read-only reference/observational data API), so capabilities.write stays false and this bundle ships no writes.json. /api/data (daily and hourly weather/ET observations) remains excluded as a genuine ENGINE_GAP (see docs.md Known limits) — unchanged from the prior review, re-confirmed against the live CIMIS REST reference during this pass.",
   "endpoints": [
     { "method": "GET", "path": "/api/station", "covered_by": { "stream": "stations" } },
+    { "method": "GET", "path": "/api/station/{stationNumber}", "excluded": { "category": "duplicate_of", "reason": "single-station-by-number filter of the same /api/station resource already covered whole by the stations stream; the engine's declarative read dialect has no per-record path-parameter filter primitive for a list stream, and a full station-list read already returns every station this endpoint would return individually" } },
+    { "method": "GET", "path": "/api/stationzipcode", "covered_by": { "stream": "station_zip_codes" } },
+    { "method": "GET", "path": "/api/stationzipcode/{zipCode}", "excluded": { "category": "duplicate_of", "reason": "single-zip-code filter of the same /api/stationzipcode resource already covered whole by the station_zip_codes stream" } },
+    { "method": "GET", "path": "/api/spatialzipcode", "covered_by": { "stream": "spatial_zip_codes" } },
+    { "method": "GET", "path": "/api/spatialzipcode/{zipCode}", "excluded": { "category": "duplicate_of", "reason": "single-zip-code filter of the same /api/spatialzipcode resource already covered whole by the spatial_zip_codes stream" } },
     { "method": "GET", "path": "/api/data", "excluded": { "category": "out_of_scope", "reason": "records live nested at Data.Providers[].Records[] (an array within an array; the engine's RecordsAt only descends object keys via a dotted path, and cannot flatten across a dynamic number of provider entries), and each record's data-item fields (e.g. DayAirTmpAvg) are a DYNAMIC set of nested {Value,Qc,Unit} objects (driven by the requested dataItems config) each of which legacy flattens into 3 synthetic sibling fields (<Item>_Value/_Qc/_Unit) per key present -- there is no dotted-path wildcard or per-key dynamic-flatten primitive in computed_fields. Genuine ENGINE_GAP, tracked for a follow-up wave; covers both the daily and hourly legacy streams." } }
   ]
 }

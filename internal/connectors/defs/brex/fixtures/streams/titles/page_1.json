@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/titles",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "title_fixture_1",
+          "name": "Engineer"
+        },
+        {
+          "id": "title_fixture_2",
+          "name": "Account Executive"
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

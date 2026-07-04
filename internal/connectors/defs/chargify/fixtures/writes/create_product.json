@@ -1,0 +1,23 @@
+{
+  "record": {
+    "product_family_id": "1",
+    "product": {
+      "name": "Fixture Product",
+      "price_in_cents": 2000,
+      "interval": 1,
+      "interval_unit": "month"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/product_families/1/products.json",
+    "body": {
+      "product": {
+        "name": "Fixture Product",
+        "price_in_cents": 2000,
+        "interval": 1,
+        "interval_unit": "month"
+      }
+    }
+  }
+}

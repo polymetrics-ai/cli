@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": 301,
+    "attributes": {
+      "email": "fixture1-updated@example.com",
+      "name": "Fixture Contact One"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/contacts/301",
+    "body": {
+      "attributes": {
+        "email": "fixture1-updated@example.com",
+        "name": "Fixture Contact One"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": 301, "attributes": { "email": "fixture1-updated@example.com" } } }
+  }
+}

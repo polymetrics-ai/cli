@@ -1,0 +1,11 @@
+{
+  "record": {
+    "fixed_asset[name]": "Fixture Laptop",
+    "fixed_asset[group_id]": 10,
+    "fixed_asset[location_id]": 100
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/assets.api"
+  }
+}

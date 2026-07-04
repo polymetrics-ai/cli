@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/purchases",
+    "query": { "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "total_pages": 2,
+      "purchases": [
+        {
+          "id": 1,
+          "transaction_id": "txn_fixture_1",
+          "status": "paid",
+          "email_address": "fixture1@example.com",
+          "currency": "USD",
+          "transaction_time": "2026-01-01T00:00:00Z",
+          "subtotal": "10.00",
+          "tax": "1.00",
+          "shipping": "0.00",
+          "discount": "0.00",
+          "total": "11.00"
+        },
+        {
+          "id": 2,
+          "transaction_id": "txn_fixture_2",
+          "status": "paid",
+          "email_address": "fixture2@example.com",
+          "currency": "USD",
+          "transaction_time": "2026-01-02T00:00:00Z",
+          "subtotal": "20.00",
+          "tax": "2.00",
+          "shipping": "0.00",
+          "discount": "0.00",
+          "total": "22.00"
+        }
+      ]
+    }
+  }
+}

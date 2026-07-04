@@ -1,0 +1,17 @@
+{
+  "record": {
+    "name": "fixture-org/fixture-pipeline",
+    "branch": "main"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pipelines/run/fixture-org/fixture-pipeline",
+    "body": {
+      "branch": "main"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "602d23ce8d78ab0000000099"
+  }
+}

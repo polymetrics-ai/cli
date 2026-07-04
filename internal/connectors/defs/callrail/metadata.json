@@ -1,14 +1,14 @@
 {
   "name": "callrail",
   "display_name": "CallRail",
-  "description": "Reads CallRail calls, companies, users, and text messages through the CallRail v3 REST API.",
+  "description": "Reads and writes CallRail call tracking data (calls, companies, users, tags, trackers, form submissions, text messages, notifications, integrations, and more) through the CallRail v3 REST API.",
   "integration_type": "api",
   "docs_url": "https://apidocs.callrail.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external CallRail API read of call tracking analytics data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external CallRail API read of call tracking analytics, contact, and configuration data",
+    "write": "external mutation of CallRail account configuration (tags, companies, users, notifications, outbound caller ids, message flows, integration filters), call/lead metadata (call tags, lead status, value), and outbound communications (placing outbound calls, sending SMS)",
+    "approval": "required for outbound-communication and account-configuration writes (placing calls, sending texts, disabling companies, deleting users/caller-ids); tag/metadata-only writes are lower risk"
   }
 }

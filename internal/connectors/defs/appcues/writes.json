@@ -1,0 +1,567 @@
+{
+  "actions": [
+    {
+      "name": "publish_flow",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/flows/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes a flow, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_flow",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/flows/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live flow, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_flow_v2",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/flows-v2/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes a Flows 2.0 experience, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_flow_v2",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/flows-v2/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live Flows 2.0 experience, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_pin",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/pins/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes a pin, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_pin",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/pins/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live pin, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_mobile_experience",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/mobile/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes a mobile experience, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_mobile_experience",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/mobile/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live mobile experience, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_launchpad",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/launchpads/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes a launchpad, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_launchpad",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/launchpads/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live launchpad, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_banner",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/banners/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes a banner, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_banner",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/banners/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live banner, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_checklist",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/checklists/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes a checklist, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_checklist",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/checklists/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live checklist, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_embed",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/embeds/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes an embed, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_embed",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/embeds/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live embed, immediately hiding it from end users"
+    },
+    {
+      "name": "publish_nps",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/nps/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "publishes an NPS 2.0 survey, making it live to end users immediately"
+    },
+    {
+      "name": "unpublish_nps",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/nps/{{ record.id }}/unpublish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "unpublishes a live NPS 2.0 survey, immediately hiding it from end users"
+    },
+    {
+      "name": "create_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/segments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new user segment used to target flows/banners/checklists"
+    },
+    {
+      "name": "update_segment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ config.account_id }}/segments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "mutates a user segment's definition, changing which users any flow/banner/checklist targeting it reaches"
+    },
+    {
+      "name": "delete_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ config.account_id }}/segments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "permanently deletes a user segment; any flow/banner/checklist targeting rule referencing it stops matching"
+    },
+    {
+      "name": "add_segment_user_ids",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/segments/{{ record.id }}/add_user_ids",
+      "path_fields": ["id"],
+      "body_fields": ["user_ids"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "user_ids"],
+        "properties": {
+          "id": { "type": "string" },
+          "user_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "adds specific end users to a segment (async job), changing who any targeting rule referencing it matches"
+    },
+    {
+      "name": "remove_segment_user_ids",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/segments/{{ record.id }}/remove_user_ids",
+      "path_fields": ["id"],
+      "body_fields": ["user_ids"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "user_ids"],
+        "properties": {
+          "id": { "type": "string" },
+          "user_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "removes specific end users from a segment (async job), changing who any targeting rule referencing it matches"
+    },
+    {
+      "name": "update_user_profile",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ config.account_id }}/users/{{ record.user_id }}/profile",
+      "path_fields": ["user_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id"],
+        "properties": {
+          "user_id": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates an end user's profile attributes, changing which flows/segments they match"
+    },
+    {
+      "name": "delete_user_profile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ config.account_id }}/users/{{ record.user_id }}/profile",
+      "path_fields": ["user_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id"],
+        "properties": { "user_id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "permanently deletes an end user's profile, properties, and flow/banner completion history (async job)"
+    },
+    {
+      "name": "track_user_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/users/{{ record.user_id }}/events",
+      "path_fields": ["user_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id", "name"],
+        "properties": {
+          "user_id": { "type": "string" },
+          "name": { "type": "string" },
+          "timestamp": { "type": "string" },
+          "attributes": { "type": "object" },
+          "group_id": { "type": "string" }
+        }
+      },
+      "risk": "injects a synthetic behavioral event into an end user's timeline, which may trigger flow/banner targeting rules"
+    },
+    {
+      "name": "update_group_profile",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ config.account_id }}/groups/{{ record.group_id }}/profile",
+      "path_fields": ["group_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_id"],
+        "properties": {
+          "group_id": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates a group's profile attributes, changing which flows/segments its members match"
+    },
+    {
+      "name": "associate_group_users",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ config.account_id }}/groups/{{ record.group_id }}/users",
+      "path_fields": ["group_id"],
+      "body_fields": ["user_ids"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_id", "user_ids"],
+        "properties": {
+          "group_id": { "type": "string" },
+          "user_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "associates end users with a group, changing group-scoped targeting and analytics rollups"
+    },
+    {
+      "name": "create_sdk_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "tag_field": { "type": "string" }
+        }
+      },
+      "risk": "creates a new SDK authentication key with production data-ingestion access"
+    },
+    {
+      "name": "update_sdk_key",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "tag_field"],
+        "properties": {
+          "id": { "type": "string" },
+          "tag_field": { "type": "string" }
+        }
+      },
+      "risk": "changes an SDK key's tag field, altering how future ingested data is tagged"
+    },
+    {
+      "name": "delete_sdk_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "permanently revokes an SDK authentication key; any client still using it immediately loses ingestion access"
+    },
+    {
+      "name": "enable_sdk_key_enforcement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}/enforcement_mode/enable",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "enables strict enforcement mode on an SDK key, which can reject previously-accepted client requests"
+    },
+    {
+      "name": "disable_sdk_key_enforcement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}/enforcement_mode/disable",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "disables strict enforcement mode on an SDK key"
+    },
+    {
+      "name": "enable_sdk_key_secure_data_ingest",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}/secure_data_ingest/enable",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "enables secure data ingest on an SDK key, which can reject unsigned client requests"
+    },
+    {
+      "name": "disable_sdk_key_secure_data_ingest",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}/secure_data_ingest/disable",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "disables secure data ingest on an SDK key"
+    }
+  ]
+}

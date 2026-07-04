@@ -1,12 +1,14 @@
 # Overview
 
-CoinAPI is a read-only market-data source. This bundle migrates `internal/connectors/coin-api` (the
-hand-written legacy connector) to a declarative Tier-1 bundle at parity: 3 metadata reference
-streams (`symbols`, `exchanges`, `assets` — `GET /v1/<resource>` returning a top-level JSON array)
-and 2 symbol-scoped historical streams (`ohlcv_historical_data`, `trades_historical_data` —
-`GET /v1/<resource>/<symbol_id>/history`, paginated by `limit` + advancing `time_start` past the
-last record's time cursor). The legacy package stays registered and unchanged until wave6's registry
-flip.
+CoinAPI is a read-only market-data source (the entire documented REST surface is GET-only; there is
+no write/mutation capability in the API at all). This bundle started as a migration of
+`internal/connectors/coin-api` (the hand-written legacy connector, which stays registered and
+unchanged until wave6's registry flip) at parity, then this Pass B pass expanded it to the practical
+current documented surface after reviewing the live CoinAPI Market Data REST API OpenAPI spec (see
+`api_surface.json`). 9 streams total: 3 metadata reference streams (`symbols`, `exchanges`,
+`assets`), 2 symbol-scoped historical streams (`ohlcv_historical_data`, `trades_historical_data`),
+and 4 new in this pass (`exchange_rates`, `quotes_current`, `orderbook_current`,
+`metrics_listing`).
 
 ## Auth setup
 
@@ -23,9 +25,25 @@ operator convention (set `base_url` explicitly for sandbox), documented under Kn
 
 ## Streams notes
 
-`symbols`, `exchanges`, and `assets` are full-refresh reference lists: `GET /v1/<resource>` with no
-query parameters, records read from the top-level JSON array (`records.path: ""`), no pagination
+`exchanges` and `assets` are full-refresh reference lists: `GET /v1/<resource>` with no query
+parameters, records read from the top-level JSON array (`records.path: ""`), no pagination
 (`type: none`) — matching legacy's `readMetadata`, which issues exactly one request per stream.
+
+**`symbols`'s endpoint was corrected, not just extended, in this pass.** Legacy (and this bundle,
+before this pass) read the bare `GET /v1/symbols` (an all-exchanges symbol listing with no query
+parameters). CoinAPI's current, live OpenAPI spec
+(`https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml`,
+reviewed 2026-07-04) no longer documents that bare endpoint at all — symbol listing is now
+exchange-scoped only, via `GET /v1/symbols/{exchange_id}/active`. This bundle now requires a new
+`exchange_id` config value (e.g. `BITSTAMP`) and reads `/v1/symbols/{{ config.exchange_id }}/active`
+instead. This is filed as a correctness fix rather than a parity deviation: the OLD endpoint may
+still work in practice (an unauthenticated probe against `https://rest.coinapi.io/v1/symbols`
+returns a 401 auth-gate response rather than a 404, so its live routing status could not be
+confirmed without a real API key), but it is no longer part of CoinAPI's documented, supported
+surface, and Pass B's mandate is to target the real current documented API. `symbol_id`/
+`exchange_id` filter query params on the new endpoint (`filter_symbol_id`/`filter_asset_id`) are not
+wired — this bundle always lists every active symbol for the configured exchange, matching the
+scope (if not the exact endpoint) of legacy's original all-exchanges listing.
 
 `ohlcv_historical_data` and `trades_historical_data` are symbol-scoped historical series requiring
 `symbol_id` (and, for OHLCV, `period`) in config. Both send `limit` (default `100`, materialized
@@ -56,10 +74,33 @@ are stamped onto every emitted record via `computed_fields` referencing `config.
 the raw wire record) — matching legacy's explicit `rec["symbol_id"] = symbolID` /
 `rec["period_id"] = period` assignments in `readTimeseries`.
 
+**New Pass B streams** (verified against the live OpenAPI spec's documented response schemas):
+
+- **`exchange_rates`** (`GET /v1/exchangerate/{{ config.asset_id_base }}`, records at `rates`):
+  current exchange rates from a configured base asset (e.g. `BTC`) to every quote asset CoinAPI
+  tracks. The envelope's own `asset_id_base` field is at the response ROOT, not on each `rates[]`
+  item, so `computed_fields` stamps `config.asset_id_base` onto every emitted record (the same
+  config-stamping pattern the historical streams already use for `symbol_id`). Primary key is the
+  `(asset_id_base, asset_id_quote)` pair. Not paginated — one request returns every quote asset's
+  current rate.
+- **`quotes_current`** (`GET /v1/quotes/{{ config.symbol_id }}/current`, `records.path: "."` — the
+  response body IS the record, a single object with no array envelope): the current best bid/ask
+  for a configured symbol.
+- **`orderbook_current`** (`GET /v1/orderbooks/{{ config.symbol_id }}/current`, `records.path:
+  "."`): the current order book snapshot (`asks`/`bids` arrays of price/size levels, passed through
+  as raw JSON arrays — no per-level schema is declared since level shape/depth is exchange- and
+  request-dependent) for a configured symbol.
+- **`metrics_listing`** (`GET /v1/metrics/listing`, records at the response root): the catalog of
+  every metric ID CoinAPI supports (used to discover what's available from the `/v1/metrics/*`
+  current/historical-value endpoints, which are themselves out of scope for this pass — see Known
+  limits).
+
 ## Write actions & risks
 
 None. CoinAPI is a read-only market-data API; `capabilities.write` is `false` and this bundle ships
-no `writes.json`, matching legacy's `Write` stub (`connectors.ErrUnsupportedOperation`).
+no `writes.json`, matching legacy's `Write` stub (`connectors.ErrUnsupportedOperation`). This is not
+a scope narrowing — the full documented CoinAPI REST surface (50 method+path operations reviewed;
+see `api_surface.json`) is exclusively GET.
 
 ## Known limits
 
@@ -84,7 +125,19 @@ no `writes.json`, matching legacy's `Write` stub (`connectors.ErrUnsupportedOper
   standard unresolved-key error path. `symbol_id` is documented as required in `spec.json`'s
   description for both historical streams for the same reason (the engine's draft-07 dialect has no
   per-stream conditional `required[]`).
-- Full CoinAPI API surface (current quotes, orderbooks, exchange rates, indexes, metrics) is out of
-  scope for this migration; see `api_surface.json`'s `excluded: {category: out_of_scope, reason:
-  "Pass B capability expansion"}` entries. Only the 3 metadata streams and 2 historical streams
-  legacy itself implements are covered.
+- Full CoinAPI API surface remains out of scope beyond the 9 streams above; see
+  `api_surface.json`'s `excluded` entries (50 method+path operations reviewed against the live
+  OpenAPI spec, each with a specific real reason — mostly `duplicate_of` latest/current variants of
+  already-covered resources, per-entity metrics values requiring iteration over the metrics catalog,
+  order-book depth/history/v3-envelope variants, options data, and blockchain-chain metadata).
+- **`orderbook_current`'s `asks`/`bids` are opaque arrays, not per-level-typed schemas.** CoinAPI's
+  own OpenAPI spec declares these fields with no `items` schema at all (untyped), so this bundle
+  matches that by declaring them `["array", "null"]` rather than guessing a `[price, size]` tuple
+  shape the spec itself doesn't commit to.
+- CoinAPI's `/v1/metrics/*` current/historical VALUE endpoints (as opposed to the covered
+  `metrics_listing` catalog) require selecting a specific `metric_id` from a large, evolving
+  catalog per asset/exchange/symbol/chain; implementing them would need either a `fan_out`-style
+  iteration over `metrics_listing`'s own output (the dialect's `fan_out.ids_from.request` shape
+  lists ids via ONE preliminary paginated GET, which doesn't fit "iterate over a large catalog and
+  issue N further-filtered requests per selected metric") or per-metric connector configuration;
+  out of scope for this pass.

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "subject": "Fixture Broadcast",
+    "content": "<p>Fixture content</p>"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/broadcasts",
+    "body": {
+      "subject": "Fixture Broadcast",
+      "content": "<p>Fixture content</p>"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "broadcast": { "id": 200, "subject": "Fixture Broadcast" } }
+  }
+}

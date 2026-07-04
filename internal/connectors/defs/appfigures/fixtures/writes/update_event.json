@@ -1,0 +1,12 @@
+{
+  "record": { "id": 9001, "caption": "Fixture Marketing Push Updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/events/9001",
+    "body": { "caption": "Fixture Marketing Push Updated" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 9001, "account_id": 1, "caption": "Fixture Marketing Push Updated", "date": "2026-01-01T00:00:00Z", "origin": "api", "products": ["100"] }
+  }
+}

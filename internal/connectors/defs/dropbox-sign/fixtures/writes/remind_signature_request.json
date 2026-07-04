@@ -1,0 +1,13 @@
+{
+  "record": {
+    "signature_request_id": "sigreq_fixture_1",
+    "email_address": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/signature_request/remind/sigreq_fixture_1",
+    "body": {
+      "email_address": "fixture1@example.com"
+    }
+  }
+}

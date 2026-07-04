@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/shared" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "summary": "Get shared workspaces",
+      "data": {
+        "workspaces": [
+          {
+            "workspaceId": "ws_fixture_shared_1",
+            "workspaceName": "Fixture Shared Workspace",
+            "workspaceDesc": "",
+            "orgId": "org_fixture_1",
+            "createdTime": "1767225601000",
+            "createdBy": "fixture1@example.com",
+            "isDefault": false
+          }
+        ]
+      }
+    }
+  }
+}

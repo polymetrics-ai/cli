@@ -1,0 +1,13 @@
+{
+  "record": {
+    "slug": "fixture-web"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/pipelines/fixture-web/archive"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

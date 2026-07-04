@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/synthetics/tests",
+    "query": { "page_number": "0", "page_size": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tests": [
+        {
+          "public_id": "abc-def-123",
+          "name": "Fixture API Test",
+          "type": "api",
+          "subtype": "http",
+          "status": "live",
+          "message": "fixture synthetics test",
+          "monitor_id": 1,
+          "locations": ["aws:us-east-1"],
+          "tags": ["fixture"]
+        }
+      ]
+    }
+  }
+}

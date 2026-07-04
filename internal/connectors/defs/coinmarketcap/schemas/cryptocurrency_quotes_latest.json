@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cryptocurrency_quotes_latest",
+  "type": "object",
+  "x-primary-key": ["cmc_id"],
+  "properties": {
+    "cmc_id": { "type": ["string", "null"] },
+    "id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "cmc_rank": { "type": ["integer", "null"] },
+    "circulating_supply": { "type": ["number", "null"] },
+    "total_supply": { "type": ["number", "null"] },
+    "max_supply": { "type": ["number", "null"] },
+    "last_updated": { "type": ["string", "null"] },
+    "quote": { "type": ["object", "null"] }
+  }
+}

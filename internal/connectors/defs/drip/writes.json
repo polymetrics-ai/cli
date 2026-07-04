@@ -1,0 +1,322 @@
+{
+  "actions": [
+    {
+      "name": "create_or_update_subscriber",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/subscribers",
+      "body_type": "json",
+      "body_fields": ["subscribers"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscribers"],
+        "properties": {
+          "subscribers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["email"],
+              "properties": {
+                "email": { "type": "string" },
+                "new_email": { "type": "string" },
+                "status": { "type": "string" },
+                "tags": { "type": "array", "items": { "type": "string" } },
+                "custom_fields": { "type": "object" },
+                "time_zone": { "type": "string" },
+                "ip_address": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new subscriber or updates an existing one matched by email; low-risk external mutation, no approval required. Drip's real API strictly requires the one-subscriber-per-write body to still be an ARRAY under the \"subscribers\" key ({\"subscribers\": [{...}]}), not a bare object — record_schema's \"subscribers\" field is itself that array, and body_fields copies it verbatim so the wire body matches Drip's real shape exactly; the engine's schema dialect has no minItems/maxItems keyword to mechanically cap it to exactly one element, so callers are expected to supply exactly one (this action is not the true batch endpoint)."
+    },
+    {
+      "name": "delete_subscriber",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.account_id }}/subscribers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a subscriber and their event/tag history; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unsubscribe_subscriber",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/unsubscribes",
+      "body_type": "json",
+      "body_fields": ["subscribers"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscribers"],
+        "properties": {
+          "subscribers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["email"],
+              "properties": {
+                "email": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "unsubscribes the named email from ALL mailings in the account; stops all future campaign/broadcast/workflow sends to them, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "apply_tag",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/subscribers/{{ record.subscriber_id }}/tags",
+      "path_fields": ["subscriber_id"],
+      "body_type": "json",
+      "body_fields": ["tags"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscriber_id", "tags"],
+        "properties": {
+          "subscriber_id": { "type": "string" },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["tag"],
+              "properties": { "tag": { "type": "string" } }
+            }
+          }
+        }
+      },
+      "risk": "applies one or more tags to a subscriber, potentially triggering any workflow with a matching tag-applied trigger; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "remove_tag",
+      "kind": "custom",
+      "method": "DELETE",
+      "path": "/{{ config.account_id }}/subscribers/{{ record.subscriber_id }}/tags/{{ record.tag }}",
+      "path_fields": ["subscriber_id", "tag"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscriber_id", "tag"],
+        "properties": {
+          "subscriber_id": { "type": "string" },
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "removes a tag from a subscriber, potentially triggering any workflow with a matching tag-removed trigger; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "record_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/events",
+      "body_type": "json",
+      "body_fields": ["events"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["events"],
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["email", "action"],
+              "properties": {
+                "email": { "type": "string" },
+                "action": { "type": "string" },
+                "properties": { "type": "object" },
+                "occurred_at": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "records a custom behavioral event on a subscriber, which can trigger any workflow with a matching event trigger; low-risk external mutation, no approval required. Drip's real API requires the body to be an ARRAY under the \"events\" key even for one event; record_schema's \"events\" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint)."
+    },
+    {
+      "name": "create_broadcast",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/broadcasts",
+      "body_type": "json",
+      "body_fields": ["broadcasts"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["broadcasts"],
+        "properties": {
+          "broadcasts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["subject", "content"],
+              "properties": {
+                "name": { "type": "string" },
+                "subject": { "type": "string" },
+                "preheader": { "type": "string" },
+                "content": { "type": "object" },
+                "postal_address": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new draft single-email campaign (broadcast); low-risk in draft form (not sent), no approval required. Drip's real API requires the body to be an ARRAY under the \"broadcasts\" key even for one broadcast; record_schema's \"broadcasts\" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint)."
+    },
+    {
+      "name": "update_broadcast",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/{{ config.account_id }}/broadcasts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["broadcasts"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "broadcasts"],
+        "properties": {
+          "id": { "type": "string" },
+          "broadcasts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "subject": { "type": "string" },
+                "preheader": { "type": "string" },
+                "content": { "type": "object" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "mutates an existing draft broadcast's subject/content; Drip only allows updating broadcasts still in draft status, so this cannot alter an already-sent email; external mutation, approval required"
+    },
+    {
+      "name": "delete_broadcast",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.account_id }}/broadcasts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a broadcast; destructive if it was already sent (removes historical record, though delivered emails cannot be recalled), approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "activate_workflow",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/workflows/{{ record.id }}/activate",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "activates a paused workflow, resuming automated sends to everyone currently enrolled and allowing new triggers to enroll people; external mutation, approval required"
+    },
+    {
+      "name": "pause_workflow",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/workflows/{{ record.id }}/pause",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "pauses an active workflow, stopping automated sends to everyone currently enrolled and disabling new triggers; low-risk (reversible via activate_workflow), no approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.account_id }}/webhooks",
+      "body_type": "json",
+      "body_fields": ["webhooks"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhooks"],
+        "properties": {
+          "webhooks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["post_url", "event_types"],
+              "properties": {
+                "post_url": { "type": "string" },
+                "event_types": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "registers a new outbound webhook that will POST live subscriber/campaign event data to an external URL of the caller's choosing; verify the target endpoint before enabling. Drip's real API requires the body to be an ARRAY under the \"webhooks\" key even for one webhook; record_schema's \"webhooks\" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint)."
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.account_id }}/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a webhook subscription; stops future event delivery to its post_url; destructive, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

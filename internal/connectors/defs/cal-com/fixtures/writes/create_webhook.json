@@ -1,0 +1,15 @@
+{
+  "record": {
+    "subscriberUrl": "https://example.com/fixture/new-webhook",
+    "triggers": ["BOOKING_CREATED"],
+    "active": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/webhooks"
+  },
+  "response": {
+    "status": 201,
+    "body": { "status": "success", "data": { "id": 402, "subscriberUrl": "https://example.com/fixture/new-webhook", "active": true, "triggers": ["BOOKING_CREATED"] } }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "study_users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "email_address": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "full_name": { "type": ["string", "null"] },
+    "institute_roles": { "type": ["array", "null"] },
+    "manage_permission": { "type": ["string", "null"] }
+  }
+}

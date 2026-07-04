@@ -1,0 +1,8 @@
+{
+  "record": { "id": 1 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/a/synthetic-conformance-value/integration_triggers/1.json"
+  },
+  "response": { "status": 204, "body": {} }
+}

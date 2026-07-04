@@ -1,16 +1,1254 @@
 {
-  "api": "Customer.io App (Beta) API v1 (https://api.customer.io/v1, or https://api-eu.customer.io/v1 for the EU region)",
-  "docs": "https://customer.io/docs/api/app/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 migration: the 4 legacy-parity read streams only, matching internal/connectors/customer-io. The App API's transactional/broadcast-trigger send endpoints and journeys/reporting surface are out of scope until Pass B; this connector is read-only (capabilities.write is false, matching legacy).",
+  "api": "Customer.io App API v1 (https://api.customer.io/v1, or https://api-eu.customer.io/v1 for the EU region)",
+  "docs": "https://docs.customer.io/api/app/ (full OpenAPI spec at https://docs.customer.io/files/journeys-app.json, fetched 2026-07-04)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every one of the 159 method+path operations in the real Journeys App API OpenAPI spec (journeys-app.json) is accounted for below, XOR'd between covered_by (16 streams + 10 writes this bundle now implements) and excluded (with a real closed-vocabulary category+reason). Categories used: duplicate_of (a per-record detail/sub-resource already reachable via a covered list stream, no bulk variant, and no parent-id-list to fan_out from), out_of_scope (a genuinely distinct product surface -- asset/design-studio CMS, ESP suppression administration, async export/import jobs, other send channels, data-dictionary config -- or a body shape (oneOf-discriminated, bulk-array-wrapped) the dialect cannot express as a single flat write action).",
   "endpoints": [
-    { "method": "GET", "path": "/v1/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/v1/newsletters", "covered_by": { "stream": "newsletters" } },
-    { "method": "GET", "path": "/v1/segments", "covered_by": { "stream": "segments" } },
-    { "method": "GET", "path": "/v1/broadcasts", "covered_by": { "stream": "broadcasts" } },
-    { "method": "GET", "path": "/v1/campaigns/{id}/metrics", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1/send/email", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1/send/push", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/exports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v1/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters",
+      "covered_by": {
+        "stream": "newsletters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts",
+      "covered_by": {
+        "stream": "broadcasts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/activities",
+      "covered_by": {
+        "stream": "activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exports",
+      "covered_by": {
+        "stream": "exports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactional",
+      "covered_by": {
+        "stream": "transactional"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/object_types",
+      "covered_by": {
+        "stream": "object_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reporting_webhooks",
+      "covered_by": {
+        "stream": "reporting_webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sender_identities",
+      "covered_by": {
+        "stream": "sender_identities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/snippets",
+      "covered_by": {
+        "stream": "snippets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/subscription_channels",
+      "covered_by": {
+        "stream": "subscription_channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/subscription_topics",
+      "covered_by": {
+        "stream": "subscription_topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/collections",
+      "covered_by": {
+        "stream": "collections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/snippets",
+      "covered_by": {
+        "write": "create_snippet"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/snippets",
+      "covered_by": {
+        "write": "update_snippet"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/snippets/{snippet_name}",
+      "covered_by": {
+        "write": "delete_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/reporting_webhooks",
+      "covered_by": {
+        "write": "create_reporting_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/reporting_webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "update_reporting_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/reporting_webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "delete_reporting_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/segments",
+      "covered_by": {
+        "write": "create_manual_segment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/segments/{segment_id}",
+      "covered_by": {
+        "write": "delete_manual_segment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/send/email",
+      "covered_by": {
+        "write": "send_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/campaigns/{broadcast_id}/triggers",
+      "covered_by": {
+        "write": "trigger_broadcast"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/assets/files",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assets/files/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/assets/files/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/assets/files/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assets/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/assets/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assets/folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/assets/folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/assets/folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/actions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/messages",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/metrics/links",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/broadcasts/{broadcast_id}/triggers",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/actions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/journey_metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/messages",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/metrics/links",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/collections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new liquid-data collection from an inline data array OR a hosted-file URL (oneOf request body); the dialect's write body construction has no oneOf-discriminated body shape, and the primary practical use (large tabular reference data upload) is a bulk-data-loading operation, not a small-record CRM/reporting mutation this connector's write scope targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/collections/{collection_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/collections/{collection_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/collections/{collection_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/collections/{collection_id}/content",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-collection content-rows fetch, keyed by a single collection_id already enumerated by the collections stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/collections/{collection_id}/content",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "replaces an entire collection's data rows in one request (bulk tabular data replacement) -- same bulk-data-loading rationale as create above, not a small-record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-customer lookup requiring a specific email as a REQUIRED query param (not a bulk list) -- there is no list-all-customers endpoint in the App API by design (person/profile data is meant to be looked up by identifier, not paginated wholesale); no declarative list stream can be built from a lookup-only endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk customer-search-by-filter endpoint (POST body carries filter criteria, JSONata-like query object) -- a query/filter surface, not a syncable list or a simple flat-body mutation; capabilities.query is false for this connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers/attributes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk customer lookup by a list of ids in the POST body -- a batch-lookup surface, not a syncable list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{customer_id}/activities",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{customer_id}/attributes",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{customer_id}/messages",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{customer_id}/relationships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{customer_id}/segments",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{customer_id}/subscription_preferences",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/data_index/attributes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates workspace-level attribute/event metadata definitions (data dictionary configuration), not a data-stream mutation of a customer/campaign/message record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/data_index/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates workspace-level attribute/event metadata definitions (data dictionary configuration), not a data-stream mutation of a customer/campaign/message record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/design_studio/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/components/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/design_studio/components/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/design_studio/components/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/emails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/design_studio/emails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/emails/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/design_studio/emails/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/design_studio/emails/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/emails/{id}/languages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/design_studio/emails/{id}/languages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/emails/{id}/languages/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/design_studio/emails/{id}/languages/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/design_studio/emails/{id}/languages/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/design_studio/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/design_studio/folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/design_studio/folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/design_studio/folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/esp/domains/{domain_name}/suppression/{suppression_type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/esp/search_suppression/{email_address}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/esp/suppression/{suppression_type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/exports/customers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kicks off an asynchronous bulk-export JOB (people or deliveries data dump); the exports stream already reads the resulting job metadata list, but starting a new export job is an async-job-creation action outside this connector's flat-record write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/exports/deliveries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kicks off an asynchronous bulk-export JOB (people or deliveries data dump); the exports stream already reads the resulting job metadata list, but starting a new export job is an async-job-creation action outside this connector's flat-record write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exports/{export_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-export detail sub-resource, keyed by a single export_id already enumerated by the exports stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exports/{export_id}/download",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-export detail/download sub-resource, keyed by a single export_id already enumerated by the exports stream; download in particular returns a binary/zip payload"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/imports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kicks off an asynchronous bulk people-IMPORT job from an uploaded file URL -- an async bulk-load action, not a flat-record write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/imports/{import_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-import-job status lookup; this connector implements no import-job-creation action to produce an import_id to look up, so there is no corresponding list/catalog surface for this detail endpoint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/info/ip_addresses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns Customer.io's own outbound IP allowlist (a static reference list for firewall configuration), not workspace data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/messages/{message_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-message detail/archived-content sub-resource, keyed by a single message_id already enumerated by the messages stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/messages/{message_id}/archived_message",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-message detail/archived-content sub-resource, keyed by a single message_id already enumerated by the messages stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/newsletters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new newsletter; body is a 6-way oneOf discriminated by message channel type (email/sms/push/in_app/webhook/inbox), each with a different required-field shape -- the dialect's single flat record_schema per write action has no oneOf/discriminator primitive to express six mutually-exclusive body shapes under one action name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter detail, keyed by a single newsletter_id already enumerated by the newsletters stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/newsletters/{newsletter_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "permanently deletes a newsletter and all its variants/metrics; omitted pending product-owner sign-off on adding a destructive per-object delete beyond the two already-covered destructive deletes (delete_manual_segment/delete_reporting_webhook) -- flaggable for a future increment, not a dialect limitation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/contents",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter variant-content list, keyed by a single newsletter_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter-variant detail, keyed by newsletter_id+content_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a specific newsletter language/test variant's subject/body content -- content-authoring mutation, a CMS-shaped write distinct from this connector's flat-record CRM/reporting mutations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter-variant metrics, keyed by newsletter_id+content_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter-variant link-click metrics, keyed by newsletter_id+content_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/newsletters/{newsletter_id}/language",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new language variant of a newsletter's content -- content-authoring mutation, not a flat-record CRM/reporting write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter-language-variant detail, keyed by newsletter_id+language"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a newsletter's language-variant content -- content-authoring mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a newsletter's language variant -- content-authoring mutation, omitted pending product sign-off on adding it as a destructive action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/messages",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter delivery-message list, keyed by a single newsletter_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter aggregate metrics, keyed by a single newsletter_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/metrics/links",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter link-click metrics, keyed by a single newsletter_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/newsletters/{newsletter_id}/schedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "schedules a newsletter to send at a future time -- a send-lifecycle action tightly coupled to Design Studio content authoring, out of scope alongside it"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/newsletters/{newsletter_id}/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a newsletter immediately -- a send-lifecycle action; sends real messages to a newsletter's full recipient list with no dry-run, higher blast-radius than the already-covered trigger_broadcast (which targets one specific broadcast_id's configured audience) and design_studio-adjacent content authoring"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a language variant for an A/B test group -- content-authoring mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-test-group-language-variant detail, keyed by newsletter_id+test_group_id+language"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an A/B test group's language variant -- content-authoring mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an A/B test group's language variant -- content-authoring mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/newsletters/{newsletter_id}/test_groups",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-newsletter A/B test-group list, keyed by a single newsletter_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/newsletters/{newsletter_id}/test_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an A/B test group on a newsletter -- content-authoring/experiment-configuration mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/objects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk custom-object lookup by filter/query in the POST body -- a query/filter surface (capabilities.query is false), not a syncable list stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/objects/{object_type_id}/{object_id}/attributes",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-object-instance attribute detail, keyed by object_type_id+object_id with no bulk list-all-instances endpoint documented for a given object_type_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/objects/{object_type_id}/{object_id}/relationships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-object-instance relationship detail, keyed by object_type_id+object_id, same no-bulk-list limitation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reporting_webhooks/{webhook_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-webhook detail, keyed by a single webhook_id already enumerated by the reporting_webhooks stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/segments/{segment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-segment detail, keyed by a single segment_id already enumerated by the segments stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/segments/{segment_id}/customer_count",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-segment membership count, keyed by a single segment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/segments/{segment_id}/membership",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-segment membership list, keyed by a single segment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/segments/{segment_id}/used_by",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-segment dependency (\"what references this segment\") lookup, keyed by a single segment_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/send/in_app",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live transactional in-app message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/send/inbox_message",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live transactional inbox message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/send/push",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live transactional push message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/send/sms",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live transactional SMS message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sender_identities/{sender_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-sender-identity detail, keyed by a single sender_id already enumerated by the sender_identities stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sender_identities/{sender_id}/used_by",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-sender-identity dependency lookup, keyed by a single sender_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/subscription_center/{customer_id}/token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mints a signed subscription-preferences-center token for one specific customer_id, for embedding in an outbound email link -- a per-request token-generation action, not catalog data or a flat-record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactional/{transactional_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactional/{transactional_id}/contents",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactional/{transactional_id}/language/{language}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactional/{transactional_id}/messages",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactional/{transactional_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactional/{transactional_id}/metrics/links",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/transactional/{transactional_id}/content/{content_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a transactional template's content body -- content-authoring mutation, a CMS-shaped write distinct from this connector's flat-record mutations"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/transactional/{transactional_id}/language/{language}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a transactional template's language-variant content -- content-authoring mutation"
+      }
+    }
   ]
 }

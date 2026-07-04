@@ -42,6 +42,13 @@
       "query": { "limit": "{{ config.page_size }}" },
       "records": { "path": "data" },
       "schema": "schemas/submitters.json"
+    },
+    {
+      "name": "template_detail",
+      "path": "/templates/{{ config.template_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/template_detail.json"
     }
   ]
 }

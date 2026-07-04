@@ -1,0 +1,19 @@
+{
+  "record": {
+    "canvas_id": "canvas_fixture_1",
+    "recipients": [
+      { "external_user_id": "user_fixture_1" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/canvas/trigger/send",
+    "body": {
+      "canvas_id": "canvas_fixture_1",
+      "recipients": [
+        { "external_user_id": "user_fixture_1" }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "dispatch_id": "dispatch_fixture_1", "message": "success" } }
+}

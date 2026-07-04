@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/getHousekeepingStatus", "query": { "pageNumber": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "roomID": "room_fixture_1",
+          "date": "2026-01-01",
+          "roomTypeID": "roomtype_fixture_1",
+          "roomTypeName": "Fixture Room Type",
+          "roomName": "101",
+          "roomCondition": "clean",
+          "roomOccupied": false,
+          "roomBlocked": false,
+          "frontdeskStatus": "unused",
+          "housekeeperID": "hk_fixture_1",
+          "housekeeper": "Fixture Housekeeper",
+          "doNotDisturb": false,
+          "refusedService": false,
+          "vacantPickup": false,
+          "roomComments": null
+        }
+      ],
+      "count": 1
+    }
+  }
+}

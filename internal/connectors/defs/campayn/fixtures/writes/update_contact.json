@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "contact_fixture_1",
+    "email": "fixture1@example.com",
+    "first_name": "Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/contact_fixture_1.json",
+    "body": {
+      "email": "fixture1@example.com",
+      "first_name": "Updated"
+    }
+  },
+  "response": { "status": 200, "body": { "success": true } }
+}

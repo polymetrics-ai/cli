@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/external_accounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "5001": {
+        "id": 5001,
+        "account_id": 1,
+        "nickname": "Fixture Apple Account",
+        "username": "fixture1@example.com",
+        "auto_import": true,
+        "store_id": 1,
+        "store": "apple",
+        "metadata": {}
+      },
+      "5002": {
+        "id": 5002,
+        "account_id": 1,
+        "nickname": "Fixture Google Account",
+        "username": "fixture2@example.com",
+        "auto_import": false,
+        "store_id": 2,
+        "store": "google_play",
+        "metadata": {}
+      }
+    }
+  }
+}

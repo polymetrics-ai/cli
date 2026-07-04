@@ -1,0 +1,4 @@
+{
+  "record": { "id": "lead_1", "name": "Updated Fixture Lead" },
+  "expect": { "method": "PUT", "path": "/lead/lead_1" }
+}

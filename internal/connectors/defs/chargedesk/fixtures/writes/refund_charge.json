@@ -1,0 +1,10 @@
+{
+  "record": {
+    "charge_id": "chg_fixture_1",
+    "amount": "1.00"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gateway/charges/chg_fixture_1/refund"
+  }
+}

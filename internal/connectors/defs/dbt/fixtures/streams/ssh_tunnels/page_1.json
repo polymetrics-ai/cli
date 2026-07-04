@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/encryptions/",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "account_id": 1,
+          "connection_id": 1,
+          "username": "fixture_tunnel_user",
+          "port": 22,
+          "hostname": "bastion.fixture.example.com",
+          "public_key": "ssh-rsa FIXTURE_PUBLIC_KEY_PLACEHOLDER",
+          "state": 1
+        }
+      ],
+      "status": { "code": 200, "is_success": true },
+      "extra": { "filters": { "limit": 100, "offset": 0 }, "pagination": { "count": 1, "total_count": 1 } }
+    }
+  }
+}

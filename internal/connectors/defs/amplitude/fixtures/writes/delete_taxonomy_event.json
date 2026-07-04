@@ -1,0 +1,11 @@
+{
+  "record": { "event_type": "fixture_event_created" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/2/taxonomy/event/fixture_event_created"
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

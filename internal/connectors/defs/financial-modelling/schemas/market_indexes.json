@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "market_indexes",
+  "type": "object",
+  "x-primary-key": ["symbol"],
+  "required": ["symbol"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "price": { "type": ["number", "null"] },
+    "changes_percentage": { "type": ["number", "null"] },
+    "change": { "type": ["number", "null"] },
+    "day_low": { "type": ["number", "null"] },
+    "day_high": { "type": ["number", "null"] },
+    "year_high": { "type": ["number", "null"] },
+    "year_low": { "type": ["number", "null"] },
+    "price_avg50": { "type": ["number", "null"] },
+    "price_avg200": { "type": ["number", "null"] },
+    "volume": { "type": ["integer", "null"] },
+    "avg_volume": { "type": ["integer", "null"] },
+    "open": { "type": ["number", "null"] },
+    "previous_close": { "type": ["number", "null"] },
+    "timestamp": { "type": ["integer", "null"] }
+  }
+}

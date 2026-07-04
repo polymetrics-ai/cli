@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/folders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "name": "Fixture Folder 1",
+      "parentId": 0,
+      "createdBy": { "id": 7, "name": "Fixture User" },
+      "createdAt": 1735689600000,
+      "modifiedAt": 1735776000000,
+      "access": { "visibility": "COMPANY" },
+      "isBookmarked": false
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "actions": [
+    {
+      "name": "add_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.list_id }}/contacts.json",
+      "path_fields": ["list_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "email"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "email": { "type": "string" },
+          "failOnDuplicate": { "type": "boolean" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "title": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip": { "type": "string" },
+          "company": { "type": "string" },
+          "country": { "type": "string" },
+          "phones": { "type": "array" },
+          "sites": { "type": "array" },
+          "social": { "type": "array" },
+          "custom_fields": { "type": "array" }
+        }
+      },
+      "risk": "adds a new contact to a Campayn subscriber list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "title": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip": { "type": "string" },
+          "company": { "type": "string" },
+          "country": { "type": "string" },
+          "phones": { "type": "array" },
+          "sites": { "type": "array" },
+          "social": { "type": "array" },
+          "custom_fields": { "type": "array" }
+        }
+      },
+      "risk": "replaces a contact's full field set (the upstream API's own docs warn any field not sent in the body is removed); external mutation, no approval required"
+    },
+    {
+      "name": "unsubscribe_contact",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.list_id }}/unsubscribe.json",
+      "path_fields": ["list_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "id": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "unsubscribes a contact from a list by id (single contact) or email (every contact on the list sharing that email address); the docs note neither path shows up in Reporting; low-risk external mutation, no approval required"
+    }
+  ]
+}

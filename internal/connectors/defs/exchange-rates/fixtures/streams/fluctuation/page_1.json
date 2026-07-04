@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fluctuation",
+    "query": {
+      "start_date": "synthetic-conformance-value",
+      "end_date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "fluctuation": true,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-02",
+      "base": "EUR",
+      "rates": {
+        "USD": { "start_rate": 1.05, "end_rate": 1.06, "change": 0.01, "change_pct": 0.95 }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "id": "CAL_fixture_1", "tags": ["New Client"], "lead_status": "good_lead" },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/calls/CAL_fixture_1.json",
+    "body": { "tags": ["New Client"], "lead_status": "good_lead" }
+  },
+  "response": { "status": 200, "body": { "id": "CAL_fixture_1", "lead_status": "good_lead" } }
+}

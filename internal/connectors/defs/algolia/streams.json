@@ -63,6 +63,43 @@
         "pagination_limited_to": "{{ record.paginationLimitedTo }}"
       },
       "schema": "schemas/index_settings.json"
+    },
+    {
+      "name": "vault_sources",
+      "path": "/1/security/sources",
+      "records": { "path": "." },
+      "schema": "schemas/vault_sources.json"
+    },
+    {
+      "name": "dictionary_settings",
+      "path": "/1/dictionaries/*/settings",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "dictionary_settings",
+        "disable_standard_entries": "{{ record.disableStandardEntries }}"
+      },
+      "schema": "schemas/dictionary_settings.json"
+    },
+    {
+      "name": "dictionary_languages",
+      "path": "/1/dictionaries/*/languages",
+      "records": { "path": ".", "keyed_object": true, "key_field": "language" },
+      "schema": "schemas/dictionary_languages.json"
+    },
+    {
+      "name": "logs",
+      "path": "/1/logs",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "length",
+        "page_size": 10
+      },
+      "records": { "path": "logs" },
+      "computed_fields": {
+        "id": "{{ record.sha1 }}"
+      },
+      "schema": "schemas/logs.json"
     }
   ]
 }

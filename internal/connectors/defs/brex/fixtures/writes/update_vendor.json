@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "vendor_fixture_1",
+    "company_name": "Fixture Vendor Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/vendors/vendor_fixture_1",
+    "body": {
+      "company_name": "Fixture Vendor Renamed"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "vendor_fixture_1"
+    }
+  }
+}

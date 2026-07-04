@@ -1,9 +1,23 @@
 # Overview
 
 Criteo Marketing is a wave2 fan-out migration. This bundle reads Criteo Marketing Solutions ad
-sets, advertisers, campaigns, audiences, and ad spend statistics through the Criteo REST API,
-migrating `internal/connectors/criteo-marketing` (the legacy hand-written connector, which stays
-registered and unchanged until wave6's registry flip) at capability parity.
+sets, advertisers, campaigns, audiences, ad spend statistics, and (Pass B) Marketplace Performance
+Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API, migrating
+`internal/connectors/criteo-marketing` (the legacy hand-written connector, which stays registered
+and unchanged until wave6's registry flip) at capability parity.
+
+**Pass B full-surface expansion** (2026-07-04): reviewed the full documented Criteo Marketing
+Solutions surface via its live OpenAPI spec (`https://api.criteo.com/2026-01/marketingsolutions/
+open-api-specifications.json`, 91 operations at the latest published version). Added 4 new
+`mpo_*` read streams (Marketplace Performance Outcomes: `mpo_advertisers`, `mpo_sellers`,
+`mpo_budgets`, `mpo_seller_campaigns` — real, unfiltered, no-required-param GET list endpoints).
+**No write actions were added**: every mutation-shaped endpoint in the real surface requires either
+elevated write scopes (`MarketingSolutions_Campaign_Manage`/`Audience_Manage`, beyond this
+connector's read-only grant) or a body shape the dialect cannot express (see Known limits). This
+review also surfaced a **pre-existing defect in the original 5 streams**, described in full below
+and flagged separately (not fixed in this pass, since fixing it needs either an engine change or a
+scoped correctness fix, both out of this Pass B review's remit of adding new coverage +
+documenting gaps).
 
 ## Auth setup
 
@@ -58,9 +72,29 @@ this is schema metadata only and does not by itself enable an `incremental_appen
 absent an `incremental` block, matching legacy's real behavior of never filtering server-side by
 date beyond the plain config passthrough.
 
+`mpo_advertisers`, `mpo_sellers`, `mpo_budgets`, and `mpo_seller_campaigns` (Pass B) target
+`/2026-01/marketing-solutions/marketplace-performance-outcomes/{advertisers,sellers,budgets,
+seller-campaigns}` — **note the different API version path segment** (`2026-01`, not this bundle's
+existing `2024-01`): Marketplace Performance Outcomes did not exist as a resource in `2024-01`
+(confirmed by fetching that version's own OpenAPI spec — no `marketplace-performance-outcomes`
+path at all), so these 4 new streams are pinned to the only version where the resource is
+documented. Each responds with a bare top-level JSON array (`records: {"path": ""}`, the
+acuity-scheduling-precedent shape for a root-array response) and documents no `page`/`limit`
+pagination parameters at all, so each declares a stream-level `"pagination": {"type": "none"}`
+override against the base's `offset_limit` spec. All 4 endpoints accept only optional query
+filters (`advertiserId`/`campaignId`/`sellerId`/date-range/status, etc.) — none are sent here, so
+every read returns the full unfiltered collection the credentials can access, matching the
+"omit every filter" semantics `mpo_advertisers`' own docs describe ("If all parameters are omitted
+the entire collection ... is returned").
+
 ## Write actions & risks
 
 None. This connector is read-only, matching legacy's `Write` stub (`connectors.ErrUnsupportedOperation`).
+Every write-shaped endpoint in the real API surface requires either an elevated write scope
+(`MarketingSolutions_Campaign_Manage`/`Audience_Manage`, beyond this connector's read-only
+`MarketingSolutions_Campaign_Read`/`Audience_Read` grant) or a body shape the dialect cannot
+express (a `oneOf`-discriminated body, or the same POST-with-filter-body ENGINE_GAP the read side
+hits — see Known limits); no write action was added this pass. `capabilities.write` stays `false`.
 
 ## Known limits
 
@@ -87,7 +121,51 @@ None. This connector is read-only, matching legacy's `Write` stub (`connectors.E
   overrides `base_url` for a test/proxy setup must also override `token_url` explicitly to point at
   the same host. Not exercised by any of this bundle's fixtures (both default to the real Criteo
   hosts).
-- Full Criteo Marketing Solutions API surface (ad-set/campaign/budget mutation, catalog/product
-  feeds, audience creation, creative management) is out of scope for wave2; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability expansion"}`
-  entries. Only the 5 legacy-parity read streams are implemented.
+- Full Criteo Marketing Solutions API surface beyond the 9 implemented streams (ad-set/campaign/
+  budget mutation, Commerce-Grid audience-segments, catalog/product feeds, creative/coupon
+  authoring, MPO per-id detail/stats sub-resources) is out of scope; see `api_surface.json`'s 91
+  enumerated endpoints for the complete, real-category-and-reason disposition of every one (no more
+  blanket "Pass B capability expansion" placeholders).
+- **`ENGINE_GAP`: `ad_sets`, `campaigns`, and `audiences` issue `GET` against endpoints that only
+  accept `POST` with a JSON filter body on the real API (discovered during this Pass B review, via
+  the live OpenAPI spec).** `POST /marketing-solutions/{ad-sets,campaigns,audiences}/search` (an
+  empty/omitted `filters` body returns every accessible record) are the ONLY documented ways to
+  list these 3 resources in any spec version reviewed (`2024-01` through `2026-01`) — there is no
+  GET alternative. The engine's declarative read path (`internal/connectors/engine/read.go`)
+  hard-codes a `nil` request body on every stream request regardless of method;
+  `streams.json`'s `StreamSpec.Body` field (`bundle.go`) is declared but never read anywhere in
+  `read.go`, so a POST-with-body list read cannot be expressed in this dialect today. This is a
+  **pre-existing wave2-migration defect**, not introduced by this Pass B review — the original
+  bundle (and the legacy `internal/connectors/criteo-marketing` Go connector it was migrated from)
+  both already called `GET` against these paths. It went undetected because `metadata.json`'s
+  bundle-level `conformance.skip_dynamic: true` marker (see above) means no dynamic check has ever
+  issued a REAL HTTP request against these paths to prove they work; the fixture-replay harness
+  only proves the fixture's OWN declared request/response shape round-trips through the engine,
+  never that the fixture matches upstream reality. **Flagged as a separate follow-up** (not fixed in
+  this pass): the fix requires either (a) an engine mini-wave item wiring `stream.Body` through to
+  the read path's request construction (a candidate `ENGINE_GAP` recurrence — worth checking
+  whether other quarantined/partial connectors hit the identical "list endpoint is POST-with-body"
+  shape before committing to this as a one-off engine change per conventions.md §6's `ENGINE_GAP`
+  recurrence-threshold rule), or (b) documenting these 3 streams as blocked and removing them from
+  `api_surface.json`'s `covered_by` pending that engine work. `api_surface.json` currently still
+  lists them `covered_by` at their (broken) GET path to accurately describe what THIS bundle's
+  `streams.json` actually calls today, alongside a companion `excluded` entry at the REAL POST path
+  spelling out the gap.
+- **`advertisers` targets a plain list path that does not exist in ANY reviewed spec version.**
+  `GET /2024-01/marketing-solutions/advertisers` (and the same path under every later version
+  checked through `2026-01`) is not a documented endpoint at all — Criteo's Marketing Solutions API
+  has no bulk "list every advertiser" endpoint. The closest real single-advertiser-context
+  endpoint is `GET /advertisers/me` (singular — returns the CURRENT credential's own advertiser
+  identity, not a list of advertisers the credential can access). The closest real BULK list is the
+  new `mpo_advertisers` stream (`GET .../marketplace-performance-outcomes/advertisers`), but it is
+  a genuinely different, MPO-scoped resource with a different shape
+  (`{advertiserName, currencyName, id, timeZoneId}` vs. the existing `advertisers` stream's
+  JSONAPI-flattened `{name, country, currency, timezone}`) — swapping one for the other would be an
+  accepted-input emitted-DATA change (a real deviation, not a drop-in replacement), so it was added
+  as an ADDITIONAL stream (`mpo_advertisers`) rather than a silent substitution for the existing
+  (already-broken) `advertisers` stream. Also flagged as part of the same follow-up as the
+  `ad_sets`/`campaigns`/`audiences` `ENGINE_GAP` above.
+- **`statistics` has the identical GET-instead-of-POST defect.** `POST /statistics/report` (a JSON
+  body carrying report dimensions/metrics/date range) is the real, only documented method; this
+  bundle's `statistics` stream sends `startDate`/`endDate`/`currency` as plain GET query parameters
+  against the same path instead. Same root cause and same follow-up as above.

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "licenses",
+  "type": "object",
+  "x-primary-key": ["account_id"],
+  "required": ["account_id"],
+  "properties": {
+    "account_id": { "type": ["integer", "null"] },
+    "developer": { "type": ["object", "null"] },
+    "explorer": { "type": ["object", "null"] },
+    "read_only": { "type": ["object", "null"] },
+    "it": { "type": ["object", "null"] },
+    "analyst": { "type": ["object", "null"] }
+  }
+}

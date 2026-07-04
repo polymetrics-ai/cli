@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "service_details",
+  "type": "object",
+  "x-primary-key": ["service_id"],
+  "required": ["service_id"],
+  "properties": {
+    "service_id": { "type": "string" },
+    "id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "customer_id": { "type": ["string", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "deleted_at": { "type": ["string", "null"], "format": "date-time" },
+    "version": { "type": ["object", "null"] },
+    "versions": { "type": ["array", "null"] },
+    "activated_version": { "type": ["object", "null"] },
+    "environments": { "type": ["array", "null"] }
+  }
+}

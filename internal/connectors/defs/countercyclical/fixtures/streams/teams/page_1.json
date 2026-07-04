@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/teams", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "team_fixture_1", "title": "Fixture Team 1" },
+      { "id": "team_fixture_2", "title": "Fixture Team 2" }
+    ]
+  }
+}

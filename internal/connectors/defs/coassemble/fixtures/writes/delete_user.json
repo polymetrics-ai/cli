@@ -1,0 +1,8 @@
+{
+  "record": { "identifier": "fixture-user-1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/headless/user/fixture-user-1"
+  },
+  "response": { "status": 200, "body": true }
+}

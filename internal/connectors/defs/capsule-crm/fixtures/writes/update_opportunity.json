@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "10",
+    "opportunity": { "milestone": { "id": 101 } }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/opportunities/10",
+    "body": {
+      "opportunity": { "milestone": { "id": 101 } }
+    }
+  }
+}

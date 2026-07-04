@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/contact.php"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "email": "fixture1@example.com",
+        "is_unsubscribed": 0,
+        "created_at": "2026-01-01 00:00:00",
+        "subscribed_at": "2026-01-01 00:00:00",
+        "modified_at": "2026-01-01 00:00:00",
+        "last_open_at": "0000-00-00 00:00:00",
+        "total_opens": "0",
+        "last_click_at": "0000-00-00 00:00:00",
+        "total_clicks": "0"
+      },
+      {
+        "email": "fixture2@example.com",
+        "is_unsubscribed": 0,
+        "created_at": "2026-01-02 00:00:00",
+        "subscribed_at": "2026-01-02 00:00:00",
+        "modified_at": "2026-01-02 00:00:00",
+        "last_open_at": "0000-00-00 00:00:00",
+        "total_opens": "0",
+        "last_click_at": "0000-00-00 00:00:00",
+        "total_clicks": "0"
+      }
+    ]
+  }
+}

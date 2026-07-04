@@ -61,6 +61,34 @@
       "query": { "include_totals": "true" },
       "records": { "path": "organizations" },
       "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "role_users",
+      "path": "/api/v2/roles/{{ fanout.id }}/users",
+      "query": { "include_totals": "true" },
+      "records": { "path": "users" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v2/roles", "records_path": "roles", "id_field": "id" }
+        },
+        "into": { "path_var": "role_id" },
+        "stamp_field": "role_id"
+      },
+      "schema": "schemas/role_users.json"
+    },
+    {
+      "name": "organization_members",
+      "path": "/api/v2/organizations/{{ fanout.id }}/members",
+      "query": { "include_totals": "true" },
+      "records": { "path": "members" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v2/organizations", "records_path": "organizations", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organization_id"
+      },
+      "schema": "schemas/organization_members.json"
     }
   ]
 }

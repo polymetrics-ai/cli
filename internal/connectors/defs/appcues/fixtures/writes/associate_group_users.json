@@ -1,0 +1,9 @@
+{
+  "record": { "group_id": "group_fixture_1", "user_ids": ["user_fixture_1", "user_fixture_2"] },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/synthetic-conformance-value/groups/group_fixture_1/users",
+    "body": { "user_ids": ["user_fixture_1", "user_fixture_2"] }
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

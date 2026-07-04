@@ -1,0 +1,17 @@
+{
+  "record": {
+    "job_id": "job_fixture_2",
+    "fields": {}
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/jobs/job_fixture_2/unblock",
+    "body": {
+      "fields": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

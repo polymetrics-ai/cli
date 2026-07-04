@@ -1,0 +1,8 @@
+{
+  "record": { "documentId": "doc_fixture_1", "deletePermanently": false },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/document/delete"
+  },
+  "response": { "status": 204, "body": {} }
+}

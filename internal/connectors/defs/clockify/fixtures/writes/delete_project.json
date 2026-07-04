@@ -1,0 +1,7 @@
+{
+  "record": { "id": "proj_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/workspaces/synthetic-conformance-value/projects/proj_fixture_1"
+  }
+}

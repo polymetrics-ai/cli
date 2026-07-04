@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["checkout_id"],
+  "required": ["checkout_id"],
+  "properties": {
+    "checkout_id": { "type": "integer" },
+    "event_id": { "type": ["integer", "string"], "description": "Stamped by the fan_out dialect from the enclosing event id discovered via the events listing (always a string on the stamped path); the raw API also sends this field on some responses, so both shapes are declared." },
+    "transaction_ref": { "type": ["string", "null"] },
+    "transaction_date": { "type": ["string", "null"] },
+    "transaction_amount": { "type": ["string", "null"] },
+    "tickets_in_transaction": { "type": ["string", "null"] },
+    "event_date": { "type": ["string", "null"] },
+    "transaction_status": { "type": ["string", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "title": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "buyer_first_name": { "type": ["string", "null"] },
+    "buyer_last_name": { "type": ["string", "null"] },
+    "promo_code": { "type": ["string", "null"] },
+    "payment_type": { "type": ["string", "null"] },
+    "comments": { "type": ["string", "null"] }
+  }
+}

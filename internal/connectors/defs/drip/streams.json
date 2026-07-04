@@ -44,6 +44,24 @@
       "pagination": { "type": "none" },
       "records": { "path": "accounts" },
       "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "workflows",
+      "path": "/{{ config.account_id }}/workflows",
+      "records": { "path": "workflows" },
+      "schema": "schemas/workflows.json"
+    },
+    {
+      "name": "forms",
+      "path": "/{{ config.account_id }}/forms",
+      "records": { "path": "forms" },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/{{ config.account_id }}/webhooks",
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

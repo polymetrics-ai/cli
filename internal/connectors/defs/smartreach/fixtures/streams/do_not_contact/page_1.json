@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/do-not-contact" },
+  "response": {
+    "status": 200,
+    "body": {
+      "dnc": [
+        { "id": "dnc_fixture_1", "name": "fixture1@example.com", "created_at": "2026-01-01T00:00:00Z" },
+        { "id": "dnc_fixture_2", "name": "fixture-domain-2.example.com", "created_at": "2026-01-02T00:00:00Z" }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

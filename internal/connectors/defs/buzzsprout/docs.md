@@ -1,10 +1,14 @@
 # Overview
 
-Buzzsprout is a wave2 fan-out declarative-HTTP migration. It reads Buzzsprout podcasts and episodes
-(titles, publish dates, durations, play counts) through the Buzzsprout REST API
-(`GET https://www.buzzsprout.com/api/...`). This bundle targets capability parity with
-`internal/connectors/buzzsprout` (the hand-written connector it migrates); the legacy package stays
-registered and unchanged until wave6's registry flip.
+Buzzsprout is a wave2 fan-out declarative-HTTP migration, expanded to full documented API-surface
+coverage in Pass B. It reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play
+counts) and creates/updates episodes through the Buzzsprout REST API
+(`https://www.buzzsprout.com/api/...`). This bundle targets capability parity with
+`internal/connectors/buzzsprout` (the hand-written connector it migrates, which was read-only); the
+legacy package stays registered and unchanged until wave6's registry flip. Buzzsprout's entire
+published API (github.com/Buzzsprout/buzzsprout-api, `sections/episodes.md` +
+`sections/podcasts.md`) is exactly 5 endpoints across 2 resources — all 5 are covered by this bundle
+(2 streams, 2 writes, 1 documented exclusion); see `api_surface.json`.
 
 ## Auth setup
 
@@ -41,9 +45,26 @@ declaration that is likewise never consumed by `harvest`.
 
 ## Write actions & risks
 
-None. Buzzsprout is exposed read-only, matching legacy's `Write` returning
-`connectors.ErrUnsupportedOperation`; `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+This bundle adds write support beyond legacy (which was read-only, `Write` returning
+`connectors.ErrUnsupportedOperation`); `capabilities.write` is now `true` and `writes.json` declares
+2 actions, both scoped to the configured `podcast_id` exactly like the `episodes` read stream:
+
+- **`create_episode`** (`POST /api/{{ config.podcast_id }}/episodes.json`, `body_type: json`,
+  `minProperties: 1`): creates a new episode. Per Buzzsprout's own docs, this can trigger audio
+  processing and an email notification (`email_user_after_audio_processed`, defaults `true` on
+  Buzzsprout's side when omitted) once the file finishes processing, and — depending on
+  `published_at`/`private` — publish the episode live to the podcast's public feed. **Risk: external
+  mutation with real-world publication side effects; approval required.**
+- **`update_episode`** (`PUT /api/{{ config.podcast_id }}/episodes/{{ record.id }}.json`,
+  `path_fields: ["id"]`, `body_type: json`): updates an existing episode's metadata (title,
+  description, `private`, `explicit`, schedule fields, etc.) in place. **Risk: external mutation;
+  can change public visibility (`private`) or publish scheduling (`published_at`) of a live episode;
+  approval required.**
+
+Buzzsprout documents no delete endpoint for episodes or podcasts at all (verified against the
+current published API reference) — there is nothing to exclude as `destructive_admin` here, unlike
+the previous (incorrect) draft of this bundle's `api_surface.json`, which listed a DELETE endpoint
+that does not actually exist in Buzzsprout's API.
 
 ## Known limits
 
@@ -63,5 +84,13 @@ None. Buzzsprout is exposed read-only, matching legacy's `Write` returning
   onto every fixture-mode record (`buzzsprout.go:187-220`); none are part of the live record shape.
   This bundle's schemas and fixtures target the live path only — the engine's own conformance
   fixture-replay harness supersedes legacy's fixture-mode affordance.
-- Full Buzzsprout API surface (single-episode fetch, episode create/update/delete) is out of scope;
-  legacy itself never implemented writes or single-object reads. See `api_surface.json`.
+- **Single-episode detail fetch (`GET /api/{podcast_id}/episodes/{episode_id}.json`) is excluded as
+  `duplicate_of`**: it returns the identical episode shape the `episodes` list stream already emits,
+  and Buzzsprout has no per-episode incremental/webhook signal that would make a targeted
+  single-record read materially useful over a full/incremental list sync. See `api_surface.json`.
+- `create_episode`'s `audio_file`/`artwork_file` multipart-attachment upload path (Buzzsprout's
+  alternative to the `audio_url`/`artwork_url` string fields) is not modeled — the declarative
+  `body_type` dialect supports `json`/`form`/`none` bodies, not multipart file attachments; only the
+  URL-reference variant of episode creation is exposed. A multipart body type is a Tier-2/engine
+  extension, not attempted here since `audio_url`/`artwork_url` cover the common (already
+  publicly-hosted-file) case.

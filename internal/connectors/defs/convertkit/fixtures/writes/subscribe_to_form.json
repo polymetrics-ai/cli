@@ -1,0 +1,15 @@
+{
+  "record": {
+    "form_id": 10,
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/forms/10/subscribe",
+    "body": { "email": "fixture@example.com" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "subscription": { "id": 1, "state": "active" } }
+  }
+}

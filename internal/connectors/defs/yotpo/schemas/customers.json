@@ -6,8 +6,23 @@
   "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
-    "id": { "type": "string" },
+    "id": { "type": ["string", "null"] },
+    "external_id": { "type": ["string", "null"] },
     "email": { "type": ["string", "null"] },
+    "phone_number": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "gender": { "type": ["string", "null"] },
+    "account_created_at": { "type": ["string", "null"] },
+    "account_updated_at": { "type": ["string", "null"] },
+    "account_status": { "type": ["string", "null"] },
+    "default_language": { "type": ["string", "null"] },
+    "default_currency": { "type": ["string", "null"] },
+    "tags": { "type": ["string", "null"] },
+    "address": { "type": ["object", "null"] },
+    "accepts_email_marketing": { "type": ["boolean", "null"] },
+    "accepts_sms_marketing": { "type": ["boolean", "null"] },
+    "custom_properties": { "type": ["object", "null"] },
     "updated_at": { "type": ["string", "null"] }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "label": "Fixture Product Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mpo_advertisers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "advertiserName": { "type": ["string", "null"] },
+    "currencyName": { "type": ["string", "null"] },
+    "timeZoneId": { "type": ["string", "null"] }
+  }
+}

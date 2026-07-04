@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": 1001,
+    "cancelNote": "Fixture cancellation"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/appointments/1001/cancel",
+    "body": {
+      "cancelNote": "Fixture cancellation"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 1001, "canceled": true }
+  }
+}

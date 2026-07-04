@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_licenses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "organizationId": { "type": "string" },
+    "licenseType": { "type": ["string", "null"] },
+    "orderNumber": { "type": ["string", "null"] },
+    "deviceSerial": { "type": ["string", "null"] },
+    "networkId": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "seatCount": { "type": ["integer", "null"] },
+    "totalDurationInDays": { "type": ["integer", "null"] },
+    "durationInDays": { "type": ["integer", "null"] },
+    "claimDate": { "type": ["string", "null"] },
+    "activationDate": { "type": ["string", "null"] },
+    "expirationDate": { "type": ["string", "null"] },
+    "headLicenseId": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/headless/translations/1001"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1001, "language": "es", "missingScreens": 0 },
+      { "id": 1001, "language": "fr", "missingScreens": 2 }
+    ]
+  }
+}

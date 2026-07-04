@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "canvas_data_summary",
+  "type": "object",
+  "x-primary-key": ["canvas_id"],
+  "required": ["canvas_id"],
+  "properties": {
+    "canvas_id": { "type": "string" },
+    "message": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "data": { "type": ["array", "null"] }
+  }
+}

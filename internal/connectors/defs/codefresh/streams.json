@@ -74,6 +74,121 @@
         "owner": "{{ record.owner }}"
       },
       "schema": "schemas/contexts.json"
+    },
+    {
+      "name": "builds",
+      "path": "/workflow",
+      "records": { "path": "workflows.docs" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "project": "{{ record.project }}",
+        "project_id": "{{ record.projectId }}",
+        "pipeline_name": "{{ record.pipelineName }}",
+        "repo_owner": "{{ record.repoOwner }}",
+        "repo_name": "{{ record.repoName }}",
+        "status": "{{ record.status }}",
+        "progress": "{{ record.progress }}",
+        "trigger": "{{ record.trigger }}",
+        "trigger_type": "{{ record.triggerType }}",
+        "triggered_by": "{{ record.triggeredBy }}",
+        "branch_name": "{{ record.branchName }}",
+        "revision": "{{ record.revision }}",
+        "commit_message": "{{ record.commitMessage }}",
+        "committer": "{{ record.committer }}",
+        "provider": "{{ record.provider }}",
+        "created": "{{ record.created }}",
+        "finished": "{{ record.finished }}"
+      },
+      "schema": "schemas/builds.json"
+    },
+    {
+      "name": "images",
+      "path": "/images",
+      "records": { "path": "docs" },
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 50
+      },
+      "computed_fields": {
+        "id": "{{ record._id }}",
+        "image_name": "{{ record.imageName }}",
+        "image_display_name": "{{ record.imageDisplayName }}",
+        "branch": "{{ record.branch }}",
+        "sha": "{{ record.sha }}",
+        "commit": "{{ record.commit }}",
+        "commit_url": "{{ record.commitURL }}",
+        "size": "{{ record.size }}",
+        "repo": "{{ record.repo }}",
+        "created": "{{ record.created }}"
+      },
+      "schema": "schemas/images.json"
+    },
+    {
+      "name": "registries",
+      "path": "/registries",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record._id }}",
+        "name": "{{ record.name }}",
+        "provider": "{{ record.provider }}",
+        "kind": "{{ record.kind }}",
+        "domain": "{{ record.domain }}",
+        "primary": "{{ record.primary }}",
+        "default": "{{ record.default }}",
+        "internal": "{{ record.internal }}",
+        "behind_firewall": "{{ record.behindFirewall }}"
+      },
+      "schema": "schemas/registries.json"
+    },
+    {
+      "name": "triggers",
+      "path": "/hermes/triggers",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "event": "{{ record.event }}",
+        "pipeline": "{{ record.pipeline }}",
+        "filter_tag": "{{ record.filters.tag }}",
+        "event_type": "{{ record.event-data.type }}",
+        "event_status": "{{ record.event-data.status }}",
+        "event_description": "{{ record.event-data.description }}"
+      },
+      "schema": "schemas/triggers.json"
+    },
+    {
+      "name": "trigger_events",
+      "path": "/hermes/events",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "uri": "{{ record.uri }}",
+        "type": "{{ record.type }}",
+        "kind": "{{ record.kind }}",
+        "account": "{{ record.account }}",
+        "endpoint": "{{ record.endpoint }}",
+        "status": "{{ record.status }}",
+        "description": "{{ record.description }}"
+      },
+      "schema": "schemas/trigger_events.json"
+    },
+    {
+      "name": "annotations",
+      "path": "/annotations",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record._id }}",
+        "account_id": "{{ record.accountId }}",
+        "entity_id": "{{ record.entityId }}",
+        "entity_type": "{{ record.entityType }}",
+        "key": "{{ record.key }}",
+        "value": "{{ record.value }}",
+        "type": "{{ record.type }}"
+      },
+      "schema": "schemas/annotations.json"
     }
   ]
 }

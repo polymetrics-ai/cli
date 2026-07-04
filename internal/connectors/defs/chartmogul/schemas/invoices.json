@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "external_id": { "type": ["string", "null"] },
+    "customer_uuid": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "due_date": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "annotations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "account_id": { "type": ["string", "null"] },
+    "entity_id": { "type": ["string", "null"] },
+    "entity_type": { "type": ["string", "null"] },
+    "key": { "type": ["string", "null"] },
+    "value": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] }
+  }
+}

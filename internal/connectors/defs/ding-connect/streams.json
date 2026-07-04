@@ -64,6 +64,56 @@
         "uuid": "{{ record.SkuCode }}"
       },
       "schema": "schemas/products.json"
+    },
+    {
+      "name": "product_descriptions",
+      "path": "/api/V1/GetProductDescriptions",
+      "pagination": { "type": "none" },
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.LocalizationKey }}:{{ record.LanguageCode }}"
+      },
+      "schema": "schemas/product_descriptions.json"
+    },
+    {
+      "name": "promotions",
+      "path": "/api/V1/GetPromotions",
+      "pagination": { "type": "none" },
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.ProviderCode }}:{{ record.LocalizationKey }}:{{ record.StartUtc }}"
+      },
+      "schema": "schemas/promotions.json"
+    },
+    {
+      "name": "provider_status",
+      "path": "/api/V1/GetProviderStatus",
+      "pagination": { "type": "none" },
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.ProviderCode }}"
+      },
+      "schema": "schemas/provider_status.json"
+    },
+    {
+      "name": "error_code_descriptions",
+      "path": "/api/V1/GetErrorCodeDescriptions",
+      "pagination": { "type": "none" },
+      "records": { "path": "Items" },
+      "computed_fields": {
+        "uuid": "{{ record.Code }}"
+      },
+      "schema": "schemas/error_code_descriptions.json"
+    },
+    {
+      "name": "balance",
+      "path": "/api/V1/GetBalance",
+      "pagination": { "type": "none" },
+      "records": { "path": ".", "single_object": true },
+      "computed_fields": {
+        "uuid": "balance"
+      },
+      "schema": "schemas/balance.json"
     }
   ]
 }

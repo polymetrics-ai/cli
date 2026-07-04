@@ -1,19 +1,24 @@
 # Overview
 
-CIMIS is a wave2 fan-out declarative-HTTP migration. It reads California Irrigation Management
-Information System (CIMIS) weather station metadata through the CIMIS Web API
-(`GET https://et.water.ca.gov/api/station`). This bundle targets capability parity with
-`internal/connectors/cimis` (the hand-written connector it migrates) for the `stations` stream
-only; the legacy package stays registered and unchanged until wave6's registry flip, and remains
-authoritative for the `daily`/`hourly` streams this bundle does not cover (see Known limits).
+CIMIS is a Pass B full-surface declarative-HTTP connector. It reads California Irrigation
+Management Information System (CIMIS) weather station metadata and both documented zip-code
+reference lists through the CIMIS Web API (`GET https://et.water.ca.gov/api/{station,
+stationzipcode,spatialzipcode}`). This bundle targets capability parity with
+`internal/connectors/cimis` (the hand-written connector it migrates) for the `stations` stream, and
+goes beyond legacy by adding the two zip-code reference streams legacy never implemented (`GET
+/api/stationzipcode`, `GET /api/spatialzipcode` — both genuinely Tier-1 expressible, simple
+top-level-array-under-one-key GET resources, no appKey required); the legacy package stays
+registered and unchanged until wave6's registry flip, and remains authoritative for the
+`daily`/`hourly` streams this bundle does not cover (see Known limits).
 
 ## Auth setup
 
-The `stations` stream (`GET /api/station`) is served by CIMIS without an appKey, matching legacy's
-own comment ("the station endpoint is the lightest read that confirms connectivity; it does not
-require the appKey"). `base.auth` is declared `[{"mode": "none"}]`. `api_key` is declared in
-`spec.json` (`x-secret: true`, optional) as a reserved field for a future `daily`/`hourly` stream
-expansion but is not wired into any template in this bundle — it currently has no effect.
+All 3 streams (`stations`, `station_zip_codes`, `spatial_zip_codes`) are served by CIMIS without an
+appKey — CIMIS's own docs state registration/an appKey is required only for the weather/ET data
+services (`/api/data`), never for station or zip-code metadata. `base.auth` is declared
+`[{"mode": "none"}]`. `api_key` is declared in `spec.json` (`x-secret: true`, optional) as a reserved
+field for a future `daily`/`hourly` stream expansion but is not wired into any template in this
+bundle — it currently has no effect.
 
 ## Streams notes
 
@@ -23,10 +28,25 @@ expansion but is not wired into any template in this bundle — it currently has
 with no allowlist and no renaming: `for key, value := range item { rec[key] = value }`). No
 incremental cursor is published (matching legacy: the `stations` stream carries no `CursorFields`).
 
+`station_zip_codes` reads `GET /api/stationzipcode` (records at the `ZipCodes` top-level array key),
+returning which CIMIS Weather Station Network stations serve which US zip codes — fields
+`StationNbr`/`ZipCode`/`ConnectDate`/`DisconnectDate`/`IsActive`, primary key
+`["StationNbr", "ZipCode"]` (a station can serve, and a zip code can be served by, more than one of
+the other — the compound key is the documented uniqueness constraint for this resource).
+`spatial_zip_codes` reads `GET /api/spatialzipcode` (same `ZipCodes` envelope shape, one level
+narrower: no `StationNbr` field at all, since Spatial CIMIS System zip-code coverage isn't tied to
+a physical station), primary key `["ZipCode"]`. Both new streams use `"projection": "passthrough"`,
+matching `stations`' own no-allowlist, no-renaming shape (there is no legacy record mapper to match
+parity against, since legacy never implemented either resource) and CIMIS's own flat, already
+schema-friendly field naming. Neither publishes an incremental cursor: CIMIS's zip-code reference
+data is a small, slowly-changing lookup table with no documented updated-at/modified-since filter.
+
 ## Write actions & risks
 
-None. CIMIS is a read-only public data API (`capabilities.write: false`, no `writes.json`),
-matching legacy's `Write` unconditionally returning `connectors.ErrUnsupportedOperation`.
+None. CIMIS is a read-only public reference/observational data API — every one of its documented
+endpoints is a `GET`; there is no create/update/delete surface anywhere in the CIMIS Web API to
+model as a write action (`capabilities.write: false`, no `writes.json`), matching legacy's `Write`
+unconditionally returning `connectors.ErrUnsupportedOperation`.
 
 ## Known limits
 
@@ -51,8 +71,22 @@ matching legacy's `Write` unconditionally returning `connectors.ErrUnsupportedOp
   authoritative for `daily`/`hourly` until the engine gains both a nested-array-within-array
   flatten primitive and a dynamic-key flatten primitive.
 - `api_key`/appKey query-param auth (`connsdk.APIKeyQuery("appKey", secret)`) is declared in
-  `spec.json` but not wired into any `auth` candidate in this bundle, since the only implemented
-  stream (`stations`) never sends it. It remains reserved for when `daily`/`hourly` are added in a
-  follow-up wave.
+  `spec.json` but not wired into any `auth` candidate in this bundle, since none of the 3 implemented
+  streams ever sends it. It remains reserved for when `daily`/`hourly` are added in a follow-up wave.
+- **`/api/station/{stationNumber}`, `/api/stationzipcode/{zipCode}`, and
+  `/api/spatialzipcode/{zipCode}`** (single-item path-parameter filters of the 3 covered list
+  resources) are excluded as `duplicate_of` rather than modeled as additional streams: a full list
+  read of the parent resource already returns every record the filtered variant would return
+  individually, and the engine's declarative stream dialect has no per-record "read one item by path
+  parameter" primitive distinct from an ordinary list stream.
+- **`station_zip_codes`' `StationNbr` schema type is `["integer", "string"]`, not a tightened bare
+  `integer`.** CIMIS's own REST reference example shows this field as a bare JSON integer (unlike the
+  `stations` stream's `StationNbr`, which is a JSON string in that resource), but this bundle's
+  `station_zip_codes` fixture was authored from documentation rather than a captured live response for
+  this specific resource; the union type is an honest hedge against CIMIS's broader documented
+  tendency to emit numeric-looking fields as strings elsewhere in this same API (`stations`' own
+  `StationNbr`, `Elevation`, etc. are all strings). `"projection": "passthrough"` means the schema
+  type here is documentation of the expected wire shape, not an enforced coercion — whichever type
+  CIMIS actually sends survives unchanged either way.
 - `base_url`'s SSRF-guard scheme/host validation (https/http only, host required) is reproduced by
   the engine's own base-URL handling; no bundle-level behavior change.

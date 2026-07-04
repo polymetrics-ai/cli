@@ -1,14 +1,14 @@
 {
   "name": "elasticemail",
   "display_name": "Elastic Email",
-  "description": "Reads Elastic Email contacts, campaigns, lists, segments, and templates through the Elastic Email v4 REST API.",
+  "description": "Reads and writes Elastic Email contacts, campaigns, lists, segments, templates, webhooks, domains, inbound routes, suppressions, and account statistics through the Elastic Email v4 REST API.",
   "integration_type": "api",
   "docs_url": "https://elasticemail.com/developers/api-documentation/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Elastic Email API read of contact, campaign, list, segment, and template data",
-    "approval": "none; read-only"
+    "read": "external Elastic Email API read of contact, campaign, list, segment, template, webhook, domain, inbound-route, suppression, sub-account, and statistics data",
+    "write": "external Elastic Email API mutations covering contact/list/segment/template/campaign/webhook/domain/inbound-route lifecycle management; create_campaign and pause_campaign can affect a live email send to real recipients, and webhook/inbound-route writes register caller-controlled external destinations for live event/mail forwarding",
+    "approval": "standard; no destructive-admin or elevated-scope actions are exposed"
   }
 }

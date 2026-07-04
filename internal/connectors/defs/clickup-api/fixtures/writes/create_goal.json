@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Goal" },
+  "expect": {
+    "method": "POST",
+    "path": "/team/synthetic-conformance-value/goal",
+    "body": { "name": "Fixture Goal" }
+  },
+  "response": { "status": 200, "body": { "goal": { "id": "goal_fixture_new" } } }
+}

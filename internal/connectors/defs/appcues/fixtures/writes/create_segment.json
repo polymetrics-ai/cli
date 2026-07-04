@@ -1,0 +1,12 @@
+{
+  "record": { "name": "Fixture Segment", "description": "conformance fixture segment" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/segments",
+    "body": { "name": "Fixture Segment", "description": "conformance fixture segment" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "seg_fixture_1", "name": "Fixture Segment", "description": "conformance fixture segment" }
+  }
+}

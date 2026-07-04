@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "account_id": 1, "email": "account1@example.com" },
+        { "account_id": 2, "email": "account2@example.com" }
+      ]
+    }
+  }
+}

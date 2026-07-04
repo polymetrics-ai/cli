@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "roles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "memberCount": { "type": ["integer", "null"] },
+    "roles": { "type": ["array", "null"] }
+  }
+}

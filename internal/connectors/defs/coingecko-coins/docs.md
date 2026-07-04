@@ -1,14 +1,18 @@
 # Overview
 
-Reads a single coin's current metadata/market-data snapshot from the CoinGecko REST API
-(`GET /coins/{id}`), migrating `internal/connectors/coingecko-coins` (the legacy hand-written
-connector, which stays registered and unchanged until wave6's registry flip) at capability parity
-for its `coin` stream only. This bundle is an **unblock re-review**, not a fresh migration: the
-connector was previously quarantined entirely (`ENGINE_GAP`, `docs/migration/quarantine.json`) for
-`market_chart`'s array-zip requirement. Re-reviewed against the new dialect additions (`fan_out`,
-`keyed_object`, `start_page: 0`, oauth2 `extra_params`, date-only incremental bounds) — none of
-those apply to this connector's remaining gaps. `market_chart` and `history` remain blocked; see
-Known limits. The API is read-only; this bundle exposes no write actions.
+Reads a single coin's current metadata/market-data snapshot and its exchange tickers from the
+CoinGecko REST API (`GET /coins/{id}`, `GET /coins/{id}/tickers`), migrating
+`internal/connectors/coingecko-coins` (the legacy hand-written connector, which stays registered
+and unchanged until wave6's registry flip) at capability parity for its `coin` stream, plus a new
+`tickers` stream added in this Pass B pass. This bundle is scoped deliberately to the single-coin
+(coin_id-configured) resource family CoinGecko's API groups under `/coins/{id}/**` — not the full
+CoinGecko API (search, exchanges, derivatives, NFTs, on-chain data, global stats, and more), which
+is a distinct, much larger product surface with no per-connection coin_id scoping in common with
+this bundle; see `api_surface.json` for the full per-endpoint review. The connector was previously
+quarantined entirely (`ENGINE_GAP`, `docs/migration/quarantine.json`) for `market_chart`'s array-zip
+requirement, then unblocked for `coin` alone in a prior pass. `market_chart`, `history`, and (newly
+reviewed this pass) `ohlc`/`ohlc/range`/`market_chart/range` remain blocked; see Known limits. The
+API is read-only; this bundle exposes no write actions.
 
 ## Auth setup
 
@@ -23,14 +27,27 @@ this bundle cannot derive it the way legacy does) — set it to
 
 ## Streams notes
 
-Only `coin` is implemented. It reads `GET /coins/{coin_id}` (the path's `{{ config.coin_id }}`
-substitutes the connection's configured coin, e.g. `bitcoin`) with the same
+`coin` (`GET /coins/{coin_id}`, the path's `{{ config.coin_id }}` substitutes the connection's
+configured coin, e.g. `bitcoin`) sends the same
 `localization=false&tickers=false&community_data=false&developer_data=false` static query legacy
 sends, and projects the identical field set legacy's `coinRecord` emits (`id`, `symbol`, `name`,
 `market_cap_rank`, `hashing_algorithm`, `categories`, `market_data`, `last_updated`). The response
 body IS the record (`records.path: "."`) — CoinGecko's single-coin endpoint has no envelope
 wrapper, matching legacy's direct `r.DoJSON(..., &item)` decode. Not paginated (a single-object
 response); not incremental (legacy publishes no `CursorFields` for `coin`).
+
+**`tickers`** (`GET /coins/{coin_id}/tickers`, new in this Pass B pass — legacy never implemented
+this stream): records at `tickers` (the response envelope is `{name, tickers: [...]}`; `name` — the
+coin's display name — is not itself emitted as a record field). CoinGecko documents 100 tickers per
+page with no page-size query override and no pagination metadata in the response body itself, so
+this is a `page_number` paginator with `size_param: ""` (matching searxng's "no page-size param is
+ever sent" pattern) and `page_size: 100` as the client-side short-page stop threshold. Primary key
+is the `(coin_id, target_coin_id, market_identifier)` triple — a single coin/target pair can be
+traded on multiple exchanges, so the exchange identifier is part of identity;
+`market_identifier` is a `computed_fields` derivation (`{{ record.market.identifier }}`) since the
+raw wire field is nested inside the `market` sub-object, not a top-level field. Every other declared
+field matches the raw wire field name exactly, so schema-mode projection copies them without any
+further `computed_fields` entries.
 
 ## Write actions & risks
 
@@ -57,7 +74,18 @@ None. CoinGecko is `capabilities.write: false`; no `writes.json` is shipped, mat
   (e.g. a "zip these N array paths by index" spec) or a Tier-2 `StreamHook`; a `StreamHook` alone
   would still need a 2nd interface for nothing else in this connector, so — per this bundle's minimal
   scope — it is filed as `ENGINE_GAP` rather than escalated to a hooks package for one stream.
-- **Blocked: `history` stream (`ENGINE_GAP`, newly identified in this unblock pass).** Legacy's
+- **Blocked: `market_chart/range`, `ohlc`, and `ohlc/range` (`ENGINE_GAP`, newly reviewed this Pass
+  B pass — same root cause as `market_chart`, not new distinct gaps).** `market_chart/range` is the
+  identical 3-parallel-array-zip shape as `market_chart` (a client-supplied `from`/`to` Unix range
+  has no bearing on the array-shape gap itself). `ohlc`/`ohlc/range` return a bare array of
+  `[timestamp, open, high, low, close]` 5-element tuples — each array ELEMENT is itself a JSON
+  array, not an object. `connsdk.RecordsAt`'s `[]any` branch only keeps elements that decode as
+  `map[string]any`; a bare-tuple element fails that check and is silently dropped, yielding zero
+  records for every page — confirmed by reading `RecordsAt`'s implementation directly in this pass
+  rather than assumed by analogy. This is the exact same "no array-of-arrays/tuple-to-record
+  primitive" limitation as `market_chart`'s array-zip gap, not a second distinct gap to track
+  separately.
+- **Blocked: `history` stream (`ENGINE_GAP`).** Legacy's
   `readHistory` walks one independent `GET /coins/{id}/history?date=DD-MM-YYYY` request per
   calendar day from `start_date` to `end_date` (inclusive) — the `date` query param IS the loop
   variable; CoinGecko's `history` endpoint has no range/from/to filter at all, only a single
@@ -81,5 +109,12 @@ None. CoinGecko is `capabilities.write: false`; no `writes.json` is shipped, mat
   but every connection MUST now set `base_url` itself. Parity-deviation ledger candidate,
   ACCEPTABLE under the meta-rule (no accepted-input record-data change; the same value legacy would
   have derived is simply now required input instead of an inferred default).
-- Full CoinGecko API surface (search, exchanges, derivatives, NFTs, on-chain data, and the `ping`
-  endpoint used only as the check probe) is out of scope until Pass B; see `api_surface.json`.
+- Full CoinGecko API surface remains out of scope beyond `coin`/`tickers` above: this connector is
+  deliberately scoped to the coin_id-scoped `/coins/{id}/**` resource family, not the much larger
+  general CoinGecko surface (multi-coin listings, search, exchanges, derivatives, NFTs, on-chain
+  data, categories, global stats, and more — none of which share this connection's per-coin_id
+  scoping shape). See `api_surface.json` for the full per-endpoint review (every documented v3
+  endpoint reviewed, not just the coin-scoped ones) with a specific real reason per exclusion —
+  mostly `out_of_scope` (a distinct resource domain from coins) or `requires_elevated_scope`
+  (documented as an Analyst-plan-or-above CoinGecko API feature, unavailable on the public/pro
+  tiers this connector's `spec.json` models).

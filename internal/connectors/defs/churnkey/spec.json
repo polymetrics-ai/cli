@@ -16,8 +16,8 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.churnkey.co/v1/data",
-      "description": "Churnkey Data API base URL."
+      "default": "https://api.churnkey.co",
+      "description": "Churnkey API host. Individual streams/writes append their own /v1/data or /v1/api path prefix (the Data API and the Event Tracking API share this host but live at different path prefixes)."
     }
   }
 }

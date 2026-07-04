@@ -1,0 +1,22 @@
+{
+  "record": {
+    "ownerId": 42,
+    "domain": "fixture-new.example.com",
+    "name": "Fixture New Co",
+    "targeted": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/create",
+    "body": {
+      "ownerId": 42,
+      "domain": "fixture-new.example.com",
+      "name": "Fixture New Co",
+      "targeted": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "accountId": "acct_fixture_new", "domain": "fixture-new.example.com" } }
+  }
+}

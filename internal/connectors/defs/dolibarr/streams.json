@@ -54,6 +54,41 @@
       "query": { "sortfield": "t.rowid", "sortorder": "ASC" },
       "records": { "path": "" },
       "schema": "schemas/orders.json"
+    },
+    {
+      "name": "thirdparty_detail",
+      "path": "/thirdparties/{{ config.thirdparty_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/thirdparty_detail.json"
+    },
+    {
+      "name": "contact_detail",
+      "path": "/contacts/{{ config.contact_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/contact_detail.json"
+    },
+    {
+      "name": "product_detail",
+      "path": "/products/{{ config.product_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/product_detail.json"
+    },
+    {
+      "name": "invoice_detail",
+      "path": "/invoices/{{ config.invoice_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/invoice_detail.json"
+    },
+    {
+      "name": "order_detail",
+      "path": "/orders/{{ config.order_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/order_detail.json"
     }
   ]
 }

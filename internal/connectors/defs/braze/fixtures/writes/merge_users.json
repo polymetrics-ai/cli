@@ -1,0 +1,17 @@
+{
+  "record": {
+    "merge_updates": [
+      { "identifier_to_merge": { "external_id": "user_fixture_old" }, "identifier_to_keep": { "external_id": "user_fixture_new" } }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/merge",
+    "body": {
+      "merge_updates": [
+        { "identifier_to_merge": { "external_id": "user_fixture_old" }, "identifier_to_keep": { "external_id": "user_fixture_new" } }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

@@ -1,0 +1,12 @@
+{
+  "record": { "name": "fixture_snippet", "value": "Updated fixture snippet value" },
+  "expect": {
+    "method": "PUT",
+    "path": "/snippets",
+    "body": {
+      "name": "fixture_snippet",
+      "value": "Updated fixture snippet value"
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

@@ -17,12 +17,45 @@
     },
     "organization_id": {
       "type": "string",
-      "description": "Concord organization id; required for the organization-scoped streams (agreements, folders, reports)."
+      "description": "Concord organization id; required for every organization-scoped stream (agreements, folders, reports, organization, clauses, approvals, groups, members, events, subscription, branding, automated_templates, folder, folder_agreements, report, clause, approval, agreement and its sub-resource streams)."
     },
     "page_size": {
       "type": "string",
       "default": "100",
       "description": "Records per page (limit query param; 1-1000)."
+    },
+    "folder_id": {
+      "type": "string",
+      "description": "Concord folder id; required for the folder and folder_agreements detail streams."
+    },
+    "agreement_uid": {
+      "type": "string",
+      "description": "Concord agreement uid; required for the agreement detail stream and its sub-resource streams (agreement_metadata, agreement_summary, agreement_comments, agreement_activities, agreement_members, agreement_versions, agreement_attachments) when read standalone rather than via fan_out from the agreements stream."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Concord report id (or sample report enum value); required for the report detail stream."
+    },
+    "clause_id": {
+      "type": "string",
+      "description": "Concord clause id; required for the clause detail stream."
+    },
+    "approval_id": {
+      "type": "string",
+      "description": "Concord approval id; required for the approval detail stream."
+    },
+    "events_start_date": {
+      "type": "string",
+      "description": "Events stream date-range start (yyyy-MM-dd); required for the events stream. Concord requires start/end to span at most 7 days."
+    },
+    "events_end_date": {
+      "type": "string",
+      "description": "Events stream date-range end (yyyy-MM-dd); required for the events stream. Concord requires start/end to span at most 7 days."
+    },
+    "clauses_page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (limit query param) for the clauses stream's offset/limit pagination."
     },
     "mode": {
       "type": "string",

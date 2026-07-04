@@ -1,14 +1,14 @@
 {
   "name": "codefresh",
   "display_name": "Codefresh",
-  "description": "Reads Codefresh projects, pipelines, runner agents, and shared contexts through the Codefresh REST API.",
+  "description": "Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, container images, registries, triggers, and annotations, and can create/update/delete/run projects, pipelines, contexts, and agents through the Codefresh REST API.",
   "integration_type": "api",
   "docs_url": "https://g.codefresh.io/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 2
   },
   "risk": {
-    "read": "external Codefresh API read of projects, pipelines, runner agents, and shared contexts",
-    "approval": "none; read-only"
+    "read": "external Codefresh API read of projects, pipelines, builds, runner agents, shared contexts, container images, registries, triggers, and annotations",
+    "write": "external mutation of Codefresh projects, pipelines, contexts, and runner agents, including irreversible deletes and triggering real pipeline runs (consumes build minutes/resources)",
+    "approval": "required for all write actions; read is unrestricted"
   }
 }

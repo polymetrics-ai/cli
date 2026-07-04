@@ -36,6 +36,20 @@
       "pagination": { "type": "none" },
       "records": { "path": "", "single_object": true },
       "schema": "schemas/namespace.json"
+    },
+    {
+      "name": "repository_detail",
+      "path": "/repositories/{{ config.docker_username }}/{{ config.repository }}/",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/repository_detail.json"
+    },
+    {
+      "name": "tag_detail",
+      "path": "/repositories/{{ config.docker_username }}/{{ config.repository }}/tags/{{ config.tag }}/",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/tag_detail.json"
     }
   ]
 }

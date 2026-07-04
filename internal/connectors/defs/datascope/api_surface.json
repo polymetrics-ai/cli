@@ -1,15 +1,29 @@
 {
   "api": "DataScope external API (https://www.mydatascope.com/api/external)",
-  "docs": "https://app.mydatascope.com/api/external/docs/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only, at full-refresh parity (the server-side start/end date window is narrowed - see docs.md Known limits); DataScope's much larger surface (form/location mutation, user management, dispatch/task creation) is out of scope until Pass B",
+  "docs": "https://dscope.github.io/docs/ (canonical reference; https://app.mydatascope.com/api/external/docs/ is an authenticated in-app mirror of the same surface)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-confirmed against the live docs site (https://dscope.github.io/docs/, fetched 2026-07-04): every documented DataScope external-API endpoint (Answers, Locations, Lists/Metadata Objects, Task Assigns, Notifications, Files, Webhooks, Tickets/Findings) is enumerated below. 7 streams (locations/answers/lists/notifications/task_assigns/findings/files) now cover every documented GET list endpoint; 9 writes (location create/update, task assignment, metadata object/type create/update, bulk metadata update, form-answer correction) cover every dialect-expressible mutation. Webhook registration has no programmatic endpoint at all (UI-only configuration, see below) so there is nothing to declare a stream/write for.",
   "endpoints": [
     { "method": "GET", "path": "/locations", "covered_by": { "stream": "locations" } },
+    { "method": "POST", "path": "/locations", "covered_by": { "write": "create_location" } },
+    { "method": "POST", "path": "/locations/{id}", "covered_by": { "write": "update_location" } },
     { "method": "GET", "path": "/v2/answers", "covered_by": { "stream": "answers" } },
+    { "method": "GET", "path": "/answers", "excluded": { "category": "duplicate_of", "reason": "legacy v1 answers listing with a higher 600-record limit and additional metadata columns, but the same underlying record shape as /v2/answers (which this bundle already reads, matching legacy's own choice of the v2 endpoint); v1 and v2 are two views onto the same submitted-answer data, not independently syncable resources" } },
+    { "method": "POST", "path": "/change_form_answer", "covered_by": { "write": "change_form_answer" } },
     { "method": "GET", "path": "/metadata_objects", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/metadata_object", "excluded": { "category": "duplicate_of", "reason": "single-list-element detail (by metadata_type + metadata_id) is a strict subset of the lists stream's already-read per-element fields; the lists stream reads every element of every list" } },
+    { "method": "POST", "path": "/metadata_object", "covered_by": { "write": "create_metadata_object" } },
+    { "method": "POST", "path": "/metadata_object/{id}", "covered_by": { "write": "update_metadata_object" } },
+    { "method": "POST", "path": "/metadata_types", "covered_by": { "write": "create_metadata_type" } },
+    { "method": "POST", "path": "/metadata_types/{id}", "covered_by": { "write": "update_metadata_type" } },
+    { "method": "POST", "path": "/metadata_objects/bulk_update", "covered_by": { "write": "bulk_update_metadata_objects" } },
+    { "method": "POST", "path": "/assign_task", "covered_by": { "write": "assign_task" } },
+    { "method": "GET", "path": "/task_assigns", "covered_by": { "stream": "task_assigns" } },
+    { "method": "GET", "path": "/task_assigns/{id}", "excluded": { "category": "duplicate_of", "reason": "single-task-assignment detail is a strict subset of the task_assigns stream's already-read per-record fields" } },
     { "method": "GET", "path": "/notifications", "covered_by": { "stream": "notifications" } },
-    { "method": "POST", "path": "/locations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/dispatch", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/files", "covered_by": { "stream": "files" } },
+    { "method": "GET", "path": "/findings/list", "covered_by": { "stream": "findings" } },
+    { "method": "GET", "path": "/findings/get/{id}", "excluded": { "category": "duplicate_of", "reason": "single-ticket detail is a strict subset of the findings stream's already-read per-record fields (Firestore document id is the same identifier used to select the individual record from the list)" } },
+    { "method": "POST", "path": "/webhooks/new", "excluded": { "category": "non_data_endpoint", "reason": "webhook subscription registration has no programmatic REST endpoint at all in DataScope's own docs — it is configured exclusively through the mydatascope.com web UI at /webhooks/new; there is no request/response API shape here to declare a write action against" } }
   ]
 }

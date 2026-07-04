@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/expenses" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 501,
+        "category": 11,
+        "date": "2026-01-05",
+        "amount": 125.50,
+        "billable": true,
+        "project": "as:1001",
+        "quantity": 1,
+        "user": 100,
+        "details": "Fixture travel expense"
+      }
+    ]
+  }
+}

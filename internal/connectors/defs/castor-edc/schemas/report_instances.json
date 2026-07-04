@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "report_instances",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "record_id": { "type": ["string", "null"] },
+    "report_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "name_custom": { "type": ["string", "null"] },
+    "parent_id": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "created_on": { "type": ["string", "null"] },
+    "updated_on": { "type": ["string", "null"] }
+  }
+}

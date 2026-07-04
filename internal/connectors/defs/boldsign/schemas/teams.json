@@ -8,7 +8,7 @@
   "properties": {
     "team_id": { "type": "string" },
     "team_name": { "type": ["string", "null"] },
-    "created_date": { "type": ["string", "null"] },
+    "created_date": { "type": ["integer", "null"] },
     "users": { "type": ["array", "null"] }
   }
 }

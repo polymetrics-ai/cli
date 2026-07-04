@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contact_detail",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_modification",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "socid": { "type": ["string", "null"] },
+    "lastname": { "type": ["string", "null"] },
+    "firstname": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone_pro": { "type": ["string", "null"] },
+    "phone_mobile": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "town": { "type": ["string", "null"] },
+    "zip": { "type": ["string", "null"] },
+    "country_code": { "type": ["string", "null"] },
+    "poste": { "type": ["string", "null"] },
+    "statut": { "type": ["string", "null"] },
+    "date_creation": { "type": ["integer", "null"] },
+    "date_modification": { "type": ["integer", "null"] }
+  }
+}

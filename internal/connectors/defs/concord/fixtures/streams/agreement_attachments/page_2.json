@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/agr_fixture_1/attachments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "attachments": [
+        { "id": "att_fixture_1", "name": "fixture.pdf", "size": 1024, "contentType": "application/pdf" }
+      ]
+    }
+  }
+}

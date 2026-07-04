@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/samlRoles"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "saml_role_fixture_1",
+        "role": "Fixture SAML Role",
+        "orgAccess": "read-only",
+        "networks": [],
+        "tags": [],
+        "camera": { "views": [] }
+      }
+    ]
+  }
+}

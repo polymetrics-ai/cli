@@ -1,0 +1,20 @@
+{
+  "record": {
+    "SegmentID": "segment_fixture_1",
+    "Title": "Renamed Fixture Segment",
+    "RuleGroups": [
+      { "Rules": [ { "RuleType": "EmailAddress", "Clause": "CONTAINS @fixture.com" } ] }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/segments/segment_fixture_1.json",
+    "body": {
+      "Title": "Renamed Fixture Segment",
+      "RuleGroups": [
+        { "Rules": [ { "RuleType": "EmailAddress", "Clause": "CONTAINS @fixture.com" } ] }
+      ]
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

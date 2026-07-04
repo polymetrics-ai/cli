@@ -1,0 +1,14 @@
+{
+  "record": {
+    "email": "fixture@example.com",
+    "role": "brand_manager"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": {
+      "email": "fixture@example.com",
+      "role": "brand_manager"
+    }
+  }
+}

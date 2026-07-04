@@ -1,0 +1,11 @@
+{
+  "record": {
+    "socid": "1",
+    "type": "0",
+    "date": 1767225600
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices"
+  }
+}

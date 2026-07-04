@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": 45465
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/channels/45465"
+  }
+}

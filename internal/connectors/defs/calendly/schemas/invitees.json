@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invitees",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id", "uri"],
+  "properties": {
+    "id": { "type": "string", "description": "Derived from uri's trailing path segment via computed_fields' last_path_segment filter, matching every other stream in this bundle." },
+    "uri": { "type": "string", "description": "Calendly's stable resource identifier; see scheduled_events.json's uri description." },
+    "email": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "event": { "type": ["string", "null"] },
+    "scheduled_event_id": { "type": ["string", "null"], "description": "The scheduled event's own id, stamped onto every invitee record by this stream's fan_out (fan-out parent id, not part of Calendly's raw Invitee shape)." },
+    "rescheduled": { "type": ["boolean", "null"] },
+    "old_invitee": { "type": ["string", "null"] },
+    "new_invitee": { "type": ["string", "null"] },
+    "cancel_url": { "type": ["string", "null"] },
+    "reschedule_url": { "type": ["string", "null"] },
+    "routing_form_submission": { "type": ["string", "null"] },
+    "cancellation": { "type": ["object", "null"] },
+    "payment": { "type": ["object", "null"] },
+    "questions_and_answers": { "type": ["array", "null"] },
+    "tracking": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

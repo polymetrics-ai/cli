@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "model_number": { "type": ["string", "null"] },
+    "end_of_life_date": { "type": ["string", "null"] },
+    "end_of_life_type": { "type": ["string", "null"] },
+    "end_of_life_months": { "type": ["integer", "null"] },
+    "default_purchase_cost": { "type": ["number", "null"] },
+    "category_id": { "type": ["integer", "null"] },
+    "manufacturer_id": { "type": ["integer", "null"] },
+    "depreciation_id": { "type": ["integer", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "custom_fields": { "type": ["array", "null"] },
+    "number_of_assets": { "type": ["integer", "null"] },
+    "number_of_deployable_assets": { "type": ["integer", "null"] },
+    "minimum_quantity": { "type": ["integer", "null"] },
+    "assets": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

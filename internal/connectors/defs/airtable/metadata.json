@@ -1,14 +1,14 @@
 {
   "name": "airtable",
   "display_name": "Airtable",
-  "description": "Reads Airtable bases, tables, and records through the Airtable Web API. Read-only.",
+  "description": "Reads Airtable bases, tables, records, webhooks, and record comments, and writes record/table/field/comment/webhook mutations, through the Airtable Web API.",
   "integration_type": "api",
-  "docs_url": "https://support.airtable.com/docs/airtable-api-deprecation-guidelines",
+  "docs_url": "https://airtable.com/developers/web/api/introduction",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Airtable API read of base/table/record metadata"
+    "read": "external Airtable API read of base/table/record metadata",
+    "write": "external Airtable API mutation of records, table/field schema, comments, and webhooks; schema mutations (create_table/update_table/create_field/update_field) are visible to every base collaborator, approval required"
   }
 }

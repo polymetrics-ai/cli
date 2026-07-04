@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/folders" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "summary": "Get folders",
+      "data": {
+        "folders": [
+          {
+            "folderId": "folder_fixture_1",
+            "folderName": "Fixture Folder",
+            "folderDesc": "",
+            "folderIndex": 1,
+            "isDefault": true,
+            "parentFolderId": "-1"
+          }
+        ]
+      }
+    }
+  }
+}

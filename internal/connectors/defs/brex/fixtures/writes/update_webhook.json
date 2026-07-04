@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "wsub_fixture_1",
+    "url": "https://example.com/fixture/webhook-updated",
+    "event_types": [
+      "EXPENSE_PAYMENT_UPDATED"
+    ],
+    "status": "ACTIVE"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/webhooks/wsub_fixture_1",
+    "body": {
+      "url": "https://example.com/fixture/webhook-updated",
+      "event_types": [
+        "EXPENSE_PAYMENT_UPDATED"
+      ],
+      "status": "ACTIVE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

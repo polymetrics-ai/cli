@@ -88,6 +88,90 @@
         "id": "{{ record.code }}"
       },
       "schema": "schemas/channels.json"
+    },
+    {
+      "name": "product_models",
+      "path": "/api/rest/v1/product-models",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/product_models.json"
+    },
+    {
+      "name": "family_variants",
+      "path": "/api/rest/v1/family-variants",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/family_variants.json"
+    },
+    {
+      "name": "attribute_groups",
+      "path": "/api/rest/v1/attribute-groups",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/attribute_groups.json"
+    },
+    {
+      "name": "association_types",
+      "path": "/api/rest/v1/association-types",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/association_types.json"
+    },
+    {
+      "name": "locales",
+      "path": "/api/rest/v1/locales",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/locales.json"
+    },
+    {
+      "name": "currencies",
+      "path": "/api/rest/v1/currencies",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/currencies.json"
+    },
+    {
+      "name": "measure_families",
+      "path": "/api/rest/v1/measure-families",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/measure_families.json"
     }
   ]
 }

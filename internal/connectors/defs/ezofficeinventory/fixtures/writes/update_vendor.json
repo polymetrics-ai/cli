@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 20,
+    "vendor[email]": "fixture-vendor@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/vendors/20.api"
+  }
+}

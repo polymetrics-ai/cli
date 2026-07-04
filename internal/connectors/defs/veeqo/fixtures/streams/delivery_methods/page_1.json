@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/delivery_methods"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 123456,
+        "name": "Fixture Delivery Method",
+        "cost": "0.0",
+        "created_at": "2026-01-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

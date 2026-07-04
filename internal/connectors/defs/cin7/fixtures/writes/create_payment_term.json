@@ -1,0 +1,20 @@
+{
+  "record": {
+    "Name": "Fixture 15 days",
+    "Duration": 15,
+    "Method": "number of days",
+    "IsActive": true,
+    "IsDefault": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ref/paymentterm",
+    "body": {
+      "Name": "Fixture 15 days",
+      "Duration": 15,
+      "Method": "number of days",
+      "IsActive": true,
+      "IsDefault": false
+    }
+  }
+}

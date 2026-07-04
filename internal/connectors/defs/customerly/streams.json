@@ -39,6 +39,13 @@
       },
       "records": { "path": "data.leads" },
       "schema": "schemas/leads.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts/",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/accounts.json"
     }
   ]
 }

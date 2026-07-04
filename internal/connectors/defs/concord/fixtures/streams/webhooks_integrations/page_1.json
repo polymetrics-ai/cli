@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/me/integrations/webhooks"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "wh_fixture_1", "url": "https://example.com/webhook", "events": ["AGREEMENT_SIGN"], "isActive": true }
+    ]
+  }
+}

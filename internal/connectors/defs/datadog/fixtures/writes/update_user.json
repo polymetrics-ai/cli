@@ -1,0 +1,10 @@
+{
+  "record": {
+    "handle": "fixture1@example.com",
+    "name": "Fixture User Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/user/fixture1@example.com"
+  }
+}

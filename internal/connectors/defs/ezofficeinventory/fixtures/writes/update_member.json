@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "user[phone_number]": "+15550100"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/members/1.api"
+  }
+}

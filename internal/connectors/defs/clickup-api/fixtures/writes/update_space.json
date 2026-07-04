@@ -1,0 +1,8 @@
+{
+  "record": { "id": "space_fixture_1", "name": "Renamed Fixture Space" },
+  "expect": {
+    "method": "PUT",
+    "path": "/space/space_fixture_1",
+    "body": { "name": "Renamed Fixture Space" }
+  }
+}

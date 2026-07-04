@@ -1,0 +1,12 @@
+{
+  "record": {
+    "callback_url": "https://example.com/hooks/dropbox-sign"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/account",
+    "body": {
+      "callback_url": "https://example.com/hooks/dropbox-sign"
+    }
+  }
+}

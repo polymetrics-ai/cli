@@ -1,14 +1,14 @@
 {
   "name": "campaign-monitor",
   "display_name": "Campaign Monitor",
-  "description": "Reads Campaign Monitor clients, campaigns, subscriber lists, and suppression lists through the createsend.com v3.3 REST API.",
+  "description": "Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscribers, segments, and templates through the createsend.com v3.3 REST API.",
   "integration_type": "api",
   "docs_url": "https://www.campaignmonitor.com/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Campaign Monitor API read of client, campaign, and subscriber list data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Campaign Monitor API read of client, campaign, subscriber, segment, and template data",
+    "write": "external mutation of Campaign Monitor lists, subscribers (add/update/unsubscribe/delete), segments, and draft campaigns; sending a campaign delivers real email to real recipients",
+    "approval": "required for campaign-send and subscriber-delete actions; list/segment/subscriber-add/update mutations are lower risk"
   }
 }

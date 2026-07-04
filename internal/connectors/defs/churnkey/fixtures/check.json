@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/sessions" },
+  "request": { "method": "GET", "path": "/v1/data/sessions" },
   "response": {
     "status": 200,
     "body": []

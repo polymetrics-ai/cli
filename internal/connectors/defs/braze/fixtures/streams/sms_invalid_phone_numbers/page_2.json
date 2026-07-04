@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sms/invalid_phone_numbers",
+    "query": {
+      "offset": "100",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sms": [
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:01:01Z",
+          "reason": "deactivated"
+        }
+      ],
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/api/2/taxonomy/category" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        { "id": 2001, "name": "Attribution" },
+        { "id": 2002, "name": "Conversion" }
+      ]
+    }
+  }
+}

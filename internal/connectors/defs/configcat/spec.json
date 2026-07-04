@@ -19,6 +19,58 @@
       "default": "https://api.configcat.com",
       "description": "ConfigCat API base URL override for tests or proxies."
     },
+    "config_id": {
+      "type": "string",
+      "description": "ConfigCat config id; required for the config, settings, deleted_settings, and setting/sdk_keys/config_setting_values detail streams (the latter two also require environment_id)."
+    },
+    "environment_id": {
+      "type": "string",
+      "description": "ConfigCat environment id; required for the environment, sdk_keys, and config_setting_values detail streams."
+    },
+    "setting_id": {
+      "type": "string",
+      "description": "ConfigCat setting (feature flag) id; required for the setting detail stream."
+    },
+    "segment_id": {
+      "type": "string",
+      "description": "ConfigCat segment id; required for the segment detail stream."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "ConfigCat webhook id; required for the webhook detail stream."
+    },
+    "permission_group_id": {
+      "type": "string",
+      "description": "ConfigCat permission group id; required for the permission_group detail stream."
+    },
+    "integration_id": {
+      "type": "string",
+      "description": "ConfigCat integration id; required for the integration detail stream."
+    },
+    "proxy_profile_id": {
+      "type": "string",
+      "description": "ConfigCat proxy profile id; required for the proxy_profile detail stream."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "ConfigCat organization id; required for the proxy_profiles and members streams."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "ConfigCat product id; required for the integrations and stale_flags detail streams (the configs/environments/tags/segments/webhooks/permission_groups/audit_logs streams instead fan out across every product automatically)."
+    },
+    "audit_log_config_id": {
+      "type": "string",
+      "description": "Optional configId query filter for the audit_logs stream."
+    },
+    "audit_log_environment_id": {
+      "type": "string",
+      "description": "Optional environmentId query filter for the audit_logs stream."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "ConfigCat tag id; required for the tag detail stream."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "ID": "sup_fixture_1",
+    "Status": "Active"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/supplier",
+    "body": {
+      "ID": "sup_fixture_1",
+      "Status": "Active"
+    }
+  }
+}

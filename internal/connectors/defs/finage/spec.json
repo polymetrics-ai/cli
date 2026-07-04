@@ -17,7 +17,17 @@
     },
     "symbols": {
       "type": "string",
-      "description": "Comma- or whitespace-separated stock ticker symbols to fan out over for the market_news stream (one GET /news/market/{symbol} request per symbol). Required for that stream only; the other 4 streams do not reference it."
+      "description": "Comma- or whitespace-separated stock ticker symbols to fan out over for the market_news stream (one GET /news/market/{symbol} request per symbol). Required for that stream only; the other streams do not reference it."
+    },
+    "calendar_from": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date (YYYY-MM-DD) for the earnings_calendar and ipo_calendar streams' required from/to date-range window. Required for those two streams only; the other streams do not reference it."
+    },
+    "calendar_to": {
+      "type": "string",
+      "format": "date",
+      "description": "End date (YYYY-MM-DD) for the earnings_calendar and ipo_calendar streams' required from/to date-range window. Required for those two streams only; the other streams do not reference it."
     },
     "mode": {
       "type": "string",

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "integration_filters",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "company_id": { "type": ["string", "null"] },
+    "integration_id": { "type": ["integer", "null"] },
+    "tracker_ids": { "type": ["array", "null"] },
+    "call_type": { "type": ["string", "null"] },
+    "min_duration": { "type": ["integer", "null"] },
+    "max_duration": { "type": ["integer", "null"] },
+    "lead_status": { "type": ["string", "integer", "null"] },
+    "integration_type": { "type": ["string", "null"] }
+  }
+}

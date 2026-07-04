@@ -1,0 +1,26 @@
+{
+  "record": {
+    "datetime": "2026-02-01T09:00:00-0800",
+    "appointmentTypeID": 42,
+    "calendarID": 7,
+    "firstName": "Fixture",
+    "lastName": "Client",
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/appointments",
+    "body": {
+      "datetime": "2026-02-01T09:00:00-0800",
+      "appointmentTypeID": 42,
+      "calendarID": 7,
+      "firstName": "Fixture",
+      "lastName": "Client",
+      "email": "fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 1001, "firstName": "Fixture", "lastName": "Client" }
+  }
+}

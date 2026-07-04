@@ -1,0 +1,10 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "name": "Fixture Template"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/org_1/configTemplates"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/group/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "group_1", "name": "Fixture Group", "organization_id": "orga_fixture", "members": [] }
+      ]
+    }
+  }
+}

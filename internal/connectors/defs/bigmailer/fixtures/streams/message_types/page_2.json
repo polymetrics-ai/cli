@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_1/message-types", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "message_type_fixture_1", "brand_id": "brand_fixture_1", "type": "user", "name": "Fixture Newsletter", "created": 1767225601 }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

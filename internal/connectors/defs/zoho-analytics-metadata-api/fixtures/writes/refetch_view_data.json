@@ -1,0 +1,10 @@
+{
+  "record": {
+    "workspace_id": "ws_fixture_1",
+    "view_id": "view_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workspaces/ws_fixture_1/views/view_fixture_1/sync"
+  }
+}

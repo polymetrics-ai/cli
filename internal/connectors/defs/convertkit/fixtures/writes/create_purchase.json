@@ -1,0 +1,26 @@
+{
+  "record": {
+    "purchase": {
+      "transaction_id": "txn_fixture_new",
+      "email_address": "fixture@example.com",
+      "currency": "USD",
+      "products": [{ "name": "Fixture Product", "sku": "FIX-1", "unit_price": 10.0, "quantity": 1 }]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchases",
+    "body": {
+      "purchase": {
+        "transaction_id": "txn_fixture_new",
+        "email_address": "fixture@example.com",
+        "currency": "USD",
+        "products": [{ "name": "Fixture Product", "sku": "FIX-1", "unit_price": 10.0, "quantity": 1 }]
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "purchase": { "id": 4, "transaction_id": "txn_fixture_new" } }
+  }
+}

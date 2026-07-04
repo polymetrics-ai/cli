@@ -1,0 +1,190 @@
+{
+  "actions": [
+    {
+      "name": "create_or_update_product",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "family": { "type": ["string", "null"] },
+          "categories": { "type": "array", "items": { "type": "string" } },
+          "groups": { "type": "array", "items": { "type": "string" } },
+          "parent": { "type": ["string", "null"] },
+          "values": { "type": "object" },
+          "associations": { "type": "object" }
+        }
+      },
+      "risk": "creates a new product (201) or updates an existing one (204) in the connected Akeneo PIM catalog; visible to every downstream channel the product is enabled/categorized for"
+    },
+    {
+      "name": "create_or_update_category",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/categories/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "parent": { "type": ["string", "null"] },
+          "labels": { "type": "object" }
+        }
+      },
+      "risk": "creates or updates a category node; re-parenting an existing category changes the catalog tree for every product classified under it"
+    },
+    {
+      "name": "create_or_update_family",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/families/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "attribute_as_label": { "type": "string" },
+          "attribute_as_image": { "type": ["string", "null"] },
+          "attributes": { "type": "array", "items": { "type": "string" } },
+          "labels": { "type": "object" }
+        }
+      },
+      "risk": "creates or updates a product family definition; changes the required/optional attribute set for every product assigned to this family"
+    },
+    {
+      "name": "create_or_update_attribute",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/attributes/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "group": { "type": "string" },
+          "localizable": { "type": "boolean" },
+          "scopable": { "type": "boolean" },
+          "labels": { "type": "object" }
+        }
+      },
+      "risk": "creates a new attribute (schema mutation, affects every family/product referencing it) or updates an existing one's non-structural properties (labels/group); some attribute properties are immutable after creation per Akeneo's own API rules"
+    },
+    {
+      "name": "create_or_update_channel",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/channels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "currencies": { "type": "array", "items": { "type": "string" } },
+          "locales": { "type": "array", "items": { "type": "string" } },
+          "category_tree": { "type": "string" },
+          "labels": { "type": "object" }
+        }
+      },
+      "risk": "creates or updates a distribution channel; changes which locales/currencies/category tree every product exported to this channel uses"
+    },
+    {
+      "name": "create_or_update_product_model",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/product-models/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "family_variant": { "type": "string" },
+          "parent": { "type": ["string", "null"] },
+          "categories": { "type": "array", "items": { "type": "string" } },
+          "values": { "type": "object" }
+        }
+      },
+      "risk": "creates or updates a product model; a shared parent for variant products, changes propagate to every variant beneath it"
+    },
+    {
+      "name": "create_or_update_family_variant",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/family-variants/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "labels": { "type": "object" },
+          "variant_attribute_sets": { "type": "array" }
+        }
+      },
+      "risk": "creates or updates a family variant's axis/attribute-set structure; changes which attributes distinguish variant products under this family"
+    },
+    {
+      "name": "create_or_update_attribute_group",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/attribute-groups/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "attributes": { "type": "array", "items": { "type": "string" } },
+          "sort_order": { "type": "integer" },
+          "labels": { "type": "object" }
+        }
+      },
+      "risk": "creates or updates an attribute group; reorganizes attribute grouping in the PIM's data-entry UI, a low-risk organizational mutation"
+    },
+    {
+      "name": "create_or_update_association_type",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/api/rest/v1/association-types/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "labels": { "type": "object" },
+          "is_two_way": { "type": "boolean" }
+        }
+      },
+      "risk": "creates or updates an association type (e.g. cross-sell/up-sell relationship definition); low-risk organizational mutation, no product data changes on its own"
+    }
+  ]
+}

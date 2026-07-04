@@ -1,0 +1,8 @@
+{
+  "record": { "ID": "cat_fixture_1", "Name": "Fixture Category Renamed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/ref/category",
+    "body": { "ID": "cat_fixture_1", "Name": "Fixture Category Renamed" }
+  }
+}

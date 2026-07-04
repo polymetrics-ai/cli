@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/getHouseAccountList" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "accountID": "houseacct_fixture_1",
+          "propertyID": "prop_fixture_1",
+          "accountName": "Fixture House Account",
+          "accountStatus": "open",
+          "isPrivate": false,
+          "userName": null
+        }
+      ],
+      "count": 1
+    }
+  }
+}

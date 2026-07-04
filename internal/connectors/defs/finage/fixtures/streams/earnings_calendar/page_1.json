@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fnd/earning-calendar",
+    "query": { "from": "synthetic-conformance-value", "to": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "symbol": "AAPL", "date": "2026-01-15", "time": "amc", "eps": 1.5, "estimated_eps": 1.45, "revenue": 95000000000, "estimated_revenue": 94000000000 },
+      { "symbol": "MSFT", "date": "2026-01-16", "time": "bmo", "eps": null, "estimated_eps": 2.72, "revenue": null, "estimated_revenue": 61000000000 }
+    ]
+  }
+}

@@ -1,72 +1,112 @@
 # Overview
 
-Appfigures is a declarative-HTTP migration. It reads Appfigures app-store reviews, products, sales
-and ratings report aggregates, and store categories through the read-only Appfigures v2 REST API
-(`GET https://api.appfigures.com/v2/...`). This bundle targets full capability parity with
-`internal/connectors/appfigures` (the hand-written connector it migrates) across all 5 legacy
-streams; the legacy package stays registered and unchanged until wave6's registry flip.
+Appfigures is a declarative-HTTP connector for the Appfigures v2 REST API
+(`https://api.appfigures.com/v2/...`). It reads app-store reviews, tracked products, analytics
+report aggregates (sales, ratings, revenue, subscriptions, ads, download/revenue estimates),
+release-event markers, connected external store accounts, account users, account/usage info, and
+reference data (categories, countries, languages, currencies, stores, tracked SDKs), and it manages
+review responses and release-event markers through Pass B's full-surface expansion. This bundle
+originally targeted full capability parity with `internal/connectors/appfigures` (the hand-written
+connector it migrates) across its 5 legacy streams; the legacy package stays registered and
+unchanged until wave6's registry flip.
 
 ## Auth setup
 
 Provide an Appfigures Personal Access Token via the `api_key` secret; it is sent as a Bearer token
-(`Authorization: Bearer <api_key>`) and is never logged, matching legacy's
-`connsdk.Bearer(secret)` (`appfigures.go:299`). `base_url` defaults to `https://api.appfigures.com/v2`
-and may be overridden for tests/proxies.
+(`Authorization: Bearer <api_key>`) and is never logged. `base_url` defaults to
+`https://api.appfigures.com/v2` and may be overridden for tests/proxies. Every stream and write
+shares this one credential.
 
 ## Streams notes
 
-`reviews` is a `GET /reviews` list endpoint whose records live at the `reviews` body key, primary
-key `["id"]`. Pagination follows Appfigures' page-number convention (`pagination.type:
-page_number`, `page_param: page`, `size_param: count`, `page_size: 100`) — legacy's `readPaged`
-sends `count=<page_size>&page=<n>` and stops on `this_page >= pages` or a short page; the engine's
-`page_number` paginator stops purely on a short page (`recordCount < page_size`), which is
-behaviorally identical for every real Appfigures response (the API always returns exactly
-`count` records except on the final page) and is the same mapping already used for other
-page-number-paginated bundles in this repo (e.g. `appcues`). Optional per-request filters
-(`search_store` -> `store`, `group_by` -> `group_by`, `start_date` -> `start`, `end_date` -> `end`)
-are wired via the opt-in optional-query dialect (`omit_when_absent: true`), matching legacy's
-`appfiguresQuery` exactly: each is sent only when its config value is set, never as an empty
-string.
+18 streams, 3 shapes:
 
-`products`, `sales`, `ratings`, and `categories` all read a JSON object keyed by an arbitrary id
-(e.g. `products/mine` returns `{"111":{...},"222":{...}}`) and are unpaginated single-request
-reads (`pagination: {"type":"none"}` overrides the base's `page_number` block, matching legacy's
-`readKeyedObject`, which issues exactly one request per call). Each declares
-`records: {"path":"","keyed_object":true}` — the S4 engine mini-wave's keyed-object flatten
-primitive (`docs/migration/conventions.md` §3) — which explodes every value of the root object
-into its own record, exactly reproducing legacy's `flattenKeyedObject` (`appfigures.go:224`).
-`key_field` is intentionally left unset on all four: legacy's `flattenKeyedObject` never stamps
-the map key onto the record (each value object already carries its own natural id/date field —
-`id` for `products`, `date` for `sales`/`ratings`, `id` for `categories`), so setting `key_field`
-would add a field legacy never emits.
+**Paginated list** (`reviews`, `users`) — 1-based `page_number` pagination (`page_param: page`,
+`size_param: count`, `page_size: 100`), stopping on a short page.
+- `reviews` — `GET /reviews`, records at `reviews`, primary key `id`. Optional per-request filters
+  (`search_store` -> `store`, `group_by` -> `group_by`, `start_date` -> `start`, `end_date` -> `end`)
+  are wired via the opt-in optional-query dialect (`omit_when_absent: true`).
+- `users` — `GET /users`, records at `results` (the `metadata.resultset` envelope is not
+  projected), primary key `id`. Same `page`/`count` pagination params as the base spec, matching
+  the documented request shape exactly.
 
-- `products` — `GET /products/mine`, primary key `["id"]`; `sales`/`group_by`/`store`/date
-  filters do not apply to this endpoint (legacy sends none), so no `query` block is declared.
-- `sales` — `GET /reports/sales`, no primary key (matches legacy's `appfiguresSalesFields`, which
-  declares none — `date` alone is not guaranteed unique across products/stores in the real API).
-  Same optional `store`/`group_by`/`start`/`end` filters as `reviews`.
-- `ratings` — `GET /reports/ratings`, no primary key (matches legacy). Same optional filters as
-  `sales`.
-- `categories` — `GET /data/categories`, primary key `["id"]`; reference data, no date filters
-  (matches legacy, which sends no query params for this endpoint).
+**Keyed-object** (`products`, `sales`, `ratings`, `categories`, `events`, `external_accounts`,
+`data_countries`, `data_languages`, `data_stores`) — a single unpaginated request
+(`pagination: {"type":"none"}`) whose body is a JSON object keyed by an arbitrary id, exploded via
+`records: {"path":"","keyed_object":true}` (`docs/migration/conventions.md` §3). `key_field` is set
+only where the value objects don't already carry a field equal to the map key themselves
+(`data_countries` stamps `iso`, `data_stores` stamps a synthetic `store_key`); it is left unset on
+`products`/`sales`/`ratings`/`categories`/`events`/`external_accounts`/`data_languages` since each
+value object already has its own natural id/date/code field.
+- `products` — `GET /products/mine`, primary key `id`.
+- `sales` / `ratings` — `GET /reports/sales` / `/reports/ratings`, no primary key (`date` alone is
+  not guaranteed unique across products/stores). Optional `store`/`group_by`/`start`/`end` filters,
+  same as `reviews`.
+- `categories` — `GET /data/categories`, primary key `id`; reference data, no date filters.
+- `events` — `GET /events/`, primary key `id`; release/marketing markers overlaid on every
+  Appfigures analytics chart.
+- `external_accounts` — `GET /external_accounts`, primary key `id`; connected app-store developer
+  accounts.
+- `data_countries` — `GET /data/countries`, primary key `iso` (also the stamped `key_field`).
+- `data_languages` — `GET /data/languages`, primary key `code` (already present on each value).
+- `data_stores` — `GET /data/stores`, primary key `store_key` (a stamped synthetic key — the store
+  code, e.g. `apple`/`google_play`, since the value objects carry their own numeric `id` but no
+  field equal to the map key itself).
 
-None of the 5 streams are incremental — Appfigures' v2 API has no server-side cursor filter
-legacy uses (no `CursorFields` declared on any legacy stream).
+**Single-object** (`revenue`, `subscriptions`, `ads`, `estimates`, `account_info`) — a single
+unpaginated request whose entire response body IS one record (`records: {"path": ""}`, no
+`keyed_object`). `revenue`/`subscriptions`/`ads`/`estimates` share the same optional
+`store`/`start`/`end` filters as `sales`; each stamps a static-literal `report` field
+(`"revenue"`/`"subscriptions"`/`"ads"`/`"estimates"`) as its primary key, since these are
+account-wide aggregate totals with no natural id. **These 4 streams model the documented
+ungrouped-totals response shape only** — passing a `group_by` value restructures the response into
+a nested breakdown this schema does not project (see Known limits). `account_info` reads the root
+`GET /` endpoint (identity + daily API usage); `computed_fields` flattens the nested
+`user.{id,name,email}` and `usage.{daily_used,daily_limit}` objects onto the record's top level
+(typed bare-reference extraction keeps `user_id`/`daily_used`/`daily_limit` as native numbers),
+primary key `user_id`.
+
+`data_currencies` and `data_sdks` are plain top-level JSON arrays (`records: {"path": ""}`, no
+`keyed_object` — the response is already an array, not a keyed object), primary keys `Currency` and
+`id` respectively.
+
+None of the 18 streams are incremental — Appfigures' v2 API has no server-side cursor filter for
+any of them.
 
 ## Write actions & risks
 
-None. Legacy's `Write` unconditionally returns `connectors.ErrUnsupportedOperation`;
-`capabilities.write` is `false` and this bundle ships no `writes.json`.
+`capabilities.write: true`. 4 actions, all requiring reverse-ETL plan approval before executing
+(`metadata.json`'s `risk.approval`):
+
+- `reply_to_review` — `POST /reviews/{id}/response`, body `{content}`. Publishes a developer
+  response visible on the review's public app-store listing; Appfigures processes this
+  asynchronously (`202 Accepted`).
+- `create_event` / `update_event` / `delete_event` — `POST`/`PUT`/`DELETE /events/[{id}]`. Manages
+  release/marketing event markers that appear overlaid on every analytics chart for the account;
+  `delete_event` returns `204 No Content` on success.
 
 ## Known limits
 
-- `page_size`/`max_pages` config overrides legacy exposes for `reviews` (`appfiguresPageSize`/
-  `appfiguresMaxPages`, clamped 1-500 / `all`/`unlimited`) are not runtime-configurable here: the
-  engine's `page_number` paginator's `PageSize` is a static int set once in `streams.json`, not
-  template-resolvable, and `PaginationSpec` has no `MaxPages` field read by this paginator type
-  wired to a config knob. `spec.json` intentionally does not declare `page_size`/`max_pages` (a
-  declared-but-unwireable key is worse than an absent one, per conventions.md F6).
-- The keyed-object streams (`products`/`sales`/`ratings`/`categories`) are read in a single
-  request with no bound on response size, matching legacy exactly (legacy's `readKeyedObject` has
-  no pagination or size cap either — Appfigures' report endpoints return their entire result set
-  in one body).
+- `page_size`/`max_pages` config overrides legacy exposes for `reviews` are not runtime-configurable
+  here: the engine's `page_number` paginator's `PageSize` is a static int set once in
+  `streams.json`, not template-resolvable. `spec.json` intentionally does not declare
+  `page_size`/`max_pages` (a declared-but-unwireable key is worse than an absent one).
+- The keyed-object and single-object streams are read in a single request with no bound on
+  response size — Appfigures' report/reference endpoints return their entire result set in one
+  body, with no pagination affordance to bound it.
+- `revenue`/`subscriptions`/`ads`/`estimates` model the ungrouped-totals response shape only: if an
+  operator sets `group_by` (a config value shared with `sales`/`ratings`, which DOES support
+  grouping), Appfigures restructures the response into a nested per-dimension breakdown these 4
+  streams' schemas do not project — the emitted record would be empty/malformed. This connector
+  does not currently guard against that misconfiguration; operators reading these 4 streams should
+  leave `group_by` unset.
+- `/reports/adspend`, `/reports/payments`, and the report-style `/reports/usage` (distinct from the
+  account-level `/usage` surfaced via `account_info`) are out of scope: no fixture-verifiable
+  ungrouped-totals response shape could be confirmed against the live documentation during this
+  research pass, unlike `revenue`/`subscriptions`/`ads`/`estimates`, whose flat-object shape is
+  explicitly documented.
+- Path-templated resources requiring an already-known product id and/or explicit date-range path
+  segments (`ranks`, `ranks/snapshots`, `aso`, `aso/stats`, `featured/*`, `products/{id}/sdks`) are
+  out of scope for this wave — a fan_out over the `products` stream's ids could reach some of these
+  in a future capability expansion, but was not prioritized here. See `api_surface.json` for the
+  full per-endpoint rationale.

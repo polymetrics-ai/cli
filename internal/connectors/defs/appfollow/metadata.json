@@ -1,20 +1,21 @@
 {
   "name": "appfollow",
   "display_name": "Appfollow",
-  "description": "Reads AppFollow account users, app collections, per-collection app lists, and per-app rating breakdowns through the AppFollow REST API v2 (config-list-driven fan-out for app_lists/ratings).",
+  "description": "Reads AppFollow account users, app collections, app lists, reviews, review summaries, ratings/ratings history, ASO keywords, rankings, and version/what's-new metadata through the AppFollow REST API v2 (config-list-driven fan-out per app/collection); writes review replies/tags/notes, ASO keyword edits, and account user/app/collection management actions.",
   "integration_type": "api",
-  "docs_url": "https://appfollow.docs.apiary.io/",
+  "docs_url": "https://docs.api.appfollow.io/reference/overview",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external AppFollow API read of account user and app collection data",
-    "approval": "none; read-only, no reverse-ETL writes"
+    "read": "external AppFollow API read of account, app collection, review, rating, and ASO data",
+    "write": "external mutations: posts public review replies, edits review tags/notes/custom-status, replaces tracked ASO keyword sets, and adds/updates/removes account users, app collections, and tracked apps",
+    "approval": "required for every write action; each is flagged high-visibility (public review reply) or irreversible (collection/app/user removal) in writes.json's per-action risk field"
   }
 }

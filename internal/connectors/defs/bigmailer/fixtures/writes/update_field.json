@@ -1,0 +1,14 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "id": "field_fixture_1",
+    "name": "Updated Fixture Field"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/fields/field_fixture_1",
+    "body": {
+      "name": "Updated Fixture Field"
+    }
+  }
+}

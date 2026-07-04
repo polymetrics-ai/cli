@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "group_subjects",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "group_subject_id": { "type": ["string", "null"] },
+    "member_subject_id": { "type": ["string", "null"] },
+    "membership_start_date": { "type": ["string", "null"] },
+    "membership_end_date": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

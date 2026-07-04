@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/agr_fixture_1/members"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "user": { "id": 7, "email": "fixture@example.com", "name": "Fixture User" },
+        "permission": "READ_WRITE",
+        "status": "ACTIVE",
+        "lastAccessAt": 1735689600000,
+        "relation": "OWNER",
+        "userSignStatus": "NOT_REQUIRED"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/user"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "studyUsers": [
+          {
+            "id": "user_fixture_1",
+            "email_address": "fixture1@example.com",
+            "first_name": "Fixture",
+            "last_name": "One",
+            "full_name": "Fixture One",
+            "institute_roles": [
+              {
+                "institute_id": "inst_fixture_1",
+                "role_id": "role_fixture_1"
+              }
+            ],
+            "manage_permission": "none"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1
+    }
+  }
+}

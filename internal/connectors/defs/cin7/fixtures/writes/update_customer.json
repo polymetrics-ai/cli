@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ID": "cust_fixture_1",
+    "Status": "Active",
+    "Discount": 5
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customer",
+    "body": {
+      "ID": "cust_fixture_1",
+      "Status": "Active",
+      "Discount": 5
+    }
+  }
+}

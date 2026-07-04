@@ -8,7 +8,7 @@
     "auth": [
       { "mode": "api_key_header", "header": "x-ck-api-key", "value": "{{ secrets.api_key }}" }
     ],
-    "check": { "method": "GET", "path": "/sessions" },
+    "check": { "method": "GET", "path": "/v1/data/sessions" },
     "error_map": [
       { "status": 401, "hint": "churnkey api_key is missing or invalid; re-run pm credentials add churnkey" },
       { "status": 403, "hint": "churnkey credentials lack access for this request" },
@@ -18,7 +18,7 @@
   "streams": [
     {
       "name": "sessions",
-      "path": "/sessions",
+      "path": "/v1/data/sessions",
       "records": { "path": "." },
       "pagination": {
         "type": "offset_limit",
@@ -49,7 +49,7 @@
     },
     {
       "name": "session_aggregation",
-      "path": "/session-aggregation",
+      "path": "/v1/data/session-aggregation",
       "records": { "path": "." },
       "computed_fields": {
         "count": "{{ record.count }}",

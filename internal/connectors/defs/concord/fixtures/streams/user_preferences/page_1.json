@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/user/me/preferences"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "mobile": null,
+      "mobileCode": null,
+      "deadlinesNotificationDays": 7,
+      "deadlinesNotificationEnabled": true,
+      "name": "Fixture User",
+      "language": "en",
+      "phone": null,
+      "phoneCode": null,
+      "dateFormat": "MM/DD/YYYY"
+    }
+  }
+}

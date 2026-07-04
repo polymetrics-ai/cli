@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/search",
+    "query": {
+      "part": "snippet",
+      "maxResults": "50",
+      "type": "video",
+      "q": "synthetic-conformance-value",
+      "channelId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": { "kind": "youtube#video", "videoId": "vid_fixture_1" },
+          "snippet": { "title": "Fixture Search Result One", "publishedAt": "2026-01-01T00:00:00Z" }
+        },
+        {
+          "id": { "kind": "youtube#video", "videoId": "vid_fixture_2" },
+          "snippet": { "title": "Fixture Search Result Two", "publishedAt": "2026-01-02T00:00:00Z" }
+        }
+      ]
+    }
+  }
+}

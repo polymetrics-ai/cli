@@ -1,0 +1,16 @@
+{
+  "record": {
+    "email": "fixture.gdpr@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gdpr/delete",
+    "body": {
+      "email": "fixture.gdpr@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "processing" }
+  }
+}

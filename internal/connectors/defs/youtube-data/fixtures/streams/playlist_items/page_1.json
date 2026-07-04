@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/playlistItems",
+    "query": {
+      "part": "snippet,contentDetails",
+      "maxResults": "50",
+      "playlistId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "pli_fixture_1",
+          "snippet": { "title": "Fixture Playlist Item One", "publishedAt": "2026-01-01T00:00:00Z" },
+          "contentDetails": { "videoId": "vid_fixture_1" }
+        },
+        {
+          "id": "pli_fixture_2",
+          "snippet": { "title": "Fixture Playlist Item Two", "publishedAt": "2026-01-02T00:00:00Z" },
+          "contentDetails": { "videoId": "vid_fixture_2" }
+        }
+      ]
+    }
+  }
+}

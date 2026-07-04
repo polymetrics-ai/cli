@@ -1,14 +1,14 @@
 {
   "name": "drift",
   "display_name": "Drift",
-  "description": "Reads Drift users, accounts, conversations, and contacts through the Drift REST API.",
+  "description": "Reads Drift users, accounts, conversations, contacts, and teams, and writes contact/account/message/conversation/timeline-event/GDPR mutations through the Drift REST API.",
   "integration_type": "api",
   "docs_url": "https://devdocs.drift.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 65
   },
   "risk": {
-    "read": "external Drift API read of conversational-marketing users, accounts, conversations, and contacts"
+    "read": "external Drift API read of conversational-marketing users, accounts, conversations, contacts, and teams",
+    "write": "external Drift API mutation of contacts, accounts, conversations, messages, timeline events, and GDPR data-subject requests; delete_contact/delete_account/gdpr_delete are destructive and require approval",
+    "approval": "required for delete_contact, delete_account, and gdpr_delete; other create/update writes are lower-risk marketing/support-data mutations"
   }
 }

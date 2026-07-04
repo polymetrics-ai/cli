@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "survey_packages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "expire_after_hours": { "type": ["integer", "null"] },
+    "auto_send": { "type": ["boolean", "null"] },
+    "auto_lock_on_finish": { "type": ["boolean", "null"] }
+  }
+}

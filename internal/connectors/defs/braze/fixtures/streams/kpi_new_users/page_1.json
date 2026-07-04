@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/kpi/new_users/data_series", "query": { "length": "14" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "data": [
+        { "time": "2026-01-01T00:00:00Z", "new_users": 50 },
+        { "time": "2026-01-02T00:00:00Z", "new_users": 55 }
+      ]
+    }
+  }
+}

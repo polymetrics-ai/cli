@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "email_hard_bounces",
+  "type": "object",
+  "x-primary-key": ["email", "hard_bounced_at"],
+  "x-cursor-field": "hard_bounced_at",
+  "required": ["email"],
+  "properties": {
+    "email": { "type": "string" },
+    "hard_bounced_at": { "type": ["string", "null"] }
+  }
+}

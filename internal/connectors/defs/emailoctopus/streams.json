@@ -45,6 +45,35 @@
       "query": { "limit": "100" },
       "records": { "path": "data" },
       "schema": "schemas/list_contacts.json"
+    },
+    {
+      "name": "list_tags",
+      "path": "/lists/{{ config.list_id }}/tags",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/list_tags.json"
+    },
+    {
+      "name": "campaign_summary_reports",
+      "path": "/campaigns/{{ fanout.id }}/reports/summary",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/campaigns", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "campaign_id" },
+        "stamp_field": "campaign_id"
+      },
+      "computed_fields": {
+        "bounced_hard": "{{ record.bounced.hard }}",
+        "bounced_soft": "{{ record.bounced.soft }}",
+        "opened_total": "{{ record.opened.total }}",
+        "opened_unique": "{{ record.opened.unique }}",
+        "clicked_total": "{{ record.clicked.total }}",
+        "clicked_unique": "{{ record.clicked.unique }}"
+      },
+      "schema": "schemas/campaign_summary_reports.json"
     }
   ]
 }

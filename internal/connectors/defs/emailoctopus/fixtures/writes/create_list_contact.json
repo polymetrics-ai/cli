@@ -1,0 +1,19 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "email_address": "fixture-new@example.com",
+    "status": "SUBSCRIBED"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/list_fixture_1/contacts",
+    "body": {
+      "email_address": "fixture-new@example.com",
+      "status": "SUBSCRIBED"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "contact_fixture_new", "email_address": "fixture-new@example.com", "status": "SUBSCRIBED" }
+  }
+}

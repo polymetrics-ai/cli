@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/customer-groups", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        { "customerGroupNumber": 1, "name": "Fixture Group 1", "self": "https://restapi.e-conomic.com/customer-groups/1" },
+        { "customerGroupNumber": 2, "name": "Fixture Group 2", "self": "https://restapi.e-conomic.com/customer-groups/2" }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

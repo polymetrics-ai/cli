@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "ld_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/log-drains/ld_fixture_1"
+  }
+}

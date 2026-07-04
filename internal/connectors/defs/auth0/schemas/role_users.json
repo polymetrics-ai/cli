@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "role_users",
+  "type": "object",
+  "x-primary-key": ["role_id", "user_id"],
+  "required": ["role_id", "user_id"],
+  "properties": {
+    "role_id": { "type": "string" },
+    "user_id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "picture": { "type": ["string", "null"] }
+  }
+}

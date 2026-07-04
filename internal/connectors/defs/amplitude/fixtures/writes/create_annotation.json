@@ -1,0 +1,22 @@
+{
+  "record": {
+    "label": "Fixture Launch",
+    "start": "2026-01-01T00:00:00Z",
+    "category": "release",
+    "details": "fixture annotation created by conformance"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/3/annotations",
+    "body": {
+      "label": "Fixture Launch",
+      "start": "2026-01-01T00:00:00Z",
+      "category": "release",
+      "details": "fixture annotation created by conformance"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": 5001, "label": "Fixture Launch", "start": "2026-01-01T00:00:00Z" } }
+  }
+}

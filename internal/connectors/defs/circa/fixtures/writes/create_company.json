@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Co",
+    "website": "https://fixture-co.example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies"
+  }
+}

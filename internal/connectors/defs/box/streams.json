@@ -51,6 +51,91 @@
       "path": "/folders/{{ config.folder_id }}/items",
       "records": { "path": "entries" },
       "schema": "schemas/folder_items.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "marker",
+        "token_path": "next_marker"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "retention_policies",
+      "path": "/retention_policies",
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "marker",
+        "token_path": "next_marker"
+      },
+      "schema": "schemas/retention_policies.json"
+    },
+    {
+      "name": "legal_hold_policies",
+      "path": "/legal_hold_policies",
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "marker",
+        "token_path": "next_marker"
+      },
+      "schema": "schemas/legal_hold_policies.json"
+    },
+    {
+      "name": "storage_policies",
+      "path": "/storage_policies",
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "marker",
+        "token_path": "next_marker"
+      },
+      "schema": "schemas/storage_policies.json"
+    },
+    {
+      "name": "sign_requests",
+      "path": "/sign_requests",
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "marker",
+        "token_path": "next_marker"
+      },
+      "schema": "schemas/sign_requests.json"
+    },
+    {
+      "name": "terms_of_services",
+      "path": "/terms_of_services",
+      "records": { "path": "entries" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/terms_of_services.json"
+    },
+    {
+      "name": "metadata_templates",
+      "path": "/metadata_templates/enterprise",
+      "records": { "path": "entries" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "marker",
+        "token_path": "next_marker"
+      },
+      "computed_fields": {
+        "template_key": "{{ record.templateKey }}",
+        "display_name": "{{ record.displayName }}",
+        "copy_instance_on_item_copy": "{{ record.copyInstanceOnItemCopy }}"
+      },
+      "schema": "schemas/metadata_templates.json"
+    },
+    {
+      "name": "pending_collaborations",
+      "path": "/collaborations",
+      "query": { "status": "pending" },
+      "records": { "path": "entries" },
+      "schema": "schemas/pending_collaborations.json"
     }
   ]
 }

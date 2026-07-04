@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/insights", "query": { "limit": "100", "level": "ad", "fields": "campaign_id,campaign_name,adset_id,adset_name,ad_id,ad_name,impressions,clicks,spend,reach,frequency,cpc,cpm,ctr,date_start,date_stop", "date_preset": "last_30d" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "campaign_id": "campaign_fixture_1", "campaign_name": "Fixture Campaign 1", "adset_id": "adset_fixture_1", "adset_name": "Fixture Ad Set 1", "ad_id": "ad_fixture_1", "ad_name": "Fixture Ad 1", "impressions": "1000", "clicks": "50", "spend": "25.50", "reach": "900", "frequency": "1.11", "cpc": "0.51", "cpm": "25.50", "ctr": "5.0", "date_start": "2026-01-01", "date_stop": "2026-01-30" },
+        { "campaign_id": "campaign_fixture_1", "campaign_name": "Fixture Campaign 1", "adset_id": "adset_fixture_2", "adset_name": "Fixture Ad Set 2", "ad_id": "ad_fixture_2", "ad_name": "Fixture Ad 2", "impressions": "800", "clicks": "20", "spend": "15.00", "reach": "700", "frequency": "1.14", "cpc": "0.75", "cpm": "18.75", "ctr": "2.5", "date_start": "2026-01-01", "date_stop": "2026-01-30" }
+      ],
+      "paging": {}
+    }
+  }
+}

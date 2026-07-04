@@ -1,0 +1,14 @@
+{
+  "record": {
+    "customerId": "cus_fixture_1",
+    "customerData": { "plan": "pro", "monthlyActiveUsers": 47 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/api/events/customer-update",
+    "body": {
+      "customerId": "cus_fixture_1",
+      "customerData": { "plan": "pro", "monthlyActiveUsers": 47 }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account_activities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "account_id": { "type": ["string", "null"] },
+    "activity_type": { "type": ["string", "null"] },
+    "activity_sub_type": { "type": ["string", "null"] },
+    "order_id": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "side": { "type": ["string", "null"] },
+    "qty": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "cum_qty": { "type": ["string", "null"] },
+    "leaves_qty": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "transaction_time": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "net_amount": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "cusip": { "type": ["string", "null"] },
+    "per_share_amount": { "type": ["string", "null"] }
+  }
+}

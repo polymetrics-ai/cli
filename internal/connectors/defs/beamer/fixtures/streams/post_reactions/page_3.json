@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/posts/post_fixture_2/reactions", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

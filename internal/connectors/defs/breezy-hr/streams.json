@@ -65,6 +65,54 @@
         "stage": "{{ record.stage.name }}"
       },
       "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "custom_attributes_candidate",
+      "path": "/custom-attributes/candidate",
+      "records": { "path": "." },
+      "schema": "schemas/custom_attributes_candidate.json"
+    },
+    {
+      "name": "custom_attributes_position",
+      "path": "/custom-attributes/position",
+      "records": { "path": "." },
+      "schema": "schemas/custom_attributes_position.json"
+    },
+    {
+      "name": "questionnaires",
+      "path": "/questionnaires",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/questionnaires.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/templates.json"
     }
   ]
 }

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stablecoinchains"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "totalCirculatingUSD": { "peggedUSD": 5000000.0 },
+        "name": "Fixture Chain One"
+      },
+      {
+        "totalCirculatingUSD": { "peggedUSD": 1200000.0 },
+        "name": "Fixture Chain Two"
+      }
+    ]
+  }
+}

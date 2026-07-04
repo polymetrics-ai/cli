@@ -1,0 +1,18 @@
+{
+  "record": {
+    "target_url": "https://example.com/fixture/webhook",
+    "event": { "name": "subscriber.tag_add", "tag_id": 100 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/automations/hooks",
+    "body": {
+      "target_url": "https://example.com/fixture/webhook",
+      "event": { "name": "subscriber.tag_add", "tag_id": 100 }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "rule": { "id": 500, "target_url": "https://example.com/fixture/webhook" } }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "accountId": "acct_fixture_1",
+    "ownerId": 42,
+    "name": "Fixture Acme Updated",
+    "targeted": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/update",
+    "body": {
+      "accountId": "acct_fixture_1",
+      "ownerId": 42,
+      "name": "Fixture Acme Updated",
+      "targeted": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "accountId": "acct_fixture_1", "name": "Fixture Acme Updated" } }
+  }
+}

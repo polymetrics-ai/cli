@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "global_metrics_quotes_historical",
+  "type": "object",
+  "x-primary-key": ["timestamp"],
+  "properties": {
+    "timestamp": { "type": ["string", "null"] },
+    "btc_dominance": { "type": ["number", "null"] },
+    "eth_dominance": { "type": ["number", "null"] },
+    "active_cryptocurrencies": { "type": ["integer", "null"] },
+    "active_exchanges": { "type": ["integer", "null"] },
+    "active_market_pairs": { "type": ["integer", "null"] },
+    "quote": { "type": ["object", "null"] }
+  }
+}

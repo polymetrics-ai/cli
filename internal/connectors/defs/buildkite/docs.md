@@ -1,10 +1,11 @@
 # Overview
 
-Buildkite is a wave2 fan-out declarative-HTTP migration. It reads Buildkite organizations,
-pipelines, builds, and agents through the Buildkite REST API v2
-(`GET https://api.buildkite.com/v2/...`). This bundle migrates `internal/connectors/buildkite` (the
-hand-written connector); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Buildkite is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full practical
+read/write surface. It reads Buildkite organizations, pipelines, builds, agents, teams, and
+clusters through the Buildkite REST API v2 (`https://api.buildkite.com/v2/...`), and writes
+pipeline/build/job/agent/team lifecycle mutations. This bundle originally migrated
+`internal/connectors/buildkite` (the hand-written connector, read-only); the legacy package stays
+registered and unchanged until wave6's registry flip.
 
 ## Auth setup
 
@@ -41,11 +42,38 @@ branch. `organizations`, `pipelines`, and `agents` declare no `incremental` bloc
 (the `created_from` param is attached to `builds` only; legacy's own comment: "for other streams
 the param is ignored harmlessly by the API but we only attach it to builds").
 
+**Pass B additions.** `teams` (`GET /organizations/{{ config.organization }}/teams`) and `clusters`
+(`GET /organizations/{{ config.organization }}/clusters`) follow the identical org-scoped,
+`link_header`-paginated, top-level-JSON-array shape as `pipelines`/`agents` — no incremental
+cursor (neither endpoint accepts a server-side modified-since filter), `x-cursor-field: created_at`
+declared in each schema for catalog purposes only (§8 rule 2).
+
 ## Write actions & risks
 
-None. Buildkite is read-only in this connector (legacy's own `Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+Seventeen write actions, none present in legacy (legacy shipped `capabilities.write: false`):
+
+- **`create_pipeline`** / **`update_pipeline`** / **`archive_pipeline`** / **`unarchive_pipeline`**
+  / **`delete_pipeline`** — pipeline lifecycle. `create_pipeline` requires `cluster_id` (Buildkite's
+  own API marks it required regardless of whether the org uses multiple clusters); changing
+  `configuration`/`repository` via `update_pipeline` affects every future build; `delete_pipeline`
+  is irreversible.
+- **`create_build`** / **`cancel_build`** / **`rebuild_build`** — build lifecycle. `create_build`
+  and `rebuild_build` both run arbitrary pipeline-defined commands on real agent capacity the
+  instant they're accepted — the highest-consequence writes in this bundle; `cancel_build`
+  terminates any in-progress jobs immediately.
+- **`create_annotation`** — posts an HTML/Markdown annotation onto a build's detail page (no
+  delete/list write modeled; see Known limits' fan_out ENGINE_GAP below for why list/delete by
+  uuid aren't reachable).
+- **`retry_job`** / **`unblock_job`** — job control. Both require a `job_id` the caller already has
+  in hand (e.g. from a build record's embedded `jobs[]` array read externally) since no stream
+  enumerates jobs directly (Buildkite has no top-level jobs-list endpoint).
+- **`stop_agent`** / **`pause_agent`** / **`resume_agent`** — agent lifecycle. `stop_agent` with
+  `force: true` cancels whatever job the agent is currently processing.
+- **`create_team`** / **`update_team`** / **`delete_team`** — team lifecycle. `delete_team` is
+  irreversible and detaches every pipeline/member association the team held.
+
+Every action's per-record `risk` string in `writes.json` is the authoritative, reviewable summary;
+`metadata.json`'s `risk.write`/`risk.approval` roll these up for the connector as a whole.
 
 ## Known limits
 
@@ -81,3 +109,19 @@ None. Buildkite is read-only in this connector (legacy's own `Write` returns
   markers stamped only under `config.mode == "fixture"`) are not modeled; this bundle's schemas and
   parity target the live wire shape only, matching this repo's established convention for a legacy
   in-code fixture path now superseded by the engine's own conformance/fixture-replay harness.
+- **`ENGINE_GAP`: annotations and artifacts cannot be read as streams because their path needs a
+  two-level fan-out the dialect only supports one level of.** Both resources live at
+  `/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations` (or
+  `/artifacts`) — three path variables deep, where `pipeline.slug` and `build.number` both vary per
+  record and neither is a fixed config value. `engine.FanOutSpec` (bundle.go) resolves EXACTLY ONE
+  parent id list per stream declaration (`ids_from` is either one `config_key` or one preliminary
+  `request`, substituted into ONE `path_var`/`query_param`) — there is no way to declare "first
+  enumerate pipelines, then for each pipeline enumerate its builds, then for each build read
+  annotations" in a single `fan_out` block; that would require chaining two independent fan-outs,
+  which the dialect does not support. `create_annotation` IS modeled as a write action despite this,
+  since a write only needs the caller to SUPPLY a `pipeline_slug`/`build_number` pair on the record
+  (no read-side enumeration required) — only the READ (list) side and any write requiring a
+  discovered id (delete-by-`annotation.uuid`) are blocked. Closing this properly needs either a
+  chained/nested `fan_out` dialect addition or a dedicated multi-level `StreamHook` — out of scope
+  for a Pass B connector-only expansion per this task's own instructions (no engine changes, no new
+  hook packages).

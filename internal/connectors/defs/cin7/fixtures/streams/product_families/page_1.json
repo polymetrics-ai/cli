@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/productFamily", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "ProductFamilies": [
+        {
+          "ID": "family_fixture_1",
+          "SKU": "FAM-1",
+          "Name": "Fixture Family One",
+          "Category": "Fixtures",
+          "Brand": "Acme",
+          "UOM": "ea",
+          "LastModifiedOn": "2026-01-01T00:00:00Z"
+        },
+        {
+          "ID": "family_fixture_2",
+          "SKU": "FAM-2",
+          "Name": "Fixture Family Two",
+          "Category": "Fixtures",
+          "Brand": "Acme",
+          "UOM": "ea",
+          "LastModifiedOn": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

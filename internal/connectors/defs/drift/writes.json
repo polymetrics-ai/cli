@@ -1,0 +1,221 @@
+{
+  "actions": [
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["attributes"],
+        "properties": {
+          "attributes": {
+            "type": "object",
+            "required": ["email"],
+            "properties": {
+              "email": { "type": "string" },
+              "externalId": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new Drift contact record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "attributes"],
+        "properties": {
+          "id": { "type": "integer" },
+          "attributes": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing Drift contact's attributes, including standard fields (email/name/phone) and any custom attribute; external mutation, approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a Drift contact and its conversation history association; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_timeline_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/timeline",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["contactId", "event"],
+        "properties": {
+          "contactId": { "type": "integer" },
+          "externalId": { "type": "string" },
+          "event": { "type": "string" },
+          "createdAt": { "type": "integer" },
+          "attributes": { "type": "object" }
+        }
+      },
+      "risk": "posts a custom timeline event onto a contact's record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ownerId", "domain"],
+        "properties": {
+          "ownerId": { "type": "integer" },
+          "domain": { "type": "string" },
+          "name": { "type": "string" },
+          "targeted": { "type": "boolean" },
+          "customProperties": { "type": "array" }
+        }
+      },
+      "risk": "creates a new Drift account (company) record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["accountId", "ownerId"],
+        "properties": {
+          "accountId": { "type": "string" },
+          "ownerId": { "type": "integer" },
+          "domain": { "type": "string" },
+          "name": { "type": "string" },
+          "targeted": { "type": "boolean" },
+          "customProperties": { "type": "array" }
+        }
+      },
+      "risk": "mutates an existing Drift account's owner/name/domain/targeting/custom properties; external mutation, approval required"
+    },
+    {
+      "name": "delete_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}",
+      "path_fields": ["account_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["account_id"],
+        "properties": {
+          "account_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a Drift account record; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/messages",
+      "path_fields": ["conversation_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["conversation_id", "type"],
+        "properties": {
+          "conversation_id": { "type": "integer" },
+          "type": { "type": "string" },
+          "body": { "type": "string" },
+          "userId": { "type": "integer" },
+          "buttons": { "type": "array" }
+        }
+      },
+      "risk": "posts a message into a live Drift conversation, visible to the end customer when type is chat; external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/new",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "starts a new Drift conversation for the given contact email; external mutation, approval required"
+    },
+    {
+      "name": "gdpr_retrieve",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/gdpr/retrieve",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "triggers Drift to compile and email all data held for the given email address to the account's admin; a data-subject-access-request action, approval required"
+    },
+    {
+      "name": "gdpr_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/gdpr/delete",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "permanently erases every contact/user record matching the given email address from Drift; irreversible data-subject-erasure action, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

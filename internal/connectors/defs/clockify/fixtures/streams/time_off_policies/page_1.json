@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/time-off/policies", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "top_fixture_1",
+        "name": "Fixture Time Off Policy",
+        "workspaceId": "ws_fixture_1",
+        "archived": false,
+        "approve": true,
+        "allowHalfDay": true,
+        "allowNegativeBalance": false,
+        "automaticAccrual": null,
+        "automaticTimeEntryCreation": false,
+        "everyoneIncludingNew": true,
+        "negativeBalance": null,
+        "timeUnit": "DAYS",
+        "projectId": null,
+        "userIds": [],
+        "userGroupIds": []
+      }
+    ]
+  }
+}

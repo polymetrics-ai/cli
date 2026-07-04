@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/members",
+    "query": { "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "members": [
+        {
+          "type": "USER",
+          "user": { "id": 7, "email": "fixture@example.com", "name": "Fixture User" },
+          "createdAt": 1735689600000,
+          "organization": { "id": 42 },
+          "role": { "id": 1, "name": "Admin" },
+          "groups": [],
+          "userOrganizationId": 1,
+          "job": "CFO",
+          "isActive": true
+        }
+      ],
+      "totalCount": 1,
+      "limit": 100,
+      "start": 0
+    }
+  }
+}

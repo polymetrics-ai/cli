@@ -1,0 +1,9 @@
+{
+  "record": {
+    "key": "fixture_api_key_placeholder"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/api_key/fixture_api_key_placeholder"
+  }
+}

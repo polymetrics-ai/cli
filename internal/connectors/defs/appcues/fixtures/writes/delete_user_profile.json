@@ -1,0 +1,11 @@
+{
+  "record": { "user_id": "user_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/accounts/synthetic-conformance-value/users/user_fixture_1/profile"
+  },
+  "response": {
+    "status": 202,
+    "body": { "job_id": "job_fixture_delete_user", "job_url": "https://api.appcues.com/v2/accounts/synthetic-conformance-value/jobs/job_fixture_delete_user", "status": 202, "title": "Accepted" }
+  }
+}

@@ -1,0 +1,518 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sms/invalid_phone_numbers",
+    "query": {
+      "offset": "0",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sms": [
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:01Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:02Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:03Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:04Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:05Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:06Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:07Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:08Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:09Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:10Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:11Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:12Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:13Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:14Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:15Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:16Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:17Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:18Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:19Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:20Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:21Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:22Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:23Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:24Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:25Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:26Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:27Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:28Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:29Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:30Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:31Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:32Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:33Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:34Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:35Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:36Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:37Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:38Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:39Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:40Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:41Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:42Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:43Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:44Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:45Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:46Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:47Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:48Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:49Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:50Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:51Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:52Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:53Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:54Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:55Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:56Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:57Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:58Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:59Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:00Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:01Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:02Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:03Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:04Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:05Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:06Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:07Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:08Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:09Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:10Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:11Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:12Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:13Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:14Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:15Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:16Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:17Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:18Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:19Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:20Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:21Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:22Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:23Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:24Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:25Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:26Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:27Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:28Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:29Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:30Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550101",
+          "invalid_detected_at": "2026-01-01T00:00:31Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550102",
+          "invalid_detected_at": "2026-01-01T00:00:32Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550103",
+          "invalid_detected_at": "2026-01-01T00:00:33Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550104",
+          "invalid_detected_at": "2026-01-01T00:00:34Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550105",
+          "invalid_detected_at": "2026-01-01T00:00:35Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550106",
+          "invalid_detected_at": "2026-01-01T00:00:36Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550107",
+          "invalid_detected_at": "2026-01-01T00:00:37Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550108",
+          "invalid_detected_at": "2026-01-01T00:00:38Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550109",
+          "invalid_detected_at": "2026-01-01T00:00:39Z",
+          "reason": "provider_error"
+        },
+        {
+          "phone": "+15550100",
+          "invalid_detected_at": "2026-01-01T00:00:40Z",
+          "reason": "provider_error"
+        }
+      ],
+      "message": "success"
+    }
+  }
+}

@@ -1,17 +1,56 @@
 {
   "api": "Chift API (https://api.chift.eu)",
-  "docs": "https://docs.chift.eu/",
-  "reviewed_at": "2026-07-03",
-  "scope": "L-size fresh migration: the 3 legacy-parity read streams only; Chift's full financial-integration surface (invoices, payments, products, webhooks per-connector sub-APIs) is out of scope until Pass B, matching legacy's own read-only core-stream scoping",
+  "docs": "https://docs.chift.eu/api-reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion. Chift's core platform API (consumers, connections, syncs, integrations, webhooks, datastores) is fully documented at docs.chift.eu/api-reference; every per-connector unified sub-API (accounting, banking, invoicing, ecommerce, point-of-sale, pms, payment) is scoped under GET/POST /consumers/{consumer_id}/<api>/<resource> — confirmed against the live docs (e.g. GET /consumers/{consumer_id}/pos/orders, GET /consumers/{consumer_id}/accounting/suppliers/{supplier_id}), NOT the flat /<api>/{connectionId}/<resource> shape a prior draft of this file guessed. This bundle covers every practical GET list/detail resource and mutation in the CORE platform API (consumers/connections/syncs, already legacy-parity, plus integrations/datastores/webhooks reads and consumer create/update/delete writes). The per-connector unified sub-APIs are reviewed and intentionally deferred as a single documented ENGINE_GAP (see the accounting/pos/ecommerce/invoicing/banking/pms/payment entries below) rather than covered partially against one hardcoded consumer id, because every one of their list endpoints requires a fan_out over EVERY consumer id (this bundle's own consumers stream) and Chift's core consumer object is flat (no envelope), so fan_out.ids_from.request.id_field: \"consumerid\" IS mechanically expressible here (unlike chargify's enveloped product_family objects) — the real blocker is combinatorial scope (7 sub-APIs x 30-90 endpoints each x N consumers), not an engine limitation; a follow-up pass should pick ONE representative sub-API + a small number of its most valuable list endpoints per api, not all of them at once.",
   "endpoints": [
     { "method": "POST", "path": "/token", "excluded": { "category": "non_data_endpoint", "reason": "session-token exchange, not a syncable object stream; implemented via the chift AuthHook" } },
+
     { "method": "GET", "path": "/consumers", "covered_by": { "stream": "consumers" } },
+    { "method": "GET", "path": "/consumers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-consumer read is redundant with the consumers list stream, which already emits every field the detail endpoint returns" } },
+    { "method": "POST", "path": "/consumers", "covered_by": { "write": "create_consumer" } },
+    { "method": "PATCH", "path": "/consumers/{id}", "covered_by": { "write": "update_consumer" } },
+    { "method": "DELETE", "path": "/consumers/{id}", "covered_by": { "write": "delete_consumer" } },
+    { "method": "GET", "path": "/consumers/{id}/sync", "excluded": { "category": "duplicate_of", "reason": "per-consumer sync-status summary is a narrower view of the same data already emitted in full by the syncs stream (filterable client-side by consumerid)" } },
+    { "method": "GET", "path": "/consumers/{id}/executions", "excluded": { "category": "out_of_scope", "reason": "sync-execution run history is operational/observability log data (past job runs and their outcomes), not a durable business object comparable to the consumers/connections/syncs configuration streams this bundle covers" } },
+    { "method": "GET", "path": "/consumers/{id}/executions/{datastore}", "excluded": { "category": "out_of_scope", "reason": "per-execution datastore payload dump is transient job-run data tied to one specific historical execution, not a stable syncable collection" } },
+    { "method": "GET", "path": "/consumers/{id}/sync/url", "excluded": { "category": "non_data_endpoint", "reason": "generates a short-lived hosted onboarding URL/token for the consumer to complete activation, not a durable business-data record" } },
+
     { "method": "GET", "path": "/connections", "covered_by": { "stream": "connections" } },
+    { "method": "POST", "path": "/connections", "excluded": { "category": "out_of_scope", "reason": "adding a connection is an interactive OAuth/credential-linking flow (returns a redirect URL for the end user to complete authorization in Chift's UI), not a plain declarative JSON create this dialect's write model fits" } },
+    { "method": "PATCH", "path": "/connections/{id}", "excluded": { "category": "out_of_scope", "reason": "connection metadata updates are a narrow admin action with no legacy precedent; Pass B prioritizes the consumer object as the representative write target" } },
+    { "method": "DELETE", "path": "/connections/{id}", "excluded": { "category": "destructive_admin", "reason": "deleting a connection severs a consumer's link to their external financial system and can interrupt in-flight syncs; an irreversible account-structure action" } },
+    { "method": "GET", "path": "/connections/{id}/transaction", "excluded": { "category": "out_of_scope", "reason": "narrow per-connection diagnostic/transaction-log detail, not part of the core connection object this bundle's connections stream already covers" } },
+
     { "method": "GET", "path": "/syncs", "covered_by": { "stream": "syncs" } },
-    { "method": "GET", "path": "/consumers/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy itself never fanned out over per-consumer detail" } },
-    { "method": "POST", "path": "/consumers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only" } },
-    { "method": "GET", "path": "/accounting/{connectionId}/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-connector sub-API surface" } },
-    { "method": "GET", "path": "/commerce/{connectionId}/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-connector sub-API surface" } },
-    { "method": "GET", "path": "/pos/{connectionId}/payments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-connector sub-API surface" } }
+    { "method": "GET", "path": "/syncs/{id}", "excluded": { "category": "duplicate_of", "reason": "single-sync read is redundant with the syncs list stream" } },
+    { "method": "GET", "path": "/syncs/{id}/executions", "excluded": { "category": "out_of_scope", "reason": "sync-execution run history is operational/observability log data, not a durable business object" } },
+    { "method": "GET", "path": "/syncs/{id}/executions/{id}/timestamp", "excluded": { "category": "out_of_scope", "reason": "per-execution timestamp detail is transient job-run diagnostic data" } },
+    { "method": "POST", "path": "/syncs/{id}/flows/{flowId}/enable", "excluded": { "category": "out_of_scope", "reason": "enabling a specific sync flow for a consumer is a narrow per-flow configuration action, not a create/update of the sync object itself" } },
+    { "method": "POST", "path": "/syncs/{id}/flows/{flowId}/event", "excluded": { "category": "out_of_scope", "reason": "sending a custom flow event is an operational trigger action (event-sourcing shape), not an object CRUD mutation" } },
+    { "method": "PATCH", "path": "/syncs/{id}/flows/{flowId}/mappings", "excluded": { "category": "out_of_scope", "reason": "field-mapping configuration for a sync flow is narrow integration-setup metadata, not the sync object's own durable fields" } },
+    { "method": "PATCH", "path": "/syncs/{id}/flows/{flowId}/settings", "excluded": { "category": "out_of_scope", "reason": "per-flow settings configuration is narrow integration-setup metadata" } },
+
+    { "method": "GET", "path": "/integrations", "covered_by": { "stream": "integrations" } },
+    { "method": "GET", "path": "/integrations/{id}/logo", "excluded": { "category": "binary_payload", "reason": "returns a logo/icon image asset, not a structured JSON business record" } },
+
+    { "method": "GET", "path": "/datastores", "covered_by": { "stream": "datastores" } },
+
+    { "method": "GET", "path": "/webhooks", "covered_by": { "stream": "webhook_definitions" } },
+    { "method": "GET", "path": "/webhooks/instances", "excluded": { "category": "out_of_scope", "reason": "configured webhook-instance inventory is account-setup/subscription metadata (which events THIS account has subscribed a callback URL to), distinct from the catalog of possible webhook events already covered by the webhook_definitions stream; no legacy precedent" } },
+    { "method": "GET", "path": "/webhooks/{id}", "excluded": { "category": "duplicate_of", "reason": "single webhook-instance read is redundant with the webhooks/instances listing this pass does not otherwise cover" } },
+    { "method": "GET", "path": "/webhooks/{id}/logs", "excluded": { "category": "out_of_scope", "reason": "webhook delivery-log listing is operational/observability data (retry status of past deliveries), not a durable business object" } },
+    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "registering a new webhook instance (callback URL subscription) is account-configuration setup, not customer-facing business data" } },
+    { "method": "PATCH", "path": "/webhooks/{id}", "excluded": { "category": "out_of_scope", "reason": "same account-configuration scoping as webhook instance creation" } },
+    { "method": "DELETE", "path": "/webhooks/{id}", "excluded": { "category": "out_of_scope", "reason": "same account-configuration scoping as webhook instance creation" } },
+
+    { "method": "GET", "path": "/consumers/{consumer_id}/accounting/**", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP-adjacent scope decision (not a hard engine blocker — see api_surface.json's top-level scope note): Chift's Accounting unified API alone publishes ~50 endpoints (entries/journals/analytic-accounts/bank-accounts/invoices/clients/suppliers/vat-codes/bookyears/folders/etc.), every GET list requiring a fan_out over every consumer id connected via an 'Accounting' api connection AND practically also filterable by folder_id (multi-entity accounts). Reviewed and deliberately deferred in full rather than covering 1-2 endpoints against a single hardcoded consumer id, which would misrepresent 'accounting coverage' while leaving ~48 sibling endpoints unimplemented; a follow-up pass should size ONE sub-API (accounting is the largest and most legacy-relevant) as its own dedicated Pass-B-2 scope." } },
+    { "method": "GET", "path": "/consumers/{consumer_id}/banking/**", "excluded": { "category": "out_of_scope", "reason": "unified Banking API (accounts/institutions/transactions/counterparts) — same per-consumer fan_out scoping decision as accounting; deferred as a distinct, smaller follow-up sub-API pass" } },
+    { "method": "GET", "path": "/consumers/{consumer_id}/invoicing/**", "excluded": { "category": "out_of_scope", "reason": "unified Invoicing API (invoices/contacts/products/payments/taxes/opportunities) — same per-consumer fan_out scoping decision as accounting" } },
+    { "method": "GET", "path": "/consumers/{consumer_id}/ecommerce/**", "excluded": { "category": "out_of_scope", "reason": "unified eCommerce API (products/orders/customers/tax-rates) — same per-consumer fan_out scoping decision as accounting" } },
+    { "method": "GET", "path": "/consumers/{consumer_id}/pos/**", "excluded": { "category": "out_of_scope", "reason": "unified Point of Sale API (orders/customers/products/payments/sales/objectives/reports) — same per-consumer fan_out scoping decision as accounting" } },
+    { "method": "GET", "path": "/consumers/{consumer_id}/pms/**", "excluded": { "category": "out_of_scope", "reason": "unified Property Management System API (customers/orders/invoices/payments) — same per-consumer fan_out scoping decision as accounting" } },
+    { "method": "GET", "path": "/consumers/{consumer_id}/payment/**", "excluded": { "category": "out_of_scope", "reason": "unified Payment API (payments/refunds/balances/transactions) — same per-consumer fan_out scoping decision as accounting" } },
+    { "method": "POST", "path": "/consumers/{consumer_id}/*/**", "excluded": { "category": "out_of_scope", "reason": "every unified sub-API's create endpoints (accounting entries/journals/clients, invoicing invoices/contacts, ecommerce orders, pos customers, etc.) are deferred alongside their own sub-API's GET surface above — no sub-API is partially covered" } }
   ]
 }

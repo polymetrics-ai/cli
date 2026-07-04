@@ -1,0 +1,11 @@
+{
+  "record": { "rule_id": 500 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/automations/hooks/500"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reservation_notes",
+  "type": "object",
+  "x-primary-key": ["reservationNoteID"],
+  "required": ["reservationNoteID"],
+  "properties": {
+    "reservationNoteID": { "type": "string" },
+    "userName": { "type": ["string", "null"] },
+    "dateCreated": { "type": ["string", "null"] },
+    "dateModified": { "type": ["string", "null"] },
+    "reservationNote": { "type": ["string", "null"] },
+    "reservationID": { "type": ["string", "null"] }
+  }
+}

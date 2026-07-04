@@ -1,0 +1,50 @@
+{
+  "request": { "method": "GET", "path": "/accounts/activities", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "20260101000000000::act_fixture_1",
+        "account_id": "acct_fixture_1",
+        "activity_type": "FILL",
+        "activity_sub_type": "FILL",
+        "order_id": "order_fixture_1",
+        "symbol": "FIX1",
+        "side": "buy",
+        "qty": "1",
+        "price": "100.00",
+        "cum_qty": "1",
+        "leaves_qty": "0",
+        "type": "fill",
+        "transaction_time": "2026-01-01T00:00:00Z",
+        "date": "2026-01-01",
+        "net_amount": null,
+        "description": null,
+        "status": null,
+        "cusip": null,
+        "per_share_amount": null
+      },
+      {
+        "id": "20260102000000000::act_fixture_2",
+        "account_id": "acct_fixture_2",
+        "activity_type": "FILL",
+        "activity_sub_type": "FILL",
+        "order_id": "order_fixture_2",
+        "symbol": "FIX2",
+        "side": "sell",
+        "qty": "2",
+        "price": "200.00",
+        "cum_qty": "2",
+        "leaves_qty": "0",
+        "type": "fill",
+        "transaction_time": "2026-01-02T00:00:00Z",
+        "date": "2026-01-02",
+        "net_amount": null,
+        "description": null,
+        "status": null,
+        "cusip": null,
+        "per_share_amount": null
+      }
+    ]
+  }
+}

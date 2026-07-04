@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tax_rules",
+  "type": "object",
+  "x-primary-key": ["ID"],
+  "required": ["ID"],
+  "properties": {
+    "ID": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "Account": { "type": ["string", "null"] },
+    "IsActive": { "type": ["boolean", "null"] },
+    "TaxInclusive": { "type": ["boolean", "null"] },
+    "TaxPercent": { "type": ["number", "null"] },
+    "IsTaxForSale": { "type": ["boolean", "null"] },
+    "IsTaxForPurchase": { "type": ["boolean", "null"] },
+    "Components": { "type": ["array", "null"] }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/recentviews" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "summary": "Get recent views",
+      "data": {
+        "views": [
+          {
+            "viewId": "view_fixture_1",
+            "viewName": "Fixture Recent View",
+            "viewType": "Table",
+            "workspaceId": "ws_fixture_1",
+            "workspaceName": "Fixture Workspace",
+            "viewLastAccessedTime": "1767225601000"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "groups",
+  "type": "object",
+  "x-primary-key": ["groupCode"],
+  "required": ["groupCode"],
+  "properties": {
+    "groupCode": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "sourceID": { "type": ["string", "null"] },
+    "sourceName": { "type": ["string", "null"] },
+    "address1": { "type": ["string", "null"] },
+    "address2": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "zip": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "countryCode": { "type": ["string", "null"] },
+    "commissionType": { "type": ["string", "null"] },
+    "taxDocumentType": { "type": ["string", "null"] },
+    "taxIdNumber": { "type": ["string", "null"] },
+    "legalName": { "type": ["string", "null"] },
+    "contacts": { "type": ["array", "null"] }
+  }
+}

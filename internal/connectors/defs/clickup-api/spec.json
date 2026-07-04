@@ -17,11 +17,19 @@
     },
     "team_id": {
       "type": "string",
-      "description": "ClickUp team (workspace) id. Required for the 'spaces' and 'tasks' streams."
+      "description": "ClickUp team (workspace) id. Required for the 'spaces', 'tasks', 'goals', and 'webhooks' streams and the create_goal/create_space/create_webhook write actions."
     },
     "space_id": {
       "type": "string",
-      "description": "ClickUp space id. Required for the 'folders' and 'lists' streams."
+      "description": "ClickUp space id. Required for the 'folders', 'lists', and 'space_tags' streams and the create_folder write action."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "ClickUp list id. Required for the create_task write action (tasks are created within a specific List)."
+    },
+    "folder_id": {
+      "type": "string",
+      "description": "ClickUp folder id. Required for the create_list write action (Lists are created within a specific Folder)."
     },
     "include_archived": {
       "type": "string",

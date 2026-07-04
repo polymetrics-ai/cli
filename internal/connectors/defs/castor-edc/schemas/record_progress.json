@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "record_progress",
+  "type": "object",
+  "x-primary-key": ["record_id"],
+  "required": ["record_id"],
+  "properties": {
+    "record_id": { "type": "string" },
+    "steps": { "type": ["array", "null"] },
+    "progress": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "record": { "id": 9001 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/events/9001"
+  },
+  "response": { "status": 204, "body": {} }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "fixture-role",
+    "description": "Fixture role for conformance"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/roles",
+    "body": {
+      "name": "fixture-role",
+      "description": "Fixture role for conformance"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "rol_fixture_new",
+      "name": "fixture-role",
+      "description": "Fixture role for conformance"
+    }
+  }
+}

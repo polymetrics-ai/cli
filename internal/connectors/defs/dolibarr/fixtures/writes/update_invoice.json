@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "note_public": "Fixture note"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/1"
+  }
+}

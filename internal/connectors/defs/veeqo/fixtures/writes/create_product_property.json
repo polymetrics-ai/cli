@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture Property"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/product_properties"
+  }
+}

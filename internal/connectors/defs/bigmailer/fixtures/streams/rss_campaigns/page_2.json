@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_1/rss-campaigns", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "rss_campaign_fixture_1",
+          "brand_id": "brand_fixture_1",
+          "created": 1767225601,
+          "name": "Fixture RSS Campaign",
+          "subject": "Fixture RSS Subject",
+          "from": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "reply_to": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "segment_id": "segment_fixture_1",
+          "message_type_id": "message_type_fixture_1",
+          "list_ids": ["list_fixture_1"],
+          "excluded_list_ids": [],
+          "suppression_list_id": "suppression_list_fixture_1",
+          "feed_url": "https://example.com/rss.xml",
+          "hour": 9,
+          "minutes": 0,
+          "frequency": { "daily": { "days": ["mon"] } },
+          "status": "active"
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

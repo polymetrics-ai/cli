@@ -1,13 +1,23 @@
 # Overview
 
 Customer.io is a Tier-1 declarative-HTTP source bundle (`internal/connectors/defs/customer-io/`):
-Bearer auth, plain JSON list endpoints under the Customer.io App (Beta) API, and cursor pagination
+Bearer auth, plain JSON list endpoints under the Customer.io App API, and cursor pagination
 where each page's response carries a `next` token echoed back as the `start` query parameter (an
-empty/null `next` ends the loop). It reads campaigns, newsletters, segments, and broadcasts. This
-port is a pure `streams.json`/`spec.json`/`schemas/*.json` bundle with zero Go — the legacy package
-(`internal/connectors/customer-io/`) is a thin connsdk composition with no auth/stream hooks, so it
-maps directly onto the engine's `cursor` + `token_path` pagination dialect (the identical shape
-airtable's `records` stream uses for its `offset`/`offset` pair).
+empty/null `next` ends the loop). This port is a pure `streams.json`/`spec.json`/`schemas/*.json`
++ `writes.json` bundle with zero Go — the legacy package (`internal/connectors/customer-io/`) is a
+thin connsdk composition with no auth/stream hooks, so it maps directly onto the engine's `cursor` +
+`token_path` pagination dialect (the identical shape airtable's `records` stream uses for its
+`offset`/`offset` pair).
+
+**Pass B full-surface expansion** (2026-07-04): reviewed the full 159-operation Journeys App API
+OpenAPI spec (`https://docs.customer.io/files/journeys-app.json`, the real machine-readable
+reference behind `docs.customer.io/api/app/`'s rendered docs page). Added 12 read streams
+(`activities`, `messages`, `exports`, `transactional`, `object_types`, `reporting_webhooks`,
+`sender_identities`, `snippets`, `subscription_channels`, `subscription_topics`, `workspaces`,
+`collections` — beyond the original 4 legacy-parity streams) and 10 write actions; `capabilities.write`
+is now `true`. See `api_surface.json` for the complete endpoint-by-endpoint disposition (every one
+of the 159 real operations is `covered_by` or `excluded` with a real category+reason) and Known
+limits below for what remains out of reach and why.
 
 ## Auth setup
 
@@ -36,13 +46,49 @@ Every object exposes a numeric `id` and Unix-seconds `created`/`updated` timesta
 `created`, matching legacy's `segmentFields`), so every schema declares `x-primary-key: ["id"]` and
 `x-cursor-field: "updated"`.
 
+The 12 Pass B streams fall into two pagination shapes:
+
+- **`activities`** shares the base's `cursor`/`start`/`next` pagination exactly like the original 4
+  streams (`incremental.cursor_field: timestamp`, `client_filtered: true` — the endpoint's own
+  `start`/`limit` params page through results but there is no server-side "since" filter).
+- **The other 11** (`messages`, `exports`, `transactional`, `object_types`, `reporting_webhooks`,
+  `sender_identities`, `snippets`, `subscription_channels`, `subscription_topics`, `workspaces`,
+  `collections`) are genuinely unpaginated per the OpenAPI spec — none of their GET operations
+  documents a `page`/`limit`/`start` parameter at all — so each declares a stream-level
+  `"pagination": {"type": "none"}` override against the base's `cursor` spec, and each ships a
+  single-page fixture (no 2-page requirement per conventions.md §4, which only mandates a 2-page
+  fixture when pagination is actually declared for that stream).
+
+`snippets`' primary key is `name` (not `id` — the resource has no numeric identifier; the API's own
+docs state the name must be unique), matching the write actions' identical `name`-keyed shape.
+
 ## Write actions & risks
 
-None. Customer.io is read-only here (`capabilities.write: false`), matching legacy's
-`Connector.Write` (`connectors.ErrUnsupportedOperation`) — the legacy package never implemented any
-reverse-ETL action (Customer.io does support triggering broadcasts/sending transactional messages via
-its API, but the ported connector never called those endpoints; see `api_surface.json`'s excluded
-`out_of_scope` entries for Pass B).
+Ten write actions, all flat-JSON-body mutations against documented endpoints (`capabilities.write`
+is now `true`):
+
+- `create_snippet` / `update_snippet` (`POST`/`PUT /snippets`) — create or overwrite a reusable
+  content snippet; `update_snippet` is a bare `PUT /snippets` (the API upserts by the `name` field
+  in the body, no path-parameterized identifier).
+- `delete_snippet` (`DELETE /snippets/{snippet_name}`) — permanently removes a snippet; irreversible,
+  breaks any message/newsletter still referencing it.
+- `create_reporting_webhook` / `update_reporting_webhook` / `delete_reporting_webhook` — manage a
+  workspace reporting webhook subscription (event delivery to an external URL).
+- `create_manual_segment` / `delete_manual_segment` — `create_manual_segment`'s record shape is
+  `{"segment": {"name": ..., "description": ...}}`, matching the API's own nested-object body
+  exactly (an ordinary nested JSON object, not the "wrap in a named bulk ARRAY" shape that blocks
+  Customerly's `create_user`/`create_lead` — a nested object is just normal JSON body construction,
+  no special dialect primitive needed).
+- `send_email` (`POST /send/email`) — sends a live transactional email; the OpenAPI body is an
+  `allOf` of three sub-schemas that merge into one flat object (no `oneOf` discriminator), so it
+  maps directly onto a single flat `record_schema`.
+- `trigger_broadcast` (`POST /campaigns/{broadcast_id}/triggers`) — triggers an API-triggered
+  broadcast to its "default audience" (the simplest of 3 documented audience-targeting variants,
+  a `oneOf`; the other two — custom recipient lists / per-recipient data overrides — are excluded,
+  see Known limits).
+
+Every action's `risk` field flags it as an external mutation requiring approval; the two deletes and
+`send_email`/`trigger_broadcast` explicitly call out irreversibility.
 
 ## Known limits
 
@@ -75,3 +121,24 @@ its API, but the ported connector never called those endpoints; see `api_surface
   spec property (a declared-but-unwireable key is worse than an absent one, per `conventions.md` F6)
   and leaves pagination unbounded (matching legacy's default `max_pages=0`/unlimited behavior, and the
   paginator's own short-page/empty-token stop signal still terminates every real sync).
+- **`oneOf`-discriminated write bodies are not implemented.** `POST /v1/newsletters` (6-way channel
+  discriminator) and the "Custom recipients"/per-recipient-data-override variants of
+  `POST /v1/campaigns/{broadcast_id}/triggers` all require the caller to pick one of several
+  mutually-exclusive body shapes at request time. A `writes.json` action declares exactly one flat
+  `record_schema` per action name — there is no discriminated-union primitive, so each of these
+  would need either N separate action names (one per variant, awkward and not how the API itself
+  models the choice) or a Tier-2 `WriteHook` (not justified here: the shapes differ only in which
+  JSON fields are present, no auth/compound-request/binary-payload trigger applies). Only
+  `trigger_broadcast`'s "Default audience" variant (no discriminator needed — it's the shape with NO
+  extra required fields beyond `broadcast_id`) is implemented; see `api_surface.json`'s `excluded`
+  entries for the rest.
+- **Per-object detail/metrics/sub-resource endpoints keyed by a single already-covered list's id are
+  excluded as `duplicate_of`**, not implemented via `fan_out`: `fan_out.ids_from` needs either a
+  `config_key` (a caller-supplied comma-separated id list) or a `request` (a preliminary GET that
+  itself returns the id list) — for every excluded sub-resource here, the "parent" ids are already
+  the covered list stream's own `id` field, and there is no separate declarative mechanism to feed a
+  stream's OWN already-read primary keys back into a second fan_out stream's `ids_from` without a
+  config-supplied id list (which would require the operator to enumerate ids up front, defeating the
+  point of a catalog sync). This is the same shape as every `*_id`-keyed detail GET this bundle
+  excludes (broadcast/campaign/collection/customer/newsletter/segment/sender_identity/transactional
+  sub-resources) — see `api_surface.json` for the full list.

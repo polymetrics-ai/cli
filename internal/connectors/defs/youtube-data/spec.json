@@ -23,6 +23,23 @@
       "type": "string",
       "description": "Comma-separated video/playlist IDs, sent as the 'id' query parameter for the 'videos' and 'playlists' streams. Omitted entirely when unset."
     },
+    "playlist_ids": {
+      "type": "string",
+      "description": "Comma-separated playlist IDs to fan out over for the 'playlist_items' stream (one request sequence per id, stamped onto every emitted record's playlist_id field). Required for that stream to emit anything; a full-refresh read with this unset simply yields zero playlist_items records."
+    },
+    "video_ids": {
+      "type": "string",
+      "description": "Comma-separated video IDs to fan out over for the 'comment_threads' stream (one request sequence per id, stamped onto every emitted record's video_id field). Required for that stream to emit anything; a full-refresh read with this unset simply yields zero comment_threads records."
+    },
+    "search_query": {
+      "type": "string",
+      "description": "Search term for the 'search' stream's 'q' query parameter. Omitted entirely when unset (an unfiltered public-content search)."
+    },
+    "region_code": {
+      "type": "string",
+      "default": "US",
+      "description": "ISO 3166-1 alpha-2 region code for the 'video_categories' stream (YouTube's video category list is region-scoped; there is no all-regions listing)."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

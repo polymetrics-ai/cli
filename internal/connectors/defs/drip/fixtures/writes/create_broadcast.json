@@ -1,0 +1,34 @@
+{
+  "record": {
+    "broadcasts": [
+      {
+        "name": "Fixture Newsletter",
+        "subject": "Fixture subject line",
+        "content": {
+          "html": { "type": "document", "value": "<html><body>Fixture</body></html>" },
+          "text": { "type": "document", "value": "Fixture" }
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/broadcasts",
+    "body": {
+      "broadcasts": [
+        {
+          "name": "Fixture Newsletter",
+          "subject": "Fixture subject line",
+          "content": {
+            "html": { "type": "document", "value": "<html><body>Fixture</body></html>" },
+            "text": { "type": "document", "value": "Fixture" }
+          }
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "broadcasts": [{ "id": "bcast_fixture_new", "status": "draft" }] }
+  }
+}

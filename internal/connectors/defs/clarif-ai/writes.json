@@ -1,0 +1,113 @@
+{
+  "actions": [
+    {
+      "name": "create_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ config.user_id }}/apps",
+      "body_type": "json",
+      "body_fields": ["apps"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["apps"],
+        "properties": {
+          "apps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id"],
+              "properties": {
+                "id": { "type": "string" },
+                "description": { "type": "string" },
+                "default_language": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new Clarifai application (workspace for datasets/models/workflows); low-risk (additive, no data loss)"
+    },
+    {
+      "name": "update_application",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/{{ config.user_id }}/apps",
+      "body_type": "json",
+      "body_fields": ["action", "apps"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["action", "apps"],
+        "properties": {
+          "action": { "type": "string" },
+          "apps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id"],
+              "properties": {
+                "id": { "type": "string" },
+                "description": { "type": "string" },
+                "default_language": { "type": "string" },
+                "default_workflow_id": { "type": "string" },
+                "image_url": { "type": "string" },
+                "notes": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates an existing Clarifai application's settings (description, default workflow, notes); action=overwrite fully replaces the named fields rather than merging, so review the action value before use; approval required"
+    },
+    {
+      "name": "create_dataset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets",
+      "body_type": "json",
+      "body_fields": ["datasets"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["datasets"],
+        "properties": {
+          "datasets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id"],
+              "properties": {
+                "id": { "type": "string" },
+                "description": { "type": "string" },
+                "metadata": { "type": "object" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new Clarifai dataset within the configured app; low-risk (additive, no data loss)"
+    },
+    {
+      "name": "delete_dataset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets",
+      "body_type": "none",
+      "body_fields": ["dataset_ids"],
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["dataset_ids"],
+        "properties": {
+          "dataset_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "risk": "permanently deletes one or more Clarifai datasets and their inputs/annotations within the configured app; irreversible; approval required"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Monitor",
+    "description": "Study monitor",
+    "permissions": { "view": true, "export": true }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/study/synthetic-conformance-value/role"
+  }
+}

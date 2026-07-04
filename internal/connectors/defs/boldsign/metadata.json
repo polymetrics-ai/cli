@@ -1,14 +1,14 @@
 {
   "name": "boldsign",
   "display_name": "BoldSign",
-  "description": "Reads BoldSign documents, templates, teams, contacts, and brands through the BoldSign REST API.",
+  "description": "Reads BoldSign documents, templates, teams, contacts, brands, users, contact groups, and sender identities, and writes team/contact-group/document-lifecycle/user-lifecycle mutations, through the BoldSign REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.boldsign.com/api-reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external BoldSign API read of documents, templates, teams, contacts, and brands",
-    "approval": "none; read-only API"
+    "read": "external BoldSign API read of documents, templates, teams, contacts, brands, users, contact groups, and sender identities",
+    "write": "external mutation of BoldSign teams, contacts, contact groups, document lifecycle state (revoke/remind/delete/tags), and user role/team/status; includes 2 destructive (irreversible-effect) actions (delete_contact, delete_contact_group, delete_document, revoke_document)",
+    "approval": "required for every write action; read remains unapproved"
   }
 }

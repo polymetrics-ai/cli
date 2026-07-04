@@ -1,0 +1,8 @@
+{
+  "record": { "id": "contact_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/contacts/delete"
+  },
+  "response": { "status": 204, "body": {} }
+}

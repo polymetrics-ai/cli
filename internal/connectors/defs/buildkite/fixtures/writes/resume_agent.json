@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "agent_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/agents/agent_fixture_1/resume"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

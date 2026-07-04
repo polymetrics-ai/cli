@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customer": {
+      "first_name": "Fixture",
+      "last_name": "Customer",
+      "email": "fixture@example.com"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers.json",
+    "body": {
+      "customer": {
+        "first_name": "Fixture",
+        "last_name": "Customer",
+        "email": "fixture@example.com"
+      }
+    }
+  }
+}

@@ -41,6 +41,20 @@ Smaily's own docs example `?page=0&limit=250`): `pagination.type: page_number` w
 small `page_size: 2` (an authoring choice for readable fixtures, not a documented API default —
 any positive `limit` value is accepted by the live API).
 
+Three more Pass-B streams round out the full documented surface, none with a legacy equivalent:
+`segment_rules` (`GET api/list.php`) is Smaily's own documented "list segments"/"list segment
+rules" read, returning `id`/`name`/`filter_type`/`subscribers_count`/`filter_data` — declared as a
+separate stream from the legacy-parity `segments` stream (see Known limits for why `segments`
+itself keeps calling `api/segment.php`, a path this review could not confirm still exists in
+Smaily's current docs). `segment_subscribers` (`GET api/contact.php`, optionally scoped by the new
+`config.segment_id` via the `list` query parameter, `omit_when_absent`) is Smaily's documented
+"list subscribers of a segment" read — same underlying path as `subscribers`, but declared as its
+own stream since its real (email-keyed) record shape and the `list` scoping parameter are
+independently documented and meaningfully different in intent from the unscoped contact list.
+`ab_tests` (`GET api/split.php`) lists A/B tests; the same path is used by the new
+`launch_ab_test` write below (GET list vs POST launch, mirroring the `campaigns` GET/POST split
+this API already establishes).
+
 ## Write actions & risks
 
 Legacy's own connector is read-only, but Pass B full-surface expansion adds 5

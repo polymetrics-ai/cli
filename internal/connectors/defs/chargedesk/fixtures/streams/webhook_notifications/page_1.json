@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/webhooks/notifications" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "notification": "charge_new",
+        "object": "Charge",
+        "name": "Charge Created",
+        "description": "Sent when a new charge is created."
+      },
+      {
+        "notification": "charge_refunded",
+        "object": "Charge",
+        "name": "Charge Refunded",
+        "description": "Sent when a charge is refunded."
+      }
+    ]
+  }
+}

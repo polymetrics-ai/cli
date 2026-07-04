@@ -67,6 +67,43 @@
       },
       "records": { "path": "envs" },
       "schema": "schemas/project_env_vars.json"
+    },
+    {
+      "name": "aliases",
+      "path": "/v4/aliases",
+      "pagination": { "type": "cursor", "cursor_param": "until", "token_path": "pagination.next" },
+      "query": {
+        "teamId": { "template": "{{ config.team_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "aliases" },
+      "schema": "schemas/aliases.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/webhooks",
+      "query": {
+        "teamId": { "template": "{{ config.team_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "log_drains",
+      "path": "/v1/log-drains",
+      "query": {
+        "teamId": { "template": "{{ config.team_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/log_drains.json"
+    },
+    {
+      "name": "edge_configs",
+      "path": "/v1/edge-config",
+      "query": {
+        "teamId": { "template": "{{ config.team_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/edge_configs.json"
     }
   ]
 }

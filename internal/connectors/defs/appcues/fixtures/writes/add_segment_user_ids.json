@@ -1,0 +1,12 @@
+{
+  "record": { "id": "seg_fixture_1", "user_ids": ["user_fixture_1", "user_fixture_2"] },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/segments/seg_fixture_1/add_user_ids",
+    "body": { "user_ids": ["user_fixture_1", "user_fixture_2"] }
+  },
+  "response": {
+    "status": 202,
+    "body": { "job_id": "job_fixture_add", "job_url": "https://api.appcues.com/v2/accounts/synthetic-conformance-value/jobs/job_fixture_add", "status": 202, "title": "Accepted" }
+  }
+}

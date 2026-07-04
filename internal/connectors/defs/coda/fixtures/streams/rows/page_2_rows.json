@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/docs/synthetic-conformance-value/tables/grid-fixture-1/rows" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "i-fixture-1",
+          "type": "row",
+          "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/tables/grid-fixture-1/rows/i-fixture-1",
+          "name": "Fixture Row 1",
+          "index": 0,
+          "browserLink": "https://coda.io/d/_dsynthetic-conformance-value#Tasks_tugrid-fixture-1/_rui-fixture-1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z",
+          "values": {
+            "c-fixture-1": "Fixture value",
+            "c-fixture-2": 10
+          }
+        }
+      ],
+      "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/tables/grid-fixture-1/rows?limit=25"
+    }
+  }
+}

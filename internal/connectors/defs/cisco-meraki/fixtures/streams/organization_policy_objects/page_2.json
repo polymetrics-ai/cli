@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/policyObjects",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "po_fixture_1",
+        "name": "Fixture Policy Object 1",
+        "category": "network",
+        "type": "cidr",
+        "cidr": "10.0.0.0/24",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:01:00Z",
+        "groupIds": [],
+        "networkIds": ["N_fixture_1"]
+      }
+    ]
+  }
+}

@@ -26,6 +26,22 @@
     "language": {
       "type": "string",
       "description": "Optional Accept-Language header override (e.g. \"en\")."
+    },
+    "entries_time_since": {
+      "type": "string",
+      "description": "ISO 8601 UTC start of the time-entries window (e.g. \"2026-01-01T00:00:00Z\"); required only for the entries stream, which Clockodo's own API requires a bounded time_since/time_until range for."
+    },
+    "entries_time_until": {
+      "type": "string",
+      "description": "ISO 8601 UTC end of the time-entries window (e.g. \"2026-12-31T23:59:59Z\"); required only for the entries stream, paired with entries_time_since."
+    },
+    "absences_year": {
+      "type": "string",
+      "description": "4-digit year (e.g. \"2026\") to query for the absences stream; required only for that stream, which Clockodo's own API requires a year query param for."
+    },
+    "nonbusinessdays_year": {
+      "type": "string",
+      "description": "4-digit year (e.g. \"2026\") to query for the nonbusiness_days stream; required only for that stream, which Clockodo's own API requires a year query param for."
     }
   }
 }

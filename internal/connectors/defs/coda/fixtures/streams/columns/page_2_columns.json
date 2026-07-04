@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/docs/synthetic-conformance-value/tables/grid-fixture-1/columns" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "c-fixture-1",
+          "type": "column",
+          "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/tables/grid-fixture-1/columns/c-fixture-1",
+          "name": "Name",
+          "display": true,
+          "calculated": false,
+          "format": { "type": "text", "isArray": false }
+        }
+      ],
+      "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/tables/grid-fixture-1/columns?limit=25"
+    }
+  }
+}

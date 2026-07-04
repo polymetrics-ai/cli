@@ -1,14 +1,14 @@
 {
   "name": "awin-advertiser",
   "display_name": "Awin Advertiser",
-  "description": "Reads Awin advertiser transactions, publisher-aggregated performance reports, and publisher relationships through the Awin Advertiser REST API.",
+  "description": "Reads Awin advertiser transactions, publisher-aggregated performance reports, publisher relationships, and publisher performance reports, and creates advertiser promotion/voucher offers, through the Awin Advertiser REST API.",
   "integration_type": "api",
   "docs_url": "https://wiki.awin.com/index.php/Advertiser_API",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Awin API read of advertiser commission transactions and publisher performance data"
+    "read": "external Awin API read of advertiser commission transactions and publisher performance data",
+    "write": "creates a new promotion or voucher offer in the advertiser's MyOffers system, immediately visible to publishers; external mutation, approval required",
+    "approval": "required for create_offer"
   }
 }

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/exchangerate/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "asset_id_base": "synthetic-conformance-value",
+      "rates": [
+        {
+          "time": "2026-01-01T00:00:00.0000000Z",
+          "asset_id_quote": "USD",
+          "rate": 43250.12
+        },
+        {
+          "time": "2026-01-01T00:00:00.0000000Z",
+          "asset_id_quote": "EUR",
+          "rate": 39800.55
+        }
+      ]
+    }
+  }
+}

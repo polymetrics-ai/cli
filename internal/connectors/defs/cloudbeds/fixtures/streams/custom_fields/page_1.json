@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/getCustomFields" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "propertyID": "prop_fixture_1",
+          "shortcode": "fixture-field",
+          "name": "Fixture Field",
+          "applyTo": "guest",
+          "required": false,
+          "isPersonal": false,
+          "maxCharacters": 100,
+          "type": "text",
+          "displayed": true
+        }
+      ],
+      "count": 1
+    }
+  }
+}

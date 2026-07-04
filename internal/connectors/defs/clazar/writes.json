@@ -1,0 +1,208 @@
+{
+  "actions": [
+    {
+      "name": "update_buyer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/buyers/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "custom_properties": { "type": "object" },
+          "external_object_associations": { "type": "object" }
+        }
+      },
+      "risk": "external mutation of a buyer's custom properties / external-system associations; approval required"
+    },
+    {
+      "name": "update_opportunity",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/opportunities/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "custom_properties": { "type": "object" },
+          "external_object_associations": { "type": "object" }
+        }
+      },
+      "risk": "external mutation of an opportunity's custom properties / external-system associations; approval required"
+    },
+    {
+      "name": "update_private_offer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/private_offers/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "custom_properties": { "type": "object" },
+          "external_object_associations": { "type": "object" }
+        }
+      },
+      "risk": "external mutation of a private offer's custom properties / external-system associations; approval required"
+    },
+    {
+      "name": "update_contract",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contracts/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "custom_properties": { "type": "object" },
+          "external_object_associations": { "type": "object" }
+        }
+      },
+      "risk": "external mutation of a contract's custom properties / external-system associations; approval required"
+    },
+    {
+      "name": "activate_contract",
+      "kind": "update",
+      "method": "POST",
+      "path": "/contracts/{{ record.id }}/activate/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly activates a pending Clazar contract in the underlying cloud marketplace; approval required (destructive/high-impact state transition)"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "email": { "type": "string" },
+          "full_name": { "type": "string" },
+          "phone_number": { "type": "string" }
+        }
+      },
+      "risk": "creates a new Clazar contact record; low-risk (no external marketplace side effects)"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "full_name": { "type": "string" },
+          "phone_number": { "type": "string" }
+        }
+      },
+      "risk": "updates a Clazar contact record; low-risk (no external marketplace side effects)"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a Clazar contact record; approval required (destructive, irreversible)"
+    },
+    {
+      "name": "update_metering_record",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/metering/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "custom_properties"],
+        "properties": {
+          "id": { "type": "string" },
+          "custom_properties": { "type": "object" }
+        }
+      },
+      "risk": "updates only the custom_properties of a submitted metering record; low-risk"
+    },
+    {
+      "name": "create_metering_records",
+      "kind": "create",
+      "method": "POST",
+      "path": "/metering/",
+      "body_type": "json",
+      "body_fields": ["request"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["request"],
+        "properties": {
+          "request": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["cloud", "contract_id", "dimension", "quantity"],
+              "properties": {
+                "cloud": { "type": "string" },
+                "contract_id": { "type": "string" },
+                "dimension": { "type": "string" },
+                "quantity": { "type": "string" },
+                "start_time": { "type": "string" },
+                "end_time": { "type": "string" },
+                "custom_properties": { "type": "object" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "submits usage-based billing metering records that drive cloud marketplace invoicing for the buyer's contract; approval required (financial impact, effectively irreversible once billed)"
+    }
+  ]
+}

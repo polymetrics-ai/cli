@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/core/v3/stores/synthetic-conformance-value/products/synthetic-conformance-value/variants",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "variants": [
+        {
+          "yotpo_id": 300021,
+          "external_id": "var-fixture-1",
+          "name": "Fixture Blue Variant",
+          "description": "A great fixture variant!",
+          "url": "http://fixture.example.com/products/1?variant=1",
+          "is_valid_url": true,
+          "image_url": "http://fixture.example.com/products/1/blue.jpg",
+          "price": 750,
+          "currency": "USD",
+          "inventory_quantity": 4,
+          "is_discontinued": false,
+          "sku": "fixture-var-sku",
+          "options": [ { "name": "color", "value": "blue" } ],
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

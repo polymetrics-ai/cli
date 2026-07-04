@@ -31,22 +31,43 @@
       "name": "customers",
       "path": "/customers",
       "records": { "path": "data" },
-      "incremental": { "cursor_field": "occurred" },
+      "incremental": { "cursor_field": "first_seen" },
       "schema": "schemas/customers.json"
     },
     {
       "name": "subscriptions",
       "path": "/subscriptions",
       "records": { "path": "data" },
-      "incremental": { "cursor_field": "occurred" },
+      "incremental": { "cursor_field": "first_seen" },
       "schema": "schemas/subscriptions.json"
     },
     {
       "name": "products",
       "path": "/products",
       "records": { "path": "data" },
-      "incremental": { "cursor_field": "occurred" },
+      "incremental": { "cursor_field": "first_seen" },
       "schema": "schemas/products.json"
+    },
+    {
+      "name": "log_activity",
+      "path": "/log/activity",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/log_activity.json"
+    },
+    {
+      "name": "log_cancellations",
+      "path": "/log/cancellations",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/log_cancellations.json"
+    },
+    {
+      "name": "webhook_notifications",
+      "path": "/webhooks/notifications",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhook_notifications.json"
     }
   ]
 }

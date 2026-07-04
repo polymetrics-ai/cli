@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v2/teams" },
+  "response": {
+    "status": 200,
+    "body": {
+      "team": [
+        { "id": 1, "name": "Fixture Team One", "leader": 1 }
+      ]
+    }
+  }
+}

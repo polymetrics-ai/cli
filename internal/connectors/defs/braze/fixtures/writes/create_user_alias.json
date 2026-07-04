@@ -1,0 +1,17 @@
+{
+  "record": {
+    "user_aliases": [
+      { "external_id": "user_fixture_1", "alias_name": "fixture_alias", "alias_label": "fixture_label" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/alias/new",
+    "body": {
+      "user_aliases": [
+        { "external_id": "user_fixture_1", "alias_name": "fixture_alias", "alias_label": "fixture_label" }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

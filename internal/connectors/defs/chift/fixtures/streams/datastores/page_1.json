@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/datastores"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ds_fixture_1",
+        "name": "Fixture Datastore",
+        "status": "active"
+      }
+    ]
+  }
+}

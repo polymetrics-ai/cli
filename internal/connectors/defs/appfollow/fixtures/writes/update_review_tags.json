@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ext_id": "ios:1001",
+    "review_id": "rev_fixture_1",
+    "tags": "bug,billing"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reviews/tags",
+    "body": {
+      "ext_id": "ios:1001",
+      "review_id": "rev_fixture_1",
+      "tags": "bug,billing"
+    }
+  }
+}

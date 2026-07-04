@@ -36,6 +36,27 @@
       "path": "/syncs",
       "records": { "path": "" },
       "schema": "schemas/syncs.json"
+    },
+    {
+      "name": "integrations",
+      "path": "/integrations",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/integrations.json"
+    },
+    {
+      "name": "datastores",
+      "path": "/datastores",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/datastores.json"
+    },
+    {
+      "name": "webhook_definitions",
+      "path": "/webhooks",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhook_definitions.json"
     }
   ]
 }

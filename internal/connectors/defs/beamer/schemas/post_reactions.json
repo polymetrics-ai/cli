@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "post_reactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "post_id": { "type": ["string", "null"] },
+    "date": { "type": "string", "format": "date-time" },
+    "reaction": { "type": ["string", "null"] },
+    "postTitle": { "type": ["string", "null"] },
+    "userId": { "type": ["string", "null"] },
+    "userEmail": { "type": ["string", "null"] },
+    "userFirstName": { "type": ["string", "null"] },
+    "userLastName": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] }
+  }
+}

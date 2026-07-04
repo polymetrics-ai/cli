@@ -1,0 +1,7 @@
+{
+  "record": { "id": "cl_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/workspaces/synthetic-conformance-value/clients/cl_fixture_1"
+  }
+}

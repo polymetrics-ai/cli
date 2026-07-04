@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/site",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "sites": [
+          {
+            "id": "site_fixture_1",
+            "name": "Fixture Hospital",
+            "abbreviation": "FH",
+            "code": "001",
+            "country_id": "1",
+            "number_of_records": 3
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

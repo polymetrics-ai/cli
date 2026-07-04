@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/user-groups" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ug_fixture_1",
+        "name": "Fixture Group One",
+        "workspaceId": "ws_fixture_1",
+        "userIds": ["user_fixture_1"],
+        "teamManagers": []
+      }
+    ]
+  }
+}

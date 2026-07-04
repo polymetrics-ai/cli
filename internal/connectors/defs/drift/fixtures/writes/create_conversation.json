@@ -1,0 +1,16 @@
+{
+  "record": {
+    "email": "fixture.conversation@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/new",
+    "body": {
+      "email": "fixture.conversation@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": 9101, "status": "open" } }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "first_name": "Fixture", "last_name": "User", "email": "fixture@example.com", "role": "reporting" },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/users.json",
+    "body": { "first_name": "Fixture", "last_name": "User", "email": "fixture@example.com", "role": "reporting" }
+  },
+  "response": { "status": 201, "body": { "id": "USR_fixture_1", "email": "fixture@example.com" } }
+}

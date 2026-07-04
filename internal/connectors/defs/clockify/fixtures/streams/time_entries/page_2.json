@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/user/user_fixture_1/time-entries", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "te_fixture_1",
+        "description": "Fixture time entry",
+        "userId": "user_fixture_1",
+        "workspaceId": "ws_fixture_1",
+        "projectId": "proj_fixture_1",
+        "taskId": "task_fixture_1",
+        "billable": true,
+        "isLocked": false,
+        "kioskId": null,
+        "type": "REGULAR",
+        "tagIds": [],
+        "timeInterval": {
+          "start": "2026-01-01T09:00:00Z",
+          "end": "2026-01-01T10:00:00Z",
+          "duration": "PT1H"
+        },
+        "hourlyRate": null,
+        "costRate": null,
+        "customFieldValues": []
+      }
+    ]
+  }
+}

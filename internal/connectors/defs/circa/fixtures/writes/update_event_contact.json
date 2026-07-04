@@ -1,0 +1,12 @@
+{
+  "record": {
+    "event_id": "ev_fixture_1",
+    "contact_id": "contact_fixture_1",
+    "attendance_status": "Attended",
+    "registration_status": "Registered"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/events/ev_fixture_1/contacts/contact_fixture_1"
+  }
+}

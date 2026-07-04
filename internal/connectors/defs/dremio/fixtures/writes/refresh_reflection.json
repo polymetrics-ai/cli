@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "reflections_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reflection/reflections_fixture_1/refresh"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

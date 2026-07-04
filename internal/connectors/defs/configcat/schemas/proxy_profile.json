@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "proxy_profile",
+  "type": "object",
+  "x-primary-key": ["proxyProfileId"],
+  "required": ["proxyProfileId"],
+  "properties": {
+    "proxyProfileId": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "lastAccessedAt": { "type": ["string", "null"] },
+    "connectionPreferences": { "type": ["object", "null"] },
+    "sdkKeySelectionRules": { "type": ["array", "null"] }
+  }
+}

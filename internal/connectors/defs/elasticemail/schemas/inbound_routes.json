@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "inbound_routes",
+  "type": "object",
+  "x-primary-key": ["PublicId"],
+  "required": ["PublicId"],
+  "properties": {
+    "PublicId": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "FilterType": { "type": ["string", "null"] },
+    "Filter": { "type": ["string", "null"] },
+    "ActionType": { "type": ["string", "null"] },
+    "ActionParameter": { "type": ["string", "null"] },
+    "SortOrder": { "type": ["integer", "null"] }
+  }
+}

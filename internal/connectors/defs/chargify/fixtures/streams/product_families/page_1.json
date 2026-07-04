@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/product_families.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "product_family": {
+          "id": 1,
+          "name": "Core Plans",
+          "handle": "core-plans",
+          "description": "Primary subscription product family",
+          "accounting_code": "CORE",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      }
+    ]
+  }
+}

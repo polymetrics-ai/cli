@@ -1,0 +1,276 @@
+{
+  "actions": [
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["first_name", "last_name"],
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "company": { "type": "string" },
+          "owner": { "type": "string" },
+          "title": { "type": "string" },
+          "website": { "type": "string" },
+          "office_phone": { "type": "string" },
+          "mobile_phone": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "postal_index": { "type": "string" },
+          "country": { "type": "string" },
+          "twitter": { "type": "string" },
+          "linkedin": { "type": "string" },
+          "description": { "type": "string" },
+          "hot_lead": { "type": "boolean" },
+          "email_opt_in": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a new CRM contact record"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "company": { "type": "string" },
+          "owner": { "type": "string" },
+          "title": { "type": "string" },
+          "website": { "type": "string" },
+          "office_phone": { "type": "string" },
+          "mobile_phone": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "postal_index": { "type": "string" },
+          "country": { "type": "string" },
+          "hot_lead": { "type": "boolean" },
+          "email_opt_in": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; updates an existing CRM contact record"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a CRM contact; approval required"
+    },
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/events",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "team_id": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" },
+          "leader": { "type": "string" },
+          "types": { "type": "array", "items": { "type": "string" } },
+          "roles": { "type": "array", "items": { "type": "string" } },
+          "website": { "type": "string" },
+          "location": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new event record"
+    },
+    {
+      "name": "update_event",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/events/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "team_id": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" },
+          "website": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an existing event record"
+    },
+    {
+      "name": "delete_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/events/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of an event; approval required"
+    },
+    {
+      "name": "create_company",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "website": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip_code": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new company record"
+    },
+    {
+      "name": "update_company",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/companies/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "website": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip_code": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an existing company record"
+    },
+    {
+      "name": "delete_company",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/companies/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a company; approval required"
+    },
+    {
+      "name": "add_event_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/events/{{ record.event_id }}/contacts",
+      "path_fields": ["event_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_id", "contact_id"],
+        "properties": {
+          "event_id": { "type": "string" },
+          "contact_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; registers an existing contact onto an event"
+    },
+    {
+      "name": "update_event_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/events/{{ record.event_id }}/contacts/{{ record.contact_id }}",
+      "path_fields": ["event_id", "contact_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_id", "contact_id"],
+        "properties": {
+          "event_id": { "type": "string" },
+          "contact_id": { "type": "string" },
+          "attendance_status": { "type": "string" },
+          "registration_status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an event-contact's attendance/registration status"
+    },
+    {
+      "name": "remove_event_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/events/{{ record.event_id }}/contacts/{{ record.contact_id }}",
+      "path_fields": ["event_id", "contact_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_id", "contact_id"],
+        "properties": {
+          "event_id": { "type": "string" },
+          "contact_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external removal of a contact's event registration; approval required"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/metering", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "metering_fixture_1",
+          "cloud": "aws",
+          "contract_id": "contract_fixture_1",
+          "dimension": "seats",
+          "quantity": "10",
+          "start_time": "2026-01-01T00:00:00.000000Z",
+          "end_time": "2026-01-31T23:59:59.000000Z",
+          "status": "accepted",
+          "custom_properties": {}
+        }
+      ],
+      "next": null,
+      "count": 1
+    }
+  }
+}

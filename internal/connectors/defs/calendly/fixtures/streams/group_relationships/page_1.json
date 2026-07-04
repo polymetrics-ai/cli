@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/group_relationships" },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "uri": "https://api.calendly.com/group_relationships/fixture_rel_1",
+          "owner": "https://api.calendly.com/users/fixture_user_1",
+          "group": "https://api.calendly.com/groups/fixture_group_1",
+          "organization": "https://api.calendly.com/organizations/fixture_org",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": { "count": 1, "next_page": null }
+    }
+  }
+}

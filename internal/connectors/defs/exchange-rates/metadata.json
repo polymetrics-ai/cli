@@ -1,7 +1,7 @@
 {
   "name": "exchange-rates",
   "display_name": "Exchange Rates API",
-  "description": "Reads latest and supported-symbol foreign-exchange rates from the exchangeratesapi.io REST API. The legacy exchange_rates daily-historical stream (a date-by-date iteration over a start_date..end_date window) is not yet ported; see docs.md Known limits.",
+  "description": "Reads latest, currency-conversion, time-series, and fluctuation foreign-exchange rate data from the exchangeratesapi.io REST API. The legacy exchange_rates daily-historical stream (a date-by-date iteration over a start_date..end_date window) and the symbols stream are not ported; see docs.md Known limits.",
   "integration_type": "api",
   "docs_url": "https://exchangeratesapi.io/documentation/",
   "release_stage": "beta",

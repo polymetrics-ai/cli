@@ -1,0 +1,4 @@
+{
+  "record": { "id": "task_fixture_1", "is_complete": true },
+  "expect": { "method": "PUT", "path": "/task/task_fixture_1" }
+}

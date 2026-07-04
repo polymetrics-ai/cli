@@ -1,15 +1,77 @@
 {
   "api": "Dwolla API (https://api.dwolla.com, HAL+JSON)",
   "docs": "https://developers.dwolla.com/api-reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 migration: the 4 legacy-parity top-level list read streams only; per-customer-scoped resources (funding-sources, transfers) and any mutation surface are out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, researched against developers.dwolla.com and the official Dwolla Go/Kotlin SDKs' request/response structs (github.com/kolanos/dwolla-v2-go, github.com/Dwolla/dwolla-v2-kotlin, fetched 2026-07-04). 4 legacy-parity read streams (customers, events, exchange_partners, business_classifications) unchanged, plus 15 new JSON-body write actions covering the full customer/funding-source/transfer/webhook-subscription/beneficial-owner lifecycle-mutation surface. Excluded: every endpoint that moves real money (create_transfer, mass payments — both destructive_admin, matching the pre-existing create_transfer exclusion decision), every endpoint requiring a multipart file upload (identity-verification documents, KBA is a question/answer flow with no create-time document but is itself excluded as session-scoped), the Dwolla Balance-tier Labels feature (a distinct, plan-gated sub-product), on-demand-authorization/IAV/funding-source-token minting (session tokens, not syncable records or persistent mutations), and single-object detail GETs that duplicate an already-covered list stream's record shape.",
   "endpoints": [
     { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
+    { "method": "POST", "path": "/customers", "covered_by": { "write": "create_customer" } },
+    { "method": "GET", "path": "/customers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-customer detail; identical record shape to the customers list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/customers/{id}", "covered_by": { "write": "update_customer" } },
+    { "method": "GET", "path": "/customers/{id}/funding-sources", "excluded": { "category": "out_of_scope", "reason": "requires a per-customer partition (list every customer, then fan out one funding-sources request per id) that the top-level list streams do not need; out of scope for the read side this pass, matching legacy's own first-cut scoping. The create/update/remove funding-source WRITE actions are still covered below since a write's target customer_id/id comes from the caller's own record, not from this connector's own read side" } },
+    { "method": "POST", "path": "/customers/{id}/funding-sources", "covered_by": { "write": "create_funding_source" } },
+    { "method": "GET", "path": "/customers/{id}/beneficial-owners", "excluded": { "category": "out_of_scope", "reason": "same per-customer-partition reasoning as the funding-sources list; not modeled as a read stream this pass" } },
+    { "method": "POST", "path": "/customers/{id}/beneficial-owners", "covered_by": { "write": "create_beneficial_owner" } },
+    { "method": "GET", "path": "/customers/{id}/beneficial-ownership", "excluded": { "category": "duplicate_of", "reason": "single-scalar certification-status read; the same status the certify_beneficial_ownership write's response already carries, not a distinct syncable resource" } },
+    { "method": "POST", "path": "/customers/{id}/beneficial-ownership", "covered_by": { "write": "certify_beneficial_ownership" } },
+    { "method": "GET", "path": "/customers/{id}/documents", "excluded": { "category": "out_of_scope", "reason": "per-customer-partition document metadata list; documents themselves are binary uploads (see POST below), out of scope this pass" } },
+    { "method": "POST", "path": "/customers/{id}/documents", "excluded": { "category": "binary_payload", "reason": "identity-verification document upload requires multipart/form-data; the engine's write dialect has no multipart body_type" } },
+    { "method": "GET", "path": "/customers/{id}/transfers", "excluded": { "category": "duplicate_of", "reason": "same transfer record shape as GET /transfers, scoped to one customer; not modeled as a separate stream" } },
+    { "method": "GET", "path": "/customers/{id}/mass-payments", "excluded": { "category": "out_of_scope", "reason": "mass-payment status list scoped to a customer whose CREATE step (below) is excluded as destructive_admin; no way to ever populate a mass payment id to list from this connector" } },
+    { "method": "GET", "path": "/customers/{id}/labels", "excluded": { "category": "requires_elevated_scope", "reason": "Dwolla Balance-tier Labels sub-product (fund reservation ledger), a distinct plan-gated feature legacy never touched" } },
+    { "method": "POST", "path": "/customers/{id}/labels", "excluded": { "category": "requires_elevated_scope", "reason": "creating a label reserves/holds customer balance funds; Dwolla Balance-tier plan-gated feature, out of scope" } },
+    { "method": "GET", "path": "/customers/{id}/funding-sources-tokens", "excluded": { "category": "non_data_endpoint", "reason": "mints a short-lived dwolla.js client token for browser-side funding-source tokenization; a session credential, not a syncable record" } },
+    { "method": "GET", "path": "/customers/{id}/iav-token", "excluded": { "category": "non_data_endpoint", "reason": "mints a short-lived Instant Account Verification session token for the dwolla.js IAV widget; a session credential, not a syncable record" } },
+
+    { "method": "GET", "path": "/funding-sources/{id}", "excluded": { "category": "duplicate_of", "reason": "single-funding-source detail; reachable only once an id is already known from a write response, not a distinct list-shaped resource to sync" } },
+    { "method": "POST", "path": "/funding-sources/{id}", "covered_by": { "write": "update_funding_source" } },
+    { "method": "POST", "path": "/funding-sources/{id}", "covered_by": { "write": "remove_funding_source" } },
+    { "method": "GET", "path": "/funding-sources/{id}/balance", "excluded": { "category": "out_of_scope", "reason": "single-scalar Dwolla Balance funding-source balance snapshot, not a syncable object list; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/funding-sources/{id}/initiate-micro-deposits", "covered_by": { "write": "initiate_micro_deposits" } },
+    { "method": "GET", "path": "/funding-sources/{id}/micro-deposits", "excluded": { "category": "duplicate_of", "reason": "single-scalar micro-deposit status read; the same status the verify_micro_deposits write's response already carries" } },
+    { "method": "POST", "path": "/funding-sources/{id}/verify-micro-deposits", "covered_by": { "write": "verify_micro_deposits" } },
+
+    { "method": "GET", "path": "/transfers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-transfer detail; reachable only once an id is already known from elsewhere, not a distinct list-shaped resource this connector reads" } },
+    { "method": "POST", "path": "/transfers", "excluded": { "category": "destructive_admin", "reason": "initiates a real money transfer" } },
+    { "method": "POST", "path": "/transfers/{id}", "covered_by": { "write": "cancel_transfer" } },
+    { "method": "GET", "path": "/transfers/{id}/failure", "excluded": { "category": "duplicate_of", "reason": "single failed-transfer reason detail, not a distinct syncable resource; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/transfers/{id}/fees", "excluded": { "category": "out_of_scope", "reason": "facilitator-fee sub-transactions of a single transfer, not a top-level syncable resource; Pass B breadth-vs-cost triage" } },
+
+    { "method": "POST", "path": "/mass-payments", "excluded": { "category": "destructive_admin", "reason": "initiates up to 5,000 real money transfers in a single batch; same reasoning as the single-transfer create" } },
+    { "method": "GET", "path": "/mass-payments/{id}", "excluded": { "category": "out_of_scope", "reason": "status polling for a mass payment whose only creation path is excluded as destructive_admin; no way to ever populate an id" } },
+    { "method": "POST", "path": "/mass-payments/{id}", "excluded": { "category": "out_of_scope", "reason": "same reasoning as the mass-payments GET: the create step is out of scope" } },
+    { "method": "GET", "path": "/mass-payments/{id}/items", "excluded": { "category": "out_of_scope", "reason": "same reasoning as the mass-payments GET" } },
+
+    { "method": "GET", "path": "/webhook-subscriptions", "excluded": { "category": "out_of_scope", "reason": "small (max 5-10), rarely-changing operational config list rather than business data; not modeled as a read stream this pass. The create/update/delete WRITE actions are still covered below" } },
+    { "method": "POST", "path": "/webhook-subscriptions", "covered_by": { "write": "create_webhook_subscription" } },
+    { "method": "GET", "path": "/webhook-subscriptions/{id}", "excluded": { "category": "duplicate_of", "reason": "single-webhook-subscription detail; reachable only once an id is already known from a write response, not a distinct list-shaped resource to sync" } },
+    { "method": "POST", "path": "/webhook-subscriptions/{id}", "covered_by": { "write": "update_webhook_subscription" } },
+    { "method": "DELETE", "path": "/webhook-subscriptions/{id}", "covered_by": { "write": "delete_webhook_subscription" } },
+    { "method": "GET", "path": "/webhook-subscriptions/{id}/webhooks", "excluded": { "category": "out_of_scope", "reason": "individual webhook DELIVERY ATTEMPT log for a subscription, a debugging/audit trail rather than business data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/webhooks/{id}", "excluded": { "category": "out_of_scope", "reason": "single delivery-attempt detail, same reasoning as the webhooks-for-subscription list" } },
+    { "method": "POST", "path": "/webhooks/{id}/retry", "excluded": { "category": "out_of_scope", "reason": "manually re-fires a previously-failed webhook delivery attempt; operational/debugging action, not a record mutation. Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/beneficial-owners/{id}", "excluded": { "category": "duplicate_of", "reason": "single-beneficial-owner detail; reachable only once an id is already known from a write response, not a distinct list-shaped resource to sync" } },
+    { "method": "POST", "path": "/beneficial-owners/{id}", "covered_by": { "write": "update_beneficial_owner" } },
+    { "method": "DELETE", "path": "/beneficial-owners/{id}", "covered_by": { "write": "remove_beneficial_owner" } },
+    { "method": "POST", "path": "/beneficial-owners/{id}/documents", "excluded": { "category": "binary_payload", "reason": "identity-verification document upload requires multipart/form-data; the engine's write dialect has no multipart body_type" } },
+    { "method": "GET", "path": "/beneficial-owners/{id}/documents", "excluded": { "category": "out_of_scope", "reason": "per-owner document metadata list; documents themselves are binary uploads, out of scope this pass" } },
+
     { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/events/{id}", "excluded": { "category": "duplicate_of", "reason": "single-event detail; identical record shape to the events list stream's per-item object, already covered by that stream" } },
+
     { "method": "GET", "path": "/exchange-partners", "covered_by": { "stream": "exchange_partners" } },
+    { "method": "GET", "path": "/exchange-partners/{id}", "excluded": { "category": "duplicate_of", "reason": "single-exchange-partner detail; identical record shape to the exchange_partners list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/exchanges/{id}", "excluded": { "category": "out_of_scope", "reason": "single open-banking exchange-session detail; a session/connection-flow resource, not a top-level business-data list. Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/customers/{id}/exchanges", "excluded": { "category": "out_of_scope", "reason": "creates an open-banking (Plaid/MX/Flinks/Finicity/Checkout.com) exchange session; a third-party-provider connection flow, not a plain data mutation. Pass B breadth-vs-cost triage" } },
+
     { "method": "GET", "path": "/business-classifications", "covered_by": { "stream": "business_classifications" } },
-    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/customers/{id}/funding-sources", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion (requires per-customer partition, out of legacy's first-cut scope too)" } },
-    { "method": "POST", "path": "/transfers", "excluded": { "category": "destructive_admin", "reason": "initiates a real money transfer" } }
+    { "method": "GET", "path": "/business-classifications/{id}", "excluded": { "category": "duplicate_of", "reason": "single-business-classification detail; identical record shape to the business_classifications list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/", "excluded": { "category": "non_data_endpoint", "reason": "the API root resource, a HAL discovery document of top-level _links only; not a syncable record" } },
+    { "method": "POST", "path": "/on-demand-authorizations", "excluded": { "category": "non_data_endpoint", "reason": "mints a short-lived on-demand transfer authorization token/consent-text pair for immediate reuse in a funding-source creation call; a session credential, not a persistent syncable record" } },
+    { "method": "GET", "path": "/on-demand-authorizations/{id}", "excluded": { "category": "non_data_endpoint", "reason": "retrieves the same short-lived authorization token by id; still a session credential" } },
+    { "method": "GET", "path": "/kba/{id}", "excluded": { "category": "non_data_endpoint", "reason": "retrieves a Knowledge-Based-Authentication question set for an in-progress identity-verification session; session-scoped, not a syncable record" } },
+    { "method": "POST", "path": "/kba/{id}", "excluded": { "category": "non_data_endpoint", "reason": "submits KBA question/answer-id pairs to complete an identity-verification session; a one-shot session action tightly coupled to the customer-creation flow, not an independent record mutation" } }
   ]
 }

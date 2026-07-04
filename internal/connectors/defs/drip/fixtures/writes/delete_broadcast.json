@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "bcast_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/synthetic-conformance-value/broadcasts/bcast_fixture_1"
+  }
+}

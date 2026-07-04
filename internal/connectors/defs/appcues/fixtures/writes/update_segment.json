@@ -1,0 +1,12 @@
+{
+  "record": { "id": "seg_fixture_1", "name": "Fixture Segment Renamed" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/synthetic-conformance-value/segments/seg_fixture_1",
+    "body": { "name": "Fixture Segment Renamed" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "seg_fixture_1", "name": "Fixture Segment Renamed" }
+  }
+}

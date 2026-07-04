@@ -41,6 +41,9 @@
         "cost": "{{ record.AverageCost }}",
         "last_modified": "{{ record.LastModifiedOn }}"
       },
+      "incremental": {
+        "request_param": "ModifiedSince"
+      },
       "schema": "schemas/products.json"
     },
     {
@@ -59,6 +62,9 @@
         "tax_rule": "{{ record.TaxRule }}",
         "last_modified": "{{ record.LastModifiedOn }}"
       },
+      "incremental": {
+        "request_param": "ModifiedSince"
+      },
       "schema": "schemas/customers.json"
     },
     {
@@ -75,6 +81,9 @@
         "currency": "{{ record.Currency }}",
         "payment_term": "{{ record.PaymentTerm }}",
         "last_modified": "{{ record.LastModifiedOn }}"
+      },
+      "incremental": {
+        "request_param": "ModifiedSince"
       },
       "schema": "schemas/suppliers.json"
     },
@@ -94,6 +103,9 @@
         "invoice_amount": "{{ record.InvoiceAmount }}",
         "last_modified": "{{ record.LastModifiedOn }}"
       },
+      "incremental": {
+        "request_param": "UpdatedSince"
+      },
       "schema": "schemas/sale_list.json"
     },
     {
@@ -111,7 +123,110 @@
         "order_date": "{{ record.OrderDate }}",
         "last_modified": "{{ record.LastModifiedOn }}"
       },
+      "incremental": {
+        "request_param": "UpdatedSince"
+      },
       "schema": "schemas/purchase_list.json"
+    },
+    {
+      "name": "product_families",
+      "path": "/productFamily",
+      "records": { "path": "ProductFamilies" },
+      "computed_fields": {
+        "id": "{{ record.ID }}",
+        "sku": "{{ record.SKU }}",
+        "name": "{{ record.Name }}",
+        "category": "{{ record.Category }}",
+        "brand": "{{ record.Brand }}",
+        "uom": "{{ record.UOM }}",
+        "last_modified": "{{ record.LastModifiedOn }}"
+      },
+      "incremental": {
+        "request_param": "ModifiedSince"
+      },
+      "schema": "schemas/product_families.json"
+    },
+    {
+      "name": "product_availability",
+      "path": "/ref/productavailability",
+      "records": { "path": "ProductAvailabilityList" },
+      "computed_fields": {
+        "id": "{{ record.ID }}",
+        "sku": "{{ record.SKU }}",
+        "name": "{{ record.Name }}",
+        "location": "{{ record.Location }}",
+        "bin": "{{ record.Bin }}",
+        "on_hand": "{{ record.OnHand }}",
+        "allocated": "{{ record.Allocated }}",
+        "available": "{{ record.Available }}",
+        "on_order": "{{ record.OnOrder }}",
+        "stock_on_hand": "{{ record.StockOnHand }}",
+        "in_transit": "{{ record.InTransit }}"
+      },
+      "schema": "schemas/product_availability.json"
+    },
+    {
+      "name": "locations",
+      "path": "/ref/location",
+      "records": { "path": "LocationList" },
+      "schema": "schemas/locations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "product_categories",
+      "path": "/ref/category",
+      "records": { "path": "CategoryList" },
+      "schema": "schemas/product_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "brands",
+      "path": "/ref/brand",
+      "records": { "path": "BrandList" },
+      "schema": "schemas/brands.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "carriers",
+      "path": "/ref/carrier",
+      "records": { "path": "CarrierList" },
+      "schema": "schemas/carriers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "chart_of_accounts",
+      "path": "/ref/account",
+      "records": { "path": "AccountsList" },
+      "schema": "schemas/chart_of_accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "payment_terms",
+      "path": "/ref/paymentterm",
+      "records": { "path": "PaymentTermList" },
+      "schema": "schemas/payment_terms.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tax_rules",
+      "path": "/ref/tax",
+      "records": { "path": "TaxRuleList" },
+      "schema": "schemas/tax_rules.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "units_of_measure",
+      "path": "/ref/unit",
+      "records": { "path": "UnitList" },
+      "schema": "schemas/units_of_measure.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "price_tiers",
+      "path": "/ref/priceTier",
+      "records": { "path": "PriceTiers" },
+      "schema": "schemas/price_tiers.json",
+      "projection": "passthrough"
     }
   ]
 }

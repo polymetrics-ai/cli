@@ -1,0 +1,519 @@
+{
+  "actions": [
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Email"],
+        "properties": {
+          "Email": { "type": "string" },
+          "Status": { "type": "string" },
+          "FirstName": { "type": "string" },
+          "LastName": { "type": "string" },
+          "CustomFields": { "type": "object" },
+          "Consent": { "type": "object" }
+        }
+      },
+      "risk": "adds a new contact to the account's overall recipient list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.Email }}",
+      "path_fields": ["Email"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Email"],
+        "properties": {
+          "Email": { "type": "string" },
+          "Status": { "type": "string" },
+          "FirstName": { "type": "string" },
+          "LastName": { "type": "string" },
+          "CustomFields": { "type": "object" },
+          "Consent": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing contact's status/name/custom-field data; a Status change (e.g. to Unsubscribed) changes future campaign eligibility for this recipient"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.Email }}",
+      "path_fields": ["Email"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Email"],
+        "properties": {
+          "Email": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a contact and its activity/consent history from the account"
+    },
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListName"],
+        "properties": {
+          "ListName": { "type": "string" },
+          "AllowUnsubscribe": { "type": "boolean" },
+          "Emails": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new contact list, optionally seeding it from existing contact emails; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_list",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lists/{{ record.ListName }}",
+      "path_fields": ["ListName"],
+      "body_type": "json",
+      "body_fields": ["NewListName", "AllowUnsubscribe"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListName"],
+        "properties": {
+          "ListName": { "type": "string" },
+          "NewListName": { "type": "string" },
+          "AllowUnsubscribe": { "type": "boolean" }
+        }
+      },
+      "risk": "renames an existing list or changes its unsubscribe-allowed setting; a rename changes the identifier campaigns/segments reference this list by"
+    },
+    {
+      "name": "delete_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lists/{{ record.ListName }}",
+      "path_fields": ["ListName"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListName"],
+        "properties": {
+          "ListName": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a contact list; any campaign still targeting this list by name will fail to resolve its recipients"
+    },
+    {
+      "name": "add_list_contacts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.ListName }}/contacts",
+      "path_fields": ["ListName"],
+      "body_type": "json",
+      "body_fields": ["Emails", "Status"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListName", "Emails"],
+        "properties": {
+          "ListName": { "type": "string" },
+          "Emails": { "type": "array", "items": { "type": "string" } },
+          "Status": { "type": "string" }
+        }
+      },
+      "risk": "adds existing contacts to a list, making them eligible recipients for any campaign targeting that list"
+    },
+    {
+      "name": "create_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/segments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "Rule"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Rule": { "type": "string" }
+        }
+      },
+      "risk": "creates a new dynamic contact segment from a SQL-like rule; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_segment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/segments/{{ record.Name }}",
+      "path_fields": ["Name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "Rule"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Rule": { "type": "string" }
+        }
+      },
+      "risk": "changes the membership rule of an existing segment; immediately changes which contacts any campaign targeting this segment will reach"
+    },
+    {
+      "name": "delete_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/segments/{{ record.Name }}",
+      "path_fields": ["Name"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a segment; any campaign still targeting this segment by name will fail to resolve its recipients"
+    },
+    {
+      "name": "create_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/templates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Subject": { "type": "string" },
+          "Body": { "type": "array" },
+          "TemplateScope": { "type": "string" }
+        }
+      },
+      "risk": "creates a new email template; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/templates/{{ record.Name }}",
+      "path_fields": ["Name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Subject": { "type": "string" },
+          "Body": { "type": "array" },
+          "TemplateScope": { "type": "string" }
+        }
+      },
+      "risk": "overwrites the subject/body of an existing template; any campaign referencing this template by name sends the new content on its next send"
+    },
+    {
+      "name": "delete_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/templates/{{ record.Name }}",
+      "path_fields": ["Name"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a template; any campaign still referencing this template by name will fail to build its content"
+    },
+    {
+      "name": "create_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/campaigns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "Recipients"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Content": { "type": "array" },
+          "Recipients": {
+            "type": "object",
+            "properties": {
+              "ListNames": { "type": "array", "items": { "type": "string" } },
+              "SegmentNames": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "Options": { "type": "object" }
+        }
+      },
+      "risk": "creates a new campaign targeting the given lists/segments; depending on Options this may schedule a live send to real recipients, not a preview-only action"
+    },
+    {
+      "name": "update_campaign",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/campaigns/{{ record.Name }}",
+      "path_fields": ["Name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Content": { "type": "array" },
+          "Recipients": { "type": "object" },
+          "Options": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing campaign's content, recipients, or send options; a campaign already in progress may not accept every field change"
+    },
+    {
+      "name": "pause_campaign",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/campaigns/{{ record.Name }}/pause",
+      "path_fields": ["Name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "pauses an in-progress campaign send; recipients not yet reached will not receive the email until the campaign is resumed"
+    },
+    {
+      "name": "delete_campaign",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/campaigns/{{ record.Name }}",
+      "path_fields": ["Name"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a campaign; if it has not finished sending, any remaining scheduled deliveries are cancelled"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhook",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "URL"],
+        "properties": {
+          "Name": { "type": "string" },
+          "URL": { "type": "string" },
+          "NotifyOncePerEmail": { "type": "boolean" },
+          "NotificationForSent": { "type": "boolean" },
+          "NotificationForOpened": { "type": "boolean" },
+          "NotificationForClicked": { "type": "boolean" },
+          "NotificationForUnsubscribed": { "type": "boolean" },
+          "NotificationForAbuseReport": { "type": "boolean" },
+          "NotificationForError": { "type": "boolean" }
+        }
+      },
+      "risk": "registers a new outbound webhook that will POST live event data (sent/opened/clicked/bounced) to an external URL of the caller's choosing; verify the target endpoint before enabling"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhook/{{ record.WebhookID }}",
+      "path_fields": ["WebhookID"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["WebhookID"],
+        "properties": {
+          "WebhookID": { "type": "string" },
+          "URL": { "type": "string" },
+          "NotifyOncePerEmail": { "type": "boolean" },
+          "NotificationForSent": { "type": "boolean" },
+          "NotificationForOpened": { "type": "boolean" },
+          "NotificationForClicked": { "type": "boolean" },
+          "NotificationForUnsubscribed": { "type": "boolean" },
+          "NotificationForAbuseReport": { "type": "boolean" },
+          "NotificationForError": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing webhook's target URL or event subscriptions; a changed URL redirects future event deliveries to a different endpoint"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhook/{{ record.WebhookID }}",
+      "path_fields": ["WebhookID"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["WebhookID"],
+        "properties": {
+          "WebhookID": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+    },
+    {
+      "name": "create_domain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/domains",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Domain"],
+        "properties": {
+          "Domain": { "type": "string" },
+          "SetAsDefault": { "type": "boolean" }
+        }
+      },
+      "risk": "registers a new sending domain pending DNS verification; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_domain",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/domains/{{ record.Domain }}",
+      "path_fields": ["Domain"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Domain"],
+        "properties": {
+          "Domain": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a verified sending domain; any campaign configured to send from this domain will fail until reconfigured"
+    },
+    {
+      "name": "create_inbound_route",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inboundroute",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "Filter", "FilterType", "ActionType"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Filter": { "type": "string" },
+          "FilterType": { "type": "string" },
+          "ActionType": { "type": "string" },
+          "EmailAddress": { "type": "string" },
+          "HttpAddress": { "type": "string" }
+        }
+      },
+      "risk": "creates a new inbound-mail routing rule that forwards matching inbound email to an external address or webhook URL of the caller's choosing"
+    },
+    {
+      "name": "update_inbound_route",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/inboundroute/{{ record.PublicId }}",
+      "path_fields": ["PublicId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["PublicId"],
+        "properties": {
+          "PublicId": { "type": "string" },
+          "Name": { "type": "string" },
+          "Filter": { "type": "string" },
+          "FilterType": { "type": "string" },
+          "ActionType": { "type": "string" },
+          "EmailAddress": { "type": "string" },
+          "HttpAddress": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing inbound route's match filter or forwarding destination; redirects future matching inbound mail to a different address/URL"
+    },
+    {
+      "name": "delete_inbound_route",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/inboundroute/{{ record.PublicId }}",
+      "path_fields": ["PublicId"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["PublicId"],
+        "properties": {
+          "PublicId": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes an inbound-mail routing rule; matching inbound mail is no longer forwarded once removed"
+    }
+  ]
+}

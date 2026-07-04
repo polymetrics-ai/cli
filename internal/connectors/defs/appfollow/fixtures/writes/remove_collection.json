@@ -1,0 +1,12 @@
+{
+  "record": {
+    "apps_id": 11
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/account/apps",
+    "body": {
+      "apps_id": 11
+    }
+  }
+}

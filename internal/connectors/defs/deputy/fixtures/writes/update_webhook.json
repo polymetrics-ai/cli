@@ -1,0 +1,21 @@
+{
+  "record": { "Id": 1, "Enabled": false },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/resource/Webhook/1",
+    "body": { "Enabled": false }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": 1,
+      "Topic": "Employee.Insert",
+      "Address": "https://example.com/webhooks/fixture",
+      "Type": "URL",
+      "Enabled": false,
+      "Creator": 1,
+      "Created": "2026-01-01T00:00:00",
+      "Modified": "2026-01-01T00:05:00"
+    }
+  }
+}

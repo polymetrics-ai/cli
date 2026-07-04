@@ -1,0 +1,20 @@
+{
+  "record": {
+    "Name": "Fixture Webhook",
+    "URL": "https://example.com/hooks/elasticemail",
+    "NotificationForSent": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook",
+    "body": {
+      "Name": "Fixture Webhook",
+      "URL": "https://example.com/hooks/elasticemail",
+      "NotificationForSent": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "WebhookID": "webhook_fixture_1" }
+  }
+}

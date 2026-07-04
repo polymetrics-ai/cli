@@ -1,10 +1,13 @@
 # Overview
 
-Chargify (Maxio Advanced Billing) is a wave2 fan-out Tier-1 declarative migration. It reads
-Chargify customers, subscriptions, products, coupons, and transactions through the Chargify REST
-API. This bundle targets capability parity with `internal/connectors/chargify` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry
-flip. Chargify is read-only in both legacy and this bundle (no `writes.json`).
+Chargify (Maxio Advanced Billing) is a wave2 fan-out Tier-1 declarative migration, expanded in Pass
+B to the full practical API surface. It reads Chargify customers, subscriptions, products, product
+families, coupons, transactions, invoices, payment profiles, events, and statements through the
+Chargify REST API, and writes customers, subscriptions (create/update/cancel), product families,
+products, and coupons. This bundle originally targeted capability parity with
+`internal/connectors/chargify` (the hand-written connector it migrates, read-only); the legacy
+package stays registered and unchanged until wave6's registry flip. Pass B's write actions are new
+capability beyond legacy parity — see "Write actions & risks" below.
 
 ## Auth setup
 
@@ -69,18 +72,73 @@ value straight through (numeric/boolean fields preserve their native type instea
 stringified). Schemas declare the real wire type (`integer`/`boolean`/`string`) per field, matching
 `chargifyStreamEndpoints`'s field catalog exactly.
 
+**Pass B new streams** (same envelope-unwrap pattern as above): `product_families`
+(`/product_families.json`, envelope `product_family`), `invoices` (`/invoices.json`, response shape
+`{"invoices": [...], "meta": {...}}` — NOT the single-key-per-element envelope the other streams
+use, since Chargify's newer relational Invoicing API returns whole invoice objects directly, so
+`invoices`' `computed_fields` reference `record.<field>` directly rather than
+`record.invoices.<field>`; `records.path: "invoices"` selects the array), `payment_profiles`
+(`/payment_profiles.json`, envelope `payment_profile`, no incremental cursor declared — Chargify's
+payment-profile list has no documented updated_at-ordered pagination guarantee and no legacy
+precedent to match), `events` (`/events.json`, envelope `event`, cursor `created_at` — events are
+an immutable append-only log), and `statements` (`/statements.json`, envelope `statement`, no
+incremental — Chargify's statement list has no documented cursor semantics).
+
 ## Write actions & risks
 
-None — Chargify is exposed as a read-only source connector in both legacy (`chargify.go`'s `Write`
-returns `connectors.ErrUnsupportedOperation`) and this bundle (`metadata.json`'s
-`capabilities.write: false`, no `writes.json` file at all).
+Pass B adds write capability (new beyond legacy, which was read-only): `create_customer`/
+`update_customer`, `create_subscription`/`update_subscription`/`cancel_subscription`,
+`create_product_family`, `create_product`/`update_product`, `create_coupon`/`update_coupon`.
+
+**Every write action's `record_schema` nests its mutable fields under a single wrapper property
+matching Chargify's own request-envelope convention** (`{"customer": {...}}`,
+`{"subscription": {...}}`, `{"product_family": {...}}`, `{"product": {...}}`, `{"coupon": {...}}` —
+Chargify's real API requires exactly this envelope on every write body, confirmed against
+`docs.chargify.com`'s signup/customer examples). The write dialect's default JSON body construction
+(`buildJSONBody`, `engine/write.go`) copies every top-level record field verbatim into the request
+body except `path_fields` — it has no dedicated "wrap the body under this key" mechanism, so the
+wrapper key is modeled as an ordinary nested-object `record_schema` property instead (the same
+pattern airtable's `create_record`'s `fields` object uses): a record shaped
+`{"id": "1", "customer": {"first_name": "Jane"}}` produces exactly Chargify's expected
+`PUT /customers/1.json` body `{"customer": {"first_name": "Jane"}}`, with `id` excluded from the
+body by `path_fields`. Subscription creation only models the minimal `product_handle` +
+`customer_id` shape (Chargify's full signup payload also accepts nested `payment_profile`/
+`components`/`metafields` sub-objects); a caller needing those can still pass them as additional
+keys inside the `subscription` object, since the schema does not set `additionalProperties: false`.
+
+`cancel_subscription` (`POST /subscriptions/{id}/cancel.json`) sends an optional
+`{"subscription": {"cancellation_message": "..."}}` body — Chargify accepts cancellation without a
+message too, so `subscription` is not required.
+
+All write actions carry `"risk": "external mutation; approval required"` (subscription lifecycle
+actions specifically call out billing side effects) — `metadata.json`'s `capabilities.write` is now
+`true` and `risk.write` documents the aggregate exposure.
 
 ## Known limits
 
-- Full Chargify API surface (invoices, payment profiles, components, webhooks, events, write
-  endpoints) is out of scope for wave2; see `api_surface.json`'s `excluded: {category:
-  out_of_scope, reason: "Pass B capability expansion"}` entries. Only the 5 legacy-parity streams
-  are implemented.
+- **`components` (`GET /product_families/{id}/components.json`) is an `ENGINE_GAP`, not
+  implemented**: this endpoint is scoped per product-family, requiring a fan-out over every
+  `product_families` id. Chargify wraps each `product_families.json` list element in a singular
+  envelope (`{"product_family": {"id": ...}}`), but `fan_out.ids_from.request.id_field`
+  (`engine/read.go`'s `fanOutIDsFromRequest`) does a single flat `map[string]any` key lookup
+  (`rec[spec.IDField]`) with no dotted-path traversal — `id_field` can select a top-level `"id"` key
+  but not a nested `"product_family.id"` path, so against Chargify's real envelope shape zero ids
+  would ever resolve and the stream would silently emit nothing. This was not shipped as a
+  silently-broken fan_out; see `api_surface.json`'s `ENGINE_GAP`-tagged entry. Closing this requires
+  either a dotted-path-capable `id_field` or a `records_path`/pre-projection step that can reach into
+  the wrapper before extraction.
+- **Product/coupon/component price points, per-subscription component allocation, and per-product
+  detail sub-resources are out of scope** — see `api_surface.json`'s per-endpoint `out_of_scope`
+  reasons (mostly: nested per-parent-id sub-resource collections with no top-level list endpoint,
+  deferred alongside the `components` gap above rather than half-modeled against a single hardcoded
+  parent id).
+- Payment-profile create/update is excluded (`requires_elevated_scope`): Chargify steers raw
+  card-data capture through Chargify.js/hosted tokenization rather than a plain server-side JSON
+  POST, which this connector's declarative write dialect has no mechanism to represent safely.
+  Payment profiles remain read-only in this bundle.
+- Destructive/irreversible admin actions (customer/coupon/payment-profile delete, subscription
+  purge, invoice status override) are deliberately excluded — see `api_surface.json`'s
+  `destructive_admin` entries.
 - **`domain`/`subdomain` config keys dropped; `base_url` is now required.** Legacy derives the API
   host from a `domain` (or `subdomain` + `.chargify.com`) config value when `base_url` is unset
   (`chargifyBaseURL`). The engine's spec-default materialization only fills in a LITERAL per-key

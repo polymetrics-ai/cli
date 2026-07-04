@@ -1,0 +1,1317 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/crm/deals",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "deal_fixture_1",
+          "attributes": {
+            "deal_name": "Fixture Deal 1",
+            "amount": 100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            1
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_2",
+          "attributes": {
+            "deal_name": "Fixture Deal 2",
+            "amount": 200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            2
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_3",
+          "attributes": {
+            "deal_name": "Fixture Deal 3",
+            "amount": 300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            3
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_4",
+          "attributes": {
+            "deal_name": "Fixture Deal 4",
+            "amount": 400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            4
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_5",
+          "attributes": {
+            "deal_name": "Fixture Deal 5",
+            "amount": 500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            5
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_6",
+          "attributes": {
+            "deal_name": "Fixture Deal 6",
+            "amount": 600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            6
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_7",
+          "attributes": {
+            "deal_name": "Fixture Deal 7",
+            "amount": 700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            7
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_8",
+          "attributes": {
+            "deal_name": "Fixture Deal 8",
+            "amount": 800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            8
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_9",
+          "attributes": {
+            "deal_name": "Fixture Deal 9",
+            "amount": 900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            9
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_10",
+          "attributes": {
+            "deal_name": "Fixture Deal 10",
+            "amount": 1000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            10
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_11",
+          "attributes": {
+            "deal_name": "Fixture Deal 11",
+            "amount": 1100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            11
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_12",
+          "attributes": {
+            "deal_name": "Fixture Deal 12",
+            "amount": 1200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            12
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_13",
+          "attributes": {
+            "deal_name": "Fixture Deal 13",
+            "amount": 1300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            13
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_14",
+          "attributes": {
+            "deal_name": "Fixture Deal 14",
+            "amount": 1400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            14
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_15",
+          "attributes": {
+            "deal_name": "Fixture Deal 15",
+            "amount": 1500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            15
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_16",
+          "attributes": {
+            "deal_name": "Fixture Deal 16",
+            "amount": 1600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            16
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_17",
+          "attributes": {
+            "deal_name": "Fixture Deal 17",
+            "amount": 1700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-18T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            17
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_18",
+          "attributes": {
+            "deal_name": "Fixture Deal 18",
+            "amount": 1800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-19T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            18
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_19",
+          "attributes": {
+            "deal_name": "Fixture Deal 19",
+            "amount": 1900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-20T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            19
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_20",
+          "attributes": {
+            "deal_name": "Fixture Deal 20",
+            "amount": 2000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-21T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            20
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_21",
+          "attributes": {
+            "deal_name": "Fixture Deal 21",
+            "amount": 2100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-22T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            21
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_22",
+          "attributes": {
+            "deal_name": "Fixture Deal 22",
+            "amount": 2200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-23T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            22
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_23",
+          "attributes": {
+            "deal_name": "Fixture Deal 23",
+            "amount": 2300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-24T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            23
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_24",
+          "attributes": {
+            "deal_name": "Fixture Deal 24",
+            "amount": 2400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-25T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            24
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_25",
+          "attributes": {
+            "deal_name": "Fixture Deal 25",
+            "amount": 2500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-26T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            25
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_26",
+          "attributes": {
+            "deal_name": "Fixture Deal 26",
+            "amount": 2600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-27T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            26
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_27",
+          "attributes": {
+            "deal_name": "Fixture Deal 27",
+            "amount": 2700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-28T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            27
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_28",
+          "attributes": {
+            "deal_name": "Fixture Deal 28",
+            "amount": 2800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-01T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            28
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_29",
+          "attributes": {
+            "deal_name": "Fixture Deal 29",
+            "amount": 2900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            29
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_30",
+          "attributes": {
+            "deal_name": "Fixture Deal 30",
+            "amount": 3000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            30
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_31",
+          "attributes": {
+            "deal_name": "Fixture Deal 31",
+            "amount": 3100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            31
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_32",
+          "attributes": {
+            "deal_name": "Fixture Deal 32",
+            "amount": 3200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            32
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_33",
+          "attributes": {
+            "deal_name": "Fixture Deal 33",
+            "amount": 3300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            33
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_34",
+          "attributes": {
+            "deal_name": "Fixture Deal 34",
+            "amount": 3400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            34
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_35",
+          "attributes": {
+            "deal_name": "Fixture Deal 35",
+            "amount": 3500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            35
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_36",
+          "attributes": {
+            "deal_name": "Fixture Deal 36",
+            "amount": 3600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            36
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_37",
+          "attributes": {
+            "deal_name": "Fixture Deal 37",
+            "amount": 3700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            37
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_38",
+          "attributes": {
+            "deal_name": "Fixture Deal 38",
+            "amount": 3800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            38
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_39",
+          "attributes": {
+            "deal_name": "Fixture Deal 39",
+            "amount": 3900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            39
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_40",
+          "attributes": {
+            "deal_name": "Fixture Deal 40",
+            "amount": 4000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            40
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_41",
+          "attributes": {
+            "deal_name": "Fixture Deal 41",
+            "amount": 4100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            41
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_42",
+          "attributes": {
+            "deal_name": "Fixture Deal 42",
+            "amount": 4200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            42
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_43",
+          "attributes": {
+            "deal_name": "Fixture Deal 43",
+            "amount": 4300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            43
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_44",
+          "attributes": {
+            "deal_name": "Fixture Deal 44",
+            "amount": 4400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            44
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_45",
+          "attributes": {
+            "deal_name": "Fixture Deal 45",
+            "amount": 4500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-18T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            45
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_46",
+          "attributes": {
+            "deal_name": "Fixture Deal 46",
+            "amount": 4600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-19T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            46
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_47",
+          "attributes": {
+            "deal_name": "Fixture Deal 47",
+            "amount": 4700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-20T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            47
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_48",
+          "attributes": {
+            "deal_name": "Fixture Deal 48",
+            "amount": 4800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-21T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            48
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_49",
+          "attributes": {
+            "deal_name": "Fixture Deal 49",
+            "amount": 4900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-22T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            49
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_50",
+          "attributes": {
+            "deal_name": "Fixture Deal 50",
+            "amount": 5000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-23T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            50
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_51",
+          "attributes": {
+            "deal_name": "Fixture Deal 51",
+            "amount": 5100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-24T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            51
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_52",
+          "attributes": {
+            "deal_name": "Fixture Deal 52",
+            "amount": 5200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-25T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            52
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_53",
+          "attributes": {
+            "deal_name": "Fixture Deal 53",
+            "amount": 5300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-26T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            53
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_54",
+          "attributes": {
+            "deal_name": "Fixture Deal 54",
+            "amount": 5400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-27T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            54
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_55",
+          "attributes": {
+            "deal_name": "Fixture Deal 55",
+            "amount": 5500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-28T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            55
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_56",
+          "attributes": {
+            "deal_name": "Fixture Deal 56",
+            "amount": 5600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-01T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            56
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_57",
+          "attributes": {
+            "deal_name": "Fixture Deal 57",
+            "amount": 5700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            57
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_58",
+          "attributes": {
+            "deal_name": "Fixture Deal 58",
+            "amount": 5800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            58
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_59",
+          "attributes": {
+            "deal_name": "Fixture Deal 59",
+            "amount": 5900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            59
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_60",
+          "attributes": {
+            "deal_name": "Fixture Deal 60",
+            "amount": 6000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            60
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_61",
+          "attributes": {
+            "deal_name": "Fixture Deal 61",
+            "amount": 6100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            61
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_62",
+          "attributes": {
+            "deal_name": "Fixture Deal 62",
+            "amount": 6200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            62
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_63",
+          "attributes": {
+            "deal_name": "Fixture Deal 63",
+            "amount": 6300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            63
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_64",
+          "attributes": {
+            "deal_name": "Fixture Deal 64",
+            "amount": 6400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            64
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_65",
+          "attributes": {
+            "deal_name": "Fixture Deal 65",
+            "amount": 6500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            65
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_66",
+          "attributes": {
+            "deal_name": "Fixture Deal 66",
+            "amount": 6600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            66
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_67",
+          "attributes": {
+            "deal_name": "Fixture Deal 67",
+            "amount": 6700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            67
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_68",
+          "attributes": {
+            "deal_name": "Fixture Deal 68",
+            "amount": 6800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            68
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_69",
+          "attributes": {
+            "deal_name": "Fixture Deal 69",
+            "amount": 6900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            69
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_70",
+          "attributes": {
+            "deal_name": "Fixture Deal 70",
+            "amount": 7000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            70
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_71",
+          "attributes": {
+            "deal_name": "Fixture Deal 71",
+            "amount": 7100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            71
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_72",
+          "attributes": {
+            "deal_name": "Fixture Deal 72",
+            "amount": 7200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            72
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_73",
+          "attributes": {
+            "deal_name": "Fixture Deal 73",
+            "amount": 7300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-18T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            73
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_74",
+          "attributes": {
+            "deal_name": "Fixture Deal 74",
+            "amount": 7400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-19T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            74
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_75",
+          "attributes": {
+            "deal_name": "Fixture Deal 75",
+            "amount": 7500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-20T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            75
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_76",
+          "attributes": {
+            "deal_name": "Fixture Deal 76",
+            "amount": 7600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-21T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            76
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_77",
+          "attributes": {
+            "deal_name": "Fixture Deal 77",
+            "amount": 7700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-22T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            77
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_78",
+          "attributes": {
+            "deal_name": "Fixture Deal 78",
+            "amount": 7800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-23T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            78
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_79",
+          "attributes": {
+            "deal_name": "Fixture Deal 79",
+            "amount": 7900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-24T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            79
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_80",
+          "attributes": {
+            "deal_name": "Fixture Deal 80",
+            "amount": 8000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-25T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            80
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_81",
+          "attributes": {
+            "deal_name": "Fixture Deal 81",
+            "amount": 8100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-26T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            81
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_82",
+          "attributes": {
+            "deal_name": "Fixture Deal 82",
+            "amount": 8200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-27T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            82
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_83",
+          "attributes": {
+            "deal_name": "Fixture Deal 83",
+            "amount": 8300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-28T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            83
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_84",
+          "attributes": {
+            "deal_name": "Fixture Deal 84",
+            "amount": 8400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-01T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            84
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_85",
+          "attributes": {
+            "deal_name": "Fixture Deal 85",
+            "amount": 8500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            85
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_86",
+          "attributes": {
+            "deal_name": "Fixture Deal 86",
+            "amount": 8600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            86
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_87",
+          "attributes": {
+            "deal_name": "Fixture Deal 87",
+            "amount": 8700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            87
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_88",
+          "attributes": {
+            "deal_name": "Fixture Deal 88",
+            "amount": 8800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            88
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_89",
+          "attributes": {
+            "deal_name": "Fixture Deal 89",
+            "amount": 8900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            89
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_90",
+          "attributes": {
+            "deal_name": "Fixture Deal 90",
+            "amount": 9000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            90
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_91",
+          "attributes": {
+            "deal_name": "Fixture Deal 91",
+            "amount": 9100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            91
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_92",
+          "attributes": {
+            "deal_name": "Fixture Deal 92",
+            "amount": 9200,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            92
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_93",
+          "attributes": {
+            "deal_name": "Fixture Deal 93",
+            "amount": 9300,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            93
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_94",
+          "attributes": {
+            "deal_name": "Fixture Deal 94",
+            "amount": 9400,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            94
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_95",
+          "attributes": {
+            "deal_name": "Fixture Deal 95",
+            "amount": 9500,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            95
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_96",
+          "attributes": {
+            "deal_name": "Fixture Deal 96",
+            "amount": 9600,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            96
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_97",
+          "attributes": {
+            "deal_name": "Fixture Deal 97",
+            "amount": 9700,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            97
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_98",
+          "attributes": {
+            "deal_name": "Fixture Deal 98",
+            "amount": 9800,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            98
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_99",
+          "attributes": {
+            "deal_name": "Fixture Deal 99",
+            "amount": 9900,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            99
+          ],
+          "linkedCompaniesIds": []
+        },
+        {
+          "id": "deal_fixture_100",
+          "attributes": {
+            "deal_name": "Fixture Deal 100",
+            "amount": 10000,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            100
+          ],
+          "linkedCompaniesIds": []
+        }
+      ]
+    }
+  }
+}

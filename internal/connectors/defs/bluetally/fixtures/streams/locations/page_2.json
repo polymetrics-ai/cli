@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/locations",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 51,
+        "name": "Fixture location 51",
+        "address_line_1": "1 Fixture St",
+        "address_line_2": "",
+        "city": "Fixtureville",
+        "zip": "00000",
+        "state": "CA",
+        "country": "United States",
+        "email": "fixture@example.com",
+        "phone": "+15550100",
+        "currency": "USD",
+        "logo": "www.test.com",
+        "number_of_checked_out_assets": 0,
+        "number_of_assets": 1,
+        "number_of_accessories": 0,
+        "number_of_components": 0,
+        "number_of_consumables": 0,
+        "number_of_employees": 0,
+        "number_of_licenses": 0,
+        "checked_out_assets": [],
+        "assets": [],
+        "accessories": [],
+        "components": [],
+        "consumables": [],
+        "employees": [],
+        "licenses": [],
+        "custom_fields": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

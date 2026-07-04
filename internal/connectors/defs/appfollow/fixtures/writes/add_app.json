@@ -1,0 +1,18 @@
+{
+  "record": {
+    "store": "itunes",
+    "ext_id": "ios:1001",
+    "apps_id": 11,
+    "locale": "us"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/account/apps/app",
+    "body": {
+      "store": "itunes",
+      "ext_id": "ios:1001",
+      "apps_id": 11,
+      "locale": "us"
+    }
+  }
+}

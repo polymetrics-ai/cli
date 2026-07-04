@@ -1,14 +1,14 @@
 {
   "name": "bigmailer",
   "display_name": "BigMailer",
-  "description": "Reads BigMailer brands, account users, and brand-scoped contacts, lists, and custom fields through the BigMailer REST API.",
+  "description": "Reads and writes BigMailer brands, account users, and brand-scoped contacts, lists, custom fields, message types, segments, senders, templates, suppression lists, and campaigns through the BigMailer REST API.",
   "integration_type": "api",
   "docs_url": "https://www.bigmailer.io/api",
   "release_stage": "beta",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external BigMailer API read of brands and account users",
-    "approval": "none; read-only API"
+    "read": "external BigMailer API read of brands, account users, and brand-scoped marketing/CRM resources",
+    "write": "external mutation of BigMailer brands, contacts, lists, custom fields, message types, segments, senders, templates, and account users; can send real emails indirectly (e.g. via a sender/template referenced by a later campaign) but issues no send action itself",
+    "approval": "required for every write action; see writes.json risk field per action"
   }
 }

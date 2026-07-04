@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture Co"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies",
+    "body": {
+      "name": "Fixture Co"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "cmp_fixture_new"
+    }
+  }
+}

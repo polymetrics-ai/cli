@@ -1,0 +1,234 @@
+{
+  "actions": [
+    {
+      "name": "create_config",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/products/{{ config.product_id }}/configs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "order": { "type": "integer" },
+          "evaluationVersion": { "type": "string" }
+        }
+      },
+      "risk": "creates a new ConfigCat config within the configured product; low risk, no data destruction"
+    },
+    {
+      "name": "update_config",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/configs/{{ record.configId }}",
+      "path_fields": ["configId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["configId"],
+        "properties": {
+          "configId": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "order": { "type": "integer" }
+        }
+      },
+      "risk": "renames/reorders an existing ConfigCat config; may affect SDK-visible dashboard organization"
+    },
+    {
+      "name": "delete_config",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/configs/{{ record.configId }}",
+      "path_fields": ["configId"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["configId"],
+        "properties": {
+          "configId": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a ConfigCat config and every feature flag/setting defined in it; destructive, external mutation; approval required"
+    },
+    {
+      "name": "create_environment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/products/{{ config.product_id }}/environments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "description": { "type": "string" },
+          "order": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new ConfigCat environment within the configured product; low risk, no data destruction"
+    },
+    {
+      "name": "update_environment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/environments/{{ record.environmentId }}",
+      "path_fields": ["environmentId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["environmentId"],
+        "properties": {
+          "environmentId": { "type": "string" },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "description": { "type": "string" },
+          "order": { "type": "integer" }
+        }
+      },
+      "risk": "renames/recolors an existing ConfigCat environment; may affect dashboard organization visible to other users"
+    },
+    {
+      "name": "delete_environment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/environments/{{ record.environmentId }}",
+      "path_fields": ["environmentId"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["environmentId"],
+        "properties": {
+          "environmentId": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a ConfigCat environment and every feature flag value/SDK key scoped to it; destructive, external mutation; approval required"
+    },
+    {
+      "name": "create_flag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/configs/{{ config.config_id }}/settings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key", "name", "settingType"],
+        "properties": {
+          "key": { "type": "string" },
+          "name": { "type": "string" },
+          "hint": { "type": "string" },
+          "settingType": { "type": "string", "enum": ["boolean", "string", "int", "double"] },
+          "tags": { "type": "array", "items": { "type": "integer" } },
+          "order": { "type": "integer" },
+          "isJson": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new ConfigCat feature flag/setting within the configured config; low risk, no data destruction"
+    },
+    {
+      "name": "update_flag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/settings/{{ record.settingId }}",
+      "path_fields": ["settingId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["settingId", "name"],
+        "properties": {
+          "settingId": { "type": "integer" },
+          "name": { "type": "string" },
+          "hint": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "integer" } },
+          "order": { "type": "integer" }
+        }
+      },
+      "risk": "replaces an existing ConfigCat feature flag/setting's metadata (name/hint/tags); does not itself change the flag's evaluated VALUE in any environment"
+    },
+    {
+      "name": "delete_flag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/settings/{{ record.settingId }}",
+      "path_fields": ["settingId"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["settingId"],
+        "properties": {
+          "settingId": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a ConfigCat feature flag/setting and its values in every environment; destructive, external mutation; approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/products/{{ config.product_id }}/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "creates a new ConfigCat tag within the configured product; low risk, no data destruction"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/tags/{{ record.tagId }}",
+      "path_fields": ["tagId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tagId"],
+        "properties": {
+          "tagId": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "renames/recolors an existing ConfigCat tag; affects every feature flag tagged with it"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/tags/{{ record.tagId }}",
+      "path_fields": ["tagId"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tagId"],
+        "properties": {
+          "tagId": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a ConfigCat tag and untags every feature flag that used it; destructive, external mutation; approval required"
+    }
+  ]
+}

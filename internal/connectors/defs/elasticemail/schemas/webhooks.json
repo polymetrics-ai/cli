@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": ["WebhookID"],
+  "required": ["WebhookID"],
+  "properties": {
+    "WebhookID": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "DateCreated": { "type": ["string", "null"] },
+    "DateUpdated": { "type": ["string", "null"] },
+    "URL": { "type": ["string", "null"] },
+    "NotifyOncePerEmail": { "type": ["boolean", "null"] },
+    "NotificationForSent": { "type": ["boolean", "null"] },
+    "NotificationForOpened": { "type": ["boolean", "null"] },
+    "NotificationForClicked": { "type": ["boolean", "null"] },
+    "NotificationForUnsubscribed": { "type": ["boolean", "null"] },
+    "NotificationForAbuseReport": { "type": ["boolean", "null"] },
+    "NotificationForError": { "type": ["boolean", "null"] },
+    "IsEnabled": { "type": ["boolean", "null"] }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/api_key" },
+  "response": {
+    "status": 200,
+    "body": {
+      "api_keys": [
+        {
+          "key": "fixture_api_key_placeholder",
+          "name": "Fixture API Key",
+          "created": "2026-01-01T00:00:00Z",
+          "created_by": "fixture@example.com"
+        }
+      ]
+    }
+  }
+}

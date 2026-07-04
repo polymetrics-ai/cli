@@ -1,0 +1,295 @@
+{
+  "actions": [
+    {
+      "name": "create_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/resource/OperationalUnit",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Company", "OperationalUnitName"],
+        "properties": {
+          "Company": { "type": "integer" },
+          "OperationalUnitName": { "type": "string" },
+          "ParentOperationalUnit": { "type": "integer" },
+          "Active": { "type": "boolean" },
+          "ShowOnRoster": { "type": "boolean" },
+          "Colour": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a real Deputy department/operational unit; approval required"
+    },
+    {
+      "name": "update_department",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/resource/OperationalUnit/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" },
+          "OperationalUnitName": { "type": "string" },
+          "Active": { "type": "boolean" },
+          "ShowOnRoster": { "type": "boolean" },
+          "Colour": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a real Deputy department/operational unit; approval required"
+    },
+    {
+      "name": "delete_department",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/resource/OperationalUnit/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible deletion of a real Deputy department/operational unit; approval required"
+    },
+    {
+      "name": "create_leave",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/resource/Leave",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Employee", "DateStart", "DateEnd"],
+        "properties": {
+          "Employee": { "type": "integer" },
+          "LeaveRule": { "type": "integer" },
+          "DateStart": { "type": "string" },
+          "DateEnd": { "type": "string" },
+          "Comment": { "type": "string" },
+          "AllDay": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a real leave request for a Deputy employee; approval required"
+    },
+    {
+      "name": "update_leave",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/resource/Leave/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" },
+          "DateStart": { "type": "string" },
+          "DateEnd": { "type": "string" },
+          "Status": { "type": "integer" },
+          "Comment": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a real Deputy leave request, including its approval status; approval required"
+    },
+    {
+      "name": "delete_leave",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/resource/Leave/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible deletion of a real Deputy leave request; approval required"
+    },
+    {
+      "name": "create_roster",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/resource/Roster",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["StartTime", "EndTime", "OperationalUnit"],
+        "properties": {
+          "OperationalUnit": { "type": "integer" },
+          "Employee": { "type": "integer" },
+          "StartTime": { "type": "integer" },
+          "EndTime": { "type": "integer" },
+          "Comment": { "type": "string" },
+          "Open": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a real Deputy roster/shift, potentially notifying the assigned employee; approval required"
+    },
+    {
+      "name": "update_roster",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/resource/Roster/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" },
+          "StartTime": { "type": "integer" },
+          "EndTime": { "type": "integer" },
+          "Employee": { "type": "integer" },
+          "Published": { "type": "boolean" },
+          "Comment": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a real Deputy roster/shift, potentially notifying the assigned employee; approval required"
+    },
+    {
+      "name": "delete_roster",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/resource/Roster/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible deletion of a real Deputy roster/shift; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/resource/Webhook",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Topic", "Address", "Type"],
+        "properties": {
+          "Topic": { "type": "string" },
+          "Address": { "type": "string" },
+          "Type": { "type": "string" },
+          "Enabled": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; registers a real Deputy webhook subscription that will deliver events to the given address; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/resource/Webhook/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" },
+          "Address": { "type": "string" },
+          "Enabled": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; updates a real Deputy webhook subscription; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/resource/Webhook/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible deletion of a real Deputy webhook subscription; approval required"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/resource/Team",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name"],
+        "properties": {
+          "Name": { "type": "string" },
+          "LeaderEmployee": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a real Deputy team; approval required"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/resource/Team/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" },
+          "Name": { "type": "string" },
+          "LeaderEmployee": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; updates a real Deputy team; approval required"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/resource/Team/{{ record.Id }}",
+      "path_fields": ["Id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Id"],
+        "properties": {
+          "Id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible deletion of a real Deputy team; approval required"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/depreciations",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 51,
+        "name": "Fixture depreciation 51",
+        "months": 24,
+        "minimum_value": 300,
+        "number_of_assets": 1,
+        "number_of_licenses": 0,
+        "number_of_products": 0,
+        "assets": [],
+        "licenses": [],
+        "products": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

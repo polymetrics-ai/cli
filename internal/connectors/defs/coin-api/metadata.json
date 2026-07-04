@@ -1,7 +1,7 @@
 {
   "name": "coin-api",
   "display_name": "Coin API",
-  "description": "Reads CoinAPI market data: symbols, exchanges, assets, and historical OHLCV and trades for a configured symbol via the CoinAPI REST API.",
+  "description": "Reads CoinAPI market data: symbols, exchanges, assets, exchange rates, current quotes, current order book, the metrics catalog, and historical OHLCV and trades for a configured symbol via the CoinAPI REST API.",
   "integration_type": "api",
   "docs_url": "https://docs.coinapi.io/",
   "release_stage": "ga",

@@ -1,7 +1,7 @@
 {
   "name": "financial-modelling",
   "display_name": "Financial Modelling",
-  "description": "Reads stock and ETF symbol lists, the stock screener, and delisted companies from the Financial Modeling Prep REST API.",
+  "description": "Reads stock and ETF symbol lists, the stock screener, delisted companies, market indexes, S&P 500 constituents, the earnings calendar, and per-symbol company profiles, quotes, historical prices, financial statements, key metrics, and ratios from the Financial Modeling Prep REST API.",
   "integration_type": "api",
   "docs_url": "https://site.financialmodelingprep.com/developer/docs",
   "release_stage": "ga",

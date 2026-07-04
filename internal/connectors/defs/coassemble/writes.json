@@ -1,0 +1,301 @@
+{
+  "actions": [
+    {
+      "name": "publish_course",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/headless/course/{{ record.id }}/publish",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "publishes the current draft of a course, making it live for learners; no approval required"
+    },
+    {
+      "name": "duplicate_course",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/headless/course/{{ record.id }}/duplicate",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "identifier": { "type": "string" },
+          "clientIdentifier": { "type": "string" }
+        }
+      },
+      "risk": "creates a full copy of an existing course; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_course",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/headless/course/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "soft-deletes a course (recoverable via restore_course within Coassemble's retention window); approval required"
+    },
+    {
+      "name": "restore_course",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/headless/course/{{ record.id }}/restore",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "restores a previously soft-deleted course; no approval required"
+    },
+    {
+      "name": "delete_tracking",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/headless/tracking",
+      "body_fields": ["id", "identifier"],
+      "body_type": "json",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "identifier"],
+        "properties": {
+          "id": { "type": "integer" },
+          "identifier": { "type": "string" }
+        }
+      },
+      "risk": "permanently erases one learner's tracking/progress record for a course; irreversible, approval required"
+    },
+    {
+      "name": "create_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/headless/collection",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "identifier": { "type": "string" },
+          "clientIdentifier": { "type": "string" },
+          "themeId": { "type": "integer" },
+          "courseIds": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "creates a new collection of courses; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/headless/collection/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "soft-deletes a collection (recoverable via restore_collection); approval required"
+    },
+    {
+      "name": "restore_collection",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/headless/collection/{{ record.id }}/restore",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "restores a previously soft-deleted collection; no approval required"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/headless/client/{{ record.clientIdentifier }}",
+      "path_fields": ["clientIdentifier"],
+      "body_fields": ["metadata"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["clientIdentifier"],
+        "properties": {
+          "clientIdentifier": { "type": "string" },
+          "metadata": { "type": "object" }
+        }
+      },
+      "risk": "overwrites a client's arbitrary metadata bag; no approval required"
+    },
+    {
+      "name": "delete_client",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/headless/client/{{ record.clientIdentifier }}",
+      "path_fields": ["clientIdentifier"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["clientIdentifier"],
+        "properties": {
+          "clientIdentifier": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly removes a client (multi-tenant sub-account) and its documented on-delete effects on associated users; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/headless/user/{{ record.identifier }}",
+      "path_fields": ["identifier"],
+      "body_fields": ["clientIdentifier", "metadata", "name", "avatar"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["identifier"],
+        "properties": {
+          "identifier": { "type": "string" },
+          "clientIdentifier": { "type": "string" },
+          "metadata": { "type": "object" },
+          "name": { "type": "string" },
+          "avatar": { "type": "string" }
+        }
+      },
+      "risk": "overwrites a learner's profile fields (name/avatar/metadata) or reassigns their client; no approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/headless/user/{{ record.identifier }}",
+      "path_fields": ["identifier"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["identifier"],
+        "properties": {
+          "identifier": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly removes a learner identity, applying Coassemble's server-side DEFAULT handling for that identity's course progress (the real endpoint also accepts optional action=reallocate|delete|ignore/reallocateTo/clientIdentifier query params to control that handling explicitly, and Coassemble's own docs do not fully specify their exact semantics beyond \"choose what to do with any courses associated with this identifier\" — this action deliberately does not expose them, since the write-action path/query dialect has no way to send an optional record field only when present, and silently defaulting an ambiguous, irreversible per-learner-data-retention choice would be worse than declaring it out of scope; approval required"
+    },
+    {
+      "name": "translate_course",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/headless/translation/translate/{{ record.course_id }}",
+      "path_fields": ["course_id"],
+      "body_fields": ["language"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["course_id", "language"],
+        "properties": {
+          "course_id": { "type": "integer" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "kicks off machine translation of a course into a new BCP-47 language variant; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "set_default_translation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/headless/translation/default/{{ record.course_id }}/{{ record.language }}",
+      "path_fields": ["course_id", "language"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["course_id", "language"],
+        "properties": {
+          "course_id": { "type": "integer" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "changes which language variant learners see by default for this course; no approval required"
+    },
+    {
+      "name": "sync_translation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/headless/translation/sync/{{ record.course_id }}/{{ record.language }}",
+      "path_fields": ["course_id", "language"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["course_id", "language"],
+        "properties": {
+          "course_id": { "type": "integer" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "re-syncs a translated variant's content with upstream changes to the source-language course, which can overwrite manual edits made directly in the translated variant; no approval required"
+    },
+    {
+      "name": "delete_translation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/headless/translation/{{ record.course_id }}/{{ record.language }}",
+      "path_fields": ["course_id", "language"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["course_id", "language"],
+        "properties": {
+          "course_id": { "type": "integer" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a language variant of a course; irreversible, approval required"
+    }
+  ]
+}

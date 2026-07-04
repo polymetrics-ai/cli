@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/annotations"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "__v": 0,
+        "_id": "602bd48b2294b2b7437acca9",
+        "accountId": "5f8a1c2b3d4e5f6a7b8c9d99",
+        "entityId": "5f8a1c2b3d4e5f6a7b8c9d01",
+        "entityType": "project",
+        "key": "team",
+        "value": "platform",
+        "type": "string"
+      }
+    ]
+  }
+}

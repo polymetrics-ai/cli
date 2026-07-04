@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/v3/fear-and-greed/latest" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": { "timestamp": "2026-01-01T00:00:00.000Z", "error_code": 0, "error_message": null, "credit_count": 1 },
+      "data": {
+        "value": 62,
+        "value_classification": "Greed",
+        "update_time": "2026-01-01T00:00:00.000Z"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/api/2/taxonomy/event" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "event_type": "fixture_event_one",
+          "category": { "name": "Fixture Category" },
+          "description": "fixture event description",
+          "display_name": "Fixture Event One",
+          "is_active": true,
+          "is_hidden_from_dropdowns": false,
+          "is_hidden_from_persona_results": false,
+          "is_hidden_from_pathfinder": false,
+          "is_hidden_from_timeline": false,
+          "tags": ["fixture"],
+          "owner": "fixture1@example.com"
+        }
+      ]
+    }
+  }
+}

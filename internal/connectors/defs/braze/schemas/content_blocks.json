@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "content_blocks",
+  "type": "object",
+  "x-primary-key": ["content_block_id"],
+  "x-cursor-field": "last_edited",
+  "required": ["content_block_id"],
+  "properties": {
+    "content_block_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "content_type": { "type": ["string", "null"] },
+    "liquid_tag": { "type": ["string", "null"] },
+    "inclusion_count": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "last_edited": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] }
+  }
+}

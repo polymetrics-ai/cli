@@ -8,7 +8,23 @@
     "status": 200,
     "body": {
       "products": [
-        { "id": "product_fixture_101", "name": "Fixture Product 101", "updated_at": "2026-01-02T00:00:00Z" }
+        {
+          "yotpo_id": 100101,
+          "external_id": "ext-fixture-101",
+          "name": "Fixture Product 101",
+          "description": "A great fixture product!",
+          "status": "active",
+          "url": "http://fixture.example.com/products/101",
+          "is_valid_url": true,
+          "image_url": "http://fixture.example.com/products/101/image.jpg",
+          "price": 900,
+          "currency": "USD",
+          "inventory_quantity": 4,
+          "is_discontinued": true,
+          "sku": "fixture-sku",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
       ]
     }
   }

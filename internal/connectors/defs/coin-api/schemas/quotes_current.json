@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "quotes_current",
+  "type": "object",
+  "x-primary-key": ["symbol_id"],
+  "required": ["symbol_id"],
+  "properties": {
+    "symbol_id": { "type": "string" },
+    "time_exchange": { "type": ["string", "null"] },
+    "time_coinapi": { "type": ["string", "null"] },
+    "ask_price": { "type": ["number", "null"] },
+    "ask_size": { "type": ["number", "null"] },
+    "bid_price": { "type": ["number", "null"] },
+    "bid_size": { "type": ["number", "null"] }
+  }
+}

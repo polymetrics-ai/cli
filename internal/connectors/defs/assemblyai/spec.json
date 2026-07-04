@@ -25,6 +25,11 @@
       "default": "0",
       "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
     },
+    "word_search_terms": {
+      "type": "string",
+      "default": "the",
+      "description": "Comma-or-space-separated keywords passed verbatim as the transcript_word_search_matches stream's required words query parameter (AssemblyAI's GET /v2/transcript/{id}/word-search has no server-side default; set this to the terms you want counted across every synced transcript). Only consumed by that one stream."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

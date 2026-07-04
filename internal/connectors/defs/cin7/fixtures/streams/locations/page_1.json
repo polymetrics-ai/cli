@@ -1,0 +1,54 @@
+{
+  "request": { "method": "GET", "path": "/ref/location", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "LocationList": [
+        {
+          "ID": "loc_fixture_1",
+          "Name": "Main Warehouse",
+          "IsDefault": true,
+          "IsDeprecated": false,
+          "Bins": null,
+          "FixedAssetsLocation": false,
+          "ParentID": null,
+          "ParentName": null,
+          "ReferenceCount": 12,
+          "AddressLine1": "",
+          "AddressLine2": "",
+          "AddressCitySuburb": "",
+          "AddressStateProvince": "",
+          "AddressZipPostCode": "",
+          "AddressCountry": "",
+          "PickZones": null,
+          "IsShopfloor": false,
+          "IsCoMan": false,
+          "IsStaging": false
+        },
+        {
+          "ID": "loc_fixture_2",
+          "Name": "Overflow Warehouse",
+          "IsDefault": false,
+          "IsDeprecated": false,
+          "Bins": null,
+          "FixedAssetsLocation": false,
+          "ParentID": null,
+          "ParentName": null,
+          "ReferenceCount": 0,
+          "AddressLine1": "",
+          "AddressLine2": "",
+          "AddressCitySuburb": "",
+          "AddressStateProvince": "",
+          "AddressZipPostCode": "",
+          "AddressCountry": "",
+          "PickZones": null,
+          "IsShopfloor": false,
+          "IsCoMan": false,
+          "IsStaging": false
+        }
+      ]
+    }
+  }
+}

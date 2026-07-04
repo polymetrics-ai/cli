@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/field-optiongroup",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "fieldOptionGroups": [
+          {
+            "id": "og_fixture_1",
+            "name": "Yes/No",
+            "layout": false,
+            "options": [
+              {
+                "id": "opt_1",
+                "name": "Yes",
+                "value": "1"
+              },
+              {
+                "id": "opt_2",
+                "name": "No",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

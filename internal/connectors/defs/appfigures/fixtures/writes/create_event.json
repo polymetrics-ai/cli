@@ -1,0 +1,22 @@
+{
+  "record": {
+    "caption": "Fixture Marketing Push",
+    "date": "2026-01-01T00:00:00Z",
+    "details": "conformance fixture event",
+    "products": ["100"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/events/",
+    "body": {
+      "caption": "Fixture Marketing Push",
+      "date": "2026-01-01T00:00:00Z",
+      "details": "conformance fixture event",
+      "products": ["100"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 9003, "caption": "Fixture Marketing Push", "date": "2026-01-01T00:00:00Z", "origin": "api", "details": "conformance fixture event", "products": ["100"] }
+  }
+}

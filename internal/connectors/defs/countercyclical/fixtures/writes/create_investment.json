@@ -1,0 +1,12 @@
+{
+  "record": { "tickerSymbol": "FIX" },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/make/actions/investments",
+    "body": { "tickerSymbol": "FIX" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "inv_fixture_new", "tickerSymbol": "FIX" }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Acuity Scheduling Product",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "hidden": { "type": ["boolean", "null"] },
+    "expires": { "type": ["integer", "null"] },
+    "minutes": { "type": ["integer", "null"] }
+  }
+}

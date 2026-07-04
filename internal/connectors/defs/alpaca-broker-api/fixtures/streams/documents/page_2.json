@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/accounts/acct_fixture_1/documents" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "doc_fixture_1",
+        "type": "account_statement",
+        "sub_type": null,
+        "name": "Fixture Statement",
+        "date": "2026-01-01"
+      }
+    ]
+  }
+}

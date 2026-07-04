@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v1/segments/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "segmentId": "seg_fixture_1",
+      "product": { "productId": "prod_fixture_1" },
+      "name": "Fixture Segment 1",
+      "description": "fixture segment",
+      "creatorEmail": "fixture@example.com",
+      "creatorFullName": "Fixture User",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "lastUpdaterEmail": "fixture@example.com",
+      "lastUpdaterFullName": "Fixture User",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "comparisonAttribute": "Email",
+      "comparator": "isOneOf",
+      "comparisonValue": "fixture@example.com"
+    }
+  }
+}

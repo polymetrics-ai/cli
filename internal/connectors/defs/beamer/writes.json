@@ -1,0 +1,308 @@
+{
+  "actions": [
+    {
+      "name": "create_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/posts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "content"],
+        "properties": {
+          "title": { "type": "array", "items": { "type": "string" } },
+          "content": { "type": "array", "items": { "type": "string" } },
+          "category": { "type": "string" },
+          "publish": { "type": "boolean" },
+          "pinned": { "type": "boolean" },
+          "showInWidget": { "type": "boolean" },
+          "showInStandalone": { "type": "boolean" },
+          "linkUrl": { "type": "array", "items": { "type": "string" } },
+          "linkText": { "type": "array", "items": { "type": "string" } },
+          "date": { "type": "string" },
+          "dueDate": { "type": "string" },
+          "language": { "type": "array", "items": { "type": "string" } },
+          "filter": { "type": "string" },
+          "enableFeedback": { "type": "boolean" },
+          "enableReactions": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a new Beamer announcement post, optionally published immediately (visible to end users); approval required"
+    },
+    {
+      "name": "update_post",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/posts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "array", "items": { "type": "string" } },
+          "content": { "type": "array", "items": { "type": "string" } },
+          "category": { "type": "string" },
+          "publish": { "type": "boolean" },
+          "pinned": { "type": "boolean" },
+          "showInWidget": { "type": "boolean" },
+          "showInStandalone": { "type": "boolean" },
+          "date": { "type": "string" },
+          "dueDate": { "type": "string" },
+          "filter": { "type": "string" },
+          "enableFeedback": { "type": "boolean" },
+          "enableReactions": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; updates a live announcement post visible to end users; approval required"
+    },
+    {
+      "name": "delete_post",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/posts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes an announcement post; irreversible; approval required"
+    },
+    {
+      "name": "create_post_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/posts/{{ record.post_id }}/comments",
+      "path_fields": ["post_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["post_id", "text"],
+        "properties": {
+          "post_id": { "type": "string" },
+          "text": { "type": "string" },
+          "userId": { "type": "string" },
+          "userEmail": { "type": "string" },
+          "userFirstname": { "type": "string" },
+          "userLastname": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; adds a comment to a live announcement post on behalf of a user; approval required"
+    },
+    {
+      "name": "delete_post_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/posts/{{ record.post_id }}/comments/{{ record.id }}",
+      "path_fields": ["post_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["post_id", "id"],
+        "properties": {
+          "post_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a comment from a post; irreversible; approval required"
+    },
+    {
+      "name": "create_feature_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/feature-requests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "content"],
+        "properties": {
+          "title": { "type": "array", "items": { "type": "string" } },
+          "content": { "type": "array", "items": { "type": "string" } },
+          "visible": { "type": "boolean" },
+          "category": { "type": "string" },
+          "status": { "type": "string" },
+          "notes": { "type": "string" },
+          "date": { "type": "string" },
+          "userId": { "type": "string" },
+          "userEmail": { "type": "string" },
+          "userFirstname": { "type": "string" },
+          "userLastname": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new feature request, optionally visible immediately to end users; approval required"
+    },
+    {
+      "name": "update_feature_request",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/feature-requests/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "array", "items": { "type": "string" } },
+          "content": { "type": "array", "items": { "type": "string" } },
+          "visible": { "type": "boolean" },
+          "category": { "type": "string" },
+          "status": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a feature request visible to end users (status changes are commonly user-facing); approval required"
+    },
+    {
+      "name": "delete_feature_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/feature-requests/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes a feature request; irreversible; approval required"
+    },
+    {
+      "name": "create_feature_request_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/feature-requests/{{ record.feature_request_id }}/comments",
+      "path_fields": ["feature_request_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["feature_request_id", "text"],
+        "properties": {
+          "feature_request_id": { "type": "string" },
+          "text": { "type": "string" },
+          "userId": { "type": "string" },
+          "userEmail": { "type": "string" },
+          "userFirstname": { "type": "string" },
+          "userLastname": { "type": "string" },
+          "visible": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; adds a comment to a feature request on behalf of a user; approval required"
+    },
+    {
+      "name": "delete_feature_request_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/feature-requests/{{ record.feature_request_id }}/comments/{{ record.id }}",
+      "path_fields": ["feature_request_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["feature_request_id", "id"],
+        "properties": {
+          "feature_request_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a comment from a feature request; irreversible; approval required"
+    },
+    {
+      "name": "create_post_reaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/posts/{{ record.post_id }}/reactions",
+      "path_fields": ["post_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["post_id", "reaction"],
+        "properties": {
+          "post_id": { "type": "string" },
+          "reaction": { "type": "string", "enum": ["positive", "neutral", "negative"] },
+          "userId": { "type": "string" },
+          "userEmail": { "type": "string" },
+          "userFirstname": { "type": "string" },
+          "userLastname": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; records a reaction to a post on behalf of a user; approval required"
+    },
+    {
+      "name": "delete_post_reaction",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/posts/{{ record.post_id }}/reactions/{{ record.id }}",
+      "path_fields": ["post_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["post_id", "id"],
+        "properties": {
+          "post_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a reaction from a post; irreversible; approval required"
+    },
+    {
+      "name": "create_feature_request_vote",
+      "kind": "create",
+      "method": "POST",
+      "path": "/feature-requests/{{ record.feature_request_id }}/votes",
+      "path_fields": ["feature_request_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["feature_request_id"],
+        "properties": {
+          "feature_request_id": { "type": "string" },
+          "userId": { "type": "string" },
+          "userEmail": { "type": "string" },
+          "userFirstname": { "type": "string" },
+          "userLastname": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; records a vote for a feature request on behalf of a user; approval required"
+    },
+    {
+      "name": "delete_feature_request_vote",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/feature-requests/{{ record.feature_request_id }}/votes/{{ record.id }}",
+      "path_fields": ["feature_request_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["feature_request_id", "id"],
+        "properties": {
+          "feature_request_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a vote from a feature request; irreversible; approval required"
+    }
+  ]
+}

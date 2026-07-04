@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "housekeepers",
+  "type": "object",
+  "x-primary-key": ["housekeeperID"],
+  "required": ["housekeeperID"],
+  "properties": {
+    "housekeeperID": { "type": "string" },
+    "propertyID": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] }
+  }
+}

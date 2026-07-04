@@ -1,17 +1,777 @@
 {
   "api": "Buildkite REST API v2 (https://api.buildkite.com/v2)",
   "docs": "https://buildkite.com/docs/apis/rest-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Buildkite surface (artifacts, annotations, jobs, teams, webhooks, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against the live REST API reference (buildkite.com/docs/apis/rest-api and its ~20 linked resource pages, fetched 2026-07-04): 6 read streams (organizations, pipelines, builds, agents, teams, clusters) and 17 write actions covering pipeline/build/job/agent/team lifecycle mutations. Excluded: build-scoped and job-scoped annotations/artifacts list+delete endpoints as an ENGINE_GAP (the engine's fan_out dialect resolves exactly one parent id list per stream, but these resources need TWO levels of path nesting resolved together \u2014 organization to pipeline to build \u2014 which no single fan_out declaration can express; create_annotation itself IS modeled since it needs no read-side id discovery, just a pipeline_slug/build_number pair supplied by the caller), team-membership and team-pipeline/team-suite access-grant join resources, cluster/queue/agent-token/pipeline-template/rule/portal infrastructure-configuration and credential-shaped surfaces, organization audit-log and membership lists, and non-data self-identity/meta endpoints (access-token introspection, current user, API meta) as out_of_scope/requires_elevated_scope/non_data_endpoint breadth-vs-cost triage for this pass; single-object detail endpoints duplicating an already-covered list stream, and binary artifact-download, round out the exclusion set.",
   "endpoints": [
-    { "method": "GET", "path": "/v2/organizations", "covered_by": { "stream": "organizations" } },
-    { "method": "GET", "path": "/v2/organizations/{org.slug}/pipelines", "covered_by": { "stream": "pipelines" } },
-    { "method": "GET", "path": "/v2/organizations/{org.slug}/builds", "covered_by": { "stream": "builds" } },
-    { "method": "GET", "path": "/v2/organizations/{org.slug}/agents", "covered_by": { "stream": "agents" } },
-    { "method": "GET", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/artifacts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/jobs/{job.id}/log", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/organizations/{org.slug}/teams", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v2/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-organization detail; identical record shape to the organizations list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipelines",
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipelines/{slug}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-pipeline detail; identical record shape to the pipelines list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/pipelines",
+      "covered_by": {
+        "write": "create_pipeline"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/organizations/{org.slug}/pipelines/{slug}",
+      "covered_by": {
+        "write": "update_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/pipelines/{slug}/archive",
+      "covered_by": {
+        "write": "archive_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/pipelines/{slug}/unarchive",
+      "covered_by": {
+        "write": "unarchive_pipeline"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/pipelines/{slug}",
+      "covered_by": {
+        "write": "delete_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/pipelines/{slug}/webhook",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "regenerates the pipeline's provider (GitHub/GitLab/etc) webhook URL/secret; a one-time provisioning action, not a syncable data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/builds",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cross-organization all-builds list (every org the token can see); this connector is single-organization-scoped (config.organization), and the org-scoped builds stream already covers every build within it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/builds",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "organization-wide (cross-pipeline) builds list; the pipeline-scoped builds stream already covers the identical per-build record shape, and this connector has no per-pipeline fan-out config to merge results back with a pipeline_slug the org-wide endpoint's response already embeds \u2014 kept out to avoid a second stream with fully overlapping record content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds",
+      "covered_by": {
+        "stream": "builds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-build detail; identical record shape to the builds list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds",
+      "covered_by": {
+        "write": "create_build"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/cancel",
+      "covered_by": {
+        "write": "cancel_build"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/rebuild",
+      "covered_by": {
+        "write": "rebuild_build"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{org.slug}/jobs/{job.id}/retry",
+      "covered_by": {
+        "write": "retry_job"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{org.slug}/jobs/{job.id}/reprioritize",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "changes a queued job's dispatch priority; a narrow scheduling-tuning action, Pass B breadth-vs-cost triage, no consuming write modeled this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{org.slug}/jobs/{job.id}/unblock",
+      "covered_by": {
+        "write": "unblock_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org.slug}/jobs/{job.id}/log",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns the job's raw console log text (large unstructured blob), not a syncable structured record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{org.slug}/jobs/{job.id}/log",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a job's console log output; not exposed as a write action this pass pending destructive-scope review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org.slug}/jobs/{job.id}/env",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns the job's resolved environment variables (may include secrets injected by the pipeline); sensitive and not modeled as ordinary sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a two-level fan-out (enumerate pipelines, then per-pipeline builds, then per-build annotations) that the engine's fan_out dialect cannot express \u2014 fan_out resolves exactly one parent id list per stream (bundle.go's FanOutSpec), and this resource needs both a pipeline slug AND a build number threaded into the same path simultaneously; ENGINE_GAP, not a scoping choice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations",
+      "covered_by": {
+        "write": "create_annotation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations/{annotation.uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a specific annotation by uuid; no read stream enumerates annotation uuids (see the excluded list-annotations entry above), so there is no way to obtain a valid uuid to delete without an external source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/jobs/{job.id}/annotations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "job-scoped alternate path for the same annotations resource; same ENGINE_GAP reasoning as the build-scoped list (a two-level org->pipeline->build fan-out would still be needed to discover which builds/jobs to enumerate)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/jobs/{job.id}/annotations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "job-scoped alternate path for create_annotation; the build-scoped write action already covers annotation creation with an equivalent body, and a caller with only a job_id in hand (not a pipeline_slug/build_number pair) is an uncommon shape for this connector's config surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/jobs/{job.id}/annotations/{annotation.uuid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "job-scoped alternate path for deleting an annotation; same reasoning as the build-scoped delete above (no read stream enumerates annotation uuids)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/artifacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same two-level fan-out ENGINE_GAP as build-scoped annotations (org->pipeline->build path nesting the fan_out dialect cannot express in one stream)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "job-scoped alternate path for the same artifacts resource; same two-level fan-out ENGINE_GAP"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-artifact detail; no read stream enumerates artifact ids (see the excluded list-artifacts entries above) to obtain one from"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts/{id}/download",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "downloads the raw artifact file content (arbitrary binary), not JSON record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/jobs/{job.id}/artifacts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an artifact by id; no read stream enumerates artifact ids to obtain one from"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/agents/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-agent detail; identical record shape to the agents list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/agents/{id}/stop",
+      "covered_by": {
+        "write": "stop_agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/agents/{id}/pause",
+      "covered_by": {
+        "write": "pause_agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/agents/{id}/resume",
+      "covered_by": {
+        "write": "resume_agent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-team detail; identical record shape to the teams list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}",
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team-membership list; a distinct join-resource sub-list, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single team-membership detail; part of the team-membership surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds a user to a team; part of the team-membership surface excluded this pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "changes a team member's role; part of the team-membership surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a user from a team; part of the team-membership surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team-to-pipeline access-grant list; a join-resource sub-list, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single team-pipeline access-grant detail; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "grants a team access to a pipeline; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "changes a team's pipeline access level; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "revokes a team's pipeline access; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team-to-test-suite access-grant list (Buildkite Test Engine); a join-resource sub-list, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single team-suite access-grant detail; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "grants a team access to a test suite; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "changes a team's test-suite access level; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "revokes a team's test-suite access; part of the excluded join-resource surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/clusters",
+      "covered_by": {
+        "stream": "clusters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/clusters/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-cluster detail; identical record shape to the clusters list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/clusters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new cluster; low-frequency infrastructure-provisioning action, Pass B breadth-vs-cost triage, no consuming write modeled this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/clusters/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a cluster's name/description/default-queue; low-frequency infrastructure-config action, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/clusters/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes a cluster and detaches every pipeline/queue/agent-token associated with it; not exposed as a write action this pass pending destructive-scope review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "cluster-scoped agent-queue list; infrastructure-configuration sub-resource, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-queue detail; part of the excluded queues surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an agent queue; part of the excluded queues surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an agent queue; part of the excluded queues surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an agent queue; part of the excluded queues surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/pause_dispatch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pauses job dispatch on a queue; part of the excluded queues surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/resume_dispatch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "resumes job dispatch on a queue; part of the excluded queues surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists agent registration tokens; these are bearer credentials agents use to connect, never modeled as ordinary sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "single agent-token detail; credential-shaped, same reasoning as the list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "mints a new agent registration token; a credential-minting operation, never a data mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "renames/revokes-and-reissues an agent token; credential-shaped mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "revokes an agent registration token; credential-shaped mutation, would disconnect every agent still using it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipeline-templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pipeline-template (reusable YAML configuration) list; a configuration-management surface, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single pipeline-template detail; part of the excluded templates surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/pipeline-templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a pipeline template; part of the excluded templates surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a pipeline template; part of the excluded templates surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/pipeline-templates/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a pipeline template; part of the excluded templates surface, would also detach it from every pipeline still referencing it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level access-control rule list (cross-pipeline/cross-cluster permission policies); a security-policy configuration surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/rules/{uuid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "single rule detail; part of the excluded rules surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates an access-control rule; a security-policy mutation, out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/rules/{uuid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes an access-control rule; a security-policy mutation, out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/portals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Buildkite Portals (scoped, shareable build-trigger links) list; a niche access-delegation feature, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-portal detail; part of the excluded portals surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/{org.slug}/portals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a portal (a scoped external trigger credential); credential-adjacent provisioning, out of scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a portal; part of the excluded portals surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{org.slug}/portals/{portal.slug}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a portal; part of the excluded portals surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/audit_events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "organization audit-log event stream; a high-volume security/compliance event log, Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/audit_events/{uuid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single audit-event detail; part of the excluded audit-log surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "organization-membership list (every user with account access, independent of team); Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/members/{user.uuid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single organization-member detail; part of the excluded org-members surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/meta",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns the API's own published webhook-IP-allowlist metadata, not organization/pipeline data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{org.slug}/emojis",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns the set of emoji shortcuts usable in pipeline annotations/build messages; a UI-rendering asset list, not syncable operational data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/access-token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "introspects the CALLING token's own scopes/uuid, not a syncable object stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/access-token",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "revokes the token this connector is authenticating with; irreversibly ends the connector's own session, never a data operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/user",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns the identity of the currently-authenticated user, not a syncable object stream"
+      }
+    }
   ]
 }

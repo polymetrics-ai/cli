@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/suppressions/bounces", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "Email": "fixture-bounced-1@example.com", "FriendlyErrorMessage": "Mailbox full", "ErrorCode": 552, "DateUpdated": "2026-01-01T00:00:00Z" }
+    ]
+  }
+}

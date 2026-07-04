@@ -1,0 +1,28 @@
+{
+  "actions": [
+    {
+      "name": "launch_workflow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workflows/{{ record.workflow_uid }}/launch",
+      "path_fields": ["workflow_uid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workflow_uid"],
+        "properties": {
+          "workflow_uid": { "type": "string" },
+          "accounts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "accounts_rotation_enabled": { "type": "boolean" },
+          "parameters": { "type": "object" },
+          "output_column": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; launches a live Captain Data workflow run (a new job), consuming account credits and potentially performing external actions (scraping, enrichment, outreach) depending on the workflow's own configured steps; approval required"
+    }
+  ]
+}

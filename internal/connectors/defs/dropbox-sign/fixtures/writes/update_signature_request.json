@@ -1,0 +1,17 @@
+{
+  "record": {
+    "signature_request_id": "sigreq_fixture_1",
+    "signature_id": "sig_fixture_1",
+    "email_address": "fixture-new@example.com",
+    "name": "Fixture Signer"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/signature_request/update/sigreq_fixture_1",
+    "body": {
+      "signature_id": "sig_fixture_1",
+      "email_address": "fixture-new@example.com",
+      "name": "Fixture Signer"
+    }
+  }
+}

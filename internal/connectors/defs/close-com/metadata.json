@@ -1,14 +1,14 @@
 {
   "name": "close-com",
   "display_name": "Close.com",
-  "description": "Reads Close CRM leads, contacts, opportunities, activities, and users through the Close REST API. Read-only.",
+  "description": "Reads Close CRM leads, contacts, opportunities, activities, users, tasks, lead/opportunity statuses, pipelines, roles, groups, and custom field definitions, and writes leads/contacts/opportunities/tasks through the Close REST API.",
   "integration_type": "api",
   "docs_url": "https://developer.close.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Close CRM API read of lead, contact, opportunity, activity, and user data",
-    "approval": "none; read-only source connector"
+    "read": "external Close CRM API read of lead, contact, opportunity, activity, user, task, and account-configuration data",
+    "write": "external mutation; creates/updates/deletes live Close leads, contacts, opportunities, and tasks",
+    "approval": "required for all write actions; reads remain none"
   }
 }

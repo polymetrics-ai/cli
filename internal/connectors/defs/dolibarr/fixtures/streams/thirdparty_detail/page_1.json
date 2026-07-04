@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/thirdparties/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "1",
+      "name": "Fixture Thirdparty Detail",
+      "name_alias": "",
+      "email": "fixture-detail@example.com",
+      "phone": "+15550100",
+      "address": "123 Fixture St",
+      "town": "San Francisco",
+      "zip": "94105",
+      "country_code": "US",
+      "code_client": "CU0001",
+      "code_fournisseur": "",
+      "siren": "",
+      "siret": "",
+      "tva_intra": "",
+      "client": "1",
+      "fournisseur": "0",
+      "status": "1",
+      "date_creation": 1767225600,
+      "date_modification": 1767225601
+    }
+  }
+}

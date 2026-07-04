@@ -1,14 +1,14 @@
 {
   "name": "zoho-analytics-metadata-api",
   "display_name": "Zoho Analytics Metadata API",
-  "description": "Reads Zoho Analytics workspace, view, and table metadata via the Zoho OAuth 2.0 refresh-token grant.",
+  "description": "Reads Zoho Analytics workspace/view/table/organization/folder/query-table/datasource metadata and triggers datasource/view data syncs, via the Zoho OAuth 2.0 refresh-token grant.",
   "integration_type": "api",
-  "docs_url": "https://www.zoho.com/analytics/api/v2/",
+  "docs_url": "https://www.zoho.com/analytics/api/v2/metadata-api.html",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,8 +17,9 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Zoho Analytics API read of workspace/view/table metadata",
-    "approval": "none; read-only, no reverse-ETL write surface"
+    "read": "external Zoho Analytics API read of workspace/view/table metadata plus organizations, recently-accessed views, shared workspaces/dashboards, folders, query tables, and datasources",
+    "write": "triggers an asynchronous datasource or view data sync/refetch in Zoho Analytics; does not create, modify, or delete any Zoho Analytics workspace/view/table/data record itself -- only re-pulls from an already-configured external datasource",
+    "approval": "required for write actions (sync_datasource/refetch_view_data); read access uses the same OAuth refresh-token grant with no separate approval"
   },
   "conformance": {
     "skip_dynamic": true,

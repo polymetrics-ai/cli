@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/1/dictionaries/*/settings" },
+  "response": {
+    "status": 200,
+    "body": {
+      "disableStandardEntries": {
+        "plurals": { "en": false },
+        "stopwords": { "en": false },
+        "compounds": { "en": false }
+      }
+    }
+  }
+}

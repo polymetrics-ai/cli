@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "target_hours",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "type": { "type": ["string", "null"] },
+    "date_since": { "type": ["string", "null"] },
+    "date_until": { "type": ["string", "null"] },
+    "compensation_monthly": { "type": ["number", "null"] },
+    "users_id": { "type": ["integer", "null"] },
+    "monday": { "type": ["number", "null"] },
+    "tuesday": { "type": ["number", "null"] },
+    "wednesday": { "type": ["number", "null"] },
+    "thursday": { "type": ["number", "null"] },
+    "friday": { "type": ["number", "null"] },
+    "saturday": { "type": ["number", "null"] },
+    "sunday": { "type": ["number", "null"] },
+    "absence_fixed_credit": { "type": ["boolean", "null"] },
+    "compensation_daily": { "type": ["number", "null"] },
+    "monthly_target": { "type": ["number", "null"] }
+  }
+}

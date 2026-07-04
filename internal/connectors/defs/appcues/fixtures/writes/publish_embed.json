@@ -1,0 +1,8 @@
+{
+  "record": { "id": "emb_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/embeds/emb_fixture_1/publish"
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

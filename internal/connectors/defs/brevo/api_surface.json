@@ -1,18 +1,2209 @@
 {
   "api": "Brevo API v3 (https://api.brevo.com/v3)",
   "docs": "https://developers.brevo.com/reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Brevo surface (transactional email/SMS send, templates, webhooks, deals, companies, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against the live published OpenAPI definition (getbrevo/brevo-java swagger_definition_client.yml, 199 paths / 278 method+path operations, fetched 2026-07-04): 9 read streams (contacts, email_campaigns, contacts_lists, senders, senders_domains, contacts_segments, companies, crm_deals, webhooks) and 14 write actions covering contact/list/sender/company/deal/webhook lifecycle mutations. Excluded: the entire Loyalty & Referral add-on product line (balances/tiers/offers/vouchers, ~49 endpoints, requires a loyalty program id this connector does not model), Conversations live-chat messaging, Corporate/reseller multi-account admin, ecommerce catalog/order/coupon/category/product-alert surfaces (no consuming stream reaches CRM-adjacent parity this pass), CRM sub-resources (notes/tasks/files/pipeline-metadata/attribute-schema), SMS/WhatsApp/transactional-email send+template+statistics surfaces (separate channel products, all send actions are irreversible real-world side effects rather than data mutations), inbound-email-parsing events, feeds, payments-requests, and account/organization/corporate admin (user invitations, permissions, sub-account provisioning) as out_of_scope breadth-vs-cost triage for this pass; single-object detail endpoints duplicating an already-covered list stream, binary-payload uploads/downloads (files, campaign images, inbound attachments), destructive bulk-import/export job kickoffs, and non-data endpoints (account snapshot, config toggles, process/job status) round out the exclusion set.",
   "endpoints": [
-    { "method": "GET", "path": "/v3/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/v3/emailCampaigns", "covered_by": { "stream": "email_campaigns" } },
-    { "method": "GET", "path": "/v3/contacts/lists", "covered_by": { "stream": "contacts_lists" } },
-    { "method": "GET", "path": "/v3/senders", "covered_by": { "stream": "senders" } },
-    { "method": "GET", "path": "/v3/account", "excluded": { "category": "non_data_endpoint", "reason": "account identity/plan snapshot, used only by check, not a syncable object stream" } },
-    { "method": "POST", "path": "/v3/smtp/email", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v3/smsCampaigns", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/deals", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/companies", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v3/account",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "account identity/plan/credits snapshot, used only by check, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/categories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ecommerce category catalog list; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/categories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates/updates an ecommerce category; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/categories/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk ecommerce category upsert; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/categories/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-category detail; same record shape as the excluded categories list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/companies",
+      "covered_by": {
+        "write": "create_company"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/companies/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous bulk company import job kickoff, not a synchronous read/write record operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/companies/link-unlink/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk link/unlink of contacts and deals against one company; update_company already covers the per-record linkedContactsIds/linkedDealsIds mutation shape this dialect can express"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/companies/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-company detail; identical record shape to the companies list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/companies/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "irreversible CRM record deletion gated behind the CRM admin/owner role; not exposed as a write action this pass pending elevated-scope review"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/companies/{id}",
+      "covered_by": {
+        "write": "update_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/attributes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "contact-attribute schema/metadata list (the account's custom-field definitions), not contact record data itself; Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/attributes/{attributeCategory}/{attributeName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new custom contact-attribute definition (account schema mutation), not a contact-record write; part of the excluded attribute-schema surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/attributes/{attributeCategory}/{attributeName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a custom contact-attribute definition; part of the excluded attribute-schema surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contacts/attributes/{attributeCategory}/{attributeName}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes a custom contact-attribute definition account-wide, wiping that field's stored value for every contact; account-schema mutation, not a record-level operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contacts/attributes/{attributeType}/{multipleChoiceAttribute}/{multipleChoiceAttributeOption}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes one option of a multiple-choice contact attribute account-wide; account-schema mutation, not a record-level operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk multi-contact update in one request; single-record update_contact already covers the per-record mutation shape this dialect can express"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/doubleOptinConfirmation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers a double opt-in confirmation email flow rather than a plain data mutation; Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous bulk CSV export job kickoff, not a synchronous read/write record operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "list folders (a container above lists), not itself contact/list data; Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a list folder; part of the excluded folder-container surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/folders/{folderId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-folder detail; same record shape as the excluded folders list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/folders/{folderId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a folder; part of the excluded folder-container surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contacts/folders/{folderId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes a folder AND every list nested inside it; cascading destructive scope beyond a single record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/folders/{folderId}/lists",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists scoped to one folder; same record shape as the unscoped contacts/lists endpoint already covered by no stream this pass, so excluded alongside it for breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous bulk contact import job kickoff, not a synchronous read/write record operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/lists",
+      "covered_by": {
+        "stream": "contacts_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/lists",
+      "covered_by": {
+        "write": "create_contacts_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/lists/{listId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-list detail; identical record shape to the contacts_lists stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/lists/{listId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renames/re-parents a list; no dedicated update_contacts_list write modeled this pass, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contacts/lists/{listId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes a contact list and its membership records; not exposed as a write action this pass pending destructive-scope review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/lists/{listId}/contacts",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-list contact membership view; same contact record shape as the contacts stream, filtered by listIds membership already present on each contacts record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/lists/{listId}/contacts/add",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk add-contacts-to-list by email/id array; update_contact's listIds field already covers the per-record list-membership mutation shape this dialect can express"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/lists/{listId}/contacts/remove",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk remove-contacts-from-list by email/id array; update_contact's unlinkListIds field already covers the per-record list-membership mutation shape this dialect can express"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/segments",
+      "covered_by": {
+        "stream": "contacts_segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{identifier}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contacts/{identifier}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/{identifier}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{identifier}/campaignStats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-contact campaign-engagement statistics sub-resource; analytics breakdown, not a syncable primary object list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/conversations/agentOnlinePing",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "sets the caller's own agent presence to online for a few minutes; a session heartbeat, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/conversations/messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live-chat conversation message as an agent; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/conversations/messages/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single conversation message detail; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/conversations/messages/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a sent conversation message; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/conversations/messages/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a sent conversation message; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/conversations/pushedMessages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends an automated push message to a site visitor; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/conversations/pushedMessages/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single pushed-message detail; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/conversations/pushedMessages/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an automated pushed message; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/conversations/pushedMessages/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an automated pushed message; conversational messaging surface out of scope for this data-sync connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/corporate/group",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a group of sub-accounts; multi-account reseller/corporate admin surface, a distinct account tier from the data-sync connector's own account"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/group/unlink/{groupId}/subAccounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes sub-accounts from a corporate group; corporate admin surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/group/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "single corporate group detail; corporate admin surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/group/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a corporate group; corporate admin surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/corporate/group/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a corporate group; corporate admin surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/groups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists corporate groups; corporate admin surface, requires a master/corporate-tier account this connector does not assume"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/invited/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists invited corporate admin users; corporate admin surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/ip",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists dedicated IPs across the corporate account; corporate admin surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/masterAccount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "master-account identity/plan snapshot; corporate admin surface, not a syncable object stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/corporate/ssoToken",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "generates an SSO token to access the master admin account; a session/credential-minting operation, never a data operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/subAccount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists sub-accounts under a master account; corporate admin surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/corporate/subAccount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new sub-account; corporate admin surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/corporate/subAccount/ip/associate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "associates a dedicated IP to sub-accounts; corporate admin surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/subAccount/ip/dissociate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "dissociates a dedicated IP from sub-accounts; corporate admin surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/corporate/subAccount/key",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "mints an API key for a sub-account; a credential-minting operation, never a data operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/corporate/subAccount/ssoToken",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "generates an SSO token to access a sub-account; a session/credential-minting operation, never a data operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/subAccount/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "single sub-account detail; corporate admin surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/corporate/subAccount/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a sub-account and all its data; corporate admin surface, maximally destructive"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/subAccount/{id}/applications/toggle",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "enables/disables sub-account applications; corporate admin surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/subAccount/{id}/plan",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes a sub-account's billing plan; corporate admin/billing surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/subAccounts/plan",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes billing plan for multiple sub-accounts at once; corporate admin/billing surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/corporate/user/invitation/send",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invites a new admin user to the corporate account; corporate admin surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/user/invitation/{action}/{email}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "resends/cancels an admin user invitation; corporate admin surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/corporate/user/revoke/{email}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "revokes an admin user's access; corporate admin surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/corporate/user/{email}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reads an admin user's permission set; corporate admin surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/corporate/user/{email}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes an admin user's permission set; corporate admin surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/couponCollections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ecommerce coupon-collection catalog list; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/couponCollections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a coupon collection; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/couponCollections/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-coupon-collection detail; same record shape as the excluded couponCollections list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/couponCollections/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a coupon collection; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/coupons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "generates individual coupon codes for a collection; part of the ecommerce surface excluded this pass, no read counterpart exists to list generated coupons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/crm/attributes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a custom deal/company attribute definition (account schema mutation), not a record-level write; part of the excluded attribute-schema surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/attributes/companies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "company-attribute schema/metadata list, not company record data itself; Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/attributes/deals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deal-attribute schema/metadata list, not deal record data itself; Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/deals",
+      "covered_by": {
+        "stream": "crm_deals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/crm/deals",
+      "covered_by": {
+        "write": "create_deal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/crm/deals/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous bulk deal import job kickoff, not a synchronous read/write record operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/crm/deals/link-unlink/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk link/unlink of contacts and companies against one deal; update_deal already covers the per-record linkedContactsIds/linkedCompaniesIds mutation shape this dialect can express"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/deals/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-deal detail; identical record shape to the crm_deals list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/crm/deals/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "irreversible CRM record deletion gated behind the CRM admin/owner role; not exposed as a write action this pass pending elevated-scope review"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/crm/deals/{id}",
+      "covered_by": {
+        "write": "update_deal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/files",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "CRM file-attachment metadata list; binary-adjacent sub-resource out of scope this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/crm/files",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "uploads a binary file attachment (multipart), not a plain JSON/form data mutation this dialect can express"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/files/{id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "downloads the raw binary file content, not JSON record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/crm/files/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a CRM file attachment; binary-adjacent sub-resource out of scope this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/files/{id}/data",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "file attachment JSON metadata; same underlying resource as the excluded crm/files list, just single-item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/notes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "CRM note list attached to contacts/companies/deals; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/crm/notes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a CRM note; part of the CRM sub-resource surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/notes/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-note detail; same record shape as the excluded notes list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/crm/notes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a CRM note; part of the CRM sub-resource surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/crm/notes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a CRM note; part of the CRM sub-resource surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/pipeline/details",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deal-pipeline stage configuration metadata, not deal record data itself; Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/pipeline/details/all",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "all-pipelines variant of the excluded pipeline/details endpoint; same metadata shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/pipeline/details/{pipelineID}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-pipeline detail; same metadata shape as the excluded pipeline/details endpoint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "CRM task list attached to contacts/companies/deals; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/crm/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a CRM task; part of the CRM sub-resource surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/tasks/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-task detail; same record shape as the excluded tasks list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/crm/tasks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a CRM task; part of the CRM sub-resource surface excluded this pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/crm/tasks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a CRM task; part of the CRM sub-resource surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/crm/tasktypes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task-type configuration metadata, not task record data itself; Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ecommerce/activate",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "one-time feature-activation toggle for the ecommerce app on this account, not a syncable data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ecommerce/attribution/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "campaign/workflow revenue-attribution analytics aggregate, not a syncable object list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ecommerce/attribution/metrics/{conversionSource}/{conversionSourceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-campaign attribution analytics detail; part of the excluded analytics surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ecommerce/attribution/products/{conversionSource}/{conversionSourceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "attributed-product-sales analytics detail; part of the excluded analytics surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ecommerce/config/displayCurrency",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "sets the account-wide ecommerce display-currency preference, not a syncable data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ecommerce/config/displayCurrency",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reads the account-wide ecommerce display-currency preference, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/emailCampaigns",
+      "covered_by": {
+        "stream": "email_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/emailCampaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new email campaign (with content, recipients, scheduling); high-complexity nested body out of scope this pass, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/emailCampaigns/images",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "uploads a binary image (multipart) to the account's image gallery, not a plain JSON/form data mutation this dialect can express"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/emailCampaigns/{campaignId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-campaign detail/report; identical record shape to the email_campaigns list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/emailCampaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an email campaign's content/recipients/scheduling; high-complexity nested body out of scope this pass, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/emailCampaigns/{campaignId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes a campaign and its send/report history; not exposed as a write action this pass pending destructive-scope review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/emailCampaigns/{campaignId}/abTestCampaignResult",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "A/B test result analytics sub-resource, not a syncable primary object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/emailCampaigns/{campaignId}/exportRecipients",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous bulk CSV export job kickoff, not a synchronous read/write record operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/emailCampaigns/{campaignId}/sendNow",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "immediately sends a live email campaign to its full recipient list; irreversible real-world side effect, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/emailCampaigns/{campaignId}/sendReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emails the campaign's report to a recipient list; a notification action, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/emailCampaigns/{campaignId}/sendTest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a test copy of the campaign to a test list; a notification action, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/emailCampaigns/{campaignId}/sharedUrl",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns a public shareable preview URL for a campaign, not syncable record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/emailCampaigns/{campaignId}/status",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "changes a campaign's lifecycle status (e.g. to sent/suspended); can trigger or halt a live send, a real-world side effect beyond a plain field update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ingests a customer-behavior tracking event (page view, custom event); write-only event-stream ingestion, not a syncable-object mutation this dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/feeds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "external product-feed configuration list; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/feeds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an external product feed; part of the feeds surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/feeds/{uuid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-feed detail; same record shape as the excluded feeds list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/feeds/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an external product feed; part of the feeds surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/feeds/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an external product feed; part of the feeds surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbound/attachments/{downloadToken}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "downloads a raw email attachment binary, not JSON record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbound/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "inbound-email-processing event list; a distinct inbound-parsing product surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbound/events/{uuid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single inbound event's full history; same record shape as the excluded inbound/events list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/balance/programs/{pid}/active-balance",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions/{bdid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions/{bdid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions/{bdid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits/{blid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits/{blid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits/{blid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/balance/programs/{pid}/contact-balances",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/balance/programs/{pid}/create-order",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/balance/programs/{pid}/subscriptions/{cid}/balances",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/balance/programs/{pid}/subscriptions/{cid}/balances",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/balance/programs/{pid}/transaction-history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/balance/programs/{pid}/transactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/balance/programs/{pid}/transactions/{tid}/cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/balance/programs/{pid}/transactions/{tid}/complete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/config/programs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/config/programs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/config/programs/{pid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/loyalty/config/programs/{pid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/loyalty/config/programs/{pid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/config/programs/{pid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/config/programs/{pid}/account-info",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/config/programs/{pid}/contact/{cid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/config/programs/{pid}/publish",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/config/programs/{pid}/subscription-members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/config/programs/{pid}/subscription-members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/config/programs/{pid}/subscriptions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/offer/programs/{pid}/code-pools/{cpid}/codes-count",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/offer/programs/{pid}/offers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/offer/programs/{pid}/offers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/offer/programs/{pid}/rewards/attribute",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/offer/programs/{pid}/rewards/redeem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/offer/programs/{pid}/rewards/redeem/{tid}/complete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/offer/programs/{pid}/rewards/revoke",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/offer/programs/{pid}/rewards/validate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/offer/programs/{pid}/rewards/{rid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/offer/programs/{pid}/vouchers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/tier/programs/{pid}/contacts/{cid}/tiers/{tid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/tier/programs/{pid}/tier-groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/tier/programs/{pid}/tier-groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/loyalty/tier/programs/{pid}/tier-groups/{gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/tier/programs/{pid}/tier-groups/{gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/tier/programs/{pid}/tier-groups/{gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/loyalty/tier/programs/{pid}/tier-groups/{gid}/tiers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/loyalty/tier/programs/{pid}/tiers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/loyalty/tier/programs/{pid}/tiers/{tid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/loyalty/tier/programs/{pid}/tiers/{tid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Brevo Loyalty & Referral program surface (balances/tiers/offers/vouchers/transactions), a separate add-on product line requiring a loyalty program id (pid) not modeled by this connector; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/objects/{object_type}/batch/upsert",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk upsert against an account-defined custom CRM object type; no per-record single-object write endpoint exists to model a create/update write action against"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/objects/{object_type}/records",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom CRM object records list; object_type is an account-specific schema this connector does not discover, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/orders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ecommerce order list; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/orders/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates order status; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/orders/status/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk order-status update; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/organization/activities",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account user-activity audit log; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/organization/invited/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists invited account users; account admin surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/organization/user/invitation/revoke/{email}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "revokes an invited user's account access; account admin surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/organization/user/invitation/send",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invites a new user to the account; account admin surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/organization/user/invitation/{action}/{email}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "resends/cancels a user invitation; account admin surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/organization/user/update/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes an account user's permission set; account admin surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/organization/user/{email}/permissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reads an account user's permission set; account admin surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/payments/requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a payment request (invoicing/payment-collection product); a distinct financial product surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/payments/requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single payment-request detail; no list endpoint exists to enumerate payment requests, so no catalog stream can be built without an id already in hand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/payments/requests/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a payment request; part of the payments product surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/processes",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lists background job/process statuses for async operations kicked off elsewhere (imports/exports); operational metadata, not primary syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/processes/{processId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single background-process status detail; operational metadata, not primary syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/products",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ecommerce product catalog list; Pass B breadth-vs-cost triage, no consuming stream this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/products",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates/updates an ecommerce product; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/products/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk ecommerce product upsert; part of the ecommerce surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/products/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-product detail; same record shape as the excluded products list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/products/{id}/alerts/{type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a back-in-stock/price-drop alert for one contact on one product; a per-contact notification subscription, not a syncable catalog mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/senders",
+      "covered_by": {
+        "stream": "senders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/senders",
+      "covered_by": {
+        "write": "create_sender"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/senders/domains",
+      "covered_by": {
+        "stream": "senders_domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/senders/domains",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "registers a new sending domain (starts DNS-record verification); low-frequency provisioning action out of scope this pass, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/senders/domains/{domainName}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently removes a verified sending domain; any sender using it stops being able to authenticate mail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/senders/domains/{domainName}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-domain validation-status detail; identical record shape to the senders_domains list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/senders/domains/{domainName}/authenticate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "re-triggers DNS authentication verification for a domain; a verification action, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/senders/ips",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists dedicated sending IPs for the account; low-value standalone infra list, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/senders/{senderId}",
+      "covered_by": {
+        "write": "update_sender"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/senders/{senderId}",
+      "covered_by": {
+        "write": "delete_sender"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/senders/{senderId}/ips",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "dedicated IPs scoped to one sender; same record shape as the excluded senders/ips list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/senders/{senderId}/validate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "resends the sender email-verification link; a verification action, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smsCampaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "SMS campaign list; a distinct SMS-channel campaign surface parallel to email_campaigns, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smsCampaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an SMS campaign; part of the SMS campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smsCampaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single SMS-campaign detail; part of the SMS campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/smsCampaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an SMS campaign; part of the SMS campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/smsCampaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an SMS campaign; part of the SMS campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smsCampaigns/{campaignId}/exportRecipients",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous bulk CSV export job kickoff; part of the SMS campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smsCampaigns/{campaignId}/sendNow",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "immediately sends a live SMS campaign to its full recipient list; irreversible real-world side effect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smsCampaigns/{campaignId}/sendReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emails the SMS campaign's report; a notification action, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smsCampaigns/{campaignId}/sendTest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a test SMS; a notification action, not a data mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/smsCampaigns/{campaignId}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "changes an SMS campaign's lifecycle status; can trigger or halt a live send, a real-world side effect beyond a plain field update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/blockedContacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "transactional-email blocklist/unsubscribe list; distinct from the marketing contacts stream, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/smtp/blockedContacts/{email}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unblocks/resubscribes a transactional contact; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/blockedDomains",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists blocked transactional-email domains; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smtp/blockedDomains",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds a domain to the transactional-email blocklist; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/smtp/blockedDomains/{domain}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a domain from the transactional-email blocklist; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smtp/deleteHardbounces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-deletes hardbounce records; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smtp/email",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live transactional email immediately; irreversible real-world side effect, not a data mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/smtp/email/{identifier}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an already-scheduled transactional send by batch/message id; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/emailStatus/{batchId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "scheduled-email batch status; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/emailStatus/{messageId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "scheduled-email message status; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/emails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "transactional-email send log; a high-volume event log distinct from the marketing-campaign streams, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/emails/{uuid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single sent-transactional-email content detail; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/smtp/log/{identifier}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a transactional log entry; part of the transactional-email surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/statistics/aggregatedReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "aggregated transactional-email activity analytics, not a syncable object list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/statistics/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unaggregated transactional-email event stream; high-volume event log, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/statistics/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-day aggregated transactional-email analytics, not a syncable object list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smtp/template/preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renders a template preview; a preview/render action, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "transactional email template list; a distinct content-management surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smtp/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a transactional email template; part of the templates surface excluded this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/smtp/templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-template detail; part of the templates surface excluded this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/smtp/templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a transactional email template; part of the templates surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/smtp/templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an inactive transactional email template; part of the templates surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/smtp/templates/{templateId}/sendTest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a test transactional email using a template; a notification action, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/transactionalSMS/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live transactional SMS asynchronously; irreversible real-world side effect, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/transactionalSMS/sms",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live transactional SMS synchronously; irreversible real-world side effect, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/transactionalSMS/statistics/aggregatedReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "aggregated transactional-SMS activity analytics, not a syncable object list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/transactionalSMS/statistics/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unaggregated transactional-SMS event stream; high-volume event log, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/transactionalSMS/statistics/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-day aggregated transactional-SMS analytics, not a syncable object list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous bulk webhook-event-history export job kickoff, not a synchronous read/write record operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks/{webhookId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/webhooks/{webhookId}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/webhooks/{webhookId}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/whatsapp/sendMessage",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a live WhatsApp message; irreversible real-world side effect, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/whatsapp/statistics/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unaggregated WhatsApp activity event stream; high-volume event log, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/whatsappCampaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates and immediately sends a WhatsApp campaign; irreversible real-world side effect bundled into the create call itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/whatsappCampaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "WhatsApp campaign list; a distinct WhatsApp-channel campaign surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/whatsappCampaigns/config",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account-level WhatsApp API configuration snapshot, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/whatsappCampaigns/template-list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "WhatsApp message template list; a distinct content-management surface, Pass B breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/whatsappCampaigns/template/approval/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "submits a WhatsApp template for Meta approval; an external submission action, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/whatsappCampaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single WhatsApp-campaign detail; part of the WhatsApp campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/whatsappCampaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a WhatsApp campaign; part of the WhatsApp campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/whatsappCampaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a WhatsApp campaign; part of the WhatsApp campaign surface excluded this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/whatsppCampaigns/template",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a WhatsApp message template (note: this exact path segment is misspelled in Brevo's own published spec, not a transcription error here); part of the WhatsApp campaign surface excluded this pass"
+      }
+    }
   ]
 }

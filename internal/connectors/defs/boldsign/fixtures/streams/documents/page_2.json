@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/v1/document/list", "query": { "Page": "2", "PageSize": "50" } },
+  "request": {
+    "method": "GET",
+    "path": "/v1/document/list",
+    "query": {
+      "Page": "2",
+      "PageSize": "50"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -9,18 +16,30 @@
           "senderEmail": "sender51@example.com",
           "messageTitle": "Fixture Document 51",
           "status": "InProgress",
-          "createdDate": "2026-01-02T00:00:00Z",
-          "expiryDate": "2026-02-02T00:00:00Z",
+          "createdDate": 1767312000,
+          "expiryDate": 1769990400,
           "isDeleted": false,
           "enableSigningOrder": true,
-          "senderDetail": { "name": "Fixture Sender", "emailAddress": "sender51@example.com" },
+          "senderDetail": {
+            "name": "Fixture Sender",
+            "emailAddress": "sender51@example.com"
+          },
           "signerDetails": [
-            { "name": "Fixture Signer", "emailAddress": "signer51@example.com", "status": "InProgress" }
+            {
+              "name": "Fixture Signer",
+              "emailAddress": "signer51@example.com",
+              "status": "InProgress"
+            }
           ],
-          "labels": ["contract"]
+          "labels": [
+            "contract"
+          ]
         }
       ],
-      "pageDetails": { "page": 2, "totalPages": 2 }
+      "pageDetails": {
+        "page": 2,
+        "totalPages": 2
+      }
     }
   }
 }

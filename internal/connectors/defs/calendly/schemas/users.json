@@ -11,6 +11,8 @@
     "email": { "type": ["string", "null"] },
     "slug": { "type": ["string", "null"] },
     "timezone": { "type": ["string", "null"] },
+    "avatar_url": { "type": ["string", "null"] },
+    "scheduling_url": { "type": ["string", "null"] },
     "current_organization": { "type": ["string", "null"] },
     "created_at": { "type": ["string", "null"], "format": "date-time" },
     "updated_at": { "type": ["string", "null"], "format": "date-time" }

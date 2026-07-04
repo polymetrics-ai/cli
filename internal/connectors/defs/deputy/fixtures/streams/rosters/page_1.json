@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/resource/Roster",
+    "query": { "max": "500", "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "Date": "2026-02-01T00:00:00",
+        "StartTime": 1769904000,
+        "EndTime": 1769932800,
+        "OperationalUnit": 1,
+        "Employee": 1,
+        "TotalTime": 8.0,
+        "Cost": 200.0,
+        "Published": true,
+        "Open": false,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 2,
+        "Date": "2026-02-02T00:00:00",
+        "StartTime": 1769990400,
+        "EndTime": 1770019200,
+        "OperationalUnit": 1,
+        "Employee": null,
+        "TotalTime": 8.0,
+        "Cost": 0.0,
+        "Published": true,
+        "Open": true,
+        "Creator": 1,
+        "Created": "2026-01-02T00:00:00",
+        "Modified": "2026-01-02T00:05:00"
+      }
+    ]
+  }
+}

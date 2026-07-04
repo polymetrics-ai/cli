@@ -1,0 +1,8 @@
+{
+  "record": { "user_id": 1001 },
+  "expect": {
+    "method": "POST",
+    "path": "/users/unsubscribe/1001"
+  },
+  "response": { "status": 200, "body": { "data": [] } }
+}

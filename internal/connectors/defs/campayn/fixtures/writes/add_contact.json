@@ -1,0 +1,18 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "email": "fixture+new@example.com",
+    "first_name": "Fixture",
+    "last_name": "Contact"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/list_fixture_1/contacts.json",
+    "body": {
+      "email": "fixture+new@example.com",
+      "first_name": "Fixture",
+      "last_name": "Contact"
+    }
+  },
+  "response": { "status": 200, "body": { "success": true } }
+}

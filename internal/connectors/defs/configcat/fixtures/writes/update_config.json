@@ -1,0 +1,7 @@
+{
+  "record": { "configId": "config_fixture_1", "name": "Renamed Fixture Config" },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/configs/config_fixture_1"
+  }
+}

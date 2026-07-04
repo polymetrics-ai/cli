@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "X_SELL",
+    "labels": { "en_US": "Cross sell" },
+    "is_two_way": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/association-types/X_SELL",
+    "body": {
+      "labels": { "en_US": "Cross sell" },
+      "is_two_way": false
+    }
+  },
+  "response": { "status": 204, "body": {} }
+}

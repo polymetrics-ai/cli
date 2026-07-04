@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cohorts_usage",
+  "type": "object",
+  "x-primary-key": ["resets_at"],
+  "required": ["resets_at"],
+  "properties": {
+    "resets_at": { "type": "string" },
+    "limit": { "type": ["integer", "null"] },
+    "usage": { "type": ["integer", "null"] }
+  }
+}

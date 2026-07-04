@@ -1,0 +1,405 @@
+{
+  "actions": [
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/list/{{ config.list_id }}/task",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "markdown_content": { "type": "string" },
+          "assignees": { "type": "array" },
+          "tags": { "type": "array" },
+          "status": { "type": "string" },
+          "priority": { "type": "integer" },
+          "due_date": { "type": "integer" },
+          "due_date_time": { "type": "boolean" },
+          "start_date": { "type": "integer" },
+          "start_date_time": { "type": "boolean" },
+          "time_estimate": { "type": "integer" },
+          "notify_all": { "type": "boolean" },
+          "parent": { "type": "string" },
+          "links_to": { "type": "string" }
+        }
+      },
+      "risk": "creates a new ClickUp task in the configured list; low-risk (additive)"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/task/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "markdown_content": { "type": "string" },
+          "status": { "type": "string" },
+          "priority": { "type": "integer" },
+          "due_date": { "type": "integer" },
+          "due_date_time": { "type": "boolean" },
+          "start_date": { "type": "integer" },
+          "start_date_time": { "type": "boolean" },
+          "time_estimate": { "type": "integer" },
+          "archived": { "type": "boolean" }
+        }
+      },
+      "risk": "updates fields on an existing ClickUp task (name, description, status, dates, priority, archived); approval required"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/task/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a ClickUp task; irreversible; approval required"
+    },
+    {
+      "name": "create_task_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/task/{{ record.task_id }}/comment",
+      "body_type": "json",
+      "body_fields": ["comment_text", "notify_all", "assignee", "group_assignee"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["task_id", "comment_text", "notify_all"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "comment_text": { "type": "string" },
+          "notify_all": { "type": "boolean" },
+          "assignee": { "type": "integer" },
+          "group_assignee": { "type": "string" }
+        }
+      },
+      "risk": "adds a new comment to a ClickUp task, visible to all task watchers when notify_all is true; low-risk"
+    },
+    {
+      "name": "add_tag_to_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/task/{{ record.task_id }}/tag/{{ record.tag_name }}",
+      "path_fields": ["task_id", "tag_name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["task_id", "tag_name"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "tag_name": { "type": "string" }
+        }
+      },
+      "risk": "attaches an existing Space Tag to a task; low-risk"
+    },
+    {
+      "name": "remove_tag_from_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/task/{{ record.task_id }}/tag/{{ record.tag_name }}",
+      "path_fields": ["task_id", "tag_name"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["task_id", "tag_name"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "tag_name": { "type": "string" }
+        }
+      },
+      "risk": "removes a tag from a task (does not delete the tag from the Space); low-risk"
+    },
+    {
+      "name": "set_custom_field_value",
+      "kind": "update",
+      "method": "POST",
+      "path": "/task/{{ record.task_id }}/field/{{ record.field_id }}",
+      "path_fields": ["task_id", "field_id"],
+      "body_type": "json",
+      "body_fields": ["value", "value_options"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["task_id", "field_id", "value"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "field_id": { "type": "string" },
+          "value_options": { "type": "object" }
+        }
+      },
+      "risk": "sets a Custom Field value on a task; the accepted value shape varies by the field's type (text/number/date/dropdown/label/people/task-relationship/manual-progress/location/button); approval required since an incorrectly-typed value can silently fail or corrupt a differently-typed field"
+    },
+    {
+      "name": "create_goal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/team/{{ config.team_id }}/goal",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "due_date": { "type": "integer" },
+          "description": { "type": "string" },
+          "multiple_owners": { "type": "boolean" },
+          "owners": { "type": "array" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "creates a new ClickUp Goal in the configured team/workspace; low-risk (additive)"
+    },
+    {
+      "name": "create_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/space/{{ config.space_id }}/folder",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": { "name": { "type": "string" } }
+      },
+      "risk": "creates a new Folder in the configured space; low-risk (additive)"
+    },
+    {
+      "name": "update_folder",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/folder/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing ClickUp Folder; approval required"
+    },
+    {
+      "name": "delete_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/folder/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a ClickUp Folder and every List/task inside it; irreversible; approval required"
+    },
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/folder/{{ config.folder_id }}/list",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "content": { "type": "string" },
+          "markdown_content": { "type": "string" },
+          "due_date": { "type": "integer" },
+          "due_date_time": { "type": "boolean" },
+          "priority": { "type": "integer" },
+          "assignee": { "type": "integer" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "creates a new List in the configured Folder; low-risk (additive)"
+    },
+    {
+      "name": "update_list",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/list/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "content": { "type": "string" },
+          "due_date": { "type": "integer" },
+          "due_date_time": { "type": "boolean" },
+          "priority": { "type": "integer" },
+          "assignee": { "type": "string" },
+          "status": { "type": "string" },
+          "unset_status": { "type": "boolean" }
+        }
+      },
+      "risk": "updates an existing ClickUp List's name/description/due date/priority/assignee/color; approval required"
+    },
+    {
+      "name": "delete_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/list/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a ClickUp List and every task inside it; irreversible; approval required"
+    },
+    {
+      "name": "create_space",
+      "kind": "create",
+      "method": "POST",
+      "path": "/team/{{ config.team_id }}/space",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "multiple_assignees": { "type": "boolean" },
+          "features": { "type": "object" }
+        }
+      },
+      "risk": "creates a new Space in the configured Workspace; low-risk (additive)"
+    },
+    {
+      "name": "update_space",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/space/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "private": { "type": "boolean" },
+          "admin_can_manage": { "type": "boolean" },
+          "multiple_assignees": { "type": "boolean" },
+          "features": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing ClickUp Space's name/color/privacy/ClickApp feature toggles; ClickUp's own docs mark every body field required (a partial update still needs the full current feature set re-sent to avoid resetting unspecified features); approval required"
+    },
+    {
+      "name": "delete_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/space/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a ClickUp Space and every Folder/List/task inside it; irreversible; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/team/{{ config.team_id }}/webhook",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["endpoint", "events"],
+        "properties": {
+          "endpoint": { "type": "string" },
+          "events": { "type": "array" },
+          "space_id": { "type": "integer" },
+          "folder_id": { "type": "integer" },
+          "list_id": { "type": "integer" },
+          "task_id": { "type": "string" }
+        }
+      },
+      "risk": "registers or repoints an outbound event-delivery URL of the caller's choosing; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhook/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "endpoint": { "type": "string" },
+          "events": { "type": "array" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "changes which events are delivered to (or repoints) an existing outbound webhook; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhook/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "stops event delivery to a registered webhook endpoint; approval required (irreversible without re-registering)"
+    }
+  ]
+}

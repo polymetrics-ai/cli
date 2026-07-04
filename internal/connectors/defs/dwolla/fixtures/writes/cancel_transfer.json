@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "tr_fixture_1",
+    "status": "cancelled"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/transfers/tr_fixture_1",
+    "body": {
+      "status": "cancelled"
+    }
+  }
+}

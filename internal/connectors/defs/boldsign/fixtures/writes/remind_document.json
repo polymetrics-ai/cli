@@ -1,0 +1,8 @@
+{
+  "record": { "documentId": "doc_fixture_1", "message": "Please sign at your earliest convenience" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/document/remind",
+    "body": { "message": "Please sign at your earliest convenience" }
+  }
+}

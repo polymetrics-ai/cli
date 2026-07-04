@@ -1,0 +1,15 @@
+{
+  "record": {
+    "content_block_id": "cb_fixture_1",
+    "content": "<p>Fixture updated</p>"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/content_blocks/update",
+    "body": {
+      "content_block_id": "cb_fixture_1",
+      "content": "<p>Fixture updated</p>"
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

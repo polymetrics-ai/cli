@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payment_terms",
+  "type": "object",
+  "x-primary-key": ["ID"],
+  "required": ["ID"],
+  "properties": {
+    "ID": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "Duration": { "type": ["integer", "null"] },
+    "Method": { "type": ["string", "null"] },
+    "IsActive": { "type": ["boolean", "null"] },
+    "IsDefault": { "type": ["boolean", "null"] }
+  }
+}

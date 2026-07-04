@@ -51,6 +51,177 @@
         "cursor_field": "Date"
       },
       "schema": "schemas/suppressionlist.json"
+    },
+    {
+      "name": "segments",
+      "path": "/clients/{{ fanout.id }}/segments.json",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients.json", "records_path": "", "id_field": "ClientID" }
+        },
+        "into": { "path_var": "client_id" },
+        "stamp_field": "OwningClientID"
+      },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "templates",
+      "path": "/clients/{{ fanout.id }}/templates.json",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients.json", "records_path": "", "id_field": "ClientID" }
+        },
+        "into": { "path_var": "client_id" },
+        "stamp_field": "OwningClientID"
+      },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "list_custom_fields",
+      "path": "/lists/{{ fanout.id }}/customfields.json",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients/{{ config.client_id }}/lists.json", "records_path": "", "id_field": "ListID" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "ListID"
+      },
+      "schema": "schemas/list_custom_fields.json"
+    },
+    {
+      "name": "list_webhooks",
+      "path": "/lists/{{ fanout.id }}/webhooks.json",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients/{{ config.client_id }}/lists.json", "records_path": "", "id_field": "ListID" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "ListID"
+      },
+      "schema": "schemas/list_webhooks.json"
+    },
+    {
+      "name": "active_subscribers",
+      "path": "/lists/{{ fanout.id }}/active.json",
+      "records": { "path": "Results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "pagesize",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients/{{ config.client_id }}/lists.json", "records_path": "", "id_field": "ListID" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "ListID"
+      },
+      "incremental": {
+        "cursor_field": "Date"
+      },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "unconfirmed_subscribers",
+      "path": "/lists/{{ fanout.id }}/unconfirmed.json",
+      "records": { "path": "Results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "pagesize",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients/{{ config.client_id }}/lists.json", "records_path": "", "id_field": "ListID" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "ListID"
+      },
+      "incremental": {
+        "cursor_field": "Date"
+      },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "unsubscribed_subscribers",
+      "path": "/lists/{{ fanout.id }}/unsubscribed.json",
+      "records": { "path": "Results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "pagesize",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients/{{ config.client_id }}/lists.json", "records_path": "", "id_field": "ListID" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "ListID"
+      },
+      "incremental": {
+        "cursor_field": "Date"
+      },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "bounced_subscribers",
+      "path": "/lists/{{ fanout.id }}/bounced.json",
+      "records": { "path": "Results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "pagesize",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients/{{ config.client_id }}/lists.json", "records_path": "", "id_field": "ListID" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "ListID"
+      },
+      "incremental": {
+        "cursor_field": "Date"
+      },
+      "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "deleted_subscribers",
+      "path": "/lists/{{ fanout.id }}/deleted.json",
+      "records": { "path": "Results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "pagesize",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/clients/{{ config.client_id }}/lists.json", "records_path": "", "id_field": "ListID" }
+        },
+        "into": { "path_var": "list_id" },
+        "stamp_field": "ListID"
+      },
+      "incremental": {
+        "cursor_field": "Date"
+      },
+      "schema": "schemas/subscribers.json"
     }
   ]
 }

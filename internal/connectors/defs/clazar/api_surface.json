@@ -1,17 +1,46 @@
 {
-  "api": "Clazar REST API (https://api.clazar.io)",
-  "docs": "https://clazar.io/api-docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (buyers, listings, contracts, opportunities, private_offers); Clazar is read-only in legacy (capabilities.write is false) and this bundle ships no writes.json.",
+  "api": "Clazar REST API (https://api.clazar.io, reference at https://developers.clazar.io/reference)",
+  "docs": "https://developers.clazar.io/reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-researched against the live developers.clazar.io reference (llms.txt index + per-endpoint pages fetched 2026-07-04): Clazar's REST surface is a compact, fully-enumerable resource set (buyers, listings, contracts, opportunities, private offers, reseller offers, contacts, metering records, one analytics-dataset passthrough endpoint, plus the OAuth2 token endpoint). Every endpoint below is either implemented as a stream/write or excluded with a specific, real reason -- there is no remaining 'Pass B' catch-all bucket. New in this pass: 3 read streams (reseller_offers, contacts, metering) and 10 write actions (update_buyer, update_opportunity, update_private_offer, update_contract, activate_contract, create_contact, update_contact, delete_contact, update_metering_record, create_metering_records); capabilities.write flips true.",
   "endpoints": [
-    { "method": "GET", "path": "/buyers", "covered_by": { "stream": "buyers" } },
-    { "method": "GET", "path": "/listings", "covered_by": { "stream": "listings" } },
-    { "method": "GET", "path": "/contracts", "covered_by": { "stream": "contracts" } },
-    { "method": "GET", "path": "/opportunities", "covered_by": { "stream": "opportunities" } },
-    { "method": "GET", "path": "/private_offers", "covered_by": { "stream": "private_offers" } },
-    { "method": "POST", "path": "/authenticate/", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client_credentials token exchange, not a syncable object stream" } },
-    { "method": "POST", "path": "/listings", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented listing creation; Pass B capability expansion" } },
-    { "method": "POST", "path": "/private_offers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented private offer creation; Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/contracts/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented contract updates; Pass B capability expansion" } }
+    { "method": "POST", "path": "/authenticate/", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client_credentials token exchange, not a syncable object stream; already wired declaratively as this bundle's auth.token_url" } },
+
+    { "method": "GET", "path": "/buyers/", "covered_by": { "stream": "buyers" } },
+    { "method": "GET", "path": "/buyers/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-buyer detail; identical record shape to the buyers list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/buyers/{uuid}/", "covered_by": { "write": "update_buyer" } },
+
+    { "method": "GET", "path": "/listings/", "covered_by": { "stream": "listings" } },
+    { "method": "GET", "path": "/listings/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-listing detail; identical record shape to the listings list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/contracts/", "covered_by": { "stream": "contracts" } },
+    { "method": "GET", "path": "/contracts/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-contract detail; identical record shape to the contracts list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/contracts/{uuid}/", "covered_by": { "write": "update_contract" } },
+    { "method": "POST", "path": "/contracts/{uuid}/activate/", "covered_by": { "write": "activate_contract" } },
+
+    { "method": "GET", "path": "/opportunities/", "covered_by": { "stream": "opportunities" } },
+    { "method": "GET", "path": "/opportunities/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-opportunity detail; identical record shape to the opportunities list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/opportunities/{uuid}/", "covered_by": { "write": "update_opportunity" } },
+
+    { "method": "GET", "path": "/private_offers/", "covered_by": { "stream": "private_offers" } },
+    { "method": "GET", "path": "/private_offers/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-private-offer detail; identical record shape to the private_offers list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/private_offers/{uuid}/", "covered_by": { "write": "update_private_offer" } },
+
+    { "method": "GET", "path": "/reseller_offers/", "covered_by": { "stream": "reseller_offers" } },
+    { "method": "GET", "path": "/reseller_offers/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-reseller-offer detail; identical record shape to the reseller_offers list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/reseller_offers/{uuid}/", "excluded": { "category": "out_of_scope", "reason": "documented reseller_offers update accepts only custom_properties/external_object_associations, an identical shape to update_private_offer/update_buyer already covered; excluded for breadth-vs-cost triage rather than adding a 6th near-duplicate action this pass" } },
+
+    { "method": "GET", "path": "/contacts/", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/contacts/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/contacts/", "covered_by": { "write": "create_contact" } },
+    { "method": "PATCH", "path": "/contacts/{uuid}/", "covered_by": { "write": "update_contact" } },
+    { "method": "DELETE", "path": "/contacts/{uuid}/", "covered_by": { "write": "delete_contact" } },
+
+    { "method": "GET", "path": "/metering/", "covered_by": { "stream": "metering" } },
+    { "method": "GET", "path": "/metering/{uuid}/", "excluded": { "category": "duplicate_of", "reason": "single-metering-record detail; identical record shape to the metering list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/metering/{uuid}/", "covered_by": { "write": "update_metering_record" } },
+    { "method": "POST", "path": "/metering/", "covered_by": { "write": "create_metering_records" } },
+
+    { "method": "GET", "path": "/analytics/datasets/{dataset_name}", "excluded": { "category": "out_of_scope", "reason": "polymorphic pre-aggregated analytics dataset whose response shape varies per dataset_name (AWS/Azure/GCP marketplace reporting cuts) with no single fixed schema; a distinct per-dataset stream per dataset_name would be needed to model it safely, deferred as breadth-vs-cost triage" } }
   ]
 }

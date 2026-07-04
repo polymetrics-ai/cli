@@ -1,20 +1,20 @@
 {
   "name": "captain-data",
   "display_name": "Captain Data",
-  "description": "Reads Captain Data workspace, workflows, jobs, and job results through the Captain Data v3 REST API (read-only / full-refresh).",
+  "description": "Reads Captain Data workspace, workflows, jobs, and job results, and writes a launch_workflow action to trigger a new workflow run, through the Captain Data v3 REST API.",
   "integration_type": "api",
-  "docs_url": "https://docs.captaindata.co/api-documentation",
+  "docs_url": "https://docs.captaindata.com/api-documentation",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
     "read": "external Captain Data API read of workspace, workflow, and job data",
-    "approval": "none; read-only API"
+    "write": "external mutation; launches a live Captain Data workflow run, consuming account credits and potentially performing external side effects depending on the workflow's own configured steps; approval required"
   }
 }

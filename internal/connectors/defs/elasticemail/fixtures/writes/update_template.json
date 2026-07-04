@@ -1,0 +1,13 @@
+{
+  "record": {
+    "Name": "Fixture Template",
+    "Subject": "Updated fixture subject"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/templates/Fixture Template",
+    "body": {
+      "Subject": "Updated fixture subject"
+    }
+  }
+}

@@ -1,0 +1,553 @@
+{
+  "actions": [
+    {
+      "name": "track_users",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/users/track",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "attributes": { "type": "array", "items": { "type": "object" } },
+          "events": { "type": "array", "items": { "type": "object" } },
+          "purchases": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "records user attribute/event/purchase data in bulk (up to 75 events/attributes/purchases per request per Braze's documented limit); an external user_id or user_alias in the record is the ONLY way Braze correlates the update to a user, so a mistargeted identifier silently attaches data to the wrong (or a newly-created) user profile"
+    },
+    {
+      "name": "identify_users",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/users/identify",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "aliases_to_identify": { "type": "array", "items": { "type": "object" } },
+          "emails_to_identify": { "type": "array", "items": { "type": "object" } },
+          "phone_numbers_to_identify": { "type": "array", "items": { "type": "object" } },
+          "merge_behavior": { "type": "string" }
+        }
+      },
+      "risk": "converts an anonymous/aliased user profile into an identified one and can merge attribute/behavior history onto the target identified profile; merge_behavior: merge combines the two profiles' full history irreversibly"
+    },
+    {
+      "name": "delete_users",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/users/delete",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "external_ids": { "type": "array", "items": { "type": "string" } },
+          "braze_ids": { "type": "array", "items": { "type": "string" } },
+          "user_aliases": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "permanently and irreversibly deletes user profiles and all their associated data (attributes, event/purchase history, message engagement); Braze does not offer an undelete path",
+      "confirm": "destructive"
+    },
+    {
+      "name": "merge_users",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/merge",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["merge_updates"],
+        "properties": {
+          "merge_updates": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "irreversibly merges one user profile's full history into another and deletes the source profile identifier; up to 50 merge pairs per request per Braze's documented limit"
+    },
+    {
+      "name": "create_user_alias",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/alias/new",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_aliases"],
+        "properties": {
+          "user_aliases": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "creates new alias identifiers for existing (or new anonymous) user profiles; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_user_alias",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/alias/update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["alias_updates"],
+        "properties": {
+          "alias_updates": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "renames an existing alias identifier on a user profile; any external system correlating users by the old alias_name stops matching after this runs"
+    },
+    {
+      "name": "remove_user_external_ids",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/users/external_ids/remove",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["external_ids"],
+        "properties": {
+          "external_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "detaches an external_id from its user profile, converting that profile to anonymous; the profile itself is not deleted but becomes unreachable by the removed identifier",
+      "confirm": "destructive"
+    },
+    {
+      "name": "rename_user_external_ids",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/external_ids/rename",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["external_id_renames"],
+        "properties": {
+          "external_id_renames": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "renames a user's external_id; any external system correlating users by the old id stops matching after this runs"
+    },
+    {
+      "name": "set_subscription_status_v2",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/subscription/status/set",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscription_groups"],
+        "properties": {
+          "subscription_groups": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "opts users into or out of an email/SMS subscription group in bulk (up to 50 groups x 50 identifiers per Braze's documented limit); setting subscription_state to unsubscribed on a transactional-adjacent group can stop legally-required or expected communications reaching those users"
+    },
+    {
+      "name": "create_catalog",
+      "kind": "create",
+      "method": "POST",
+      "path": "/catalogs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["catalogs"],
+        "properties": {
+          "catalogs": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "creates a new catalog container with a fixed field schema; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "delete_catalog",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/catalogs/{{ record.catalog_name }}",
+      "path_fields": ["catalog_name"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["catalog_name"],
+        "properties": {
+          "catalog_name": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a catalog and every item it contains; any campaign/Canvas/Connected Content template referencing this catalog by name starts failing to resolve",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_catalog_items",
+      "kind": "create",
+      "method": "POST",
+      "path": "/catalogs/{{ record.catalog_name }}/items",
+      "path_fields": ["catalog_name"],
+      "body_type": "json",
+      "body_fields": ["items"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["catalog_name", "items"],
+        "properties": {
+          "catalog_name": { "type": "string" },
+          "items": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "adds new rows (up to 50 per request per Braze's documented limit) to an existing catalog; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_catalog_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/catalogs/{{ record.catalog_name }}/items",
+      "path_fields": ["catalog_name"],
+      "body_type": "json",
+      "body_fields": ["items"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["catalog_name", "items"],
+        "properties": {
+          "catalog_name": { "type": "string" },
+          "items": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "partially updates existing catalog rows in bulk by their id field; any Connected Content template or campaign personalization reading this catalog reflects the new values on its next fetch"
+    },
+    {
+      "name": "update_catalog_item",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/catalogs/{{ record.catalog_name }}/items/{{ record.item_id }}",
+      "path_fields": ["catalog_name", "item_id"],
+      "body_type": "json",
+      "body_fields": ["items"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["catalog_name", "item_id", "items"],
+        "properties": {
+          "catalog_name": { "type": "string" },
+          "item_id": { "type": "string" },
+          "items": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "partially updates a single existing catalog row; any Connected Content template or campaign personalization reading this catalog reflects the new value on its next fetch"
+    },
+    {
+      "name": "delete_catalog_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/catalogs/{{ record.catalog_name }}/items/{{ record.item_id }}",
+      "path_fields": ["catalog_name", "item_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["catalog_name", "item_id"],
+        "properties": {
+          "catalog_name": { "type": "string" },
+          "item_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a single row from a catalog; any Connected Content template or campaign personalization referencing this item_id starts returning no match",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_content_block",
+      "kind": "create",
+      "method": "POST",
+      "path": "/content_blocks/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "content"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "content": { "type": "string" },
+          "state": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new reusable email Content Block; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_content_block",
+      "kind": "update",
+      "method": "POST",
+      "path": "/content_blocks/update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["content_block_id"],
+        "properties": {
+          "content_block_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "content": { "type": "string" },
+          "state": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing Content Block's markup/text; changes are reflected in EVERY campaign/Canvas/template that includes this block on their next send, including already-scheduled sends"
+    },
+    {
+      "name": "create_email_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/templates/email/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["template_name", "subject", "body"],
+        "properties": {
+          "template_name": { "type": "string" },
+          "subject": { "type": "string" },
+          "body": { "type": "string" },
+          "plaintext_body": { "type": "string" },
+          "preheader": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "should_inline_css": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new reusable email template; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_email_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "/templates/email/update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email_template_id"],
+        "properties": {
+          "email_template_id": { "type": "string" },
+          "template_name": { "type": "string" },
+          "subject": { "type": "string" },
+          "body": { "type": "string" },
+          "plaintext_body": { "type": "string" },
+          "preheader": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "should_inline_css": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing email template's subject/body; changes are reflected in EVERY campaign using this template on its next send, including already-scheduled sends"
+    },
+    {
+      "name": "create_email_blocklist",
+      "kind": "create",
+      "method": "POST",
+      "path": "/email/blocklist",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "permanently blocklists email addresses from ever receiving Braze email again for this workspace; Braze's own docs note blocklisting cannot be undone via the API (requires a support request to reverse)",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_email_hard_bounce",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/email/bounce/remove",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "clears an email address's hard-bounced status, allowing future sends to resume; use only after confirming the underlying delivery issue is actually resolved, or the address will likely hard-bounce again and harm sender reputation"
+    },
+    {
+      "name": "remove_email_spam",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/email/spam/remove",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "clears an email address's spam-complaint status, allowing future sends to resume; reversing a genuine spam complaint risks another complaint and further sender-reputation damage"
+    },
+    {
+      "name": "set_email_subscription_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/email/status",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "subscription_state"],
+        "properties": {
+          "email": { "type": "string" },
+          "subscription_state": { "type": "string" }
+        }
+      },
+      "risk": "changes a single email address's global subscription state (subscribed/unsubscribed/opted_in); setting unsubscribed stops all future non-transactional email to that address"
+    },
+    {
+      "name": "remove_sms_invalid_phone_numbers",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/sms/invalid_phone_numbers/remove",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["phone_numbers"],
+        "properties": {
+          "phone_numbers": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "clears the invalid-number flag for phone numbers, allowing future SMS/MMS sends to resume; use only after confirming the number can actually receive messages again, or it will likely be re-flagged and waste sending budget"
+    },
+    {
+      "name": "create_preference_center",
+      "kind": "create",
+      "method": "POST",
+      "path": "/preference_center/v1",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "preference_center_title", "preference_center_page_html", "confirmation_page_html"],
+        "properties": {
+          "name": { "type": "string" },
+          "preference_center_title": { "type": "string" },
+          "preference_center_page_html": { "type": "string" },
+          "confirmation_page_html": { "type": "string" },
+          "state": { "type": "string" },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "publishes a new customer-facing preference center page (a live, externally-reachable URL once active); low-risk additive mutation but review the submitted HTML before use since it is served to end users verbatim"
+    },
+    {
+      "name": "update_preference_center",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/preference_center/v1/{{ record.preference_center_external_id }}",
+      "path_fields": ["preference_center_external_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["preference_center_external_id", "name", "preference_center_title", "preference_center_page_html", "confirmation_page_html"],
+        "properties": {
+          "preference_center_external_id": { "type": "string" },
+          "name": { "type": "string" },
+          "preference_center_title": { "type": "string" },
+          "preference_center_page_html": { "type": "string" },
+          "confirmation_page_html": { "type": "string" },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "overwrites an already-live, externally-reachable preference center page's HTML/title; visible to any end user who visits the page immediately after this runs"
+    },
+    {
+      "name": "send_message",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/messages/send",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["messages"],
+        "properties": {
+          "broadcast": { "type": "string" },
+          "external_user_ids": { "type": "array", "items": { "type": "string" } },
+          "user_aliases": { "type": "object" },
+          "segment_id": { "type": "string" },
+          "audience": { "type": "object" },
+          "campaign_id": { "type": "string" },
+          "send_id": { "type": "string" },
+          "override_frequency_capping": { "type": "string" },
+          "recipient_subscription_state": { "type": "string" },
+          "messages": { "type": "object" }
+        }
+      },
+      "risk": "immediately sends a live message (push/email/SMS/webhook/Content Card) to the specified users, segment, or broadcast audience; irreversible once dispatched and the single riskiest write this connector exposes — always confirm the audience scope (segment_id/audience filter vs. an explicit small external_user_ids list) before use",
+      "confirm": "destructive"
+    },
+    {
+      "name": "trigger_campaign_send",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/campaigns/trigger/send",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "send_id": { "type": "string" },
+          "trigger_properties": { "type": "object" },
+          "broadcast": { "type": "boolean" },
+          "audience": { "type": "object" },
+          "recipients": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "immediately dispatches an existing API-triggered campaign to the specified recipients/audience; irreversible once dispatched, always confirm the recipients/audience scope before use",
+      "confirm": "destructive"
+    },
+    {
+      "name": "trigger_canvas_send",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/canvas/trigger/send",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["canvas_id"],
+        "properties": {
+          "canvas_id": { "type": "string" },
+          "canvas_entry_properties": { "type": "object" },
+          "broadcast": { "type": "boolean" },
+          "audience": { "type": "object" },
+          "recipients": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "immediately enters the specified recipients/audience into an existing API-triggered Canvas; irreversible once dispatched, always confirm the recipients/audience scope before use",
+      "confirm": "destructive"
+    }
+  ]
+}

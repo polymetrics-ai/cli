@@ -52,6 +52,130 @@
       "records": { "path": "_embedded.audit_trail" },
       "incremental": { "cursor_field": "datetime" },
       "schema": "schemas/audit_trail.json"
+    },
+    {
+      "name": "records",
+      "path": "/study/{{ config.study_id }}/record",
+      "records": { "path": "_embedded.records" },
+      "schema": "schemas/records.json"
+    },
+    {
+      "name": "fields",
+      "path": "/study/{{ config.study_id }}/field",
+      "query": { "include": "metadata,validations,optiongroup" },
+      "records": { "path": "_embedded.fields" },
+      "schema": "schemas/fields.json"
+    },
+    {
+      "name": "field_dependencies",
+      "path": "/study/{{ config.study_id }}/field-dependency",
+      "records": { "path": "_embedded.fieldDependencies" },
+      "schema": "schemas/field_dependencies.json"
+    },
+    {
+      "name": "field_optiongroups",
+      "path": "/study/{{ config.study_id }}/field-optiongroup",
+      "records": { "path": "_embedded.fieldOptionGroups" },
+      "schema": "schemas/field_optiongroups.json"
+    },
+    {
+      "name": "field_validations",
+      "path": "/study/{{ config.study_id }}/field-validation",
+      "records": { "path": "_embedded.fieldValidations" },
+      "schema": "schemas/field_validations.json"
+    },
+    {
+      "name": "sites",
+      "path": "/study/{{ config.study_id }}/site",
+      "records": { "path": "_embedded.sites" },
+      "schema": "schemas/sites.json"
+    },
+    {
+      "name": "study_metadata",
+      "path": "/study/{{ config.study_id }}/metadata",
+      "records": { "path": "_embedded.metadatas" },
+      "schema": "schemas/study_metadata.json"
+    },
+    {
+      "name": "metadata_types",
+      "path": "/study/{{ config.study_id }}/metadatatype",
+      "records": { "path": "_embedded.metadatatypes" },
+      "schema": "schemas/metadata_types.json"
+    },
+    {
+      "name": "phases",
+      "path": "/study/{{ config.study_id }}/phase",
+      "records": { "path": "_embedded.phases" },
+      "schema": "schemas/phases.json"
+    },
+    {
+      "name": "queries",
+      "path": "/study/{{ config.study_id }}/query",
+      "records": { "path": "_embedded.queries" },
+      "schema": "schemas/queries.json"
+    },
+    {
+      "name": "reports",
+      "path": "/study/{{ config.study_id }}/report",
+      "records": { "path": "_embedded.reports" },
+      "schema": "schemas/reports.json"
+    },
+    {
+      "name": "report_instances",
+      "path": "/study/{{ config.study_id }}/report-instance",
+      "query": { "archived": "0" },
+      "records": { "path": "_embedded.reportInstances" },
+      "schema": "schemas/report_instances.json"
+    },
+    {
+      "name": "roles",
+      "path": "/study/{{ config.study_id }}/role",
+      "records": { "path": "_embedded.roles" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "steps",
+      "path": "/study/{{ config.study_id }}/step",
+      "records": { "path": "_embedded.steps" },
+      "schema": "schemas/steps.json"
+    },
+    {
+      "name": "surveys",
+      "path": "/study/{{ config.study_id }}/survey",
+      "records": { "path": "_embedded.surveys" },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "survey_packages",
+      "path": "/study/{{ config.study_id }}/surveypackage",
+      "records": { "path": "_embedded.survey_packages" },
+      "schema": "schemas/survey_packages.json"
+    },
+    {
+      "name": "survey_package_instances",
+      "path": "/study/{{ config.study_id }}/surveypackageinstance",
+      "records": { "path": "_embedded.surveypackageinstance" },
+      "schema": "schemas/survey_package_instances.json"
+    },
+    {
+      "name": "study_users",
+      "path": "/study/{{ config.study_id }}/user",
+      "records": { "path": "_embedded.studyUsers" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/study_users.json"
+    },
+    {
+      "name": "verifications",
+      "path": "/study/{{ config.study_id }}/verification",
+      "records": { "path": "_embedded.verifications" },
+      "schema": "schemas/verifications.json"
+    },
+    {
+      "name": "record_progress",
+      "path": "/study/{{ config.study_id }}/record-progress/steps",
+      "records": { "path": "_embedded.records" },
+      "schema": "schemas/record_progress.json"
     }
   ]
 }

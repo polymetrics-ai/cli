@@ -1,15 +1,26 @@
 {
-  "api": "DingConnect REST API (https://docs.ding.com/)",
+  "api": "DingConnect REST API (https://docs.ding.com/, https://www.dingconnect.com/Api)",
   "docs": "https://docs.ding.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 migration: the 5 legacy-parity read streams only (countries, currencies, regions, providers, products); DingConnect's read-only reference/catalog surface is modeled by legacy with no reverse-ETL write endpoint (Capabilities.Write is false), so there are no write endpoints in or out of scope.",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: DingConnect's V1 API is a small, fully-enumerable 16-method surface. This bundle now covers every no-required-filter GET catalog/reference endpoint as a stream (10 total: the legacy 5 plus product_descriptions, promotions, provider_status, error_code_descriptions, balance) and the one genuinely dialect-expressible mutation (send_transfer, a flat-object POST body). GetAccountLookup is excluded as a per-account lookup (not a catalog listing); EstimatePrices/ListTransferRecords/CancelTransfers are excluded because the write dialect has no top-level-JSON-array-body support (ENGINE_GAP) and the read dialect never sends a request body at all, so a POST-with-required-body 'query' endpoint fits neither the stream nor the write shape this engine offers.",
   "endpoints": [
     { "method": "GET", "path": "/api/V1/GetCountries", "covered_by": { "stream": "countries" } },
     { "method": "GET", "path": "/api/V1/GetCurrencies", "covered_by": { "stream": "currencies" } },
     { "method": "GET", "path": "/api/V1/GetRegions", "covered_by": { "stream": "regions" } },
     { "method": "GET", "path": "/api/V1/GetProviders", "covered_by": { "stream": "providers" } },
     { "method": "GET", "path": "/api/V1/GetProducts", "covered_by": { "stream": "products" } },
-    { "method": "POST", "path": "/api/V1/SendTransfer", "excluded": { "category": "destructive_admin", "reason": "a real-money top-up mutation; out of scope for a read-only reference-data source connector" } },
-    { "method": "GET", "path": "/api/V1/GetAccountBalance", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not modeled by legacy ding-connect connector" } }
+    { "method": "GET", "path": "/api/V1/GetProductDescriptions", "covered_by": { "stream": "product_descriptions" } },
+    { "method": "GET", "path": "/api/V1/GetPromotions", "covered_by": { "stream": "promotions" } },
+    { "method": "GET", "path": "/api/V1/GetProviderStatus", "covered_by": { "stream": "provider_status" } },
+    { "method": "GET", "path": "/api/V1/GetErrorCodeDescriptions", "covered_by": { "stream": "error_code_descriptions" } },
+    { "method": "GET", "path": "/api/V1/GetBalance", "covered_by": { "stream": "balance" } },
+    { "method": "POST", "path": "/api/V1/SendTransfer", "covered_by": { "write": "send_transfer" } },
+
+    { "method": "GET", "path": "/api/V1/GetPromotionDescriptions", "excluded": { "category": "duplicate_of", "reason": "localized promotion description strings keyed by the same localization_key/language_code shape already modeled by the covered product_descriptions stream; adding a near-identical second localized-strings stream for promotions specifically has no distinct schema value beyond what product_descriptions already proves for this API's localization pattern, and DingConnect's own docs note not every localization_key will have promotion-specific text in every language" } },
+    { "method": "GET", "path": "/api/V1/GetAccountLookup", "excluded": { "category": "out_of_scope", "reason": "requires a specific account_number as the lookup target (a per-account point lookup, not a catalog listing with optional filters like every covered stream); the dialect's stream.Query has no way to require a caller-supplied per-record lookup key at read time (streams only take static/config-derived query params), so this is a genuine per-call parameterized RPC, not a syncable stream" } },
+
+    { "method": "POST", "path": "/api/V1/EstimatePrices", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: EstimatePrices is a GET-shaped query (no side effect, returns computed pricing data) implemented as a POST because its filter criteria (EstimationRequest[]) is too rich for query params, but the read dialect's declarative stream path never sends a request body (read.go's readDeclarative call sites always pass a nil body to Requester.Do) — there is no way to express 'a read that needs a POST body' in streams.json at all. Not a stream (no body support) and not a real mutation either (nothing changes), so it fits neither Tier-1 dialect surface." } },
+    { "method": "POST", "path": "/api/V1/ListTransferRecords", "excluded": { "category": "out_of_scope", "reason": "same ENGINE_GAP as EstimatePrices: a read-shaped query (paged transfer history) that requires a POST body (ListTransferRecordsRequest) to specify the date range/paging criteria; the read dialect has no body-carrying read primitive, so this cannot be expressed as a stream despite being conceptually a list endpoint" } },
+    { "method": "POST", "path": "/api/V1/CancelTransfers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: CancelTransfers requires a top-level JSON ARRAY body (CancellationRequest[], each item a nested {transfer_id: {transfer_ref, distributor_ref}, batch_item_ref} object) - write.go's executeWriteRecord always issues a single JSON OBJECT body per record (buildJSONBody/buildBodyFieldsPayload both return map[string]any, never wrapped in an array), so a batch-array-shaped mutation body cannot be constructed by the write dialect as it exists today. A per-record write call also could not batch multiple cancellations into one array the way the real API expects; this needs either an array-body write primitive or a Tier-2 WriteHook, neither available/permitted this wave." } }
   ]
 }

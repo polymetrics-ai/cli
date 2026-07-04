@@ -1,0 +1,19 @@
+{
+  "record": {
+    "user_id": "users_fixture_1",
+    "label": "fixture-pat-label",
+    "millisToExpire": 2592000000
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/user/users_fixture_1/token",
+    "body": {
+      "label": "fixture-pat-label",
+      "millisToExpire": 2592000000
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "token_fixture_new", "token": "fixture-token-placeholder" }
+  }
+}

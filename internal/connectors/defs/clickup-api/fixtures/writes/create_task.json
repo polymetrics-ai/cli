@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Task" },
+  "expect": {
+    "method": "POST",
+    "path": "/list/synthetic-conformance-value/task",
+    "body": { "name": "Fixture Task" }
+  },
+  "response": { "status": 200, "body": { "id": "task_fixture_new", "name": "Fixture Task" } }
+}

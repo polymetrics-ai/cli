@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "estimates",
+  "type": "object",
+  "x-primary-key": ["report"],
+  "required": ["report"],
+  "properties": {
+    "report": { "type": "string" },
+    "downloads": { "type": ["integer", "null"] },
+    "revenue": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "record": { "task_id": "task_fixture_1", "tag_name": "fixture-tag" },
+  "expect": {
+    "method": "POST",
+    "path": "/task/task_fixture_1/tag/fixture-tag"
+  }
+}

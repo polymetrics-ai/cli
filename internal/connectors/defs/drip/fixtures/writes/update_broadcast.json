@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "bcast_fixture_1",
+    "broadcasts": [
+      { "subject": "Fixture updated subject" }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/synthetic-conformance-value/broadcasts/bcast_fixture_1",
+    "body": {
+      "broadcasts": [
+        { "subject": "Fixture updated subject" }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "broadcasts": [{ "id": "bcast_fixture_1", "subject": "Fixture updated subject" }] }
+  }
+}

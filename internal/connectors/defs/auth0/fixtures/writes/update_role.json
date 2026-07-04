@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "rol_fixture_1",
+    "description": "Updated fixture role description"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/roles/rol_fixture_1",
+    "body": {
+      "description": "Updated fixture role description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "rol_fixture_1",
+      "description": "Updated fixture role description"
+    }
+  }
+}

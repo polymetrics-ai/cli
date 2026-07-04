@@ -11,7 +11,11 @@
     },
     "repository": {
       "type": "string",
-      "description": "Repository name (without the namespace prefix) the 'tags' stream is scoped to. Required only when reading the 'tags' stream."
+      "description": "Repository name (without the namespace prefix) the 'tags'/'repository_detail'/'tag_detail' streams are scoped to. Required only when reading one of those streams."
+    },
+    "tag": {
+      "type": "string",
+      "description": "Tag name the 'tag_detail' stream reads a single tag record for (e.g. 'latest'). Required only when reading the 'tag_detail' stream."
     },
     "base_url": {
       "type": "string",

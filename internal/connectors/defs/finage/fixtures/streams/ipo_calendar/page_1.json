@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fnd/ipo-calendar",
+    "query": { "from": "synthetic-conformance-value", "to": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "symbol": "FXTR", "date": "2026-02-01", "company": "Fixture Capital Corp", "exchange": "NASDAQ", "status": "Priced", "shares": 1500000, "price_range": "12.00 - 14.00", "market_cap": 19500000 }
+    ]
+  }
+}

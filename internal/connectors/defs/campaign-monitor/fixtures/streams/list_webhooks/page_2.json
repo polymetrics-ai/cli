@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/lists/list_fixture_1/webhooks.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "WebhookID": "webhook_fixture_1",
+        "Events": ["Subscribe"],
+        "Url": "https://example.com/webhooks/subscribe",
+        "Status": "Active",
+        "PayloadFormat": "Json"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Preference Center",
+    "preference_center_title": "Fixture Title",
+    "preference_center_page_html": "<html></html>",
+    "confirmation_page_html": "<html></html>"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/preference_center/v1",
+    "body": {
+      "name": "Fixture Preference Center",
+      "preference_center_title": "Fixture Title",
+      "preference_center_page_html": "<html></html>",
+      "confirmation_page_html": "<html></html>"
+    }
+  },
+  "response": { "status": 201, "body": { "preference_center_api_id": "pc_fixture_1", "message": "success" } }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orderbook_current",
+  "type": "object",
+  "x-primary-key": ["symbol_id"],
+  "required": ["symbol_id"],
+  "properties": {
+    "symbol_id": { "type": "string" },
+    "time_exchange": { "type": ["string", "null"] },
+    "time_coinapi": { "type": ["string", "null"] },
+    "asks": { "type": ["array", "null"] },
+    "bids": { "type": ["array", "null"] }
+  }
+}

@@ -43,6 +43,99 @@
       "path": "/api/v1/headless/trackings",
       "records": { "path": "" },
       "schema": "schemas/trackings.json"
+    },
+    {
+      "name": "collections",
+      "path": "/api/v1/headless/collections",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "clients",
+      "path": "/api/v1/headless/clients",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v1/headless/users",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "user_trackings",
+      "path": "/api/v1/headless/user/trackings",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v1/headless/users", "records_path": "", "id_field": "identifier" }
+        },
+        "into": { "query_param": "identifier" },
+        "stamp_field": "identifier"
+      },
+      "schema": "schemas/user_trackings.json"
+    },
+    {
+      "name": "collection_trackings",
+      "path": "/api/v1/headless/collection/trackings",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v1/headless/collections", "records_path": "", "id_field": "id" }
+        },
+        "into": { "query_param": "id" },
+        "stamp_field": "collection_id"
+      },
+      "schema": "schemas/collection_trackings.json"
+    },
+    {
+      "name": "translations",
+      "path": "/api/v1/headless/translations/{{ fanout.id }}",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v1/headless/courses", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "course_id" },
+        "stamp_field": "course_id"
+      },
+      "schema": "schemas/translations.json"
     }
   ]
 }

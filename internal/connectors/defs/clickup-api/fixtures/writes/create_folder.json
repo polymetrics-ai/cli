@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Folder" },
+  "expect": {
+    "method": "POST",
+    "path": "/space/synthetic-conformance-value/folder",
+    "body": { "name": "Fixture Folder" }
+  },
+  "response": { "status": 200, "body": { "id": "folder_fixture_new", "name": "Fixture Folder" } }
+}

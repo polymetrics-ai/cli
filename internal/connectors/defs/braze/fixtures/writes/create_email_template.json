@@ -1,0 +1,17 @@
+{
+  "record": {
+    "template_name": "Fixture Template",
+    "subject": "Fixture Subject",
+    "body": "<p>Fixture</p>"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates/email/create",
+    "body": {
+      "template_name": "Fixture Template",
+      "subject": "Fixture Subject",
+      "body": "<p>Fixture</p>"
+    }
+  },
+  "response": { "status": 201, "body": { "email_template_id": "tpl_fixture_1", "message": "success" } }
+}

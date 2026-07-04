@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/metadatatype",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "metadatatypes": [
+          {
+            "id": "mt_fixture_1",
+            "name": "SNOMED",
+            "description": "SNOMED CT coding"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

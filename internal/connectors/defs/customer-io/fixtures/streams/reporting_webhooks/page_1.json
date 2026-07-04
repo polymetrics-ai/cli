@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/reporting_webhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "reporting_webhooks": [
+        { "id": 1, "name": "Fixture Webhook One", "endpoint": "https://example.com/webhook-one", "disabled": false, "full_resolution": true, "with_content": false, "events": ["email_sent", "email_opened"] },
+        { "id": 2, "name": "Fixture Webhook Two", "endpoint": "https://example.com/webhook-two", "disabled": true, "full_resolution": false, "with_content": false, "events": ["email_bounced"] }
+      ]
+    }
+  }
+}

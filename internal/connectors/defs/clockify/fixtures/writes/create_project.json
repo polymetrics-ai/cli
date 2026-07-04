@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture Project" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/workspaces/synthetic-conformance-value/projects"
+  }
+}

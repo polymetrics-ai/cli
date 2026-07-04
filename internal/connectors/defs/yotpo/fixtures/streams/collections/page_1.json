@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/core/v3/stores/synthetic-conformance-value/collections",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collections": [
+        { "yotpo_id": 1, "external_id": "col-fixture-1", "name": "Fixture Surfboards", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" },
+        { "yotpo_id": 2, "external_id": "col-fixture-2", "name": "Fixture Winter Surfboards", "created_at": "2026-01-02T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

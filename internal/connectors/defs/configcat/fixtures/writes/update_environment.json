@@ -1,0 +1,7 @@
+{
+  "record": { "environmentId": "env_fixture_1", "name": "Renamed Fixture Environment" },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/environments/env_fixture_1"
+  }
+}

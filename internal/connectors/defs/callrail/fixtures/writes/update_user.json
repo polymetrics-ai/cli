@@ -1,0 +1,9 @@
+{
+  "record": { "id": "USR_fixture_1", "role": "admin" },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/users/USR_fixture_1.json",
+    "body": { "role": "admin" }
+  },
+  "response": { "status": 200, "body": { "id": "USR_fixture_1", "role": "admin" } }
+}

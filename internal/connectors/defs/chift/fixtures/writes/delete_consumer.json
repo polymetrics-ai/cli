@@ -1,0 +1,9 @@
+{
+  "record": {
+    "consumerid": "con_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/consumers/con_fixture_1"
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "actions": [
+    {
+      "name": "create_network",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.organizationId }}/networks",
+      "path_fields": ["organizationId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "name", "productTypes"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "name": { "type": "string" },
+          "productTypes": { "type": "array", "items": { "type": "string" } },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "timeZone": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new Meraki network under an organization"
+    },
+    {
+      "name": "update_network",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/networks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "timeZone": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "enrollmentString": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an existing Meraki network's name, timezone, tags, or notes"
+    },
+    {
+      "name": "delete_network",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/networks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a Meraki network and all its devices' configuration; approval required"
+    },
+    {
+      "name": "update_device",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/devices/{{ record.serial }}",
+      "path_fields": ["serial"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["serial"],
+        "properties": {
+          "serial": { "type": "string" },
+          "name": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "lat": { "type": "number" },
+          "lng": { "type": "number" },
+          "address": { "type": "string" },
+          "notes": { "type": "string" },
+          "moveMapMarker": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; updates an existing device's name, tags, physical location, or notes"
+    },
+    {
+      "name": "create_admin",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.organizationId }}/admins",
+      "path_fields": ["organizationId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "email", "name", "orgAccess"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "orgAccess": { "type": "string" },
+          "tags": { "type": "array" },
+          "networks": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; grants a new dashboard administrator access to this organization"
+    },
+    {
+      "name": "update_admin",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ record.organizationId }}/admins/{{ record.id }}",
+      "path_fields": ["organizationId", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "id"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "orgAccess": { "type": "string" },
+          "tags": { "type": "array" },
+          "networks": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; changes an existing dashboard administrator's organization/network/tag access privileges"
+    },
+    {
+      "name": "delete_admin",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ record.organizationId }}/admins/{{ record.id }}",
+      "path_fields": ["organizationId", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "id"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external revocation of a dashboard administrator's access to this organization; approval required"
+    },
+    {
+      "name": "create_config_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.organizationId }}/configTemplates",
+      "path_fields": ["organizationId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "name"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "name": { "type": "string" },
+          "timeZone": { "type": "string" },
+          "copyFromNetworkId": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new configuration template under an organization"
+    },
+    {
+      "name": "update_config_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ record.organizationId }}/configTemplates/{{ record.id }}",
+      "path_fields": ["organizationId", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "id"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "timeZone": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; renames or retimezones an existing configuration template"
+    },
+    {
+      "name": "delete_config_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ record.organizationId }}/configTemplates/{{ record.id }}",
+      "path_fields": ["organizationId", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "id"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a configuration template; may unbind networks currently attached to it; approval required"
+    },
+    {
+      "name": "create_policy_object",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.organizationId }}/policyObjects",
+      "path_fields": ["organizationId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "name", "category", "type"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "name": { "type": "string" },
+          "category": { "type": "string" },
+          "type": { "type": "string" },
+          "cidr": { "type": "string" },
+          "fqdn": { "type": "string" },
+          "mask": { "type": "string" },
+          "ip": { "type": "string" },
+          "groupIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; creates a new network policy object (CIDR/FQDN definition) used by firewall/traffic-shaping rules"
+    },
+    {
+      "name": "update_policy_object",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ record.organizationId }}/policyObjects/{{ record.id }}",
+      "path_fields": ["organizationId", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "id"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "cidr": { "type": "string" },
+          "fqdn": { "type": "string" },
+          "mask": { "type": "string" },
+          "ip": { "type": "string" },
+          "groupIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; changes an existing network policy object's definition, potentially altering live firewall/traffic-shaping behavior"
+    },
+    {
+      "name": "delete_policy_object",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ record.organizationId }}/policyObjects/{{ record.id }}",
+      "path_fields": ["organizationId", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organizationId", "id"],
+        "properties": {
+          "organizationId": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a network policy object; may break firewall/traffic-shaping rules that reference it; approval required"
+    }
+  ]
+}

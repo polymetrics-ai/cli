@@ -1,0 +1,16 @@
+{
+  "record": {
+    "data_source_uuid": "ds_fixture_1",
+    "external_id": "ext_fixture_1",
+    "name": "Fixture Customer"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": {
+      "data_source_uuid": "ds_fixture_1",
+      "external_id": "ext_fixture_1",
+      "name": "Fixture Customer"
+    }
+  }
+}

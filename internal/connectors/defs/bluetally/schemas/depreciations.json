@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "depreciations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "months": { "type": ["integer", "null"] },
+    "minimum_value": { "type": ["number", "null"] },
+    "number_of_assets": { "type": ["integer", "null"] },
+    "number_of_licenses": { "type": ["integer", "null"] },
+    "number_of_products": { "type": ["integer", "null"] },
+    "assets": { "type": ["array", "null"] },
+    "licenses": { "type": ["array", "null"] },
+    "products": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

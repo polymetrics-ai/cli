@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture Group" },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/groups"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "request": { "method": "GET", "path": "/ref/productavailability", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "ProductAvailabilityList": [
+        {
+          "ID": "prod_fixture_1",
+          "SKU": "SKU-1",
+          "Name": "Fixture Product 1",
+          "Barcode": null,
+          "Location": "Main Warehouse",
+          "Bin": null,
+          "Batch": null,
+          "ExpiryDate": null,
+          "OnHand": 10,
+          "Allocated": 1,
+          "Available": 9,
+          "OnOrder": 0,
+          "StockOnHand": 10,
+          "InTransit": 0,
+          "NextDeliveryDate": null
+        },
+        {
+          "ID": "prod_fixture_2",
+          "SKU": "SKU-2",
+          "Name": "Fixture Product 2",
+          "Barcode": null,
+          "Location": "Main Warehouse",
+          "Bin": null,
+          "Batch": null,
+          "ExpiryDate": null,
+          "OnHand": 5,
+          "Allocated": 0,
+          "Available": 5,
+          "OnOrder": 2,
+          "StockOnHand": 5,
+          "InTransit": 0,
+          "NextDeliveryDate": "2026-02-01T00:00:00"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "hosts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_reported_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "host_name": { "type": ["string", "null"] },
+    "aws_name": { "type": ["string", "null"] },
+    "aliases": { "type": ["array", "null"], "items": { "type": "string" } },
+    "apps": { "type": ["array", "null"], "items": { "type": "string" } },
+    "sources": { "type": ["array", "null"], "items": { "type": "string" } },
+    "is_muted": { "type": ["boolean", "null"] },
+    "mute_timeout": { "type": ["integer", "null"] },
+    "up": { "type": ["boolean", "null"] },
+    "last_reported_time": { "type": ["integer", "null"] }
+  }
+}

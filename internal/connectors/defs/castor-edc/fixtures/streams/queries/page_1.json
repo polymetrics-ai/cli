@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/query",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "queries": [
+          {
+            "id": "query_fixture_1",
+            "record_id": "rec_fixture_1",
+            "field_id": "field_fixture_1",
+            "instance_id": null,
+            "status": "open",
+            "query_text": "Please confirm value",
+            "created_by": "user_fixture_1",
+            "created_on": "2026-01-01T00:00:00Z",
+            "updated_on": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

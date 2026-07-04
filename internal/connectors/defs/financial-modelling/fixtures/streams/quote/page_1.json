@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/quote/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "synthetic-conformance-value",
+        "name": "Fixture Company 1",
+        "price": 101.0,
+        "changesPercentage": 0.5,
+        "change": 0.5,
+        "dayLow": 100.0,
+        "dayHigh": 102.0,
+        "yearHigh": 120.0,
+        "yearLow": 80.0,
+        "marketCap": 1000000000,
+        "priceAvg50": 99.0,
+        "priceAvg200": 95.0,
+        "volume": 1000000,
+        "avgVolume": 1100000,
+        "exchange": "NASDAQ",
+        "open": 100.5,
+        "previousClose": 100.5,
+        "eps": 5.0,
+        "pe": 20.2,
+        "earningsAnnouncement": "2026-01-15T00:00:00.000+0000",
+        "sharesOutstanding": 100000000,
+        "timestamp": 1735689600
+      }
+    ]
+  }
+}

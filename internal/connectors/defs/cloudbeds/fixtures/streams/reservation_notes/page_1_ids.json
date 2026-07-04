@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/getReservations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "reservationID": "res_fixture_1",
+          "propertyID": "prop_fixture_1",
+          "guestID": "guest_fixture_1",
+          "guestName": "Fixture Guest 1",
+          "status": "confirmed",
+          "startDate": "2026-01-01",
+          "endDate": "2026-01-03",
+          "adults": 2,
+          "children": 0,
+          "balance": 0,
+          "sourceName": "Fixture Source",
+          "origin": "direct",
+          "dateCreated": "2026-01-01 12:00:00",
+          "dateModified": "2026-01-01 12:00:00"
+        }
+      ],
+      "count": 1
+    }
+  }
+}

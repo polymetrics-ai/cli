@@ -1,0 +1,293 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "number": { "type": "string" },
+          "active": { "type": "boolean" },
+          "billable_default": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockodo customer; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "number": { "type": "string" },
+          "active": { "type": "boolean" },
+          "billable_default": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockodo customer's fields; approval required"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockodo customer; approval required"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "customers_id"],
+        "properties": {
+          "name": { "type": "string" },
+          "customers_id": { "type": "integer" },
+          "number": { "type": "string" },
+          "active": { "type": "boolean" },
+          "billable_default": { "type": "boolean" },
+          "note": { "type": "string" },
+          "budget_money": { "type": "number" },
+          "budget_is_hours": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockodo project; approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "active": { "type": "boolean" },
+          "billable_default": { "type": "boolean" },
+          "note": { "type": "string" },
+          "budget_money": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockodo project's fields; approval required"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; irreversibly removes a live Clockodo project; approval required"
+    },
+    {
+      "name": "create_service",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/services",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "number": { "type": "string" },
+          "active": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockodo service; approval required"
+    },
+    {
+      "name": "update_service",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/services/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "active": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockodo service's fields; approval required"
+    },
+    {
+      "name": "delete_service",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/services/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockodo service; approval required"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "leader": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockodo team; approval required"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/teams/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "leader": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockodo team's fields; approval required"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/teams/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockodo team; approval required"
+    },
+    {
+      "name": "create_lumpsum_service",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/lumpsumservices",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "price"],
+        "properties": {
+          "name": { "type": "string" },
+          "price": { "type": "number" },
+          "unit": { "type": "string" },
+          "number": { "type": "string" },
+          "active": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockodo lump-sum service; approval required"
+    },
+    {
+      "name": "update_lumpsum_service",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/lumpsumservices/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "price": { "type": "number" },
+          "active": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockodo lump-sum service's fields; approval required"
+    },
+    {
+      "name": "delete_lumpsum_service",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/lumpsumservices/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockodo lump-sum service; approval required"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uid": "agr_fixture_1",
+      "folderId": 1,
+      "lastPublicVersion": { "id": "v1", "version": 1 },
+      "lock": null,
+      "metadata": { "title": "Fixture Agreement 1", "status": "DRAFT" },
+      "permission": "OWNER",
+      "creation": { "createdAt": 1735689600000 }
+    }
+  }
+}

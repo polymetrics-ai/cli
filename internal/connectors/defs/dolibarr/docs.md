@@ -7,8 +7,12 @@ start (a plain Go `int` `StartPage` field could not distinguish an explicit `0` 
 key). This gap was closed by the S4 engine mini-wave's `PaginationSpec.StartPage *int`
 (`"start_page": 0` is now distinguishable and honored verbatim) — this bundle is the unblock build
 using that dialect addition. It reads Dolibarr third parties, contacts, products, customer
-invoices, and orders through the Dolibarr REST API. This bundle migrates
-`internal/connectors/dolibarr` (the hand-written connector it replaces at capability parity); the
+invoices, and orders (list + single-record detail) through the Dolibarr REST API, and writes
+create/update/delete/validate mutations for the same 5 objects. This bundle migrates
+`internal/connectors/dolibarr` (the hand-written connector it replaces at capability parity), then
+extends it in Pass B with 5 detail streams and 17 write actions covering every CRUD/validate REST
+method on Dolibarr's `api_thirdparties`/`api_contacts`/`api_products`/`api_invoices`/`api_orders`
+PHP classes (fetched directly from the Dolibarr/dolibarr GitHub repository's `develop` branch); the
 legacy package stays registered and unchanged until wave6's registry flip.
 
 ## Auth setup
@@ -28,7 +32,7 @@ construction exactly). Pagination is genuinely 0-indexed (`pagination.type: page
 page returning fewer than `limit` records stops the read (legacy's `len(records) < pageSize`
 short-page stop).
 
-None of the 5 streams declares an `incremental` block: legacy's `harvest` sends no server-side
+None of the 5 list streams declares an `incremental` block: legacy's `harvest` sends no server-side
 filter parameter derived from a cursor or `start_date`-shaped config value at all (only the static
 `sortfield`/`sortorder`/`limit`/`page` params above) — per conventions.md §8 rule 2, an
 `incremental` block is only declared when legacy actually sends a server-side filter, which it does
@@ -36,11 +40,40 @@ not here. `x-cursor-field: date_modification` is still declared on every schema 
 published `CursorFields`) for catalog/sync-mode-derivation parity even though no request-time
 filtering happens.
 
+`thirdparty_detail`/`contact_detail`/`product_detail`/`invoice_detail`/`order_detail` (Pass B
+additions) each read `GET /{resource}/{id}` — a single-object detail record scoped by a new
+`{resource}_id` config field (e.g. `thirdparty_id`). Every detail schema widens its list-stream
+counterpart with a few genuinely detail-only fields the Dolibarr object classes publish (e.g.
+`address`/`code_client`/`siren`/`siret`/`tva_intra` for thirdparties, `description`/`weight` for
+products) — these are never present on the list endpoint's page-array entries. `pagination:
+{"type": "none"}` overrides the base 0-indexed `page_number` pagination for all 5, matching the
+single-object-stream pattern used elsewhere in this codebase (see dockerhub's `namespace`/
+`repository_detail`).
+
 ## Write actions & risks
 
-None. Dolibarr is exposed read-only here (legacy's `Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+17 write actions cover every create/update/delete/validate REST method Dolibarr's 5 already-migrated
+object classes expose (per their real `@url`-annotated PHP methods):
+
+- `create_thirdparty`/`update_thirdparty`/`delete_thirdparty` (`POST`/`PUT`/`DELETE /thirdparties`)
+- `create_contact`/`update_contact`/`delete_contact` (`POST`/`PUT`/`DELETE /contacts`)
+- `create_product`/`update_product`/`delete_product` (`POST`/`PUT`/`DELETE /products`)
+- `create_invoice`/`update_invoice`/`delete_invoice`/`validate_invoice` (`POST`/`PUT`/
+  `DELETE /invoices`, `POST /invoices/{id}/validate`)
+- `create_order`/`update_order`/`delete_order`/`validate_order` (`POST`/`PUT`/`DELETE /orders`,
+  `POST /orders/{id}/validate`)
+
+`validate_invoice`/`validate_order` are `kind: update` state-transition writes (not `create`/
+`delete`): Dolibarr's own `validate()` PHP method accepts an optional JSON body
+(`{idwarehouse, notrigger}`, both defaulting server-side) alongside the path `id` — modeled with
+`body_fields: ["idwarehouse", "notrigger"]` so the body is restricted to exactly those two optional
+fields rather than the default "every field except path_fields" behavior. Validating is a real,
+one-way state transition (draft to validated, assigning the invoice/order's final reference
+number) — every validate action's `risk` field calls this out explicitly. `update_invoice`/
+`update_order`/`delete_invoice`/`delete_order` are only accepted by Dolibarr while the record is
+still in draft status (Dolibarr itself enforces this business rule server-side; this bundle does
+not attempt to pre-check status client-side, matching how every other write action in this
+codebase defers business-rule enforcement to the live API).
 
 ## Known limits
 
@@ -69,6 +102,17 @@ None. Dolibarr is exposed read-only here (legacy's `Write` returns
   `my_dolibarr_domain_url` at all (a declared-but-unwireable key is worse than an absent one, per
   conventions.md F6). Documented config-surface narrowing, not a silent behavior change for any
   input this bundle itself accepts.
-- Full Dolibarr API surface (users, projects, warehouses/stock, bank accounts, expense reports, and
-  any write/mutation endpoints) is out of scope; see `api_surface.json`'s `excluded` entries. Only
-  the 5 legacy-parity read streams are implemented.
+- Full Dolibarr API surface beyond the 5 already-migrated objects (users, projects, warehouses/
+  stock, bank accounts, expense reports, proposals/quotes, shipments, contracts) remains out of
+  scope; see `api_surface.json`'s `excluded` entries. Within the 5 migrated objects, every
+  sub-resource family (categories/tags, notifications, bank accounts, purchase prices, variant
+  attributes, line items, payments, contact-linking, recurring-invoice templates, discount/
+  credit-note operations) is also out of scope this pass — each is individually reasoned in
+  `api_surface.json`, mostly `out_of_scope` (niche sub-object, no legacy precedent) or
+  `requires_elevated_scope` (financial-instrument or identity-provisioning data this bundle
+  deliberately does not touch).
+- Only the forward `validate` state transition is modeled for invoices/orders; the reverse
+  `settodraft`/`reopen` rollback transitions, and the `settopaid`/`settounpaid`/`setinvoiced`
+  status-shortcut endpoints (which change financial state without a genuine underlying payment/
+  invoice record), are excluded as `out_of_scope`/`requires_elevated_scope` respectively — see
+  `api_surface.json`.

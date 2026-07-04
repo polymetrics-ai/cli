@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/getItemCategories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "categoryID": "cat_fixture_1",
+          "categoryName": "Fixture Category",
+          "categoryCode": "FIX",
+          "categoryColor": "#3b7be7"
+        }
+      ],
+      "count": 1
+    }
+  }
+}

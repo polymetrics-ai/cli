@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sources",
+  "type": "object",
+  "x-primary-key": ["propertyID", "sourceID"],
+  "required": ["propertyID", "sourceID"],
+  "properties": {
+    "propertyID": { "type": "string" },
+    "sourceID": { "type": "string" },
+    "sourceName": { "type": ["string", "null"] },
+    "isThirdParty": { "type": ["boolean", "null"] },
+    "status": { "type": ["string", "null"] },
+    "commission": { "type": ["number", "null"] },
+    "paymentCollect": { "type": ["string", "null"] },
+    "taxes": { "type": ["array", "null"] },
+    "fees": { "type": ["array", "null"] }
+  }
+}

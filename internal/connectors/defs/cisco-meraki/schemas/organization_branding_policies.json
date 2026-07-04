@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_branding_policies",
+  "type": "object",
+  "x-primary-key": ["organizationId", "name"],
+  "required": ["organizationId", "name"],
+  "properties": {
+    "organizationId": { "type": "string" },
+    "name": { "type": "string" },
+    "enabled": { "type": ["boolean", "null"] },
+    "adminSettings": { "type": ["object", "null"] },
+    "helpSettings": { "type": ["object", "null"] },
+    "customLogo": { "type": ["object", "null"] }
+  }
+}

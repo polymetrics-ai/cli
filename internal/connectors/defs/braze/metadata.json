@@ -1,14 +1,14 @@
 {
   "name": "braze",
   "display_name": "Braze",
-  "description": "Reads Braze campaigns, Canvases, and segments through the Braze REST API list-export endpoints. The events (custom event names) stream is not modeled by this bundle; see docs.md Known limits.",
+  "description": "Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summary), catalogs, content blocks, email templates, Content Cards, email bounce/unsubscribe lists, SMS invalid-number lists, KPIs, sessions, preference centers, and scheduled broadcasts; writes user data (track/identify/merge/alias/delete), subscription-group status, catalog and catalog-item mutations, content block/email template mutations, email/SMS compliance-list mutations, preference center mutations, and live message/campaign/Canvas sends through the Braze REST API. The events (custom event names) and purchases/product_list streams are not modeled by this bundle; see docs.md Known limits.",
   "integration_type": "api",
   "docs_url": "https://www.braze.com/docs/api/basics/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Braze API read of campaign, Canvas, and segment metadata",
-    "approval": "none; read-only, no reverse-ETL writes"
+    "read": "external Braze API read of campaign, Canvas, segment, catalog, content-block, template, Content-Card, email-compliance, SMS-compliance, KPI/session, and preference-center metadata",
+    "write": "external mutation of Braze user profiles (track/identify/merge/delete/alias), subscription-group membership, catalogs and catalog items, content blocks, email templates, email/SMS compliance lists, preference centers, and live message/campaign/Canvas sends; send_message/trigger_campaign_send/trigger_canvas_send dispatch real, irreversible communications to end users and delete_users/remove_user_external_ids/create_email_blocklist are destructive — every write ships with an explicit per-action risk string",
+    "approval": "required for destructive actions (delete_users, remove_user_external_ids, delete_catalog, delete_catalog_item, create_email_blocklist) and for any live send (send_message, trigger_campaign_send, trigger_canvas_send); catalog/content-block/template/preference-center create-update and compliance-list removals are lower-risk but still externally visible"
   }
 }

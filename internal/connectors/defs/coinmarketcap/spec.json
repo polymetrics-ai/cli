@@ -15,6 +15,48 @@
       "default": "https://pro-api.coinmarketcap.com",
       "description": "CoinMarketCap Pro API base URL override for tests or proxies."
     },
+    "cryptocurrency_ids": {
+      "type": "string",
+      "description": "Comma-separated CoinMarketCap cryptocurrency IDs (e.g. \"1,1027\"), used as the `id` query param for the id/slug/symbol-keyed detail streams (cryptocurrency_info, cryptocurrency_quotes_latest). Required for those two streams only; leave unset if only reading other streams."
+    },
+    "convert": {
+      "type": "string",
+      "default": "USD",
+      "description": "Comma-separated fiat/crypto symbols CoinMarketCap converts quote values into (the `convert` query param on quote-bearing endpoints). Defaults to USD, matching CoinMarketCap's own documented default."
+    },
+    "price_conversion_amount": {
+      "type": "string",
+      "description": "Amount to convert for the price_conversion stream's `amount` query param (required only when reading that stream)."
+    },
+    "price_conversion_id": {
+      "type": "string",
+      "description": "CoinMarketCap cryptocurrency ID to convert FROM, for the price_conversion stream's `id` query param (use this OR price_conversion_symbol, not both)."
+    },
+    "price_conversion_symbol": {
+      "type": "string",
+      "description": "Cryptocurrency symbol to convert FROM, for the price_conversion stream's `symbol` query param (use this OR price_conversion_id, not both)."
+    },
+    "altcoin_season_timeframe": {
+      "type": "string",
+      "default": "7d",
+      "description": "Timeframe for the altcoin_season_index_historical stream: one of 7d, 30d, 90d."
+    },
+    "historical_time_start": {
+      "type": "string",
+      "description": "Optional Unix-or-ISO-8601 start timestamp for the global_metrics_quotes_historical stream's `time_start` query param."
+    },
+    "historical_time_end": {
+      "type": "string",
+      "description": "Optional Unix-or-ISO-8601 end timestamp for the global_metrics_quotes_historical stream's `time_end` query param."
+    },
+    "historical_count": {
+      "type": "string",
+      "description": "Optional result count (1-10000, CoinMarketCap default 10) for the global_metrics_quotes_historical stream's `count` query param."
+    },
+    "historical_interval": {
+      "type": "string",
+      "description": "Optional interval (e.g. \"1d\") for the global_metrics_quotes_historical stream's `interval` query param."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

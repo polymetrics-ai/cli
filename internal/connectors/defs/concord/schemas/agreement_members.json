@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agreement_members",
+  "type": "object",
+  "x-primary-key": ["agreement_id", "member_id"],
+  "required": ["agreement_id"],
+  "properties": {
+    "user": { "type": ["object", "null"] },
+    "member_id": { "type": ["integer", "null"] },
+    "permission": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "lastAccessAt": { "type": ["integer", "null"] },
+    "relation": { "type": ["string", "null"] },
+    "userSignStatus": { "type": ["string", "null"] },
+    "agreement_id": { "type": "string" }
+  }
+}

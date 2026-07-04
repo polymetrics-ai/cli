@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "wf_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/workflows/wf_fixture_1/pause"
+  },
+  "response": {
+    "status": 200,
+    "body": { "workflows": [{ "id": "wf_fixture_1", "status": "paused" }] }
+  }
+}

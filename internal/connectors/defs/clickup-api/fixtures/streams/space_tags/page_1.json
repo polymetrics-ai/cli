@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/space/synthetic-conformance-value/tag" },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "name": "fixture-tag-1", "tag_fg": "#ffffff", "tag_bg": "#4287f5" }
+      ]
+    }
+  }
+}

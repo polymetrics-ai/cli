@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "clusters",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "graphql_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "emoji": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "default_queue_id": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "web_url": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

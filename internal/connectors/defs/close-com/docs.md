@@ -1,10 +1,18 @@
 # Overview
 
-Close.com (Close CRM) is a wave2 fan-out declarative-HTTP migration. It reads Close leads,
-contacts, opportunities, activities, and users through the Close REST API
-(`GET https://api.close.com/api/v1/...`). This bundle targets capability parity with
-`internal/connectors/close-com` (the hand-written connector it migrates); the legacy package stays
-registered and unchanged until wave6's registry flip.
+Close.com (Close CRM) is a wave2 fan-out declarative-HTTP migration, expanded to a broad slice of
+the documented Close API surface in Pass B (Close's full OpenAPI 3.1 spec, `https://developer.
+close.com/openapi.json`, publishes 297 operations — see `api_surface.json` for the itemized
+per-endpoint disposition). It reads Close leads, contacts, opportunities, activities, users, tasks,
+lead statuses, opportunity statuses, pipelines, roles, groups, and lead/contact/opportunity custom
+field definitions; it writes leads, contacts, opportunities, and tasks (create/update/delete)
+through the Close REST API (`https://api.close.com/api/v1/...`). This bundle targets capability
+parity with `internal/connectors/close-com` (the hand-written connector it migrates) for its
+original 5 streams; the legacy package stays registered and unchanged until wave6's registry flip.
+The Pass B streams/writes (`tasks`, `lead_statuses`, `opportunity_statuses`, `pipelines`, `roles`,
+`groups`, `custom_fields_lead`/`custom_fields_contact`/`custom_fields_opportunity`, and every
+`writes.json` action) are new coverage beyond legacy's own scope — legacy never implemented them —
+so there is no parity constraint on their record shape.
 
 ## Auth setup
 
@@ -36,12 +44,52 @@ resource regardless of any prior cursor. Because there is no real incremental FI
 to port (only a schema-level field that happens to look like a cursor), this bundle declares no
 `incremental` block and no `x-cursor-field` on any schema, honestly representing legacy's actual
 behavior rather than its unused declared intent. `date_updated` remains a plain schema property.
+None of the Pass B streams below declare an `incremental` block either — Close's API offers no
+server-side updated-since filter on any of them.
+
+**Pass B streams**: `tasks` reuses the same `_skip`/`_limit` offset pagination and `data` envelope as
+`leads`/`contacts`. `lead_statuses`, `opportunity_statuses`, `pipelines`, `roles`, and `groups` are
+all `pagination.type: none` — Close's own OpenAPI spec declares no `_limit`/`_skip` query parameters
+on any of these five endpoints (organization-scoped configuration objects Close does not paginate).
+`custom_fields_lead`/`custom_fields_contact`/`custom_fields_opportunity` paginate like the CRM-core
+streams. **Schema-derivation caveat**: Close's own published OpenAPI spec (`https://developer.close.
+com/openapi.json`) declares EMPTY (`{"type":"object","properties":{}}`) response-body schemas for
+every one of these Pass B resources — unlike `Lead`/`Contact`/`Opportunity`, which have fully-typed
+schemas. Every Pass B schema in this bundle was instead derived from real, cross-referenced facts in
+the same spec: `tasks`' fields come from the `CreateTask` discriminated-union request body (the
+`_type: "lead"` variant, the most general-purpose task type: `_type`/`lead_id`/`text`/`contact_id`/
+`assigned_to`/`due_date`/`is_complete`/etc., all independently documented, required fields
+`["_type","lead_id","text"]`); `opportunity_statuses`' `type` field is grounded in the independently
+enumerated `OpportunityStatusType` schema (`won`/`lost`/`active`, matching the already-parity-proven
+`opportunities` stream's own `status_type` field); `lead_statuses`' `id`/`label` come from the
+`InlineLeadStatusPayload` reference schema; `groups`' full shape (`id`/`name`/`organization_id`/
+`members[].user_id`) comes from the fully-typed `Group`/`GroupMember` schemas (one of the few Pass B
+resources with a complete spec). `pipelines` (`id`/`name`/`organization_id`/`statuses[]`) and `roles`
+(`id`/`name`/`organization_id`) use the minimal fields directly confirmed by the spec's query
+parameters and Close's own documented organization-scoped-resource convention; a live capture
+against a real Close account would be needed to confirm every additional field these two endpoints
+return, but the declared fields are all real and none are guessed beyond what the spec/docs support.
 
 ## Write actions & risks
 
-None. Close is read-only in this connector (legacy's own package doc: "no obviously-safe
-reverse-ETL writes... it exposes no reverse-ETL writes, so Capabilities.Write is false");
-`capabilities.write` is `false` and this bundle ships no `writes.json`.
+`create_lead`/`update_lead`/`delete_lead`, `create_contact`/`update_contact`/`delete_contact`,
+`create_opportunity`/`update_opportunity`/`delete_opportunity`, and
+`create_task`/`update_task`/`delete_task` are new Pass B writes (legacy never implemented any Close
+write path — legacy's own package doc states "no obviously-safe reverse-ETL writes... it exposes no
+reverse-ETL writes, so Capabilities.Write is false"; this bundle now supersedes that for these 4
+resources). Every action is a live external mutation against the real Close organization; `risk` on
+each action requires approval. `create_task` is scoped to Close's `_type: "lead"` task variant only
+(the general-purpose case) — Close's `CreateTask` body is a discriminated union keyed by `_type`
+(`lead`/`outgoing_call`/etc.), each variant selecting different required fields on the SAME `/task/`
+endpoint; only one variant is dialect-expressible per write action (`record_schema` is a single flat
+object, not a union), so `outgoing_call` and other task variants are excluded (see
+`api_surface.json`). `capabilities.write` is now `true`.
+
+Custom field definitions, lead/opportunity statuses, pipelines, roles, and groups have no write
+action in this bundle — all five are workspace-schema/access-control configuration objects with no
+demonstrated write demand (deleting or renaming any of them has wide blast radius across every
+record referencing them); see `api_surface.json` for the itemized reason on every excluded
+create/update/delete endpoint.
 
 ## Known limits
 

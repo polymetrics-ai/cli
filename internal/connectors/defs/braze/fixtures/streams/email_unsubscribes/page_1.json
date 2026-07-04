@@ -1,0 +1,418 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/email/unsubscribes",
+    "query": {
+      "offset": "0",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "emails": [
+        {
+          "email": "fixture1@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:01Z"
+        },
+        {
+          "email": "fixture2@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:02Z"
+        },
+        {
+          "email": "fixture3@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:03Z"
+        },
+        {
+          "email": "fixture4@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:04Z"
+        },
+        {
+          "email": "fixture5@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:05Z"
+        },
+        {
+          "email": "fixture6@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:06Z"
+        },
+        {
+          "email": "fixture7@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:07Z"
+        },
+        {
+          "email": "fixture8@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:08Z"
+        },
+        {
+          "email": "fixture9@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:09Z"
+        },
+        {
+          "email": "fixture10@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:10Z"
+        },
+        {
+          "email": "fixture11@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:11Z"
+        },
+        {
+          "email": "fixture12@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:12Z"
+        },
+        {
+          "email": "fixture13@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:13Z"
+        },
+        {
+          "email": "fixture14@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:14Z"
+        },
+        {
+          "email": "fixture15@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:15Z"
+        },
+        {
+          "email": "fixture16@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:16Z"
+        },
+        {
+          "email": "fixture17@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:17Z"
+        },
+        {
+          "email": "fixture18@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:18Z"
+        },
+        {
+          "email": "fixture19@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:19Z"
+        },
+        {
+          "email": "fixture20@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:20Z"
+        },
+        {
+          "email": "fixture21@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:21Z"
+        },
+        {
+          "email": "fixture22@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:22Z"
+        },
+        {
+          "email": "fixture23@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:23Z"
+        },
+        {
+          "email": "fixture24@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:24Z"
+        },
+        {
+          "email": "fixture25@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:25Z"
+        },
+        {
+          "email": "fixture26@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:26Z"
+        },
+        {
+          "email": "fixture27@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:27Z"
+        },
+        {
+          "email": "fixture28@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:28Z"
+        },
+        {
+          "email": "fixture29@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:29Z"
+        },
+        {
+          "email": "fixture30@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:30Z"
+        },
+        {
+          "email": "fixture31@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:31Z"
+        },
+        {
+          "email": "fixture32@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:32Z"
+        },
+        {
+          "email": "fixture33@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:33Z"
+        },
+        {
+          "email": "fixture34@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:34Z"
+        },
+        {
+          "email": "fixture35@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:35Z"
+        },
+        {
+          "email": "fixture36@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:36Z"
+        },
+        {
+          "email": "fixture37@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:37Z"
+        },
+        {
+          "email": "fixture38@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:38Z"
+        },
+        {
+          "email": "fixture39@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:39Z"
+        },
+        {
+          "email": "fixture40@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:40Z"
+        },
+        {
+          "email": "fixture41@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:41Z"
+        },
+        {
+          "email": "fixture42@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:42Z"
+        },
+        {
+          "email": "fixture43@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:43Z"
+        },
+        {
+          "email": "fixture44@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:44Z"
+        },
+        {
+          "email": "fixture45@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:45Z"
+        },
+        {
+          "email": "fixture46@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:46Z"
+        },
+        {
+          "email": "fixture47@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:47Z"
+        },
+        {
+          "email": "fixture48@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:48Z"
+        },
+        {
+          "email": "fixture49@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:49Z"
+        },
+        {
+          "email": "fixture50@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:50Z"
+        },
+        {
+          "email": "fixture51@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:51Z"
+        },
+        {
+          "email": "fixture52@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:52Z"
+        },
+        {
+          "email": "fixture53@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:53Z"
+        },
+        {
+          "email": "fixture54@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:54Z"
+        },
+        {
+          "email": "fixture55@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:55Z"
+        },
+        {
+          "email": "fixture56@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:56Z"
+        },
+        {
+          "email": "fixture57@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:57Z"
+        },
+        {
+          "email": "fixture58@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:58Z"
+        },
+        {
+          "email": "fixture59@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:59Z"
+        },
+        {
+          "email": "fixture60@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "email": "fixture61@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:01Z"
+        },
+        {
+          "email": "fixture62@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:02Z"
+        },
+        {
+          "email": "fixture63@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:03Z"
+        },
+        {
+          "email": "fixture64@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:04Z"
+        },
+        {
+          "email": "fixture65@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:05Z"
+        },
+        {
+          "email": "fixture66@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:06Z"
+        },
+        {
+          "email": "fixture67@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:07Z"
+        },
+        {
+          "email": "fixture68@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:08Z"
+        },
+        {
+          "email": "fixture69@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:09Z"
+        },
+        {
+          "email": "fixture70@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:10Z"
+        },
+        {
+          "email": "fixture71@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:11Z"
+        },
+        {
+          "email": "fixture72@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:12Z"
+        },
+        {
+          "email": "fixture73@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:13Z"
+        },
+        {
+          "email": "fixture74@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:14Z"
+        },
+        {
+          "email": "fixture75@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:15Z"
+        },
+        {
+          "email": "fixture76@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:16Z"
+        },
+        {
+          "email": "fixture77@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:17Z"
+        },
+        {
+          "email": "fixture78@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:18Z"
+        },
+        {
+          "email": "fixture79@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:19Z"
+        },
+        {
+          "email": "fixture80@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:20Z"
+        },
+        {
+          "email": "fixture81@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:21Z"
+        },
+        {
+          "email": "fixture82@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:22Z"
+        },
+        {
+          "email": "fixture83@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:23Z"
+        },
+        {
+          "email": "fixture84@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:24Z"
+        },
+        {
+          "email": "fixture85@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:25Z"
+        },
+        {
+          "email": "fixture86@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:26Z"
+        },
+        {
+          "email": "fixture87@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:27Z"
+        },
+        {
+          "email": "fixture88@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:28Z"
+        },
+        {
+          "email": "fixture89@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:29Z"
+        },
+        {
+          "email": "fixture90@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:30Z"
+        },
+        {
+          "email": "fixture91@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:31Z"
+        },
+        {
+          "email": "fixture92@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:32Z"
+        },
+        {
+          "email": "fixture93@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:33Z"
+        },
+        {
+          "email": "fixture94@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:34Z"
+        },
+        {
+          "email": "fixture95@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:35Z"
+        },
+        {
+          "email": "fixture96@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:36Z"
+        },
+        {
+          "email": "fixture97@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:37Z"
+        },
+        {
+          "email": "fixture98@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:38Z"
+        },
+        {
+          "email": "fixture99@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:39Z"
+        },
+        {
+          "email": "fixture100@example.com",
+          "unsubscribed_at": "2026-01-01T00:00:40Z"
+        }
+      ],
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tenants",
+  "type": "object",
+  "x-primary-key": ["tenant_id"],
+  "required": ["tenant_id"],
+  "properties": {
+    "tenant_id": { "type": "integer" },
+    "tenant_name": { "type": ["string", "null"] }
+  }
+}

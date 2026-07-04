@@ -1,14 +1,14 @@
 {
   "name": "yotpo",
   "display_name": "Yotpo",
-  "description": "Reads Yotpo store products, customers, and orders through REST API endpoints. Read-only.",
+  "description": "Reads Yotpo store products, product variants, collections, customers, orders, and webhook targets/filters/subscriptions, and writes product/variant/order/customer/fulfillment/collection-membership/webhook mutations through the Yotpo Core API v3.",
   "integration_type": "api",
-  "docs_url": "https://apidocs.yotpo.com/reference",
+  "docs_url": "https://core-api.yotpo.com/reference/welcome",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Yotpo API read of store product, customer, and order data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Yotpo Core API read of product, variant, collection, customer, order, and webhook configuration data",
+    "write": "external mutation: creates/updates products, variants, orders, customers, order fulfillments, and collections; manages collection membership and webhook target/filter/subscription lifecycle",
+    "approval": "required for all write actions; reads require none"
   }
 }

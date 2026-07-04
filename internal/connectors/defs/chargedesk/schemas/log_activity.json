@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "log_activity",
+  "type": "object",
+  "x-cursor-field": "occurred",
+  "properties": {
+    "object_id": { "type": ["string", "null"] },
+    "object_type": { "type": ["string", "null"] },
+    "action_type": { "type": ["string", "null"] },
+    "action_reason": { "type": ["string", "null"] },
+    "action_params": { "type": ["boolean", "null"] },
+    "description": { "type": ["string", "null"] },
+    "sub_description": { "type": ["string", "null"] },
+    "event": { "type": ["string", "null"] },
+    "occurred": { "type": "integer" },
+    "ip": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "company": { "type": ["string", "null"] },
+    "context": { "type": ["string", "null"] },
+    "params": { "type": ["string", "null"] }
+  }
+}

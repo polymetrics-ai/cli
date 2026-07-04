@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "cl_fixture_1",
+    "name": "Fixture Client Co Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/clients/cl_fixture_1",
+    "body": {
+      "name": "Fixture Client Co Renamed"
+    }
+  }
+}

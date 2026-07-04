@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "shared_workspaces",
+  "type": "object",
+  "x-primary-key": ["workspaceId"],
+  "required": ["workspaceId"],
+  "properties": {
+    "workspaceId": { "type": "string" },
+    "workspaceName": { "type": ["string", "null"] },
+    "workspaceDesc": { "type": ["string", "null"] },
+    "orgId": { "type": ["string", "null"] },
+    "createdTime": { "type": ["string", "null"] },
+    "createdBy": { "type": ["string", "null"] },
+    "isDefault": { "type": ["boolean", "null"] }
+  }
+}

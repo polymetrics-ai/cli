@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invites",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "account_id": { "type": "integer" },
+    "email_address": { "type": ["string", "null"] },
+    "license_type": { "type": ["string", "null"] },
+    "status": { "type": ["integer", "null"] },
+    "type": { "type": ["string", "null"] },
+    "group_ids": { "type": ["array", "null"], "items": { "type": "integer" } },
+    "redeemed_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

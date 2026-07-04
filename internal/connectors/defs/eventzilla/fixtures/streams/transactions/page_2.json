@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/events/1/transactions", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactions": [
+        {
+          "checkout_id": 5001,
+          "event_id": 1,
+          "transaction_ref": "REF-5001",
+          "transaction_date": "2026-01-01",
+          "transaction_amount": "25.00",
+          "tickets_in_transaction": "1",
+          "event_date": "2026-01-01T09:00:00Z",
+          "transaction_status": "Confirmed",
+          "user_id": 900,
+          "title": "Fixture Launch",
+          "email": "buyer1@example.com",
+          "buyer_first_name": "Fixture",
+          "buyer_last_name": "Buyer1",
+          "promo_code": "",
+          "payment_type": "card",
+          "comments": ""
+        }
+      ]
+    }
+  }
+}

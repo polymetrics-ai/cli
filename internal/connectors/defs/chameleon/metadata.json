@@ -8,7 +8,7 @@
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external Chameleon API read of in-product experience and segment data",
-    "approval": "none; read-only"
+    "read": "external Chameleon API read of in-product experience, segment, tag, event, delivery, webhook, and company data",
+    "write": "external mutations publishing/unpublishing in-product experiences, triggering/cancelling user-targeted Deliveries, and creating/deleting outbound Webhook subscriptions; every write action requires approval",
+    "approval": "read: none; write: required for every action"
   }
 }

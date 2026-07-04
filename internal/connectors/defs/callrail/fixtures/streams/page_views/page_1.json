@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/calls.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "calls": [
+        {
+          "id": "CAL_fixture_1",
+          "answered": true,
+          "start_time": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

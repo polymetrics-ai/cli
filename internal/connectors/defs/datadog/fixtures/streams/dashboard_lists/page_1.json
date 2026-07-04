@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/dashboard/lists/manual" },
+  "response": {
+    "status": 200,
+    "body": {
+      "dashboard_lists": [
+        {
+          "id": 1,
+          "name": "Fixture Dashboard List 1",
+          "type": "manual_dashboard_list",
+          "dashboard_count": 3,
+          "is_favorite": false,
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:05:00Z"
+        }
+      ]
+    }
+  }
+}

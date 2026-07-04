@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "beamerId": "beamer_user_fixture_1",
+        "userId": "user_1",
+        "userEmail": "fixture1@example.com",
+        "userFirstName": "First1",
+        "userLastName": "Last1",
+        "language": "en",
+        "filter": "",
+        "firstSeen": "2026-01-01T00:00:00Z",
+        "lastSeen": "2026-01-02T00:00:00Z",
+        "ip": "203.0.113.1",
+        "browser": "Chrome",
+        "os": "macOS",
+        "city": "San Francisco",
+        "country": "US",
+        "latitude": "37.7749",
+        "longitude": "-122.4194"
+      }
+    ]
+  }
+}

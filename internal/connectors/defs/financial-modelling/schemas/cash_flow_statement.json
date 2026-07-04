@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cash_flow_statement",
+  "type": "object",
+  "x-primary-key": ["symbol", "date", "period"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "period": { "type": ["string", "null"] },
+    "reported_currency": { "type": ["string", "null"] },
+    "fiscal_year": { "type": ["string", "null"] },
+    "filling_date": { "type": ["string", "null"] },
+    "accepted_date": { "type": ["string", "null"] },
+    "calendar_year": { "type": ["string", "null"] },
+    "net_income": { "type": ["number", "null"] },
+    "operating_cash_flow": { "type": ["number", "null"] },
+    "net_cash_provided_by_operating_activities": { "type": ["number", "null"] },
+    "capital_expenditure": { "type": ["number", "null"] },
+    "free_cash_flow": { "type": ["number", "null"] },
+    "net_change_in_cash": { "type": ["number", "null"] }
+  }
+}

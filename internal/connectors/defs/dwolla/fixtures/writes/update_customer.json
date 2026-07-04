@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "cus_fixture_1",
+    "email": "fixture1-new@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/cus_fixture_1",
+    "body": {
+      "email": "fixture1-new@example.com"
+    }
+  }
+}

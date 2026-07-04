@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/context",
+    "query": { "owner-slug": "synthetic-conformance-value/synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "ctx_fixture_1", "name": "fixture-context-1", "created_at": "2026-01-01T00:00:00Z" },
+        { "id": "ctx_fixture_2", "name": "fixture-context-2", "created_at": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page_token": null
+    }
+  }
+}

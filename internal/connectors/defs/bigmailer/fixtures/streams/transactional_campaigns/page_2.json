@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_1/transactional-campaigns", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "transactional_campaign_fixture_1",
+          "brand_id": "brand_fixture_1",
+          "created": 1767225601,
+          "name": "Fixture Transactional Campaign",
+          "subject": "Fixture Transactional Subject",
+          "from": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "reply_to": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "message_type_id": "message_type_fixture_1",
+          "list_id": "list_fixture_1",
+          "num_sent": 100,
+          "num_rejected": 10,
+          "num_clicks": 20,
+          "num_total_clicks": 30,
+          "num_opens": 50,
+          "num_total_opens": 60,
+          "num_hard_bounces": 4,
+          "num_soft_bounces": 8,
+          "num_complaints": 2,
+          "num_unsubscribes": 3,
+          "status": "active"
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pending_collaborations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "item": { "type": ["object", "null"] },
+    "accessible_by": { "type": ["object", "null"] },
+    "invite_email": { "type": ["string", "null"] },
+    "role": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "expires_at": { "type": ["string", "null"] },
+    "is_access_only": { "type": ["boolean", "null"] },
+    "acknowledged_at": { "type": ["string", "null"] },
+    "created_by": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "modified_at": { "type": ["string", "null"] }
+  }
+}

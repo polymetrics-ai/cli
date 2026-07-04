@@ -1,0 +1,1415 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/consumables",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture consumable 1",
+        "model_number": "MN-1",
+        "order_number": "ORD-1",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 2,
+        "name": "Fixture consumable 2",
+        "model_number": "MN-2",
+        "order_number": "ORD-2",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 3,
+        "name": "Fixture consumable 3",
+        "model_number": "MN-3",
+        "order_number": "ORD-3",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 4,
+        "name": "Fixture consumable 4",
+        "model_number": "MN-4",
+        "order_number": "ORD-4",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 5,
+        "name": "Fixture consumable 5",
+        "model_number": "MN-5",
+        "order_number": "ORD-5",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 6,
+        "name": "Fixture consumable 6",
+        "model_number": "MN-6",
+        "order_number": "ORD-6",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 7,
+        "name": "Fixture consumable 7",
+        "model_number": "MN-7",
+        "order_number": "ORD-7",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 8,
+        "name": "Fixture consumable 8",
+        "model_number": "MN-8",
+        "order_number": "ORD-8",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 9,
+        "name": "Fixture consumable 9",
+        "model_number": "MN-9",
+        "order_number": "ORD-9",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 10,
+        "name": "Fixture consumable 10",
+        "model_number": "MN-10",
+        "order_number": "ORD-10",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 11,
+        "name": "Fixture consumable 11",
+        "model_number": "MN-11",
+        "order_number": "ORD-11",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 12,
+        "name": "Fixture consumable 12",
+        "model_number": "MN-12",
+        "order_number": "ORD-12",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 13,
+        "name": "Fixture consumable 13",
+        "model_number": "MN-13",
+        "order_number": "ORD-13",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 14,
+        "name": "Fixture consumable 14",
+        "model_number": "MN-14",
+        "order_number": "ORD-14",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 15,
+        "name": "Fixture consumable 15",
+        "model_number": "MN-15",
+        "order_number": "ORD-15",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 16,
+        "name": "Fixture consumable 16",
+        "model_number": "MN-16",
+        "order_number": "ORD-16",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 17,
+        "name": "Fixture consumable 17",
+        "model_number": "MN-17",
+        "order_number": "ORD-17",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 18,
+        "name": "Fixture consumable 18",
+        "model_number": "MN-18",
+        "order_number": "ORD-18",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 19,
+        "name": "Fixture consumable 19",
+        "model_number": "MN-19",
+        "order_number": "ORD-19",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 20,
+        "name": "Fixture consumable 20",
+        "model_number": "MN-20",
+        "order_number": "ORD-20",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 21,
+        "name": "Fixture consumable 21",
+        "model_number": "MN-21",
+        "order_number": "ORD-21",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 22,
+        "name": "Fixture consumable 22",
+        "model_number": "MN-22",
+        "order_number": "ORD-22",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 23,
+        "name": "Fixture consumable 23",
+        "model_number": "MN-23",
+        "order_number": "ORD-23",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 24,
+        "name": "Fixture consumable 24",
+        "model_number": "MN-24",
+        "order_number": "ORD-24",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 25,
+        "name": "Fixture consumable 25",
+        "model_number": "MN-25",
+        "order_number": "ORD-25",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 26,
+        "name": "Fixture consumable 26",
+        "model_number": "MN-26",
+        "order_number": "ORD-26",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 27,
+        "name": "Fixture consumable 27",
+        "model_number": "MN-27",
+        "order_number": "ORD-27",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 28,
+        "name": "Fixture consumable 28",
+        "model_number": "MN-28",
+        "order_number": "ORD-28",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 29,
+        "name": "Fixture consumable 29",
+        "model_number": "MN-29",
+        "order_number": "ORD-29",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 30,
+        "name": "Fixture consumable 30",
+        "model_number": "MN-30",
+        "order_number": "ORD-30",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 31,
+        "name": "Fixture consumable 31",
+        "model_number": "MN-31",
+        "order_number": "ORD-31",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 32,
+        "name": "Fixture consumable 32",
+        "model_number": "MN-32",
+        "order_number": "ORD-32",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 33,
+        "name": "Fixture consumable 33",
+        "model_number": "MN-33",
+        "order_number": "ORD-33",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 34,
+        "name": "Fixture consumable 34",
+        "model_number": "MN-34",
+        "order_number": "ORD-34",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 35,
+        "name": "Fixture consumable 35",
+        "model_number": "MN-35",
+        "order_number": "ORD-35",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 36,
+        "name": "Fixture consumable 36",
+        "model_number": "MN-36",
+        "order_number": "ORD-36",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 37,
+        "name": "Fixture consumable 37",
+        "model_number": "MN-37",
+        "order_number": "ORD-37",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 38,
+        "name": "Fixture consumable 38",
+        "model_number": "MN-38",
+        "order_number": "ORD-38",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 39,
+        "name": "Fixture consumable 39",
+        "model_number": "MN-39",
+        "order_number": "ORD-39",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 40,
+        "name": "Fixture consumable 40",
+        "model_number": "MN-40",
+        "order_number": "ORD-40",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 41,
+        "name": "Fixture consumable 41",
+        "model_number": "MN-41",
+        "order_number": "ORD-41",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 42,
+        "name": "Fixture consumable 42",
+        "model_number": "MN-42",
+        "order_number": "ORD-42",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 43,
+        "name": "Fixture consumable 43",
+        "model_number": "MN-43",
+        "order_number": "ORD-43",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 44,
+        "name": "Fixture consumable 44",
+        "model_number": "MN-44",
+        "order_number": "ORD-44",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 45,
+        "name": "Fixture consumable 45",
+        "model_number": "MN-45",
+        "order_number": "ORD-45",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 46,
+        "name": "Fixture consumable 46",
+        "model_number": "MN-46",
+        "order_number": "ORD-46",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 47,
+        "name": "Fixture consumable 47",
+        "model_number": "MN-47",
+        "order_number": "ORD-47",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 48,
+        "name": "Fixture consumable 48",
+        "model_number": "MN-48",
+        "order_number": "ORD-48",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 49,
+        "name": "Fixture consumable 49",
+        "model_number": "MN-49",
+        "order_number": "ORD-49",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 50,
+        "name": "Fixture consumable 50",
+        "model_number": "MN-50",
+        "order_number": "ORD-50",
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "unit_cost": 7,
+        "currency": "USD",
+        "minimum_quantity": 20,
+        "available": 141,
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "logo": "www.test.com",
+        "notes": "fixture record",
+        "custom_fields": [
+          {
+            "Paper Size": "A3"
+          }
+        ],
+        "checked_out_to_employees": [],
+        "checked_out_to_locations": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

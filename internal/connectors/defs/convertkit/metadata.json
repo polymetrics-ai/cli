@@ -1,14 +1,14 @@
 {
   "name": "convertkit",
   "display_name": "ConvertKit",
-  "description": "Reads ConvertKit (Kit) subscribers, forms, sequences, tags, and broadcasts through the ConvertKit v3 REST API.",
+  "description": "Reads ConvertKit (Kit) subscribers, forms, sequences, tags, broadcasts, custom fields, and purchases, and writes subscriber/tag/form/sequence/broadcast/custom-field/purchase/webhook mutations, through the ConvertKit v3 REST API.",
   "integration_type": "api",
-  "docs_url": "https://developers.convertkit.com/",
+  "docs_url": "https://developers.kit.com/api-reference/v3/overview",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,6 +18,7 @@
   },
   "risk": {
     "read": "external ConvertKit API read of subscriber and campaign data",
-    "approval": "none; read-only source"
+    "write": "external mutation: creates/updates subscribers, tags, forms/sequences subscriptions, broadcasts (including scheduling live sends), custom fields, purchase records, and webhooks; deletes are limited to broadcasts/webhooks/tag-removal (no subscriber/custom-field/global-unsubscribe deletes)",
+    "approval": "required for all write actions; read-only otherwise"
   }
 }

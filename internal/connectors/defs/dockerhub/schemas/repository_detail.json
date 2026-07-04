@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "repository_detail",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "x-cursor-field": "last_updated",
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "namespace": { "type": ["string", "null"] },
+    "repository_type": { "type": ["string", "null"] },
+    "status": { "type": ["integer", "null"] },
+    "status_description": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "is_private": { "type": ["boolean", "null"] },
+    "is_automated": { "type": ["boolean", "null"] },
+    "star_count": { "type": ["integer", "null"] },
+    "pull_count": { "type": ["integer", "null"] },
+    "storage_size": { "type": ["integer", "null"] },
+    "collaborator_count": { "type": ["integer", "null"] },
+    "hub_user": { "type": ["string", "null"] },
+    "has_starred": { "type": ["boolean", "null"] },
+    "full_description": { "type": ["string", "null"] },
+    "last_updated": { "type": ["string", "null"] },
+    "date_registered": { "type": ["string", "null"] }
+  }
+}

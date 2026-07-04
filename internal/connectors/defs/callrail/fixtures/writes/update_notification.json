@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1, "call_enabled": false },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/notifications/1.json",
+    "body": { "call_enabled": false }
+  },
+  "response": { "status": 200, "body": { "id": 1, "call_enabled": false } }
+}

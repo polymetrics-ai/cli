@@ -1,10 +1,12 @@
 # Overview
 
-Care Quality Commission (CQC) is a wave2 fan-out migration. This bundle reads the public CQC
-Syndication API's core top-level streams — registered locations, registered providers, and
-inspection areas — migrating `internal/connectors/care-quality-commission` (the legacy
-hand-written connector, which stays registered and unchanged until wave6's registry flip) at
-capability parity. The API is read-only; this bundle exposes no write actions.
+Care Quality Commission (CQC) is a wave2 fan-out migration, expanded in Pass B to the full
+practical CQC Syndication API v1 surface. This bundle reads the public CQC Syndication API's
+core top-level streams — registered locations, registered providers, and inspection areas —
+migrating `internal/connectors/care-quality-commission` (the legacy hand-written connector,
+which stays registered and unchanged until wave6's registry flip). The API is a read-only,
+published-open-data API with no authenticated write endpoint of any kind documented anywhere;
+this bundle exposes no write actions and never will unless CQC itself adds one.
 
 ## Auth setup
 
@@ -40,9 +42,27 @@ properties (unlike legacy, which accepts config overrides for both): the `page_n
 mechanism in this dialect to wire a spec property into those fields at all (F6, `conventions.md`:
 a declared-but-unwireable spec property is worse than an absent one). See Known limits.
 
+**Pass B schema enrichment**: `locations` and `providers` were widened from a 2-3-field
+identity-only projection to the full flat (non-nested-array) field set CQC's own documented
+location/provider object shape publishes — registration status/date, address fields, ONSPD
+lat/long, phone, region, local authority, constituency, and (locations only) `numberOfBeds`/
+`careHome`/`providerId`. Every new property is optional (`["<type>", "null"]`, none added to
+`required`), so this is a strictly additive schema widening: no existing record shape becomes
+invalid, and a live response that omits a field a caller's older sync never saw simply projects
+as absent/null exactly as it always would have. Deeply nested array-of-object sub-resources CQC
+also documents on both objects (`relationships`, `locationTypes`/`gacServiceTypes`,
+`regulatedActivities`, `specialisms`, `currentRatings`/`historicRatings`, `reports`) are NOT
+modeled: `computed_fields`' `join:<sep>` filter only joins a flat array of scalars, not an array
+of rating/report objects, and passthrough of the raw nested arrays via plain schema projection
+(`"type": ["array","null"]` with no `items` shape) would silently vary per-record depending on
+which ratings/report fields CQC happens to populate — left out for now rather than declared with
+an under-specified shape.
+
 ## Write actions & risks
 
-None. This connector is read-only, matching legacy's `Write` stub (`connectors.ErrUnsupportedOperation`).
+None. This connector is read-only: the CQC Syndication API documents no write endpoint of any
+kind (matching legacy's `Write` stub returning `connectors.ErrUnsupportedOperation`), so
+`capabilities.write` stays `false` and no `writes.json` is added.
 
 ## Known limits
 
@@ -53,11 +73,24 @@ None. This connector is read-only, matching legacy's `Write` stub (`connectors.E
   never changes any single emitted record's DATA, only how many requests a sync issues and at
   what page size — parity-deviation ledger candidate, ACCEPTABLE under the meta-rule (no
   accepted-input record-data change).
-- Per-parent detail/fan-out endpoints (`/locations/{id}`, `/providers/{id}`,
-  `/providers/{id}/locations`) and the `/changes/*` delta endpoints are out of scope for wave2;
-  see `api_surface.json`'s `excluded: {category: out_of_scope}` entries. Legacy itself never
-  implemented these (its own package doc says the substream/detail endpoints are "intentionally
-  out of scope for this read-only core connector"), so this is a like-for-like parity boundary,
-  not a new narrowing introduced by migration.
-- Full CQC API surface (locations_detailed/providers_detailed substreams) is out of scope until
-  Pass B.
+- Detail-by-id endpoints (`/locations/{id}`, `/providers/{id}`) are excluded as `duplicate_of`
+  their list stream: CQC's own documentation shows the detail endpoint returning the identical
+  full object shape the list endpoint already emits per record, so no read coverage is lost.
+- `/providers/{id}/locations` is excluded as `out_of_scope`: it is not present anywhere in CQC's
+  own published Syndication API documentation. A live probe against this path does return HTTP
+  401 rather than 404, but that is inconclusive (the Azure API Management gateway in front of
+  this API appears to gate on subscription key before backend route-matching for at least some
+  undocumented paths), so this bundle treats it as unconfirmed/undocumented rather than a real
+  endpoint. The same information (a provider's associated location ids) is already reachable, in
+  principle, from the (currently unmodeled) `locationIds` array on the provider object itself.
+- `/changes/locations` and `/changes/providers` are excluded as `out_of_scope`: both return a
+  paginated array of BARE location/provider-id strings for a `startTimestamp`/`endTimestamp`
+  window, not full record objects — the dialect's `records.path`/schema-projection model has no
+  primitive for turning a bare-scalar array into per-element records (the identical `ENGINE_GAP`
+  class documented for ip2whois's `nameservers` field, `docs/migration/conventions.md` §5 item
+  12), and modeling it would require either a `fan_out` fetch-per-id round trip (defeating the
+  feed's own purpose — its whole point is letting a caller avoid re-fetching every full record)
+  or emitting useless id-only pseudo-records.
+- Deeply nested rating/report/relationship sub-structures on `locations`/`providers` (see Streams
+  notes) are not modeled as schema properties; only the flat, non-array-of-object CQC-documented
+  fields are.

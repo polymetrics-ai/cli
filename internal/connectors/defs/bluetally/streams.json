@@ -47,6 +47,85 @@
       "path": "/api/v1/accessories",
       "records": { "path": "" },
       "schema": "schemas/accessories.json"
+    },
+    {
+      "name": "components",
+      "path": "/api/v1/components",
+      "records": { "path": "" },
+      "schema": "schemas/components.json"
+    },
+    {
+      "name": "consumables",
+      "path": "/api/v1/consumables",
+      "records": { "path": "" },
+      "schema": "schemas/consumables.json"
+    },
+    {
+      "name": "categories",
+      "path": "/api/v1/categories",
+      "records": { "path": "" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "departments",
+      "path": "/api/v1/departments",
+      "records": { "path": "" },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "depreciations",
+      "path": "/api/v1/depreciations",
+      "records": { "path": "" },
+      "schema": "schemas/depreciations.json"
+    },
+    {
+      "name": "locations",
+      "path": "/api/v1/locations",
+      "records": { "path": "" },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "manufacturers",
+      "path": "/api/v1/manufacturers",
+      "records": { "path": "" },
+      "schema": "schemas/manufacturers.json"
+    },
+    {
+      "name": "products",
+      "path": "/api/v1/products",
+      "records": { "path": "" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "statuses",
+      "path": "/api/v1/statuses",
+      "records": { "path": "" },
+      "schema": "schemas/statuses.json"
+    },
+    {
+      "name": "suppliers",
+      "path": "/api/v1/suppliers",
+      "records": { "path": "" },
+      "schema": "schemas/suppliers.json"
+    },
+    {
+      "name": "audits",
+      "path": "/api/v1/audits",
+      "records": { "path": "" },
+      "schema": "schemas/audits.json"
+    },
+    {
+      "name": "activity",
+      "path": "/api/v1/activity",
+      "records": { "path": "" },
+      "schema": "schemas/activity.json"
+    },
+    {
+      "name": "tenants",
+      "path": "/api/v1/tenants",
+      "records": { "path": "tenants" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/tenants.json"
     }
   ]
 }

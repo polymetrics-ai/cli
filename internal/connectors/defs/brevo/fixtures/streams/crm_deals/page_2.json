@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/crm/deals",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "deal_fixture_101",
+          "attributes": {
+            "deal_name": "Fixture Deal 101",
+            "amount": 10100,
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_date": "2026-01-18T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            101
+          ],
+          "linkedCompaniesIds": []
+        }
+      ]
+    }
+  }
+}

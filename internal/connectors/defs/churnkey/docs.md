@@ -1,26 +1,36 @@
 # Overview
 
-Churnkey is a wave2 fan-out Tier-1 declarative migration. It reads Churnkey cancel-flow sessions and
-aggregated session counts through Churnkey's read-only Data API
-(`https://api.churnkey.co/v1/data`). This bundle targets capability parity with
-`internal/connectors/churnkey` (the hand-written connector it migrates); the legacy package stays
-registered and unchanged until wave6's registry flip. Churnkey is read-only in both legacy and this
-bundle (no `writes.json` — legacy's own comment: "There are no safe reverse-ETL write actions — the
-only mutating endpoints are GDPR deletes").
+Churnkey is a Pass B full-surface Tier-1 declarative connector. It reads Churnkey cancel-flow
+sessions and aggregated session counts through Churnkey's Data API (`https://api.churnkey.co/v1/data`),
+and writes usage events / customer attribute updates / billing-contact assignments through Churnkey's
+Event Tracking API (`https://api.churnkey.co/v1/api/events/*`) — both APIs share one host
+(`api.churnkey.co`) but live at different path prefixes, so `base_url` is now the bare host and every
+stream/write path carries its own `/v1/data` or `/v1/api` prefix. This bundle targets capability
+parity with `internal/connectors/churnkey` (the hand-written connector it migrates) for reads, and
+extends beyond it for writes (legacy never implemented any write path; its own comment asserted "There
+are no safe reverse-ETL write actions — the only mutating endpoints are GDPR deletes", which undersold
+the documented Event Tracking API); the legacy package stays registered and unchanged until wave6's
+registry flip.
 
 ## Auth setup
 
 Provide a Churnkey Data API key via the `api_key` secret; it is sent as the `x-ck-api-key` header
 (`auth: [{"mode":"api_key_header","header":"x-ck-api-key","value":"{{ secrets.api_key }}"}]`),
-matching legacy's `connsdk.APIKeyHeader(churnkeyAPIKeyHdr, secret, "")` exactly. The Churnkey
-application id is required via the `app_id` config property, sent as a static `x-ck-app` header on
-every request (`streams.json`'s `base.headers`), matching legacy's `DefaultHeaders: {churnkeyAppHdr:
-app}`. `base_url` defaults to `https://api.churnkey.co/v1/data` (`spec.json`'s `default`), matching
-legacy's `churnkeyDefaultBaseURL`.
+matching legacy's `connsdk.APIKeyHeader(churnkeyAPIKeyHdr, secret, "")` exactly — the same header
+authenticates both the Data API and the Event Tracking API (Churnkey's docs confirm both surfaces use
+the identical `x-ck-api-key`/`x-ck-app` header pair). The Churnkey application id is required via the
+`app_id` config property, sent as a static `x-ck-app` header on every request (`streams.json`'s
+`base.headers`), matching legacy's `DefaultHeaders: {churnkeyAppHdr: app}`. `base_url` defaults to
+`https://api.churnkey.co` (`spec.json`'s `default`) — narrowed from legacy's `churnkeyDefaultBaseURL`
+(`https://api.churnkey.co/v1/data`) to the bare host now that writes.json needs to reach the sibling
+`/v1/api` prefix on the same host; every stream/action path was updated to carry the full `/v1/data/...`
+or `/v1/api/...` prefix itself (the engine joins `base_url` + `path` as a plain string concatenation
+with no `../`-escape allowed, so a shared bare-host base is the only way to address two sibling path
+prefixes from one bundle — see conventions.md's `resolveURL`/`InterpolatePath` reference).
 
 ## Streams notes
 
-`sessions` (`GET /sessions`) paginates with Churnkey's limit/skip offset convention
+`sessions` (`GET /v1/data/sessions`) paginates with Churnkey's limit/skip offset convention
 (`pagination.type: offset_limit`, `limit_param: limit`, `offset_param: skip`); a page shorter than
 the declared `page_size` ends the read, matching legacy's `harvest()` loop (`churnkey.go:154-187`)
 exactly. Primary key is `["_id"]` (Churnkey's Mongo-style id) and the incremental cursor field is
@@ -36,7 +46,7 @@ whole-object preservation uses a bare `{{ record.acceptedOffer }}` reference (ty
 copies the raw object through unchanged; `customer` needs no rename since its raw key already
 matches the schema property name, so plain schema projection covers it).
 
-`session_aggregation` (`GET /session-aggregation`) is Churnkey's unpaginated rollup endpoint,
+`session_aggregation` (`GET /v1/data/session-aggregation`) is Churnkey's unpaginated rollup endpoint,
 returning every grouped-count row in one response (`records.path: "."` over a top-level array, no
 `pagination` block, matching legacy's `paginated: false` + `readSinglePage`). Legacy normalizes 4
 camelCase breakdown-dimension keys (`billingInterval`, `planId`, `offerType`, `saveType`) to
@@ -50,17 +60,57 @@ OTHER breakdown dimension" fallback is not reproduced).
 
 ## Write actions & risks
 
-None — Churnkey is exposed as a read-only source connector in both legacy (`churnkey.go`'s `Write`
-returns `connectors.ErrUnsupportedOperation`) and this bundle (`metadata.json`'s
-`capabilities.write: false`, no `writes.json` file at all). Churnkey's only mutating endpoints are
-GDPR customer-data deletes, excluded from `api_surface.json` as `destructive_admin` — not a
-reverse-ETL read/write surface for a source connector.
+Three single-record write actions cover the full documented Event Tracking API, all POSTing a plain
+JSON object body (`body_type: "json"`, the default) to `https://api.churnkey.co/v1/api/events/*`:
+
+- **`create_event`** (`POST /v1/api/events/new`) — records a usage/billing event
+  (`event`/`customerId` required; `uid`, `eventDate` for backfilling, `eventData` key-value metrics,
+  and a nested `user` object for B2B products are optional) against a Churnkey customer. This is the
+  primary signal Churnkey's cancel-flow targeting and save-offer eligibility logic consumes.
+- **`update_customer`** (`POST /v1/api/events/customer-update`) — overwrites a customer's tracked
+  `customerData` attributes (and/or nested `user.data`), identified by `customerId` or `uid` (at
+  least one must be supplied by the caller; the dialect's draft-07 subset cannot express Churnkey's
+  documented "at least one of `uid`/`customerId`" OR-constraint as a hard requirement — see Known
+  limits).
+- **`set_billing_users`** (`POST /v1/api/events/customer-update/set-users`) — overwrites the list of
+  billing contacts (`users[]`, each with `userId` + `data.email`/`data.name`/`data.billingAdmin`
+  required, `data.phone` optional) who receive Payment Recovery emails for a customer.
+
+Every write is an **external mutation requiring approval** (`metadata.json`'s `risk.write`): each
+directly influences which cancel offers a real customer sees, or who receives billing-recovery email,
+in the connected Churnkey account.
+
+Legacy implemented none of these — its own doc comment ("no safe reverse-ETL write actions") predates
+this Pass B research into the documented Event Tracking API, which is a genuinely separate,
+purpose-built ingestion surface (distinct from the GDPR deletes legacy was referring to).
 
 ## Known limits
 
-- Full Churnkey Data API surface (any endpoints beyond `/sessions` and `/session-aggregation`, and
-  the GDPR delete endpoints) is out of scope for wave2; see `api_surface.json`'s `excluded` entries.
-  Only the 2 legacy-parity streams are implemented.
+- **Bulk-batch write variants are not modeled.** `POST /v1/api/events/bulk` (up to 100 events per
+  call) and `POST /v1/api/events/customer-update/set-users/bulk` both accept a JSON ARRAY request
+  body; the engine's write dialect (`engine/write.go`'s `executeWriteRecord`) issues exactly one
+  request per record with a JSON-OBJECT body built from that record's own fields — there is no
+  array-body write primitive. `create_event`/`set_billing_users` already cover the identical
+  per-record shape one record at a time; a caller migrating a bulk-array workflow issues N single
+  writes instead of 1 batched write (same eventual data, more requests). See `api_surface.json`'s
+  `duplicate_of` exclusions.
+- **`update_customer`'s "at least one of `uid`/`customerId`" OR-requirement is not enforced.**
+  Churnkey's docs require at least one caller-supplied identifier field; the engine's draft-07 schema
+  subset has no `anyOf`/`oneOf` (the same limitation stripe's `create_customer` documents, ledger item
+  1 in conventions.md §5) — `record_schema` declares both fields optional rather than modeling the
+  OR. Strictly more permissive than legacy's real API contract (a record with neither field set would
+  be accepted here and rejected by Churnkey itself with a 4xx), never silently wrong-shaped.
+  ACCEPTABLE per conventions.md §5's meta-rule.
+- **GDPR data-subject-request endpoints (`POST /v1/data/dsr/access`, `POST /v1/data/dsr/delete`) are
+  out of scope**, not reverse-ETL write actions — see `api_surface.json`'s `non_data_endpoint`/
+  `destructive_admin` exclusions.
+- **The hosted-cancel-flow "Customer Data Endpoint" is not a Churnkey-hosted API at all** and is out
+  of scope by construction: it is a webhook Churnkey itself calls INTO the customer's own backend
+  (HMAC-signed, customer-operated URL) to fetch extra attributes during a live cancel-flow session —
+  there is nothing on Churnkey's side to read or write.
+- Full Churnkey Data API/Event Tracking API surface beyond the 2 read streams and 3 write actions
+  above is covered; see `api_surface.json`'s `excluded` entries for the remaining, deliberately
+  out-of-scope endpoints.
 - **`session_aggregation`'s dynamic extra-dimension passthrough is not reproduced.** Legacy's
   `churnkeyAggregationRecord` carries through ANY additional breakdown-dimension key beyond the 8 it
   explicitly enumerates (`count`/`month`/`trial`/`billingInterval`/`planId`/`aborted`/`canceled`/

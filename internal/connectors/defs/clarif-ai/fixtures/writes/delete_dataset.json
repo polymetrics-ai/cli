@@ -1,0 +1,9 @@
+{
+  "record": { "dataset_ids": ["fixture-dataset-1"] },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/synthetic-conformance-value/apps/synthetic-conformance-value/datasets",
+    "body": { "dataset_ids": ["fixture-dataset-1"] }
+  },
+  "response": { "status": 200, "body": { "status": { "code": 10000, "description": "Ok" } } }
+}

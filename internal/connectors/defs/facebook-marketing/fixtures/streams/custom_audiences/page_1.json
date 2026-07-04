@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/customaudiences", "query": { "limit": "100", "fields": "id,name,subtype,description,approximate_count_lower_bound,approximate_count_upper_bound,operation_status,time_created,time_updated" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "audience_fixture_1", "name": "Fixture Audience 1", "subtype": "CUSTOM", "description": "fixture custom audience", "approximate_count_lower_bound": 1000, "approximate_count_upper_bound": 1500, "operation_status": { "code": 200, "description": "Ready" }, "time_created": "2026-01-01T00:00:00+0000", "time_updated": "2026-01-02T00:00:00+0000" },
+        { "id": "audience_fixture_2", "name": "Fixture Audience 2", "subtype": "LOOKALIKE", "description": "fixture lookalike audience", "approximate_count_lower_bound": 5000, "approximate_count_upper_bound": 6000, "operation_status": { "code": 200, "description": "Ready" }, "time_created": "2026-01-01T00:00:00+0000", "time_updated": "2026-01-02T00:00:00+0000" }
+      ],
+      "paging": {}
+    }
+  }
+}

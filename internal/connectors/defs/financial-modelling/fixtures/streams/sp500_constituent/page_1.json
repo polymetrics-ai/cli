@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/sp500_constituent" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "FIX1",
+        "name": "Fixture Company 1",
+        "sector": "Technology",
+        "subSector": "Software",
+        "headQuarter": "Fixtureville, CA",
+        "dateFirstAdded": "2001-01-01",
+        "cik": "0000000001",
+        "founded": "1990"
+      }
+    ]
+  }
+}

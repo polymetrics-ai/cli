@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "co_fixture_1",
+    "zip_code": "94105"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/companies/co_fixture_1"
+  }
+}

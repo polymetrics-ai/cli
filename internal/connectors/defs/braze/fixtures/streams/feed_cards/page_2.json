@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/feed/list",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "cards": [
+        {
+          "id": "card_fixture_101",
+          "type": "Banner",
+          "title": "Fixture Card 101",
+          "tags": [
+            "fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

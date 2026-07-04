@@ -1,0 +1,217 @@
+{
+  "actions": [
+    {
+      "name": "reply_to_review",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reviews/reply",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ext_id", "review_id", "answer_text"],
+        "properties": {
+          "ext_id": { "type": "string" },
+          "review_id": { "type": "string" },
+          "answer_text": { "type": "string" },
+          "login": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; posts a public reply to a live app-store review, cannot be unsent programmatically; approval required"
+    },
+    {
+      "name": "update_review_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reviews/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ext_id", "review_id", "tags"],
+        "properties": {
+          "ext_id": { "type": "string" },
+          "review_id": { "type": "string" },
+          "tags": { "type": "string", "description": "comma-separated tag names" },
+          "apps_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; overwrites a review's tag set; approval required"
+    },
+    {
+      "name": "update_review_notes",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reviews/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ext_id", "review_id", "content"],
+        "properties": {
+          "ext_id": { "type": "string" },
+          "review_id": { "type": "string" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a review's internal note; approval required"
+    },
+    {
+      "name": "edit_keywords",
+      "kind": "update",
+      "method": "POST",
+      "path": "/aso/keywords",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["country", "device", "keywords"],
+        "properties": {
+          "country": { "type": "string" },
+          "device": { "type": "string" },
+          "keywords": { "type": "string", "description": "comma-separated tracked keywords, replaces the tracked set for country+device" },
+          "apps_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; replaces the tracked ASO keyword list for a country/device pair; approval required"
+    },
+    {
+      "name": "add_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/account/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "role", "email"],
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string" },
+          "email": { "type": "string" },
+          "collections": { "type": "string", "description": "comma-separated collection ids visible to this user" }
+        }
+      },
+      "risk": "external mutation; grants AppFollow account access to a new user; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/account/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "role", "email"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "role": { "type": "string" },
+          "email": { "type": "string" },
+          "collections": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; changes an existing account user's role/access; approval required"
+    },
+    {
+      "name": "remove_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/account/users",
+      "body_type": "json",
+      "body_fields": ["id", "email"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "irreversible external mutation; revokes an AppFollow account user's access; approval required"
+    },
+    {
+      "name": "add_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/account/apps",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "countries"],
+        "properties": {
+          "title": { "type": "string" },
+          "countries": { "type": "string" },
+          "default_country": { "type": "string" },
+          "email": { "type": "string" },
+          "appUpdates": { "type": "string" },
+          "dashboard": { "type": "string" },
+          "keywords": { "type": "string" },
+          "ranks": { "type": "string" },
+          "reviews": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new billable app collection; approval required"
+    },
+    {
+      "name": "remove_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/account/apps",
+      "body_type": "json",
+      "body_fields": ["apps_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["apps_id"],
+        "properties": {
+          "apps_id": { "type": "integer" }
+        }
+      },
+      "risk": "irreversible external deletion; removes an app collection and every app tracked under it; approval required"
+    },
+    {
+      "name": "add_app",
+      "kind": "create",
+      "method": "POST",
+      "path": "/account/apps/app",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["store", "ext_id", "apps_id", "locale"],
+        "properties": {
+          "store": { "type": "string" },
+          "ext_id": { "type": "string" },
+          "apps_id": { "type": "integer" },
+          "locale": { "type": "string" },
+          "user_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; adds a tracked app to an existing collection; approval required"
+    },
+    {
+      "name": "remove_app",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/account/apps/app",
+      "body_type": "json",
+      "body_fields": ["store", "ext_id", "apps_id", "user_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["store", "ext_id", "apps_id"],
+        "properties": {
+          "store": { "type": "string" },
+          "ext_id": { "type": "string" },
+          "apps_id": { "type": "integer" },
+          "user_id": { "type": "integer" }
+        }
+      },
+      "risk": "irreversible external deletion; stops tracking an app under a collection; approval required"
+    }
+  ]
+}

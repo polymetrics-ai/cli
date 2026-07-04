@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 10,
+    "group[description]": "Updated fixture group"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/groups/10.api"
+  }
+}

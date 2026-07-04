@@ -1,0 +1,18 @@
+{
+  "record": {
+    "pageId": "pages_fixture_1",
+    "body": { "representation": "storage", "value": "<p>Fixture footer comment</p>" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/footer-comments",
+    "body": {
+      "pageId": "pages_fixture_1",
+      "body": { "representation": "storage", "value": "<p>Fixture footer comment</p>" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "fc_fixture_new", "status": "current" }
+  }
+}

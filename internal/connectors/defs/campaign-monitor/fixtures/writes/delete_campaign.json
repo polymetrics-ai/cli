@@ -1,0 +1,8 @@
+{
+  "record": { "CampaignID": "camp_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/campaigns/camp_fixture_1.json"
+  },
+  "response": { "status": 200, "body": {} }
+}

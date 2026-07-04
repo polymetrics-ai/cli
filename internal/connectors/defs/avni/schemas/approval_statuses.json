@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "approval_statuses",
+  "type": "object",
+  "x-primary-key": ["entity_id", "entity_type"],
+  "x-cursor-field": "status_date_time",
+  "required": ["entity_id", "entity_type"],
+  "properties": {
+    "entity_id": { "type": "string" },
+    "entity_type": { "type": "string" },
+    "entity_type_id": { "type": ["string", "null"] },
+    "approval_status": { "type": ["string", "null"] },
+    "approval_status_comment": { "type": ["string", "null"] },
+    "status_date_time": { "type": ["string", "null"] }
+  }
+}

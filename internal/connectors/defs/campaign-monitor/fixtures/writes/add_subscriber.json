@@ -1,0 +1,9 @@
+{
+  "record": { "ListID": "list_fixture_1", "EmailAddress": "fixture@example.com", "Name": "Fixture Subscriber" },
+  "expect": {
+    "method": "POST",
+    "path": "/subscribers/list_fixture_1.json",
+    "body": { "EmailAddress": "fixture@example.com", "Name": "Fixture Subscriber" }
+  },
+  "response": { "status": 201, "body": "fixture@example.com" }
+}

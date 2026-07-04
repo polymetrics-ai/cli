@@ -1,0 +1,269 @@
+{
+  "actions": [
+    {
+      "name": "update_vendor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/vendors/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "company_name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "beneficiary_name": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing vendor's name, contact details, or payment accounts; affects future transfer counterparty resolution"
+    },
+    {
+      "name": "delete_vendor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/vendors/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently removes a vendor record; any transfer still referencing it as counterparty will fail to resolve"
+    },
+    {
+      "name": "create_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/departments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new organizational department; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/locations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new organizational location; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_title",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/titles",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new job title; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "first_name", "last_name"],
+        "properties": {
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "manager_id": { "type": "string" },
+          "department_id": { "type": "string" },
+          "location_id": { "type": "string" },
+          "title_id": { "type": "string" }
+        }
+      },
+      "risk": "invites a new user to the Brex account; sends a real invitation email to the target address"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string" },
+          "manager_id": { "type": "string" },
+          "department_id": { "type": "string" },
+          "location_id": { "type": "string" },
+          "title_id": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing user's status, manager, department, location, or title; setting status to a terminated/suspended state revokes account access"
+    },
+    {
+      "name": "update_card",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/cards/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "spend_controls": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing card's spend controls (limit amount/category/merchant restrictions); takes effect on the physical/virtual card immediately"
+    },
+    {
+      "name": "lock_card",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/cards/{{ record.id }}/lock",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "immediately blocks all new transactions on the card until unlocked; does not affect already-authorized/pending transactions"
+    },
+    {
+      "name": "unlock_card",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/cards/{{ record.id }}/unlock",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "immediately re-enables new transactions on a previously locked card"
+    },
+    {
+      "name": "terminate_card",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/cards/{{ record.id }}/terminate",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deactivates a card; irreversible, the card can never be unlocked or reused after termination"
+    },
+    {
+      "name": "update_expense",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/expenses/card/{{ record.expense_id }}",
+      "path_fields": ["expense_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["expense_id"],
+        "properties": {
+          "expense_id": { "type": "string" },
+          "memo": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing card expense's memo; low-risk metadata-only external mutation"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "url", "event_types", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "url": { "type": "string" },
+          "group_id": { "type": "string" },
+          "event_types": { "type": "array", "items": { "type": "string" } },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "re-points an already-registered webhook's delivery URL, event set, or active status; redirects live event delivery immediately"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently removes a webhook subscription; irreversible"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/v2/webhooks", "query": { "take": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "id": 401,
+          "subscriberUrl": "https://example.com/fixture/webhook",
+          "active": true,
+          "payloadTemplate": null,
+          "triggers": ["BOOKING_CREATED", "BOOKING_CANCELLED"],
+          "userId": 501
+        }
+      ]
+    }
+  }
+}

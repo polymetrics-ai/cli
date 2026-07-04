@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "brand_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "operator": { "type": ["string", "null"] },
+    "conditions": { "type": ["array", "null"] },
+    "created": { "type": ["integer", "null"] }
+  }
+}

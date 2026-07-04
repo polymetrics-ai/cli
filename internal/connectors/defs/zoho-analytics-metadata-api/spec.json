@@ -35,6 +35,10 @@
       "type": "string",
       "description": "Optional Zoho Analytics organization ID; sent as the ZANALYTICS-ORGID header on every request when set."
     },
+    "workspace_id": {
+      "type": "string",
+      "description": "Zoho Analytics workspace ID required by the folders/query_tables/datasources streams and the sync_datasource/refetch_view_data write actions, all of which are workspace-scoped paths in the real Metadata API (unlike the flat legacy-parity workspaces/views/tables streams). Reading/writing those without this set fails with an unresolved-config-key error naming workspace_id; every other stream/action does not require it."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

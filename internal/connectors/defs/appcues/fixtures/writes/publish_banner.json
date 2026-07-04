@@ -1,0 +1,8 @@
+{
+  "record": { "id": "ban_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/banners/ban_fixture_1/publish"
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

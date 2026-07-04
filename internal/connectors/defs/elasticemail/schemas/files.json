@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "files",
+  "type": "object",
+  "x-primary-key": ["FileName"],
+  "required": ["FileName"],
+  "properties": {
+    "FileName": { "type": "string" },
+    "Size": { "type": ["integer", "null"] },
+    "DateAdded": { "type": ["string", "null"] },
+    "ExpirationDate": { "type": ["string", "null"] },
+    "ContentType": { "type": ["string", "null"] }
+  }
+}

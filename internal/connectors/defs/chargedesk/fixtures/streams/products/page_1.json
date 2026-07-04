@@ -3,19 +3,26 @@
   "response": {
     "status": 200,
     "body": {
-      "object": "list",
-      "count": 100,
+      "count": 1,
       "offset": 0,
       "data": [
         {
           "product_id": "prod_fixture_1",
-          "object": "product",
-          "occurred": 1767225600,
+          "first_seen": 1767225600,
           "name": "Fixture Product",
-          "amount": "10.00",
+          "description": "A fixture product",
+          "amount": 10,
           "currency": "usd",
           "interval": "month",
-          "status": "active"
+          "interval_count": 1,
+          "quantity": 1,
+          "status": "complete",
+          "chargeable": 1,
+          "taxable": 1,
+          "url": "https://example.com/fixture-product",
+          "charges": 0,
+          "gateway_id": "",
+          "trial_period_days": 0
         }
       ]
     }

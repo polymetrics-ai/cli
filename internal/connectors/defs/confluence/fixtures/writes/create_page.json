@@ -1,0 +1,22 @@
+{
+  "record": {
+    "spaceId": "spaces_fixture_1",
+    "status": "current",
+    "title": "Fixture Created Page",
+    "body": { "representation": "storage", "value": "<p>Fixture body</p>" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pages",
+    "body": {
+      "spaceId": "spaces_fixture_1",
+      "status": "current",
+      "title": "Fixture Created Page",
+      "body": { "representation": "storage", "value": "<p>Fixture body</p>" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "pages_fixture_new", "status": "current", "title": "Fixture Created Page" }
+  }
+}

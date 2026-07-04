@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cards",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "owner": { "type": ["object", "null"] },
+    "status": { "type": ["string", "null"] },
+    "last_four": { "type": ["string", "null"] },
+    "card_name": { "type": ["string", "null"] },
+    "card_type": { "type": ["string", "null"] },
+    "limit_type": { "type": ["string", "null"] },
+    "spend_controls": { "type": ["object", "null"] },
+    "billing_address": { "type": ["object", "null"] },
+    "mailing_address": { "type": ["object", "null"] },
+    "expiration_date": { "type": ["object", "null"] },
+    "has_been_transferred": { "type": ["boolean", "null"] },
+    "budget_id": { "type": ["string", "null"] }
+  }
+}

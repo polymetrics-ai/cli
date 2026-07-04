@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lostreasons"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "lostReasons": [
+        { "id": 1, "name": "Fixture Lost Reason 1" }
+      ]
+    }
+  }
+}

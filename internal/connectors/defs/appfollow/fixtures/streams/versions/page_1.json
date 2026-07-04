@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/meta/versions",
+    "query": {
+      "country": "synthetic-conformance-value",
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ext_id": "ios:1001",
+        "country": "us",
+        "version": "1.0.0",
+        "release_date": "2026-01-01T00:00:00Z",
+        "whats_new": "Fixture release notes 1",
+        "size": 10485760
+      },
+      {
+        "ext_id": "ios:1001",
+        "country": "us",
+        "version": "1.0.1",
+        "release_date": "2026-01-05T00:00:00Z",
+        "whats_new": "Fixture release notes 2",
+        "size": 10600000
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "record": {
+    "supplierNumber": 201,
+    "name": "Fixture Supplier ApS Updated",
+    "email": "fixture-supplier-updated@example.com",
+    "city": "Odense",
+    "zip": "5000",
+    "country": "Denmark",
+    "address": "4 Fixture Street",
+    "barred": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/suppliers/201",
+    "body": {
+      "name": "Fixture Supplier ApS Updated",
+      "email": "fixture-supplier-updated@example.com",
+      "city": "Odense",
+      "zip": "5000",
+      "country": "Denmark",
+      "address": "4 Fixture Street",
+      "barred": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "supplierNumber": 201, "self": "https://restapi.e-conomic.com/suppliers/201" }
+  }
+}

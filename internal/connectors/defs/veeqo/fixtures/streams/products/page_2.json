@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "page": "2",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 8636420,
+        "title": "Fixture Product",
+        "notes": "Fixture Notes",
+        "created_at": "2026-01-02T00:00:00.000Z",
+        "updated_at": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

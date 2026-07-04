@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/hosts",
+    "query": { "start": "0", "count": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "host_list": [
+        {
+          "id": 1,
+          "name": "fixture-host-1",
+          "host_name": "fixture-host-1",
+          "aliases": ["fixture-alias-1"],
+          "apps": ["ntp"],
+          "sources": ["ntp"],
+          "is_muted": false,
+          "up": true,
+          "last_reported_time": 1767225600
+        }
+      ],
+      "total_matching": 1,
+      "total_returned": 1
+    }
+  }
+}

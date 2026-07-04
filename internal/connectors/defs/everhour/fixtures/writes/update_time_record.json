@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 701,
+    "time": 7200
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/time/701",
+    "body": {
+      "time": 7200
+    }
+  }
+}

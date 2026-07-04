@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "invoices": [
+        {
+          "uid": "inv_fixture_1",
+          "number": "1000",
+          "status": "paid",
+          "customer": { "id": 1 },
+          "subscription_id": 1,
+          "total_amount": "20.00",
+          "paid_amount": "20.00",
+          "due_amount": "0.00",
+          "currency": "USD",
+          "issue_date": "2026-01-01",
+          "due_date": "2026-01-15",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "total_count": 1, "current_page": 1, "total_pages": 1 }
+    }
+  }
+}

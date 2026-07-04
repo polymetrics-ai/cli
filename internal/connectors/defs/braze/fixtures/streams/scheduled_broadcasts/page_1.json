@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/messages/scheduled_broadcasts" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "Fixture Scheduled Campaign",
+        "id": "campaign_fixture_1",
+        "type": "Campaign",
+        "tags": ["fixture"],
+        "next_send_time": "2026-01-02T00:00:00Z",
+        "schedule_type": "local_time_zones"
+      }
+    ]
+  }
+}

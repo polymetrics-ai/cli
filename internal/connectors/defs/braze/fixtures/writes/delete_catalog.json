@@ -1,0 +1,10 @@
+{
+  "record": {
+    "catalog_name": "fixture_catalog"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/catalogs/fixture_catalog"
+  },
+  "response": { "status": 200, "body": { "message": "success" } }
+}

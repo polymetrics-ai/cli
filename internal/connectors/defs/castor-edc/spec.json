@@ -25,6 +25,10 @@
       "format": "uri",
       "default": "https://data.castoredc.com/oauth/token",
       "description": "OAuth2 token endpoint override; defaults to the same host as the default base_url (legacy derives this from whichever base_url resolves to at runtime, but the engine's default materialization is a fixed literal, not a base_url-derived one - see docs.md Known limits)."
+    },
+    "study_id": {
+      "type": "string",
+      "description": "Castor EDC study id to scope every study-level resource (records, fields, forms, visits/phases, sites, surveys, survey packages, roles, steps, metadata, queries, verifications, and the create_* write actions). Optional: the study/user/country/audit_trail streams and the account-level users stream do not require it. Corresponds to legacy's CastorClient.link_study(study_id)."
     }
   }
 }

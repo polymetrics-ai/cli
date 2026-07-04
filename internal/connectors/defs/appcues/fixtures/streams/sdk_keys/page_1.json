@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/sdk_keys", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "key_fixture_1",
+        "name": "Fixture Production Key",
+        "tag_field": "version",
+        "created_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "key_fixture_2",
+        "name": "Fixture Staging Key",
+        "tag_field": "environment",
+        "created_at": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

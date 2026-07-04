@@ -1,0 +1,18 @@
+{
+  "record": {
+    "yotpo_id": "3245",
+    "webhook_subscription": {
+      "active": false
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/core/v3/stores/synthetic-conformance-value/webhooks/subscriptions/3245",
+    "body": {
+      "webhook_subscription": {
+        "active": false
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "webhook_subscription": { "yotpo_id": 3245 } } }
+}

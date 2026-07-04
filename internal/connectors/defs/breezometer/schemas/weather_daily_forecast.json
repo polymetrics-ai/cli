@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "weather_daily_forecast",
+  "type": "object",
+  "x-primary-key": ["start_date", "latitude", "longitude"],
+  "x-cursor-field": "start_date",
+  "required": ["start_date", "latitude", "longitude"],
+  "properties": {
+    "start_date": { "type": "string" },
+    "latitude": { "type": "string" },
+    "longitude": { "type": "string" },
+    "sun": { "type": ["object", "null"] },
+    "moon": { "type": ["object", "null"] },
+    "max_uv_index": { "type": ["integer", "null"] }
+  }
+}

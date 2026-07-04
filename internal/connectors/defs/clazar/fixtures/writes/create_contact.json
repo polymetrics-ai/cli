@@ -1,0 +1,8 @@
+{
+  "record": { "email": "fixture-contact@example.com", "full_name": "Fixture Contact" },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/",
+    "body": { "email": "fixture-contact@example.com", "full_name": "Fixture Contact" }
+  }
+}

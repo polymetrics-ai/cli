@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickers",
+  "type": "object",
+  "x-primary-key": ["coin_id", "target_coin_id", "market_identifier"],
+  "required": ["base", "target"],
+  "properties": {
+    "base": { "type": "string" },
+    "target": { "type": "string" },
+    "market_identifier": { "type": ["string", "null"] },
+    "market": { "type": ["object", "null"] },
+    "last": { "type": ["number", "null"] },
+    "volume": { "type": ["number", "null"] },
+    "converted_last": { "type": ["object", "null"] },
+    "converted_volume": { "type": ["object", "null"] },
+    "trust_score": { "type": ["string", "null"] },
+    "bid_ask_spread_percentage": { "type": ["number", "null"] },
+    "timestamp": { "type": ["string", "null"] },
+    "last_traded_at": { "type": ["string", "null"] },
+    "last_fetch_at": { "type": ["string", "null"] },
+    "is_anomaly": { "type": ["boolean", "null"] },
+    "is_stale": { "type": ["boolean", "null"] },
+    "trade_url": { "type": ["string", "null"] },
+    "coin_id": { "type": ["string", "null"] },
+    "target_coin_id": { "type": ["string", "null"] }
+  }
+}

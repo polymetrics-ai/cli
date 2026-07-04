@@ -1,0 +1,12 @@
+{
+  "record": {
+    "email_address": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/team/remove_member",
+    "body": {
+      "email_address": "fixture1@example.com"
+    }
+  }
+}

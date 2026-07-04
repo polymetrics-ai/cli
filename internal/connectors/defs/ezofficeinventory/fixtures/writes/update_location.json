@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 100,
+    "location[city]": "Fixture City"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/locations/100.api"
+  }
+}

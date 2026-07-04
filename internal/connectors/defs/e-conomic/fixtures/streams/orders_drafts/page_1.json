@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/orders/drafts", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "draftOrderNumber": 1,
+          "date": "2026-01-05T00:00:00Z",
+          "currency": "DKK",
+          "netAmount": 300,
+          "grossAmount": 375,
+          "customer": { "customerNumber": 1 },
+          "self": "https://restapi.e-conomic.com/orders/drafts/1"
+        },
+        {
+          "draftOrderNumber": 2,
+          "date": "2026-01-06T00:00:00Z",
+          "currency": "DKK",
+          "netAmount": 450,
+          "grossAmount": 562.5,
+          "customer": { "customerNumber": 2 },
+          "self": "https://restapi.e-conomic.com/orders/drafts/2"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

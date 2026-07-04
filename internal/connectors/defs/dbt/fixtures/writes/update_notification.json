@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "state": 2
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/notifications/1/"
+  }
+}

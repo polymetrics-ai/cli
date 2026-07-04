@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/resource/Team",
+    "query": { "max": "500", "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "Name": "Fixture Team 1",
+        "LeaderEmployee": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 2,
+        "Name": "Fixture Team 2",
+        "LeaderEmployee": 2,
+        "Creator": 1,
+        "Created": "2026-01-02T00:00:00",
+        "Modified": "2026-01-02T00:05:00"
+      }
+    ]
+  }
+}

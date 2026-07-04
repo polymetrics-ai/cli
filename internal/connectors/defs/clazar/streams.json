@@ -84,6 +84,24 @@
         "start_config_key": "start_date"
       },
       "schema": "schemas/private_offers.json"
+    },
+    {
+      "name": "reseller_offers",
+      "path": "/reseller_offers",
+      "records": { "path": "results" },
+      "schema": "schemas/reseller_offers.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "results" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "metering",
+      "path": "/metering",
+      "records": { "path": "results" },
+      "schema": "schemas/metering.json"
     }
   ]
 }

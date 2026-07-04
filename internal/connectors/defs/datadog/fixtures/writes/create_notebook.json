@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture Notebook",
+    "cells": [],
+    "time": { "live_span": "1h" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/notebooks"
+  }
+}

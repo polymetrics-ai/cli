@@ -1,16 +1,44 @@
 {
   "api": "Airtable Web API (https://api.airtable.com/v0)",
-  "docs": "https://support.airtable.com/docs/airtable-api-deprecation-guidelines",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; Airtable record writes and webhook/comment/attachment sub-resources are out of scope until Pass B",
+  "docs": "https://airtable.com/developers/web/api/introduction",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every endpoint documented under airtable.com/developers/web/api/ (meta bases/tables/fields, records, comments, webhooks) is enumerated below. 5 GET list resources are streams (bases, tables, records, webhooks, comments — comments via the fan_out dialect over each table's own records); 12 dialect-expressible mutations are writes.json actions (records, tables, fields, comments, webhooks). Legacy was fully read-only (capabilities.write:false); this pass flips capabilities.write to true. Base/workspace-provisioning (create-base, requiring a workspaceId this connector's spec has no config surface for), webhook-operational sub-actions, and view-metadata endpoints remain excluded (see per-endpoint reasons).",
   "endpoints": [
     { "method": "GET", "path": "/v0/meta/bases", "covered_by": { "stream": "bases" } },
+    { "method": "GET", "path": "/v0/meta/bases/{baseId}", "excluded": { "category": "duplicate_of", "reason": "get-base-schema is the same operation as GET /v0/meta/bases/{baseId}/tables (fields are embedded per-table, no separate list-fields endpoint exists); not a separate resource from the tables stream" } },
+    { "method": "POST", "path": "/v0/meta/bases", "excluded": { "category": "requires_elevated_scope", "reason": "creating a base requires a workspaceId and the schema.bases:write scope; this connector's spec.json is scoped to an already-existing base_id/table_id, with no workspace config surface to hang a create_base write action off of" } },
+
     { "method": "GET", "path": "/v0/meta/bases/{baseId}/tables", "covered_by": { "stream": "tables" } },
-    { "method": "GET", "path": "/v0/{baseId}/{tableId}", "covered_by": { "stream": "records" } },
-    { "method": "POST", "path": "/v0/{baseId}/{tableId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/v0/{baseId}/{tableId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/v0/{baseId}/{tableId}/{recordId}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v0/{baseId}/{tableId}/{recordId}/comments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/v0/meta/bases/{baseId}/tables", "covered_by": { "write": "create_table" } },
+    { "method": "PATCH", "path": "/v0/meta/bases/{baseId}/tables/{tableIdOrName}", "covered_by": { "write": "update_table" } },
+
+    { "method": "POST", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields", "covered_by": { "write": "create_field" } },
+    { "method": "PATCH", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}", "covered_by": { "write": "update_field" } },
+
+    { "method": "GET", "path": "/v0/{baseId}/{tableIdOrName}", "covered_by": { "stream": "records" } },
+    { "method": "GET", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "excluded": { "category": "duplicate_of", "reason": "single-record detail; the records stream already covers the list data" } },
+    { "method": "POST", "path": "/v0/{baseId}/{tableIdOrName}", "covered_by": { "write": "create_record" } },
+    { "method": "PATCH", "path": "/v0/{baseId}/{tableIdOrName}", "excluded": { "category": "duplicate_of", "reason": "bulk multi-record PATCH (up to 10 records/request); the single-record create_record/update_record write actions already cover create and update, one request per record, matching the engine's one-request-per-record write semantics (conventions.md §3)" } },
+    { "method": "PUT", "path": "/v0/{baseId}/{tableIdOrName}", "excluded": { "category": "destructive_admin", "reason": "bulk destructive multi-record PUT clears every unincluded cell value across up to 10 records in one call; update_record's PATCH already covers the non-destructive per-record update case" } },
+    { "method": "PATCH", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "covered_by": { "write": "update_record" } },
+    { "method": "PUT", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "excluded": { "category": "destructive_admin", "reason": "destructive update clears every unincluded cell value on the record; update_record's PATCH already covers the non-destructive case" } },
+    { "method": "DELETE", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "covered_by": { "write": "delete_record" } },
+    { "method": "DELETE", "path": "/v0/{baseId}/{tableIdOrName}", "excluded": { "category": "duplicate_of", "reason": "bulk multi-record DELETE via records[] query params; delete_record's single-record DELETE already covers deletion, one request per record" } },
+
+    { "method": "GET", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments", "covered_by": { "stream": "comments" } },
+    { "method": "POST", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments", "covered_by": { "write": "create_comment" } },
+    { "method": "PATCH", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}", "covered_by": { "write": "update_comment" } },
+    { "method": "DELETE", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}", "covered_by": { "write": "delete_comment" } },
+
+    { "method": "GET", "path": "/v0/bases/{baseId}/webhooks", "covered_by": { "stream": "webhooks" } },
+    { "method": "POST", "path": "/v0/bases/{baseId}/webhooks", "covered_by": { "write": "create_webhook" } },
+    { "method": "DELETE", "path": "/v0/bases/{baseId}/webhooks/{webhookId}", "covered_by": { "write": "delete_webhook" } },
+    { "method": "POST", "path": "/v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications", "excluded": { "category": "out_of_scope", "reason": "toggles delivery-retry notification state on an existing webhook; a minor operational knob, not core reverse-ETL surface" } },
+    { "method": "POST", "path": "/v0/bases/{baseId}/webhooks/{webhookId}/refresh", "excluded": { "category": "out_of_scope", "reason": "extends a webhook's expiration window; an operational keep-alive action, not reverse-ETL record data" } },
+    { "method": "GET", "path": "/v0/bases/{baseId}/webhooks/{webhookId}/payloads", "excluded": { "category": "out_of_scope", "reason": "webhook delivery-payload inspection/debugging endpoint, not a syncable business-data record stream" } },
+
+    { "method": "POST", "path": "/v0/{baseId}/{tableIdOrName}/listRecords", "excluded": { "category": "duplicate_of", "reason": "POST-with-body alternative to the same GET list-records operation the records stream already covers, used only when the query string would exceed URL length limits" } },
+    { "method": "GET", "path": "/v0/meta/whoami", "excluded": { "category": "non_data_endpoint", "reason": "returns the authenticated user's own identity/scopes for token introspection, not syncable business data" } },
+    { "method": "GET", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/views/{viewId}", "excluded": { "category": "out_of_scope", "reason": "view metadata detail is a UI-configuration sub-resource already embedded in the tables stream's views field" } }
   ]
 }

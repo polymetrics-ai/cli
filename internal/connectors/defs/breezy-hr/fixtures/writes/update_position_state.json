@@ -1,0 +1,14 @@
+{
+  "record": {
+    "position_id": "pos_fixture_1",
+    "state": "published"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/position/pos_fixture_1/state",
+    "body": {
+      "state": "published"
+    }
+  },
+  "response": { "status": 200, "body": { "_id": "pos_fixture_1", "state": "published" } }
+}

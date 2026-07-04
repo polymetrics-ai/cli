@@ -1,0 +1,9 @@
+{
+  "record": {
+    "Name": "Fixture Template"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/templates/Fixture Template"
+  }
+}

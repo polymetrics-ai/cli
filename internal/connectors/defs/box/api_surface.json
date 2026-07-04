@@ -1,13 +1,2339 @@
 {
-  "api": "Box REST API 2.0 (https://api.box.com/2.0)",
+  "api": "Box Platform REST API (https://api.box.com/2.0), OpenAPI 3.0 spec at https://raw.githubusercontent.com/box/box-openapi/main/openapi.json",
   "docs": "https://developer.box.com/reference/",
-  "reviewed_at": "2026-07-03",
-  "scope": "the 4 legacy-parity read streams only (users, groups, collections, folder_items); Box's manifest-only upstream source is read-only, matching legacy",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, scoped to account/enterprise-level catalog resources plus the connector-configured folder_id (matching this connector's actual spec.json config surface \u2014 a Box service-account app, not a file/folder-tree crawler): every one of the 294 non-file-content-management endpoints reachable without a caller-supplied specific file_id/folder_id beyond the one configured folder_id is enumerated below (this mirrors github's own precedent of narrowing api_surface.json to the endpoints a real config shape can reach, rather than every endpoint Box publishes). 11 read streams (users, groups, collections, folder_items, webhooks, retention_policies, legal_hold_policies, storage_policies, sign_requests, terms_of_services, metadata_templates, pending_collaborations \u2014 12 total) and 9 write actions (group/webhook/collaboration create-update-delete) are implemented. The ~86 file/folder/web-link-item-scoped endpoints (content upload/download, per-file/folder metadata/comments/tasks/versions/shared-links/watermarks) require a specific file_id/folder_id/web_link_id this connector has no independent way to enumerate (folder_items lists ONE configured folder's immediate children, not a recursive tree), and are excluded as out_of_scope/binary_payload per-endpoint below alongside every other account-level endpoint not covered by a stream or write.",
   "endpoints": [
-    { "method": "GET", "path": "/2.0/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/2.0/groups", "covered_by": { "stream": "groups" } },
-    { "method": "GET", "path": "/2.0/collections", "covered_by": { "stream": "collections" } },
-    { "method": "GET", "path": "/2.0/folders/{folder_id}/items", "covered_by": { "stream": "folder_items" } },
-    { "method": "POST", "path": "/oauth2/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client-credentials token exchange, not a syncable object stream" } }
+    {
+      "method": "POST",
+      "path": "/ai/ask",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box AI conversational Q&A over file content is an interactive AI feature, not a syncable catalog object or record mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/extract",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box AI freeform metadata extraction from file content; an AI-generated derived-data feature, not a catalog object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/extract_structured",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box AI structured metadata extraction from file content; deferred alongside ai/extract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/text_gen",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box AI free-text generation; an interactive AI feature, not a syncable catalog object or record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai_agent_default",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns the default AI agent configuration for a mode/language, a settings lookup rather than a syncable object catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai_agents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box AI Studio custom agent configurations are an AI-feature-configuration surface, not a general object catalog comparable to users/groups/webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai_agents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside ai_agents GET; AI Studio agent authoring, not a generic reverse-ETL write target"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ai_agents/{agent_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside ai_agents GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai_agents/{agent_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-agent detail GET; the ai_agents family itself is out of scope (see ai_agents GET)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ai_agents/{agent_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside ai_agents GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/authorize",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "interactive OAuth2 authorization-code consent-screen redirect endpoint, not an API data call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration_whitelist_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "enterprise-wide collaboration domain allowlist management is a narrow security-admin configuration surface; deferred to a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collaboration_whitelist_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside collaboration_whitelist_entries GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration_whitelist_entries/{collaboration_whitelist_entry_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-entry detail GET; the collaboration_whitelist_entries family itself is out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collaboration_whitelist_entries/{collaboration_whitelist_entry_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside collaboration_whitelist_entries GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration_whitelist_exempt_targets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user exemption management for the collaboration domain allowlist; deferred alongside collaboration_whitelist_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collaboration_whitelist_exempt_targets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside collaboration_whitelist_exempt_targets GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration_whitelist_exempt_targets/{collaboration_whitelist_exempt_target_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-target detail GET; the collaboration_whitelist_exempt_targets family itself is out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collaboration_whitelist_exempt_targets/{collaboration_whitelist_exempt_target_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside collaboration_whitelist_exempt_targets GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaborations",
+      "covered_by": {
+        "stream": "pending_collaborations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collaborations",
+      "covered_by": {
+        "write": "create_collaboration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaborations/{collaboration_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-collaboration detail GET redundant with the pending_collaborations list stream for the pending subset already covered; non-pending collaborations have no account-wide list endpoint at all in the Box API (only per-file/per-folder/per-group scoped lists, out of scope per the file/folder-scoped exclusions)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/collaborations/{collaboration_id}",
+      "covered_by": {
+        "write": "update_collaboration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collaborations/{collaboration_id}",
+      "covered_by": {
+        "write": "delete_collaboration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections",
+      "covered_by": {
+        "stream": "collections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{collection_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-collection detail GET redundant with the collections list stream already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{collection_id}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "collection membership listing (which files/folders belong to a collection) is a file/folder-item-scoped concern outside this connector's account-level catalog scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "comment creation is scoped to a specific file_id parent, outside this connector's account-level write scope; no account-wide comment catalog exists to pair it with"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-comment detail GET has no account-wide comment list to pair with (comments are only listable per-file, a file-scoped concern out of scope)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/comments/{comment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside comments GET/POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/comments/{comment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside comments GET/POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device_pinners/{device_pinner_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-device-pinner detail GET; device pinner management is a narrow enterprise mobile-device-management concern, deferred"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/device_pinners/{device_pinner_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside device_pinners GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{enterprise_id}/device_pinners",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "enterprise device-pinner listing requires a specific enterprise_id this connector's spec.json has no config surface for (auth is a Box app service account, not an enterprise-admin identity lookup); deferred"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the enterprise/user event stream is a real-time activity feed with its own cursor-based stream-position pagination model (distinct from every other list endpoint's marker/offset shape) better suited to a dedicated future increment than this pass's account-catalog streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file_requests/{file_request_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-file-request detail GET has no account-wide file-request list endpoint to pair with in the Box API; file requests are only reachable by a specific known id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/file_requests/{file_request_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside file_requests GET"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/file_requests/{file_request_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside file_requests GET"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/file_requests/{file_request_id}/copy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside file_requests GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file_version_legal_holds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a policy_id or file_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file_version_legal_holds/{file_version_legal_hold_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-hold detail GET; the file_version_legal_holds family itself is out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file_version_retentions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a file_id/file_version_id/policy_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file_version_retentions/{file_version_retention_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-retention detail GET; the file_version_retentions family itself is out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folder_locks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a folder_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folder_locks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside folder_locks GET"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folder_locks/{folder_lock_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside folder_locks GET"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/group_memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "group membership management requires a specific group_id/user_id pair with no account-wide membership catalog to pair the write with; deferred (groups/create/update/delete already covers the group-lifecycle surface)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/group_memberships/{group_membership_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-membership detail GET; group memberships are only listable per-group (groups/{group_id}/memberships), a narrower scope than this connector's account-level catalog"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/group_memberships/{group_membership_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside group_memberships GET"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/group_memberships/{group_membership_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside group_memberships GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups",
+      "covered_by": {
+        "write": "create_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups/terminate_sessions",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "forcibly terminates every active session for every member of a group; a bulk security-response action with irreversible session-invalidation side effects, not a safe generic reverse-ETL write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{group_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-group detail GET redundant with the groups list stream already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{group_id}",
+      "covered_by": {
+        "write": "update_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{group_id}",
+      "covered_by": {
+        "write": "delete_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{group_id}/collaborations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a group-scoped variant of collaboration listing already covered (differently scoped) by the account-wide pending_collaborations stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{group_id}/memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-group membership listing requires iterating every group_id from the groups stream in a fan_out shape; judged lower-value than the account-level streams covered this pass, candidate for a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_mappings/slack",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Slack channel-to-Box-folder mapping configuration is a narrow third-party-integration admin surface; deferred"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_mappings/slack",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside integration_mappings/slack GET"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integration_mappings/slack/{integration_mapping_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside integration_mappings/slack GET"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integration_mappings/slack/{integration_mapping_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside integration_mappings/slack GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_mappings/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Microsoft Teams channel-to-Box-folder mapping configuration; deferred alongside integration_mappings/slack"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_mappings/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside integration_mappings/teams GET"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integration_mappings/teams/{integration_mapping_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside integration_mappings/teams GET"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integration_mappings/teams/{integration_mapping_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside integration_mappings/teams GET"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "enterprise-to-enterprise collaboration invitation is a one-time cross-org administrative action with side effects (an email invitation flow) beyond a simple record insert; deferred"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invites/{invite_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-invite detail GET has no account-wide invite list endpoint to pair with; deferred alongside invites POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/legal_hold_policies",
+      "covered_by": {
+        "stream": "legal_hold_policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/legal_hold_policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legal hold policy creation has significant legal/compliance consequences (litigation-hold obligations); not a safe generic reverse-ETL create target this wave"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/legal_hold_policies/{legal_hold_policy_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-policy detail GET redundant with the legal_hold_policies list stream already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/legal_hold_policies/{legal_hold_policy_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside legal_hold_policies POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/legal_hold_policies/{legal_hold_policy_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible deletion of a legal hold policy carries litigation/compliance risk; not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/legal_hold_policy_assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a policy_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/legal_hold_policy_assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "assigning a legal hold to content has legal/compliance consequences; deferred alongside legal_hold_policies writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/legal_hold_policy_assignments/{legal_hold_policy_assignment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-assignment detail GET; the legal_hold_policy_assignments family itself is out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/legal_hold_policy_assignments/{legal_hold_policy_assignment_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "removing a legal hold assignment has litigation/compliance consequences; not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/legal_hold_policy_assignments/{legal_hold_policy_assignment_id}/file_versions_on_hold",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific assignment_id from the already-excluded legal_hold_policy_assignments family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/legal_hold_policy_assignments/{legal_hold_policy_assignment_id}/files_on_hold",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific assignment_id from the already-excluded legal_hold_policy_assignments family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_cascade_policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a folder_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_cascade_policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_cascade_policies GET; requires a specific folder_id and metadata template scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_cascade_policies/{metadata_cascade_policy_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-policy detail GET; the metadata_cascade_policies family itself is out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata_cascade_policies/{metadata_cascade_policy_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_cascade_policies GET"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_cascade_policies/{metadata_cascade_policy_id}/apply",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_cascade_policies GET"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_queries/execute_read",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a query-language search over file/folder metadata instances; a search-execution endpoint, not a syncable object catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_taxonomies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "structured-taxonomy metadata authoring is a narrow enterprise metadata-governance admin surface; deferred to a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_taxonomies/{namespace}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific namespace with no account-wide taxonomy-namespace list endpoint to pair it with; deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-taxonomy detail GET; the metadata_taxonomies family itself is out of scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/levels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/levels/{level_index}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/levels:append",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/levels:trim",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/nodes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/nodes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/nodes/{node_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-node detail GET; the metadata_taxonomies family itself is out of scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/nodes/{node_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata_taxonomies/{namespace}/{taxonomy_key}/nodes/{node_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_taxonomies POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a metadata_instance_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog (metadata_templates/enterprise already covers the enterprise-scoped list stream)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_templates/enterprise",
+      "covered_by": {
+        "stream": "metadata_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_templates/enterprise/securityClassification-6VMVochwUWo/schema",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the enterprise security-classification schema is a single fixed singleton resource, not a list-shaped catalog stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata_templates/enterprise/securityClassification-6VMVochwUWo/schema#add",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside the classifications schema GET"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata_templates/enterprise/securityClassification-6VMVochwUWo/schema#update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside the classifications schema GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_templates/global",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a global-scope variant of metadata template listing; the enterprise-scoped metadata_templates stream already covers this connector's templates of interest"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_templates/schema",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom metadata template schema authoring is a narrow enterprise metadata-governance admin surface; deferred"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metadata_templates/schema#classifications",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside metadata_templates/schema POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_templates/{namespace}/{template_key}/fields/{field_key}/options",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific namespace/template_key/field_key triple from the already-deferred metadata_taxonomies/metadata_templates family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_templates/{scope}/{template_key}/schema",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-template-schema detail GET redundant with the metadata_templates list stream already covered (its fields property carries the same schema data)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata_templates/{scope}/{template_key}/schema",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom metadata template schema field-level editing; deferred alongside metadata_templates/schema POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata_templates/{scope}/{template_key}/schema",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible deletion of a metadata template schema breaks every file/folder metadata instance using it; not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata_templates/{template_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-template detail GET (by template_id rather than scope/template_key) redundant with the metadata_templates list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/revoke",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth2 token revocation is an auth-lifecycle action, not a syncable object or record mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth2 token exchange; handled declaratively by this bundle's own auth block, not a separate write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/token#refresh",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth2 token refresh; handled internally by the engine's oauth2_client_credentials auth mode, not a separate write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recent_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a per-authenticated-identity recently-accessed-item feed; judged lower-value/less catalog-shaped than the 11 streams already covered, candidate for a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention_policies",
+      "covered_by": {
+        "stream": "retention_policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retention_policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "retention policy creation has significant legal/compliance consequences (data-deletion-blocking obligations); not a safe generic reverse-ETL create target this wave"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention_policies/{retention_policy_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-policy detail GET redundant with the retention_policies list stream already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/retention_policies/{retention_policy_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside retention_policies POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/retention_policies/{retention_policy_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible deletion of a retention policy risks premature permanent deletion of content it was protecting; not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention_policies/{retention_policy_id}/assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-policy assignment listing requires iterating every retention_policy_id from the retention_policies stream in a fan_out shape; judged lower-value this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/retention_policy_assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "assigning a retention policy to content/metadata has legal/compliance consequences; deferred alongside retention_policies writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention_policy_assignments/{retention_policy_assignment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-assignment detail GET has no account-wide assignment list endpoint to pair with (only per-policy scoped, out of scope above)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/retention_policy_assignments/{retention_policy_assignment_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "removing a retention policy assignment risks premature permanent deletion of content it was protecting; not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention_policy_assignments/{retention_policy_assignment_id}/file_versions_under_retention",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific assignment_id from the already out-of-scope retention_policy_assignments family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention_policy_assignments/{retention_policy_assignment_id}/files_under_retention",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific assignment_id from the already out-of-scope retention_policy_assignments family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a free-text search-execution endpoint over file/folder content and metadata, not a syncable object catalog with a stable record shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "resolves a single shared-link URL/password pair to its target item; a lookup-by-token endpoint, not a listable catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared_items#app_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shared_items GET; same lookup-by-token shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared_items#folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shared_items GET; same lookup-by-token shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared_items#web_links",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shared_items GET; same lookup-by-token shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a shield_information_barrier_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shield_information_barrier_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Shield information barrier reports are an enterprise-compliance admin feature requiring Box Shield licensing; deferred to a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_reports/{shield_information_barrier_report_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-report detail GET; the shield_information_barrier_reports family itself is out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_segment_members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a shield_information_barrier_segment_id query filter; deferred alongside the Shield information barrier family"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shield_information_barrier_segment_members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barrier_segment_members GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_segment_members/{shield_information_barrier_segment_member_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-member detail GET; the shield_information_barrier_segment_members family itself is out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shield_information_barrier_segment_members/{shield_information_barrier_segment_member_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barrier_segment_members GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_segment_restrictions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a shield_information_barrier_segment_id query filter; deferred alongside the Shield information barrier family"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shield_information_barrier_segment_restrictions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barrier_segment_restrictions GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_segment_restrictions/{shield_information_barrier_segment_restriction_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-restriction detail GET; the shield_information_barrier_segment_restrictions family itself is out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shield_information_barrier_segment_restrictions/{shield_information_barrier_segment_restriction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barrier_segment_restrictions GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_segments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a shield_information_barrier_id query filter; deferred alongside the Shield information barrier family"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shield_information_barrier_segments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barrier_segments GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barrier_segments/{shield_information_barrier_segment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-segment detail GET; the shield_information_barrier_segments family itself is out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shield_information_barrier_segments/{shield_information_barrier_segment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barrier_segments GET"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shield_information_barrier_segments/{shield_information_barrier_segment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barrier_segments GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barriers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires an enterprise_id query filter; Box Shield information barrier configuration is a narrow enterprise-compliance admin feature requiring Box Shield licensing, deferred"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shield_information_barriers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside shield_information_barriers GET"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shield_information_barriers/change_status",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "changes an information barrier's enforcement status enterprise-wide; a compliance-critical bulk state transition, not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shield_information_barriers/{shield_information_barrier_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-barrier detail GET; the shield_information_barriers family itself is out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sign_requests",
+      "covered_by": {
+        "stream": "sign_requests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sign_requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creating a Box Sign request requires source file references already uploaded/known to the caller and a multipart-adjacent authoring flow; deferred alongside BoldSign's identical document/send exclusion precedent in this same wave"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sign_requests/{sign_request_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-sign-request detail GET redundant with the sign_requests list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sign_requests/{sign_request_id}/cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "narrow lifecycle action judged lower-value than the streams/writes already covered this pass; candidate for a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sign_requests/{sign_request_id}/resend",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside sign_requests/cancel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sign_templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box Sign reusable template listing; judged lower-value than the 11 streams already covered, candidate for a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sign_templates/{template_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-template detail GET; the sign_templates family itself is out of scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/skill_invocations/{skill_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box Skills is a deprecated third-party-AI-integration framework; not a safe or current generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storage_policies",
+      "covered_by": {
+        "stream": "storage_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storage_policies/{storage_policy_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-policy detail GET redundant with the storage_policies list stream already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storage_policy_assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a resolved_for_type/resolved_for_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/storage_policy_assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "assigning a storage policy to a user/enterprise is a narrow data-residency admin action; deferred"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/storage_policy_assignments/{storage_policy_assignment_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-assignment detail GET; the storage_policy_assignments family itself is out of scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/storage_policy_assignments/{storage_policy_assignment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside storage_policy_assignments POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/storage_policy_assignments/{storage_policy_assignment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside storage_policy_assignments POST"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/task_assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task assignment requires a specific task_id from the already out-of-scope Tasks family (file-scoped, no account-wide task catalog exists)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/task_assignments/{task_assignment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-assignment detail GET has no account-wide task-assignment list endpoint to pair with"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/task_assignments/{task_assignment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside task_assignments POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/task_assignments/{task_assignment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside task_assignments POST"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task creation is scoped to a specific file_id parent, outside this connector's account-level write scope; no account-wide task catalog exists to pair it with"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-task detail GET has no account-wide task list endpoint to pair with (tasks are only listable per-file, a file-scoped concern out of scope)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tasks/{task_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside tasks GET/POST"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{task_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside tasks GET/POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}/assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific task_id from the already out-of-scope Tasks family"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terms_of_service_user_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a tos_id/user_id query filter to return any records; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/terms_of_service_user_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "records a specific user's terms-of-service acceptance/rejection status; a per-user compliance action, deferred"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/terms_of_service_user_statuses/{terms_of_service_user_status_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside terms_of_service_user_statuses POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terms_of_services",
+      "covered_by": {
+        "stream": "terms_of_services"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/terms_of_services",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creating a new enterprise terms-of-service document is a rare, legally-significant administrative action; not a safe generic reverse-ETL create target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terms_of_services/{terms_of_service_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-terms-of-service detail GET redundant with the terms_of_services list stream already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/terms_of_services/{terms_of_service_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside terms_of_services POST"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "provisioning a new enterprise-managed user is a significant identity-lifecycle administrative action (license consumption, SSO/directory-sync implications); not a safe generic reverse-ETL create target this wave"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the caller's own user record, a single fixed identity lookup redundant with the users list stream (which includes the caller) already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/terminate_sessions",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "forcibly terminates every active session for a set of users; a bulk security-response action with irreversible session-invalidation side effects, not a safe generic reverse-ETL write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user detail GET redundant with the users list stream already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user profile/role/status editing touches enterprise identity/license state; judged higher-risk than the group/webhook/collaboration writes already covered this pass, deferred to a future increment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversible enterprise user account deletion (with content transfer/deletion consequences); not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/avatar",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a raw image byte stream, not a JSON record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user_id}/avatar",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "accepts a raw image byte stream upload, not a JSON record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}/avatar",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside the avatar family; narrow profile-cosmetic action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/email_aliases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user email alias listing requires iterating every user_id from the users stream in a fan_out shape; judged lower-value this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user_id}/email_aliases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside email_aliases GET"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}/email_aliases/{email_alias_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deferred alongside email_aliases GET"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}/folders/0",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "transfers all of a (typically deactivated/deleted) user's content ownership to another user; an irreversible bulk-ownership-transfer administrative action, not a safe generic write target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user group-membership listing requires iterating every user_id from the users stream in a fan_out shape; judged lower-value this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workflows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Box Relay workflow definitions are listable only when scoped to a specific folder_id query filter; a detail-lookup endpoint rather than an independently-listable account catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{workflow_id}/start",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers a Box Relay automation workflow run; a side-effecting automation-trigger action, not a record-shaped catalog mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/zip_downloads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "initiates a multi-file ZIP archive download session; the actual archive content is a raw byte stream, not a JSON record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/zip_downloads/{zip_download_id}/content",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns the raw ZIP archive byte stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/zip_downloads/{zip_download_id}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a specific zip_download_id from the already out-of-scope zip_downloads POST; a transient job-status poll, not a catalog record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{webhook_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-webhook detail GET redundant with the webhooks list stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/content",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/upload_sessions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/upload_sessions/{upload_session_id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/upload_sessions/{upload_session_id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/upload_sessions/{upload_session_id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/upload_sessions/{upload_session_id}/commit",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/upload_sessions/{upload_session_id}/parts",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-file metadata GET/PUT/DELETE/copy requires a specific file_id the connector has no catalog stream or config-declared list of to iterate; this connector is scoped to account/enterprise-level list & lifecycle resources (see api_surface.json scope), not a file-tree crawler"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-file lifecycle management (restore/purge/inspect) requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-file metadata GET/PUT/DELETE/copy requires a specific file_id the connector has no catalog stream or config-declared list of to iterate; this connector is scoped to account/enterprise-level list & lifecycle resources (see api_surface.json scope), not a file-tree crawler"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{file_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-file metadata GET/PUT/DELETE/copy requires a specific file_id the connector has no catalog stream or config-declared list of to iterate; this connector is scoped to account/enterprise-level list & lifecycle resources (see api_surface.json scope), not a file-tree crawler"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}#add_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file shared-link management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}#get_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file shared-link management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}#remove_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file shared-link management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}#update_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file shared-link management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/app_item_associations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file/folder third-party app association listing requires a specific file/folder id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/collaborations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a file/folder-scoped variant of collaboration listing already covered by the account-wide pending_collaborations stream (scoped differently, not additional data)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "comment creation/listing is scoped to a specific file_id (no account-wide comment list endpoint exists in the Box API at all); out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/content",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}/content",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}/copy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-file metadata GET/PUT/DELETE/copy requires a specific file_id the connector has no catalog stream or config-declared list of to iterate; this connector is scoped to account/enterprise-level list & lifecycle resources (see api_surface.json scope), not a file-tree crawler"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file custom-metadata instance management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file security-classification management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file security-classification management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file security-classification management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{file_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file security-classification management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/metadata/global/boxSkillsCards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file Box Skills metadata card management requires a specific file_id; a legacy/deprecated Box Skills framework feature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}/metadata/global/boxSkillsCards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file Box Skills metadata card management requires a specific file_id; a legacy/deprecated Box Skills framework feature"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}/metadata/global/boxSkillsCards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file Box Skills metadata card management requires a specific file_id; a legacy/deprecated Box Skills framework feature"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{file_id}/metadata/global/boxSkillsCards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file Box Skills metadata card management requires a specific file_id; a legacy/deprecated Box Skills framework feature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file custom-metadata instance management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file custom-metadata instance management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file custom-metadata instance management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{file_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file custom-metadata instance management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task creation/listing is scoped to a specific file_id (no account-wide task list endpoint exists in the Box API at all); out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/thumbnail.{extension}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-file metadata GET/PUT/DELETE/copy requires a specific file_id the connector has no catalog stream or config-declared list of to iterate; this connector is scoped to account/enterprise-level list & lifecycle resources (see api_surface.json scope), not a file-tree crawler"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/trash",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-file lifecycle management (restore/purge/inspect) requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{file_id}/trash",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-file lifecycle management (restore/purge/inspect) requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}/upload_sessions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns/accepts a raw file byte stream (upload or download), not a JSON record; no declarative binary-payload shape exists in this dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file version history management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/{file_id}/versions/current",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file version history management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/versions/{file_version_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file version history management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{file_id}/versions/{file_version_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file version history management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}/versions/{file_version_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file version history management requires a specific file_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{file_id}/watermark",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "watermark placement/removal on a specific file/folder is a content-protection control with no natural per-record catalog shape and no config-declared file/folder set to iterate \u2014 narrowly out of scope for this connector's account/enterprise-level surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/files/{file_id}/watermark",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "watermark placement/removal on a specific file/folder is a content-protection control with no natural per-record catalog shape and no config-declared file/folder set to iterate \u2014 narrowly out of scope for this connector's account/enterprise-level surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{file_id}/watermark",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "watermark placement/removal on a specific file/folder is a content-protection control with no natural per-record catalog shape and no config-declared file/folder set to iterate \u2014 narrowly out of scope for this connector's account/enterprise-level surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-folder metadata GET/PUT/DELETE/copy/create requires a specific folder_id beyond the one connector-configured folder_id (folder_items already covers listing that folder's contents); out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/trash/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account-wide trashed-item listing requires enumerating trashed folders, a content-management concern distinct from this connector's account/enterprise-level catalog scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-folder metadata GET/PUT/DELETE/copy/create requires a specific folder_id beyond the one connector-configured folder_id (folder_items already covers listing that folder's contents); out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folder_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-folder lifecycle management (restore/purge/inspect) requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-folder metadata GET/PUT/DELETE/copy/create requires a specific folder_id beyond the one connector-configured folder_id (folder_items already covers listing that folder's contents); out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folder_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-folder metadata GET/PUT/DELETE/copy/create requires a specific folder_id beyond the one connector-configured folder_id (folder_items already covers listing that folder's contents); out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_id}#add_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder shared-link management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}#get_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder shared-link management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_id}#remove_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder shared-link management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_id}#update_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder shared-link management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/app_item_associations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-file/folder third-party app association listing requires a specific file/folder id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/collaborations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a file/folder-scoped variant of collaboration listing already covered by the account-wide pending_collaborations stream (scoped differently, not additional data)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folder_id}/copy",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-folder metadata GET/PUT/DELETE/copy/create requires a specific folder_id beyond the one connector-configured folder_id (folder_items already covers listing that folder's contents); out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/items",
+      "covered_by": {
+        "stream": "folder_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder custom-metadata instance management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder security-classification management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folder_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder security-classification management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder security-classification management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folder_id}/metadata/enterprise/securityClassification-6VMVochwUWo",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder security-classification management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder custom-metadata instance management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders/{folder_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder custom-metadata instance management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder custom-metadata instance management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folder_id}/metadata/{scope}/{template_key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-folder custom-metadata instance management requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/trash",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-folder lifecycle management (restore/purge/inspect) requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folder_id}/trash",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-folder lifecycle management (restore/purge/inspect) requires a specific folder_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_id}/watermark",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "watermark placement/removal on a specific file/folder is a content-protection control with no natural per-record catalog shape and no config-declared file/folder set to iterate \u2014 narrowly out of scope for this connector's account/enterprise-level surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_id}/watermark",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "watermark placement/removal on a specific file/folder is a content-protection control with no natural per-record catalog shape and no config-declared file/folder set to iterate \u2014 narrowly out of scope for this connector's account/enterprise-level surface"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folder_id}/watermark",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "watermark placement/removal on a specific file/folder is a content-protection control with no natural per-record catalog shape and no config-declared file/folder set to iterate \u2014 narrowly out of scope for this connector's account/enterprise-level surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/web_links",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "web-link (bookmark) object management requires a specific web_link_id created via a parent-folder-scoped POST; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/web_links/{web_link_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "web-link (bookmark) object management requires a specific web_link_id created via a parent-folder-scoped POST; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/web_links/{web_link_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-web-link lifecycle management requires a specific web_link_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/web_links/{web_link_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "web-link (bookmark) object management requires a specific web_link_id created via a parent-folder-scoped POST; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/web_links/{web_link_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "web-link (bookmark) object management requires a specific web_link_id created via a parent-folder-scoped POST; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/web_links/{web_link_id}#add_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-web-link shared-link management requires a specific web_link_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/web_links/{web_link_id}#get_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-web-link shared-link management requires a specific web_link_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/web_links/{web_link_id}#remove_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-web-link shared-link management requires a specific web_link_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/web_links/{web_link_id}#update_shared_link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-web-link shared-link management requires a specific web_link_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/web_links/{web_link_id}/trash",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-web-link lifecycle management requires a specific web_link_id; out of this connector's account-level scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/web_links/{web_link_id}/trash",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "trashed-web-link lifecycle management requires a specific web_link_id; out of this connector's account-level scope"
+      }
+    }
   ]
 }

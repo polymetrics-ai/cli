@@ -1,0 +1,13 @@
+{
+  "record": {
+    "senderId": 5
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/senders/5"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

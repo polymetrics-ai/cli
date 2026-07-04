@@ -1,0 +1,7 @@
+{
+  "record": { "projectId": "proj_fixture_1", "name": "Fixture Task" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/workspaces/synthetic-conformance-value/projects/proj_fixture_1/tasks"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/seller-campaigns" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "10656107.248287", "sellerId": "10656107", "campaignId": 248287, "bid": 0.15, "suspendedSince": null, "suspensionReasons": null },
+      { "id": "10656108.248288", "sellerId": "10656108", "campaignId": 248288, "bid": 0.0, "suspendedSince": "2026-01-03T15:14:25.797Z", "suspensionReasons": ["NoBudgetDefined"] }
+    ]
+  }
+}

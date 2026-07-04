@@ -23,6 +23,10 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "taxonomy_show_deleted": {
+      "type": "string",
+      "description": "Optional 'true'/'false' string forwarded as the showDeleted query parameter on the taxonomy_events and taxonomy_user_properties streams. Left unset, the parameter is omitted and Amplitude applies its own default (deleted items excluded)."
     }
   }
 }

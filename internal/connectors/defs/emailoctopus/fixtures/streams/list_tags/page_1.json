@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/lists/synthetic-conformance-value/tags", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "tag": "vip" },
+        { "tag": "trial" }
+      ],
+      "paging": { "previous": null, "next": null }
+    }
+  }
+}

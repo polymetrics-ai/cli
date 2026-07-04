@@ -1,14 +1,14 @@
 {
   "name": "customer-io",
   "display_name": "Customer.io",
-  "description": "Reads Customer.io campaigns, newsletters, segments, and broadcasts through the Customer.io App (Beta) API.",
+  "description": "Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, messages, exports, transactional templates, object types, reporting webhooks, sender identities, snippets, subscription channels/topics, workspaces, and collections; writes snippet/webhook/segment mutations and can send transactional email or trigger broadcasts, through the Customer.io App API.",
   "integration_type": "api",
   "docs_url": "https://customer.io/docs/api/app/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Customer.io App API read of campaign/newsletter/segment/broadcast metadata",
-    "approval": "none; read-only source"
+    "read": "external Customer.io App API read of campaign/newsletter/segment/broadcast/activity/message/export/transactional/webhook/subscription/workspace metadata",
+    "write": "external mutation of live Customer.io workspace config (snippets/webhooks/segments) and live message sends (transactional email, broadcast triggers); irreversible once delivered; approval required",
+    "approval": "read: none; write: required"
   }
 }

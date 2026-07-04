@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ratings_history",
+  "type": "object",
+  "x-primary-key": ["ext_id", "date", "country", "version"],
+  "required": ["ext_id"],
+  "properties": {
+    "ext_id": { "type": ["string", "null"] },
+    "store": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "period": { "type": ["string", "null"] },
+    "stars": { "type": ["integer", "null"] },
+    "stars1": { "type": ["integer", "null"] },
+    "stars2": { "type": ["integer", "null"] },
+    "stars3": { "type": ["integer", "null"] },
+    "stars4": { "type": ["integer", "null"] },
+    "stars5": { "type": ["integer", "null"] },
+    "avg_rating": { "type": ["number", "null"] },
+    "total": { "type": ["integer", "null"] }
+  }
+}

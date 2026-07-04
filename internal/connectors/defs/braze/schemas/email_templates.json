@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "email_templates",
+  "type": "object",
+  "x-primary-key": ["email_template_id"],
+  "x-cursor-field": "updated_at",
+  "required": ["email_template_id"],
+  "properties": {
+    "email_template_id": { "type": "string" },
+    "template_name": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "tags": { "type": ["string", "null"] }
+  }
+}

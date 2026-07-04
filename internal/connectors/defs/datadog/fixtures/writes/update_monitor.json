@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "message": "updated fixture monitor alert"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/monitor/1"
+  }
+}

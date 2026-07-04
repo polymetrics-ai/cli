@@ -1,0 +1,15 @@
+{
+  "record": {
+    "project_gid": "fixture_proj_1",
+    "data": {
+      "name": "Fixture section"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/fixture_proj_1/sections",
+    "body": {
+      "data": { "name": "Fixture section" }
+    }
+  }
+}

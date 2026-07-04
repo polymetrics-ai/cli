@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/brands" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "brand_fixture_1", "name": "Fixture Brand 1" },
+        { "id": "brand_fixture_2", "name": "Fixture Brand 2" }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

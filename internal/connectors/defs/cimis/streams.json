@@ -18,6 +18,20 @@
       "records": { "path": "Stations" },
       "schema": "schemas/stations.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "station_zip_codes",
+      "path": "/api/stationzipcode",
+      "records": { "path": "ZipCodes" },
+      "schema": "schemas/station_zip_codes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "spatial_zip_codes",
+      "path": "/api/spatialzipcode",
+      "records": { "path": "ZipCodes" },
+      "schema": "schemas/spatial_zip_codes.json",
+      "projection": "passthrough"
     }
   ]
 }

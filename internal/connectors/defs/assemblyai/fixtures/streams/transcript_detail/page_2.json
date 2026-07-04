@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/v2/transcript/fixture_transcript_1" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_transcript_1",
+      "status": "completed",
+      "audio_url": "https://example.com/audio/fixture1.mp3",
+      "text": "This is a fixture transcript.",
+      "error": null,
+      "audio_duration": 12.5,
+      "audio_channels": 1,
+      "language_code": "en_us",
+      "language_confidence": 0.98,
+      "punctuate": true,
+      "format_text": true,
+      "speaker_labels": false,
+      "auto_chapters": false,
+      "auto_highlights": false,
+      "entity_detection": false,
+      "sentiment_analysis": false,
+      "summarization": false,
+      "summary": null,
+      "redact_pii": false,
+      "confidence": 0.97,
+      "webhook_url": null,
+      "webhook_status_code": null
+    }
+  }
+}

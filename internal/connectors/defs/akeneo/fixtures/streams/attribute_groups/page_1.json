@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/attribute-groups", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          {
+            "code": "marketing",
+            "attributes": ["name", "description"],
+            "sort_order": 1,
+            "labels": { "en_US": "Marketing" }
+          }
+        ]
+      }
+    }
+  }
+}

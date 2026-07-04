@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/custom-content", "query": { "limit": "25", "type": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "cc_fixture_1",
+          "type": "synthetic-conformance-value",
+          "status": "current",
+          "title": "Fixture Custom Content 1",
+          "spaceId": "spaces_fixture_1",
+          "pageId": "pages_fixture_1",
+          "blogPostId": "",
+          "authorId": "author_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "version": { "number": 1 }
+        },
+        {
+          "id": "cc_fixture_2",
+          "type": "synthetic-conformance-value",
+          "status": "current",
+          "title": "Fixture Custom Content 2",
+          "spaceId": "spaces_fixture_1",
+          "pageId": "",
+          "blogPostId": "",
+          "authorId": "author_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "version": { "number": 1 }
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "table_id": "tbl_fixture_1",
+    "id": "fld_fixture_1",
+    "name": "Fixture Field Renamed"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/meta/bases/synthetic-conformance-value/tables/tbl_fixture_1/fields/fld_fixture_1",
+    "body": {
+      "name": "Fixture Field Renamed"
+    }
+  }
+}

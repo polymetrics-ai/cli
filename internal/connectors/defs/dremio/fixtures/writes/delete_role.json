@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "role_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/role/role_fixture_1"
+  }
+}

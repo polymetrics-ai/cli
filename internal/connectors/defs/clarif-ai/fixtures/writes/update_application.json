@@ -1,0 +1,9 @@
+{
+  "record": { "action": "overwrite", "apps": [{ "id": "fixture-app-1", "description": "Updated fixture application" }] },
+  "expect": {
+    "method": "PATCH",
+    "path": "/users/synthetic-conformance-value/apps",
+    "body": { "action": "overwrite", "apps": [{ "id": "fixture-app-1", "description": "Updated fixture application" }] }
+  },
+  "response": { "status": 200, "body": { "status": { "code": 10000, "description": "Ok" }, "apps": [{ "id": "fixture-app-1" }] } }
+}

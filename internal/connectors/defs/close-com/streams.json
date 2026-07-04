@@ -48,6 +48,65 @@
       "path": "/user/",
       "records": { "path": "data" },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/task/",
+      "records": { "path": "data" },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "lead_statuses",
+      "path": "/status/lead/",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/lead_statuses.json"
+    },
+    {
+      "name": "opportunity_statuses",
+      "path": "/status/opportunity/",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/opportunity_statuses.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipeline/",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "roles",
+      "path": "/role/",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "groups",
+      "path": "/group/",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "custom_fields_lead",
+      "path": "/custom_field/lead/",
+      "records": { "path": "data" },
+      "schema": "schemas/custom_fields_lead.json"
+    },
+    {
+      "name": "custom_fields_contact",
+      "path": "/custom_field/contact/",
+      "records": { "path": "data" },
+      "schema": "schemas/custom_fields_contact.json"
+    },
+    {
+      "name": "custom_fields_opportunity",
+      "path": "/custom_field/opportunity/",
+      "records": { "path": "data" },
+      "schema": "schemas/custom_fields_opportunity.json"
     }
   ]
 }

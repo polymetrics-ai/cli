@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "fs_fixture_1",
+    "name": "Fixture Savings"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/funding-sources/fs_fixture_1",
+    "body": {
+      "name": "Fixture Savings"
+    }
+  }
+}

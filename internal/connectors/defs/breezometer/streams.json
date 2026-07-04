@@ -103,6 +103,53 @@
         "longitude": "{{ config.longitude }}"
       },
       "schema": "schemas/weather_current.json"
+    },
+    {
+      "name": "weather_daily_forecast",
+      "path": "/weather/v1/forecast/daily",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}",
+        "days": { "template": "{{ config.weather_days_to_forecast }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "start_date" },
+      "computed_fields": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/weather_daily_forecast.json"
+    },
+    {
+      "name": "wildfire_active_tracking",
+      "path": "/fires/v1/locate-and-track",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}",
+        "radius": "{{ config.wildfire_radius_km }}"
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/wildfire_active_tracking.json"
+    },
+    {
+      "name": "wildfire_burnt_area",
+      "path": "/fires/v1/burnt-area",
+      "query": {
+        "lat": "{{ config.latitude }}",
+        "lon": "{{ config.longitude }}",
+        "radius": "{{ config.wildfire_radius_km }}",
+        "daysFromExtinguish": { "template": "{{ config.wildfire_days_from_extinguish }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}"
+      },
+      "schema": "schemas/wildfire_burnt_area.json"
     }
   ]
 }

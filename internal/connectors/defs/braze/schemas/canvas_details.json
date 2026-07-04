@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "canvas_details",
+  "type": "object",
+  "x-primary-key": ["canvas_id"],
+  "required": ["canvas_id"],
+  "properties": {
+    "canvas_id": { "type": "string" },
+    "message": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "draft": { "type": ["boolean", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "schedule_type": { "type": ["string", "null"] },
+    "first_entry": { "type": ["string", "null"] },
+    "last_entry": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "tags": { "type": ["string", "null"] },
+    "teams": { "type": ["string", "null"] },
+    "channels": { "type": ["array", "null"] },
+    "variants": { "type": ["array", "null"] },
+    "steps": { "type": ["array", "null"] }
+  }
+}

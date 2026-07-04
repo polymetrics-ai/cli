@@ -1,0 +1,59 @@
+{
+  "actions": [
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhook/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["formId", "url"],
+        "properties": {
+          "formId": { "type": "string", "description": "The public identifier of the form to subscribe to." },
+          "url": { "type": "string", "format": "uri", "description": "The endpoint that receives submission events." }
+        }
+      },
+      "risk": "registers a new outbound webhook subscription that will POST live form-submission data to an external URL; external mutation, approval required"
+    },
+    {
+      "name": "remove_webhook",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/webhook/delete",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhookId"],
+        "properties": {
+          "webhookId": { "type": "string", "description": "The id returned when the webhook was created." }
+        }
+      },
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_submission_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/forms/{{ record.form_id }}/submissions/{{ record.submission_id }}",
+      "path_fields": ["form_id", "submission_id"],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["form_id", "submission_id"],
+        "properties": {
+          "form_id": { "type": "string" },
+          "submission_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a single form response; irreversible, approval required"
+    }
+  ]
+}

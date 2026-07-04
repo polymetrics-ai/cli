@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/log/activity", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "offset": 0,
+      "data": [
+        {
+          "object_id": "chg_fixture_1",
+          "object_type": "charge",
+          "action_type": "refund",
+          "action_reason": "Fixture refund",
+          "action_params": false,
+          "description": "Charge Refunded",
+          "sub_description": "",
+          "event": "charge-refund",
+          "occurred": 1767225601,
+          "ip": "203.0.113.1",
+          "source": "web",
+          "company": "company-fixture",
+          "context": null,
+          "params": null
+        }
+      ]
+    }
+  }
+}

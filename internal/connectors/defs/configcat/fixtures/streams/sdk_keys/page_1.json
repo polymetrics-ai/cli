@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v1/configs/synthetic-conformance-value/environments/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "primary": "configcat_sdk_1_fixture_primary",
+      "secondary": "configcat_sdk_1_fixture_secondary"
+    }
+  }
+}

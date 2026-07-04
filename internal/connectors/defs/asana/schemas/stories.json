@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stories",
+  "type": "object",
+  "x-primary-key": ["gid"],
+  "required": ["gid"],
+  "properties": {
+    "gid": { "type": "string" },
+    "resource_type": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "resource_subtype": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "task_gid": { "type": ["string", "null"] }
+  }
+}

@@ -1,13 +1,23 @@
 {
   "api": "Captain Data API v3 (https://api.captaindata.co/v3)",
-  "docs": "https://docs.captaindata.co/api-documentation",
-  "reviewed_at": "2026-07-03",
-  "scope": "capability-parity migration: the 4 legacy-parity read streams (workspace, workflows, jobs, job_results) only; Captain Data has no reverse-ETL writes in legacy, so no write actions are in scope",
+  "docs": "https://docs.captaindata.com/api-documentation",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented Captain Data v3 endpoint reachable from public docs/support articles (the interactive Apiary/API-reference pages behind support.captaindata.com return 403/404 to unauthenticated fetches, so the endpoint list below is sourced from Captain Data's own published support articles and quickstart guides, cross-checked against legacy's implemented shape) is enumerated below, covered_by a stream/write action or excluded with a specific reason. The 4 legacy-parity read streams are unchanged; this wave adds launch_workflow, the one dialect-expressible mutation Captain Data's API documents.",
   "endpoints": [
     { "method": "GET", "path": "/workspace", "covered_by": { "stream": "workspace" } },
     { "method": "GET", "path": "/workflows", "covered_by": { "stream": "workflows" } },
     { "method": "GET", "path": "/workflows/{workflow_uid}/jobs", "covered_by": { "stream": "jobs" } },
+    { "method": "GET", "path": "/jobs/{job_uid}", "excluded": { "category": "duplicate_of", "reason": "single-job detail is a subset of the jobs list stream (same record shape scoped to one row)" } },
     { "method": "GET", "path": "/jobs/{job_uid}/results", "covered_by": { "stream": "job_results" } },
-    { "method": "POST", "path": "/workflows/{workflow_uid}/jobs", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy exposes no reverse-ETL writes for Captain Data" } }
+    { "method": "POST", "path": "/workflows/{workflow_uid}/launch", "covered_by": { "write": "launch_workflow" } },
+    { "method": "POST", "path": "/jobs/{job_uid}/retry", "excluded": { "category": "out_of_scope", "reason": "retries a job left in a warning/failed state; a re-run/administrative action on an existing job rather than a create/update/delete of CRM-shaped record data, and legacy never exposed a corresponding reverse-ETL write" } },
+    { "method": "POST", "path": "/webhooks/{job_uid}/retry", "excluded": { "category": "out_of_scope", "reason": "re-delivers a webhook notification for a completed job; a notification-replay action, not a record mutation" } },
+    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "webhook subscription listing is a notification/integration concern, not workflow/job record data" } },
+    { "method": "POST", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Captain Data's own documentation states webhooks cannot currently be created via the API — subscriptions are managed only through the app UI's per-run Webhooks tab" } },
+    { "method": "GET", "path": "/users", "excluded": { "category": "requires_elevated_scope", "reason": "lists workspace/project users and their roles; account-administration data, not workflow/job data, and requires elevated (owner/admin) API scope per Captain Data's users-and-accounts documentation" } },
+    { "method": "POST", "path": "/users", "excluded": { "category": "requires_elevated_scope", "reason": "invites a new user to the workspace; account-administration mutation requiring elevated (owner/admin) API scope" } },
+    { "method": "DELETE", "path": "/users/{user_uid}", "excluded": { "category": "destructive_admin", "reason": "removes a user's access to the workspace; account-administration mutation, not a workflow/job record write" } },
+    { "method": "GET", "path": "/integrations", "excluded": { "category": "out_of_scope", "reason": "lists connected third-party account integrations (LinkedIn, Sales Navigator, etc.) used as workflow inputs; account-configuration data with no corresponding legacy stream" } },
+    { "method": "GET", "path": "/collections", "excluded": { "category": "out_of_scope", "reason": "Data Pipeline / collections feature has no corresponding legacy stream and is not part of the 4 core workspace/workflow/job/result streams this connector models" } }
   ]
 }

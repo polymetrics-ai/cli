@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/getHousekeepers", "query": { "pageNumber": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "housekeeperID": "hk_fixture_1",
+          "propertyID": "prop_fixture_1",
+          "name": "Fixture Housekeeper"
+        }
+      ],
+      "count": 1
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/headless/user/trackings",
+    "query": { "identifier": "fixture-user-1", "page": "0", "length": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "identifier": "fixture-user-1",
+      "clientIdentifier": "fixture-client-1",
+      "name": "Fixture Learner One",
+      "avatar": "https://cdn.coassemble.example/avatar/fixture-user-1.png",
+      "totals": { "viewed": 5, "completed": 3, "averageProgress": 62.5 },
+      "trackings": [
+        { "id": 3001, "courseId": 1001, "progress": 100 }
+      ]
+    }
+  }
+}

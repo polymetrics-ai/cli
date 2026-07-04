@@ -1,0 +1,170 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["connection"],
+        "properties": {
+          "connection": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "username": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "given_name": { "type": "string" },
+          "family_name": { "type": "string" },
+          "name": { "type": "string" },
+          "email_verified": { "type": "boolean" },
+          "phone_verified": { "type": "boolean" },
+          "blocked": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a new Auth0 user account (and, when password is set, a live credential); approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/users/{{ record.user_id }}",
+      "path_fields": ["user_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id"],
+        "properties": {
+          "user_id": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "username": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "given_name": { "type": "string" },
+          "family_name": { "type": "string" },
+          "name": { "type": "string" },
+          "email_verified": { "type": "boolean" },
+          "blocked": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; updates an existing Auth0 user's profile/credential/blocked state; approval required"
+    },
+    {
+      "name": "create_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/clients",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "app_type": { "type": "string" },
+          "is_first_party": { "type": "boolean" },
+          "oidc_conformant": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; registers a new Auth0 application (client), which can obtain its own OAuth2 credentials; approval required"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/clients/{{ record.client_id }}",
+      "path_fields": ["client_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["client_id"],
+        "properties": {
+          "client_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "app_type": { "type": "string" },
+          "is_first_party": { "type": "boolean" },
+          "oidc_conformant": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; updates an existing Auth0 application's configuration; approval required"
+    },
+    {
+      "name": "create_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/roles",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new RBAC role (no permissions attached by default); approval required"
+    },
+    {
+      "name": "update_role",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/roles/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an existing RBAC role's name/description; approval required"
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "display_name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new Auth0 organization (multi-tenant scoping unit); approval required"
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/organizations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "display_name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an existing Auth0 organization's name/display_name; approval required"
+    }
+  ]
+}

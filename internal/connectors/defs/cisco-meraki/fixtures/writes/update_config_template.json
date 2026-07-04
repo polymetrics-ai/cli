@@ -1,0 +1,11 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "id": "tmpl_fixture_1",
+    "name": "Fixture Template Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/org_1/configTemplates/tmpl_fixture_1"
+  }
+}

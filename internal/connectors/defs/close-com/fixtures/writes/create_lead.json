@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture Lead" },
+  "expect": { "method": "POST", "path": "/lead/" }
+}

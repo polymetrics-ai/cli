@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "20",
+    "kase": { "status": "CLOSED" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/kases/20",
+    "body": {
+      "kase": { "status": "CLOSED" }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": 301
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/301"
+  }
+}

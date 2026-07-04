@@ -1,0 +1,584 @@
+{
+  "actions": [
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/products",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product"],
+        "properties": {
+          "product": {
+            "type": "object",
+            "required": ["external_id", "name"],
+            "properties": {
+              "external_id": { "type": "string" },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "url": { "type": "string" },
+              "image_url": { "type": "string" },
+              "price": { "type": "number" },
+              "compare_at_price": { "type": "number" },
+              "currency": { "type": "string" },
+              "inventory_quantity": { "type": "integer" },
+              "is_discontinued": { "type": "boolean" },
+              "brand": { "type": "string" },
+              "sku": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new product in the store's catalog; approval required. Body is wrapped under a top-level \"product\" key (Yotpo Core API v3 convention) — the record itself carries that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive (see teamwork/ynab precedent)."
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/products/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id", "product"],
+        "properties": {
+          "yotpo_id": { "type": "string" },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "price": { "type": "number" },
+              "inventory_quantity": { "type": "integer" },
+              "is_discontinued": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates an existing product's catalog fields; approval required"
+    },
+    {
+      "name": "create_product_variant",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/products/{{ record.product_yotpo_id }}/variants",
+      "path_fields": ["product_yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_yotpo_id", "variant"],
+        "properties": {
+          "product_yotpo_id": { "type": "string" },
+          "variant": {
+            "type": "object",
+            "required": ["external_id"],
+            "properties": {
+              "external_id": { "type": "string" },
+              "name": { "type": "string" },
+              "price": { "type": "number" },
+              "sku": { "type": "string" },
+              "inventory_quantity": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new variant under an existing product; approval required"
+    },
+    {
+      "name": "update_product_variant",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/products/{{ record.product_yotpo_id }}/variants/{{ record.yotpo_id }}",
+      "path_fields": ["product_yotpo_id", "yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_yotpo_id", "yotpo_id", "variant"],
+        "properties": {
+          "product_yotpo_id": { "type": "string" },
+          "yotpo_id": { "type": "string" },
+          "variant": {
+            "type": "object",
+            "properties": {
+              "price": { "type": "number" },
+              "inventory_quantity": { "type": "integer" },
+              "is_discontinued": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates an existing product variant's fields; approval required"
+    },
+    {
+      "name": "create_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/orders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["order"],
+        "properties": {
+          "order": {
+            "type": "object",
+            "required": ["external_id", "order_date", "customer", "line_items"],
+            "properties": {
+              "external_id": { "type": "string" },
+              "order_date": { "type": "string" },
+              "customer": {
+                "type": "object",
+                "required": ["external_id"],
+                "properties": {
+                  "external_id": { "type": "string" },
+                  "email": { "type": "string" },
+                  "first_name": { "type": "string" },
+                  "last_name": { "type": "string" }
+                }
+              },
+              "line_items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["external_product_id", "quantity"],
+                  "properties": {
+                    "external_product_id": { "type": "string" },
+                    "quantity": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new order (may trigger Yotpo's automatic review-request email flow for the associated customer); approval required. Not possible to send automatic review-request emails for orders older than six months (Yotpo's own documented constraint)."
+    },
+    {
+      "name": "update_order",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/orders/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id", "order"],
+        "properties": {
+          "yotpo_id": { "type": "string" },
+          "order": {
+            "type": "object",
+            "properties": {
+              "payment_status": { "type": "string" },
+              "total_price": { "type": "number" },
+              "cancellation": {
+                "type": "object",
+                "properties": {
+                  "cancellation_date": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates an existing order's status/pricing/cancellation fields; approval required"
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer"],
+        "properties": {
+          "customer": {
+            "type": "object",
+            "required": ["external_id"],
+            "properties": {
+              "external_id": { "type": "string" },
+              "email": { "type": "string" },
+              "phone_number": { "type": "string" },
+              "first_name": { "type": "string" },
+              "last_name": { "type": "string" },
+              "gender": { "type": "string" },
+              "default_language": { "type": "string" },
+              "default_currency": { "type": "string" },
+              "tags": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates or updates (upsert-by-external_id) a customer profile; approval required. Yotpo's own endpoint is documented as create-or-update, keyed on external_id — there is no separate update_customer action since the same request both creates and upserts."
+    },
+    {
+      "name": "create_order_fulfillment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/orders/{{ record.order_yotpo_id }}/fulfillments",
+      "path_fields": ["order_yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["order_yotpo_id", "fulfillment"],
+        "properties": {
+          "order_yotpo_id": { "type": "string" },
+          "fulfillment": {
+            "type": "object",
+            "properties": {
+              "external_id": { "type": "string" },
+              "fulfillment_date": { "type": "string" },
+              "status": { "type": "string" },
+              "shipment_info": {
+                "type": "object",
+                "properties": {
+                  "shipment_status": { "type": "string" },
+                  "tracking_company": { "type": "string" },
+                  "tracking_url": { "type": "string" },
+                  "tracking_number": { "type": "string" }
+                }
+              },
+              "fulfilled_items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "external_product_id": { "type": "string" },
+                    "quantity": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; records a shipment/fulfillment event against an existing order; approval required"
+    },
+    {
+      "name": "update_order_fulfillment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/orders/{{ record.order_yotpo_id }}/fulfillments/{{ record.yotpo_id }}",
+      "path_fields": ["order_yotpo_id", "yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["order_yotpo_id", "yotpo_id", "fulfillment"],
+        "properties": {
+          "order_yotpo_id": { "type": "string" },
+          "yotpo_id": { "type": "string" },
+          "fulfillment": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string" },
+              "shipment_info": {
+                "type": "object",
+                "properties": {
+                  "shipment_status": { "type": "string" },
+                  "tracking_company": { "type": "string" },
+                  "tracking_url": { "type": "string" },
+                  "tracking_number": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates the shipment status/tracking of an existing order fulfillment; approval required"
+    },
+    {
+      "name": "create_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/collections",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection"],
+        "properties": {
+          "collection": {
+            "type": "object",
+            "required": ["external_id", "name"],
+            "properties": {
+              "external_id": { "type": "string" },
+              "name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new product collection; approval required"
+    },
+    {
+      "name": "update_collection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/collections/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id", "collection"],
+        "properties": {
+          "yotpo_id": { "type": "string" },
+          "collection": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; renames an existing product collection; approval required"
+    },
+    {
+      "name": "add_product_to_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/collections/{{ record.collection_yotpo_id }}/products",
+      "path_fields": ["collection_yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_yotpo_id", "product_id"],
+        "properties": {
+          "collection_yotpo_id": { "type": "string" },
+          "product_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; adds a product to an existing collection; approval required"
+    },
+    {
+      "name": "remove_product_from_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/core/v3/stores/{{ config.store_id }}/collections/{{ record.collection_yotpo_id }}/products",
+      "path_fields": ["collection_yotpo_id"],
+      "body_type": "json",
+      "body_fields": ["product_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_yotpo_id", "product_id"],
+        "properties": {
+          "collection_yotpo_id": { "type": "string" },
+          "product_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external mutation; removes a product from an existing collection; approval required"
+    },
+    {
+      "name": "create_webhook_target",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/targets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhook_target"],
+        "properties": {
+          "webhook_target": {
+            "type": "object",
+            "required": ["url"],
+            "properties": {
+              "url": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; registers a webhook callback URL target; approval required"
+    },
+    {
+      "name": "update_webhook_target",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/targets/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id", "webhook_target"],
+        "properties": {
+          "yotpo_id": { "type": "string" },
+          "webhook_target": {
+            "type": "object",
+            "required": ["url"],
+            "properties": {
+              "url": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; changes an existing webhook target's callback URL; approval required"
+    },
+    {
+      "name": "delete_webhook_target",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/targets/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id"],
+        "properties": {
+          "yotpo_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; removes a registered webhook target (any subscription still referencing it becomes inactive); approval required"
+    },
+    {
+      "name": "create_webhook_filter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/filters",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhook_filter"],
+        "properties": {
+          "webhook_filter": {
+            "type": "object",
+            "required": ["events"],
+            "properties": {
+              "events": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a webhook event filter (an event type cannot be used twice across filters, per Yotpo's own constraint); approval required"
+    },
+    {
+      "name": "update_webhook_filter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/filters/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id", "webhook_filter"],
+        "properties": {
+          "yotpo_id": { "type": "string" },
+          "webhook_filter": {
+            "type": "object",
+            "required": ["events"],
+            "properties": {
+              "events": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; changes an existing webhook filter's subscribed event types; approval required"
+    },
+    {
+      "name": "delete_webhook_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/filters/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id"],
+        "properties": {
+          "yotpo_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; removes a webhook filter (only unused filters can be deleted, per Yotpo's own constraint); approval required"
+    },
+    {
+      "name": "create_webhook_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/subscriptions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhook_subscription"],
+        "properties": {
+          "webhook_subscription": {
+            "type": "object",
+            "required": ["target_id", "filter_id"],
+            "properties": {
+              "target_id": { "type": "integer" },
+              "filter_id": { "type": "integer" },
+              "active": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; activates webhook event delivery by combining an existing target and filter; approval required"
+    },
+    {
+      "name": "update_webhook_subscription",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/subscriptions/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id", "webhook_subscription"],
+        "properties": {
+          "yotpo_id": { "type": "string" },
+          "webhook_subscription": {
+            "type": "object",
+            "properties": {
+              "target_id": { "type": "integer" },
+              "filter_id": { "type": "integer" },
+              "active": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; retargets or (de)activates an existing webhook subscription; approval required"
+    },
+    {
+      "name": "delete_webhook_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/subscriptions/{{ record.yotpo_id }}",
+      "path_fields": ["yotpo_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["yotpo_id"],
+        "properties": {
+          "yotpo_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; stops webhook event delivery for an existing target/filter combination; approval required"
+    }
+  ]
+}

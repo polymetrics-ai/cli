@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "reservationID": "res_fixture_1", "type": "credit", "amount": 100.0 },
+  "expect": { "method": "POST", "path": "/postPayment" },
+  "response": { "status": 200, "body": { "success": true, "paymentID": "payment_fixture_new" } }
+}

@@ -27,6 +27,10 @@
       "type": "string",
       "description": "Optional Asana assignee gid; scopes the 'tasks' stream to this assignee when set."
     },
+    "team_id": {
+      "type": "string",
+      "description": "Optional Asana team gid; scopes the 'team_memberships' stream to this team when set (Asana requires either team, or workspace+user, on that endpoint)."
+    },
     "page_size": {
       "type": "string",
       "default": "100",

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhook_subscriptions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id", "uri"],
+  "properties": {
+    "id": { "type": "string", "description": "Derived from uri's trailing path segment via computed_fields' last_path_segment filter, matching every other stream in this bundle." },
+    "uri": { "type": "string", "description": "Calendly's stable resource identifier; see scheduled_events.json's uri description." },
+    "callback_url": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "events": { "type": ["array", "null"], "items": { "type": "string" } },
+    "scope": { "type": ["string", "null"] },
+    "organization": { "type": ["string", "null"] },
+    "user": { "type": ["string", "null"] },
+    "creator": { "type": ["string", "null"] },
+    "retry_started_at": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

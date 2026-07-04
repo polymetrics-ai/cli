@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetPromotions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "ProviderCode": "PROV1",
+          "StartUtc": "2026-01-01T00:00:00Z",
+          "EndUtc": "2026-02-01T00:00:00Z",
+          "CurrencyIso": "USD",
+          "ValidityPeriodIso": "P30D",
+          "MinimumSendAmount": 10.0,
+          "LocalizationKey": "promotion.fixture.1"
+        }
+      ]
+    }
+  }
+}

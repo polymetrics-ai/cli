@@ -1,14 +1,14 @@
 {
   "name": "brex",
   "display_name": "Brex",
-  "description": "Reads Brex transactions, users, expenses, vendors, and budgets through the Brex platform REST API.",
+  "description": "Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, accounts, statements, transfers, and webhooks through the Brex platform REST API.",
   "integration_type": "api",
   "docs_url": "https://developer.brex.com/openapi/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Brex API read of card transaction, user, and expense data",
-    "approval": "none; read-only financial source, no reverse-ETL writes shipped"
+    "read": "external Brex API read of card transaction, user, expense, vendor, card, account, and transfer data",
+    "write": "external mutation of vendors, org directory (departments/locations/titles/users), card controls/lifecycle, expenses, and webhooks; card lock/unlock/terminate take effect on real payment instruments immediately",
+    "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
   }
 }

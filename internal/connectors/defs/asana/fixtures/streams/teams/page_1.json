@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/teams" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_team_1", "name": "Fixture Team One", "resource_type": "team", "description": "Fixture team description", "visibility": "public" },
+        { "gid": "fixture_team_2", "name": "Fixture Team Two", "resource_type": "team", "description": null, "visibility": "private" }
+      ],
+      "next_page": null
+    }
+  }
+}

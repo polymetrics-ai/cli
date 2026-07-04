@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "crm_deals",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_updated_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "attributes": { "type": ["object", "null"] },
+    "linkedContactsIds": { "type": ["array", "null"] },
+    "linkedCompaniesIds": { "type": ["array", "null"] },
+    "last_updated_date": { "type": ["string", "null"] }
+  }
+}

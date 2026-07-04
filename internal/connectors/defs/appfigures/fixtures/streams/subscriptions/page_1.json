@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/reports/subscriptions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "active_subscriptions": 500,
+      "active_free_trials": 20,
+      "new_subscriptions": 15,
+      "cancelled_subscriptions": 3,
+      "new_trials": 10,
+      "trial_conversion_rate": "0.45",
+      "mrr": "2500.00",
+      "actual_revenue": "2450.00",
+      "renewals": 400,
+      "reactivations": 2,
+      "cancellations": 3,
+      "trial_conversions": 5,
+      "churn": "0.02",
+      "gross_revenue": "2600.00",
+      "gross_mrr": "2650.00"
+    }
+  }
+}

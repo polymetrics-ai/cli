@@ -1,13 +1,909 @@
 {
   "api": "Concord REST API v1 (https://api.concordnow.com/api/rest/1)",
-  "docs": "https://api.concordnow.com/api/rest/1/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "the 5 legacy-parity read streams only (agreements, user_organizations, folders, reports, tags); Concord is read-only upstream in legacy (full-refresh only), matching this bundle",
+  "docs": "https://api.concordnow.com/api/rest/1/docs (rendered from https://api.doc.concordnow.com/concord-openapi-bundled.yaml, the published OpenAPI 3.1 spec)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against Concord's published OpenAPI spec (117 documented method+path combinations across 77 unique paths). This bundle covers every practical GET list/detail read (25 streams, up from 5) and every dialect-expressible non-destructive-admin write action (13 write actions across folders/reports/clauses/groups/approvals: create+update+delete except groups, which the API exposes no DELETE for). Excluded: agreement-content-mutating writes (create/patch/sign/renew agreement and its clauses/fields/versions/members/comments/attachments/branding/webhooks/rules/integration-export) -- Concord's own AgreementCreate schema alone is a deeply nested templating/source-agreement/parameter-replacement shape not safely reducible to a flat JSON write action without risking silent mis-mapping of legally-binding contract content, and every legally-consequential signature/renewal/negotiation-membership action is out of scope for this pass; binary-payload endpoints (PDF/DOCX export, attachment upload/download, logo upload); and organization-provisioning (create org). Every excluded endpoint below carries the specific reason it was not modeled, not a blanket bucket.",
   "endpoints": [
-    { "method": "GET", "path": "/organizations/{org}/agreements", "covered_by": { "stream": "agreements" } },
-    { "method": "GET", "path": "/user/me/organizations", "covered_by": { "stream": "user_organizations" } },
-    { "method": "GET", "path": "/organizations/{org}/folders", "covered_by": { "stream": "folders" } },
-    { "method": "GET", "path": "/organizations/{org}/reports", "covered_by": { "stream": "reports" } },
-    { "method": "GET", "path": "/tags", "covered_by": { "stream": "tags" } }
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements",
+      "covered_by": {
+        "stream": "agreements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/me/organizations",
+      "covered_by": {
+        "stream": "user_organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/folders",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/reports",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}",
+      "covered_by": {
+        "stream": "organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/folders/{folderId}",
+      "covered_by": {
+        "stream": "folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/folders/{folderId}/agreements",
+      "covered_by": {
+        "stream": "folder_agreements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/reports/{id}",
+      "covered_by": {
+        "stream": "report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/clauses",
+      "covered_by": {
+        "stream": "clauses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/clauses/{clauseId}",
+      "covered_by": {
+        "stream": "clause"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/approvals",
+      "covered_by": {
+        "stream": "approvals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/approvals/{approvalId}",
+      "covered_by": {
+        "stream": "approval"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/subscription",
+      "covered_by": {
+        "stream": "subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/branding",
+      "covered_by": {
+        "stream": "branding"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/auto",
+      "covered_by": {
+        "stream": "automated_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/me",
+      "covered_by": {
+        "stream": "user_me"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/me/preferences",
+      "covered_by": {
+        "stream": "user_preferences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me/integrations/webhooks",
+      "covered_by": {
+        "stream": "webhooks_integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}",
+      "covered_by": {
+        "stream": "agreement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/metadata",
+      "covered_by": {
+        "stream": "agreement_metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary",
+      "covered_by": {
+        "stream": "agreement_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/comments",
+      "covered_by": {
+        "stream": "agreement_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/activities",
+      "covered_by": {
+        "stream": "agreement_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members",
+      "covered_by": {
+        "stream": "agreement_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions",
+      "covered_by": {
+        "stream": "agreement_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments",
+      "covered_by": {
+        "stream": "agreement_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/folders",
+      "covered_by": {
+        "write": "create_folder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/folders/{folderId}",
+      "covered_by": {
+        "write": "update_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/folders/{folderId}",
+      "covered_by": {
+        "write": "delete_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/reports",
+      "covered_by": {
+        "write": "create_report"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/reports/{id}",
+      "covered_by": {
+        "write": "update_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/reports/{id}",
+      "covered_by": {
+        "write": "delete_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/clauses",
+      "covered_by": {
+        "write": "create_clause"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/clauses/{clauseId}",
+      "covered_by": {
+        "write": "update_clause"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/clauses/{clauseId}",
+      "covered_by": {
+        "write": "delete_clause"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/groups",
+      "covered_by": {
+        "write": "create_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/approvals",
+      "covered_by": {
+        "write": "create_approval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/approvals/{approvalId}",
+      "covered_by": {
+        "write": "update_approval"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/approvals/{approvalId}",
+      "covered_by": {
+        "write": "delete_approval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a brand-new Concord organization (tenant-level provisioning), not a resource within the configured organization_id this connector operates inside."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "AgreementCreate's own schema is a deeply nested templating/source-agreement/parameter-replacement shape (create from template, copy from contract, draft creation) not safely reducible to a flat JSON write action without risking silent mis-mapping of legally-binding contract content; deferred pending a dedicated schema review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes a signed/negotiated legal agreement and its full history; destructive beyond this pass's write scope (folders/reports/clauses/groups/approvals only)."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "partial agreement metadata patch; deferred alongside agreement creation (same content-mutation review needed before modeling)."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}.docx",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a binary Word document, not structured record data."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}.pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a binary PDF document, not structured record data."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "discards an in-flight approval from an agreement negotiation; deferred pending a dedicated review of the agreement-negotiation write surface."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the approval workflow instance attached to one specific agreement; a distinct per-agreement sub-resource from the org-level approvals stream already covered, deferred pending its own schema review."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "replaces the approval workflow on a live agreement negotiation; deferred alongside the read side."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns the raw attachment file content, not structured record data (the attachments LIST endpoint, already covered, returns the structured metadata)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "uploads binary attachment content to an agreement; a multipart/binary-payload write not modeled this pass."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an agreement attachment; deferred alongside attachment upload."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates attachment metadata; deferred alongside attachment upload."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds or updates a comment thread on a live agreement negotiation; deferred pending a dedicated review of the agreement-negotiation write surface."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/folder",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "moves an agreement to a different folder; a targeted single-field agreement mutation deferred alongside the broader agreement-content-mutation exclusion above."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/integration",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "exports an agreement to a third-party integration (e.g. Salesforce); an outbound side-effecting action, not a data mutation this connector's write model represents."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invites a new member into a live agreement negotiation; deferred pending a dedicated review of the agreement-negotiation write surface."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds a delayed invitation to an agreement; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a delayed invitation from a negotiation; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/permission",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "edits a delayed invitation's negotiation permission; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a pending delayed invitation; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes an invited user from a negotiation; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}/permission",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "edits an invited user's negotiation permission; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/me",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "joins the calling user into an agreement negotiation; a session-bound action, not a bulk-syncable mutation."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/me",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes the calling user from a negotiation; a session-bound action, not a bulk-syncable mutation."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes an active member from a negotiation; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}/permission",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "edits an active member's negotiation permission; deferred alongside the broader agreement-negotiation write exclusion."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates agreement metadata (title/description/tags/status); deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/path",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "returns the folder-path breadcrumb for an agreement, derivable from the already-covered agreement/folder streams' folderId/parentId chain; not modeled as a separate stream."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/rules/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends an action to an automation rule on a live agreement; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "revokes all signatures on an agreement, a legally-consequential destructive action out of scope for this pass."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "e-signature metadata for one specific agreement; deferred pending its own schema review, distinct from the metadata/summary sub-resources already covered."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "modifies in-flight signature metadata; deferred alongside the signing-flow exclusion."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "completes the signing flow on a live agreement; a legally-consequential action out of scope for this pass."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature/request",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requests e-signature on a live agreement, a legally-consequential action out of scope for this pass."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature/slots",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reconfigures signature slot assignments on an agreement; deferred alongside the signing-flow exclusion."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds a clause instance to a live agreement; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a clause instance from a live agreement; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-clause detail already enumerable via the covered agreement_summary stream's clauses array."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a clause instance on a live agreement; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renews a live agreement (creates a new end-clause/term extension); a legally-consequential action out of scope for this pass."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the most-recent end-clause, already enumerable via the covered agreement_summary stream's endclauses array."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates the current end-clause/renewal terms; deferred alongside the renewal-mutation exclusion above."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "cancels an agreement renewal; deferred alongside the renewal-mutation exclusion above."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single end-clause detail already enumerable via the covered agreement_summary stream's endclauses array."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom summary-field definitions for one agreement; a distinct nested sub-resource from the summary object already covered, deferred pending its own schema review."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a custom summary field on an agreement; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a custom summary field; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a custom summary field; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/lifecycle",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates the agreement lifecycle stage (e.g. force-expire/renew state machine transition); a legally-consequential action out of scope for this pass."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/links",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "links two agreements together; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/links/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a link between agreements; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/signedwithlabels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates the \"signed with\" party labels on an agreement; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/track-changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "in-document track-changes/redline data for one agreement version; a distinct document-content sub-resource deferred pending its own schema review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/diff",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a computed diff between two agreement versions (requires two version-id query params to select the comparison pair); a distinct on-demand-computation shape, not a listable resource, deferred pending its own schema review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the most-recent version, already enumerable via the covered agreement_versions stream (its first/last element by date)."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "template field values from the latest version; deferred pending its own schema review, distinct from the version metadata already covered."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "fills template field values on the latest version; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/pdffields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "fills PDF form fields on the latest version; deferred alongside the broader agreement-content-mutation exclusion."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/upload",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "uploads a new agreement version from a PDF/Word file; a multipart/binary-payload write not modeled this pass."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/auto/{agreementUid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "instantiates an agreement from an automated template; deferred alongside the broader agreement-creation exclusion."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/branding/agreementview",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "org-wide branding/white-label configuration change; an organization-admin-level setting outside this pass's write scope."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/branding/email",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes org email branding configuration; organization-admin-level setting outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/branding/email",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a custom email domain for org branding; organization-admin-level setting outside this pass's write scope."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/branding/email",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "org-wide email-sender branding configuration; organization-admin-level setting outside this pass's write scope."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/branding/logo",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes org branding logo; organization-admin-level setting outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/branding/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "uploads a temporary logo image; a binary-payload write, not JSON record data."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organizationId}/branding/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "sets a logo image; a binary-payload write, not JSON record data."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organizationId}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk user-group membership update (add/remove many users across many groups in one request body); a distinct batch-mutation shape from the single-resource create action this pass models; not modeled this pass."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/invitations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invites a new user into the organization; an organization-admin user-provisioning action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/reports/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "\"Create a new Report from a sample\" -- a create variant keyed by a sample-report enum id, distinct from and narrower than the already-covered create_report/update_report pair; not modeled separately this pass."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/me/organizations/{organizationId}/agreements",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "an alternate agreements-list path scoped under /user/me/; this connector's agreements stream already covers agreement listing via the organization-scoped path legacy targets (/organizations/{organizationId}/agreements), matching this bundle's pre-existing parity choice."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user/me/organizations/{organizationId}/agreements/count",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns only an aggregate count, not record data; not modeled as a stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/me/organizations/{organizationId}/folders",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "an alternate folders-list path scoped under /user/me/; this connector's folders stream already covers folder listing via the organization-scoped path legacy targets (/organizations/{organizationId}/folders)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/me/integrations/webhooks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a personal webhook integration tied to the authenticated user's own account, not organization CLM content; outside this pass's write scope."
+      }
+    }
   ]
 }

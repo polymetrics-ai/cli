@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "wh_fixture_1",
+    "paused": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook-subscriptions/wh_fixture_1",
+    "body": {
+      "paused": true
+    }
+  }
+}

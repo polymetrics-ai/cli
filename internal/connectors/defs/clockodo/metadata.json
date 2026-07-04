@@ -1,20 +1,21 @@
 {
   "name": "clockodo",
   "display_name": "Clockodo",
-  "description": "Reads Clockodo customers, projects, services, and users through the Clockodo REST API.",
+  "description": "Reads Clockodo customers, projects, services, users, time entries, absences, teams, surcharges, lump-sum services, nonbusiness groups/days, holiday/overtime carryovers, target hours, and current-user settings, and writes customers/projects/services/teams/lump-sum services through the Clockodo REST API.",
   "integration_type": "api",
   "docs_url": "https://www.clockodo.com/en/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external Clockodo API read of customer, project, service, and user data",
-    "approval": "none; read-only source connector"
+    "read": "external Clockodo API read of customer, project, service, user, time-entry, absence, and workspace-configuration data",
+    "write": "external mutation; creates/updates/deletes live Clockodo customers, projects, services, teams, and lump-sum services",
+    "approval": "required for all write actions; reads remain none"
   }
 }

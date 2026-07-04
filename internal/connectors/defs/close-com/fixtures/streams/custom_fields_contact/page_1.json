@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/custom_field/contact/", "query": { "_limit": "100", "_skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cf_contact_1",
+          "name": "Fixture contact Custom Field",
+          "type": "text",
+          "choices": null,
+          "editable_with_roles": [],
+          "required": false,
+          "accepts_multiple_values": false,
+          "organization_id": "orga_fixture",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_updated": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

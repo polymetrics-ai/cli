@@ -1,0 +1,28 @@
+{
+  "record": {
+    "splits": [
+      { "subject": "Fixture subject A", "from": "fixture-sender@example.com", "template_id": 1 },
+      { "subject": "Fixture subject B", "from": "fixture-sender@example.com", "template_id": 2 }
+    ],
+    "list": "4",
+    "size": 20,
+    "win_at": "2026-01-02 00:00:00"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/split.php",
+    "body": {
+      "splits": [
+        { "subject": "Fixture subject A", "from": "fixture-sender@example.com", "template_id": 1 },
+        { "subject": "Fixture subject B", "from": "fixture-sender@example.com", "template_id": 2 }
+      ],
+      "list": "4",
+      "size": 20,
+      "win_at": "2026-01-02 00:00:00"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "code": 200, "message": "OK", "id": 1 }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/journals" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "journal_fixture_1",
+        "entry_type": "JNLC",
+        "from_account": "acct_fixture_1",
+        "to_account": "acct_fixture_2",
+        "symbol": null,
+        "qty": null,
+        "price": null,
+        "status": "executed",
+        "settle_date": "2026-01-02",
+        "system_date": "2026-01-01",
+        "net_amount": "100.00",
+        "description": "Fixture journal",
+        "created_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

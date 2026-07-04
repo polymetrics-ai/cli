@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/approvals/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "title": "Fixture Approval 1",
+      "description": "Deterministic fixture record.",
+      "blockThirdPartySignature": false,
+      "rules": [],
+      "deletable": true
+    }
+  }
+}

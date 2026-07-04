@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture New List"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/metadata_types"
+  }
+}

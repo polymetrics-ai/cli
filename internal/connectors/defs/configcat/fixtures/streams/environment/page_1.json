@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/v1/environments/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "environmentId": "env_fixture_1",
+      "product": { "productId": "prod_fixture_1" },
+      "name": "Fixture Environment 1",
+      "color": "green",
+      "description": "fixture environment",
+      "order": 0,
+      "reasonRequired": false,
+      "approveRequired": false
+    }
+  }
+}

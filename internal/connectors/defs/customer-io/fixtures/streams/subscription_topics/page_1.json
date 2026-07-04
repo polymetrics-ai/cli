@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/subscription_topics" },
+  "response": {
+    "status": 200,
+    "body": {
+      "topics": [
+        { "id": 1, "name": "Product Updates", "description": "Fixture topic one", "identifier": "product_updates", "subscribed_by_default": true },
+        { "id": 2, "name": "Promotions", "description": "Fixture topic two", "identifier": "promotions", "subscribed_by_default": false }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/products/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "1",
+      "ref": "PROD_FIXTURE_1",
+      "label": "Fixture Product",
+      "description": "A fixture product detail record.",
+      "type": "0",
+      "price": "100.00",
+      "price_ttc": "120.00",
+      "tva_tx": "20.00",
+      "weight": "1.5",
+      "length": "10",
+      "barcode": "",
+      "status": "1",
+      "status_buy": "1",
+      "stock_reel": "42",
+      "date_creation": 1767225600,
+      "date_modification": 1767225601
+    }
+  }
+}

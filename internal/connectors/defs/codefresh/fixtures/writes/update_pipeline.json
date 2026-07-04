@@ -1,0 +1,23 @@
+{
+  "record": {
+    "name": "fixture-org/fixture-pipeline",
+    "metadata": {
+      "name": "fixture-org/fixture-pipeline"
+    },
+    "spec": {
+      "triggers": []
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/pipelines/fixture-org/fixture-pipeline",
+    "body": {
+      "metadata": { "name": "fixture-org/fixture-pipeline" },
+      "spec": { "triggers": [] }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "metadata": { "name": "fixture-org/fixture-pipeline" } }
+  }
+}

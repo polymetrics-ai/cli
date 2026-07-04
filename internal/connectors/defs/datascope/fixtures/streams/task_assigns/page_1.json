@@ -1,0 +1,42 @@
+{
+  "request": { "method": "GET", "path": "/task_assigns", "query": { "limit": "200", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "task_assigns": [
+        {
+          "id": 1,
+          "assign_id": "TA-FIXTURE-1",
+          "response_code": "FA-FIXTURE-1",
+          "priority": 1,
+          "start_time": "01/01/2026 09:00:00",
+          "form_name": "Fixture Safety Inspection",
+          "user_email": "inspector1@example.com",
+          "description": "Fixture task assignment",
+          "location_name": "Fixture Warehouse",
+          "location_code": "WH-FIXTURE-1",
+          "location_address": "1 Fixture Ave",
+          "location_email": "warehouse@example.com",
+          "location_phone": "+10000000000",
+          "location_latitude": 38.721,
+          "location_longitude": -9.131,
+          "gap": 2,
+          "completed": "Yes",
+          "on_time": "Yes",
+          "completed_datetime": "01/01/2026 10:45:00",
+          "mandatory": "for_everyone",
+          "confirmation_status": "completed",
+          "status": "completed",
+          "time_to_perform_minutes": 105.5,
+          "response_start": "01/01/2026 09:05:00",
+          "response_end": "01/01/2026 10:45:00",
+          "created_at": "01/01/2026 08:00:00",
+          "created_by": "Fixture Admin"
+        }
+      ],
+      "total": 1,
+      "limit": 200,
+      "offset": 0
+    }
+  }
+}

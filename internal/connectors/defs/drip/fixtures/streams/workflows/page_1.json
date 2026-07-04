@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/workflows", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "workflows": [
+        { "id": "wf_fixture_1", "name": "Fixture Onboarding Workflow", "status": "active" },
+        { "id": "wf_fixture_2", "name": "Fixture Winback Workflow", "status": "paused" }
+      ]
+    }
+  }
+}

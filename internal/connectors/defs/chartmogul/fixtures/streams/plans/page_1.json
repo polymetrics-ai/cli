@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/plans", "query": { "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "plans": [
+        {
+          "uuid": "pl_fixture_1",
+          "data_source_uuid": "ds_fixture_1",
+          "name": "Fixture Plan",
+          "interval_count": 1,
+          "interval_unit": "month",
+          "external_id": "plan_fixture_1"
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

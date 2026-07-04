@@ -1,0 +1,300 @@
+{
+  "actions": [
+    {
+      "name": "update_subscriber",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscribers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "first_name": { "type": "string" },
+          "email_address": { "type": "string" },
+          "fields": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing subscriber's name/email/custom-field values; external mutation, no approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new tag on the account; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "tag_subscriber",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tags/{{ record.tag_id }}/subscribe",
+      "path_fields": ["tag_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tag_id", "email"],
+        "properties": {
+          "tag_id": { "type": "integer" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "fields": { "type": "object" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "applies a tag to a subscriber (creating the subscriber if the email is new); external mutation, no approval required"
+    },
+    {
+      "name": "remove_tag_from_subscriber",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscribers/{{ record.subscriber_id }}/tags/{{ record.tag_id }}",
+      "path_fields": ["subscriber_id", "tag_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscriber_id", "tag_id"],
+        "properties": {
+          "subscriber_id": { "type": "integer" },
+          "tag_id": { "type": "integer" }
+        }
+      },
+      "risk": "removes a tag from a subscriber; external mutation, no approval required"
+    },
+    {
+      "name": "subscribe_to_form",
+      "kind": "update",
+      "method": "POST",
+      "path": "/forms/{{ record.form_id }}/subscribe",
+      "path_fields": ["form_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["form_id", "email"],
+        "properties": {
+          "form_id": { "type": "integer" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "fields": { "type": "object" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "subscribes an email address to a form (creating the subscriber if the email is new); external mutation, no approval required"
+    },
+    {
+      "name": "subscribe_to_sequence",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequences/{{ record.sequence_id }}/subscribe",
+      "path_fields": ["sequence_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sequence_id", "email"],
+        "properties": {
+          "sequence_id": { "type": "integer" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "fields": { "type": "object" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "subscribes an email address to a sequence (creating the subscriber if the email is new); external mutation, no approval required"
+    },
+    {
+      "name": "create_broadcast",
+      "kind": "create",
+      "method": "POST",
+      "path": "/broadcasts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subject", "content"],
+        "properties": {
+          "subject": { "type": "string" },
+          "content": { "type": "string" },
+          "description": { "type": "string" },
+          "public": { "type": "boolean" },
+          "published_at": { "type": "string" },
+          "send_at": { "type": "string" },
+          "email_address": { "type": "string" },
+          "email_layout_template": { "type": "string" },
+          "thumbnail_alt": { "type": "string" },
+          "thumbnail_url": { "type": "string" }
+        }
+      },
+      "risk": "creates a draft or scheduled email broadcast; a scheduled broadcast (send_at/published_at set) will send to the account's live subscriber list, external mutation, approval required"
+    },
+    {
+      "name": "update_broadcast",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/broadcasts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "subject": { "type": "string" },
+          "content": { "type": "string" },
+          "description": { "type": "string" },
+          "public": { "type": "boolean" },
+          "published_at": { "type": "string" },
+          "send_at": { "type": "string" }
+        }
+      },
+      "risk": "mutates a draft or scheduled broadcast's content/send time; external mutation, approval required"
+    },
+    {
+      "name": "delete_broadcast",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/broadcasts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a draft or scheduled broadcast record; irreversible, approval required"
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_fields",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["label"],
+        "properties": {
+          "label": { "type": "string" }
+        }
+      },
+      "risk": "creates a new custom subscriber field on the account (up to 140 total); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_custom_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/custom_fields/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "type": "integer" },
+          "label": { "type": "string" }
+        }
+      },
+      "risk": "renames a custom field's label (the underlying key is unchanged per Kit's own docs); external mutation, no approval required"
+    },
+    {
+      "name": "create_purchase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchases",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["purchase"],
+        "properties": {
+          "purchase": {
+            "type": "object",
+            "required": ["transaction_id", "email_address", "currency", "products"],
+            "properties": {
+              "transaction_id": { "type": "string" },
+              "email_address": { "type": "string" },
+              "currency": { "type": "string" },
+              "transaction_time": { "type": "string" },
+              "subtotal": { "type": "string" },
+              "tax": { "type": "string" },
+              "shipping": { "type": "string" },
+              "discount": { "type": "string" },
+              "total": { "type": "string" },
+              "status": { "type": "string" },
+              "products": { "type": "array" }
+            }
+          },
+          "integration": { "type": "string" },
+          "integration_key": { "type": "string" }
+        }
+      },
+      "risk": "records a new purchase-tracking transaction for a subscriber; external mutation, no approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/automations/hooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["target_url", "event"],
+        "properties": {
+          "target_url": { "type": "string" },
+          "event": { "type": "object" }
+        }
+      },
+      "risk": "creates a webhook that POSTs subscriber-event payloads to an external URL the caller controls; external mutation, approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/automations/hooks/{{ record.rule_id }}",
+      "path_fields": ["rule_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["rule_id"],
+        "properties": {
+          "rule_id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a webhook automation; irreversible, approval required"
+    }
+  ]
+}

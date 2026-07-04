@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "uuid": "con_fixture_1",
+          "customer_uuid": "cus_fixture_1",
+          "customer_external_id": "ext_1",
+          "data_source_uuid": "ds_fixture_1",
+          "external_id": "cont_fixture_1",
+          "first_name": "Fixture",
+          "last_name": "Contact",
+          "title": "CEO",
+          "email": "fixture-contact@example.com",
+          "phone": "+15550100",
+          "last_seen": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

@@ -55,6 +55,26 @@
         "stamp_field": "symbol"
       },
       "schema": "schemas/market_news.json"
+    },
+    {
+      "name": "earnings_calendar",
+      "path": "/fnd/earning-calendar",
+      "query": {
+        "from": "{{ config.calendar_from }}",
+        "to": "{{ config.calendar_to }}"
+      },
+      "records": { "path": "" },
+      "schema": "schemas/earnings_calendar.json"
+    },
+    {
+      "name": "ipo_calendar",
+      "path": "/fnd/ipo-calendar",
+      "query": {
+        "from": "{{ config.calendar_from }}",
+        "to": "{{ config.calendar_to }}"
+      },
+      "records": { "path": "" },
+      "schema": "schemas/ipo_calendar.json"
     }
   ]
 }

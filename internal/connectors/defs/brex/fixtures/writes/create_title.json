@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Title"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/titles",
+    "body": {
+      "name": "Fixture Title"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "title_fixture_new",
+      "name": "Fixture Title"
+    }
+  }
+}

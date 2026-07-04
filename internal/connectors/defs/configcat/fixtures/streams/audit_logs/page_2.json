@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v1/products/prod_fixture_1/auditlogs" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "auditLogId": "audit_fixture_1",
+        "auditLogDateTime": "2026-01-01T00:00:00Z",
+        "auditLogTypeEnum": "SETTING_CREATED",
+        "truncated": false,
+        "modelVersion": 1,
+        "auditLogType": "SETTING_CREATED",
+        "userEmail": "fixture@example.com",
+        "userName": "Fixture User",
+        "where": { "configId": "config_fixture_1" },
+        "why": {},
+        "actionTarget": { "settingId": 1 },
+        "details": {}
+      }
+    ]
+  }
+}

@@ -64,6 +64,101 @@
         "stamp_field": "organizationId"
       },
       "schema": "schemas/organization_admins.json"
+    },
+    {
+      "name": "organization_licenses",
+      "path": "/organizations/{{ fanout.id }}/licenses",
+      "query": { "perPage": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_licenses.json"
+    },
+    {
+      "name": "organization_config_templates",
+      "path": "/organizations/{{ fanout.id }}/configTemplates",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_config_templates.json"
+    },
+    {
+      "name": "organization_policy_objects",
+      "path": "/organizations/{{ fanout.id }}/policyObjects",
+      "query": { "perPage": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_policy_objects.json"
+    },
+    {
+      "name": "organization_branding_policies",
+      "path": "/organizations/{{ fanout.id }}/brandingPolicies",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_branding_policies.json"
+    },
+    {
+      "name": "organization_saml_roles",
+      "path": "/organizations/{{ fanout.id }}/samlRoles",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_saml_roles.json"
+    },
+    {
+      "name": "organization_configuration_changes",
+      "path": "/organizations/{{ fanout.id }}/configurationChanges",
+      "query": { "perPage": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_configuration_changes.json"
+    },
+    {
+      "name": "organization_api_requests",
+      "path": "/organizations/{{ fanout.id }}/apiRequests",
+      "query": { "perPage": "{{ config.page_size }}" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organizationId"
+      },
+      "schema": "schemas/organization_api_requests.json"
     }
   ]
 }

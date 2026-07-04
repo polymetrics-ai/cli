@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v2/surcharges" },
+  "response": {
+    "status": 200,
+    "body": {
+      "surcharges": [
+        {
+          "id": 1,
+          "name": "Fixture Surcharge",
+          "accumulation": "credit_hours",
+          "night": 25,
+          "night_increased": 0,
+          "nonbusiness": 50,
+          "nonbusiness_special": 0,
+          "sunday": 50,
+          "saturday": 0
+        }
+      ]
+    }
+  }
+}

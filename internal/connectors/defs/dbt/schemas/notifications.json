@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "notifications",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "account_id": { "type": "integer" },
+    "user_id": { "type": ["integer", "null"] },
+    "external_email": { "type": ["string", "null"] },
+    "slack_channel_id": { "type": ["string", "null"] },
+    "slack_channel_name": { "type": ["string", "null"] },
+    "on_cancel": { "type": ["array", "null"], "items": { "type": "integer" } },
+    "on_failure": { "type": ["array", "null"], "items": { "type": "integer" } },
+    "on_success": { "type": ["array", "null"], "items": { "type": "integer" } },
+    "on_warning": { "type": ["array", "null"], "items": { "type": "integer" } },
+    "state": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

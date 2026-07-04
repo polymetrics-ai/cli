@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "ecfg_fixture_1",
+    "slug": "updated-fixture-config"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/edge-config/ecfg_fixture_1"
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "actions": [
+    {
+      "name": "create_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization_id }}/folders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "parentId"],
+        "properties": {
+          "name": { "type": "string" },
+          "parentId": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new Concord folder within the configured organization; low risk, no data destruction"
+    },
+    {
+      "name": "update_folder",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization_id }}/folders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "parentId": { "type": "integer" }
+        }
+      },
+      "risk": "renames/moves an existing Concord folder; may change document organization visible to other users"
+    },
+    {
+      "name": "delete_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ config.organization_id }}/folders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a Concord folder; destructive, external mutation; approval required"
+    },
+    {
+      "name": "create_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization_id }}/reports",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "sampleId": { "type": "string" },
+          "filters": { "type": "object" }
+        }
+      },
+      "risk": "creates a new saved Concord report within the configured organization; low risk"
+    },
+    {
+      "name": "update_report",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization_id }}/reports/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "description", "filters"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "filters": { "type": "object" }
+        }
+      },
+      "risk": "replaces an existing Concord saved report's definition; may change what other users see when they run it"
+    },
+    {
+      "name": "delete_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ config.organization_id }}/reports/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a Concord saved report; destructive, external mutation; approval required"
+    },
+    {
+      "name": "create_clause",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization_id }}/clauses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "content"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "creates a new reusable Concord clause template within the configured organization; low risk"
+    },
+    {
+      "name": "update_clause",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization_id }}/clauses/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "title", "content"],
+        "properties": {
+          "id": { "type": "string" },
+          "version": { "type": "integer" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing Concord clause template; may affect future agreements linked to this clause"
+    },
+    {
+      "name": "delete_clause",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ config.organization_id }}/clauses/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a Concord clause template; destructive, external mutation; approval required"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization_id }}/groups",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new Concord user group within the configured organization; low risk"
+    },
+    {
+      "name": "create_approval",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization_id }}/approvals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "description", "blockThirdPartySignature"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "blockThirdPartySignature": { "type": "boolean" },
+          "rules": { "type": "array" }
+        }
+      },
+      "risk": "creates a new Concord company approval workflow within the configured organization; affects future agreement signature routing"
+    },
+    {
+      "name": "update_approval",
+      "kind": "update",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization_id }}/approvals/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "title", "description", "blockThirdPartySignature"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "blockThirdPartySignature": { "type": "boolean" },
+          "rules": { "type": "array" }
+        }
+      },
+      "risk": "replaces an existing Concord company approval workflow; affects agreements already routed through it"
+    },
+    {
+      "name": "delete_approval",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ config.organization_id }}/approvals/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a Concord company approval workflow; destructive, external mutation; approval required"
+    }
+  ]
+}

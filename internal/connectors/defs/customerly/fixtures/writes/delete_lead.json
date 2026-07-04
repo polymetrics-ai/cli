@@ -1,0 +1,8 @@
+{
+  "record": { "email": "lead-fixture@example.com" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/leads"
+  },
+  "response": { "status": 200, "body": { "data": [] } }
+}

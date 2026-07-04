@@ -18,6 +18,11 @@
       "x-secret": true,
       "description": "Atlassian API token, used as the HTTP Basic auth password. Never logged."
     },
+    "custom_content_type": {
+      "type": "string",
+      "default": "com.atlassian.confluence.macro.core",
+      "description": "Confluence custom-content type key to sync via the custom_content stream. GET /custom-content requires a type filter (Confluence has no type-agnostic custom-content list); set this to the app-defined type key you want to read (e.g. a Forge/Connect app's registered custom content type)."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "webhookId": 99,
+    "url": "https://example.com/fixture/webhook-updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/webhooks/99",
+    "body": {
+      "url": "https://example.com/fixture/webhook-updated"
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/webhooks",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "wsub_fixture_1",
+          "group_id": null,
+          "url": "https://example.com/fixture/webhook",
+          "event_types": [
+            "EXPENSE_PAYMENT_UPDATED"
+          ],
+          "status": "ACTIVE"
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

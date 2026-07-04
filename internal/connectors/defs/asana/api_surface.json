@@ -1,18 +1,1982 @@
 {
   "api": "Asana API v1 (https://app.asana.com/api/1.0)",
-  "docs": "https://developers.asana.com/reference/rest-api-reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "migration: the 3 legacy-parity read streams only (workspaces, projects, tasks); Asana has no writes modeled by legacy (capabilities.write is false).",
+  "docs": "https://developers.asana.com/reference/rest-api-reference (OpenAPI source: https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every endpoint in Asana's official OpenAPI spec (250 operations, including /users/me which the spec omits from its paths map but which is a real, documented, already-used identity alias) is enumerated below, each covered_by a stream/write or excluded with a specific reason. 13 read streams (4 pre-existing + 9 new) plus 13 write actions (all new; legacy shipped none) cover the core PM domain (workspaces/projects/tasks/sections/tags/stories/users/teams/custom_fields/project_statuses/memberships); the remaining ~224 endpoints are duplicate/filtered views of already-covered data, admin/Enterprise-gated configuration, or entire adjacent product sub-domains (Goals, Portfolios, Time Tracking, Webhooks, Project/Task Templates, Allocations/Budgets/Rates) scoped out as future capability-expansion passes of their own rather than partially folded into this one \u2014 see docs.md's Known limits for the full breakdown.",
   "endpoints": [
-    { "method": "GET", "path": "/workspaces", "covered_by": { "stream": "workspaces" } },
-    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
-    { "method": "GET", "path": "/users/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user identity probe, used only by Check, not a syncable object stream" } },
-    { "method": "POST", "path": "/tasks", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented task creation; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/tasks/{task_gid}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented task updates; Pass B capability expansion" } },
-    { "method": "GET", "path": "/tasks/{task_gid}/stories", "excluded": { "category": "out_of_scope", "reason": "task comments/stories not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/tags", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/users", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/teams", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{project_gid}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_gid}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}/project_statuses",
+      "covered_by": {
+        "stream": "project_statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}/sections",
+      "covered_by": {
+        "stream": "sections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/sections",
+      "covered_by": {
+        "write": "create_section"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sections/{section_gid}",
+      "covered_by": {
+        "write": "update_section"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sections/{section_gid}",
+      "covered_by": {
+        "write": "delete_section"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tags/{tag_gid}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{tag_gid}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "covered_by": {
+        "write": "create_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tasks/{task_gid}",
+      "covered_by": {
+        "write": "update_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{task_gid}",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}/stories",
+      "covered_by": {
+        "stream": "stories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/stories",
+      "covered_by": {
+        "write": "add_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/team_memberships",
+      "covered_by": {
+        "stream": "team_memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/custom_fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/workspace_memberships",
+      "covered_by": {
+        "stream": "workspace_memberships"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "uploads a file (multipart/form-data or an external URL reference) as a task/project attachment \u2014 not a JSON record body the write dialect's body_type json/form/none shapes can express"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_fields/{custom_field_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom-field detail lookup, already covered in full by the custom_fields stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/{goal_gid}/custom_field_settings",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "custom_field_settings is the join/association between a custom_fields definition (already covered by the custom_fields stream) and a parent object (goal/portfolio/project/team) \u2014 the association itself carries no data beyond which custom field is attached to which parent, redundant with reading custom_fields directly plus the parent object's own custom_field_settings summary field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/memberships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Memberships resource is a newer unified access-control API covering the same access-grant data already exposed per-object by the covered team_memberships/workspace_memberships streams and by portfolio/project membership endpoints (also excluded below as duplicates) \u2014 redundant surface, not independently new data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/memberships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Memberships resource is a newer unified access-control API covering the same access-grant data already exposed per-object by the covered team_memberships/workspace_memberships streams and by portfolio/project membership endpoints (also excluded below as duplicates) \u2014 redundant surface, not independently new data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/memberships/{membership_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Memberships resource is a newer unified access-control API covering the same access-grant data already exposed per-object by the covered team_memberships/workspace_memberships streams and by portfolio/project membership endpoints (also excluded below as duplicates) \u2014 redundant surface, not independently new data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/memberships/{membership_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Memberships resource is a newer unified access-control API covering the same access-grant data already exposed per-object by the covered team_memberships/workspace_memberships streams and by portfolio/project membership endpoints (also excluded below as duplicates) \u2014 redundant surface, not independently new data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/memberships/{membership_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Memberships resource is a newer unified access-control API covering the same access-grant data already exposed per-object by the covered team_memberships/workspace_memberships streams and by portfolio/project membership endpoints (also excluded below as duplicates) \u2014 redundant surface, not independently new data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolio_gid}/custom_field_settings",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "custom_field_settings is the join/association between a custom_fields definition (already covered by the custom_fields stream) and a parent object (goal/portfolio/project/team) \u2014 the association itself carries no data beyond which custom field is attached to which parent, redundant with reading custom_fields directly plus the parent object's own custom_field_settings summary field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project_memberships/{project_membership_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project membership records \u2014 the same generic-Memberships-vs-per-object-membership redundancy as team_memberships/workspace_memberships' relationship to the unified Memberships resource, here scoped to projects specifically; not independently modeled as its own stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project_statuses/{project_status_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-status detail/delete for a record the project_statuses stream already reads in full; not implemented as a separate write action in this pass (see docs.md \u2014 project status posts are typically append-only progress updates, better matched to a future create_project_status write than a delete-focused one)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/project_statuses/{project_status_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-status detail/delete for a record the project_statuses stream already reads in full; not implemented as a separate write action in this pass (see docs.md \u2014 project status posts are typically append-only progress updates, better matched to a future create_project_status write than a delete-focused one)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-project detail lookup, already covered in full by the projects stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/addCustomFieldSetting",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "attaches/detaches a custom_field_settings association to a project \u2014 same association-record redundancy as the custom_field_settings read endpoints above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}/custom_field_settings",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "custom_field_settings is the join/association between a custom_fields definition (already covered by the custom_fields stream) and a parent object (goal/portfolio/project/team) \u2014 the association itself carries no data beyond which custom field is attached to which parent, redundant with reading custom_fields directly plus the parent object's own custom_field_settings summary field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}/project_memberships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project membership records \u2014 the same generic-Memberships-vs-per-object-membership redundancy as team_memberships/workspace_memberships' relationship to the unified Memberships resource, here scoped to projects specifically; not independently modeled as its own stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/removeCustomFieldSetting",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "attaches/detaches a custom_field_settings association to a project \u2014 same association-record redundancy as the custom_field_settings read endpoints above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/sections/insert",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "reorders sections within a project's board view \u2014 a display-ordering action, not new data, narrower than create/update_section already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}/task_counts",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "aggregate task-count-by-status for a project, derivable by counting the already-covered tasks stream client-side; no data beyond what tasks itself exposes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}/tasks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project-scoped task list, a filtered view of the same tasks stream already reads in full via its own optional project query param"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sections/{section_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-section detail lookup, already covered in full by the sections stream's per-project getAll-shaped list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sections/{section_gid}/addTask",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "moves an existing task into a section \u2014 equivalent to setting update_task's memberships/section field; narrower than the already-covered update_task action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sections/{section_gid}/tasks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "section-scoped task list, a filtered view of the same tasks stream already reads in full via its own project/section-capable query surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status_updates",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Status Updates resource (narrative progress posts on ANY object: project/portfolio/goal) overlaps the already-covered project_statuses stream's project-scoped equivalent; not modeled as a second, broader stream in this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/status_updates",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Status Updates resource (narrative progress posts on ANY object: project/portfolio/goal) overlaps the already-covered project_statuses stream's project-scoped equivalent; not modeled as a second, broader stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status_updates/{status_update_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Status Updates resource (narrative progress posts on ANY object: project/portfolio/goal) overlaps the already-covered project_statuses stream's project-scoped equivalent; not modeled as a second, broader stream in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/status_updates/{status_update_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the generic Status Updates resource (narrative progress posts on ANY object: project/portfolio/goal) overlaps the already-covered project_statuses stream's project-scoped equivalent; not modeled as a second, broader stream in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stories/{story_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-story detail lookup, already covered in full by the stories stream's per-task getAll-shaped list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-tag detail lookup, already covered in full by the tags stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_gid}/tasks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "tag-scoped task list, a filtered view of the same tasks stream already reads in full"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-task detail lookup, already covered in full by the tasks stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/addProject",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "adds a task to an additional project \u2014 equivalent to update_task's projects field; narrower than the already-covered update_task action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/addTag",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "adds one tag to a task \u2014 equivalent to update_task's tags field; narrower than the already-covered update_task action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}/projects",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "reverse lookup of which projects a task belongs to \u2014 the same relationship data the tasks stream's own membership fields (via opt_fields) already expose; not modeled as an independent stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/removeProject",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "removes a task from a project \u2014 same reasoning as addProject"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/removeTag",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "removes one tag from a task \u2014 same reasoning as addTag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/setParent",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "re-parents an existing task \u2014 equivalent to update_task's parent field, already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}/subtasks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "subtask list, a filtered view of the same tasks stream already reads in full (subtasks share the tasks schema; the tasks stream's opt_fields can surface a task's parent field)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/subtasks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "creating a subtask is create_task with its parent field set \u2014 already expressible via the covered create_task action, not a separate action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}/tags",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "task-scoped tag list, a filtered view of the same tags stream already reads in full (and the tasks stream's own opt_fields can already surface a task's tags)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/team_memberships/{team_membership_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-team-membership detail lookup, already covered in full by the team_memberships stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-team detail lookup, already covered in full by the teams stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_gid}/custom_field_settings",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "custom_field_settings is the join/association between a custom_fields definition (already covered by the custom_fields stream) and a parent object (goal/portfolio/project/team) \u2014 the association itself carries no data beyond which custom field is attached to which parent, redundant with reading custom_fields directly plus the parent object's own custom_field_settings summary field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_gid}/projects",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "team-scoped project list, a filtered view of the same projects stream already reads in full (Asana's projects list endpoint itself accepts a team-scoping equivalent via workspace)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_gid}/projects",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "team-scoped project creation, a narrower variant of the already-covered create_project action (which accepts an optional team field in its record body)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_gid}/team_memberships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "team-scoped membership list, a filtered view of the same team_memberships stream already reads in full via its own optional team query param"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_gid}/users",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "team-scoped user list, a filtered view of the same users stream already reads in full via its own optional workspace query param"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user detail lookup, already covered in full by the users stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_gid}/team_memberships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "user-scoped membership list, a filtered view of the same team_memberships data (Asana's own team query param on the covered stream can be combined with client-side filtering)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_gid}/teams",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "user-scoped team membership list, a filtered view of the same teams/team_memberships data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_gid}/workspace_memberships",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "user-scoped membership list, a filtered view of the same workspace_memberships data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspace_memberships/{workspace_membership_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-workspace-membership detail lookup, already covered in full by the workspace_memberships stream's getAll-shaped list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/projects",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-scoped project list, a filtered view of the same data the projects stream already reads in full via its own optional workspace query param"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_gid}/projects",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-scoped project creation, a narrower variant of the already-covered create_project action (which accepts an optional workspace field in its record body)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/projects/search",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "keyword search over the same project records the projects stream already reads in full \u2014 a filtered/narrower view, not new data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/tags",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-scoped tag list, a filtered view of the same data the tags stream already reads in full via its own optional workspace query param"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_gid}/tags",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-scoped tag creation, a narrower variant of the already-covered create_tag action (which accepts an optional workspace field in its record body)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-task lookup by an organization's custom numeric id scheme, an alternate key for the same tasks stream data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/tasks/search",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "advanced keyword/field search over the same task records the tasks stream already reads in full \u2014 a filtered/narrower view, not new data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/users",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-scoped user list, a filtered view of the same users stream already reads in full via its own optional workspace query param"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/users/{user_gid}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user-in-workspace detail lookup, already covered in full by the users stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batch",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "meta-endpoint that executes up to 10 arbitrary sub-requests in one call; a request-multiplexing transport optimization, not itself a domain object or action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_types",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "workspace-level custom OBJECT TYPE (not custom field) schema definitions \u2014 a schema-introspection endpoint for a newer Asana platform feature (custom item types), not task/project domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_types/{custom_type_gid}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single custom-type schema lookup, same reasoning as the list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "webhook-style change-event polling cursor feed (requires a sync_token from a prior call), not a listable domain-object stream; better modeled as CDC/webhooks, out of scope for a declarative full-refresh/incremental stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_gid}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "async job-status poll for a previously-started long-running operation (e.g. duplicate/export); has no independent list endpoint and no meaning without the specific job gid a prior action returned"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_periods",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "fiscal/reporting time-period definitions (quarters/fiscal years) used to scope Budgets/Allocations reporting \u2014 configuration metadata for the excluded financial add-on suite, not PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_periods/{time_period_gid}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "fiscal/reporting time-period definitions (quarters/fiscal years) used to scope Budgets/Allocations reporting \u2014 configuration metadata for the excluded financial add-on suite, not PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user identity probe, used only by Check, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/events",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "same change-event polling shape as /events, scoped to a workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/typeahead",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "autocomplete/search-as-you-type lookup tool for interactive UIs, not a syncable object list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/{agent_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Asana AI agent (bot actor) identity lookup \u2014 a narrow AI-feature-specific resource, not core PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/allocations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Resource/Workload Management allocations (assigning a user's time-percentage to a project over a date range) is a paid-tier add-on planning feature layered on top of the already-covered projects/users streams, not core task/project sync data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/allocations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Resource/Workload Management allocations (assigning a user's time-percentage to a project over a date range) is a paid-tier add-on planning feature layered on top of the already-covered projects/users streams, not core task/project sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/allocations/{allocation_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Resource/Workload Management allocations (assigning a user's time-percentage to a project over a date range) is a paid-tier add-on planning feature layered on top of the already-covered projects/users streams, not core task/project sync data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/allocations/{allocation_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Resource/Workload Management allocations (assigning a user's time-percentage to a project over a date range) is a paid-tier add-on planning feature layered on top of the already-covered projects/users streams, not core task/project sync data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/allocations/{allocation_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Resource/Workload Management allocations (assigning a user's time-percentage to a project over a date range) is a paid-tier add-on planning feature layered on top of the already-covered projects/users streams, not core task/project sync data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "requires a parent object gid (task/project/etc) plus attachment binary metadata; listing attachments per-task would need a fan_out over tasks with no independent value beyond what the tasks stream's own attachment_count-style fields already summarize, and every attachment record's useful payload is a download URL, not sync-relevant structured data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attachments/{attachment_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-attachment detail lookup, same reasoning as the list endpoint"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/attachments/{attachment_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deleting an attachment is only meaningful paired with the excluded read/create attachment endpoints above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creating a custom field definition is a workspace-schema-design action (defining what data CAN be tracked), materially different in kind from populating task/project data records \u2014 narrower value than the task/project/section/tag CRUD already covered, and workspace-schema mutations carry outsized blast radius (affects every task using that field) for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_fields/{custom_field_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same workspace-schema-design scope narrowing as creating a custom field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_fields/{custom_field_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same workspace-schema-design scope narrowing; additionally irreversibly destroys the field's data on every task that used it"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_fields/{custom_field_gid}/enum_options",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds a new picklist value to an enum-type custom field's definition \u2014 schema-design scope, same reasoning as create/updateCustomField"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_fields/{custom_field_gid}/enum_options/insert",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reorders an enum-type custom field's picklist values \u2014 same schema-design scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enum_options/{enum_option_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renames/enables/disables one picklist value \u2014 same schema-design scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/exports/graph",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers an async whole-workspace relationship-graph export job (returns a job gid to poll) \u2014 a bulk backup/migration tool, not an incremental sync-relevant action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/exports/resource",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers an async single-resource export job \u2014 same bulk-export-tool scope as exports/graph"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goal_relationships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "goal-to-goal supporting-relationship graph \u2014 part of the same out-of-scope Goals sub-domain above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goal_relationships/{goal_relationship_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "goal-to-goal supporting-relationship graph \u2014 part of the same out-of-scope Goals sub-domain above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/goal_relationships/{goal_relationship_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "goal-to-goal supporting-relationship graph \u2014 part of the same out-of-scope Goals sub-domain above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/{goal_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/goals/{goal_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/goals/{goal_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/addCustomFieldSetting",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/addFollowers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/addSupportingRelationship",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "goal-to-goal supporting-relationship graph \u2014 part of the same out-of-scope Goals sub-domain above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/{goal_gid}/parentGoals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/removeCustomFieldSetting",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/removeFollowers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/removeSupportingRelationship",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "goal-to-goal supporting-relationship graph \u2014 part of the same out-of-scope Goals sub-domain above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/setMetric",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/setMetricCurrentValue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals/{goal_gid}/stories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/goals/{goal_gid}/stories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Goals (company-objective/OKR tracking, a distinct product surface from task/project execution) is a coherent, sizable sub-domain of its own (12+ endpoints including goal-metric progress and goal-to-goal supporting relationships) better scoped as its own future capability-expansion pass than folded partially into this one"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ooo_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "out-of-office calendar entries are an HR/scheduling add-on feature orthogonal to task/project/team PM domain data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ooo_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "out-of-office calendar entries are an HR/scheduling add-on feature orthogonal to task/project/team PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ooo_entries/{ooo_entry_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "out-of-office calendar entries are an HR/scheduling add-on feature orthogonal to task/project/team PM domain data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ooo_entries/{ooo_entry_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "out-of-office calendar entries are an HR/scheduling add-on feature orthogonal to task/project/team PM domain data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ooo_entries/{ooo_entry_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "out-of-office calendar entries are an HR/scheduling add-on feature orthogonal to task/project/team PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolio_memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "portfolio membership records \u2014 part of the same out-of-scope Portfolios sub-domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolio_memberships/{portfolio_membership_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "portfolio membership records \u2014 part of the same out-of-scope Portfolios sub-domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolio_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/portfolios/{portfolio_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/portfolios/{portfolio_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios/{portfolio_gid}/addCustomFieldSetting",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios/{portfolio_gid}/addItem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios/{portfolio_gid}/addMembers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios/{portfolio_gid}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolio_gid}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolio_gid}/portfolio_memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "portfolio membership records \u2014 part of the same out-of-scope Portfolios sub-domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolio_gid}/project_portfolio_settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project display settings WITHIN a portfolio rollup view \u2014 configuration for the already-out-of-scope Portfolios feature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios/{portfolio_gid}/removeCustomFieldSetting",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios/{portfolio_gid}/removeItem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/portfolios/{portfolio_gid}/removeMembers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Portfolios (a project-of-projects rollup view, Business/Enterprise-tier feature) is a coherent sub-domain of its own (13 endpoints) layered above the already-covered projects stream; scoped out as a future capability-expansion pass rather than partially folded in here"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project_briefs/{project_brief_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Briefs (a rich-text planning-doc attached to a project) is a document-editing feature layered on projects, distinct in kind from the structured task/project/section/tag CRUD already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/project_briefs/{project_brief_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Briefs (a rich-text planning-doc attached to a project) is a document-editing feature layered on projects, distinct in kind from the structured task/project/section/tag CRUD already covered"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/project_briefs/{project_brief_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Briefs (a rich-text planning-doc attached to a project) is a document-editing feature layered on projects, distinct in kind from the structured task/project/section/tag CRUD already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project display settings WITHIN a portfolio rollup view \u2014 configuration for the already-out-of-scope Portfolios feature"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project display settings WITHIN a portfolio rollup view \u2014 configuration for the already-out-of-scope Portfolios feature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project_templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Templates (reusable project scaffolding, Business/Enterprise-tier) is a template-management feature distinct from the projects stream's own CRUD, itself a small coherent sub-domain better scoped separately"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project_templates/{project_template_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Templates (reusable project scaffolding, Business/Enterprise-tier) is a template-management feature distinct from the projects stream's own CRUD, itself a small coherent sub-domain better scoped separately"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/project_templates/{project_template_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Templates (reusable project scaffolding, Business/Enterprise-tier) is a template-management feature distinct from the projects stream's own CRUD, itself a small coherent sub-domain better scoped separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project_templates/{project_template_gid}/instantiateProject",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Templates (reusable project scaffolding, Business/Enterprise-tier) is a template-management feature distinct from the projects stream's own CRUD, itself a small coherent sub-domain better scoped separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/addFollowers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "project membership/follower-list mutation \u2014 narrower value than the project field CRUD already covered by update_project; not implemented in this pass to keep the write surface focused on the highest-value CRUD actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/addMembers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "project membership/follower-list mutation \u2014 narrower value than the project field CRUD already covered by update_project; not implemented in this pass to keep the write surface focused on the highest-value CRUD actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "async whole-project-clone job (returns a job gid to poll) \u2014 a bulk operation distinct in kind from a single-record create/update/delete write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/project_briefs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Briefs (a rich-text planning-doc attached to a project) is a document-editing feature layered on projects, distinct in kind from the structured task/project/section/tag CRUD already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_gid}/project_portfolio_settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project display settings WITHIN a portfolio rollup view \u2014 configuration for the already-out-of-scope Portfolios feature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/project_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creating a project status post (narrative progress update) is a distinct write shape (title/text/color) from the task/project/section/tag field CRUD already covered by this pass's writes; the project_statuses stream already reads this data in full \u2014 narrower priority than the covered writes, left for a future capability-expansion pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/removeFollowers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "project membership/follower-list mutation \u2014 narrower value than the project field CRUD already covered by update_project; not implemented in this pass to keep the write surface focused on the highest-value CRUD actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/removeMembers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "project membership/follower-list mutation \u2014 narrower value than the project field CRUD already covered by update_project; not implemented in this pass to keep the write surface focused on the highest-value CRUD actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_gid}/saveAsTemplate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "async job that converts a live project into a reusable template \u2014 part of the out-of-scope Project Templates sub-domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "emoji-reaction-on-a-story lookup \u2014 a narrow social/UI-affordance feature with no independent business value as sync data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rule_triggers/{rule_trigger_gid}/run",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "manually fires a workflow-automation Rule (Asana's if-this-then-that automation feature) \u2014 an automation-engine trigger, not a data CRUD action, and requires a pre-existing rule_trigger_gid this connector has no stream exposing"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/stories/{story_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "edits an existing comment's text \u2014 Asana only allows editing your own comments and only within a short window; narrower value than add_comment (create) already covered"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/stories/{story_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an existing comment/story \u2014 same narrow-window-edit-permission caveat as updateStory; not implemented in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/task_templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Task Templates (reusable task scaffolding) is a template-management feature distinct from the tasks stream's own CRUD, mirroring Project Templates' out-of-scope reasoning"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/task_templates/{task_template_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Task Templates (reusable task scaffolding) is a template-management feature distinct from the tasks stream's own CRUD, mirroring Project Templates' out-of-scope reasoning"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/task_templates/{task_template_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Task Templates (reusable task scaffolding) is a template-management feature distinct from the tasks stream's own CRUD, mirroring Project Templates' out-of-scope reasoning"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/task_templates/{task_template_gid}/instantiateTask",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Task Templates (reusable task scaffolding) is a template-management feature distinct from the tasks stream's own CRUD, mirroring Project Templates' out-of-scope reasoning"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/addDependencies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task dependency-graph edges (blocking/blocked-by relationships) are a distinct relationship-graph concern from the task field CRUD already covered by create/update/delete_task; narrower value, scoped out of this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/addDependents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task dependency-graph edges (blocking/blocked-by relationships) are a distinct relationship-graph concern from the task field CRUD already covered by create/update/delete_task; narrower value, scoped out of this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/addFollowers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds followers/watchers to a task \u2014 narrower value than the field CRUD already covered; not implemented in this pass to keep the write surface focused"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}/dependencies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task dependency-graph edges (blocking/blocked-by relationships) are a distinct relationship-graph concern from the task field CRUD already covered by create/update/delete_task; narrower value, scoped out of this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}/dependents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task dependency-graph edges (blocking/blocked-by relationships) are a distinct relationship-graph concern from the task field CRUD already covered by create/update/delete_task; narrower value, scoped out of this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "async whole-task-clone job (returns a job gid to poll) \u2014 a bulk operation distinct in kind from a single-record create/update/delete write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/removeDependencies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task dependency-graph edges (blocking/blocked-by relationships) are a distinct relationship-graph concern from the task field CRUD already covered by create/update/delete_task; narrower value, scoped out of this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/removeDependents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "task dependency-graph edges (blocking/blocked-by relationships) are a distinct relationship-graph concern from the task field CRUD already covered by create/update/delete_task; narrower value, scoped out of this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/removeFollowers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes followers/watchers from a task \u2014 same reasoning as addFollowers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_gid}/time_tracking_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking entries (logged hours against a task) is the same add-on scope as time_tracking_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_gid}/time_tracking_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking entries (logged hours against a task) is the same add-on scope as time_tracking_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creating a new team is an Enterprise-tier org-structure action with outsized blast radius (new billing/permission boundary), distinct in kind from the project/task/tag CRUD already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{team_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same org-structure-mutation scope as team creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_gid}/addUser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds a user to a team \u2014 org-membership mutation, narrower value than the covered writes and outside this pass's focused CRUD scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_gid}/project_templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Project Templates (reusable project scaffolding, Business/Enterprise-tier) is a template-management feature distinct from the projects stream's own CRUD, itself a small coherent sub-domain better scoped separately"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_gid}/removeUser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a user from a team \u2014 same org-membership-mutation scope as addUser"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_tracking_categories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking (categories) is a paid-tier add-on planning/reporting feature layered on tasks; not core PM sync data for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/time_tracking_categories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking (categories) is a paid-tier add-on planning/reporting feature layered on tasks; not core PM sync data for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_tracking_categories/{time_tracking_category_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking (categories) is a paid-tier add-on planning/reporting feature layered on tasks; not core PM sync data for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/time_tracking_categories/{time_tracking_category_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking (categories) is a paid-tier add-on planning/reporting feature layered on tasks; not core PM sync data for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time_tracking_categories/{time_tracking_category_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking (categories) is a paid-tier add-on planning/reporting feature layered on tasks; not core PM sync data for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking (categories) is a paid-tier add-on planning/reporting feature layered on tasks; not core PM sync data for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_tracking_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking entries (logged hours against a task) is the same add-on scope as time_tracking_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking entries (logged hours against a task) is the same add-on scope as time_tracking_categories"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking entries (logged hours against a task) is the same add-on scope as time_tracking_categories"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Time Tracking entries (logged hours against a task) is the same add-on scope as time_tracking_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timesheet_approval_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Timesheet approval workflow status is the same Time Tracking add-on scope, one layer further (approval state of logged time)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timesheet_approval_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Timesheet approval workflow status is the same Time Tracking add-on scope, one layer further (approval state of logged time)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Timesheet approval workflow status is the same Time Tracking add-on scope, one layer further (approval state of logged time)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Timesheet approval workflow status is the same Time Tracking add-on scope, one layer further (approval state of logged time)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_task_lists/{user_task_list_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "detail lookup for a user's private My-Tasks list container \u2014 same personal-workspace-UI-construct scope as the excluded tasks-for-user-task-list endpoint"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_task_lists/{user_task_list_gid}/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a user's private \"My Tasks\" list view \u2014 requires first resolving a user_task_list_gid via the excluded User Task Lists endpoints, a personal-workspace UI construct rather than shared PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_gid}/favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a user's personal starred/favorited objects \u2014 a personal-UI-preference construct, not shared PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_gid}/user_task_list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "resolves a user's private My-Tasks list gid \u2014 same personal-workspace-UI-construct scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Webhooks (push-notification subscriptions to a caller-hosted receiver URL) is a push-delivery mechanism orthogonal to this connector's pull-based declarative read/write model; better modeled as a distinct CDC/event-delivery capability than a stream or write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Webhooks (push-notification subscriptions to a caller-hosted receiver URL) is a push-delivery mechanism orthogonal to this connector's pull-based declarative read/write model; better modeled as a distinct CDC/event-delivery capability than a stream or write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{webhook_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Webhooks (push-notification subscriptions to a caller-hosted receiver URL) is a push-delivery mechanism orthogonal to this connector's pull-based declarative read/write model; better modeled as a distinct CDC/event-delivery capability than a stream or write action"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{webhook_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Webhooks (push-notification subscriptions to a caller-hosted receiver URL) is a push-delivery mechanism orthogonal to this connector's pull-based declarative read/write model; better modeled as a distinct CDC/event-delivery capability than a stream or write action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhook_gid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Webhooks (push-notification subscriptions to a caller-hosted receiver URL) is a push-delivery mechanism orthogonal to this connector's pull-based declarative read/write model; better modeled as a distinct CDC/event-delivery capability than a stream or write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_gid}/addUser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invites/adds a user to a workspace \u2014 org-membership mutation, outside this pass's focused task/project/section/tag CRUD scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/agents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "list of AI agents configured in a workspace \u2014 same AI-feature scope narrowing as agents/{agent_gid}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/ai_studio/runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "AI Studio (Asana's generative-AI workflow builder) usage/run telemetry \u2014 a narrow, add-on-product-specific reporting endpoint outside this connector's core PM domain (tasks/projects/teams)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/ai_studio/seats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "AI Studio seat/license usage telemetry \u2014 same add-on-product scope narrowing as ai_studio/runs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_gid}/removeUser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a user from a workspace \u2014 same org-membership-mutation scope as addUser"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access_requests",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-admin-only access-request queue (who is requesting to join); an admin-console workflow, not general PM domain data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access_requests",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "submits a new access request to join a workspace/team; an identity/admin workflow action, not PM domain data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access_requests/{access_request_gid}/approve",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-admin-only approval action for a pending access request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access_requests/{access_request_gid}/reject",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-admin-only rejection action for a pending access request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/budgets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Budgets is a financial/billing-adjacent Enterprise add-on (project cost tracking) gated behind elevated workspace permissions; out of scope alongside the other resource-planning add-ons (allocations/rates/time-tracking)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/budgets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Budgets is a financial/billing-adjacent Enterprise add-on (project cost tracking) gated behind elevated workspace permissions; out of scope alongside the other resource-planning add-ons (allocations/rates/time-tracking)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/budgets/{budget_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Budgets is a financial/billing-adjacent Enterprise add-on (project cost tracking) gated behind elevated workspace permissions; out of scope alongside the other resource-planning add-ons (allocations/rates/time-tracking)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/budgets/{budget_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Budgets is a financial/billing-adjacent Enterprise add-on (project cost tracking) gated behind elevated workspace permissions; out of scope alongside the other resource-planning add-ons (allocations/rates/time-tracking)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/budgets/{budget_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Budgets is a financial/billing-adjacent Enterprise add-on (project cost tracking) gated behind elevated workspace permissions; out of scope alongside the other resource-planning add-ons (allocations/rates/time-tracking)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organization_exports",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Enterprise-tier organization-wide data export (a full account backup), admin-gated and far broader in blast radius than any covered write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organization_exports/{organization_export_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "poll/detail for the organization-wide export job above \u2014 same elevated-scope reasoning"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Rates (per-user hourly cost rates feeding Budgets) is the same financial Enterprise add-on scope as Budgets \u2014 elevated-permission financial data, not core PM data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Rates (per-user hourly cost rates feeding Budgets) is the same financial Enterprise add-on scope as Budgets \u2014 elevated-permission financial data, not core PM data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rates/{rate_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Rates (per-user hourly cost rates feeding Budgets) is the same financial Enterprise add-on scope as Budgets \u2014 elevated-permission financial data, not core PM data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rates/{rate_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Rates (per-user hourly cost rates feeding Budgets) is the same financial Enterprise add-on scope as Budgets \u2014 elevated-permission financial data, not core PM data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rates/{rate_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Rates (per-user hourly cost rates feeding Budgets) is the same financial Enterprise add-on scope as Budgets \u2014 elevated-permission financial data, not core PM data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom permission-Role definitions (RBAC schema) are an Enterprise-tier admin-console feature, elevated-permission workspace configuration rather than PM domain data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom permission-Role definitions (RBAC schema) are an Enterprise-tier admin-console feature, elevated-permission workspace configuration rather than PM domain data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{role_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom permission-Role definitions (RBAC schema) are an Enterprise-tier admin-console feature, elevated-permission workspace configuration rather than PM domain data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/roles/{role_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom permission-Role definitions (RBAC schema) are an Enterprise-tier admin-console feature, elevated-permission workspace configuration rather than PM domain data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/roles/{role_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom permission-Role definitions (RBAC schema) are an Enterprise-tier admin-console feature, elevated-permission workspace configuration rather than PM domain data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "modifies another user's own profile fields \u2014 an identity-management action requiring elevated admin permission over another account, distinct from this connector's PM-domain write scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "renames/reconfigures a workspace \u2014 an org-admin action with account-wide blast radius, elevated-permission scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_gid}/audit_log_events",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Enterprise-tier-only security audit log (who did what, when) gated behind elevated admin permissions; a compliance/security feed, not PM domain data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_gid}/users/{user_gid}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "same elevated identity-management scope as updateUser, workspace-scoped"
+      }
+    }
   ]
 }

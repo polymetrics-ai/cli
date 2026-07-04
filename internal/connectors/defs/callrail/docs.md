@@ -1,9 +1,21 @@
 # Overview
 
-CallRail is a wave2 fan-out declarative-HTTP migration. It reads CallRail calls, companies, users,
-and text messages through the CallRail v3 REST API (`GET https://api.callrail.com/v3/...`). This
-bundle targets capability parity with `internal/connectors/callrail` (the hand-written connector it
-migrates); the legacy package stays registered and unchanged until wave6's registry flip.
+CallRail reads and writes CallRail call tracking, contact, and account-configuration data through
+the CallRail v3 REST API (`https://api.callrail.com/v3/...`). This bundle targets capability parity
+with `internal/connectors/callrail` (the hand-written connector it migrates); the legacy package
+stays registered and unchanged until wave6's registry flip.
+
+**Pass B full-surface expansion** (`api_surface.json`, reviewed 2026-07-04 against the live
+apidocs.callrail.com docs site): every documented resource category is now accounted for. Beyond
+the original 4 legacy streams (`calls`, `companies`, `users`, `text_messages`), this bundle adds 13
+more: `accounts`, `tags`, `trackers`, `form_submissions`, `integrations`, `integration_filters`,
+`notifications`, `caller_ids`, `sms_threads`, `message_flows`, `leads`, and 2 fan-out sub-resource
+streams (`page_views` per-call, `lead_timeline` per-lead) — 17 streams total. `capabilities.write`
+is now `true`, with 27 write actions covering tags, companies, users, calls (metadata +
+outbound-call placement), text messages, integrations, integration filters, notifications, caller
+ids, message flows, SMS threads, and tracker reconfiguration. See `api_surface.json` for the full
+endpoint-by-endpoint accounting, including every deliberate exclusion and its real,
+closed-vocabulary reason.
 
 ## Auth setup
 
@@ -29,18 +41,73 @@ an exact multiple of `per_page` costs one extra, empty-page request on the engin
 the same records). `page_size` is `100`, matching legacy's own default (see Known limits for why it
 is not runtime-configurable).
 
-Each stream sends `start_date` (`param_format: date`, converting a resolved RFC3339 lower bound to
-`YYYY-MM-DD` for the wire) computed either from the sync's persisted cursor or, on a fresh sync, from
-the `start_date` config value — matching legacy's `startDateParam`/`dateOnly` exactly for the
-RFC3339-input case (see Known limits for the accepted-input narrowing this requires). Per-stream
-cursor fields match legacy's own `CursorFields` declarations: `calls` -> `start_time`,
-`companies`/`users` -> `created_at`, `text_messages` -> `last_message_at`.
+Each of the 4 legacy streams sends `start_date` (`param_format: date`, converting a resolved RFC3339
+lower bound to `YYYY-MM-DD` for the wire) computed either from the sync's persisted cursor or, on a
+fresh sync, from the `start_date` config value — matching legacy's `startDateParam`/`dateOnly`
+exactly for the RFC3339-input case (see Known limits for the accepted-input narrowing this
+requires). Per-stream cursor fields match legacy's own `CursorFields` declarations: `calls` ->
+`start_time`, `companies`/`users` -> `created_at`, `text_messages` -> `last_message_at`.
+
+**New Pass B streams**: `accounts` (`GET /a.json`, account-scoped path segment not needed), `tags`,
+`trackers`, `notifications`, `sms_threads`, `caller_ids` are unpaginated-incrementally-useful lists
+sharing the base page_number pagination; `tags`/`trackers` additionally declare
+`incremental.cursor_field: created_at` off a `start_date`-driven state cursor (client-tracked, since
+CallRail's tags/trackers list endpoints document no server-side date filter param — the engine has
+no incremental `request_param` for these two, matching how legacy never implemented them either).
+`form_submissions` reuses the same `start_date`/`param_format: date` request-param shape as the
+4 legacy streams, cursor field `submitted_at`. `integrations`, `integration_filters`, `caller_ids`,
+`message_flows`, and `leads` support an optional `company_id` query filter (`stream.Query`'s
+`omit_when_absent` dialect, config key `company_id`) matching each endpoint's documented optional
+company-scoping parameter — omitted entirely when unset. `trackers`' nested `company: {id, name}`
+object is flattened via `computed_fields` into `company_id`/`company_name`;
+`integration_filters`' nested `integration: {id, type}` is flattened into `integration_type`
+the same way.
+
+`page_views` and `lead_timeline` are **fan-out sub-resource streams** (`stream.fan_out`, matching
+campayn's established pattern): `page_views` first lists every call id (`ids_from.request` against
+`/calls.json`), then issues `GET /calls/{{ fanout.id }}/page_views.json` per call id, stamping the
+parent `call_id` onto every emitted page-view record (page views have no `id` field of their own,
+so the schema's primary key is the composite `[call_id, created_at]`). `lead_timeline` follows the
+identical shape off `/leads.json` -> `GET /leads/{{ fanout.id }}/timeline.json`; the endpoint returns
+a single JSON object (not an array) at the `lead` path, so `records.path: "lead"` naturally yields
+exactly one record per lead id via `connsdk.RecordsAt`'s bare-object-is-one-record behavior.
 
 ## Write actions & risks
 
-None. CallRail is exposed read-only, matching legacy's `Write` returning
-`connectors.ErrUnsupportedOperation`; `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+`capabilities.write` is now `true` (Pass B). 27 actions, grouped by resource:
+
+- **Tags**: `create_tag`, `update_tag` (low risk), `delete_tag` (irreversible — removes the tag from
+  every call/text it was ever applied to; approval recommended).
+- **Companies**: `create_company`, `update_company` (setting `status: disabled` deactivates all of a
+  company's tracking numbers — approval recommended for status changes specifically). CallRail has
+  no true company DELETE (the docs call it "Disabling a Company"), so `update_company` is the only
+  covered mutation; see `api_surface.json`.
+- **Users**: `create_user`/`update_user` (administrator-scoped API key required by CallRail itself;
+  approval recommended), `delete_user` (irreversible, approval required).
+- **Calls**: `update_call` (tags/note/lead_status/value/customer_name metadata; this is also how
+  CallRail applies tags to a call — there is no separate tagging endpoint), `create_outbound_call`
+  (places a REAL phone call between two numbers; US/Canada only; approval required — a genuine
+  real-world side effect, not just a CallRail data mutation).
+- **Text messages**: `send_text_message` (sends a REAL SMS/MMS; approval required; the `media_url`
+  variant is covered, direct multipart file-upload MMS is not — see Known limits).
+- **Integrations**: `create_integration`/`update_integration` (Webhooks/Custom types only, matching
+  what the API itself allows creating), `disable_integration` (the docs' own term; not a true
+  delete).
+- **Integration filters**: `create_integration_filter`, `update_integration_filter`,
+  `delete_integration_filter` (all low risk — these narrow which calls trigger an existing
+  integration, they don't touch the integration itself).
+- **Notifications**: `create_notification`, `update_notification`, `delete_notification` (all low
+  risk, user-alert-subscription config).
+- **Outbound caller IDs**: `create_caller_id` (triggers a REAL verification phone call to the
+  registered number; approval required), `delete_caller_id` (low risk).
+- **SMS threads**: `update_sms_thread` (notes/value/tags/lead_qualification metadata; low risk).
+- **Trackers**: `update_tracker` only (reconfigures an already-provisioned tracker's call flow,
+  whisper message, SMS setting, or source rules) — tracker CREATE and the docs' own "Disabling a
+  Tracker" DELETE both provision/deprovision a real, billable phone number and are excluded as
+  `requires_elevated_scope`/`destructive_admin` respectively; see `api_surface.json`.
+- **Message flows**: `create_message_flow`, `update_message_flow` (the docs' own PUT endpoint takes
+  no `{message_flow_id}` path segment — the flow is identified purely by the body's `id` field, so
+  this action declares no `path_fields`), `delete_message_flow`.
 
 ## Known limits
 
@@ -68,5 +135,20 @@ None. CallRail is exposed read-only, matching legacy's `Write` returning
   when `config.mode == "fixture"`) stamps a `previous_cursor` field onto every fixture-mode record
   when a prior cursor happens to be set (`callrail.go:206-239`); this is not part of the live record
   shape. This bundle's schemas and fixtures target the live path only.
-- Full CallRail API surface (trackers, form submissions, tags, call tagging writes) is out of scope;
-  see `api_surface.json`'s `excluded` entries.
+- **`send_text_message` does not cover multipart-form MMS file upload.** The docs show 3 ways to
+  send an MMS: a publicly-hosted `media_url` (covered), or a multipart `-F media_file=@path` upload
+  (not covered — the engine's write dialect has no multipart/binary-payload body type; this would
+  be a `binary_payload`-category exclusion if enumerated as its own endpoint, but since it is a body
+  variant of the same `POST /text-messages.json` endpoint already covered by `send_text_message`,
+  it is documented here rather than as a separate `api_surface.json` line).
+- **`tags`/`trackers` incremental cursoring is client-tracked, not server-filtered.** Neither
+  endpoint documents a server-side date-range filter query parameter (unlike `calls`/
+  `form_submissions`, which send `start_date`), so `incremental.cursor_field: created_at` on these
+  2 streams relies purely on the engine's persisted-cursor comparison against each stream's own
+  `created_at` field; every page is still fetched and filtered client-side implicitly by the cursor
+  advancing, not by a narrower request. This is not a deviation — legacy never implemented these two
+  streams at all, so there is no prior behavior to diverge from.
+- Every remaining known CallRail endpoint is either covered or excluded with a specific reason; see
+  `api_surface.json`'s `excluded` entries for the full, closed-vocabulary accounting (analytics
+  aggregates, phone-number-provisioning actions, and admin-config surfaces judged out of scope for
+  this pass).

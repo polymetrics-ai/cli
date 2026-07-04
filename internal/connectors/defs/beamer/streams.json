@@ -48,6 +48,38 @@
       "path": "/comments",
       "records": { "path": "." },
       "schema": "schemas/comments.json"
+    },
+    {
+      "name": "post_reactions",
+      "path": "/posts/{{ fanout.id }}/reactions",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/posts", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "post_id" },
+        "stamp_field": "post_id"
+      },
+      "schema": "schemas/post_reactions.json"
+    },
+    {
+      "name": "feature_request_votes",
+      "path": "/feature-requests/{{ fanout.id }}/votes",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/feature-requests", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "feature_request_id" },
+        "stamp_field": "feature_request_id"
+      },
+      "schema": "schemas/feature_request_votes.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "." },
+      "schema": "schemas/users.json"
     }
   ]
 }

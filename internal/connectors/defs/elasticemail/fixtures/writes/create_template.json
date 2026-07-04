@@ -1,0 +1,18 @@
+{
+  "record": {
+    "Name": "Fixture Template",
+    "Subject": "Fixture subject"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates",
+    "body": {
+      "Name": "Fixture Template",
+      "Subject": "Fixture subject"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

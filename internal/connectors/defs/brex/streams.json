@@ -64,6 +64,82 @@
       "query": { "limit": "100" },
       "records": { "path": "items" },
       "schema": "schemas/budgets.json"
+    },
+    {
+      "name": "departments",
+      "path": "/v2/departments",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "locations",
+      "path": "/v2/locations",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "titles",
+      "path": "/v2/titles",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/titles.json"
+    },
+    {
+      "name": "legal_entities",
+      "path": "/v2/legal_entities",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/legal_entities.json"
+    },
+    {
+      "name": "cards",
+      "path": "/v2/cards",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/cards.json"
+    },
+    {
+      "name": "accounts_card",
+      "path": "/v2/accounts/card",
+      "records": { "path": "" },
+      "schema": "schemas/accounts_card.json"
+    },
+    {
+      "name": "accounts_cash",
+      "path": "/v2/accounts/cash",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/accounts_cash.json"
+    },
+    {
+      "name": "card_statements",
+      "path": "/v2/accounts/card/primary/statements",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/card_statements.json"
+    },
+    {
+      "name": "linked_accounts",
+      "path": "/v1/linked_accounts",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/linked_accounts.json"
+    },
+    {
+      "name": "transfers",
+      "path": "/v1/transfers",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/transfers.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/webhooks",
+      "query": { "limit": "100" },
+      "records": { "path": "items" },
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

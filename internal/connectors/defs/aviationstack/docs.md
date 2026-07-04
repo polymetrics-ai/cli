@@ -58,20 +58,25 @@ None. Aviationstack is a read-only data source in both legacy and this bundle
   `PageSize`/`MaxPages` fields, not a scope-narrowing choice specific to this connector. A live
   read always requests pages of the bundle's fixed page size; there is no way to request larger or
   smaller pages, or a hard page-count cap, without an engine change.
-- Only the 5 legacy-parity reference/flight streams are implemented; premium-tier endpoints
-  (`/v1/timetable`, `/v1/historical`) and additional reference resources (`/v1/routes`,
-  `/v1/cities`, `/v1/taxes`) are out of scope — see `api_surface.json`'s `excluded` entries.
-- **Check request omits legacy's `limit=1` query param (`ENGINE_GAP`).** Legacy's `Check` sends
+- **Pass B full-surface research**: aviationstack's own pricing page (aviationstack.com/pricing)
+  confirms only real-time flights ships on the Free plan — `/v1/routes` (airline routes),
+  `/v1/flightsFuture` (future flight schedules), `/v1/historical` (historical flight status), and
+  `/v1/timetable` are all explicitly gated to the paid Basic tier and above, hence
+  `requires_elevated_scope` in `api_surface.json`. `/v1/cities`, `/v1/taxes`, and
+  `/v1/aircraft_types` are additional reference-data resources this migration had no paid-tier
+  account to verify live field shapes against and which were never part of legacy's own covered
+  surface (`streamEndpoints` in `internal/connectors/aviationstack/streams.go` lists exactly the 5
+  streams this bundle already implements) — triaged `out_of_scope` rather than assumed covered.
+  aviationstack's documented surface has no mutation endpoint of any kind (GET-only throughout);
+  `capabilities.write` stays `false`, no `writes.json` — this is the full extent of the real
+  surface, not a scoping choice.
+- **Check request now sends legacy's `limit=1` query param.** Legacy's `Check` sends
   `GET /countries?limit=1` (a bounded read of the small countries reference list, used only to
-  confirm auth/connectivity without pulling a full page). This bundle's `streams.json` `base.check`
-  is `{"method": "GET", "path": "/countries"}` with no `limit` param, because the engine's check
-  dispatch (`internal/connectors/engine/bundle.go`'s `RequestSpec`, used only by `check`) is a
-  method+path descriptor with **no query-parameter field at all** —
-  `internal/connectors/engine/read.go`'s `Check()` calls `rt.Requester.Do(ctx, method, checkPath,
-  nil, nil)`, always passing a `nil` query. No bundle in this repo declares a check query param
-  (stripe's check is `{"method": "GET", "path": "/customers"}`, searxng's is `{"method": "GET",
-  "path": "/search"}`) because the dialect has nowhere to put one; adding this would require
-  extending `RequestSpec` with a `query` field and threading it through `Check()` — a genuine
-  engine gap, not a per-connector fix. Impact is minimal and non-data-emitting: the check still
-  hits the identical `/countries` endpoint and proves auth/connectivity the same way; the only
-  difference is legacy's check pulls at most 1 record instead of a full page.
+  confirm auth/connectivity without pulling a full page). A prior revision of this bundle omitted
+  the `limit` param because `RequestSpec` (`internal/connectors/engine/bundle.go`, used by
+  `base.check`) had no `query` field at the time; the engine gained `RequestSpec.Query` (the same
+  `engine.QueryParam` dialect `stream.Query` uses) since then, and `read.go`'s `Check()` now builds
+  and sends it via `buildCheckQuery`. `streams.json`'s `base.check` is now `{"method": "GET",
+  "path": "/countries", "query": {"limit": "1"}}`, matching legacy exactly. This ENGINE_GAP is
+  RESOLVED, not still open — see `docs/migration/conventions.md` §3 for the general
+  `RequestSpec.Query` mechanism.

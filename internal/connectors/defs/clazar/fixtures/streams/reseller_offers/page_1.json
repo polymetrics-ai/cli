@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/reseller_offers", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "reseller_offer_fixture_1",
+          "name": "Fixture Reseller Offer 1",
+          "status": "published",
+          "cloud": "aws",
+          "cloud_id": "offer-fixture-1",
+          "cloud_url": "https://aws.amazon.com/marketplace/pp/fixture-1",
+          "eula_type": "standard",
+          "listing_id": "listing_fixture_1",
+          "archived": false,
+          "accepted_at": null,
+          "published_at": "2026-01-01T00:00:00.000000Z",
+          "expiration_at": "2026-06-01T00:00:00.000000Z"
+        }
+      ],
+      "next": null,
+      "count": 1
+    }
+  }
+}

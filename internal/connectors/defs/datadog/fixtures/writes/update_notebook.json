@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Notebook Renamed",
+    "cells": [],
+    "time": { "live_span": "1h" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/notebooks/1"
+  }
+}

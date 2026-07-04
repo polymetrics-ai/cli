@@ -1,0 +1,13 @@
+{
+  "record": {
+    "post_id": "post_fixture_1",
+    "text": "Fixture comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/posts/post_fixture_1/comments",
+    "body": {
+      "text": "Fixture comment"
+    }
+  }
+}

@@ -1,11 +1,18 @@
 {
-  "api": "Churnkey Data API (https://api.churnkey.co/v1/data)",
-  "docs": "https://docs.churnkey.co/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only. Churnkey's Data API is read-only for reverse-ETL purposes in both legacy and this bundle (its only mutating endpoints are GDPR deletes, which are destructive-admin operations out of scope for a source connector).",
+  "api": "Churnkey Data API + Event Tracking API (https://api.churnkey.co)",
+  "docs": "https://docs.churnkey.co/data-integrations/data-api/, https://docs.churnkey.co/data-integrations/event-tracking/, https://docs.churnkey.co/failed-payment-recovery/billing-contact-api/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented Churnkey Data API read endpoint and every documented Event Tracking API single-record write endpoint is covered. Bulk-batch write variants (accepting an array body rather than one object per call) are excluded as duplicate_of their single-record counterparts, since the engine's declarative write dialect issues exactly one request per record with a JSON-object body (no array-body write primitive). GDPR data-subject-request endpoints are excluded (dsr/access as non_data_endpoint — a compliance workflow trigger, not reverse-ETL row data; dsr/delete as destructive_admin). The customer-data-endpoint webhook Churnkey calls INTO the customer's own backend during a hosted cancel-flow session is not a Churnkey API surface at all (Churnkey is the caller, not us) and is out of scope by construction.",
   "endpoints": [
-    { "method": "GET", "path": "/sessions", "covered_by": { "stream": "sessions" } },
-    { "method": "GET", "path": "/session-aggregation", "covered_by": { "stream": "session_aggregation" } },
-    { "method": "DELETE", "path": "/customers/{id}", "excluded": { "category": "destructive_admin", "reason": "GDPR customer-data deletion; not a reverse-ETL read/write surface" } }
+    { "method": "GET", "path": "/v1/data/sessions", "covered_by": { "stream": "sessions" } },
+    { "method": "GET", "path": "/v1/data/session-aggregation", "covered_by": { "stream": "session_aggregation" } },
+    { "method": "POST", "path": "/v1/api/events/new", "covered_by": { "write": "create_event" } },
+    { "method": "POST", "path": "/v1/api/events/customer-update", "covered_by": { "write": "update_customer" } },
+    { "method": "POST", "path": "/v1/api/events/customer-update/set-users", "covered_by": { "write": "set_billing_users" } },
+    { "method": "POST", "path": "/v1/api/events/bulk", "excluded": { "category": "duplicate_of", "reason": "bulk variant of POST /v1/api/events/new; accepts an array of up to 100 event objects in one request body, but the engine's write dialect issues one JSON-object-body request per record — create_event already covers the identical per-event shape one record at a time" } },
+    { "method": "POST", "path": "/v1/api/events/customer-update/set-users/bulk", "excluded": { "category": "duplicate_of", "reason": "bulk variant of POST /v1/api/events/customer-update/set-users; accepts an array of customer objects in one request body, no per-record equivalent in the engine's one-request-per-record write dialect — set_billing_users already covers the identical per-customer shape" } },
+    { "method": "POST", "path": "/v1/data/dsr/access", "excluded": { "category": "non_data_endpoint", "reason": "triggers a GDPR data-subject access request workflow (an async compliance process, not a synchronous reverse-ETL row write or read); not a business-data resource" } },
+    { "method": "POST", "path": "/v1/data/dsr/delete", "excluded": { "category": "destructive_admin", "reason": "GDPR customer-data deletion; irreversible admin-level mutation out of scope for a reverse-ETL connector" } },
+    { "method": "POST", "path": "(customer-supplied URL, Customer Data Endpoint)", "excluded": { "category": "out_of_scope", "reason": "this is a webhook Churnkey itself calls INTO the customer's own backend during a hosted cancel-flow session to fetch extra customer attributes — Churnkey is the HTTP client here, not this connector; there is no Churnkey-hosted endpoint to read or write" } }
   ]
 }

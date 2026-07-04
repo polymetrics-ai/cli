@@ -1,0 +1,279 @@
+{
+  "actions": [
+    {
+      "name": "create_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/jobs/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "environment_id", "name", "execute_steps"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "environment_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "dbt_version": { "type": "string" },
+          "execute_steps": { "type": "array", "items": { "type": "string" } },
+          "generate_docs": { "type": "boolean" },
+          "run_generate_sources": { "type": "boolean" },
+          "triggers": { "type": "object" },
+          "settings": { "type": "object" }
+        }
+      },
+      "risk": "creates a new scheduled/triggerable dbt Cloud job definition; low-risk until triggered, no approval required"
+    },
+    {
+      "name": "update_job",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/jobs/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "dbt_version": { "type": "string" },
+          "execute_steps": { "type": "array", "items": { "type": "string" } },
+          "generate_docs": { "type": "boolean" },
+          "state": { "type": "integer" },
+          "triggers": { "type": "object" },
+          "settings": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing dbt Cloud job's definition (steps, schedule, environment); a changed schema/target affects the next triggered run, external mutation, approval required"
+    },
+    {
+      "name": "delete_job",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ config.account_id }}/jobs/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible removal of a job definition (its schedule/trigger and run history reference); approval required"
+    },
+    {
+      "name": "trigger_job_run",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/jobs/{{ record.job_id }}/run/",
+      "path_fields": ["job_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["job_id", "cause"],
+        "properties": {
+          "job_id": { "type": "integer" },
+          "cause": { "type": "string" },
+          "git_sha": { "type": "string" },
+          "git_branch": { "type": "string" },
+          "schema_override": { "type": "string" },
+          "dbt_version_override": { "type": "string" },
+          "threads_override": { "type": "integer" },
+          "target_name_override": { "type": "string" },
+          "generate_docs_override": { "type": "boolean" },
+          "steps_override": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "kicks off a real dbt Cloud job run against the configured warehouse connection (builds/materializes models, can run arbitrary project SQL); external mutation with warehouse side effects, approval required"
+    },
+    {
+      "name": "retry_failed_job",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/jobs/{{ record.job_id }}/rerun/",
+      "path_fields": ["job_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["job_id"],
+        "properties": {
+          "job_id": { "type": "integer" }
+        }
+      },
+      "risk": "retries a job's most recent failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required"
+    },
+    {
+      "name": "cancel_run",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/runs/{{ record.run_id }}/cancel/",
+      "path_fields": ["run_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["run_id"],
+        "properties": {
+          "run_id": { "type": "integer" }
+        }
+      },
+      "risk": "cancels an in-progress dbt Cloud run; stops warehouse queries mid-execution, external mutation, approval required"
+    },
+    {
+      "name": "retry_run",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/runs/{{ record.run_id }}/retry/",
+      "path_fields": ["run_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["run_id"],
+        "properties": {
+          "run_id": { "type": "integer" }
+        }
+      },
+      "risk": "retries a specific failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required"
+    },
+    {
+      "name": "create_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/notifications/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id", "on_cancel", "on_failure", "on_success", "on_warning", "state"],
+        "properties": {
+          "user_id": { "type": "integer" },
+          "external_email": { "type": "string" },
+          "slack_channel_id": { "type": "string" },
+          "slack_channel_name": { "type": "string" },
+          "on_cancel": { "type": "array", "items": { "type": "integer" } },
+          "on_failure": { "type": "array", "items": { "type": "integer" } },
+          "on_success": { "type": "array", "items": { "type": "integer" } },
+          "on_warning": { "type": "array", "items": { "type": "integer" } },
+          "state": { "type": "integer" }
+        }
+      },
+      "risk": "registers an outbound job-status notification (email or Slack channel of the caller's choosing); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_notification",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/notifications/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "external_email": { "type": "string" },
+          "slack_channel_id": { "type": "string" },
+          "slack_channel_name": { "type": "string" },
+          "on_cancel": { "type": "array", "items": { "type": "integer" } },
+          "on_failure": { "type": "array", "items": { "type": "integer" } },
+          "on_success": { "type": "array", "items": { "type": "integer" } },
+          "on_warning": { "type": "array", "items": { "type": "integer" } },
+          "state": { "type": "integer" }
+        }
+      },
+      "risk": "repoints or reconfigures an existing job-status notification's destination (email/Slack channel); external mutation, approval required for a changed destination"
+    },
+    {
+      "name": "delete_notification",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ config.account_id }}/notifications/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "removes an existing job-status notification configuration; approval required"
+    },
+    {
+      "name": "create_ssh_tunnel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/encryptions/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["connection_id", "username", "port", "hostname", "state"],
+        "properties": {
+          "connection_id": { "type": "integer" },
+          "username": { "type": "string" },
+          "port": { "type": "integer" },
+          "hostname": { "type": "string" },
+          "public_key": { "type": "string" },
+          "private_key": { "type": "string" },
+          "state": { "type": "integer" }
+        }
+      },
+      "risk": "creates an SSH tunnel encrypting traffic for a warehouse connection; may carry a private key in the request body, external mutation, approval required"
+    },
+    {
+      "name": "update_ssh_tunnel",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/encryptions/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "username": { "type": "string" },
+          "port": { "type": "integer" },
+          "hostname": { "type": "string" },
+          "public_key": { "type": "string" },
+          "private_key": { "type": "string" },
+          "state": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing SSH tunnel's connection details; may carry a private key in the request body, external mutation, approval required"
+    },
+    {
+      "name": "delete_ssh_tunnel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ config.account_id }}/encryptions/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "removes an SSH tunnel; the associated warehouse connection falls back to unencrypted/direct connectivity, approval required"
+    }
+  ]
+}

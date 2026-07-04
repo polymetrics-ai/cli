@@ -1,0 +1,22 @@
+{
+  "record": {
+    "product_yotpo_id": "100001",
+    "variant": {
+      "external_id": "var-fixture-new",
+      "name": "Fixture New Variant",
+      "price": 550
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/products/100001/variants",
+    "body": {
+      "variant": {
+        "external_id": "var-fixture-new",
+        "name": "Fixture New Variant",
+        "price": 550
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "variant": { "yotpo_id": 888888 } } }
+}

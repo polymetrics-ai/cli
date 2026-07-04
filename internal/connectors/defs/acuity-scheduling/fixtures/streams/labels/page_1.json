@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/labels" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Confirmed", "color": "blue" },
+      { "id": 2, "name": "Checked In", "color": "green" }
+    ]
+  }
+}

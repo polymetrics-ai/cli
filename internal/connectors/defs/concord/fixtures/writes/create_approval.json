@@ -1,0 +1,7 @@
+{
+  "record": { "title": "Fixture Approval", "description": "Deterministic fixture record.", "blockThirdPartySignature": false },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/approvals"
+  }
+}

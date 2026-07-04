@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sched_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/schedule/sched_fixture_1"
+  }
+}

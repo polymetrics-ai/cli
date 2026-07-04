@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customfields"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "definitions": [
+        {
+          "id": 1,
+          "name": "Fixture Field 1",
+          "tag": null,
+          "type": "TEXT",
+          "entityType": "party",
+          "restrictedToType": "person"
+        }
+      ]
+    }
+  }
+}

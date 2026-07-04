@@ -1,14 +1,14 @@
 {
   "name": "confluence",
   "display_name": "Confluence",
-  "description": "Reads Confluence Cloud spaces, pages, blog posts, labels, and attachments through the Confluence Cloud REST API v2.",
+  "description": "Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments, tasks, and custom content, and writes pages, blog posts, and comments through the Confluence Cloud REST API v2.",
   "integration_type": "api",
   "docs_url": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,6 +18,7 @@
   },
   "risk": {
     "read": "external Confluence Cloud API read of space/content metadata",
-    "approval": "none; read-only source"
+    "write": "external mutation: creates/updates Confluence pages, blog posts, and comments; no destructive (delete) actions are exposed",
+    "approval": "required for all write actions; read-only otherwise"
   }
 }

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/files/files_fixture_1",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "files_fixture_1",
+      "type": "file",
+      "etag": "1",
+      "name": "fixture-1.pdf",
+      "sha1": "fixture-sha1-1",
+      "description": "",
+      "size": 1024,
+      "path_collection": { "total_count": 1, "entries": [{ "id": "0", "type": "folder", "name": "All Files" }] },
+      "created_at": "2026-01-01T00:00:00-08:00",
+      "modified_at": "2026-01-02T00:00:00-08:00",
+      "trashed_at": null,
+      "purged_at": null,
+      "content_created_at": "2026-01-01T00:00:00-08:00",
+      "content_modified_at": "2026-01-02T00:00:00-08:00",
+      "created_by": { "id": "users_fixture_1", "type": "user" },
+      "modified_by": { "id": "users_fixture_1", "type": "user" },
+      "owned_by": { "id": "users_fixture_1", "type": "user" },
+      "shared_link": null,
+      "parent": { "id": "0", "type": "folder" },
+      "item_status": "active"
+    }
+  }
+}

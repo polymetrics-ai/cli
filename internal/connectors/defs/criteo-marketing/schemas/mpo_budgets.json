@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mpo_budgets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "sellerId": { "type": ["string", "null"] },
+    "campaignIds": {
+      "type": ["array", "null"],
+      "items": { "type": "integer" }
+    },
+    "budgetType": { "type": ["string", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "startDate": { "type": ["string", "null"] },
+    "endDate": { "type": ["string", "null"] },
+    "spend": { "type": ["number", "null"] },
+    "status": { "type": ["string", "null"] },
+    "isSuspended": { "type": ["boolean", "null"] }
+  }
+}

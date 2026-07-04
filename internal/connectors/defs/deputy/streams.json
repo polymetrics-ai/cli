@@ -110,6 +110,77 @@
         "modified": "{{ record.Modified }}"
       },
       "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "leave",
+      "path": "/api/v1/resource/Leave",
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "employee": "{{ record.Employee }}",
+        "leave_rule": "{{ record.LeaveRule }}",
+        "date_start": "{{ record.DateStart }}",
+        "date_end": "{{ record.DateEnd }}",
+        "days": "{{ record.Days }}",
+        "status": "{{ record.Status }}",
+        "comment": "{{ record.Comment }}",
+        "all_day": "{{ record.AllDay }}",
+        "creator": "{{ record.Creator }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/leave.json"
+    },
+    {
+      "name": "rosters",
+      "path": "/api/v1/resource/Roster",
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "date": "{{ record.Date }}",
+        "start_time": "{{ record.StartTime }}",
+        "end_time": "{{ record.EndTime }}",
+        "operational_unit": "{{ record.OperationalUnit }}",
+        "employee": "{{ record.Employee }}",
+        "total_time": "{{ record.TotalTime }}",
+        "cost": "{{ record.Cost }}",
+        "published": "{{ record.Published }}",
+        "open": "{{ record.Open }}",
+        "creator": "{{ record.Creator }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/rosters.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/api/v1/resource/Webhook",
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "topic": "{{ record.Topic }}",
+        "address": "{{ record.Address }}",
+        "type": "{{ record.Type }}",
+        "enabled": "{{ record.Enabled }}",
+        "creator": "{{ record.Creator }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "teams",
+      "path": "/api/v1/resource/Team",
+      "records": { "path": "" },
+      "computed_fields": {
+        "id": "{{ record.Id }}",
+        "name": "{{ record.Name }}",
+        "leader_employee": "{{ record.LeaderEmployee }}",
+        "creator": "{{ record.Creator }}",
+        "created": "{{ record.Created }}",
+        "modified": "{{ record.Modified }}"
+      },
+      "schema": "schemas/teams.json"
     }
   ]
 }

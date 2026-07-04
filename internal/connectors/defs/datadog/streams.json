@@ -75,6 +75,108 @@
       "path": "/api/v1/downtime",
       "records": { "path": "." },
       "schema": "schemas/downtimes.json"
+    },
+    {
+      "name": "dashboard_lists",
+      "path": "/api/v1/dashboard/lists/manual",
+      "records": { "path": "dashboard_lists" },
+      "schema": "schemas/dashboard_lists.json"
+    },
+    {
+      "name": "notebooks",
+      "path": "/api/v1/notebooks",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "start",
+        "limit_param": "count",
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "created": "{{ record.attributes.created }}",
+        "modified": "{{ record.attributes.modified }}",
+        "author_handle": "{{ record.attributes.author.handle }}"
+      },
+      "schema": "schemas/notebooks.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/api/v1/org",
+      "records": { "path": "orgs" },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "hosts",
+      "path": "/api/v1/hosts",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "start",
+        "limit_param": "count",
+        "page_size": 100
+      },
+      "records": { "path": "host_list" },
+      "schema": "schemas/hosts.json"
+    },
+    {
+      "name": "slo_corrections",
+      "path": "/api/v1/slo/correction",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "slo_id": "{{ record.attributes.slo_id }}",
+        "category": "{{ record.attributes.category }}",
+        "description": "{{ record.attributes.description }}",
+        "start": "{{ record.attributes.start }}",
+        "end": "{{ record.attributes.end }}",
+        "duration": "{{ record.attributes.duration }}",
+        "timezone": "{{ record.attributes.timezone }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "modified_at": "{{ record.attributes.modified_at }}"
+      },
+      "schema": "schemas/slo_corrections.json"
+    },
+    {
+      "name": "synthetics_tests",
+      "path": "/api/v1/synthetics/tests",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page_number",
+        "size_param": "page_size",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "records": { "path": "tests" },
+      "schema": "schemas/synthetics_tests.json"
+    },
+    {
+      "name": "synthetics_locations",
+      "path": "/api/v1/synthetics/locations",
+      "records": { "path": "locations" },
+      "schema": "schemas/synthetics_locations.json"
+    },
+    {
+      "name": "synthetics_variables",
+      "path": "/api/v1/synthetics/variables",
+      "records": { "path": "variables" },
+      "schema": "schemas/synthetics_variables.json"
+    },
+    {
+      "name": "api_keys",
+      "path": "/api/v1/api_key",
+      "records": { "path": "api_keys" },
+      "schema": "schemas/api_keys.json"
+    },
+    {
+      "name": "application_keys",
+      "path": "/api/v1/application_key",
+      "records": { "path": "application_keys" },
+      "schema": "schemas/application_keys.json"
     }
   ]
 }

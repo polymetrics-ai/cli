@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_2/senders", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sender_fixture_2",
+          "brand_id": "brand_fixture_2",
+          "identity_type": "email",
+          "identity": "sender2@example.com",
+          "bounce_domain": "",
+          "share_type": "none",
+          "verified": false,
+          "bounce_verified": false,
+          "created": 1767225602
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

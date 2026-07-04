@@ -1,0 +1,618 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts/segments",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        {
+          "id": 1,
+          "segmentName": "Fixture Segment 1",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-02T00:00:00.000+00:00"
+        },
+        {
+          "id": 2,
+          "segmentName": "Fixture Segment 2",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-03T00:00:00.000+00:00"
+        },
+        {
+          "id": 3,
+          "segmentName": "Fixture Segment 3",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-04T00:00:00.000+00:00"
+        },
+        {
+          "id": 4,
+          "segmentName": "Fixture Segment 4",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-05T00:00:00.000+00:00"
+        },
+        {
+          "id": 5,
+          "segmentName": "Fixture Segment 5",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-06T00:00:00.000+00:00"
+        },
+        {
+          "id": 6,
+          "segmentName": "Fixture Segment 6",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-07T00:00:00.000+00:00"
+        },
+        {
+          "id": 7,
+          "segmentName": "Fixture Segment 7",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-08T00:00:00.000+00:00"
+        },
+        {
+          "id": 8,
+          "segmentName": "Fixture Segment 8",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-09T00:00:00.000+00:00"
+        },
+        {
+          "id": 9,
+          "segmentName": "Fixture Segment 9",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-10T00:00:00.000+00:00"
+        },
+        {
+          "id": 10,
+          "segmentName": "Fixture Segment 10",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-11T00:00:00.000+00:00"
+        },
+        {
+          "id": 11,
+          "segmentName": "Fixture Segment 11",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-12T00:00:00.000+00:00"
+        },
+        {
+          "id": 12,
+          "segmentName": "Fixture Segment 12",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-13T00:00:00.000+00:00"
+        },
+        {
+          "id": 13,
+          "segmentName": "Fixture Segment 13",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-14T00:00:00.000+00:00"
+        },
+        {
+          "id": 14,
+          "segmentName": "Fixture Segment 14",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-15T00:00:00.000+00:00"
+        },
+        {
+          "id": 15,
+          "segmentName": "Fixture Segment 15",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-16T00:00:00.000+00:00"
+        },
+        {
+          "id": 16,
+          "segmentName": "Fixture Segment 16",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-17T00:00:00.000+00:00"
+        },
+        {
+          "id": 17,
+          "segmentName": "Fixture Segment 17",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-18T00:00:00.000+00:00"
+        },
+        {
+          "id": 18,
+          "segmentName": "Fixture Segment 18",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-19T00:00:00.000+00:00"
+        },
+        {
+          "id": 19,
+          "segmentName": "Fixture Segment 19",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-20T00:00:00.000+00:00"
+        },
+        {
+          "id": 20,
+          "segmentName": "Fixture Segment 20",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-21T00:00:00.000+00:00"
+        },
+        {
+          "id": 21,
+          "segmentName": "Fixture Segment 21",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-22T00:00:00.000+00:00"
+        },
+        {
+          "id": 22,
+          "segmentName": "Fixture Segment 22",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-23T00:00:00.000+00:00"
+        },
+        {
+          "id": 23,
+          "segmentName": "Fixture Segment 23",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-24T00:00:00.000+00:00"
+        },
+        {
+          "id": 24,
+          "segmentName": "Fixture Segment 24",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-25T00:00:00.000+00:00"
+        },
+        {
+          "id": 25,
+          "segmentName": "Fixture Segment 25",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-26T00:00:00.000+00:00"
+        },
+        {
+          "id": 26,
+          "segmentName": "Fixture Segment 26",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-27T00:00:00.000+00:00"
+        },
+        {
+          "id": 27,
+          "segmentName": "Fixture Segment 27",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-28T00:00:00.000+00:00"
+        },
+        {
+          "id": 28,
+          "segmentName": "Fixture Segment 28",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-01T00:00:00.000+00:00"
+        },
+        {
+          "id": 29,
+          "segmentName": "Fixture Segment 29",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-02T00:00:00.000+00:00"
+        },
+        {
+          "id": 30,
+          "segmentName": "Fixture Segment 30",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-03T00:00:00.000+00:00"
+        },
+        {
+          "id": 31,
+          "segmentName": "Fixture Segment 31",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-04T00:00:00.000+00:00"
+        },
+        {
+          "id": 32,
+          "segmentName": "Fixture Segment 32",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-05T00:00:00.000+00:00"
+        },
+        {
+          "id": 33,
+          "segmentName": "Fixture Segment 33",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-06T00:00:00.000+00:00"
+        },
+        {
+          "id": 34,
+          "segmentName": "Fixture Segment 34",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-07T00:00:00.000+00:00"
+        },
+        {
+          "id": 35,
+          "segmentName": "Fixture Segment 35",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-08T00:00:00.000+00:00"
+        },
+        {
+          "id": 36,
+          "segmentName": "Fixture Segment 36",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-09T00:00:00.000+00:00"
+        },
+        {
+          "id": 37,
+          "segmentName": "Fixture Segment 37",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-10T00:00:00.000+00:00"
+        },
+        {
+          "id": 38,
+          "segmentName": "Fixture Segment 38",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-11T00:00:00.000+00:00"
+        },
+        {
+          "id": 39,
+          "segmentName": "Fixture Segment 39",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-12T00:00:00.000+00:00"
+        },
+        {
+          "id": 40,
+          "segmentName": "Fixture Segment 40",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-13T00:00:00.000+00:00"
+        },
+        {
+          "id": 41,
+          "segmentName": "Fixture Segment 41",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-14T00:00:00.000+00:00"
+        },
+        {
+          "id": 42,
+          "segmentName": "Fixture Segment 42",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-15T00:00:00.000+00:00"
+        },
+        {
+          "id": 43,
+          "segmentName": "Fixture Segment 43",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-16T00:00:00.000+00:00"
+        },
+        {
+          "id": 44,
+          "segmentName": "Fixture Segment 44",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-17T00:00:00.000+00:00"
+        },
+        {
+          "id": 45,
+          "segmentName": "Fixture Segment 45",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-18T00:00:00.000+00:00"
+        },
+        {
+          "id": 46,
+          "segmentName": "Fixture Segment 46",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-19T00:00:00.000+00:00"
+        },
+        {
+          "id": 47,
+          "segmentName": "Fixture Segment 47",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-20T00:00:00.000+00:00"
+        },
+        {
+          "id": 48,
+          "segmentName": "Fixture Segment 48",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-21T00:00:00.000+00:00"
+        },
+        {
+          "id": 49,
+          "segmentName": "Fixture Segment 49",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-22T00:00:00.000+00:00"
+        },
+        {
+          "id": 50,
+          "segmentName": "Fixture Segment 50",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-23T00:00:00.000+00:00"
+        },
+        {
+          "id": 51,
+          "segmentName": "Fixture Segment 51",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-24T00:00:00.000+00:00"
+        },
+        {
+          "id": 52,
+          "segmentName": "Fixture Segment 52",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-25T00:00:00.000+00:00"
+        },
+        {
+          "id": 53,
+          "segmentName": "Fixture Segment 53",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-26T00:00:00.000+00:00"
+        },
+        {
+          "id": 54,
+          "segmentName": "Fixture Segment 54",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-27T00:00:00.000+00:00"
+        },
+        {
+          "id": 55,
+          "segmentName": "Fixture Segment 55",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-28T00:00:00.000+00:00"
+        },
+        {
+          "id": 56,
+          "segmentName": "Fixture Segment 56",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-01T00:00:00.000+00:00"
+        },
+        {
+          "id": 57,
+          "segmentName": "Fixture Segment 57",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-02T00:00:00.000+00:00"
+        },
+        {
+          "id": 58,
+          "segmentName": "Fixture Segment 58",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-03T00:00:00.000+00:00"
+        },
+        {
+          "id": 59,
+          "segmentName": "Fixture Segment 59",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-04T00:00:00.000+00:00"
+        },
+        {
+          "id": 60,
+          "segmentName": "Fixture Segment 60",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-05T00:00:00.000+00:00"
+        },
+        {
+          "id": 61,
+          "segmentName": "Fixture Segment 61",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-06T00:00:00.000+00:00"
+        },
+        {
+          "id": 62,
+          "segmentName": "Fixture Segment 62",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-07T00:00:00.000+00:00"
+        },
+        {
+          "id": 63,
+          "segmentName": "Fixture Segment 63",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-08T00:00:00.000+00:00"
+        },
+        {
+          "id": 64,
+          "segmentName": "Fixture Segment 64",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-09T00:00:00.000+00:00"
+        },
+        {
+          "id": 65,
+          "segmentName": "Fixture Segment 65",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-10T00:00:00.000+00:00"
+        },
+        {
+          "id": 66,
+          "segmentName": "Fixture Segment 66",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-11T00:00:00.000+00:00"
+        },
+        {
+          "id": 67,
+          "segmentName": "Fixture Segment 67",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-12T00:00:00.000+00:00"
+        },
+        {
+          "id": 68,
+          "segmentName": "Fixture Segment 68",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-13T00:00:00.000+00:00"
+        },
+        {
+          "id": 69,
+          "segmentName": "Fixture Segment 69",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-14T00:00:00.000+00:00"
+        },
+        {
+          "id": 70,
+          "segmentName": "Fixture Segment 70",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-15T00:00:00.000+00:00"
+        },
+        {
+          "id": 71,
+          "segmentName": "Fixture Segment 71",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-16T00:00:00.000+00:00"
+        },
+        {
+          "id": 72,
+          "segmentName": "Fixture Segment 72",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-17T00:00:00.000+00:00"
+        },
+        {
+          "id": 73,
+          "segmentName": "Fixture Segment 73",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-18T00:00:00.000+00:00"
+        },
+        {
+          "id": 74,
+          "segmentName": "Fixture Segment 74",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-19T00:00:00.000+00:00"
+        },
+        {
+          "id": 75,
+          "segmentName": "Fixture Segment 75",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-20T00:00:00.000+00:00"
+        },
+        {
+          "id": 76,
+          "segmentName": "Fixture Segment 76",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-21T00:00:00.000+00:00"
+        },
+        {
+          "id": 77,
+          "segmentName": "Fixture Segment 77",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-22T00:00:00.000+00:00"
+        },
+        {
+          "id": 78,
+          "segmentName": "Fixture Segment 78",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-23T00:00:00.000+00:00"
+        },
+        {
+          "id": 79,
+          "segmentName": "Fixture Segment 79",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-24T00:00:00.000+00:00"
+        },
+        {
+          "id": 80,
+          "segmentName": "Fixture Segment 80",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-25T00:00:00.000+00:00"
+        },
+        {
+          "id": 81,
+          "segmentName": "Fixture Segment 81",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-26T00:00:00.000+00:00"
+        },
+        {
+          "id": 82,
+          "segmentName": "Fixture Segment 82",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-27T00:00:00.000+00:00"
+        },
+        {
+          "id": 83,
+          "segmentName": "Fixture Segment 83",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-28T00:00:00.000+00:00"
+        },
+        {
+          "id": 84,
+          "segmentName": "Fixture Segment 84",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-01T00:00:00.000+00:00"
+        },
+        {
+          "id": 85,
+          "segmentName": "Fixture Segment 85",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-02T00:00:00.000+00:00"
+        },
+        {
+          "id": 86,
+          "segmentName": "Fixture Segment 86",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-03T00:00:00.000+00:00"
+        },
+        {
+          "id": 87,
+          "segmentName": "Fixture Segment 87",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-04T00:00:00.000+00:00"
+        },
+        {
+          "id": 88,
+          "segmentName": "Fixture Segment 88",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-05T00:00:00.000+00:00"
+        },
+        {
+          "id": 89,
+          "segmentName": "Fixture Segment 89",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-06T00:00:00.000+00:00"
+        },
+        {
+          "id": 90,
+          "segmentName": "Fixture Segment 90",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-07T00:00:00.000+00:00"
+        },
+        {
+          "id": 91,
+          "segmentName": "Fixture Segment 91",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-08T00:00:00.000+00:00"
+        },
+        {
+          "id": 92,
+          "segmentName": "Fixture Segment 92",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-09T00:00:00.000+00:00"
+        },
+        {
+          "id": 93,
+          "segmentName": "Fixture Segment 93",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-10T00:00:00.000+00:00"
+        },
+        {
+          "id": 94,
+          "segmentName": "Fixture Segment 94",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-11T00:00:00.000+00:00"
+        },
+        {
+          "id": 95,
+          "segmentName": "Fixture Segment 95",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-12T00:00:00.000+00:00"
+        },
+        {
+          "id": 96,
+          "segmentName": "Fixture Segment 96",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-13T00:00:00.000+00:00"
+        },
+        {
+          "id": 97,
+          "segmentName": "Fixture Segment 97",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-14T00:00:00.000+00:00"
+        },
+        {
+          "id": 98,
+          "segmentName": "Fixture Segment 98",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-15T00:00:00.000+00:00"
+        },
+        {
+          "id": 99,
+          "segmentName": "Fixture Segment 99",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-16T00:00:00.000+00:00"
+        },
+        {
+          "id": 100,
+          "segmentName": "Fixture Segment 100",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-17T00:00:00.000+00:00"
+        }
+      ],
+      "count": 101
+    }
+  }
+}

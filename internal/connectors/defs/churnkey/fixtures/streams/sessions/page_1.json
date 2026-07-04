@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/sessions",
+    "path": "/v1/data/sessions",
     "query": {
       "limit": "100",
       "skip": "0"

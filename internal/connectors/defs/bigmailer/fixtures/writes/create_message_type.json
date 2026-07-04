@@ -1,0 +1,13 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "name": "Fixture Message Type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/message-types",
+    "body": {
+      "name": "Fixture Message Type"
+    }
+  }
+}

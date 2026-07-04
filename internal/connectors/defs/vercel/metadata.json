@@ -1,7 +1,7 @@
 {
   "name": "vercel",
   "display_name": "Vercel",
-  "description": "Reads deployments, projects, teams, and domains from the Vercel REST API, and writes projects, deployments, domains, and project environment variables.",
+  "description": "Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and edge configs from the Vercel REST API, and writes projects, deployments, domains, project environment variables, webhooks, log drains, edge configs, and alias removal.",
   "integration_type": "api",
   "docs_url": "https://vercel.com/docs/rest-api",
   "release_stage": "ga",
@@ -14,8 +14,8 @@
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external Vercel API read of deployment, project, team, and domain data",
-    "write": "external mutation of Vercel projects, deployments, domains, and environment variables; approval required",
+    "read": "external Vercel API read of deployment, project, team, domain, alias, webhook, log-drain, and edge-config data",
+    "write": "external mutation of Vercel projects, deployments, domains, environment variables, webhooks, log drains, edge configs, and aliases; approval required",
     "approval": "read: none; write: required for every action"
   }
 }

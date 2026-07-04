@@ -63,6 +63,65 @@
         "cursor_field": "started_at"
       },
       "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "contexts",
+      "path": "/context",
+      "query": { "owner-slug": "{{ config.vcs_type }}/{{ config.org }}" },
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page-token",
+        "token_path": "next_page_token"
+      },
+      "schema": "schemas/contexts.json"
+    },
+    {
+      "name": "schedules",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/schedule",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page-token",
+        "token_path": "next_page_token"
+      },
+      "incremental": {
+        "cursor_field": "updated-at"
+      },
+      "schema": "schemas/schedules.json"
+    },
+    {
+      "name": "checkout_keys",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page-token",
+        "token_path": "next_page_token"
+      },
+      "schema": "schemas/checkout_keys.json"
+    },
+    {
+      "name": "environment_variables",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page-token",
+        "token_path": "next_page_token"
+      },
+      "schema": "schemas/environment_variables.json"
+    },
+    {
+      "name": "insights_workflow_summary",
+      "path": "/insights/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/workflows",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page-token",
+        "token_path": "next_page_token"
+      },
+      "schema": "schemas/insights_workflow_summary.json"
     }
   ]
 }

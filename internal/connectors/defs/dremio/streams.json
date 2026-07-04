@@ -45,6 +45,13 @@
       "query": { "maxResults": "{{ config.page_size }}" },
       "records": { "path": "data" },
       "schema": "schemas/users.json"
+    },
+    {
+      "name": "roles",
+      "path": "/role",
+      "query": { "maxResults": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/roles.json"
     }
   ]
 }

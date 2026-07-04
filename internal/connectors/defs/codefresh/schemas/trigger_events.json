@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "trigger_events",
+  "type": "object",
+  "x-primary-key": ["uri"],
+  "required": ["uri"],
+  "properties": {
+    "uri": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "kind": { "type": ["string", "null"] },
+    "account": { "type": ["string", "null"] },
+    "endpoint": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] }
+  }
+}

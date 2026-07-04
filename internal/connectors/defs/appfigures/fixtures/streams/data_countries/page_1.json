@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/data/countries" },
+  "response": {
+    "status": 200,
+    "body": {
+      "US": { "iso": "US", "name": "United States", "apple_store_no": "143441" },
+      "GB": { "iso": "GB", "name": "United Kingdom", "apple_store_no": "143444" }
+    }
+  }
+}

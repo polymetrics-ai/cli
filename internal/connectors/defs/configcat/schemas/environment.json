@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "environment",
+  "type": "object",
+  "x-primary-key": ["environmentId"],
+  "required": ["environmentId"],
+  "properties": {
+    "environmentId": { "type": "string" },
+    "product": { "type": ["object", "null"] },
+    "name": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "order": { "type": ["integer", "null"] },
+    "reasonRequired": { "type": ["boolean", "null"] },
+    "approveRequired": { "type": ["boolean", "null"] }
+  }
+}

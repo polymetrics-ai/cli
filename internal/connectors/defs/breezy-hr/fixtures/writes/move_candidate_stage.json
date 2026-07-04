@@ -1,0 +1,15 @@
+{
+  "record": {
+    "position_id": "pos_fixture_1",
+    "candidate_id": "cand_fixture_1",
+    "stage_id": "stage_fixture_interviewing"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/position/pos_fixture_1/candidate/cand_fixture_1/stage",
+    "body": {
+      "stage_id": "stage_fixture_interviewing"
+    }
+  },
+  "response": { "status": 200, "body": { "_id": "cand_fixture_1", "stage": { "id": "stage_fixture_interviewing", "name": "Interviewing" } } }
+}

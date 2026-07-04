@@ -1,19 +1,47 @@
 {
   "api": "Calendly API v2 (https://api.calendly.com)",
   "docs": "https://developer.calendly.com/api-docs",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave1-pilot migration: the 5 legacy-parity read streams only (calendly is read-only in both legacy and this bundle); the full Calendly v2 surface (webhooks, invitees, availability schedules, routing forms, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, verified against Calendly's published OpenAPI 3.1 spec (github.com/api-evangelist/calendly, openapi/calendly-scheduling-api-openapi.yml — 35 method+path endpoints across 30 paths, matching developer.calendly.com/api-docs's documented resource categories). 11 read streams and 8 writes are now covered; every other endpoint is a single-resource duplicate of an already-covered list stream, a GDPR/account-settings action out of scope for a scheduling-data connector, or a narrower compound-write variant deferred to a later wave.",
   "endpoints": [
     { "method": "GET", "path": "/scheduled_events", "covered_by": { "stream": "scheduled_events" } },
+    { "method": "POST", "path": "/scheduled_events/{uuid}/cancellation", "covered_by": { "write": "cancel_scheduled_event" } },
     { "method": "GET", "path": "/event_types", "covered_by": { "stream": "event_types" } },
     { "method": "GET", "path": "/organization_memberships", "covered_by": { "stream": "organization_memberships" } },
+    { "method": "DELETE", "path": "/organization_memberships/{uuid}", "covered_by": { "write": "remove_organization_membership" } },
     { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
     { "method": "GET", "path": "/users/me", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/scheduled_events/{uuid}/invitees", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/webhook_subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/webhook_subscriptions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/availability_schedules", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/routing_forms", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/scheduled_events/{uuid}/cancellation", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy calendly is read-only (Write returns ErrUnsupportedOperation)" } }
+    { "method": "GET", "path": "/routing_forms", "covered_by": { "stream": "routing_forms" } },
+    { "method": "GET", "path": "/routing_form_submissions", "covered_by": { "stream": "routing_form_submissions" } },
+    { "method": "GET", "path": "/webhook_subscriptions", "covered_by": { "stream": "webhook_subscriptions" } },
+    { "method": "POST", "path": "/webhook_subscriptions", "covered_by": { "write": "create_webhook_subscription" } },
+    { "method": "DELETE", "path": "/webhook_subscriptions/{uuid}", "covered_by": { "write": "delete_webhook_subscription" } },
+    { "method": "GET", "path": "/user_availability_schedules", "covered_by": { "stream": "user_availability_schedules" } },
+    { "method": "GET", "path": "/group_relationships", "covered_by": { "stream": "group_relationships" } },
+    { "method": "GET", "path": "/activity_log_entries", "covered_by": { "stream": "activity_log_entries" } },
+    { "method": "GET", "path": "/scheduled_events/{event_uuid}/invitees", "covered_by": { "stream": "invitees" } },
+    { "method": "POST", "path": "/invitees", "covered_by": { "write": "create_invitee" } },
+    { "method": "POST", "path": "/organizations/{uuid}/invitations", "covered_by": { "write": "invite_user_to_organization" } },
+    { "method": "POST", "path": "/one_off_event_types", "covered_by": { "write": "create_one_off_event_type" } },
+    { "method": "POST", "path": "/shares", "covered_by": { "write": "create_share" } },
+
+    { "method": "GET", "path": "/scheduled_events/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-scheduled-event detail fetch; every field it returns is already emitted by the scheduled_events list stream" } },
+    { "method": "GET", "path": "/event_types/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-event-type detail fetch; every field it returns is already emitted by the event_types list stream" } },
+    { "method": "GET", "path": "/organization_memberships/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-membership detail fetch; every field it returns is already emitted by the organization_memberships list stream" } },
+    { "method": "GET", "path": "/webhook_subscriptions/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-webhook detail fetch; every field it returns is already emitted by the webhook_subscriptions list stream" } },
+    { "method": "GET", "path": "/user_availability_schedules/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-schedule detail fetch; every field it returns is already emitted by the user_availability_schedules list stream" } },
+    { "method": "GET", "path": "/routing_forms/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-routing-form detail fetch; every field it returns is already emitted by the routing_forms list stream" } },
+    { "method": "GET", "path": "/routing_form_submissions/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-submission detail fetch; every field it returns is already emitted by the routing_form_submissions list stream" } },
+    { "method": "GET", "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}", "excluded": { "category": "duplicate_of", "reason": "single-invitee detail fetch; every field it returns is already emitted by the invitees fan_out stream" } },
+    { "method": "GET", "path": "/users/{uuid}", "excluded": { "category": "duplicate_of", "reason": "single-user detail fetch by arbitrary uuid; the users stream already covers the authenticated user (GET /users/me), the only user this bundle's api_key credential can name without a separate user-listing endpoint (Calendly publishes none)" } },
+
+    { "method": "GET", "path": "/event_type_available_times", "excluded": { "category": "non_data_endpoint", "reason": "computes available booking time slots for an event type over an arbitrary caller-supplied time window at query time; a derived availability calculation, not a persisted, syncable record set" } },
+    { "method": "GET", "path": "/user_busy_times", "excluded": { "category": "out_of_scope", "reason": "requires an arbitrary caller-supplied start_time/end_time window per call (not a natural full/incremental list), on top of the same user-uri-required constraint as user_availability_schedules; a point-in-time availability check, not a syncable object stream" } },
+
+    { "method": "GET", "path": "/organizations/{uuid}/invitations", "excluded": { "category": "duplicate_of", "reason": "lists an organization's pending invitations; a narrower, less useful view than organization_memberships (accepted members) for a sync-oriented connector, and not the resource the invite_user_to_organization write acts on reading back" } },
+    { "method": "GET", "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}", "excluded": { "category": "duplicate_of", "reason": "single-invitation detail fetch; same reasoning as the list endpoint above" } },
+    { "method": "DELETE", "path": "/organizations/{org_uuid}/invitations/{invitation_uuid}", "excluded": { "category": "destructive_admin", "reason": "revokes a pending organization invitation; narrow lifecycle action on a resource this bundle does not stream, deferred to a later wave" } },
+
+    { "method": "POST", "path": "/data_compliance/deletion/invitees", "excluded": { "category": "destructive_admin", "reason": "GDPR-style bulk deletion of invitee personal data across the account by email address; irreversible compliance action, never a safe automated write" } }
   ]
 }

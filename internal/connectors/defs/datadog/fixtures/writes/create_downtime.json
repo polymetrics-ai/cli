@@ -1,0 +1,10 @@
+{
+  "record": {
+    "scope": ["env:fixture"],
+    "message": "fixture scheduled downtime"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/downtime"
+  }
+}

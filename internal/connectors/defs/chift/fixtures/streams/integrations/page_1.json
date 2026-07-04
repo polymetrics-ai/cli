@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integrations"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "integrationid": 1,
+        "name": "Fixture Accounting Integration",
+        "description": "A fixture accounting software integration",
+        "status": "active",
+        "api": "Accounting",
+        "logo_url": "https://example.com/logo.png",
+        "icon_url": "https://example.com/icon.png",
+        "local_agent": false
+      }
+    ]
+  }
+}
