@@ -1,23 +1,25 @@
 {
   "name": "shopwired",
   "display_name": "ShopWired",
-  "description": "Reads ShopWired products, orders, customers, and categories through the ShopWired REST API.",
+  "description": "Reads and writes ShopWired v1 catalog, order, customer, content, marketing, shipping, theme, webhook, wishlist, and payment resources through the documented REST API.",
   "integration_type": "api",
-  "docs_url": "https://www.shopwired.com/api",
+  "docs_url": "https://shopwired.readme.io/reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external ShopWired API read of product, order, customer, and category data",
-    "approval": "none; read-only, no reverse-ETL write surface"
+    "read": "external ShopWired API reads across catalog, orders, customers, content, marketing, shipping, webhooks, themes, wishlists, stock, and payments resources",
+    "write": "external ShopWired API mutations that create, update, delete, refund, dispatch, verify, modify, or otherwise alter store data",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive deletes and irreversible store changes are flagged destructive"
   }
 }

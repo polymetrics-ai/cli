@@ -1,0 +1,19 @@
+{
+  "record": {
+    "product_id": 1,
+    "id": 1,
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/1/customization-fields/1",
+    "body": {
+      "name": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

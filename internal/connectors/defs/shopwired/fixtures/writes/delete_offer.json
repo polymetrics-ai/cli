@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/offers/1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

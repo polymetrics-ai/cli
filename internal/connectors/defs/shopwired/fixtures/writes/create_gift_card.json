@@ -1,0 +1,21 @@
+{
+  "record": {
+    "code": "code_fixture",
+    "amount": 1,
+    "amountUsed": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gift-vouchers",
+    "body": {
+      "code": "code_fixture",
+      "amount": 1,
+      "amountUsed": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

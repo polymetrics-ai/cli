@@ -1,0 +1,21 @@
+{
+  "record": {
+    "customerId": 1,
+    "productId": "productId_fixture",
+    "price": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/trade-customer-product-prices",
+    "body": {
+      "customerId": 1,
+      "productId": "productId_fixture",
+      "price": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

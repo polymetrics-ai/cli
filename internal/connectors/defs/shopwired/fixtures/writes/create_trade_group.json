@@ -1,0 +1,23 @@
+{
+  "record": {
+    "title": "title_fixture",
+    "products": [
+
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/trade-groups",
+    "body": {
+      "title": "title_fixture",
+      "products": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

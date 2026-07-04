@@ -1,75 +1,29 @@
 # Overview
 
-ShopWired is a fresh Tier-1 (pure declarative) migration at legacy capability parity, porting
-`internal/connectors/shopwired` (`shopwired.go`). It reads ShopWired products, orders, customers,
-and categories through the ShopWired REST API. Read-only: legacy's `Write` always returns
-`ErrUnsupportedOperation` (`shopwired.go:91-93`), and this bundle declares `capabilities.write:
-false` with no `writes.json` to match. The legacy package stays registered and unchanged until the
-wave6 registry flip.
+ShopWired is a declarative HTTP connector for the documented ShopWired REST API v1. Pass B expands beyond the original products, orders, customers, and categories streams to cover the ReadMe API reference list, detail, and search GET endpoints as streams, and JSON POST/PUT/PATCH/DELETE endpoints as write actions.
+
+The legacy Go connector emitted a fixed six-field projection for its four original streams. This bundle uses passthrough projection for the expanded API so raw documented response fields are preserved; the original stream names remain `products`, `orders`, `customers`, and `categories`.
 
 ## Auth setup
 
-Provide one secret: `api_key`, sent as the `X-API-Key` request header on every call
-(`streams.json`'s `base.auth`: `{"mode": "api_key_header", "header": "X-API-Key", "value": "{{
-secrets.api_key }}"}`), matching legacy's `connsdk.APIKeyHeader("X-API-Key", token, "")`
-(`shopwired.go:130`). `base_url` defaults to `https://api.shopwired.co.uk` and is overridable for
-tests/proxies, matching legacy's `shopwiredDefaultBaseURL` fallback.
+The current ShopWired docs use HTTP Basic authentication where the API key is the username and the API secret is the password. Provide `api_key` and `api_secret` for that flow. OAuth bearer tokens are also supported with `access_token`. For compatibility with the legacy connector, if only `api_key` is configured the engine sends it as the `X-API-Key` header.
+
+`base_url` defaults to `https://api.ecommerceapi.uk/v1`, matching the current ShopWired reference. Override it if an account still uses the legacy `https://api.shopwired.co.uk` host.
 
 ## Streams notes
 
-Four streams, all primary-keyed on `id`, all sharing the identical shape: `GET`, a top-level JSON
-array response (`records.path: "."`), `page`/`per_page` `page_number` pagination starting at page 1
-with a 100-record page size (legacy's `shopwiredDefaultPageSize`), stopping on a short/empty final
-page. `products`, `orders`, `customers`, `categories` map to `/products`, `/orders`, `/customers`,
-`/categories` respectively (`shopwiredEndpoints`, `shopwired.go:139-144`).
+Streams are generated from the ReadMe OpenAPI snippets linked by `https://shopwired.readme.io/llms.txt`. List endpoints use documented `count`/`offset` pagination, with a static `count` of 100. Detail endpoints use `pagination.type: none` and require the documented path parameter through config, such as `id`, `product_id`, `sku`, `comment_id`, or `country_id` depending on the stream path.
 
-Legacy's single shared `shopwiredRecord` mapper (`shopwired.go:146-148`) is applied uniformly across
-all four endpoints and always emits the SAME six keys on every record regardless of stream —
-`id`, `name`, `sku`, `email`, `status`, `updated_at` — leaving whichever fields don't apply to that
-endpoint as `nil`. This bundle's four schemas each declare all six properties (not just the fields
-that logically belong to that resource) specifically to reproduce that legacy shape field-for-field;
-omitting the endpoint-irrelevant fields from a stream's schema would silently narrow the emitted
-record compared to legacy under schema-mode projection.
-
-`updated_at` is the incremental cursor field on every stream (`x-cursor-field`), matching legacy's
-uniform `CursorFields: []string{"updated_at"}` (`shopwired.go:169`); no `incremental` block is
-declared on any stream because legacy's `Read` never sends a server-side incremental filter
-parameter and publishes no lower-bound-aware query behavior — `updated_at` is catalog-published
-metadata only, not a wired incremental read (matches conventions.md §8 rule 2's truth table:
-`x-cursor-field` in schema, no `incremental` block, since legacy sends no server-side filter).
+Count endpoints such as `/products/count` are listed in `api_surface.json` as `non_data_endpoint` because they return aggregate metadata rather than records. Optional documented query parameters are exposed as optional config-backed query values and omitted when absent.
 
 ## Write actions & risks
 
-None — ShopWired is read-only. `capabilities.write: false`, no `writes.json` file, matching
-legacy's `ErrUnsupportedOperation` (`shopwired.go:91-93`).
+Write actions are fixed to documented ShopWired endpoints and validate required path/body fields from the OpenAPI snippets where available. They are not generic HTTP writes. Deletions, refunds, cancellations, stock returns, dispatch requests, wishlist modifications, and all-app-data deletion are marked destructive when their documented operation can remove data or trigger irreversible store behavior.
+
+All writes mutate external ShopWired store state and must go through plan, preview, approval, and execute.
 
 ## Known limits
 
-- **Legacy's `first(item, "id", "order_id")` / `first(item, "name", "title")` /
-  `first(item, "updated_at", "modified_at")` defensive-fallback field aliasing
-  (`shopwiredRecord`, `shopwired.go:146-148, 180-187`) is not reproduced.** The engine's
-  `computed_fields` dialect has no coalesce/fallback filter (conventions.md §3: a field can be
-  renamed, filtered, or joined, but two `computed_fields` entries cannot target the same output key
-  as an "or" — the JSON map itself only allows one value per key), and no evidence anywhere in the
-  legacy test suite, fixtures, or the ShopWired API's own documented response shape
-  (https://www.shopwired.com/api) shows `order_id`/`title`/`modified_at` ever actually appearing in
-  place of `id`/`name`/`updated_at` on any of the four endpoints — every real and fixture-recorded
-  response uses `id`/`name`/`updated_at` uniformly. This bundle emits `{{ record.id }}`/
-  `{{ record.name }}`/`{{ record.updated_at }}` directly (typed bare-reference extraction, so `id`
-  keeps its native numeric wire type instead of legacy's implicit `any`-typed passthrough). This is
-  an ACCEPTABLE deviation per conventions.md §5's meta-rule: it never diverges from legacy for any
-  input the real API is documented to send (the fallback names have no confirmed real-world
-  trigger), and only a currently-unobserved wire shape (an `order_id`-only or `title`-only response
-  with no `id`/`name` at all) would produce a different result than legacy's fallback — see the
-  parity-deviation ledger entry below.
-- **No config-driven `page_size`/`max_pages` runtime override.** Legacy accepted `page_size`
-  (falling back to `limit`) and `max_pages` (`0`/`all`/`unlimited` meaning uncapped) as
-  caller-supplied config overrides (`pageSize`/`maxPages`, `shopwired.go:215-239`). The engine's
-  `page_number` pagination spec's `page_size`/`max_pages` fields are static integers on
-  `streams.json`'s `base.pagination` block, not `{{ }}`-templated — there is no per-request
-  config-driven override mechanism for either (identical to searxng's documented
-  `page_size`/`max_pages` gap, conventions.md §1's read-only/no-auth worked example). Both
-  properties are therefore NOT declared in `spec.json` (a declared-but-unwireable key is dead config
-  worse than an absent one, conventions.md F6); the bundle hard-codes legacy's own default
-  (`page_size: 100`, uncapped `max_pages`), matching legacy's behavior whenever the caller does not
-  override either config key.
+- The current docs use Basic/OAuth authentication and `https://api.ecommerceapi.uk/v1`; the legacy Go connector used `X-API-Key` against `https://api.shopwired.co.uk`. The bundle supports both auth shapes, but defaults to the current documented host.
+- Runtime `page_size`/`max_pages` overrides from legacy are not modeled because engine pagination fields are static. The bundle uses documented `count`/`offset` pagination with `count=100`.
+- Response schemas are intentionally permissive passthrough schemas. The ReadMe OpenAPI snippets define many resource-specific schemas, but preserving raw fields across the broad Pass B surface is safer than projecting a partial field list.

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 1,
+    "comment_id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/orders/1/comments/1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

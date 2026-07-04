@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks/1/verify",
+    "body": {
+      "name": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

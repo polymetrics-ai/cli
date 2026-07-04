@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "extension": "extension_fixture",
+    "sourceUrl": "https://example.invalid/fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/digital-files",
+    "body": {
+      "name": "name_fixture",
+      "extension": "extension_fixture",
+      "sourceUrl": "https://example.invalid/fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

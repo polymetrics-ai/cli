@@ -1,0 +1,17 @@
+{
+  "record": {
+    "orderProductItemId": "orderProductItemId_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/stock/return",
+    "body": {
+      "orderProductItemId": "orderProductItemId_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "oldPath": "oldPath_fixture",
+    "newPath": "newPath_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/redirects",
+    "body": {
+      "oldPath": "oldPath_fixture",
+      "newPath": "newPath_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

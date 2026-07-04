@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "status": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/business/features/change-status",
+    "body": {
+      "name": "name_fixture",
+      "status": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

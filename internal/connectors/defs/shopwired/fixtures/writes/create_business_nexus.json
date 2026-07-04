@@ -1,0 +1,31 @@
+{
+  "record": {
+    "countryId": 1,
+    "stateId": "stateId_fixture",
+    "type": "type_fixture",
+    "name": "name_fixture",
+    "addressLine1": {
+    },
+    "city": "city_fixture",
+    "postcode": "postcode_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/nexuses",
+    "body": {
+      "countryId": 1,
+      "stateId": "stateId_fixture",
+      "type": "type_fixture",
+      "name": "name_fixture",
+      "addressLine1": {
+      },
+      "city": "city_fixture",
+      "postcode": "postcode_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

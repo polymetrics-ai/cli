@@ -1,0 +1,25 @@
+{
+  "record": {
+    "targetType": "targetType_fixture",
+    "targetId": "targetId_fixture",
+    "discount": 1,
+    "validFrom": "validFrom_fixture",
+    "active": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sales",
+    "body": {
+      "targetType": "targetType_fixture",
+      "targetId": "targetId_fixture",
+      "discount": 1,
+      "validFrom": "validFrom_fixture",
+      "active": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

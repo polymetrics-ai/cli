@@ -1,0 +1,13 @@
+{
+  "record": {
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/app/data"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

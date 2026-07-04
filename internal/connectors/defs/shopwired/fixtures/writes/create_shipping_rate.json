@@ -1,0 +1,31 @@
+{
+  "record": {
+    "country": 1,
+    "name": "name_fixture",
+    "criteria": {
+    },
+    "from": 1,
+    "to": 1,
+    "cost": 1,
+    "vatExclusive": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shipping-rates",
+    "body": {
+      "country": 1,
+      "name": "name_fixture",
+      "criteria": {
+      },
+      "from": 1,
+      "to": 1,
+      "cost": 1,
+      "vatExclusive": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

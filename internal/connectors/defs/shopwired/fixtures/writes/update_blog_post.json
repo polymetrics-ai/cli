@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": 1,
+    "title": "title_fixture",
+    "slug": "slug_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/blog-posts/1",
+    "body": {
+      "title": "title_fixture",
+      "slug": "slug_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

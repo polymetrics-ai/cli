@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": 1,
+    "products": [
+
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/trade-groups/1",
+    "body": {
+      "products": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

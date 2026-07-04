@@ -1,0 +1,22 @@
+{
+  "record": {
+    "product_id": 1,
+    "name": "name_fixture",
+    "price": 1,
+    "sku": "sku_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/1/extras",
+    "body": {
+      "name": "name_fixture",
+      "price": 1,
+      "sku": "sku_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

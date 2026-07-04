@@ -1,0 +1,20 @@
+{
+  "record": {
+    "product_id": 1,
+    "name": "name_fixture",
+    "option": "option_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/1/option-values",
+    "body": {
+      "name": "name_fixture",
+      "option": "option_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

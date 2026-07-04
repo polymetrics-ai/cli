@@ -1,0 +1,17 @@
+{
+  "record": {
+    "customerId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wishlists",
+    "body": {
+      "customerId": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

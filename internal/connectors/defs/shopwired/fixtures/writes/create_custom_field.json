@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "itemType": "itemType_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/custom-fields",
+    "body": {
+      "name": "name_fixture",
+      "itemType": "itemType_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

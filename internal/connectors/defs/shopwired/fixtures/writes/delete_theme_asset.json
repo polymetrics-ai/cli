@@ -1,0 +1,14 @@
+{
+  "record": {
+    "theme_id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/theme-assets/1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

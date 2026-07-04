@@ -1,0 +1,22 @@
+{
+  "record": {
+    "product_id": 1,
+    "values": [
+
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/1/variations",
+    "body": {
+      "values": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,17 +1,1697 @@
 {
-  "api": "ShopWired REST API (https://api.shopwired.co.uk)",
-  "docs": "https://www.shopwired.com/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "Fresh migration at legacy capability parity: the 4 legacy read streams only (products, orders, customers, categories); legacy shopwired is read-only (Write always returns ErrUnsupportedOperation) and the full ShopWired API surface (webhooks, discounts, gift cards, shipping, store settings) is out of scope until Pass B",
+  "api": "ShopWired REST API v1",
+  "docs": "https://shopwired.readme.io/reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "ShopWired ReadMe API reference endpoints under https://api.ecommerceapi.uk/v1. GET list/detail/search endpoints are streams; count endpoints are excluded as aggregate metadata; JSON POST/PUT/PATCH/DELETE operations are write actions.",
   "endpoints": [
-    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
-    { "method": "GET", "path": "/orders", "covered_by": { "stream": "orders" } },
-    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } },
-    { "method": "POST", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PUT", "path": "/products/{id}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/orders/{id}/fulfil", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/discounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/app",
+      "covered_by": {
+        "stream": "app"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/app/data",
+      "covered_by": {
+        "write": "deletes_all_app_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/app/data",
+      "covered_by": {
+        "stream": "data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/app/data",
+      "covered_by": {
+        "write": "create_new_app_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-categories",
+      "covered_by": {
+        "stream": "blog_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blog-categories",
+      "covered_by": {
+        "write": "create_blog_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-categories/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/blog-categories/{id}",
+      "covered_by": {
+        "write": "delete_blog_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-categories/{id}",
+      "covered_by": {
+        "stream": "blog_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/blog-categories/{id}",
+      "covered_by": {
+        "write": "update_blog_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-posts",
+      "covered_by": {
+        "stream": "blog_posts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blog-posts",
+      "covered_by": {
+        "write": "create_blog_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-posts/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/blog-posts/{id}",
+      "covered_by": {
+        "write": "delete_blog_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-posts/{id}",
+      "covered_by": {
+        "stream": "blog_post"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/blog-posts/{id}",
+      "covered_by": {
+        "write": "update_blog_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-tags",
+      "covered_by": {
+        "stream": "blog_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blog-tags",
+      "covered_by": {
+        "write": "create_blog_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-tags/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/blog-tags/{id}",
+      "covered_by": {
+        "write": "delete_blog_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blog-tags/{id}",
+      "covered_by": {
+        "stream": "blog_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/blog-tags/{id}",
+      "covered_by": {
+        "write": "update_blog_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/brands",
+      "covered_by": {
+        "stream": "brands"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/brands",
+      "covered_by": {
+        "write": "create_brand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/brands/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/brands/{id}",
+      "covered_by": {
+        "write": "delete_brand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/brands/{id}",
+      "covered_by": {
+        "stream": "brand"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/brands/{id}",
+      "covered_by": {
+        "write": "update_brand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business",
+      "covered_by": {
+        "stream": "business"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business/features",
+      "covered_by": {
+        "stream": "features"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/business/features/change-status",
+      "covered_by": {
+        "write": "change_business_feature_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/categories",
+      "covered_by": {
+        "write": "create_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/categories/{id}",
+      "covered_by": {
+        "write": "delete_category_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories/{id}",
+      "covered_by": {
+        "stream": "category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/categories/{id}",
+      "covered_by": {
+        "write": "update_category_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/choice-set-values",
+      "covered_by": {
+        "write": "create_choice_set_value"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/choice-set-values/{id}",
+      "covered_by": {
+        "write": "delete_choice_set_value"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/choice-set-values/{id}",
+      "covered_by": {
+        "write": "update_choice_set_value"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/choice-sets",
+      "covered_by": {
+        "stream": "choice_sets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/choice-sets",
+      "covered_by": {
+        "write": "create_choice_set"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/choice-sets/{id}",
+      "covered_by": {
+        "write": "delete_choice_set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/choice-sets/{id}",
+      "covered_by": {
+        "stream": "choice_set"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/choice-sets/{id}",
+      "covered_by": {
+        "write": "update_choice_set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collect-locations",
+      "covered_by": {
+        "stream": "collect_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collect-locations/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collect-locations/{id}",
+      "covered_by": {
+        "stream": "collect_location"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/countries",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/countries/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom-fields",
+      "covered_by": {
+        "write": "create_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom-fields/{id}",
+      "covered_by": {
+        "write": "delete_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields/{id}",
+      "covered_by": {
+        "stream": "custom_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom-fields/{id}",
+      "covered_by": {
+        "write": "update_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/digital-files",
+      "covered_by": {
+        "stream": "digital_files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/digital-files",
+      "covered_by": {
+        "write": "create_digital_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/digital-files/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/digital-files/{id}",
+      "covered_by": {
+        "write": "delete_digital_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/digital-files/{id}",
+      "covered_by": {
+        "stream": "digital_file"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/digital-files/{id}",
+      "covered_by": {
+        "write": "update_digital_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filter-groups",
+      "covered_by": {
+        "stream": "filter_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/filter-groups",
+      "covered_by": {
+        "write": "create_filter_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filter-groups/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/filter-groups/{id}",
+      "covered_by": {
+        "write": "delete_filter_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filter-groups/{id}",
+      "covered_by": {
+        "stream": "filter_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/filter-groups/{id}",
+      "covered_by": {
+        "write": "update_filter_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gift-vouchers",
+      "covered_by": {
+        "stream": "gift_vouchers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gift-vouchers",
+      "covered_by": {
+        "write": "create_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gift-vouchers/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gift-vouchers/{id}",
+      "covered_by": {
+        "write": "delete_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gift-vouchers/{id}",
+      "covered_by": {
+        "stream": "gift_voucher"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gift-vouchers/{id}",
+      "covered_by": {
+        "write": "update_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incomplete-orders",
+      "covered_by": {
+        "stream": "incomplete_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incomplete-orders/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incomplete-orders/{id}",
+      "covered_by": {
+        "stream": "incomplete_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/newsletter-subscribers",
+      "covered_by": {
+        "stream": "newsletter_subscribers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/newsletter-subscribers/{id}",
+      "covered_by": {
+        "stream": "newsletter_subscriber"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nexuses",
+      "covered_by": {
+        "stream": "nexuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nexuses",
+      "covered_by": {
+        "write": "create_business_nexus"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/nexuses/{id}",
+      "covered_by": {
+        "write": "delete_business_nexus"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/nexuses/{id}",
+      "covered_by": {
+        "write": "update_business_nexus"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offers",
+      "covered_by": {
+        "stream": "offers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offers",
+      "covered_by": {
+        "write": "create_offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offers/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/offers/{id}",
+      "covered_by": {
+        "write": "delete_offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offers/{id}",
+      "covered_by": {
+        "stream": "offer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/offers/{id}",
+      "covered_by": {
+        "write": "update_offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/order-statuses",
+      "covered_by": {
+        "stream": "order_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/order-statuses",
+      "covered_by": {
+        "write": "create_order_status"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/order-statuses/{id}",
+      "covered_by": {
+        "write": "delete_order_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders",
+      "covered_by": {
+        "write": "create_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/search",
+      "covered_by": {
+        "stream": "search"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orders/{id}",
+      "covered_by": {
+        "write": "delete_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{id}",
+      "covered_by": {
+        "stream": "order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{id}/comments",
+      "covered_by": {
+        "write": "create_an_order_admin_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orders/{id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_an_order_admin_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{id}/dispatch-pre-order",
+      "covered_by": {
+        "write": "request_a_pre_order_be_dispatched"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{id}/status",
+      "covered_by": {
+        "write": "update_an_order_s_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{order_id}/refunds",
+      "covered_by": {
+        "write": "create_refund"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages",
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages",
+      "covered_by": {
+        "write": "create_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{id}",
+      "covered_by": {
+        "write": "delete_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{id}",
+      "covered_by": {
+        "stream": "page"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{id}",
+      "covered_by": {
+        "write": "update_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment-methods",
+      "covered_by": {
+        "stream": "payment_methods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "covered_by": {
+        "write": "create_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/prices",
+      "covered_by": {
+        "write": "update_prices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/search",
+      "covered_by": {
+        "stream": "search_2"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{id}",
+      "covered_by": {
+        "write": "delete_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "covered_by": {
+        "stream": "product"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{id}",
+      "covered_by": {
+        "write": "update_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}/bulk-prices",
+      "covered_by": {
+        "stream": "bulk_prices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{id}/bulk-prices",
+      "covered_by": {
+        "write": "create_bulk_price"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/bulk-prices/{id}",
+      "covered_by": {
+        "write": "delete_bulk_price"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/bulk-prices/{id}",
+      "covered_by": {
+        "stream": "bulk_price"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/bulk-prices/{id}",
+      "covered_by": {
+        "write": "update_bulk_price"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/choices",
+      "covered_by": {
+        "stream": "choices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/choices",
+      "covered_by": {
+        "write": "assign_product_choice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/choices/{id}",
+      "covered_by": {
+        "write": "delete_product_choice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/choices/{id}",
+      "covered_by": {
+        "stream": "choice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/choices/{id}",
+      "covered_by": {
+        "write": "update_product_choice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/customization-fields",
+      "covered_by": {
+        "stream": "customization_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/customization-fields",
+      "covered_by": {
+        "write": "create_product_customization_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/customization-fields/{id}",
+      "covered_by": {
+        "write": "delete_product_customization_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/customization-fields/{id}",
+      "covered_by": {
+        "write": "update_product_customization_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/extras",
+      "covered_by": {
+        "stream": "extras"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/extras",
+      "covered_by": {
+        "write": "create_product_extra"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/extras/{id}",
+      "covered_by": {
+        "write": "delete_product_extra"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/extras/{id}",
+      "covered_by": {
+        "write": "update_product_extra"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/images",
+      "covered_by": {
+        "stream": "images"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/images",
+      "covered_by": {
+        "write": "create_product_image"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/images/{id}",
+      "covered_by": {
+        "write": "delete_product_image"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/images/{id}",
+      "covered_by": {
+        "write": "update_product_image"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/option-values",
+      "covered_by": {
+        "write": "create_product_option_value"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/option-values/{id}",
+      "covered_by": {
+        "write": "delete_product_option_value"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/option-values/{id}",
+      "covered_by": {
+        "write": "update_product_option_value"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/options",
+      "covered_by": {
+        "stream": "options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/options",
+      "covered_by": {
+        "write": "create_product_option"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/options/{id}",
+      "covered_by": {
+        "write": "delete_product_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/options/{id}",
+      "covered_by": {
+        "stream": "option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/options/{id}",
+      "covered_by": {
+        "write": "update_product_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/reviews",
+      "covered_by": {
+        "stream": "reviews"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/reviews",
+      "covered_by": {
+        "write": "create_product_review"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/reviews/{id}",
+      "covered_by": {
+        "write": "delete_product_review"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/reviews/{id}",
+      "covered_by": {
+        "write": "update_product_review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/variations",
+      "covered_by": {
+        "stream": "variations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/{product_id}/variations",
+      "covered_by": {
+        "write": "create_product_variation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/variations/{id}",
+      "covered_by": {
+        "write": "delete_product_variation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/variations/{id}",
+      "covered_by": {
+        "stream": "variation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/variations/{id}",
+      "covered_by": {
+        "write": "update_product_variation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/redirects",
+      "covered_by": {
+        "stream": "redirects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/redirects",
+      "covered_by": {
+        "write": "create_redirect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/redirects/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/redirects/{id}",
+      "covered_by": {
+        "write": "delete_redirect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/redirects/{id}",
+      "covered_by": {
+        "stream": "redirect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sales",
+      "covered_by": {
+        "stream": "sales"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sales",
+      "covered_by": {
+        "write": "create_sale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sales/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sales/{id}",
+      "covered_by": {
+        "write": "delete_sale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sales/{id}",
+      "covered_by": {
+        "stream": "sale"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sales/{id}",
+      "covered_by": {
+        "write": "update_sale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping-rates",
+      "covered_by": {
+        "stream": "shipping_rates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping-rates",
+      "covered_by": {
+        "write": "create_shipping_rate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shipping-rates/{id}",
+      "covered_by": {
+        "write": "delete_shipping_rate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping-rates/{id}",
+      "covered_by": {
+        "stream": "shipping_rate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping-rates/{id}",
+      "covered_by": {
+        "write": "update_shipping_rate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping-zones",
+      "covered_by": {
+        "stream": "shipping_zones"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping-zones",
+      "covered_by": {
+        "write": "create_shipping_zone"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping-zones/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shipping-zones/{country-id}",
+      "covered_by": {
+        "write": "delete_shipping_zone"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping-zones/{country-id}",
+      "covered_by": {
+        "stream": "shipping_zone"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping-zones/{country-id}",
+      "covered_by": {
+        "write": "update_shipping_zone"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/disputes",
+      "covered_by": {
+        "stream": "disputes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/disputes/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/disputes/{dispute_id}",
+      "covered_by": {
+        "stream": "dispute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/payouts",
+      "covered_by": {
+        "stream": "payouts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/payouts/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/payouts/{payout_id}",
+      "covered_by": {
+        "stream": "payout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/transactions/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shopwired-payments/transactions/{transaction_id}",
+      "covered_by": {
+        "stream": "transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stock",
+      "covered_by": {
+        "stream": "stock"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock",
+      "covered_by": {
+        "write": "update_stock"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stock-requests",
+      "covered_by": {
+        "stream": "stock_requests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock/return",
+      "covered_by": {
+        "write": "return_stock"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/theme-assets/{theme_id}",
+      "covered_by": {
+        "write": "delete_theme_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/theme-assets/{theme_id}",
+      "covered_by": {
+        "stream": "theme_assets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/theme-assets/{theme_id}",
+      "covered_by": {
+        "write": "create_or_update_theme_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/themes",
+      "covered_by": {
+        "stream": "themes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/themes/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/themes/{id}",
+      "covered_by": {
+        "stream": "theme"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/themes/{id}",
+      "covered_by": {
+        "write": "update_theme"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trade-customer-product-prices",
+      "covered_by": {
+        "stream": "trade_customer_product_prices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/trade-customer-product-prices",
+      "covered_by": {
+        "write": "create_trade_customer_product_price"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/trade-customer-product-prices/bulk",
+      "covered_by": {
+        "write": "bulk_trade_customer_product_prices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trade-customer-product-prices/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/trade-customer-product-prices/{id}",
+      "covered_by": {
+        "write": "delete_trade_customer_product_price"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trade-customer-product-prices/{id}",
+      "covered_by": {
+        "stream": "trade_customer_product_price"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/trade-customer-product-prices/{id}",
+      "covered_by": {
+        "write": "update_trade_customer_product_price"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trade-groups",
+      "covered_by": {
+        "stream": "trade_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/trade-groups",
+      "covered_by": {
+        "write": "create_trade_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/trade-groups/{id}",
+      "covered_by": {
+        "write": "delete_trade_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trade-groups/{id}",
+      "covered_by": {
+        "stream": "trade_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/trade-groups/{id}",
+      "covered_by": {
+        "write": "update_trade_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vouchers",
+      "covered_by": {
+        "stream": "vouchers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vouchers",
+      "covered_by": {
+        "write": "create_voucher"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vouchers/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vouchers/{id}",
+      "covered_by": {
+        "write": "delete_voucher"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vouchers/{id}",
+      "covered_by": {
+        "stream": "voucher"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vouchers/{id}",
+      "covered_by": {
+        "write": "update_voucher"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "covered_by": {
+        "write": "create_a_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{id}",
+      "covered_by": {
+        "write": "delete_a_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{id}",
+      "covered_by": {
+        "write": "update_a_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/{id}/verify",
+      "covered_by": {
+        "write": "verify_a_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wishlists",
+      "covered_by": {
+        "stream": "wishlists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wishlists",
+      "covered_by": {
+        "write": "create_a_wishlist"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wishlists/count",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wishlists/{id}",
+      "covered_by": {
+        "stream": "wishlist"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wishlists/{id}",
+      "covered_by": {
+        "write": "update_a_wishlist"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wishlists/{id}/modify",
+      "covered_by": {
+        "write": "modify_a_wishlist"
+      }
+    }
   ]
 }

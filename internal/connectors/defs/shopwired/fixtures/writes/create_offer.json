@@ -1,0 +1,19 @@
+{
+  "record": {
+    "title": "title_fixture",
+    "itemCount": "itemCount_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/offers",
+    "body": {
+      "title": "title_fixture",
+      "itemCount": "itemCount_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}
