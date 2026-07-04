@@ -50,3 +50,27 @@ gains the capability.
 
 Then re-run the fix agents for the unblocked connectors + re-verify (validate + conformance +
 a targeted fidelity re-review).
+
+## Update — engine mini-wave completed + re-verified (2026-07-04)
+
+Engine features `{{ coalesce record.a record.b }}` (type-preserving first-non-null),
+`{{ record.path | length }}` (typed int), and opt-in `response_fields` (stamp a response-envelope
+field onto every record) were implemented (branch `wave5-engine`, merged) and the 8 connectors
+re-fixed. A targeted adversarial re-review (review → independent confirm) of all 8 vs legacy:
+
+- **Fully clean** (drift closed, no new divergence): convex, sigma-computing, simplecast, zoom,
+  openweather.
+- **ebay-fulfillment, google-forms** — the `length` filter initially emitted `0` when the source
+  array key was absent, whereas legacy stamps the count *only* when the array is present (guarded
+  `if arr, ok := item[k].([]any); ok`). Fixed by making the `length` computed field **omit** the
+  field for an absent/null/non-array value (read.go), matching legacy exactly. Re-verified clean.
+- **netsuite** — drift closed (populated values now match legacy's `first(...)`). One **minor,
+  accepted deviation** remains: when *every* coalesce path is absent/nil, the engine omits the key,
+  whereas legacy's `record()` always assigns it (so emits `"name": null`). This is connector-specific
+  and inexpressible as a single engine default (convex's guarded `id ?? _id` *wants* omission when
+  both are absent), and is near-unreachable (a NetSuite record lacking all of entityId/tranId, or all
+  of companyName/name/title). Accepted as a documented deviation rather than adding per-field
+  absent-mode config.
+
+Net fidelity outcome: **41 defects → 37 fully closed, 1 minor documented deviation (netsuite edge),
+3 deferred (adjust/productive object-flatten, plausible config-param).**

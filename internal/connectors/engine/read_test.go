@@ -1126,14 +1126,20 @@ func TestReadComputedFieldsLengthFilterEmitsTypedInt(t *testing.T) {
 	if len(recs) != 4 {
 		t.Fatalf("records = %+v", recs)
 	}
-	want := []int{3, 0, 0, 0}
-	for i := range want {
-		got := recs[i]["item_count"]
-		if _, isString := got.(string); isString {
-			t.Fatalf("record %d item_count = %#v (%T), want typed int, not string", i, got, got)
-		}
-		if got != want[i] {
-			t.Fatalf("record %d item_count = %#v, want %d", i, got, want[i])
+	// Only a PRESENT array yields a count. A null, absent, or non-array value
+	// omits the field entirely — mirroring legacy's guarded
+	// `if arr, ok := item[k].([]any); ok { rec[name] = len(arr) }`, which never
+	// stamps a count otherwise (emitting 0 there would be a fidelity divergence).
+	if got, ok := recs[0]["item_count"]; !ok {
+		t.Fatalf("record 0 (array) item_count missing, want 3")
+	} else if _, isString := got.(string); isString {
+		t.Fatalf("record 0 item_count = %#v (%T), want typed int, not string", got, got)
+	} else if got != 3 {
+		t.Fatalf("record 0 item_count = %#v, want typed int 3", got)
+	}
+	for i, id := range []string{"null", "absent", "object"} {
+		if got, ok := recs[i+1]["item_count"]; ok {
+			t.Fatalf("record %d (%s items) emitted item_count = %#v, want the field OMITTED (legacy stamps no count)", i+1, id, got)
 		}
 	}
 }

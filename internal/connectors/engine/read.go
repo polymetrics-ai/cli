@@ -1083,12 +1083,20 @@ func applyComputedFields(projected, raw map[string]any, cfg map[string]string, c
 			val, err := resolveRecordPathValue(raw, strings.Split(path, "."))
 			if err != nil {
 				if isUnresolvedRecordPath(err) {
-					projected[name] = 0
+					// Absent path: omit the field, matching legacy's guarded
+					// `if arr, ok := item[k].([]any); ok { rec[name] = len(arr) }`
+					// — legacy never stamps a count when the source array key is
+					// missing, so emitting 0 here would be a new divergence.
 					continue
 				}
 				return fmt.Errorf("engine: computed_fields %q: %w", name, err)
 			}
-			projected[name] = arrayLength(val)
+			// A present array yields its length (0 for an empty array); any
+			// present-but-non-array value (including JSON null) is omitted, both
+			// mirroring legacy's type-asserted guard exactly.
+			if arr, ok := val.([]any); ok {
+				projected[name] = len(arr)
+			}
 			continue
 		}
 
