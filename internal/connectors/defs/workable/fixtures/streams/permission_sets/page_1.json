@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/permission_sets"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "permission_set_fixture_1",
+        "name": "fixture_permission_set"
+      }
+    ]
+  }
+}

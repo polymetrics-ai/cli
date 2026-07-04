@@ -1,0 +1,13 @@
+{
+  "record": {
+    "candidate_id": "candidate_fixture",
+    "comment": "Fixture comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/candidates/candidate_fixture/comments",
+    "body": {
+      "comment": "Fixture comment"
+    }
+  }
+}

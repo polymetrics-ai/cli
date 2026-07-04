@@ -1,0 +1,24 @@
+{
+  "record": {
+    "firstname": "Fixture",
+    "lastname": "Employee",
+    "personal_email": [
+      {
+        "value": "employee.fixture@example.test"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/employees",
+    "body": {
+      "firstname": "Fixture",
+      "lastname": "Employee",
+      "personal_email": [
+        {
+          "value": "employee.fixture@example.test"
+        }
+      ]
+    }
+  }
+}

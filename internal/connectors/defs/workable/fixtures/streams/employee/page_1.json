@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/employees/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "firstname": "Fixture",
+      "lastname": "Employee",
+      "state": "published"
+    }
+  }
+}

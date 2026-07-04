@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "account_fixture_1",
+      "name": "Fixture Account",
+      "subdomain": "synthetic-conformance-value"
+    }
+  }
+}

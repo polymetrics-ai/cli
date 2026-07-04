@@ -1,0 +1,13 @@
+{
+  "record": {
+    "employee_id": "employee_fixture",
+    "firstname": "Fixture Updated"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/employees/employee_fixture",
+    "body": {
+      "firstname": "Fixture Updated"
+    }
+  }
+}

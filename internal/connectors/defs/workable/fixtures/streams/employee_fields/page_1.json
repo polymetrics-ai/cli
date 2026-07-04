@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/employee_fields"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "firstname",
+        "label": "First name",
+        "type": "text"
+      }
+    ]
+  }
+}

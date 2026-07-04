@@ -1,0 +1,13 @@
+{
+  "record": {
+    "approval_key": "approval_fixture",
+    "state": "approved"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/timeoff/approvals/approval_fixture",
+    "body": {
+      "state": "approved"
+    }
+  }
+}

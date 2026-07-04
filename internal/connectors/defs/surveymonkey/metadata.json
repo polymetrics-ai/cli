@@ -1,23 +1,25 @@
 {
   "name": "surveymonkey",
   "display_name": "SurveyMonkey",
-  "description": "Reads SurveyMonkey surveys, collectors, and bulk survey responses through the v3 REST API. Read-only.",
+  "description": "Reads and writes SurveyMonkey REST v3 and SCIM v2 resources through the documented API surface.",
   "integration_type": "api",
   "docs_url": "https://developer.surveymonkey.com/api/v3/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external SurveyMonkey API read of survey, collector, and response data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external SurveyMonkey API read of survey, collector, contact, team, webhook, benchmark, error, organization, and SCIM data",
+    "write": "external SurveyMonkey API mutations can create or update surveys, collectors, messages, contacts, contact lists, workgroups, organizations, webhooks, and SCIM users; message send/share actions can notify real recipients",
+    "approval": "reverse ETL writes require plan preview and approval token before any SurveyMonkey mutation is executed"
   }
 }

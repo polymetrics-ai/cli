@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recruiters"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "recruiters": [
+        {
+          "id": "recruiter_fixture_1",
+          "name": "Fixture Recruiter",
+          "email": "recruiter.fixture@example.test"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

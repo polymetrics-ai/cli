@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/departments"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "department_fixture_1",
+        "name": "Fixture Department",
+        "parent_id": null
+      }
+    ]
+  }
+}

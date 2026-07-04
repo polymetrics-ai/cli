@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/employees"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "employees": [
+        {
+          "id": "employee_fixture_1",
+          "firstname": "Fixture",
+          "lastname": "Employee",
+          "state": "published"
+        }
+      ],
+      "total_count": 1
+    }
+  }
+}

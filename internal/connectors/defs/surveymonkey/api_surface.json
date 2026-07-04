@@ -1,16 +1,953 @@
 {
-  "api": "SurveyMonkey REST API v3 (https://api.surveymonkey.com/v3)",
+  "api": "SurveyMonkey REST API v3 and SCIM API v2 (https://api.surveymonkey.com)",
   "docs": "https://developer.surveymonkey.com/api/v3/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Tier-1 migration: the 3 legacy-parity read streams only (surveys, collectors, survey_responses). SurveyMonkey's survey-editing, webhook, and contact-management endpoints are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against SurveyMonkey's rendered static API reference fetched from the official developer portal iframe. All 135 documented operations are covered: 82 GET endpoints as streams (REST v3 resources plus SCIM v2 resources) and 53 POST/PUT/PATCH endpoints as write actions. New non-legacy streams use passthrough projection with minimal catalog schemas so the engine preserves the live API response fields instead of pretending a hand-maintained schema is exhaustive. No documented DELETE endpoints were present in the fetched reference.",
   "endpoints": [
-    { "method": "GET", "path": "/v3/surveys", "covered_by": { "stream": "surveys" } },
-    { "method": "GET", "path": "/v3/surveys/{id}/collectors", "covered_by": { "stream": "collectors" } },
-    { "method": "GET", "path": "/v3/surveys/{id}/responses/bulk", "covered_by": { "stream": "survey_responses" } },
-    { "method": "GET", "path": "/v3/users/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream; used only by base.check" } },
-    { "method": "POST", "path": "/v3/surveys", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented survey creation; Pass B capability expansion" } },
-    { "method": "PATCH", "path": "/v3/surveys/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented survey updates; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/webhooks", "excluded": { "category": "out_of_scope", "reason": "webhook management not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/contacts", "excluded": { "category": "out_of_scope", "reason": "contact management not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/v3/benchmark_bundles",
+      "covered_by": {
+        "stream": "benchmark_bundles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/benchmark_bundles/{bundle_id}",
+      "covered_by": {
+        "stream": "benchmark_bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/benchmark_bundles/{id}/analyze",
+      "covered_by": {
+        "stream": "benchmark_bundle_analysis"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}",
+      "covered_by": {
+        "stream": "collector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/messages",
+      "covered_by": {
+        "stream": "collector_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
+      "covered_by": {
+        "stream": "collector_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients",
+      "covered_by": {
+        "stream": "collector_message_recipients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/recipients",
+      "covered_by": {
+        "stream": "collector_recipients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses",
+      "covered_by": {
+        "stream": "collector_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
+      "covered_by": {
+        "stream": "collector_response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}/details",
+      "covered_by": {
+        "stream": "collector_response_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses/bulk",
+      "covered_by": {
+        "stream": "collector_bulk_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/stats",
+      "covered_by": {
+        "stream": "collector_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_fields",
+      "covered_by": {
+        "stream": "contact_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_fields/{contact_field_id}",
+      "covered_by": {
+        "stream": "contact_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists",
+      "covered_by": {
+        "stream": "contact_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists/{contact_list_id}",
+      "covered_by": {
+        "stream": "contact_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists/{contact_list_id}/contacts",
+      "covered_by": {
+        "stream": "contact_list_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists/{contact_list_id}/contacts/bulk",
+      "covered_by": {
+        "stream": "contact_list_contacts_bulk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{contact_id}",
+      "covered_by": {
+        "stream": "contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/bulk",
+      "covered_by": {
+        "stream": "contacts_bulk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/errors",
+      "covered_by": {
+        "stream": "errors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/errors/{error_id}",
+      "covered_by": {
+        "stream": "error"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}",
+      "covered_by": {
+        "stream": "group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/activities",
+      "covered_by": {
+        "stream": "group_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/activities/{action_type}",
+      "covered_by": {
+        "stream": "group_activities_by_action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/members",
+      "covered_by": {
+        "stream": "group_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/members/{member_id}",
+      "covered_by": {
+        "stream": "group_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/organization/{organization_id}",
+      "covered_by": {
+        "stream": "organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/question_bank/questions",
+      "covered_by": {
+        "stream": "question_bank_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/ResourceTypes",
+      "covered_by": {
+        "stream": "scim_resource_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/ResourceTypes/{id}",
+      "covered_by": {
+        "stream": "scim_resource_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/roles",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Schemas",
+      "covered_by": {
+        "stream": "scim_schemas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Schemas/{id}",
+      "covered_by": {
+        "stream": "scim_schema"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/ServiceProviderConfig",
+      "covered_by": {
+        "stream": "scim_service_provider_config"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_categories",
+      "covered_by": {
+        "stream": "survey_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_folders",
+      "covered_by": {
+        "stream": "survey_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_languages",
+      "covered_by": {
+        "stream": "survey_languages_catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_templates",
+      "covered_by": {
+        "stream": "survey_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys",
+      "covered_by": {
+        "stream": "surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{id}",
+      "covered_by": {
+        "stream": "survey"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{id}/details",
+      "covered_by": {
+        "stream": "survey_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/collectors",
+      "covered_by": {
+        "stream": "collectors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/messages/{message_id}/stats",
+      "covered_by": {
+        "stream": "survey_collector_message_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/recipients/{recipient_id}",
+      "covered_by": {
+        "stream": "survey_collector_recipient"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/languages",
+      "covered_by": {
+        "stream": "survey_languages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/languages/{language_code}",
+      "covered_by": {
+        "stream": "survey_language"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages",
+      "covered_by": {
+        "stream": "survey_pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
+      "covered_by": {
+        "stream": "survey_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions",
+      "covered_by": {
+        "stream": "survey_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}",
+      "covered_by": {
+        "stream": "survey_question"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/benchmark",
+      "covered_by": {
+        "stream": "question_benchmark"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/rollups",
+      "covered_by": {
+        "stream": "question_rollups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/trends",
+      "covered_by": {
+        "stream": "question_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/rollups",
+      "covered_by": {
+        "stream": "page_rollups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/trends",
+      "covered_by": {
+        "stream": "page_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses",
+      "covered_by": {
+        "stream": "survey_response_summaries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
+      "covered_by": {
+        "stream": "survey_response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}/details",
+      "covered_by": {
+        "stream": "survey_response_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses/bulk",
+      "covered_by": {
+        "stream": "survey_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/rollups",
+      "covered_by": {
+        "stream": "survey_rollups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/share_list",
+      "covered_by": {
+        "stream": "survey_share_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/trends",
+      "covered_by": {
+        "stream": "survey_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/search",
+      "covered_by": {
+        "stream": "survey_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/team_survey_templates",
+      "covered_by": {
+        "stream": "team_survey_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Users",
+      "covered_by": {
+        "stream": "scim_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Users/{id}",
+      "covered_by": {
+        "stream": "scim_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{user_id}/shared",
+      "covered_by": {
+        "stream": "user_shared"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{user_id}/workgroups",
+      "covered_by": {
+        "stream": "user_workgroups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/me",
+      "covered_by": {
+        "stream": "users_me"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks/{webhook_id}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups",
+      "covered_by": {
+        "stream": "workgroups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}",
+      "covered_by": {
+        "stream": "workgroup"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/members",
+      "covered_by": {
+        "stream": "workgroup_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/members/{member_id}",
+      "covered_by": {
+        "stream": "workgroup_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/shares",
+      "covered_by": {
+        "stream": "workgroup_shares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/shares/{share_id}",
+      "covered_by": {
+        "stream": "workgroup_share"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/collectors/{collector_id}",
+      "covered_by": {
+        "write": "update_collector"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
+      "covered_by": {
+        "write": "update_collector_message"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
+      "covered_by": {
+        "write": "update_collector_response"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contact_fields/{contact_field_id}",
+      "covered_by": {
+        "write": "update_contact_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contact_lists/{contact_list_id}",
+      "covered_by": {
+        "write": "update_contact_list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contacts/{contact_id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/groups/{group_id}/members/{member_id}",
+      "covered_by": {
+        "write": "update_group_member"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/organization/{organization_id}",
+      "covered_by": {
+        "write": "update_organization"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/{id}",
+      "covered_by": {
+        "write": "update_survey"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/{survey_id}/languages/{language_code}",
+      "covered_by": {
+        "write": "update_survey_language"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
+      "covered_by": {
+        "write": "update_survey_page"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
+      "covered_by": {
+        "write": "update_survey_response"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/scim/v2/Users/{id}",
+      "covered_by": {
+        "write": "update_scim_user"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/workgroups/{workgroup_id}",
+      "covered_by": {
+        "write": "update_workgroup"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/workgroups/{workgroup_id}/members/{member_id}",
+      "covered_by": {
+        "write": "update_workgroup_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/collectors/{collector_id}/messages",
+      "covered_by": {
+        "write": "create_collector_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients",
+      "covered_by": {
+        "write": "create_message_recipient"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients/bulk",
+      "covered_by": {
+        "write": "create_message_recipients_bulk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}/send",
+      "covered_by": {
+        "write": "send_collector_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/collectors/{collector_id}/responses",
+      "covered_by": {
+        "write": "create_collector_response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact_lists",
+      "covered_by": {
+        "write": "create_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact_lists/{contact_list_id}/contacts",
+      "covered_by": {
+        "write": "add_contact_to_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact_lists/{contact_list_id}/contacts/bulk",
+      "covered_by": {
+        "write": "add_contacts_to_contact_list_bulk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact_lists/{contact_list_id}/copy",
+      "covered_by": {
+        "write": "copy_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact_lists/{contact_list_id}/merge",
+      "covered_by": {
+        "write": "merge_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/bulk",
+      "covered_by": {
+        "write": "create_contacts_bulk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/organizations",
+      "covered_by": {
+        "write": "create_organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/survey_folders",
+      "covered_by": {
+        "write": "create_survey_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys",
+      "covered_by": {
+        "write": "create_survey"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys/{survey_id}/collectors",
+      "covered_by": {
+        "write": "create_survey_collector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys/{survey_id}/languages/{language_code}",
+      "covered_by": {
+        "write": "create_survey_language"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys/{survey_id}/pages",
+      "covered_by": {
+        "write": "create_survey_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions",
+      "covered_by": {
+        "write": "create_survey_question"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys/{survey_id}/share",
+      "covered_by": {
+        "write": "share_survey"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scim/v2/Users",
+      "covered_by": {
+        "write": "create_scim_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/workgroups",
+      "covered_by": {
+        "write": "create_workgroup"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/workgroups/{workgroup_id}/members",
+      "covered_by": {
+        "write": "create_workgroup_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/workgroups/{workgroup_id}/members/bulk",
+      "covered_by": {
+        "write": "create_workgroup_members_bulk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/workgroups/{workgroup_id}/shares",
+      "covered_by": {
+        "write": "create_workgroup_share"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/workgroups/{workgroup_id}/shares/bulk",
+      "covered_by": {
+        "write": "create_workgroup_shares_bulk"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/collectors/{collector_id}",
+      "covered_by": {
+        "write": "replace_collector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
+      "covered_by": {
+        "write": "replace_collector_message"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
+      "covered_by": {
+        "write": "replace_collector_response"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact_lists/{contact_list_id}",
+      "covered_by": {
+        "write": "replace_contact_list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/{contact_id}",
+      "covered_by": {
+        "write": "replace_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/surveys/{id}",
+      "covered_by": {
+        "write": "replace_survey"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
+      "covered_by": {
+        "write": "replace_survey_page"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
+      "covered_by": {
+        "write": "replace_survey_response"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/scim/v2/Users/{id}",
+      "covered_by": {
+        "write": "replace_scim_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "replace_webhook"
+      }
+    }
   ]
 }

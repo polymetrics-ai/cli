@@ -1,0 +1,13 @@
+{
+  "record": {
+    "requisition_id": "requisition_fixture",
+    "reason": "replacement"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/requisitions/requisition_fixture",
+    "body": {
+      "reason": "replacement"
+    }
+  }
+}

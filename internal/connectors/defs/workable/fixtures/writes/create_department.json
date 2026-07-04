@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Department"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/departments",
+    "body": {
+      "name": "Fixture Department"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "candidate_id": "candidate_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/candidates/candidate_fixture/revert"
+  }
+}

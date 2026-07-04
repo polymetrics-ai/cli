@@ -1,0 +1,24 @@
+{
+  "record": {
+    "time_entries": [
+      {
+        "employee_id": "employee_fixture",
+        "type": "time-entry",
+        "from_date": "2026-01-01"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/time-tracking/time-entries",
+    "body": {
+      "time_entries": [
+        {
+          "employee_id": "employee_fixture",
+          "type": "time-entry",
+          "from_date": "2026-01-01"
+        }
+      ]
+    }
+  }
+}

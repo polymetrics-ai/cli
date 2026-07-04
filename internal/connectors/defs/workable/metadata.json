@@ -1,22 +1,25 @@
 {
   "name": "workable",
   "display_name": "Workable",
-  "description": "Reads Workable jobs, candidates, and members through the Workable API.",
+  "description": "Reads Workable recruiting, account, employee, time tracking, time off, review, subscription, requisition, and offer data; writes Workable candidate, employee, department, member, subscription, time tracking, time off, offer, and requisition mutations.",
   "integration_type": "api",
   "docs_url": "https://workable.readme.io/reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Workable API read of jobs, candidates, and members"
+    "read": "external Workable SPI v3 reads across recruiting, account, employee, time tracking, time off, review, subscription, requisition, and offer endpoints",
+    "write": "creates, updates, approves, rejects, archives, deactivates, or deletes Workable recruiting/HR resources according to the selected action",
+    "approval": "reverse ETL writes require plan preview and approval token"
   }
 }

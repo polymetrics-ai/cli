@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/candidates/synthetic-conformance-value/activities"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "activities": [
+        {
+          "id": "activity_fixture_1",
+          "action": "candidate_created",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

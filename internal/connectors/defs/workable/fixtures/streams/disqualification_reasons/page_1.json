@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/disqualification_reasons"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reasons": [
+        {
+          "id": "reason_fixture_1",
+          "name": "Fixture Reason"
+        }
+      ]
+    }
+  }
+}

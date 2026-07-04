@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "subscriptions": [
+        {
+          "id": 772571818,
+          "target": "https://example.test/workable-subscription",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

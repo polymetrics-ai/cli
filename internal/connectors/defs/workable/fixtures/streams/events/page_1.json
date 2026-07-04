@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "id": "event_fixture_1",
+          "title": "Fixture Event",
+          "type": "InterviewEvent",
+          "starts_at": "2026-01-01T10:00:00.000Z"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

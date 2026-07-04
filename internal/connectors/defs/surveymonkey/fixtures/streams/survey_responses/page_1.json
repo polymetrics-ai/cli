@@ -1,5 +1,11 @@
 {
-  "request": { "method": "GET", "path": "/surveys/synthetic-conformance-value/responses/bulk", "query": { "per_page": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/v3/surveys/synthetic-conformance-value/responses/bulk",
+    "query": {
+      "per_page": "100"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -11,7 +17,9 @@
           "analyze_url": "https://www.surveymonkey.com/analyze/fixture1"
         }
       ],
-      "links": { "next": "" }
+      "links": {
+        "next": ""
+      }
     }
   }
 }

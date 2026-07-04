@@ -2,21 +2,61 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Workable Connection Specification",
   "type": "object",
-  "required": ["base_url", "api_key"],
+  "required": [
+    "base_url",
+    "api_key"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Workable SPI v3 base URL, e.g. https://example.workable.com/spi/v3. See Known limits: legacy's account_subdomain-derived base URL is not modeled; pass the full base URL directly."
+      "description": "Full Workable SPI v3 base URL, for example https://example.workable.com/spi/v3."
     },
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "Workable API access token. Sent as a Bearer token; never logged."
+      "description": "Workable API access token sent as a Bearer token."
     },
     "start_date": {
       "type": "string",
-      "description": "created_after lower bound, sent verbatim as the created_after query param on every stream. See Known limits: page_size/max_pages are not modeled as runtime config (no templating mechanism on pagination fields in this dialect)."
+      "description": "Optional timestamp sent as created_after on legacy-compatible list streams."
+    },
+    "account_subdomain": {
+      "type": "string",
+      "description": "Account subdomain for /accounts/{subdomain}."
+    },
+    "candidate_id": {
+      "type": "string",
+      "description": "Candidate id for candidate detail and sub-resource streams."
+    },
+    "job_shortcode": {
+      "type": "string",
+      "description": "Job shortcode for job detail and sub-resource streams."
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Employee id for employee detail, documents, and employee-scoped filters."
+    },
+    "review_template_id": {
+      "type": "string",
+      "description": "Performance review template id."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Event id for event detail stream."
+    },
+    "offer_id": {
+      "type": "string",
+      "description": "Offer id for offer detail stream."
+    },
+    "requisition_code": {
+      "type": "string",
+      "description": "Requisition code for requisition detail stream."
+    },
+    "timeoff_from_date": {
+      "type": "string",
+      "default": "2020-01-01",
+      "description": "Lower date bound for timeoff_requests, whose API requires from_date."
     }
   }
 }

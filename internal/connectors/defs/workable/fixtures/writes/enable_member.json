@@ -1,0 +1,9 @@
+{
+  "record": {
+    "member_id": "member_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/members/member_fixture/enable"
+  }
+}

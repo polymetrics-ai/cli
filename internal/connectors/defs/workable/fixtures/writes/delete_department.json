@@ -1,0 +1,10 @@
+{
+  "record": {
+    "department_id": "department_fixture",
+    "force": "false"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/departments/department_fixture"
+  }
+}

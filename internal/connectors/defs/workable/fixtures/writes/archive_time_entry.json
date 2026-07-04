@@ -1,0 +1,10 @@
+{
+  "record": {
+    "employee_id": "employee_fixture",
+    "uuid": "time-entry-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/time-tracking/employees/employee_fixture/time-entries/time-entry-fixture-1"
+  }
+}

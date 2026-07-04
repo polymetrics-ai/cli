@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "title": "Fixture Event",
+      "type": "InterviewEvent"
+    }
+  }
+}

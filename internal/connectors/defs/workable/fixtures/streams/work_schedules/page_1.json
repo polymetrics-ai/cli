@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/work_schedules"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "work_schedule_fixture_1",
+        "name": "Fixture Work Schedule"
+      }
+    ]
+  }
+}

@@ -1,7 +1,13 @@
 {
-  "request": { "method": "GET", "path": "/users/me" },
+  "request": {
+    "method": "GET",
+    "path": "/v3/users/me"
+  },
   "response": {
     "status": 200,
-    "body": { "id": "fixture-user", "username": "fixture" }
+    "body": {
+      "id": "fixture-user",
+      "username": "fixture"
+    }
   }
 }

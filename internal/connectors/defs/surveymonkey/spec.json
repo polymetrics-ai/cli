@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "SurveyMonkey Connection Specification",
   "type": "object",
-  "required": ["access_token"],
+  "required": [
+    "access_token"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
@@ -12,16 +14,104 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.surveymonkey.com/v3",
-      "description": "SurveyMonkey API base URL override for tests or proxies."
+      "default": "https://api.surveymonkey.com",
+      "description": "SurveyMonkey API host root. REST streams use /v3 paths and SCIM streams use /scim/v2 paths."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "SurveyMonkey user ID for user-scoped streams."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "SurveyMonkey group ID for group-scoped streams."
+    },
+    "action_type": {
+      "type": "string",
+      "description": "SurveyMonkey group activity action type for action-scoped activity streams."
+    },
+    "member_id": {
+      "type": "string",
+      "description": "SurveyMonkey group/workgroup member ID for member detail streams."
+    },
+    "workgroup_id": {
+      "type": "string",
+      "description": "SurveyMonkey workgroup ID for workgroup-scoped streams."
+    },
+    "share_id": {
+      "type": "string",
+      "description": "SurveyMonkey workgroup share ID for share detail streams."
     },
     "survey_id": {
       "type": "string",
-      "description": "SurveyMonkey survey ID; required for the collectors and survey_responses streams, which are scoped to a single survey."
+      "description": "SurveyMonkey survey ID for survey-scoped streams."
     },
-    "mode": {
+    "page_id": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "SurveyMonkey survey page ID for page/question streams."
+    },
+    "question_id": {
+      "type": "string",
+      "description": "SurveyMonkey survey question ID for question detail, benchmark, rollup, and trend streams."
+    },
+    "language_code": {
+      "type": "string",
+      "description": "SurveyMonkey survey language code for translation streams."
+    },
+    "contact_list_id": {
+      "type": "string",
+      "description": "SurveyMonkey contact list ID for contact-list scoped streams."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "SurveyMonkey contact ID for contact detail streams."
+    },
+    "contact_field_id": {
+      "type": "string",
+      "description": "SurveyMonkey contact field ID for contact-field detail streams."
+    },
+    "collector_id": {
+      "type": "string",
+      "description": "SurveyMonkey collector ID for collector-scoped streams."
+    },
+    "message_id": {
+      "type": "string",
+      "description": "SurveyMonkey collector message ID for message-scoped streams."
+    },
+    "recipient_id": {
+      "type": "string",
+      "description": "SurveyMonkey collector recipient ID for recipient detail streams."
+    },
+    "response_id": {
+      "type": "string",
+      "description": "SurveyMonkey response ID for response detail streams."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "SurveyMonkey webhook ID for webhook detail streams."
+    },
+    "benchmark_bundle_id": {
+      "type": "string",
+      "description": "SurveyMonkey benchmark bundle ID for benchmark detail and analysis streams."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "SurveyMonkey organization ID for organization detail streams."
+    },
+    "error_id": {
+      "type": "string",
+      "description": "SurveyMonkey error ID for error detail streams."
+    },
+    "scim_user_id": {
+      "type": "string",
+      "description": "SurveyMonkey SCIM User ID for SCIM user detail streams."
+    },
+    "scim_schema_id": {
+      "type": "string",
+      "description": "SurveyMonkey SCIM Schema ID for SCIM schema detail streams."
+    },
+    "scim_resource_type_id": {
+      "type": "string",
+      "description": "SurveyMonkey SCIM ResourceType ID for SCIM resource-type detail streams."
     }
   }
 }

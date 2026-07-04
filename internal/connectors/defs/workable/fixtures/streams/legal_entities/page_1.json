@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/legal_entities"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "legal_entity_fixture_1",
+        "name": "Fixture Legal Entity",
+        "type": "entity"
+      }
+    ]
+  }
+}

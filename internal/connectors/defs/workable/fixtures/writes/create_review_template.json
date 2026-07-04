@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Review Template"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/review-cycles/templates",
+    "body": {
+      "name": "Fixture Review Template"
+    }
+  }
+}

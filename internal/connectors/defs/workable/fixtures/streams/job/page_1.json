@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "job_fixture_1",
+      "shortcode": "synthetic-conformance-value",
+      "title": "Fixture Job"
+    }
+  }
+}

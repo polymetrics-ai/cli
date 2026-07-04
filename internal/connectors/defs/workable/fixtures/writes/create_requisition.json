@@ -1,0 +1,14 @@
+{
+  "record": {
+    "code": "REQ-FIXTURE-2",
+    "reason": "replacement"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/requisitions",
+    "body": {
+      "code": "REQ-FIXTURE-2",
+      "reason": "replacement"
+    }
+  }
+}

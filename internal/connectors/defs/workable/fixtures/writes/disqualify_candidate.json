@@ -1,0 +1,13 @@
+{
+  "record": {
+    "candidate_id": "candidate_fixture",
+    "disqualification_reason": "Fixture reason"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/candidates/candidate_fixture/disqualify",
+    "body": {
+      "disqualification_reason": "Fixture reason"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/candidates/synthetic-conformance-value/files"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "files": [
+        {
+          "id": "file_fixture_1",
+          "name": "fixture_resume.pdf",
+          "url": "https://example.test/files/file_fixture_1"
+        }
+      ]
+    }
+  }
+}

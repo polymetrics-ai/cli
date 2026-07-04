@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/employees/synthetic-conformance-value/documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "documents": [
+        {
+          "id": "document_fixture_1",
+          "name": "Fixture Document",
+          "type": "signed_document"
+        }
+      ],
+      "total_count": 1
+    }
+  }
+}

@@ -1,60 +1,17 @@
 {
-  "request": { "method": "GET", "path": "/candidates", "query": { "limit": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/candidates"
+  },
   "response": {
     "status": 200,
     "body": {
       "candidates": [
         {
-          "id": "cand_fixture_1",
-          "name": "Fixture Candidate One",
-          "firstname": "Fixture",
-          "lastname": "Candidate One",
-          "headline": "Fixture Software Engineer",
-          "account": { "subdomain": "fixture", "name": "Fixture Co" },
-          "job": { "id": "job_fixture_1", "shortcode": "FIX1", "title": "Fixture Software Engineer" },
-          "stage": "sourced",
-          "disqualified": false,
-          "disqualification_reason": null,
-          "sourced": true,
-          "profile_url": "https://fixture.workable.com/backend/jobs/FIX1/candidates/cand_fixture_1",
-          "address": "Fixtureville, US",
-          "phone": "+15550100",
-          "email": "fixture.candidate.one@example.com",
-          "domain": "example.com",
-          "created_at": "2026-01-01T00:00:00.000Z",
-          "updated_at": "2026-01-02T00:00:00.000Z",
-          "education_entries": [
-            { "school": "Fixture University", "degree": "BSc Computer Science", "field_of_study": "Computer Science", "start_date": "2018-09-01", "end_date": "2022-06-01" }
-          ],
-          "experience_entries": [
-            { "title": "Software Engineer", "company": "Prior Fixture Corp", "start_date": "2022-07-01", "end_date": null, "current": true, "summary": "Fixture experience summary." }
-          ],
-          "tags": ["referral"],
-          "resume_url": "https://fixture.workable.com/backend/candidates/cand_fixture_1/resume"
-        },
-        {
-          "id": "cand_fixture_2",
-          "name": "Fixture Candidate Two",
-          "firstname": "Fixture",
-          "lastname": "Candidate Two",
-          "headline": "Fixture Product Designer",
-          "account": { "subdomain": "fixture", "name": "Fixture Co" },
-          "job": { "id": "job_fixture_2", "shortcode": "FIX2", "title": "Fixture Product Designer" },
-          "stage": "phone screen",
-          "disqualified": true,
-          "disqualification_reason": "Fixture disqualification reason",
-          "sourced": false,
-          "profile_url": "https://fixture.workable.com/backend/jobs/FIX2/candidates/cand_fixture_2",
-          "address": "Remote",
-          "phone": null,
-          "email": "fixture.candidate.two@example.com",
-          "domain": "example.com",
-          "created_at": "2026-01-03T00:00:00.000Z",
-          "updated_at": "2026-01-04T00:00:00.000Z",
-          "education_entries": [],
-          "experience_entries": [],
-          "tags": [],
-          "resume_url": null
+          "id": "candidate_fixture_1",
+          "name": "Fixture Candidate",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
         }
       ],
       "paging": {}

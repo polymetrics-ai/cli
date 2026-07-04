@@ -1,0 +1,18 @@
+{
+  "record": {
+    "employee_id": "employee_fixture",
+    "from_date": "2026-02-01",
+    "to_date": "2026-02-03",
+    "category_id": "category_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/timeoff/requests",
+    "body": {
+      "employee_id": "employee_fixture",
+      "from_date": "2026-02-01",
+      "to_date": "2026-02-03",
+      "category_id": "category_fixture"
+    }
+  }
+}

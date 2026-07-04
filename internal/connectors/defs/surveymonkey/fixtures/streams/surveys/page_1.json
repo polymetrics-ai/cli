@@ -1,5 +1,11 @@
 {
-  "request": { "method": "GET", "path": "/surveys", "query": { "per_page": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/v3/surveys",
+    "query": {
+      "per_page": "100"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
@@ -17,7 +23,9 @@
           "date_modified": "2026-01-04T00:00:00Z"
         }
       ],
-      "links": { "next": "" }
+      "links": {
+        "next": ""
+      }
     }
   }
 }

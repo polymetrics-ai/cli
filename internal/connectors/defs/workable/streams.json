@@ -3,52 +3,612 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "next_url",
       "next_url_path": "paging.next"
     },
-    "check": { "method": "GET", "path": "jobs" },
+    "check": {
+      "method": "GET",
+      "path": "/jobs",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "workable api_key is missing or invalid; re-run pm credentials add workable" },
-      { "status": 403, "hint": "workable API user lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "workable rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "workable api_key is missing or invalid; re-run pm credentials add workable"
+      },
+      {
+        "status": 403,
+        "hint": "workable API token lacks the required scope for this request"
+      },
+      {
+        "status": 404,
+        "hint": "workable resource not found or not visible to this token"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "workable rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "jobs",
-      "path": "jobs",
+      "path": "/jobs",
+      "records": {
+        "path": "jobs"
+      },
       "query": {
         "limit": "100",
-        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "created_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "jobs" },
       "projection": "passthrough",
       "schema": "schemas/jobs.json"
     },
     {
       "name": "candidates",
-      "path": "candidates",
+      "path": "/candidates",
+      "records": {
+        "path": "candidates"
+      },
       "query": {
         "limit": "100",
-        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "created_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "candidates" },
       "projection": "passthrough",
       "schema": "schemas/candidates.json"
     },
     {
       "name": "members",
-      "path": "members",
+      "path": "/members",
+      "records": {
+        "path": "members"
+      },
       "query": {
         "limit": "100",
-        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "created_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "members" },
       "projection": "passthrough",
       "schema": "schemas/members.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": {
+        "path": "accounts"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "account",
+      "path": "/accounts/{{ config.account_subdomain }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account.json"
+    },
+    {
+      "name": "collaboration_permissions",
+      "path": "/collaboration_permissions",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "_pm_id": "collaboration_permissions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collaboration_permissions.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "disqualification_reasons",
+      "path": "/disqualification_reasons",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "_pm_id": "disqualification_reasons"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/disqualification_reasons.json"
+    },
+    {
+      "name": "legal_entities",
+      "path": "/legal_entities",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/legal_entities.json"
+    },
+    {
+      "name": "permission_sets",
+      "path": "/permission_sets",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/permission_sets.json"
+    },
+    {
+      "name": "recruiters",
+      "path": "/recruiters",
+      "records": {
+        "path": "recruiters"
+      },
+      "query": {
+        "shortcode": {
+          "template": "{{ config.job_shortcode }}",
+          "omit_when_absent": true
+        }
+      },
+      "projection": "passthrough",
+      "schema": "schemas/recruiters.json"
+    },
+    {
+      "name": "stages",
+      "path": "/stages",
+      "records": {
+        "path": "stages"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/stages.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "records": {
+        "path": "subscriptions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "employee_fields",
+      "path": "/employee_fields",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/employee_fields.json"
+    },
+    {
+      "name": "employees_orgchart",
+      "path": "/employees/orgchart",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/employees_orgchart.json"
+    },
+    {
+      "name": "employees",
+      "path": "/employees",
+      "records": {
+        "path": "employees"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 10
+      },
+      "projection": "passthrough",
+      "schema": "schemas/employees.json"
+    },
+    {
+      "name": "employee",
+      "path": "/employees/{{ config.employee_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/employee.json"
+    },
+    {
+      "name": "employee_documents",
+      "path": "/employees/{{ config.employee_id }}/documents",
+      "records": {
+        "path": "documents"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 10
+      },
+      "projection": "passthrough",
+      "schema": "schemas/employee_documents.json"
+    },
+    {
+      "name": "review_templates",
+      "path": "/review-cycles/templates",
+      "records": {
+        "path": "templates"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 10
+      },
+      "projection": "passthrough",
+      "schema": "schemas/review_templates.json"
+    },
+    {
+      "name": "review_template",
+      "path": "/review-cycles/templates/{{ config.review_template_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/review_template.json"
+    },
+    {
+      "name": "time_entries",
+      "path": "/time-tracking/time-entries",
+      "records": {
+        "path": "time_entries"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 10
+      },
+      "projection": "passthrough",
+      "schema": "schemas/time_entries.json"
+    },
+    {
+      "name": "timeoff_balances",
+      "path": "/timeoff/balances",
+      "records": {
+        "path": "balances"
+      },
+      "query": {
+        "employee_id": {
+          "template": "{{ config.employee_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/timeoff_balances.json"
+    },
+    {
+      "name": "timeoff_categories",
+      "path": "/timeoff/categories",
+      "records": {
+        "path": "categories"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/timeoff_categories.json"
+    },
+    {
+      "name": "timeoff_requests",
+      "path": "/timeoff/requests",
+      "records": {
+        "path": "requests"
+      },
+      "query": {
+        "from_date": {
+          "template": "{{ config.timeoff_from_date }}",
+          "default": "2020-01-01"
+        }
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 10
+      },
+      "projection": "passthrough",
+      "schema": "schemas/timeoff_requests.json"
+    },
+    {
+      "name": "work_schedules",
+      "path": "/work_schedules",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/work_schedules.json"
+    },
+    {
+      "name": "candidate_activities",
+      "path": "/candidates/{{ config.candidate_id }}/activities",
+      "records": {
+        "path": "activities"
+      },
+      "query": {
+        "limit": "100"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/candidate_activities.json"
+    },
+    {
+      "name": "candidate_files",
+      "path": "/candidates/{{ config.candidate_id }}/files",
+      "records": {
+        "path": "files"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/candidate_files.json"
+    },
+    {
+      "name": "candidate_offer",
+      "path": "/candidates/{{ config.candidate_id }}/offer",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/candidate_offer.json"
+    },
+    {
+      "name": "custom_attributes",
+      "path": "/custom_attributes",
+      "records": {
+        "path": "custom_attributes"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_attributes.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": "events"
+      },
+      "query": {
+        "limit": "100"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "event",
+      "path": "/events/{{ config.event_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/event.json"
+    },
+    {
+      "name": "job_activities",
+      "path": "/jobs/{{ config.job_shortcode }}/activities",
+      "records": {
+        "path": "activities"
+      },
+      "query": {
+        "limit": "100"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_activities.json"
+    },
+    {
+      "name": "job_custom_attributes",
+      "path": "/jobs/{{ config.job_shortcode }}/custom_attributes",
+      "records": {
+        "path": "custom_attributes"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_custom_attributes.json"
+    },
+    {
+      "name": "job_members",
+      "path": "/jobs/{{ config.job_shortcode }}/members",
+      "records": {
+        "path": "members"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_members.json"
+    },
+    {
+      "name": "job_questions",
+      "path": "/jobs/{{ config.job_shortcode }}/questions",
+      "records": {
+        "path": "questions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_questions.json"
+    },
+    {
+      "name": "job_stages",
+      "path": "/jobs/{{ config.job_shortcode }}/stages",
+      "records": {
+        "path": "stages"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_stages.json"
+    },
+    {
+      "name": "job",
+      "path": "/jobs/{{ config.job_shortcode }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job.json"
+    },
+    {
+      "name": "job_application_form",
+      "path": "/jobs/{{ config.job_shortcode }}/application_form",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "_pm_id": "{{ config.job_shortcode }}"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_application_form.json"
+    },
+    {
+      "name": "job_recruiters",
+      "path": "/jobs/{{ config.job_shortcode }}/recruiters",
+      "records": {
+        "path": "recruiters"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_recruiters.json"
+    },
+    {
+      "name": "requisitions",
+      "path": "/requisitions",
+      "records": {
+        "path": "requisitions"
+      },
+      "query": {
+        "limit": "100",
+        "created_after": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
+      },
+      "projection": "passthrough",
+      "schema": "schemas/requisitions.json"
+    },
+    {
+      "name": "requisition",
+      "path": "/requisitions/{{ config.requisition_code }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/requisition.json"
+    },
+    {
+      "name": "offer",
+      "path": "/offers/{{ config.offer_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/offer.json"
     }
   ]
 }
