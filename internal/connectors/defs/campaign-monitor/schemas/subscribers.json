@@ -3,7 +3,6 @@
   "title": "subscribers",
   "type": "object",
   "x-primary-key": ["ListID", "EmailAddress"],
-  "x-cursor-field": "Date",
   "required": ["ListID", "EmailAddress"],
   "properties": {
     "ListID": { "type": "string" },

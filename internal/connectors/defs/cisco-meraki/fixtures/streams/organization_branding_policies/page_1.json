@@ -1,7 +1,8 @@
 {
   "request": {
     "method": "GET",
-    "path": "/organizations"
+    "path": "/organizations",
+    "query": { "perPage": "synthetic-conformance-value" }
   },
   "response": {
     "status": 200,

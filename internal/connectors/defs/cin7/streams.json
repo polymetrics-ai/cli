@@ -29,7 +29,7 @@
       "query": { "IncludeDeprecated": "true" },
       "records": { "path": "Products" },
       "computed_fields": {
-        "id": "{{ record.ID }}",
+        "id": "{{ coalesce record.ID record.SKU }}",
         "sku": "{{ record.SKU }}",
         "name": "{{ record.Name }}",
         "category": "{{ record.Category }}",
@@ -40,9 +40,6 @@
         "price_tier1": "{{ record.PriceTier1 }}",
         "cost": "{{ record.AverageCost }}",
         "last_modified": "{{ record.LastModifiedOn }}"
-      },
-      "incremental": {
-        "request_param": "ModifiedSince"
       },
       "schema": "schemas/products.json"
     },
@@ -62,9 +59,6 @@
         "tax_rule": "{{ record.TaxRule }}",
         "last_modified": "{{ record.LastModifiedOn }}"
       },
-      "incremental": {
-        "request_param": "ModifiedSince"
-      },
       "schema": "schemas/customers.json"
     },
     {
@@ -82,9 +76,6 @@
         "payment_term": "{{ record.PaymentTerm }}",
         "last_modified": "{{ record.LastModifiedOn }}"
       },
-      "incremental": {
-        "request_param": "ModifiedSince"
-      },
       "schema": "schemas/suppliers.json"
     },
     {
@@ -92,7 +83,7 @@
       "path": "/saleList",
       "records": { "path": "SaleList" },
       "computed_fields": {
-        "id": "{{ record.SaleID }}",
+        "id": "{{ coalesce record.SaleID record.ID }}",
         "order_number": "{{ record.OrderNumber }}",
         "customer": "{{ record.Customer }}",
         "customer_id": "{{ record.CustomerID }}",
@@ -103,9 +94,6 @@
         "invoice_amount": "{{ record.InvoiceAmount }}",
         "last_modified": "{{ record.LastModifiedOn }}"
       },
-      "incremental": {
-        "request_param": "UpdatedSince"
-      },
       "schema": "schemas/sale_list.json"
     },
     {
@@ -113,7 +101,7 @@
       "path": "/purchaseList",
       "records": { "path": "PurchaseList" },
       "computed_fields": {
-        "id": "{{ record.ID }}",
+        "id": "{{ coalesce record.ID record.TaskID }}",
         "order_number": "{{ record.OrderNumber }}",
         "supplier": "{{ record.Supplier }}",
         "supplier_id": "{{ record.SupplierID }}",
@@ -122,9 +110,6 @@
         "invoice_amount": "{{ record.InvoiceAmount }}",
         "order_date": "{{ record.OrderDate }}",
         "last_modified": "{{ record.LastModifiedOn }}"
-      },
-      "incremental": {
-        "request_param": "UpdatedSince"
       },
       "schema": "schemas/purchase_list.json"
     },

@@ -40,17 +40,13 @@ own `PrimaryKey: []string{"category"}` — Eventzilla's category list has no sep
 `GET /events` sequence (reusing the `attendees`/`tickets` stream's own effective pagination — the
 base `offset_limit` block, since neither stream declares its own override), extracting `id_field:
 id` off every discovered event record; `into.path_var: "event_id"` threads each discovered event id
-into `/events/{{ fanout.id }}/attendees` (or `/tickets`); `stamp_field: "event_id"` writes it onto
-every emitted child record after projection — reproducing legacy's `stampParent` (which only fills
-`event_id` when the raw record itself omits it; the real Eventzilla API always sends `event_id` on
-every attendee/ticket record, so the fan-out stamp's unconditional overwrite lands on the exact
-same value legacy's raw record already carried — never a data change for any real API response).
-Both streams' `event_id` schema property is typed `["integer", "string"]`: the raw wire value is a
-JSON integer, but the fan_out engine's stamp always writes the fan-out id as a Go string (S4 engine
-mini-wave item 2, `read.go`'s `fc.id`) — see Known limits for why this is a documented, ACCEPTABLE
-parity deviation rather than a silent narrowing.
+into `/events/{{ fanout.id }}/attendees` (or `/tickets`). The child streams deliberately do NOT
+declare `stamp_field`: Eventzilla's live attendee/ticket payload already carries `event_id` as a
+JSON integer, and legacy preserves that raw value whenever it is present (`stampParent` only filled
+the field for the legacy fallback case where the raw child record omitted it). Leaving the raw
+`event_id` untouched keeps emitted data and type fidelity with legacy for the real API shape.
 
-`transactions` (Pass B addition) is the same per-event fan-out shape as `attendees`/`tickets`:
+`transactions` (Pass B addition) uses the same event-id fan-out source as `attendees`/`tickets`:
 `GET /events/{event_id}/transactions`, records at the `transactions` field path, primary key
 `checkout_id` (the numeric id both single-transaction detail GETs — by `checkout_id` or by
 `refno` — key off of; both are excluded from `api_surface.json` as `duplicate_of` since they
@@ -81,16 +77,6 @@ charge/refund real money and cannot be expressed as a single declarative write a
 
 ## Known limits
 
-- **`attendees`/`tickets`'s `event_id` field is typed `["integer", "string"]`, not a bare
-  `integer`.** Legacy's raw Eventzilla API always sends `event_id` as a JSON integer on both
-  streams; the engine's `fan_out.stamp_field` mechanism always overwrites that field with the
-  fan-out id as a Go **string** (`read.go`'s `fc.id`), applied unconditionally after projection —
-  there is no dialect option to stamp a typed (non-string) value. This never changes the emitted
-  VALUE for any real Eventzilla response (the stamped string is the same event id legacy's own
-  `stampParent` fallback would have used, and the real API always already carries the matching
-  integer on the raw record, which the stamp simply overwrites with the string form of the same
-  id) — only the JSON **type** of the field differs from legacy's plain-integer schema. ACCEPTABLE
-  parity deviation (§5): documented here rather than silently narrowed.
 - **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size` (default
   100, capped at 100) and `max_pages` (0/all/unlimited = unbounded) as config-driven overrides
   (`eventzillaPageSize`/`eventzillaMaxPages` in `eventzilla.go`). The engine's `offset_limit`

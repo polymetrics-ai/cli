@@ -24,16 +24,6 @@
       "format": "date-time",
       "description": "RFC3339 lower bound; only builds created at or after this time are read (sent as created_from)."
     },
-    "page_size": {
-      "type": "string",
-      "default": "100",
-      "description": "Records per page (1-100)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
-    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

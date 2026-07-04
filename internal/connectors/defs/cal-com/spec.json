@@ -17,8 +17,8 @@
     },
     "api_version": {
       "type": "string",
-      "default": "2024-06-14",
-      "description": "Value sent as the cal-api-version header on every request. Cal.com v2 versions each resource family independently (bookings officially documents 2024-08-13, schedules 2024-06-11, event-types 2024-06-14) but the engine's HTTPBase.Headers is bundle-wide, not per-stream, so exactly one value must be chosen. 2024-06-14 was verified live (2026-07-04) to route bookings/schedules/event-types/webhooks/me all to their current, correctly-versioned handlers (a real-token-shaped request returns 401 Unauthorized, never a 404 version-routing miss, on every one of those 5 resources); 2024-08-13 was verified to 404 on schedules and event-types specifically. See docs.md's Known limits."
+      "default": "2024-08-13",
+      "description": "Value sent as the cal-api-version header on every request. Defaults to the legacy connector's defaultAPIVersion constant."
     }
   }
 }

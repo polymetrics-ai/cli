@@ -6,11 +6,10 @@ product stock availability, and 8 reference/lookup tables (locations, product ca
 carriers, chart of accounts, payment terms, tax rules, units of measure, price tiers) through the
 Cin7 Core External API v2 (`https://inventory.dearsystems.com/externalapi/v2/...`). This bundle
 targets capability parity with `internal/connectors/cin7` (the hand-written connector it migrates)
-for its 5 original read streams, and substantially exceeds it: legacy was read-only and never
-implemented incremental filtering; this bundle adds 10 new read streams, 13 write actions, and
-`ModifiedSince`/`UpdatedSince` incremental filtering on all 5 original streams, researched directly
-against Cin7 Core's published Apiary API Blueprint (see `api_surface.json`). The legacy package
-stays registered and unchanged until wave6's registry flip.
+for its 5 original read streams, and substantially exceeds it: legacy was read-only and always
+full-refresh; this bundle adds 10 new read streams and 13 write actions researched directly against
+Cin7 Core's published Apiary API Blueprint (see `api_surface.json`). The legacy package stays
+registered and unchanged until wave6's registry flip.
 
 ## Auth setup
 
@@ -36,16 +35,12 @@ legacy's own `harvest` stop condition. Every stream's raw uppercase Cin7 field n
 native JSON type — `price_tier1`/`cost`/`invoice_amount` stay numeric, matching legacy's own
 pass-through of Cin7's numeric JSON values).
 
-**Incremental filtering (new, beyond legacy).** Cin7 Core's Apiary docs confirm `products`/
-`customers`/`suppliers` accept a `ModifiedSince` query parameter and `sale_list`/`purchase_list`
-accept `UpdatedSince` (both ISO 8601/RFC3339, the engine's default `param_format`) to filter to
-records changed since a given timestamp. Legacy's own `harvest` never applied one (a full paginated
-sweep every read); this bundle adds `incremental.request_param` to all 5 streams and
-`x-cursor-field: last_modified` to their schemas — a genuine new capability, not a parity
-requirement, since it never changes what a full-refresh (no prior state) read returns.
+The legacy-parity streams intentionally declare no `incremental` block and no schema
+`x-cursor-field`: legacy publishes no `CursorFields` and never sends Cin7's optional
+`ModifiedSince`/`UpdatedSince` filters, so every read remains a full paginated sweep.
 
 **New streams (beyond legacy).** `product_families` (`GET /productFamily` → `ProductFamilies`,
-same shape/incremental convention as `products`) covers Cin7's product-family (variant/option)
+same list-envelope shape as `products`) covers Cin7's product-family (variant/option)
 catalog resource, distinct from `products` (Cin7 models a family of variants — e.g. a T-shirt in
 several sizes/colors — as one ProductFamily record referencing N child Product records).
 `product_availability` (`GET /ref/productavailability` → `ProductAvailabilityList`) is Cin7's
@@ -95,18 +90,12 @@ deliberately did NOT model, and `api_surface.json` for the full researched exclu
   only; a caller that previously supplied it exclusively via the secrets store must move it to
   config. This is a config-surface narrowing (ACCEPTABLE, never changes accepted-input DATA,
   conventions.md §5) — the resolved account id value once supplied is identical either way.
-- **`id`-field fallback chains are narrowed to the primary field only.** Legacy's `firstField`
-  helper falls back through a priority list when the primary id-shaped field is absent:
+- **Legacy `id` fallback chains are preserved.** Legacy's `firstField` helper falls back through a
+  priority list when the primary id-shaped field is absent:
   `products.id` = `firstField(item, "ID", "SKU")`, `sale_list.id` = `firstField(item, "SaleID",
-  "ID")`, `purchase_list.id` = `firstField(item, "ID", "TaskID")`. The engine's `computed_fields`
-  dialect has no "first of N paths" coalesce primitive — only a single bare `{{ record.<path> }}`
-  reference (or a filter chain over one reference). This bundle references only the
-  higher-priority field (`ID`/`SaleID`/`ID` respectively); the documented Cin7 Core wire shape
-  always populates that field for every real product/sale/purchase record (the fallback exists
-  defensively in legacy for malformed/partial API responses, never observed in practice).
-  ACCEPTABLE per conventions.md §5's meta-rule: this never diverges for any record the real Cin7
-  API actually returns; it is a genuine `ENGINE_GAP` only for the theoretical malformed-response
-  case legacy defends against.
+  "ID")`, `purchase_list.id` = `firstField(item, "ID", "TaskID")`. This bundle uses
+  `{{ coalesce ... }}` in `computed_fields` for those three streams, preserving the same first
+  non-null field choice.
 - `page_size` (the query size param) is a fixed `streams.json` pagination value (100, matching
   legacy's default); legacy's config-driven `page_size` override (1-1000) is not modeled —
   the engine's `page_number` paginator's `PageSize` is a static value set once in `streams.json`,

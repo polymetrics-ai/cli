@@ -3,7 +3,6 @@
   "title": "sale_list",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "last_modified",
   "properties": {
     "id": { "type": ["string", "null"] },
     "order_number": { "type": ["string", "null"] },

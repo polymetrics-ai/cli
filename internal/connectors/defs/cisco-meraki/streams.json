@@ -30,7 +30,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -44,7 +44,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -58,7 +58,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -72,7 +72,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -85,7 +85,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -99,7 +99,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -112,7 +112,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -125,7 +125,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -139,7 +139,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"
@@ -153,7 +153,7 @@
       "records": { "path": "" },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/organizations", "records_path": "", "id_field": "id" }
+          "request": { "path": "/organizations?perPage={{ config.page_size }}", "records_path": "", "id_field": "id" }
         },
         "into": { "path_var": "organization_id" },
         "stamp_field": "organizationId"

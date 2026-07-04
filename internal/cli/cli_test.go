@@ -92,7 +92,7 @@ func TestBareCommandShowsManualInsteadOfUsageError(t *testing.T) {
 		args []string
 		want string
 	}{
-		{args: []string{"connectors"}, want: "pm connectors - inspect built-in connector capabilities"},
+		{args: []string{"connectors"}, want: "pm connectors - inspect connector definitions, streams, and write actions"},
 		{args: []string{"etl"}, want: "SYNC MODES"},
 		{args: []string{"credentials"}, want: "pm credentials - manage encrypted connector credentials"},
 		{args: []string{"connections"}, want: "pm connections - configure source-to-destination sync connections"},
@@ -135,7 +135,7 @@ func TestBareCommandJSONShowsManualForAgents(t *testing.T) {
 	}
 }
 
-func TestConnectorsManualDocumentsGithubAuthStreamsAndActions(t *testing.T) {
+func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors"}, &stdout, &stderr)
 	if code != 0 {
@@ -143,6 +143,10 @@ func TestConnectorsManualDocumentsGithubAuthStreamsAndActions(t *testing.T) {
 	}
 	out := stdout.String()
 	for _, want := range []string{
+		"declarative JSON bundles",
+		"write=true/false",
+		"REVERSE ETL WRITE ACTIONS",
+		"218 writable connectors out of 547",
 		"GITHUB AUTHENTICATION",
 		"public",
 		"token",

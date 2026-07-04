@@ -6,7 +6,7 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },
-    "event_id": { "type": ["integer", "string"], "description": "Stamped by the fan_out dialect from the enclosing event id discovered via the events listing (always a string on the stamped path); the raw API also sends this field as an integer, so both shapes are declared." },
+    "event_id": { "type": ["integer", "null"] },
     "first_name": { "type": ["string", "null"] },
     "last_name": { "type": ["string", "null"] },
     "email": { "type": ["string", "null"] },

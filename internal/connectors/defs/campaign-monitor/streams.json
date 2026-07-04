@@ -126,9 +126,6 @@
         "into": { "path_var": "list_id" },
         "stamp_field": "ListID"
       },
-      "incremental": {
-        "cursor_field": "Date"
-      },
       "schema": "schemas/subscribers.json"
     },
     {
@@ -148,9 +145,6 @@
         },
         "into": { "path_var": "list_id" },
         "stamp_field": "ListID"
-      },
-      "incremental": {
-        "cursor_field": "Date"
       },
       "schema": "schemas/subscribers.json"
     },
@@ -172,9 +166,6 @@
         "into": { "path_var": "list_id" },
         "stamp_field": "ListID"
       },
-      "incremental": {
-        "cursor_field": "Date"
-      },
       "schema": "schemas/subscribers.json"
     },
     {
@@ -195,9 +186,6 @@
         "into": { "path_var": "list_id" },
         "stamp_field": "ListID"
       },
-      "incremental": {
-        "cursor_field": "Date"
-      },
       "schema": "schemas/subscribers.json"
     },
     {
@@ -217,9 +205,6 @@
         },
         "into": { "path_var": "list_id" },
         "stamp_field": "ListID"
-      },
-      "incremental": {
-        "cursor_field": "Date"
       },
       "schema": "schemas/subscribers.json"
     }

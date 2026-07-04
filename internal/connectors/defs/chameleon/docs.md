@@ -21,9 +21,13 @@ deviation: it changes how many requests a sync issues to walk a large collection
 `offset`-based pagination past the first ~2-3 pages would in practice miss or duplicate records
 against a real API that never actually implemented offset semantics server-side, since offset/limit
 was never real) — every record ever returned is unaffected in shape, only correctly enumerated now.
-The 5 original streams' record schemas were also corrected to match the real documented field names
-(`name` not `title`; no fabricated `type`/`state`/`is_live` fields — see each schema's Known Limits
-entry below for the full list of corrected fields per stream).
+The 5 original streams' record schemas intentionally retain the legacy emitted field set even where
+the newer Chameleon docs use different names. For `surveys`, `tours`, `launchers`, and `tooltips`
+that means the legacy experience fields (`title`, `type`, `state`, `is_live`, `created_at`,
+`updated_at`) rather than the broader documented `name`/`position`/`published_at` surface; for
+`segments` it means the legacy `description` field rather than the newer `items`/`items_op`
+definition. This keeps the bundle faithful to `internal/connectors/chameleon`'s emitted record data
+during the pre-cutover migration.
 
 ## Auth setup
 
@@ -94,14 +98,13 @@ conservative write surface).
 
 ## Known limits
 
-- **Corrected schemas for the 5 pre-existing streams** (Pass B research finding): `surveys`/
-  `tours`/`launchers`/`tooltips`/`segments` previously declared fabricated `title`/`type`/`state`/
-  `is_live` fields that do not appear in Chameleon's documented schema for any of these resources.
-  They are replaced with the real documented fields (`name`, `position`, `segment_ids`, `tag_ids`,
-  `published_at`, `dashboard_url`, plus resource-specific fields like `style` for tours and
-  `preset`/`title`/`description` for launchers — see each `schemas/<stream>.json`). This is a
-  correction of a wave2 research gap, not a new deviation: no caller could have been relying on the
-  fabricated fields since they never appeared in any real Chameleon API response.
+- **Legacy schemas for the 5 pre-existing streams are preserved.** The newer Chameleon docs show a
+  richer/different field set for the experience resources, but the migration target for these
+  streams is the legacy Go connector's emitted records. `surveys`/`tours`/`launchers`/`tooltips`
+  therefore declare only `id`, `title`, `type`, `state`, `is_live`, `created_at`, and
+  `updated_at`; `segments` declares `id`, `name`, `description`, `created_at`, and `updated_at`.
+  Expanded Pass B-only streams keep their documented schemas because legacy had no emitted record
+  surface for them.
 - **Pagination corrected from offset/limit to cursor** (see Overview) — a genuine bug fix. No
   `page_size`/`max_pages` runtime override is exposed (matching every other bundle's F6 rationale);
   every read uses the fixed `limit: 50` page size baked into `streams.json`.

@@ -61,8 +61,8 @@ and the 5 subscriber-state streams (`active_subscribers`/`unconfirmed_subscriber
 (`ids_from.request` against `/clients/{{ config.client_id }}/lists.json`, `into.path_var:
 "list_id"`, `stamp_field: "ListID"`) — the 5 subscriber-state streams additionally paginate
 (`page_number`, `page_param: page`, `size_param: pagesize`, `page_size: 1000` matching the docs'
-own default `PageSize`) and declare `incremental.cursor_field: Date`, all sharing one
-`schemas/subscribers.json` (identical `Subscriber` record shape across every state, per the docs);
+own default `PageSize`) and remain full-refresh, all sharing one `schemas/subscribers.json`
+(identical `Subscriber` record shape across every state, per the docs);
 `list_custom_fields`/`list_webhooks` are unpaginated bare arrays like segments/templates.
 
 ## Write actions & risks

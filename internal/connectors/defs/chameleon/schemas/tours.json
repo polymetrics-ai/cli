@@ -7,13 +7,10 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
-    "name": { "type": ["string", "null"] },
-    "style": { "type": ["string", "null"] },
-    "position": { "type": ["integer", "null"] },
-    "segment_ids": { "type": ["array", "null"] },
-    "tag_ids": { "type": ["array", "null"] },
-    "published_at": { "type": ["string", "null"], "format": "date-time" },
-    "dashboard_url": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "is_live": { "type": ["boolean", "null"] },
     "created_at": { "type": ["string", "null"], "format": "date-time" },
     "updated_at": { "type": ["string", "null"], "format": "date-time" }
   }

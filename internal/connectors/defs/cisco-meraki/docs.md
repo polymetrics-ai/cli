@@ -30,9 +30,10 @@ every organization the API key can access; primary key `id`.
 per-organization sub-resource once per organization id, stamping `organizationId` onto every
 emitted record; this bundle reproduces that exact pattern for all 10 org-scoped streams with the
 engine's `stream.fan_out` dialect: `ids_from.request` issues a preliminary, fully-paginated
-`GET /organizations` listing (the SAME endpoint the `organizations` stream itself reads, extracting
-`id` off each record); `into.path_var` makes the resolved organization id referenceable in the
-stream's own `path` as `{{ fanout.id }}` (e.g. `/organizations/{{ fanout.id }}/devices`);
+`GET /organizations?perPage={{ config.page_size }}` listing (the SAME endpoint the `organizations`
+stream itself reads, with legacy's page-size query preserved, extracting `id` off each record);
+`into.path_var` makes the resolved organization id referenceable in the stream's own `path` as
+`{{ fanout.id }}` (e.g. `/organizations/{{ fanout.id }}/devices`);
 `stamp_field: organizationId` writes the current organization id onto every emitted record of that
 stream, after projection — exactly matching legacy's `harvest`'s manual `record["organizationId"]
 = orgID` stamp for the original 3 fan-out streams, now extended to the 7 new Pass B streams.

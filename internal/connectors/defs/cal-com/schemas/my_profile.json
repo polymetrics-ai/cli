@@ -9,12 +9,8 @@
     "username": { "type": ["string", "null"] },
     "email": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },
-    "avatarUrl": { "type": ["string", "null"] },
-    "bio": { "type": ["string", "null"] },
     "timeZone": { "type": ["string", "null"] },
     "timeFormat": { "type": ["integer", "null"] },
-    "weekStart": { "type": ["string", "null"] },
-    "defaultScheduleId": { "type": ["integer", "null"] },
-    "organizationId": { "type": ["integer", "null"] }
+    "weekStart": { "type": ["string", "null"] }
   }
 }

@@ -74,3 +74,9 @@ re-fixed. A targeted adversarial re-review (review → independent confirm) of a
 
 Net fidelity outcome: **41 defects → 37 fully closed, 1 minor documented deviation (netsuite edge),
 3 deferred (adjust/productive object-flatten, plausible config-param).**
+
+## Additional shard-1 deferred findings (2026-07-04)
+
+| Connector | Defect | Required engine feature |
+|---|---|---|
+| cal-com | legacy `event_types` flattens `data.eventTypeGroups[].eventTypes[]`; bundle can only select one array/object via `records.path` | **nested-array flatten / chained extraction** (or a stream hook) |

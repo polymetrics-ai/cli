@@ -3,7 +3,6 @@
   "title": "suppliers",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "last_modified",
   "properties": {
     "id": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },

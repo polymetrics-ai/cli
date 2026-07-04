@@ -31,22 +31,23 @@ link_header`) — the byte-accurate parity choice, since legacy's own `connsdk.L
 IS Link-header following (unlike, e.g., this repo's `github` bundle, which deliberately chose
 `page_number` because ITS legacy implementation used `page`/`per_page` query params instead of
 Link headers despite GitHub's API also supporting them). Every request sends `per_page=100`
-(matches legacy's `buildkiteDefaultPageSize`) via each stream's static `query: {"per_page": "100"}`.
+(matches legacy's `buildkiteDefaultPageSize`) via each stream's static query.
 
 `builds` supports Buildkite's `created_from` incremental lower bound (legacy: `if stream ==
 "builds" { base.Set("created_from", createdGTE) }`) — expressed via the opt-in optional-query
 dialect referencing `{{ incremental.lower_bound }}` with `omit_when_absent: true`, so
 `created_from` is sent ONLY when the incremental lower bound resolves (persisted cursor, or the
 RFC3339 `start_date` config value on a fresh sync), exactly matching legacy's own conditional
-branch. `organizations`, `pipelines`, and `agents` declare no `incremental` block, matching legacy
+branch. `organizations`, `pipelines`, and `agents` retain the legacy catalog's `created_at` cursor
+metadata in their schemas but declare no `incremental` block, matching legacy request behavior
 (the `created_from` param is attached to `builds` only; legacy's own comment: "for other streams
 the param is ignored harmlessly by the API but we only attach it to builds").
 
 **Pass B additions.** `teams` (`GET /organizations/{{ config.organization }}/teams`) and `clusters`
 (`GET /organizations/{{ config.organization }}/clusters`) follow the identical org-scoped,
 `link_header`-paginated, top-level-JSON-array shape as `pipelines`/`agents` — no incremental
-cursor (neither endpoint accepts a server-side modified-since filter), `x-cursor-field: created_at`
-declared in each schema for catalog purposes only (§8 rule 2).
+cursor marker (neither endpoint accepts a server-side modified-since filter, and there is no legacy
+catalog cursor for these Pass B-only streams).
 
 ## Write actions & risks
 
@@ -97,14 +98,11 @@ Every action's per-record `risk` string in `writes.json` is the authoritative, r
   production for pagination continuation, so that substitution would NOT be byte-accurate parity
   here), would close this gap properly.
 - **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size` (1-100,
-  default 100) and `max_pages` as config-driven overrides read fresh on every `Read` call. The
-  engine's `link_header` paginator has no page-size knob at all (Buildkite's own next-page URL,
-  read from the Link header, already carries whatever `per_page` was requested on the first page);
-  `per_page=100` is a static per-stream query literal, matching stripe's `limit=100` precedent.
-  `max_pages` has no config-driven override either; pagination is bounded only by the absence of a
-  `Link: rel="next"` header, matching Buildkite's own real termination behavior. `spec.json` still
-  declares `page_size`/`max_pages` for documentation continuity with legacy's config surface, but
-  neither is wired into any template.
+  default 100) and `max_pages` as config-driven overrides read fresh on every `Read` call. This
+  bundle sends the legacy default `per_page=100` statically, and pagination is bounded by the
+  absence of a `Link: rel="next"` header, matching Buildkite's normal termination behavior. These
+  keys are intentionally not declared in `spec.json` because no runtime config template consumes
+  them.
 - Legacy's fixture-mode-only fields (`connector`, `fixture`, `previous_cursor` static/echoed
   markers stamped only under `config.mode == "fixture"`) are not modeled; this bundle's schemas and
   parity target the live wire shape only, matching this repo's established convention for a legacy
