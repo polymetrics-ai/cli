@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_content_document_asin_relations",
+  "type": "object",
+  "properties": {
+    "asin": {
+      "type": "string"
+    },
+    "badgeSet": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parent": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "contentReferenceKeySet": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "content_reference_key": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

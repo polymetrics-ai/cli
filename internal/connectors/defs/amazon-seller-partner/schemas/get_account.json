@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_account",
+  "type": "object",
+  "properties": {
+    "accountId": {
+      "type": "string"
+    },
+    "accountHolderName": {
+      "type": "string"
+    },
+    "bankAccountNumberFormat": {
+      "type": "string"
+    },
+    "bankName": {
+      "type": "string"
+    },
+    "bankAccountOwnershipType": {
+      "type": "string"
+    },
+    "routingNumber": {
+      "type": "string"
+    },
+    "bankNumberFormat": {
+      "type": "string"
+    },
+    "accountCountryCode": {
+      "type": "string"
+    },
+    "accountCurrency": {
+      "type": "string"
+    },
+    "bankAccountNumberTail": {
+      "type": "string"
+    },
+    "bankAccountHolderStatus": {
+      "type": "string"
+    },
+    "account_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "accountId"
+  ]
+}

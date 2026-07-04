@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pagespeed_reports",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string"
+    },
+    "strategy": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "requested_url": {
+      "type": "string"
+    },
+    "final_url": {
+      "type": "string"
+    },
+    "lighthouse_version": {
+      "type": "string"
+    },
+    "fetch_time": {
+      "type": "string"
+    },
+    "analysis_utc_timestamp": {
+      "type": "string"
+    },
+    "overall_loading_experience": {
+      "type": "string"
+    },
+    "performance_score": {
+      "type": "number"
+    },
+    "accessibility_score": {
+      "type": "number"
+    },
+    "best_practices_score": {
+      "type": "number"
+    },
+    "seo_score": {
+      "type": "number"
+    },
+    "pwa_score": {
+      "type": "number"
+    }
+  },
+  "x-primary-key": [
+    "url",
+    "strategy"
+  ]
+}

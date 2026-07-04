@@ -1,0 +1,38 @@
+{
+  "record": {
+    "booking_id": 2983,
+    "new_name": "Fixture Booking Updated",
+    "amendment_note": "Sanitized amendment fixture",
+    "new_wants_pickup_service": false,
+    "new_cargo_ready_date": "2026-01-20",
+    "new_metadata": {
+      "PO": ["PO-FIXTURE-1"]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/booking_amendments",
+    "body": {
+      "booking_id": 2983,
+      "new_name": "Fixture Booking Updated",
+      "amendment_note": "Sanitized amendment fixture",
+      "new_wants_pickup_service": false,
+      "new_cargo_ready_date": "2026-01-20",
+      "new_metadata": {
+        "PO": ["PO-FIXTURE-1"]
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/booking_amendment",
+        "id": 334455,
+        "booking_id": 2983,
+        "is_pending": false
+      }
+    }
+  }
+}

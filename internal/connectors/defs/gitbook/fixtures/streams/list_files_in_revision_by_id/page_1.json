@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/revisions/synthetic-conformance-value/files",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_files_in_revision_by_id_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_files_in_revision_by_id",
+          "name": "Fixture list_files_in_revision_by_id",
+          "status": "active",
+          "operation_id": "listFilesInRevisionById"
+        }
+      ]
+    }
+  }
+}

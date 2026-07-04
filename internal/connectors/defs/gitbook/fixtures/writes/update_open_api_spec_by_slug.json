@@ -1,0 +1,21 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "spec_slug": "synthetic-conformance-value",
+    "visibility": "private"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/orgs/synthetic-conformance-value/openapi/synthetic-conformance-value",
+    "body": {
+      "visibility": "private"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_open_api_spec_by_slug_fixture_1"
+    }
+  }
+}

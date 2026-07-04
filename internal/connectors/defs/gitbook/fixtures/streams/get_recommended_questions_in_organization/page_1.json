@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/ask/questions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "questions": [
+        {
+          "id": "get_recommended_questions_in_organization_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_recommended_questions_in_organization",
+          "name": "Fixture get_recommended_questions_in_organization",
+          "status": "active",
+          "operation_id": "getRecommendedQuestionsInOrganization"
+        }
+      ]
+    }
+  }
+}

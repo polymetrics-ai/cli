@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/orders/v1/purchaseOrdersStatus",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "ordersStatus": [
+          {
+            "purchaseOrderNumber": "purchaseOrderNumber-fixture-1",
+            "purchaseOrderStatus": "purchaseOrderStatus-fixture-1",
+            "purchaseOrderDate": "purchaseOrderDate-fixture-1",
+            "lastUpdatedDate": "lastUpdatedDate-fixture-1",
+            "sellingParty": {},
+            "shipToParty": {},
+            "itemStatus": []
+          }
+        ]
+      }
+    }
+  }
+}

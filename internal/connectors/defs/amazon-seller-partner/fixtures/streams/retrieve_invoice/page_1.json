@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/externalFulfillment/2024-09-11/shipments/synthetic-conformance-value/invoice"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "document": {
+        "format": "format-fixture-1",
+        "content": "content-fixture-1",
+        "shipment_id": "shipment_id-fixture-1"
+      }
+    }
+  }
+}

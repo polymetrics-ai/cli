@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/inbound/v0/shipmentItems",
+    "query": {
+      "QueryType": "synthetic-conformance-value",
+      "MarketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "ItemData": [
+          {
+            "ShipmentId": "ShipmentId-fixture-1",
+            "SellerSKU": "SellerSKU-fixture-1",
+            "FulfillmentNetworkSKU": "FulfillmentNetworkSKU-fixture-1",
+            "QuantityShipped": 1,
+            "QuantityReceived": 1,
+            "QuantityInCase": 1,
+            "ReleaseDate": "ReleaseDate-fixture-1",
+            "PrepDetailsList": []
+          }
+        ]
+      }
+    }
+  }
+}

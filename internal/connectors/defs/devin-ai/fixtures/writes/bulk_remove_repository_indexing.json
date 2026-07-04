@@ -1,0 +1,12 @@
+{
+  "record": {
+    "repository_paths": ["fixture-owner/fixture-repo"]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v3beta1/organizations/synthetic-conformance-value/repositories/indexing",
+    "body": {
+      "repository_paths": ["fixture-owner/fixture-repo"]
+    }
+  }
+}

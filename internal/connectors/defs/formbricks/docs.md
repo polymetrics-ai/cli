@@ -1,67 +1,80 @@
 # Overview
 
-Formbricks is an open-source survey/experience-management platform. This bundle reads five
-read-only streams — `surveys`, `responses`, `action_classes`, `attribute_classes`, `webhooks` —
-through the Formbricks management API (`https://app.formbricks.com/api/v1/<resource>` by default,
-or a self-hosted instance's equivalent). It migrates `internal/connectors/formbricks` (the
-hand-written legacy connector), which stays registered and unchanged until wave6's registry flip.
-Formbricks has no write/mutation surface exposed for reverse ETL in this connector, matching legacy:
-`capabilities.write` is `false` and this bundle ships no `writes.json`.
+Formbricks is an open-source survey and experience-management platform. This
+bundle targets the Formbricks API v1 Management API documented at
+`https://formbricks.com/docs/api-reference/rest-api`, using
+`https://app.formbricks.com/api/v1` by default.
+
+Pass B expands the legacy parity bundle beyond surveys, responses, action
+classes, attribute classes, and webhooks. It now also reads management account
+metadata, contact attribute keys, contact attributes, contacts, and detail
+resources, and exposes approved JSON write actions for action classes,
+responses, public file upload metadata, surveys, and webhooks.
 
 ## Auth setup
 
-Formbricks authenticates every request with an `X-API-Key` request header (`streams.json`
-`base.auth`'s `api_key_header` mode), sourced from the required `api_key` secret, matching legacy's
-`connsdk.APIKeyHeader` wiring (`formbricks.go:236-240`) exactly. `base_url` defaults to
-`https://app.formbricks.com/api/v1` (legacy's `formbricksDefaultBaseURL`) via `spec.json`'s
-`default`; override it for a self-hosted Formbricks deployment.
+Formbricks Management API requests authenticate with an `X-API-Key` header from
+the `api_key` secret. `base_url` defaults to the hosted Formbricks API v1 base
+URL and can be overridden for self-hosted deployments. The optional `survey_id`
+config narrows the `responses` stream through the documented `surveyId` query
+parameter. The optional comma-separated `response_ids` config drives the
+`response_details` stream because the response detail endpoint needs explicit
+response ids.
 
 ## Streams notes
 
-All five streams share the same envelope: records are extracted from the top-level `data` array
-(matching legacy's `connsdk.RecordsAt(resp.Body, "data")`). Every stream needs a `computed_fields`
-rename from the raw API's camelCase field names (`environmentId`, `createdAt`, `updatedAt`,
-`surveyId`, `contactId`) to this bundle's snake_case schema properties — plain schema projection
-copies by exact key match only, so without the rename these fields would silently drop (mirrors
-searxng's documented `publishedDate`-vs-`published_date` pattern, `docs/migration/conventions.md`
-§5 item 5).
+Legacy parity streams keep their original projected record shape:
+`surveys`, `responses`, `action_classes`, `attribute_classes`, and `webhooks`.
+Those streams intentionally retain the same field set as
+`internal/connectors/formbricks` instead of passing through every raw API field.
+CamelCase raw fields such as `environmentId`, `surveyId`, `contactId`,
+`createdAt`, and `updatedAt` are mapped with `computed_fields`.
 
-Only `responses` paginates: Formbricks' management API accepts `limit`/`skip` offset pagination for
-that endpoint (`offset_limit` type, `limit_param: "limit"`, `offset_param: "skip"`), matching
-legacy's `harvest` loop (`formbricks.go:145-181`) exactly — the loop stops on a short page (fewer
-than the requested size). The remaining four streams (`surveys`, `action_classes`,
-`attribute_classes`, `webhooks`) return their entire collection in a single, unpaginated page,
-matching legacy's `endpoint.paginated == false` branch (a single request, no query params sent).
+The current Formbricks v1 docs no longer list the legacy
+`management/attribute-classes` endpoint; they expose contact attribute keys and
+contact attributes instead. The `attribute_classes` stream remains for legacy
+parity, while `contact_attribute_keys`, `contact_attribute_key_details`, and
+`contact_attributes` cover the current documented contact attribute surface.
 
-`webhooks`' raw API fields `surveyIds`/`triggers` are emitted verbatim (unrenamed, camelCase) in
-both legacy (`formbricksWebhookRecord`, `streams.go:187-198`) and this bundle's schema — an
-intentional exception to the otherwise snake_case schema, preserved for exact parity rather than
-"fixed" to snake_case, since a rename here would be a data-shape change legacy itself never made.
+Detail streams use `fan_out` where a safe unpaginated list endpoint provides
+ids: surveys, action classes, contact attribute keys, contacts, and webhooks.
+`response_details` uses configured `response_ids` instead, because the response
+list endpoint is offset-paginated and the current fan-out dialect cannot assign
+separate pagination behavior to the id-list request and the child detail
+request.
 
-No stream has a working incremental capability: legacy declares `CursorFields: []string{"updated_at"}`
-on `surveys`/`responses`/`action_classes`/`attribute_classes` (manifest metadata only — `webhooks`
-declares none at all) but never actually filters or advances a read by it; this bundle mirrors that
-exactly via `x-cursor-field` on those same four schemas (and no cursor field on `webhooks`), with no
-`incremental` block on any stream.
+Only `responses` paginates, using documented `limit` and `skip` offset
+pagination with the legacy default page size of 50. No stream declares an
+incremental request parameter because legacy published cursor metadata only and
+did not send server-side incremental filters.
 
 ## Write actions & risks
 
-None. Formbricks' write/mutation surface is not exposed by this connector (legacy:
-`Capabilities.Write: false`, `Write` returns `ErrUnsupportedOperation`); `capabilities.write` is
-`false` and this bundle ships no `writes.json`.
+Write actions are intentionally resource-specific:
+`create_action_class`, `delete_action_class`, `create_response`,
+`update_response`, `delete_response`, `create_public_file_upload`,
+`create_survey`, `update_survey`, `delete_survey`, `create_webhook`, and
+`delete_webhook`.
+
+All writes use Formbricks JSON request bodies except deletes, which send no
+body. Delete actions are marked destructive and require the normal reverse ETL
+plan, preview, approval token, and execute flow. Response writes can trigger
+Formbricks response pipelines. Webhook creation starts future event deliveries
+to the configured URL. `create_public_file_upload` requests public upload
+metadata; it does not upload binary file bytes.
 
 ## Known limits
 
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy accepts optional `page_size`
-  (1-100, default 50) and `max_pages` (default unlimited) config keys read at request time
-  (`formbricksPageSize`/`formbricksMaxPages`, `formbricks.go:271-298`), applied uniformly across
-  every stream (even non-paginated ones, where `page_size` is simply unused). The engine's
-  `PaginationSpec.PageSize`/`MaxPages` fields are plain fixed JSON integers baked into
-  `streams.json` — there is no templating/config-driven override mechanism for them. This bundle
-  declares a fixed `page_size: 50` for the `responses` stream, matching legacy's own default
-  exactly (`formbricksDefaultPageSize`, `formbricks.go:28`), and no `max_pages` cap (unbounded,
-  matching legacy's own default). Neither `page_size` nor `max_pages` is declared in `spec.json`
-  (F6, `docs/migration/conventions.md`: dead, unwireable config is worse than absent config). The
-  required 2-page conformance fixture (`docs/migration/conventions.md` §4) uses a full 50-record
-  page 1 followed by a short 1-record page 2 to exercise the real page-size stop rule realistically
-  rather than leaking a fixture-scale page size into the live default.
+- The API v1 Public Client API endpoints are documented on the same REST API
+  page but are excluded from this management API connector. They use a client
+  workspace path model and are intended for SDK event/response submission, not
+  backend management API-key sync.
+- `GET /health` is excluded as an operational health check.
+- `GET /management/surveys/{surveyId}/singleUseIds` is excluded because it
+  generates new single-use survey links from a GET request. Treating it as a
+  read stream would introduce side effects.
+- The old API-key test helper `GET /api/v1/me` is excluded as a duplicate of
+  the current documented `GET /api/v1/management/me` stream.
+- `page_size` and `max_pages` config overrides from legacy are not modeled.
+  The declarative pagination spec uses the legacy default page size of 50 and
+  no max-page cap, matching legacy defaults.

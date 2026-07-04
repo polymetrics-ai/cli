@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "carts",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "id_customer": {
+      "type": "integer"
+    },
+    "id_address_delivery": {
+      "type": "integer"
+    },
+    "id_address_invoice": {
+      "type": "integer"
+    },
+    "id_currency": {
+      "type": "integer"
+    },
+    "id_lang": {
+      "type": "integer"
+    },
+    "id_carrier": {
+      "type": "integer"
+    },
+    "date_add": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "date_upd": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "date_upd"
+}

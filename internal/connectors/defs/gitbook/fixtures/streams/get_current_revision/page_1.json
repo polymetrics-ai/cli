@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/content"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pages": [
+        {
+          "id": "get_current_revision_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_current_revision",
+          "name": "Fixture get_current_revision",
+          "status": "active",
+          "operation_id": "getCurrentRevision"
+        }
+      ]
+    }
+  }
+}

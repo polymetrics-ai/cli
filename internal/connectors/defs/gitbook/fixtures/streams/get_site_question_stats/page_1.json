@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/question-stats"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "weeklyPulse": [
+        {
+          "id": "get_site_question_stats_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_site_question_stats",
+          "name": "Fixture get_site_question_stats",
+          "status": "active",
+          "operation_id": "getSiteQuestionStats"
+        }
+      ]
+    }
+  }
+}

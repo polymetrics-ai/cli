@@ -1,0 +1,284 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "task_list_template_uuid": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "due": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "due_date": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "task_template_uuid": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "completed_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "tags": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "user_id": {
+                  "type": "integer"
+                },
+                "task_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "uuid",
+                "user_id",
+                "task_id"
+              ]
+            }
+          },
+          "task_completion": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "NUMBER",
+                  "TEMPERATURE",
+                  "PHOTO",
+                  "STRING",
+                  "WEIGHT",
+                  "CHECKMARK"
+                ]
+              },
+              "primitive_type": {
+                "type": "string",
+                "enum": [
+                  "INTEGER",
+                  "DECIMAL",
+                  "FILE",
+                  "STRING",
+                  "BOOLEAN"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "C",
+                  "F",
+                  "KG"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "primitive_type",
+              "unit"
+            ]
+          },
+          "task_completion_event": {
+            "type": "object",
+            "properties": {
+              "user_id": {
+                "type": "integer"
+              },
+              "completed_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "completion_value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "user_id",
+              "completed_at",
+              "completion_value"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "user_id",
+          "completed_at"
+        ]
+      }
+    },
+    "recurrence": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "type": "string"
+        },
+        "rrule": {
+          "type": "string",
+          "description": "recurrence rules as defined by the RFC 5545 spec"
+        }
+      },
+      "required": [
+        "interval",
+        "rrule"
+      ]
+    },
+    "assignments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "integer"
+          },
+          "location_id": {
+            "type": "integer"
+          },
+          "department_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "role_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "company_id",
+          "location_id"
+        ]
+      }
+    },
+    "time_frame": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The time when this task starts",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+        },
+        "end": {
+          "type": "string",
+          "description": "The time when this task ends",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+        },
+        "start_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The date and time when this task starts",
+          "format": "date-time"
+        },
+        "end_time": {
+          "type": "string",
+          "description": "The date and time when this task ends",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "start_time",
+        "end_time"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "task_list_template_uuid",
+    "title",
+    "description",
+    "start",
+    "due",
+    "due_date",
+    "tasks",
+    "assignments",
+    "recurrence"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_task_list",
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "api": "Lokalise legacy connector hook surface",
+  "docs": "https://developers.lokalise.com/reference/api-introduction",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy lokalise connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/lokalise, which delegates to internal/connectors/lokalise until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/lokalise keys read path",
+      "covered_by": {
+        "stream": "keys"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/lokalise languages read path",
+      "covered_by": {
+        "stream": "languages"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/lokalise translations read path",
+      "covered_by": {
+        "stream": "translations"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/lokalise contributors read path",
+      "covered_by": {
+        "stream": "contributors"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/lokalise comments read path",
+      "covered_by": {
+        "stream": "comments"
+      }
+    }
+  ]
+}

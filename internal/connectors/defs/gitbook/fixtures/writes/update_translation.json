@@ -1,0 +1,25 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "translation_id": "synthetic-conformance-value",
+    "instructions": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/translations/synthetic-conformance-value",
+    "body": {
+      "instructions": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_translation_fixture_1"
+    }
+  }
+}

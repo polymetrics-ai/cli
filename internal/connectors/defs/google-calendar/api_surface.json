@@ -1,0 +1,36 @@
+{
+  "api": "Google Calendar legacy connector hook surface",
+  "docs": "https://developers.google.com/calendar/api/v3/reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy google-calendar connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/google-calendar, which delegates to internal/connectors/google-calendar until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-calendar calendar_list read path",
+      "covered_by": {
+        "stream": "calendar_list"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-calendar events read path",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-calendar settings read path",
+      "covered_by": {
+        "stream": "settings"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-calendar acl read path",
+      "covered_by": {
+        "stream": "acl"
+      }
+    }
+  ]
+}

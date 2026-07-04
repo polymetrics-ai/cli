@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_feature_sku",
+  "type": "object",
+  "properties": {
+    "marketplaceId": {
+      "type": "string"
+    },
+    "featureName": {
+      "type": "string"
+    },
+    "isEligible": {
+      "type": "boolean"
+    },
+    "ineligibleReasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sellerSku": {
+      "type": "string"
+    },
+    "fnSku": {
+      "type": "string"
+    },
+    "asin": {
+      "type": "string"
+    },
+    "skuCount": {
+      "type": "number"
+    },
+    "feature_name": {
+      "type": "string"
+    },
+    "seller_sku": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

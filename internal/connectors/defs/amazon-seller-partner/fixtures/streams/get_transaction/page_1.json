@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/wallet/2024-03-01/transactions/synthetic-conformance-value",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactionStatus": {
+        "transaction_id": "transaction_id-fixture-1"
+      }
+    }
+  }
+}

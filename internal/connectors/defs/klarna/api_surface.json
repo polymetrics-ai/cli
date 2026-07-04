@@ -1,12 +1,17 @@
 {
   "api": "Klarna Settlements API",
   "docs": "https://docs.klarna.com/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out: the 3 legacy-parity read streams only (payouts, transactions, payout_summary); the Klarna Settlements API is read-only for pm reverse-ETL purposes, no writes implemented",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against the Klarna Settlements API Swagger embedded in the canonical docs page. JSON list/detail endpoints are covered by streams without changing legacy-emitted record data: the 3 legacy streams remain, and Pass B adds payout_details and payout_summaries. CSV/PDF report downloads are excluded as binary payloads. The Settlements API publishes no POST/PUT/PATCH/DELETE operations.",
   "endpoints": [
+    { "method": "GET", "path": "/settlements/v1/payouts/summary", "covered_by": { "stream": "payout_summaries" } },
+    { "method": "GET", "path": "/settlements/v1/payouts/{payment_reference}", "covered_by": { "stream": "payout_details" } },
     { "method": "GET", "path": "/settlements/v1/payouts", "covered_by": { "stream": "payouts" } },
     { "method": "GET", "path": "/settlements/v1/transactions", "covered_by": { "stream": "transactions" } },
     { "method": "GET", "path": "/settlements/v1/payouts", "covered_by": { "stream": "payout_summary" } },
-    { "method": "GET", "path": "/settlements/v1/payouts/{payout_reference}/transactions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; per-payout transaction drill-down, not implemented by legacy internal/connectors/klarna" } }
+    { "method": "GET", "path": "/settlements/v1/reports/payout-with-transactions", "excluded": { "category": "binary_payload", "reason": "CSV report download keyed by payment_reference; the declarative stream engine expects JSON object records, not text/csv report payloads" } },
+    { "method": "GET", "path": "/settlements/v1/reports/payout", "excluded": { "category": "binary_payload", "reason": "PDF payout report download keyed by payment_reference; binary documents are outside stream/writes dialect support" } },
+    { "method": "GET", "path": "/settlements/v1/reports/payouts-summary-with-transactions", "excluded": { "category": "binary_payload", "reason": "CSV summary report download for a date range; the engine cannot parse text/csv report payloads into JSON records without a hook, and no new hook package is allowed in this pass" } },
+    { "method": "GET", "path": "/settlements/v1/reports/payouts-summary", "excluded": { "category": "binary_payload", "reason": "PDF summary report download for a date range; binary documents are outside stream/writes dialect support" } }
   ]
 }

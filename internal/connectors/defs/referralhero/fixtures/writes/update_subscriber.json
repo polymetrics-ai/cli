@@ -1,0 +1,31 @@
+{
+  "record": {
+    "uuid": "MFfixture001",
+    "subscriber_id": "sub_fixture_1",
+    "name": "Jane Updated",
+    "city": "New York",
+    "tags": ["updated"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/MFfixture001/subscribers/sub_fixture_1",
+    "body": {
+      "name": "Jane Updated",
+      "city": "New York",
+      "tags": ["updated"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "subscriber_updated",
+        "id": "sub_fixture_1",
+        "name": "Jane Updated"
+      },
+      "calls_left": 1000,
+      "timestamp": 1487661494
+    }
+  }
+}

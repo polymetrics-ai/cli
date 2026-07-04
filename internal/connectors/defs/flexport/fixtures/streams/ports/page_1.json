@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ports"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/ports",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/port",
+            "id": 105,
+            "name": "Los Angeles",
+            "iata_code": "LAX",
+            "lat": "33.7406",
+            "lng": "-118.2639",
+            "port_name": "Port of Los Angeles",
+            "country_code": "US",
+            "port_type": "seaport"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "company_id": {
+      "type": "integer"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "prompted_auto_assign_ids": {
+      "type": "boolean"
+    },
+    "has_created_list": {
+      "type": "boolean"
+    },
+    "can_use_task_management": {
+      "type": "boolean"
+    },
+    "employee_login": {
+      "type": "boolean"
+    },
+    "employee_reminder": {
+      "type": "boolean"
+    },
+    "overdue_alert": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "enabled",
+    "prompted_auto_assign_ids",
+    "has_created_list",
+    "can_use_task_management",
+    "employee_login",
+    "employee_reminder",
+    "overdue_alert"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_task_management_settings",
+  "x-primary-key": [
+    "id"
+  ]
+}

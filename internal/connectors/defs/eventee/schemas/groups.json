@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "groups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "public_name": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "emoji": { "type": ["string", "null"] },
+    "agenda": { "type": ["boolean", "null"] },
+    "newsfeed": { "type": ["boolean", "null"] },
+    "networking": { "type": ["boolean", "null"] },
+    "session_ratings": { "type": ["boolean", "null"] },
+    "social_wall": { "type": ["boolean", "null"] },
+    "gamification": { "type": ["boolean", "null"] },
+    "ticket_names": { "type": ["array", "null"], "items": { "type": "string" } },
+    "is_default": { "type": ["boolean", "null"] }
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "company_id": {
+      "type": "integer"
+    },
+    "uuid": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "integer"
+    },
+    "due": {
+      "type": "string",
+      "description": "A date with YYYY-MM-DD format",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "activated_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "task_templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sort": {
+            "type": "integer"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "task_completion": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "NUMBER",
+                  "TEMPERATURE",
+                  "PHOTO",
+                  "STRING",
+                  "WEIGHT",
+                  "CHECKMARK"
+                ]
+              },
+              "primitive_type": {
+                "type": "string",
+                "enum": [
+                  "INTEGER",
+                  "DECIMAL",
+                  "FILE",
+                  "STRING",
+                  "BOOLEAN"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "C",
+                  "F",
+                  "KG"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "primitive_type",
+              "unit"
+            ]
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "sort"
+        ]
+      }
+    },
+    "assignments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer"
+          },
+          "department_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "role_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "location_id"
+        ]
+      }
+    },
+    "recurrence": {
+      "type": "string",
+      "description": "recurrence rules as defined by the RFC 5545 spec"
+    },
+    "time_frame": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The time when this task starts",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+        },
+        "end": {
+          "type": "string",
+          "description": "The time when this task ends",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "uuid",
+    "title",
+    "description",
+    "status",
+    "created",
+    "activated_at",
+    "task_templates",
+    "assignments",
+    "recurrence"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_task_list_template",
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,9 +1,9 @@
 # Overview
 
 tyntec SMS reads messages, templates, sender IDs, and delivery reports from the tyntec Messaging
-API (`GET {base_url}/sms/v1/<resource>`). This bundle migrates the hand-written
-`internal/connectors/tyntec-sms` legacy package to a declarative Tier-1 defs bundle at capability
-parity; the legacy package stays registered and unchanged until wave6's registry flip.
+API (`GET {base_url}/sms/v1/<resource>`). Pass B also adds the documented SMS send mutation as an
+approval-gated write action. The legacy package stays registered and unchanged until wave6's
+registry flip.
 
 ## Auth setup
 
@@ -36,8 +36,10 @@ declared).
 
 ## Write actions & risks
 
-None. This is a read-only connector; `capabilities.write` is `false` and this bundle ships no
-`writes.json`, matching legacy's `Write` stub (`connectors.ErrUnsupportedOperation`).
+`send_message` posts to `POST sms/v1/messages` and sends an SMS through tyntec. Records must provide
+`to`, `from`, and `text`; optional `reference` and `callbackUrl` fields are forwarded when present.
+This is a billable, externally visible side effect and requires reverse-ETL plan preview and
+approval before execution.
 
 ## Known limits
 
@@ -54,3 +56,8 @@ None. This is a read-only connector; `capabilities.write` is `false` and this bu
   previously relied on setting `max_pages=all`/a larger `page_size` to pull more than one page's
   worth of records per read loses that override; out of scope for this wave, not silently wrong for
   the common (unconfigured) case.
+- The stale metadata URL `https://api.tyntec.com/reference/messaging` returned 404 during Pass B.
+  The official reference index at `https://api.tyntec.com/reference/` was reachable and links the
+  SMS API reference; HTTPS fetches of the linked `sms/current.html` page failed from this sandbox,
+  so the write schema is kept to the stable documented SMS send fields (`to`, `from`, `text`) plus
+  two common optional fields.

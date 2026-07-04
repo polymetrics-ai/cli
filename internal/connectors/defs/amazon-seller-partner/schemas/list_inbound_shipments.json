@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_inbound_shipments",
+  "type": "object",
+  "properties": {
+    "createdAt": {
+      "type": "string"
+    },
+    "externalReferenceId": {
+      "type": "string"
+    },
+    "orderId": {
+      "type": "string"
+    },
+    "shipmentId": {
+      "type": "string"
+    },
+    "shipmentStatus": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "orderId"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_order_metrics",
+  "type": "object",
+  "properties": {
+    "interval": {
+      "type": "string"
+    },
+    "unitCount": {
+      "type": "integer"
+    },
+    "orderItemCount": {
+      "type": "integer"
+    },
+    "orderCount": {
+      "type": "integer"
+    },
+    "averageUnitPrice": {
+      "type": "object"
+    },
+    "totalSales": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

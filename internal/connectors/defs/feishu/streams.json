@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "records",
+      "method": "GET",
+      "path": "/__legacy_hook/records",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/records.json"
+    },
+    {
+      "name": "tables",
+      "method": "GET",
+      "path": "/__legacy_hook/tables",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tables.json"
+    },
+    {
+      "name": "fields",
+      "method": "GET",
+      "path": "/__legacy_hook/fields",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/fields.json"
+    }
+  ]
+}

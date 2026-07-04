@@ -1,0 +1,18 @@
+{
+  "record": {
+    "group_id": "group_fixture_1",
+    "name": "Fixture group updated",
+    "case_sharing": true,
+    "reporting": true,
+    "users": ["mobile_worker_fixture_1"],
+    "metadata": { "localization": "Updated Fixture" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/group/v1/group_fixture_1/",
+    "body": {
+      "name": "Fixture group updated",
+      "case_sharing": true
+    }
+  }
+}

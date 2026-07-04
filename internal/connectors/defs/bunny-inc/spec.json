@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bunny, Inc. Connection Specification",
+  "type": "object",
+  "required": [
+    "apikey",
+    "subdomain"
+  ],
+  "properties": {
+    "apikey": {
+      "type": "string",
+      "x-secret": true
+    },
+    "start_date": {
+      "type": "string"
+    },
+    "subdomain": {
+      "type": "string",
+      "description": "The subdomain specific to your Bunny account or service."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/comments/synthetic-conformance-value/replies/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reactions": [
+        {
+          "id": "get_comment_reply_in_change_request_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_comment_reply_in_change_request",
+          "name": "Fixture get_comment_reply_in_change_request",
+          "status": "active",
+          "operation_id": "getCommentReplyInChangeRequest"
+        }
+      ]
+    }
+  }
+}

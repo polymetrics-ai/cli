@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Analytics 4 (GA4) Connection Specification",
+  "type": "object",
+  "required": [
+    "property_ids"
+  ],
+  "properties": {
+    "convert_conversions_event": {
+      "type": "string",
+      "description": "Enables conversion of `conversions:*` event metrics from integers to floats. This is beneficial for preventing data rounding when the API returns float values for any `conversions:*` fields."
+    },
+    "credentials": {
+      "type": "string",
+      "description": "Credentials for the service"
+    },
+    "custom_reports_array": {
+      "type": "string",
+      "description": "You can add your Custom Analytics report by creating one."
+    },
+    "date_ranges_end_date": {
+      "type": "string",
+      "description": "The end date from which to replicate report data in the format YYYY-MM-DD. Data generated after this date will not be included in the report. Not applied to custom Cohort reports. When no date is provided or the date is in the future, the date from today is used."
+    },
+    "date_ranges_start_date": {
+      "type": "string",
+      "description": "The start date from which to replicate report data in the format YYYY-MM-DD. Data generated before this date will not be included in the report. Not applied to custom Cohort reports."
+    },
+    "keep_empty_rows": {
+      "type": "string",
+      "description": "If false, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter. More information is available in <a href=\"https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport#request-body\">the documentation</a>."
+    },
+    "lookback_window": {
+      "type": "string",
+      "description": "Since attribution changes after the event date, and Google Analytics has a data processing latency, we should specify how many days in the past we should refresh the data in every run. So if you set it at 5 days, in every sync it will fetch the last bookmark date minus 5 days."
+    },
+    "property_ids": {
+      "type": "string",
+      "description": "A list of your Property IDs. The Property ID is a unique number assigned to each property in Google Analytics, found in your GA4 property URL. This ID allows the connector to track the specific events associated with your property. Refer to the <a href='https://developers.google.com/analytics/devguides/reporting/data/v1/property-id#what_is_my_property_id'>Google Analytics documentation</a> to locate your property ID."
+    },
+    "subscription_tier": {
+      "type": "string",
+      "description": "Quota tier of the Google Analytics 4 properties being queried. Determines the per-property rate-limit policy applied locally once the tier-aware rate-limit budget is activated. Select \"Analytics 360 Property\" only if all configured property IDs belong to an Analytics 360 subscription. See https://developers.google.com/analytics/devguides/reporting/data/v1/quotas."
+    },
+    "window_in_days": {
+      "type": "string",
+      "description": "manual intervention needed"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

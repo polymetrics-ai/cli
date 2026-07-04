@@ -1,0 +1,5 @@
+{
+  "record": {},
+  "expect": { "method": "DELETE", "path": "/test/content" },
+  "response": { "status": 204, "body": {} }
+}

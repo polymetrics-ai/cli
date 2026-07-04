@@ -1,0 +1,19 @@
+{
+  "record": {
+    "lookup_table_item_id": "lookup_table_row_fixture_1",
+    "data_type_id": "lookup_table_fixture_1",
+    "fields": {
+      "name": { "field_list": [{ "field_value": "MMR", "properties": { "lang": "en" } }] },
+      "price": { "field_list": [{ "field_value": "10", "properties": {} }] }
+    },
+    "sort_key": 3
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/lookup_table_item/v1/lookup_table_row_fixture_1",
+    "body": {
+      "data_type_id": "lookup_table_fixture_1",
+      "sort_key": 3
+    }
+  }
+}

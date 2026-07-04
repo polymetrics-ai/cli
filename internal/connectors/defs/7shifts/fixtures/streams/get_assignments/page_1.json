@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/users/synthetic-conformance-value/assignments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "locations": [
+          {
+            "id": 1001,
+            "name": "fixture name"
+          }
+        ],
+        "departments": [
+          {
+            "id": 1001,
+            "company_id": 1001,
+            "location_id": 1001,
+            "name": "fixture name",
+            "appear_on_schedule": true
+          }
+        ],
+        "roles": [
+          {
+            "id": 1001,
+            "company_id": 1001,
+            "location_id": 1001,
+            "department_id": 1001,
+            "name": "fixture name",
+            "is_primary": true,
+            "skill_level": 0,
+            "sort": 1001
+          }
+        ]
+      }
+    }
+  }
+}

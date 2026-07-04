@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Manual Entry UUID",
+      "format": "uuid"
+    },
+    "tip_pool_settings_uuid": {
+      "type": "string",
+      "description": "UUID for the associated Tip Pool",
+      "format": "uuid"
+    },
+    "day_part_uuid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "UUID for the associated Day Part (if any)",
+      "format": "uuid"
+    },
+    "entry_date": {
+      "type": "string",
+      "description": "The date of the manually entered tips"
+    },
+    "tip_amount": {
+      "type": "number",
+      "description": "The tip amount for the given manual entry",
+      "format": "float"
+    },
+    "created": {
+      "type": "string",
+      "description": "When this manual entry record was created"
+    },
+    "modified": {
+      "type": "string",
+      "description": "When this manual entry record was last modified"
+    }
+  },
+  "required": [
+    "uuid",
+    "tip_pool_settings_uuid",
+    "entry_date",
+    "tip_amount"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "fetch_tip_pool_manual_entry",
+  "x-primary-key": [
+    "uuid"
+  ]
+}

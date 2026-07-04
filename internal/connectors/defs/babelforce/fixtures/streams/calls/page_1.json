@@ -1,0 +1,23 @@
+{
+  "data": [
+    {
+      "id": "fixture",
+      "type": "fixture",
+      "state": "fixture",
+      "source": "fixture",
+      "domain": "fixture",
+      "from": "fixture",
+      "to": "fixture",
+      "anonymous": true,
+      "duration": 1,
+      "finishReason": "fixture",
+      "conversationId": "fixture",
+      "sessionId": "fixture",
+      "parentId": "fixture",
+      "dateCreated": "fixture",
+      "dateEstablished": "fixture",
+      "dateFinished": "fixture",
+      "lastUpdated": "fixture"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/shifts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "user_id": 1001,
+        "start": "2026-01-01T00:00:00Z",
+        "end": "2026-01-01T00:00:00Z",
+        "close": true,
+        "business_decline": true,
+        "department_id": 1001,
+        "location_id": 1001,
+        "role_id": 1001,
+        "notes": "fixture notes",
+        "draft": true,
+        "notified": true,
+        "open": true,
+        "unassigned": true,
+        "unassigned_skill_level": 1001,
+        "open_offer_type": "all_location_members",
+        "attendance_status": "none",
+        "publish_status": "draft",
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-01T00:00:00Z",
+        "deleted": true,
+        "soft_deleted": "fixture soft deleted",
+        "station": 1001,
+        "station_name": "fixture station name",
+        "station_id": 1001,
+        "hourly_wage": 12.34,
+        "custom_flag": {
+          "id": 1001,
+          "name": "fixture name",
+          "color": "fixture color"
+        },
+        "late_minuets": 1001,
+        "breaks": [
+          {
+            "id": 1001,
+            "shift_id": 1001,
+            "name": "fixture name",
+            "length": 1001,
+            "break_type_id": 1001,
+            "start": "2026-01-01T00:00:00Z",
+            "end": "2026-01-01T00:00:00Z",
+            "type": "paid"
+          }
+        ]
+      }
+    }
+  }
+}

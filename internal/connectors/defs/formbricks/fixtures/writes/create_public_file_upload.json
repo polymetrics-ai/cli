@@ -1,0 +1,17 @@
+{
+  "record": {
+    "fileName": "profile.png",
+    "fileType": "image/png",
+    "workspaceId": "wrk_fixture_1",
+    "allowedFileExtensions": ["png", "jpg"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/management/storage",
+    "body": {
+      "fileName": "profile.png",
+      "fileType": "image/png",
+      "workspaceId": "wrk_fixture_1"
+    }
+  }
+}

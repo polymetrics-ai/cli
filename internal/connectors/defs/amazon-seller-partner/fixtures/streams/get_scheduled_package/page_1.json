@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/easyShip/2022-03-23/package",
+    "query": {
+      "amazonOrderId": "synthetic-conformance-value",
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "packageItems": [
+        {
+          "orderItemId": "orderItemId-fixture-1",
+          "orderItemSerialNumbers": []
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "url": "https://example.com/gitbook"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/urls/published",
+    "body": {
+      "url": "https://example.com/gitbook"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "resolve_published_content_by_url_fixture_1"
+    }
+  }
+}

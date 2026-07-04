@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/urls/embed",
+    "query": {
+      "url": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_embed_by_url_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_embed_by_url",
+      "name": "Fixture get_embed_by_url",
+      "status": "active",
+      "operation_id": "getEmbedByUrl"
+    }
+  }
+}

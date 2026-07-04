@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/adaptive-schema/template-conditions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_adaptive_template_conditions_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_adaptive_template_conditions",
+          "name": "Fixture list_site_adaptive_template_conditions",
+          "status": "active",
+          "operation_id": "listSiteAdaptiveTemplateConditions"
+        }
+      ]
+    }
+  }
+}

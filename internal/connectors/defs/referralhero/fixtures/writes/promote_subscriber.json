@@ -1,0 +1,22 @@
+{
+  "record": {
+    "uuid": "MFfixture001",
+    "subscriber_id": "sub_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/MFfixture001/subscribers/sub_fixture_1/promote"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "subscriber_promoted",
+        "id": "sub_fixture_1"
+      },
+      "calls_left": 1000,
+      "timestamp": 1487661494
+    }
+  }
+}

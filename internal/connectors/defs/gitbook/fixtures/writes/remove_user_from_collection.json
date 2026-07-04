@@ -1,0 +1,17 @@
+{
+  "record": {
+    "collection_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/collections/synthetic-conformance-value/permissions/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "remove_user_from_collection_fixture_1"
+    }
+  }
+}

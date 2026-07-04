@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/coupon_groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "id": "rh200",
+        "name": "RH200",
+        "active": true,
+        "created_at": 1686563246,
+        "coupons": [
+          {
+            "code": "FCMPFI",
+            "available": true,
+            "sent_at": null,
+            "email_id": null,
+            "created_at": 1686563246
+          }
+        ]
+      },
+      "calls_left": null,
+      "timestamp": 1686563777
+    }
+  }
+}

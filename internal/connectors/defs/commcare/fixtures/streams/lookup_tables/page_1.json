@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/lookup_table/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "fields": [
+            { "field_name": "name", "properties": ["lang"] },
+            { "field_name": "price", "properties": [] }
+          ],
+          "id": "lookup_table_fixture_1",
+          "is_global": true,
+          "resource_uri": "",
+          "tag": "vaccines"
+        }
+      ]
+    }
+  }
+}

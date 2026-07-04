@@ -3,7 +3,10 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "custom", "hook": "amazon-seller-partner" }
+      {
+        "mode": "custom",
+        "hook": "amazon-seller-partner"
+      }
     ],
     "check": {
       "method": "GET",
@@ -15,9 +18,19 @@
       }
     },
     "error_map": [
-      { "status": 401, "hint": "amazon-seller-partner LWA credentials are missing or invalid; re-run pm credentials add amazon-seller-partner" },
-      { "status": 403, "hint": "amazon-seller-partner credentials lack access for this marketplace/resource" },
-      { "status": 429, "class": "rate_limited", "hint": "amazon-seller-partner (SP-API) rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "amazon-seller-partner LWA credentials are missing or invalid; re-run pm credentials add amazon-seller-partner"
+      },
+      {
+        "status": 403,
+        "hint": "amazon-seller-partner credentials lack access for this marketplace/resource"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "amazon-seller-partner (SP-API) rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -28,7 +41,9 @@
         "MarketplaceIds": "{{ config.marketplace_id }}",
         "MaxResultsPerPage": "{{ config.page_size }}"
       },
-      "records": { "path": "payload.Orders" },
+      "records": {
+        "path": "payload.Orders"
+      },
       "pagination": {
         "type": "cursor",
         "cursor_param": "NextToken",
@@ -51,7 +66,9 @@
         "marketplaceIds": "{{ config.marketplace_id }}",
         "details": "true"
       },
-      "records": { "path": "payload.inventorySummaries" },
+      "records": {
+        "path": "payload.inventorySummaries"
+      },
       "pagination": {
         "type": "cursor",
         "cursor_param": "nextToken",
@@ -71,7 +88,9 @@
       "query": {
         "MaxResultsPerPage": "{{ config.page_size }}"
       },
-      "records": { "path": "payload.FinancialEventGroupList" },
+      "records": {
+        "path": "payload.FinancialEventGroupList"
+      },
       "pagination": {
         "type": "cursor",
         "cursor_param": "NextToken",
@@ -84,6 +103,2221 @@
         "start_config_key": "replication_start_date"
       },
       "schema": "schemas/financial_event_groups.json"
+    },
+    {
+      "name": "list_content_document_asin_relations",
+      "path": "/aplus/2020-11-01/contentDocuments/{{ config.content_reference_key }}/asins",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "asinMetadataSet"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_content_document_asin_relations.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "computed_fields": {
+        "content_reference_key": "{{ config.content_reference_key }}"
+      }
+    },
+    {
+      "name": "search_content_documents",
+      "path": "/aplus/2020-11-01/contentDocuments",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "contentMetadataRecords"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_content_documents.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      }
+    },
+    {
+      "name": "search_content_publish_records",
+      "path": "/aplus/2020-11-01/contentPublishRecords",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}",
+        "asin": "{{ config.asin }}"
+      },
+      "records": {
+        "path": "publishRecordList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_content_publish_records.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      }
+    },
+    {
+      "name": "get_inbound",
+      "path": "/awd/2024-05-09/inboundOrders/{{ config.order_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_inbound.json",
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "get_label_page_types",
+      "path": "/awd/2024-05-09/inboundShipments/{{ config.shipment_id }}/labelPageTypes",
+      "records": {
+        "path": "pageTypes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_label_page_types.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_inbound_shipment",
+      "path": "/awd/2024-05-09/inboundShipments/{{ config.shipment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_inbound_shipment.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "list_inbound_shipments",
+      "path": "/awd/2024-05-09/inboundShipments",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "shipments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbound_shipments.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "list_inventory",
+      "path": "/awd/2024-05-09/inventory",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "inventory"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inventory.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "get_outbound",
+      "path": "/awd/2024-05-09/outboundOrders/{{ config.order_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_outbound.json",
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "list_outbounds",
+      "path": "/awd/2024-05-09/outboundOrders",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "outboundOrders"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_outbounds.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "get_replenishment_order",
+      "path": "/awd/2024-05-09/replenishmentOrders/{{ config.order_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_replenishment_order.json",
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "list_replenishment_orders",
+      "path": "/awd/2024-05-09/replenishmentOrders",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "orders"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_replenishment_orders.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "get_catalog_item",
+      "path": "/catalog/2020-12-01/items/{{ config.asin }}",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_catalog_item.json",
+      "computed_fields": {
+        "asin": "{{ config.asin }}"
+      }
+    },
+    {
+      "name": "search_catalog_items",
+      "path": "/catalog/2020-12-01/items",
+      "query": {
+        "keywords": "{{ config.keywords }}",
+        "marketplaceIds": "{{ config.marketplace_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_catalog_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_catalog_item_catalog_2022_04_01_items_asin",
+      "path": "/catalog/2022-04-01/items/{{ config.asin }}",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_catalog_item_catalog_2022_04_01_items_asin.json",
+      "computed_fields": {
+        "asin": "{{ config.asin }}"
+      }
+    },
+    {
+      "name": "search_catalog_items_catalog_2022_04_01_items",
+      "path": "/catalog/2022-04-01/items",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_catalog_items_catalog_2022_04_01_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_vehicles",
+      "path": "/catalog/2024-11-01/automotive/vehicles",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}",
+        "vehicleType": "{{ config.vehicle_type }}"
+      },
+      "records": {
+        "path": "vehicles"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_vehicles.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "list_catalog_categories",
+      "path": "/catalog/v0/categories",
+      "query": {
+        "MarketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_catalog_categories.json"
+    },
+    {
+      "name": "get_browse_node_return_topics",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{{ config.browse_node_id }}/returns/topics",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "topics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_browse_node_return_topics.json",
+      "computed_fields": {
+        "browse_node_id": "{{ config.browse_node_id }}"
+      }
+    },
+    {
+      "name": "get_browse_node_return_trends",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{{ config.browse_node_id }}/returns/trends",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "returnTrends"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_browse_node_return_trends.json",
+      "computed_fields": {
+        "browse_node_id": "{{ config.browse_node_id }}"
+      }
+    },
+    {
+      "name": "get_browse_node_review_topics",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{{ config.browse_node_id }}/reviews/topics",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}",
+        "sortBy": "{{ config.sort_by }}"
+      },
+      "records": {
+        "path": "topics.positiveTopics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_browse_node_review_topics.json",
+      "computed_fields": {
+        "browse_node_id": "{{ config.browse_node_id }}"
+      }
+    },
+    {
+      "name": "get_browse_node_review_trends",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{{ config.browse_node_id }}/reviews/trends",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "reviewTrends.positiveTopics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_browse_node_review_trends.json",
+      "computed_fields": {
+        "browse_node_id": "{{ config.browse_node_id }}"
+      }
+    },
+    {
+      "name": "get_item_browse_node",
+      "path": "/customerFeedback/2024-06-01/items/{{ config.asin }}/browseNode",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_item_browse_node.json",
+      "computed_fields": {
+        "asin": "{{ config.asin }}"
+      }
+    },
+    {
+      "name": "get_item_review_topics",
+      "path": "/customerFeedback/2024-06-01/items/{{ config.asin }}/reviews/topics",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}",
+        "sortBy": "{{ config.sort_by }}"
+      },
+      "records": {
+        "path": "topics.positiveTopics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_item_review_topics.json",
+      "computed_fields": {
+        "asin": "{{ config.asin }}"
+      }
+    },
+    {
+      "name": "get_item_review_trends",
+      "path": "/customerFeedback/2024-06-01/items/{{ config.asin }}/reviews/trends",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "reviewTrends.positiveTopics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_item_review_trends.json",
+      "computed_fields": {
+        "asin": "{{ config.asin }}"
+      }
+    },
+    {
+      "name": "get_query",
+      "path": "/dataKiosk/2023-11-15/queries/{{ config.query_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_query.json",
+      "computed_fields": {
+        "query_id": "{{ config.query_id }}"
+      }
+    },
+    {
+      "name": "get_queries",
+      "path": "/dataKiosk/2023-11-15/queries",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "queries"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_queries.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_definitions_product_type",
+      "path": "/definitions/2020-09-01/productTypes/{{ config.product_type }}",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_definitions_product_type.json",
+      "computed_fields": {
+        "product_type": "{{ config.product_type }}"
+      }
+    },
+    {
+      "name": "search_definitions_product_types",
+      "path": "/definitions/2020-09-01/productTypes",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "productTypes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_definitions_product_types.json"
+    },
+    {
+      "name": "get_scheduled_package",
+      "path": "/easyShip/2022-03-23/package",
+      "query": {
+        "amazonOrderId": "{{ config.order_id }}",
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "packageItems"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_scheduled_package.json"
+    },
+    {
+      "name": "get_return",
+      "path": "/externalFulfillment/2024-09-11/returns/{{ config.return_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_return.json",
+      "computed_fields": {
+        "return_id": "{{ config.return_id }}"
+      }
+    },
+    {
+      "name": "list_returns",
+      "path": "/externalFulfillment/2024-09-11/returns",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "returns"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_returns.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "retrieve_invoice",
+      "path": "/externalFulfillment/2024-09-11/shipments/{{ config.shipment_id }}/invoice",
+      "records": {
+        "path": "document",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/retrieve_invoice.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "retrieve_shipping_options",
+      "path": "/externalFulfillment/2024-09-11/shipments/{{ config.shipment_id }}/shippingOptions",
+      "query": {
+        "packageId": "{{ config.package_id }}"
+      },
+      "records": {
+        "path": "shippingOptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/retrieve_shipping_options.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_shipment",
+      "path": "/externalFulfillment/2024-09-11/shipments/{{ config.shipment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_shipments",
+      "path": "/externalFulfillment/2024-09-11/shipments",
+      "query": {
+        "status": "{{ config.status }}",
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "shipments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipments.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_prep_instructions",
+      "path": "/fba/inbound/v0/prepInstructions",
+      "query": {
+        "ShipToCountryCode": "{{ config.ship_to_country_code }}"
+      },
+      "records": {
+        "path": "payload.SKUPrepInstructionsList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_prep_instructions.json"
+    },
+    {
+      "name": "get_shipment_items",
+      "path": "/fba/inbound/v0/shipmentItems",
+      "query": {
+        "QueryType": "{{ config.query_type }}",
+        "MarketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload.ItemData"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      }
+    },
+    {
+      "name": "get_shipment_items_by_shipment_id",
+      "path": "/fba/inbound/v0/shipments/{{ config.shipment_id }}/items",
+      "records": {
+        "path": "payload.ItemData"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_items_by_shipment_id.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_shipments_fba_inbound_v0_shipments",
+      "path": "/fba/inbound/v0/shipments",
+      "query": {
+        "QueryType": "{{ config.query_type }}",
+        "MarketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload.ShipmentData"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipments_fba_inbound_v0_shipments.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      }
+    },
+    {
+      "name": "get_item_eligibility_preview",
+      "path": "/fba/inbound/v1/eligibility/itemPreview",
+      "query": {
+        "asin": "{{ config.asin }}",
+        "program": "{{ config.program }}"
+      },
+      "records": {
+        "path": "payload.ineligibilityReasonList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_item_eligibility_preview.json"
+    },
+    {
+      "name": "get_feature_sku",
+      "path": "/fba/outbound/2020-07-01/features/inventory/{{ config.feature_name }}/{{ config.seller_sku }}",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_feature_sku.json",
+      "computed_fields": {
+        "feature_name": "{{ config.feature_name }}",
+        "seller_sku": "{{ config.seller_sku }}"
+      }
+    },
+    {
+      "name": "get_feature_inventory",
+      "path": "/fba/outbound/2020-07-01/features/inventory/{{ config.feature_name }}",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_feature_inventory.json",
+      "computed_fields": {
+        "feature_name": "{{ config.feature_name }}"
+      }
+    },
+    {
+      "name": "get_features",
+      "path": "/fba/outbound/2020-07-01/features",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload.features"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_features.json"
+    },
+    {
+      "name": "get_fulfillment_order",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{{ config.seller_fulfillment_order_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_fulfillment_order.json",
+      "computed_fields": {
+        "seller_fulfillment_order_id": "{{ config.seller_fulfillment_order_id }}"
+      }
+    },
+    {
+      "name": "list_all_fulfillment_orders",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+      "records": {
+        "path": "payload.fulfillmentOrders"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_all_fulfillment_orders.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "payload.nextToken"
+      }
+    },
+    {
+      "name": "list_return_reason_codes",
+      "path": "/fba/outbound/2020-07-01/returnReasonCodes",
+      "query": {
+        "sellerSku": "{{ config.seller_sku }}"
+      },
+      "records": {
+        "path": "payload.reasonCodeDetails"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_return_reason_codes.json"
+    },
+    {
+      "name": "get_package_tracking_details",
+      "path": "/fba/outbound/2020-07-01/tracking",
+      "query": {
+        "packageNumber": "{{ config.package_number }}"
+      },
+      "records": {
+        "path": "payload.trackingEvents"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_package_tracking_details.json"
+    },
+    {
+      "name": "get_shipment_details",
+      "path": "/fba/outbound/brazil/v0/shipments/{{ config.shipment_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_details.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_feed",
+      "path": "/feeds/2021-06-30/feeds/{{ config.feed_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_feed.json",
+      "computed_fields": {
+        "feed_id": "{{ config.feed_id }}"
+      }
+    },
+    {
+      "name": "get_feeds",
+      "path": "/feeds/2021-06-30/feeds",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "feeds"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_feeds.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "list_transactions",
+      "path": "/finances/2024-06-19/transactions",
+      "records": {
+        "path": "payload.transactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_transactions.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "payload.nextToken"
+      }
+    },
+    {
+      "name": "get_payment_methods",
+      "path": "/finances/transfers/2024-06-01/paymentMethods",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "paymentMethods"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_payment_methods.json"
+    },
+    {
+      "name": "list_account_balances",
+      "path": "/finances/transfers/wallet/2024-03-01/accounts/{{ config.account_id }}/balance",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "balances"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_account_balances.json",
+      "computed_fields": {
+        "account_id": "{{ config.account_id }}"
+      }
+    },
+    {
+      "name": "get_account",
+      "path": "/finances/transfers/wallet/2024-03-01/accounts/{{ config.account_id }}",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_account.json",
+      "computed_fields": {
+        "account_id": "{{ config.account_id }}"
+      }
+    },
+    {
+      "name": "list_accounts",
+      "path": "/finances/transfers/wallet/2024-03-01/accounts",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_accounts.json"
+    },
+    {
+      "name": "get_transaction",
+      "path": "/finances/transfers/wallet/2024-03-01/transactions/{{ config.transaction_id }}",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "transactionStatus",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_transaction.json",
+      "computed_fields": {
+        "transaction_id": "{{ config.transaction_id }}"
+      }
+    },
+    {
+      "name": "list_account_transactions",
+      "path": "/finances/transfers/wallet/2024-03-01/transactions",
+      "query": {
+        "accountId": "{{ config.account_id }}",
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "transactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_account_transactions.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken"
+      }
+    },
+    {
+      "name": "get_transfer_preview",
+      "path": "/finances/transfers/wallet/2024-03-01/transferPreview",
+      "query": {
+        "sourceCountryCode": "{{ config.source_country_code }}",
+        "sourceCurrencyCode": "{{ config.source_currency_code }}",
+        "destinationCountryCode": "{{ config.destination_country_code }}",
+        "destinationCurrencyCode": "{{ config.destination_currency_code }}",
+        "baseAmount": "{{ config.base_amount }}",
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "fees"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_transfer_preview.json"
+    },
+    {
+      "name": "get_transfer_schedule",
+      "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{{ config.transfer_schedule_id }}",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_transfer_schedule.json",
+      "computed_fields": {
+        "transfer_schedule_id": "{{ config.transfer_schedule_id }}"
+      }
+    },
+    {
+      "name": "list_transfer_schedules",
+      "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+      "query": {
+        "accountId": "{{ config.account_id }}",
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "transferSchedules"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_transfer_schedules.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken"
+      }
+    },
+    {
+      "name": "list_financial_events_by_group_id",
+      "path": "/finances/v0/financialEventGroups/{{ config.event_group_id }}/financialEvents",
+      "query": {
+        "MaxResultsPerPage": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "payload.FinancialEvents.ShipmentEventList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_financial_events_by_group_id.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      },
+      "computed_fields": {
+        "event_group_id": "{{ config.event_group_id }}"
+      }
+    },
+    {
+      "name": "list_financial_events",
+      "path": "/finances/v0/financialEvents",
+      "query": {
+        "MaxResultsPerPage": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "payload.FinancialEvents.ShipmentEventList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_financial_events.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      }
+    },
+    {
+      "name": "list_financial_events_by_order_id",
+      "path": "/finances/v0/orders/{{ config.order_id }}/financialEvents",
+      "query": {
+        "MaxResultsPerPage": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "payload.FinancialEvents.ShipmentEventList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_financial_events_by_order_id.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      },
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "list_inbound_plan_boxes",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/boxes",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "boxes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbound_plan_boxes.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}"
+      }
+    },
+    {
+      "name": "list_inbound_plan_items",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/items",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbound_plan_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}"
+      }
+    },
+    {
+      "name": "list_packing_group_boxes",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/packingGroups/{{ config.packing_group_id }}/boxes",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "boxes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_packing_group_boxes.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "packing_group_id": "{{ config.packing_group_id }}"
+      }
+    },
+    {
+      "name": "list_packing_group_items",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/packingGroups/{{ config.packing_group_id }}/items",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_packing_group_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "packing_group_id": "{{ config.packing_group_id }}"
+      }
+    },
+    {
+      "name": "list_packing_options",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/packingOptions",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "packingOptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_packing_options.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}"
+      }
+    },
+    {
+      "name": "list_inbound_plan_pallets",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/pallets",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "pallets"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbound_plan_pallets.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}"
+      }
+    },
+    {
+      "name": "list_placement_options",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/placementOptions",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "placementOptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_placement_options.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}"
+      }
+    },
+    {
+      "name": "list_shipment_boxes",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}/boxes",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "boxes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_shipment_boxes.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_shipment_content_update_preview",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}/contentUpdatePreviews/{{ config.content_update_preview_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_content_update_preview.json",
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}",
+        "content_update_preview_id": "{{ config.content_update_preview_id }}"
+      }
+    },
+    {
+      "name": "list_shipment_content_update_previews",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}/contentUpdatePreviews",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "contentUpdatePreviews"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_shipment_content_update_previews.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "list_delivery_window_options",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}/deliveryWindowOptions",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "deliveryWindowOptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_delivery_window_options.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "list_shipment_items",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}/items",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_shipment_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "list_shipment_pallets",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}/pallets",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "pallets"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_shipment_pallets.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_self_ship_appointment_slots",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}/selfShipAppointmentSlots",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "selfShipAppointmentSlotsAvailability.slots"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_self_ship_appointment_slots.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_shipment_inbound_fba_2024_03_20_inbound_plans_inbound_plan_id_shipments_shipment_id",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/shipments/{{ config.shipment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_inbound_fba_2024_03_20_inbound_plans_inbound_plan_id_shipments_shipment_id.json",
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}",
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "list_transportation_options",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}/transportationOptions",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "transportationOptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_transportation_options.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}"
+      }
+    },
+    {
+      "name": "get_inbound_plan",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ config.inbound_plan_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_inbound_plan.json",
+      "computed_fields": {
+        "inbound_plan_id": "{{ config.inbound_plan_id }}"
+      }
+    },
+    {
+      "name": "list_inbound_plans",
+      "path": "/inbound/fba/2024-03-20/inboundPlans",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "inboundPlans"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbound_plans.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "list_item_compliance_details",
+      "path": "/inbound/fba/2024-03-20/items/compliance",
+      "query": {
+        "mskus": "{{ config.mskus }}",
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "complianceDetails"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_item_compliance_details.json"
+    },
+    {
+      "name": "list_prep_details",
+      "path": "/inbound/fba/2024-03-20/items/prepDetails",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}",
+        "mskus": "{{ config.mskus }}"
+      },
+      "records": {
+        "path": "mskuPrepDetails"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_prep_details.json"
+    },
+    {
+      "name": "get_listings_item",
+      "path": "/listings/2021-08-01/items/{{ config.seller_id }}/{{ config.sku }}",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_listings_item.json",
+      "computed_fields": {
+        "seller_id": "{{ config.seller_id }}",
+        "sku": "{{ config.sku }}"
+      }
+    },
+    {
+      "name": "search_listings_items",
+      "path": "/listings/2021-08-01/items/{{ config.seller_id }}",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_listings_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "pagination.nextToken"
+      },
+      "computed_fields": {
+        "seller_id": "{{ config.seller_id }}"
+      }
+    },
+    {
+      "name": "get_listings_restrictions",
+      "path": "/listings/2021-08-01/restrictions",
+      "query": {
+        "asin": "{{ config.asin }}",
+        "sellerId": "{{ config.seller_id }}",
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "restrictions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_listings_restrictions.json"
+    },
+    {
+      "name": "get_messaging_actions_for_order",
+      "path": "/messaging/v1/orders/{{ config.order_id }}",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_messaging_actions_for_order.json",
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "get_shipment_mfn_v0_shipments_shipment_id",
+      "path": "/mfn/v0/shipments/{{ config.shipment_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_mfn_v0_shipments_shipment_id.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_destination",
+      "path": "/notifications/v1/destinations/{{ config.destination_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_destination.json",
+      "computed_fields": {
+        "destination_id": "{{ config.destination_id }}"
+      }
+    },
+    {
+      "name": "get_destinations",
+      "path": "/notifications/v1/destinations",
+      "records": {
+        "path": "payload"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_destinations.json"
+    },
+    {
+      "name": "get_subscription_by_id",
+      "path": "/notifications/v1/subscriptions/{{ config.notification_type }}/{{ config.subscription_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_subscription_by_id.json",
+      "computed_fields": {
+        "notification_type": "{{ config.notification_type }}",
+        "subscription_id": "{{ config.subscription_id }}"
+      }
+    },
+    {
+      "name": "get_subscription",
+      "path": "/notifications/v1/subscriptions/{{ config.notification_type }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_subscription.json",
+      "computed_fields": {
+        "notification_type": "{{ config.notification_type }}"
+      }
+    },
+    {
+      "name": "get_order",
+      "path": "/orders/2026-01-01/orders/{{ config.order_id }}",
+      "records": {
+        "path": "order",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_order.json",
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "search_orders",
+      "path": "/orders/2026-01-01/orders",
+      "query": {
+        "maxResultsPerPage": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "orders"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_orders.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "paginationToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_order_items",
+      "path": "/orders/v0/orders/{{ config.order_id }}/orderItems",
+      "records": {
+        "path": "payload.OrderItems"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_order_items.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "NextToken",
+        "token_path": "payload.NextToken"
+      },
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "get_order_orders_v0_orders_order_id",
+      "path": "/orders/v0/orders/{{ config.order_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_order_orders_v0_orders_order_id.json",
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "get_competitive_pricing",
+      "path": "/products/pricing/v0/competitivePrice",
+      "query": {
+        "MarketplaceId": "{{ config.marketplace_id }}",
+        "ItemType": "{{ config.item_type }}"
+      },
+      "records": {
+        "path": "payload"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_competitive_pricing.json"
+    },
+    {
+      "name": "get_item_offers",
+      "path": "/products/pricing/v0/items/{{ config.asin }}/offers",
+      "query": {
+        "MarketplaceId": "{{ config.marketplace_id }}",
+        "ItemCondition": "{{ config.item_condition }}"
+      },
+      "records": {
+        "path": "payload.Offers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_item_offers.json",
+      "computed_fields": {
+        "asin": "{{ config.asin }}"
+      }
+    },
+    {
+      "name": "get_listing_offers",
+      "path": "/products/pricing/v0/listings/{{ config.seller_sku }}/offers",
+      "query": {
+        "MarketplaceId": "{{ config.marketplace_id }}",
+        "ItemCondition": "{{ config.item_condition }}"
+      },
+      "records": {
+        "path": "payload.Offers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_listing_offers.json",
+      "computed_fields": {
+        "seller_sku": "{{ config.seller_sku }}"
+      }
+    },
+    {
+      "name": "get_pricing",
+      "path": "/products/pricing/v0/price",
+      "query": {
+        "MarketplaceId": "{{ config.marketplace_id }}",
+        "ItemType": "{{ config.item_type }}"
+      },
+      "records": {
+        "path": "payload"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_pricing.json"
+    },
+    {
+      "name": "get_report",
+      "path": "/reports/2021-06-30/reports/{{ config.report_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_report.json",
+      "computed_fields": {
+        "report_id": "{{ config.report_id }}"
+      }
+    },
+    {
+      "name": "get_reports",
+      "path": "/reports/2021-06-30/reports",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "reports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reports.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "get_report_schedule",
+      "path": "/reports/2021-06-30/schedules/{{ config.report_schedule_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_report_schedule.json",
+      "computed_fields": {
+        "report_schedule_id": "{{ config.report_schedule_id }}"
+      }
+    },
+    {
+      "name": "get_report_schedules",
+      "path": "/reports/2021-06-30/schedules",
+      "query": {
+        "reportTypes": "{{ config.report_types }}"
+      },
+      "records": {
+        "path": "reportSchedules"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_report_schedules.json"
+    },
+    {
+      "name": "get_order_metrics",
+      "path": "/sales/v1/orderMetrics",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}",
+        "interval": "{{ config.metrics_interval }}",
+        "granularity": "{{ config.metrics_granularity }}"
+      },
+      "records": {
+        "path": "payload"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_order_metrics.json"
+    },
+    {
+      "name": "get_account_sellers_v1_account",
+      "path": "/sellers/v1/account",
+      "records": {
+        "path": "payload.marketplaceParticipationList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_account_sellers_v1_account.json"
+    },
+    {
+      "name": "get_marketplace_participations",
+      "path": "/sellers/v1/marketplaceParticipations",
+      "records": {
+        "path": "payload"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_marketplace_participations.json"
+    },
+    {
+      "name": "get_appointment_slots",
+      "path": "/service/v1/appointmentSlots",
+      "query": {
+        "asin": "{{ config.asin }}",
+        "storeId": "{{ config.store_id }}",
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload.appointmentSlots"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_appointment_slots.json"
+    },
+    {
+      "name": "get_appointmment_slots_by_job_id",
+      "path": "/service/v1/serviceJobs/{{ config.service_job_id }}/appointmentSlots",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload.appointmentSlots"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_appointmment_slots_by_job_id.json",
+      "computed_fields": {
+        "service_job_id": "{{ config.service_job_id }}"
+      }
+    },
+    {
+      "name": "get_service_job_by_service_job_id",
+      "path": "/service/v1/serviceJobs/{{ config.service_job_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_service_job_by_service_job_id.json",
+      "computed_fields": {
+        "service_job_id": "{{ config.service_job_id }}"
+      }
+    },
+    {
+      "name": "get_service_jobs",
+      "path": "/service/v1/serviceJobs",
+      "query": {
+        "pageSize": "{{ config.page_size }}",
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "payload.jobs"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_service_jobs.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "payload.nextPageToken"
+      }
+    },
+    {
+      "name": "get_account_shipping_v1_account",
+      "path": "/shipping/v1/account",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_account_shipping_v1_account.json"
+    },
+    {
+      "name": "get_shipment_shipping_v1_shipments_shipment_id",
+      "path": "/shipping/v1/shipments/{{ config.shipment_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_shipping_v1_shipments_shipment_id.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_tracking_information",
+      "path": "/shipping/v1/tracking/{{ config.tracking_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_tracking_information.json",
+      "computed_fields": {
+        "tracking_id": "{{ config.tracking_id }}"
+      }
+    },
+    {
+      "name": "get_access_points",
+      "path": "/shipping/v2/accessPoints",
+      "query": {
+        "accessPointTypes": "{{ config.access_point_types }}",
+        "countryCode": "{{ config.country_code }}",
+        "postalCode": "{{ config.postal_code }}"
+      },
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_access_points.json"
+    },
+    {
+      "name": "get_carrier_account_form_inputs",
+      "path": "/shipping/v2/carrierAccountFormInputs",
+      "records": {
+        "path": "linkableCarriersList"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_carrier_account_form_inputs.json"
+    },
+    {
+      "name": "get_collection_form",
+      "path": "/shipping/v2/collectionForms/{{ config.collection_form_id }}",
+      "records": {
+        "path": "collectionsFormDocument",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_collection_form.json",
+      "computed_fields": {
+        "collection_form_id": "{{ config.collection_form_id }}"
+      }
+    },
+    {
+      "name": "get_shipment_documents",
+      "path": "/shipping/v2/shipments/{{ config.shipment_id }}/documents",
+      "query": {
+        "packageClientReferenceId": "{{ config.package_client_reference_id }}"
+      },
+      "records": {
+        "path": "payload.packageDocumentDetail.packageDocuments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_documents.json",
+      "computed_fields": {
+        "shipment_id": "{{ config.shipment_id }}"
+      }
+    },
+    {
+      "name": "get_additional_inputs",
+      "path": "/shipping/v2/shipments/additionalInputs/schema",
+      "query": {
+        "requestToken": "{{ config.request_token }}",
+        "rateId": "{{ config.rate_id }}"
+      },
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_additional_inputs.json"
+    },
+    {
+      "name": "get_tracking",
+      "path": "/shipping/v2/tracking",
+      "query": {
+        "trackingId": "{{ config.tracking_id }}",
+        "carrierId": "{{ config.carrier_id }}"
+      },
+      "records": {
+        "path": "payload.summary.trackingDetailCodes.returns"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_tracking.json"
+    },
+    {
+      "name": "get_solicitation_actions_for_order",
+      "path": "/solicitations/v1/orders/{{ config.order_id }}",
+      "query": {
+        "marketplaceIds": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_solicitation_actions_for_order.json",
+      "computed_fields": {
+        "order_id": "{{ config.order_id }}"
+      }
+    },
+    {
+      "name": "get_supply_source",
+      "path": "/supplySources/2020-07-01/supplySources/{{ config.supply_source_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_supply_source.json",
+      "computed_fields": {
+        "supply_source_id": "{{ config.supply_source_id }}"
+      }
+    },
+    {
+      "name": "get_supply_sources",
+      "path": "/supplySources/2020-07-01/supplySources",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "supplySources"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_supply_sources.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken"
+      }
+    },
+    {
+      "name": "get_invoices_export",
+      "path": "/tax/invoices/2024-06-19/exports/{{ config.export_id }}",
+      "records": {
+        "path": "export",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_invoices_export.json",
+      "computed_fields": {
+        "export_id": "{{ config.export_id }}"
+      }
+    },
+    {
+      "name": "get_invoices_exports",
+      "path": "/tax/invoices/2024-06-19/exports",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}",
+        "pageSize": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "exports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_invoices_exports.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "get_invoice",
+      "path": "/tax/invoices/2024-06-19/invoices/{{ config.invoice_id }}",
+      "query": {
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "invoice",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_invoice.json",
+      "computed_fields": {
+        "invoice_id": "{{ config.invoice_id }}"
+      }
+    },
+    {
+      "name": "get_invoices",
+      "path": "/tax/invoices/2024-06-19/invoices",
+      "query": {
+        "pageSize": "{{ config.page_size }}",
+        "marketplaceId": "{{ config.marketplace_id }}"
+      },
+      "records": {
+        "path": "invoices"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_invoices.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "nextToken"
+      }
+    },
+    {
+      "name": "get_order_vendor_direct_fulfillment_orders_2021_12_28_purchase_orders_purchase_order_numbe",
+      "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders/{{ config.purchase_order_number }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_order_vendor_direct_fulfillment_orders_2021_12_28_purchase_orders_purchase_order_numbe.json",
+      "computed_fields": {
+        "purchase_order_number": "{{ config.purchase_order_number }}"
+      }
+    },
+    {
+      "name": "get_orders",
+      "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders",
+      "query": {
+        "limit": "{{ config.page_size }}",
+        "createdAfter": "{{ config.created_after }}",
+        "createdBefore": "{{ config.created_before }}"
+      },
+      "records": {
+        "path": "orders"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_orders.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_order_vendor_direct_fulfillment_orders_v1_purchase_orders_purchase_order_number",
+      "path": "/vendor/directFulfillment/orders/v1/purchaseOrders/{{ config.purchase_order_number }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_order_vendor_direct_fulfillment_orders_v1_purchase_orders_purchase_order_number.json",
+      "computed_fields": {
+        "purchase_order_number": "{{ config.purchase_order_number }}"
+      }
+    },
+    {
+      "name": "get_orders_vendor_direct_fulfillment_orders_v1_purchase_orders",
+      "path": "/vendor/directFulfillment/orders/v1/purchaseOrders",
+      "query": {
+        "limit": "{{ config.page_size }}",
+        "createdAfter": "{{ config.created_after }}",
+        "createdBefore": "{{ config.created_before }}"
+      },
+      "records": {
+        "path": "payload.orders"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_orders_vendor_direct_fulfillment_orders_v1_purchase_orders.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "payload.pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_order_scenarios",
+      "path": "/vendor/directFulfillment/sandbox/2021-10-28/transactions/{{ config.transaction_id }}",
+      "records": {
+        "path": "transactionStatus",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_order_scenarios.json",
+      "computed_fields": {
+        "transaction_id": "{{ config.transaction_id }}"
+      }
+    },
+    {
+      "name": "get_customer_invoice",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices/{{ config.purchase_order_number }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_customer_invoice.json",
+      "computed_fields": {
+        "purchase_order_number": "{{ config.purchase_order_number }}"
+      }
+    },
+    {
+      "name": "get_customer_invoices",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices",
+      "query": {
+        "limit": "{{ config.page_size }}",
+        "createdAfter": "{{ config.created_after }}",
+        "createdBefore": "{{ config.created_before }}"
+      },
+      "records": {
+        "path": "customerInvoices"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_customer_invoices.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_customer_invoice_vendor_direct_fulfillment_shipping_v1_customer_invoices_purchase_order_number",
+      "path": "/vendor/directFulfillment/shipping/v1/customerInvoices/{{ config.purchase_order_number }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_customer_invoice_vendor_direct_fulfillment_shipping_v1_customer_invoices_purchase_order_number.json",
+      "computed_fields": {
+        "purchase_order_number": "{{ config.purchase_order_number }}"
+      }
+    },
+    {
+      "name": "get_customer_invoices_vendor_direct_fulfillment_shipping_v1_customer_invoices",
+      "path": "/vendor/directFulfillment/shipping/v1/customerInvoices",
+      "query": {
+        "limit": "{{ config.page_size }}",
+        "createdAfter": "{{ config.created_after }}",
+        "createdBefore": "{{ config.created_before }}"
+      },
+      "records": {
+        "path": "payload.customerInvoices"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_customer_invoices_vendor_direct_fulfillment_shipping_v1_customer_invoices.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "payload.pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_transaction_status",
+      "path": "/vendor/directFulfillment/transactions/2021-12-28/transactions/{{ config.transaction_id }}",
+      "records": {
+        "path": "transactionStatus",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_transaction_status.json",
+      "computed_fields": {
+        "transaction_id": "{{ config.transaction_id }}"
+      }
+    },
+    {
+      "name": "get_transaction_status_vendor_direct_fulfillment_transactions_v1_transactions_transaction_id",
+      "path": "/vendor/directFulfillment/transactions/v1/transactions/{{ config.transaction_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_transaction_status_vendor_direct_fulfillment_transactions_v1_transactions_transaction_id.json",
+      "computed_fields": {
+        "transaction_id": "{{ config.transaction_id }}"
+      }
+    },
+    {
+      "name": "get_purchase_order",
+      "path": "/vendor/orders/v1/purchaseOrders/{{ config.purchase_order_number }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_purchase_order.json",
+      "computed_fields": {
+        "purchase_order_number": "{{ config.purchase_order_number }}"
+      }
+    },
+    {
+      "name": "get_purchase_orders",
+      "path": "/vendor/orders/v1/purchaseOrders",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "payload.orders"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_purchase_orders.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "payload.pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_purchase_orders_status",
+      "path": "/vendor/orders/v1/purchaseOrdersStatus",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "payload.ordersStatus"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_purchase_orders_status.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "payload.pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_shipment_details_vendor_shipping_v1_shipments",
+      "path": "/vendor/shipping/v1/shipments",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "payload.shipments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_shipment_details_vendor_shipping_v1_shipments.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextToken",
+        "token_path": "payload.pagination.nextToken"
+      }
+    },
+    {
+      "name": "get_transaction_vendor_transactions_v1_transactions_transaction_id",
+      "path": "/vendor/transactions/v1/transactions/{{ config.transaction_id }}",
+      "records": {
+        "path": "payload",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_transaction_vendor_transactions_v1_transactions_transaction_id.json",
+      "computed_fields": {
+        "transaction_id": "{{ config.transaction_id }}"
+      }
     }
   ]
 }

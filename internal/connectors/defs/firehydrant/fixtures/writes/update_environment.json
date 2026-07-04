@@ -1,0 +1,20 @@
+{
+  "record": {
+    "environment_id": "env_fixture_1",
+    "name": "Renamed fixture environment"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/environments/env_fixture_1",
+    "body": {
+      "name": "Renamed fixture environment"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "env_fixture_1",
+      "name": "Renamed fixture environment"
+    }
+  }
+}

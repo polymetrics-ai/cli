@@ -1,0 +1,36 @@
+{
+  "api": "AWS CloudTrail legacy connector hook surface",
+  "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy aws-cloudtrail connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/aws-cloudtrail, which delegates to internal/connectors/aws-cloudtrail until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/aws-cloudtrail management_events read path",
+      "covered_by": {
+        "stream": "management_events"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/aws-cloudtrail read_only_events read path",
+      "covered_by": {
+        "stream": "read_only_events"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/aws-cloudtrail write_only_events read path",
+      "covered_by": {
+        "stream": "write_only_events"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/aws-cloudtrail console_logins read path",
+      "covered_by": {
+        "stream": "console_logins"
+      }
+    }
+  ]
+}

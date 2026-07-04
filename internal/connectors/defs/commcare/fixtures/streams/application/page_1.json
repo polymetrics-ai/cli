@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/application/v1/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": "app_fixture_detail",
+          "is_released": true,
+          "version": 17,
+          "name": "Fixture detail application",
+          "modules": [],
+          "versions": []
+        }
+      ]
+    }
+  }
+}

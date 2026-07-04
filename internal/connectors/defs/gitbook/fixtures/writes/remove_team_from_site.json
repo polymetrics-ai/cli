@@ -1,0 +1,18 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "team_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/permissions/teams/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "remove_team_from_site_fixture_1"
+    }
+  }
+}

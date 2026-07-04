@@ -1,0 +1,20 @@
+{
+  "record": {
+    "site_id": "synthetic-conformance-value",
+    "status": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/ads/sites/synthetic-conformance-value",
+    "body": {
+      "status": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "ads_update_site_fixture_1"
+    }
+  }
+}

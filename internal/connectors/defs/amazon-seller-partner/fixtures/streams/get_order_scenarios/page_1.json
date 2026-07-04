@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/directFulfillment/sandbox/2021-10-28/transactions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactionStatus": {
+        "transactionId": "transactionId-fixture-1",
+        "status": "status-fixture-1",
+        "testCaseData": {},
+        "transaction_id": "transaction_id-fixture-1"
+      }
+    }
+  }
+}

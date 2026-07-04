@@ -1,63 +1,32 @@
 # Overview
 
-Employment Hero is a wave2 fan-out migration. It reads Employment Hero organisations, employees,
-leave requests, and teams through the Employment Hero REST API
-(`https://api.employmenthero.com/api/v1`). This bundle migrates
-`internal/connectors/employment-hero` (Go package `employmenthero`); the legacy package stays
-registered and unchanged until wave6's registry flip. The API is full-refresh only and read-only:
-there is no obviously-safe reverse-ETL write surface, matching legacy's `Capabilities.Write: false`.
+Employment Hero is a declarative REST connector for the official Employment Hero API reference at https://developer.employmenthero.com/api-references. The bundle uses the official Postman collection base URL (https://api.employmenthero.com/api) and declares versioned /v1 and /v2 paths per endpoint.
+
+Pass B expands beyond the original four legacy streams. It now reads organisations, employees, teams, leave, certifications, cost centres, custom fields, employing entities, forms, goals, kiosk members, payroll-reference resources, rosters, unavailability, work locations/sites/types, and employee-scoped resources such as bank accounts, documents, emergency contacts, employment histories, leave balances, pay details, payslips, timesheet entries, tax declarations, superannuation details, and work eligibility. It also exposes official JSON mutations as reverse-ETL write actions.
 
 ## Auth setup
 
-Provide an Employment Hero API token via the `api_key` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_key>`) and is never logged.
+Provide an Employment Hero access token via the `api_key` secret. The engine sends it as `Authorization: Bearer <api_key>` and never records the value in fixtures or previews. OAuth authorize/token endpoints are not implemented as connector actions because they are credential-acquisition flows, not data sync endpoints.
 
 ## Streams notes
 
-`organisations` is the root stream (`GET /organisations`) and supplies organisation ids for the
-other three streams. `employees`, `leave_requests`, and `teams` are org-scoped substreams
-(`GET /organisations/{organization_id}/employees|leave_requests|teams`); the organisation id is
-resolved from the required-for-those-streams `organization_id` config value (interpolated directly
-into the stream `path`), matching legacy's `organizationID` resolution. All four streams share
-Employment Hero's `page_index`/`items_per_page` page-number pagination convention
-(`pagination.type: page_number`, `page_param: page_index`, `size_param: items_per_page`,
-`start_page: 1`, `page_size: 100` — legacy's real default `items_per_page`), records at
-`data.items`. Every object exposes a string `id`; the API offers only full-refresh syncs (no
-incremental cursor), matching legacy's empty `CursorFields`.
+The connector base URL is `https://api.employmenthero.com/api`; stream paths include `/v1` or `/v2`. The official collection uses `item_per_page` (singular), so Pass B uses `page_index`/`item_per_page` pagination. This intentionally differs from the legacy Go connector's `items_per_page` spelling.
 
-Documented scope narrowing: legacy's `organizationID` resolver accepts EITHER a single
-`organization_id` config value OR the first non-empty entry of a comma-separated
-`organization_configids` list, as a convenience fallback mirroring the upstream catalog's
-multi-org config shape. The engine's path-templating dialect has no string-split/first-of-list
-filter, so only the single `organization_id` form is wired here; `organization_configids` is not
-declared in `spec.json` at all (a declared-but-unwireable key is worse than an absent one, per
-searxng's precedent). This never changes the emitted record DATA for any input legacy itself would
-accept via `organization_id` — it narrows an alternate CONFIG-SHAPE convenience, not accepted
-output.
+`organisations` is the root discovery stream. Most streams require `organization_id` (the official docs spell the path parameter `organisation_id`). Collection-style employee subresources fan out by listing `/v1/organisations/{organization_id}/employees` and then reading each employee child endpoint. Single-object employee detail endpoints (superannuation, tax declaration, work eligibility) use `employee_ids`, a comma-separated config list, because the current fan-out dialect cannot use one pagination strategy for the ID discovery request and a different no-pagination strategy for the child single-object request.
 
-`items_per_page` is likewise not declared in `spec.json`: `streams.json`'s `pagination.page_size`
-is a fixed JSON literal the `page_number` paginator constructor reads once at bundle-authoring
-time, with no runtime config-driven override mechanism in this dialect (the same class of gap
-documented in `docs/migration/conventions.md`'s searxng worked example) — declaring a spec
-property no template consumes would be dead config (F6).
+Form, goal, and team child collection streams fan out from their parent lists. Single-object streams use the corresponding config id (for example `form_id`, `goal_id`, `leave_request_id`, `payslip_id`). Optional filter query parameters from the API reference are not modeled unless required for addressing; streams perform broad full-refresh reads.
 
 ## Write actions & risks
 
-None. Employment Hero is read-only; `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+Write actions cover the official JSON body mutations: certification create/update/archive/delete, department create/update, employee quick-add/onboarding/update/delete, employee certification update, form and form category/template mutations, goal status updates, kiosk access bulk grant/revoke, leave balance adjustment, leave request creation, position create/update, rostered shift bulk create, timesheet entry creation, and work site create/update.
+
+All writes execute live Employment Hero mutations only after reverse-ETL plan preview and approval. Delete actions are marked destructive and treat 404 as idempotent success where the API resource is already absent. Async creation actions such as employee onboarding and rostered-shift bulk create are write-only submissions here; their polling/status endpoints are excluded as non-data endpoints.
 
 ## Known limits
 
-- Only the 4 legacy-parity read streams are implemented; the full Employment Hero surface
-  (timesheets, pay runs, expenses, documents, and any write endpoints) is out of scope for this
-  wave — see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B capability
-  expansion"}` entries.
-- Legacy's `organization_configids` comma-list fallback for resolving the org-scoped streams'
-  organisation id is not modeled (see Streams notes above) — only the single `organization_id`
-  config value is wired.
-- Legacy's `max_pages` config override (accepting `0`/`all`/`unlimited` for unbounded, or a
-  positive integer cap) has no equivalent in this dialect: `PaginationSpec.MaxPages` is a fixed
-  bundle-authored literal, not runtime-config-driven, and this bundle leaves it unset
-  (unbounded), matching legacy's own default (`max_pages` unset/`all`/`unlimited` client-side).
-- `items_per_page` runtime override is not modeled for the same reason (`pagination.page_size` is
-  a fixed literal); the bundle's declared `page_size: 100` reproduces legacy's real default.
+- Multipart or binary endpoints are excluded: certification file uploads, employee certification file uploads, document creation/upload, and payslip PDF generation require binary upload/download semantics that the declarative JSON write engine does not express.
+- OAuth authorize/token/refresh endpoints are excluded as non-data credential flows.
+- Polling/status endpoints for async onboarding, certification polling, and rostered-shift bulk-create jobs are excluded as non-data endpoints that require ephemeral keys from prior mutations.
+- The rostered shift cost endpoint is excluded as an aggregate calculation endpoint rather than a list or object data stream.
+- Optional filters from the official collection are intentionally not surfaced as spec fields; this avoids dead config and keeps reads broad/full-refresh unless an ID is required in the path.
+- Legacy's `organization_configids` comma-list fallback and runtime `items_per_page`/`max_pages` overrides remain unsupported in this declarative bundle; the engine has fixed bundle-authored pagination settings.

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/integration-scripts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "list_site_integration_scripts_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture list_site_integration_scripts",
+      "name": "Fixture list_site_integration_scripts",
+      "status": "active",
+      "operation_id": "listSiteIntegrationScripts"
+    }
+  }
+}

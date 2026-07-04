@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/members/synthetic-conformance-value/form_responses",
+    "query": {
+      "page_index": "1",
+      "item_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "member_form_response_fixture_1",
+            "member_id": "synthetic-conformance-value",
+            "form_id": "form_fixture_1",
+            "status": "submitted",
+            "submitted_at": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

@@ -2,46 +2,849 @@
   "base": {
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json"
+    },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
       "page_param": "page_index",
-      "size_param": "items_per_page",
+      "size_param": "item_per_page",
       "start_page": 1,
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/organisations", "query": { "page_index": "1", "items_per_page": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/v1/organisations",
+      "query": {
+        "page_index": "1",
+        "item_per_page": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "employment-hero api_key is missing or invalid; re-run pm credentials add employment-hero" },
-      { "status": 429, "class": "rate_limited", "hint": "employment-hero rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "employment-hero api_key is missing or invalid; re-run pm credentials add employment-hero"
+      },
+      {
+        "status": 403,
+        "hint": "employment-hero token lacks the required scope for this organisation or endpoint"
+      },
+      {
+        "status": 404,
+        "hint": "employment-hero resource not found or token lacks access"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "employment-hero rate limit exceeded; retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "organisations",
-      "path": "/organisations",
-      "records": { "path": "data.items" },
+      "path": "/v1/organisations",
+      "records": {
+        "path": "data.items"
+      },
       "schema": "schemas/organisations.json"
     },
     {
+      "name": "organisation",
+      "path": "/v1/organisations/{{ config.organization_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/organisation.json"
+    },
+    {
       "name": "employees",
-      "path": "/organisations/{{ config.organization_id }}/employees",
-      "records": { "path": "data.items" },
+      "path": "/v1/organisations/{{ config.organization_id }}/employees",
+      "records": {
+        "path": "data.items"
+      },
       "schema": "schemas/employees.json"
     },
     {
-      "name": "leave_requests",
-      "path": "/organisations/{{ config.organization_id }}/leave_requests",
-      "records": { "path": "data.items" },
-      "schema": "schemas/leave_requests.json"
+      "name": "employee",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ config.employee_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/employee.json"
     },
     {
       "name": "teams",
-      "path": "/organisations/{{ config.organization_id }}/teams",
-      "records": { "path": "data.items" },
+      "path": "/v1/organisations/{{ config.organization_id }}/teams",
+      "records": {
+        "path": "data.items"
+      },
       "schema": "schemas/teams.json"
+    },
+    {
+      "name": "team_employees",
+      "path": "/v1/organisations/{{ config.organization_id }}/teams/{{ fanout.id }}/employees",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/teams",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "team_id"
+      },
+      "schema": "schemas/team_employees.json"
+    },
+    {
+      "name": "leave_requests",
+      "path": "/v1/organisations/{{ config.organization_id }}/leave_requests",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/leave_requests.json"
+    },
+    {
+      "name": "leave_request",
+      "path": "/v1/organisations/{{ config.organization_id }}/leave_requests/{{ config.leave_request_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/leave_request.json"
+    },
+    {
+      "name": "certifications",
+      "path": "/v1/organisations/{{ config.organization_id }}/certifications",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/certifications.json"
+    },
+    {
+      "name": "certification",
+      "path": "/v1/organisations/{{ config.organization_id }}/certifications/{{ config.certification_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/certification.json"
+    },
+    {
+      "name": "cost_centres",
+      "path": "/v1/organisations/{{ config.organization_id }}/cost_centres",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/cost_centres.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/v1/organisations/{{ config.organization_id }}/custom_fields",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "employing_entities",
+      "path": "/v1/organisations/{{ config.organization_id }}/employing_entities",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/employing_entities.json"
+    },
+    {
+      "name": "forms",
+      "path": "/v1/organisations/{{ config.organization_id }}/forms",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "form",
+      "path": "/v1/organisations/{{ config.organization_id }}/forms/{{ config.form_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/form.json"
+    },
+    {
+      "name": "form_responses",
+      "path": "/v1/organisations/{{ config.organization_id }}/forms/{{ fanout.id }}/responses",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/forms",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "form_id"
+      },
+      "schema": "schemas/form_responses.json"
+    },
+    {
+      "name": "form_response",
+      "path": "/v1/organisations/{{ config.organization_id }}/forms/{{ config.form_id }}/responses/{{ config.response_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/form_response.json"
+    },
+    {
+      "name": "form_assignments",
+      "path": "/v1/organisations/{{ config.organization_id }}/forms/{{ fanout.id }}/assignments",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/forms",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "form_id"
+      },
+      "schema": "schemas/form_assignments.json"
+    },
+    {
+      "name": "member_form_responses",
+      "path": "/v1/organisations/{{ config.organization_id }}/members/{{ fanout.id }}/form_responses",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "member_ids"
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "member_id"
+      },
+      "schema": "schemas/member_form_responses.json"
+    },
+    {
+      "name": "form_categories",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_categories",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/form_categories.json"
+    },
+    {
+      "name": "form_templates",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_templates",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/form_templates.json"
+    },
+    {
+      "name": "form_template",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_templates/{{ config.template_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/form_template.json"
+    },
+    {
+      "name": "goals",
+      "path": "/v1/organisations/{{ config.organization_id }}/goals",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/goals.json"
+    },
+    {
+      "name": "goal",
+      "path": "/v1/organisations/{{ config.organization_id }}/goals/{{ config.goal_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goal.json"
+    },
+    {
+      "name": "goal_comments",
+      "path": "/v1/organisations/{{ config.organization_id }}/goals/{{ fanout.id }}/comments",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/goals",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "goal_id"
+      },
+      "schema": "schemas/goal_comments.json"
+    },
+    {
+      "name": "goal_key_results",
+      "path": "/v1/organisations/{{ config.organization_id }}/goals/{{ fanout.id }}/key_results",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/goals",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "goal_id"
+      },
+      "schema": "schemas/goal_key_results.json"
+    },
+    {
+      "name": "goal_key_result",
+      "path": "/v1/organisations/{{ config.organization_id }}/goals/{{ config.goal_id }}/key_results/{{ config.key_result_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/goal_key_result.json"
+    },
+    {
+      "name": "kiosk_members",
+      "path": "/v1/organisations/{{ config.organization_id }}/kiosk_members",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/kiosk_members.json"
+    },
+    {
+      "name": "leave_categories",
+      "path": "/v1/organisations/{{ config.organization_id }}/leave_categories",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/leave_categories.json"
+    },
+    {
+      "name": "pay_categories",
+      "path": "/v1/organisations/{{ config.organization_id }}/pay_categories",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/pay_categories.json"
+    },
+    {
+      "name": "policies",
+      "path": "/v1/organisations/{{ config.organization_id }}/policies",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/policies.json"
+    },
+    {
+      "name": "rostered_shifts",
+      "path": "/v1/organisations/{{ config.organization_id }}/rostered_shifts",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/rostered_shifts.json"
+    },
+    {
+      "name": "rostered_shift",
+      "path": "/v1/organisations/{{ config.organization_id }}/rostered_shifts/{{ config.rostered_shift_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/rostered_shift.json"
+    },
+    {
+      "name": "roles",
+      "path": "/v1/organisations/{{ config.organization_id }}/roles",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "unavailabilities",
+      "path": "/v1/organisations/{{ config.organization_id }}/unavailabilities",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/unavailabilities.json"
+    },
+    {
+      "name": "unavailability",
+      "path": "/v1/organisations/{{ config.organization_id }}/unavailabilities/{{ config.unavailability_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/unavailability.json"
+    },
+    {
+      "name": "work_locations",
+      "path": "/v1/organisations/{{ config.organization_id }}/work_locations",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/work_locations.json"
+    },
+    {
+      "name": "work_sites",
+      "path": "/v1/organisations/{{ config.organization_id }}/work_sites",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/work_sites.json"
+    },
+    {
+      "name": "work_types",
+      "path": "/v1/organisations/{{ config.organization_id }}/work_types",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/work_types.json"
+    },
+    {
+      "name": "bank_accounts_v1",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/bank_accounts",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/bank_accounts_v1.json"
+    },
+    {
+      "name": "bank_accounts_v2",
+      "path": "/v2/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/bank_accounts",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/bank_accounts_v2.json"
+    },
+    {
+      "name": "contractor_job_histories",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/job_histories",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/contractor_job_histories.json"
+    },
+    {
+      "name": "documents",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/documents",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/documents.json"
+    },
+    {
+      "name": "emergency_contacts",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/emergency_contacts",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/emergency_contacts.json"
+    },
+    {
+      "name": "employee_certification_details",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/certifications",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/employee_certification_details.json"
+    },
+    {
+      "name": "employee_custom_fields",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/custom_fields",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/employee_custom_fields.json"
+    },
+    {
+      "name": "employment_histories",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/employment_histories",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/employment_histories.json"
+    },
+    {
+      "name": "leave_balances",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/leave_balances",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/leave_balances.json"
+    },
+    {
+      "name": "pay_details",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/pay_details",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/pay_details.json"
+    },
+    {
+      "name": "payslips",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/payslips",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/payslips.json"
+    },
+    {
+      "name": "payslip",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ config.employee_id }}/payslips/{{ config.payslip_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/payslip.json"
+    },
+    {
+      "name": "timesheet_entries",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/timesheet_entries",
+      "records": {
+        "path": "data.items"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v1/organisations/{{ config.organization_id }}/employees",
+            "records_path": "data.items",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/timesheet_entries.json"
+    },
+    {
+      "name": "superannuation_detail_v1",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/superannuation_detail",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "employee_ids"
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/superannuation_detail_v1.json"
+    },
+    {
+      "name": "superannuation_detail_v2",
+      "path": "/v2/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/superannuation_detail",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "employee_ids"
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/superannuation_detail_v2.json"
+    },
+    {
+      "name": "tax_declaration_v1",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/tax_declaration",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "employee_ids"
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/tax_declaration_v1.json"
+    },
+    {
+      "name": "tax_declaration_v2",
+      "path": "/v2/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/tax_declaration",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "employee_ids"
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/tax_declaration_v2.json"
+    },
+    {
+      "name": "work_eligibility",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ fanout.id }}/work_eligibility",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "employee_ids"
+        },
+        "into": {
+          "path_var": "fanout.id"
+        },
+        "stamp_field": "employee_id"
+      },
+      "schema": "schemas/work_eligibility.json"
     }
   ]
 }

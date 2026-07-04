@@ -1,0 +1,22 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "font_family": "synthetic-conformance-value",
+    "font_faces": []
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/fonts",
+    "body": {
+      "font_family": "synthetic-conformance-value",
+      "font_faces": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "create_custom_font_fixture_1"
+    }
+  }
+}

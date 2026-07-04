@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/requested-reviewers",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "get_requested_reviewers_by_change_request_id_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_requested_reviewers_by_change_request_id",
+          "name": "Fixture get_requested_reviewers_by_change_request_id",
+          "status": "active",
+          "operation_id": "getRequestedReviewersByChangeRequestId"
+        }
+      ]
+    }
+  }
+}

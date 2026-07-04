@@ -1,60 +1,23 @@
 # Overview
 
-7shifts is a restaurant/hospitality scheduling and labor-management platform. This bundle reads
-companies, locations, departments, roles, users, shifts, and time punches through the 7shifts v2
-REST API. It migrates `internal/connectors/7shifts` (the hand-written connector) at capability
-parity; the legacy package stays registered and unchanged until wave6's registry flip.
+7shifts is a restaurant and hospitality scheduling and labor-management platform. This bundle covers the documented 2026-01-01 7shifts API reference for ordinary tenant-scoped REST resources. The original legacy-parity streams keep their legacy projection shape; newly added streams use the documented response `data` shapes.
 
 ## Auth setup
 
-Provide a 7shifts API access token via the `access_token` secret; it is used only for Bearer auth
-(`Authorization: Bearer <access_token>`) and is never logged. Also provide `company_id`, the
-7shifts company id every stream except `companies` is scoped under
-(`/v2/company/{{ config.company_id }}/...`) — matching legacy's `endpoint.companyScoped` check,
-which hard-errors a company-scoped stream read when `company_id` is unset. `company_id` is
-declared `required` in `spec.json` (not merely optional-and-conditionally-used) because the
-engine's path interpolation has no absent-key-tolerance mechanism: an unresolved `config.*`
-reference inside a stream `path` is always a hard error, regardless of whether the key is
-`required[]`-declared or not (see `docs/migration/conventions.md` §3's path-interpolation note).
+Provide a 7shifts API access token as the `access_token` secret. The engine sends it as Bearer authentication. Provide `company_id` for company-scoped streams and write actions. Some detail, report, and settings streams also require the specific path or query config value named in `spec.json`, such as `location_id`, `user_id`, `time_off_id`, `date`, `from`, or `to`.
 
 ## Streams notes
 
-All 7 streams share the same shape: `GET`, records at `data`, primary key `["id"]`, incremental
-cursor field `modified`. Pagination follows 7shifts's `meta.cursor.next` next-page-token
-convention (`pagination.type: cursor` with `token_path: meta.cursor.next`, `cursor_param: cursor`):
-the engine reads the next cursor token from the response body and stops when the token is
-absent/empty, exactly matching legacy `harvest`'s `strings.TrimSpace(next) == ""` stop condition.
-Every request sends `limit=100` (matches legacy's `defaultPageSize`) via each stream's static
-`query: {"limit": "100"}`.
-
-Incremental reads send `modified_since` as a bare `YYYY-MM-DD` date (`param_format: date`),
-computed either from the sync's persisted cursor or, on a fresh sync, from the RFC3339 `start_date`
-config value — identical to legacy `incrementalLowerBound`/`toDate`, which always reduces the
-cursor or `start_date` to its date-only prefix before sending it as `modified_since` (7shifts
-filters by date only, not a full timestamp).
-
-`companies` is the one top-level (non-company-scoped) stream, matching legacy's
-`streamEndpoints["companies"].companyScoped == false`; its `path` has no `company_id` template.
+List streams use 7shifts cursor pagination when the endpoint documents `cursor` and `limit`; the connector sends `limit=100` and follows `meta.cursor.next`. Single-resource, settings, identity, and report endpoints use one-page reads. The original `companies`, `locations`, `departments`, `roles`, `users`, `shifts`, and `time_punches` streams keep the legacy incremental `modified_since` behavior and legacy field projections.
 
 ## Write actions & risks
 
-None. 7shifts is read-only here (`capabilities.write: false`), matching legacy
-(`Capabilities.Write: false`) exactly — `Write` returns `ErrUnsupportedOperation` on the legacy
-side and this bundle ships no `writes.json` at all.
+Supported write actions are single HTTP requests with JSON bodies or empty-body deletes. The action schema follows the documented request body plus path fields supplied in the record. Deletes are marked destructive and treat `404` as idempotent success where the API indicates the resource is already absent.
 
 ## Known limits
 
-- `page_size`/`max_pages` config-driven overrides from legacy (`pageSizeFor`/`maxPagesFor`,
-  bounded 1-200 and 0/all/unlimited respectively) are not modeled: the engine's `cursor`
-  paginator's `PaginationSpec.PageSize`/`MaxPages` fields are static JSON literals with no
-  templating support, so they cannot be wired to a runtime `config.*` value (unlike
-  `stream.Query`, which does support templated, optionally-absent values). `limit=100` is sent as
-  a fixed literal via the static per-stream `query` block, matching legacy's *default* exactly;
-  a caller can no longer override the page size or cap total pages via config. This is a
-  documented, accepted config-surface narrowing (`docs/migration/conventions.md` §5's
-  meta-rule: it never changes emitted record DATA for any input legacy itself would accept at
-  its own default, since the default behavior is preserved byte-for-byte) — declaring dead
-  `page_size`/`max_pages` spec properties that no template consumes would itself violate F6.
-- Full 7shifts API surface (schedules, time off, availability, wages, punch edit requests, and any
-  write endpoints) is out of scope for this pass; see `api_surface.json`'s `excluded:
-  {category: out_of_scope, reason: "Pass B capability expansion"}` entries.
+- Deprecated endpoints are not implemented; each is marked `deprecated` in `api_surface.json` and covered by the current non-deprecated endpoint where one exists.
+- `POST /oauth2/token` is excluded as a non-data authentication flow because this bundle authenticates with an existing bearer token.
+- `POST /v2/partner_company_creation` is excluded because it is an elevated partner account-creation flow, not an ordinary tenant-scoped reverse-ETL action.
+- Mutations whose request body is a root JSON array are excluded with an engine-gap reason. The current declarative write engine sends JSON objects built from record fields, not root arrays.
+- Optional query filters beyond required filters, pagination `cursor`, pagination `limit`, and legacy incremental `modified_since` are not surfaced as connection config. Add a dedicated stream if an optional filter becomes required for a production workflow.

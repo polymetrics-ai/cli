@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/synthetic-conformance-value/work_eligibility",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "employee_id": "synthetic-conformance-value",
+        "status": "eligible",
+        "visa_type": null,
+        "expiry_date": null
+      }
+    }
+  }
+}

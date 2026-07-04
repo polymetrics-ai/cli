@@ -1,0 +1,11 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "fixture",
+      "archived": true,
+      "date_archived": "fixture",
+      "custom_id": "fixture"
+    }
+  ]
+}

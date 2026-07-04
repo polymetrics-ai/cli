@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/unavailabilities/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "member_id": "emp_fixture_1",
+        "from_date": "2026-01-01",
+        "to_date": "2026-01-02",
+        "status": "approved"
+      }
+    }
+  }
+}

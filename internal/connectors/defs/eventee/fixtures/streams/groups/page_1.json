@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/groups" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 81,
+        "name": "Fixture attendees",
+        "public_name": "Fixture",
+        "color": "#2FABD9",
+        "emoji": "star",
+        "agenda": true,
+        "newsfeed": true,
+        "networking": true,
+        "session_ratings": true,
+        "social_wall": true,
+        "gamification": true,
+        "ticket_names": [],
+        "is_default": true
+      }
+    ]
+  }
+}

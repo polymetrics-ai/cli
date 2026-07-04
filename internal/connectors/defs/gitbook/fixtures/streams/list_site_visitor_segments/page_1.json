@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/insights/visitor-segments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_visitor_segments_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_visitor_segments",
+          "name": "Fixture list_site_visitor_segments",
+          "status": "active",
+          "operation_id": "listSiteVisitorSegments"
+        }
+      ]
+    }
+  }
+}

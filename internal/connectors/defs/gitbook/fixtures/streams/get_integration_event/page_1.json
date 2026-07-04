@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integrations/synthetic-conformance-value/events/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_integration_event_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_integration_event",
+      "name": "Fixture get_integration_event",
+      "status": "active",
+      "operation_id": "getIntegrationEvent"
+    }
+  }
+}

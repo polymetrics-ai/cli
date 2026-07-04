@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Metabase Connection Specification",
+  "type": "object",
+  "required": [
+    "instance_api_url",
+    "username"
+  ],
+  "properties": {
+    "instance_api_url": {
+      "type": "string",
+      "description": "URL to your metabase instance API"
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true
+    },
+    "session_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "To generate your session token, you need to run the following command: ``` curl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"username\": \"person@metabase.com\", \"password\": \"fakepassword\"}' \\\n  http://localhost:3000/api/session\n``` Then copy the value of the `id` field returned by a successful call to that API.\nNote that by default, sessions are good for 14 days and needs to be regenerated."
+    },
+    "username": {
+      "type": "string"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

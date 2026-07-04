@@ -1,0 +1,29 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "name": "synthetic-conformance-value",
+    "url": "https://example.com/gitbook",
+    "headers": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/mcp-servers",
+    "body": {
+      "name": "synthetic-conformance-value",
+      "url": "https://example.com/gitbook",
+      "headers": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "create_site_mcp_server_fixture_1"
+    }
+  }
+}

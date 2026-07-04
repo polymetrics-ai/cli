@@ -1,0 +1,18 @@
+{
+  "record": {
+    "web_user_id": "web_user_fixture_1",
+    "role": "Read Only",
+    "primary_location_id": "location_v2_fixture_1",
+    "assigned_location_ids": ["location_v2_fixture_1"],
+    "profile": "Facility User",
+    "user_data": { "Can View Data": "yes" }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/a/synthetic-conformance-value/api/web-user/v1/web_user_fixture_1/",
+    "body": {
+      "role": "Read Only",
+      "primary_location_id": "location_v2_fixture_1"
+    }
+  }
+}

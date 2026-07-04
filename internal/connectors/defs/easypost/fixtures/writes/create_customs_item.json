@@ -1,0 +1,27 @@
+{
+  "record": {
+    "customs_item": {
+      "description": "Fixture item",
+      "quantity": "1",
+      "weight": "5",
+      "value": "10",
+      "hs_tariff_number": "123456",
+      "origin_country": "US"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customs_items",
+    "body": {
+      "customs_item": {
+        "description": "Fixture item",
+        "quantity": "1",
+        "weight": "5",
+        "value": "10",
+        "hs_tariff_number": "123456",
+        "origin_country": "US"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "cstitem_fixture_new", "object": "CustomsItem" } }
+}

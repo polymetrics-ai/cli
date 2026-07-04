@@ -1,0 +1,136 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "photo": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "expires": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "days_to_expire": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "converted": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "pos": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "trial",
+        "cancelled",
+        "delinquent",
+        "expired",
+        "unknown"
+      ]
+    },
+    "start_week_on": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "signup_utm_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "utm_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "signup_content_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "buy_now": {
+          "type": "boolean"
+        },
+        "trial_checklist_stored_locally": {
+          "type": "boolean"
+        },
+        "employee_count_range": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "api_key": {
+          "type": "string",
+          "description": "Company API key"
+        }
+      }
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "country",
+    "photo",
+    "plan_id",
+    "created",
+    "modified",
+    "expires",
+    "days_to_expire",
+    "converted",
+    "pos",
+    "status",
+    "start_week_on"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "view_company",
+  "x-primary-key": [
+    "id"
+  ]
+}

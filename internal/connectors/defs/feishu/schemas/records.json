@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "records",
+  "type": "object",
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "object"
+    }
+  },
+  "x-primary-key": [
+    "record_id"
+  ]
+}

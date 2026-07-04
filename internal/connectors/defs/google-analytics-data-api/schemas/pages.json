@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pages",
+  "type": "object",
+  "properties": {
+    "property_id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "pagePath": {
+      "type": "string"
+    },
+    "pageTitle": {
+      "type": "string"
+    },
+    "screenPageViews": {
+      "type": "number"
+    },
+    "activeUsers": {
+      "type": "number"
+    },
+    "averageSessionDuration": {
+      "type": "number"
+    }
+  },
+  "x-primary-key": [
+    "property_id",
+    "date",
+    "pagePath",
+    "pageTitle"
+  ],
+  "x-cursor-field": "date"
+}

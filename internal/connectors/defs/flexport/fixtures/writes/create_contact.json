@@ -1,0 +1,28 @@
+{
+  "record": {
+    "name": "Fixture Contact",
+    "email": "fixture.contact@example.com",
+    "phone_number": "415-555-0100",
+    "company_id": "company_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/network/contacts",
+    "body": {
+      "name": "Fixture Contact",
+      "email": "fixture.contact@example.com",
+      "phone_number": "415-555-0100",
+      "company_id": "company_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/network/contact",
+        "id": "contact_fixture_1"
+      }
+    }
+  }
+}

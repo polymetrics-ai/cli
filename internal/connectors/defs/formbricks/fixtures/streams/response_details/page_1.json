@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/management/responses/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "res_fixture_detail_1",
+        "surveyId": "srv_fixture_1",
+        "contactId": "ctc_fixture_1",
+        "finished": true,
+        "language": "en",
+        "data": { "question_fixture_1": "fixture answer" },
+        "meta": { "source": "fixture" },
+        "person": {
+          "id": "person_fixture_1",
+          "userId": "user_fixture_1",
+          "workspaceId": "wrk_fixture_1"
+        },
+        "personAttributes": { "created_from": "fixture" },
+        "singleUseId": null,
+        "tags": [],
+        "ttc": { "_total": 42 },
+        "createdAt": "2026-01-03T00:00:00.000Z",
+        "updatedAt": "2026-01-03T00:00:00.000Z"
+      }
+    }
+  }
+}

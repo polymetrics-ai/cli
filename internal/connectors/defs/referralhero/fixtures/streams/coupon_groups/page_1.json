@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/coupon_groups",
+    "query": {
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "coupon_groups_retrieved",
+        "coupon_groups": [
+          {
+            "id": "rh200",
+            "name": "RH200",
+            "active": true,
+            "created_at": 1686563246,
+            "coupons": [
+              {
+                "code": "FCMPFI",
+                "available": true,
+                "sent_at": null,
+                "email_id": null,
+                "created_at": 1686563246
+              }
+            ]
+          }
+        ],
+        "pagination": {
+          "total_pages": 1,
+          "current_page": 1,
+          "per_page": 50,
+          "total_objects": 1
+        }
+      },
+      "calls_left": null,
+      "timestamp": 1686563777
+    }
+  }
+}

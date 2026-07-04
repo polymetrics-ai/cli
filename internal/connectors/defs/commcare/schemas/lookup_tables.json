@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lookup_tables",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "tag": { "type": ["string", "null"] },
+    "fields": { "type": ["array", "null"] },
+    "is_global": { "type": ["boolean", "null"] },
+    "resource_uri": { "type": ["string", "null"] }
+  }
+}

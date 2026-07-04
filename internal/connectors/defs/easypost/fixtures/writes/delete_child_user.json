@@ -1,0 +1,5 @@
+{
+  "record": { "child_id": "user_fixture_child_1" },
+  "expect": { "method": "DELETE", "path": "/users/user_fixture_child_1" },
+  "response": { "status": 200, "body": {} }
+}

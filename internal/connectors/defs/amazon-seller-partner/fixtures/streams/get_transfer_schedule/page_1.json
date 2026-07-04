@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/synthetic-conformance-value",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transferScheduleId": "transferScheduleId-fixture-1",
+      "transactionType": "transactionType-fixture-1",
+      "transactionSourceAccount": {},
+      "transactionDestinationAccount": {},
+      "transferScheduleStatus": "transferScheduleStatus-fixture-1",
+      "transferScheduleInformation": {},
+      "paymentPreference": {},
+      "transferScheduleFailures": [],
+      "transfer_schedule_id": "transfer_schedule_id-fixture-1"
+    }
+  }
+}

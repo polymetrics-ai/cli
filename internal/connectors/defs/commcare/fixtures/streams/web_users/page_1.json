@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/web-user/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "default_phone_number": null,
+          "email": "admin@example.test",
+          "first_name": "Admin",
+          "id": "web_user_fixture_1",
+          "is_admin": true,
+          "last_name": "User",
+          "permissions": { "doc_type": "Permissions", "edit_apps": true, "edit_data": true },
+          "phone_numbers": [],
+          "resource_uri": "",
+          "role": "Admin",
+          "username": "admin@example.test"
+        }
+      ]
+    }
+  }
+}

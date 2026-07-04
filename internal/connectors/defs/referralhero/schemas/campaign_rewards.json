@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReferralHero Campaign Reward",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "referrals": { "type": ["integer", "null"] },
+    "created_at": { "type": ["integer", "string", "null"] },
+    "unlocked_date": { "type": ["integer", "string", "null"] },
+    "sent_date": { "type": ["integer", "string", "null"] },
+    "referral": { "type": ["string", "null"] },
+    "value": { "type": ["number", "null"] },
+    "total": { "type": ["string", "number", "null"] },
+    "signup_type": { "type": ["string", "null"] },
+    "referrals_type": { "type": ["string", "null"] },
+    "recurring_count": { "type": ["integer", "null"] },
+    "coupon_code": { "type": ["string", "null"] },
+    "coupon_group": { "type": ["string", "null"] },
+    "image_url": { "type": ["string", "null"] },
+    "subscriber_email": { "type": ["string", "null"] },
+    "subscriber_id": { "type": ["string", "null"] }
+  }
+}

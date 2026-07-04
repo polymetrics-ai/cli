@@ -1,19 +1,2587 @@
 {
-  "api": "Amazon Selling Partner API (SP-API), https://sellingpartnerapi-na.amazon.com",
-  "docs": "https://developer-docs.amazon.com/sp-api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Fresh migration at legacy capability parity: the 3 legacy-parity read streams only (Orders v0, FBA Inventory v1, Finances v0 event groups); feeds/reports/listings/pricing/catalog/notifications APIs are out of scope until Pass B capability expansion.",
+  "api": "Amazon Selling Partner API (SP-API), official Swagger models from amzn/selling-partner-api-models",
+  "docs": "https://developer-docs.amazon.com/sp-api/ and https://github.com/amzn/selling-partner-api-models/tree/main/models",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface manifest across 353 documented operations from the official SP-API models. JSON GET endpoints are covered by streams when they fit the current declarative engine; path/body-only mutations are covered by writes. Operations requiring elevated authorization, binary/document handling, dynamic POST read bodies, or mutation query parameters are specifically excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/orders/v0/orders", "covered_by": { "stream": "orders" } },
-    { "method": "GET", "path": "/fba/inventory/v1/summaries", "covered_by": { "stream": "inventory_summaries" } },
-    { "method": "GET", "path": "/finances/v0/financialEventGroups", "covered_by": { "stream": "financial_event_groups" } },
-    { "method": "GET", "path": "/orders/v0/orders/{orderId}/orderItems", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/finances/v0/financialEvents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/catalog/2022-04-01/items", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/listings/2021-08-01/items/{sellerId}/{sku}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "PUT", "path": "/listings/2021-08-01/items/{sellerId}/{sku}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/reports/2021-06-30/reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/feeds/2021-06-30/feeds", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/notifications/v1/subscriptions/{notificationType}", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "POST",
+      "path": "/aplus/2020-11-01/contentAsinValidations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/approvalSubmissions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+      "covered_by": {
+        "stream": "list_content_document_asin_relations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/suspendSubmissions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/aplus/2020-11-01/contentDocuments",
+      "covered_by": {
+        "stream": "search_content_documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/aplus/2020-11-01/contentDocuments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/aplus/2020-11-01/contentPublishRecords",
+      "covered_by": {
+        "stream": "search_content_publish_records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appIntegrations/2024-04-01/notifications/{notificationId}/feedback",
+      "covered_by": {
+        "write": "record_action_feedback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appIntegrations/2024-04-01/notifications/deletion",
+      "covered_by": {
+        "write": "delete_notifications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appIntegrations/2024-04-01/notifications",
+      "covered_by": {
+        "write": "create_notification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/2023-11-30/clientSecret",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/inboundEligibility",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/inboundOrders/{orderId}/cancellation",
+      "covered_by": {
+        "write": "cancel_inbound"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/inboundOrders/{orderId}/confirmation",
+      "covered_by": {
+        "write": "confirm_inbound"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/inboundOrders/{orderId}",
+      "covered_by": {
+        "stream": "get_inbound"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/awd/2024-05-09/inboundOrders/{orderId}",
+      "covered_by": {
+        "write": "update_inbound"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/inboundOrders",
+      "covered_by": {
+        "write": "create_inbound"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/labelPageTypes",
+      "covered_by": {
+        "stream": "get_label_page_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/labels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/transport",
+      "covered_by": {
+        "write": "update_inbound_shipment_transport_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/inboundShipments/{shipmentId}",
+      "covered_by": {
+        "stream": "get_inbound_shipment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/inboundShipments",
+      "covered_by": {
+        "stream": "list_inbound_shipments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/inventory",
+      "covered_by": {
+        "stream": "list_inventory"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/outboundOrders/{orderId}/confirmation",
+      "covered_by": {
+        "write": "confirm_outbound"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/outboundOrders/{orderId}",
+      "covered_by": {
+        "stream": "get_outbound"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/awd/2024-05-09/outboundOrders/{orderId}",
+      "covered_by": {
+        "write": "update_outbound"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/outboundOrders",
+      "covered_by": {
+        "stream": "list_outbounds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/outboundOrders",
+      "covered_by": {
+        "write": "create_outbound"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/replenishmentOrders/{orderId}/confirmation",
+      "covered_by": {
+        "write": "confirm_replenishment_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/replenishmentOrders/{orderId}",
+      "covered_by": {
+        "stream": "get_replenishment_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/awd/2024-05-09/replenishmentOrders",
+      "covered_by": {
+        "stream": "list_replenishment_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/awd/2024-05-09/replenishmentOrders",
+      "covered_by": {
+        "write": "create_replenishment_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/products/pricing/2022-05-01/items/competitiveSummary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/products/pricing/2022-05-01/offer/featuredOfferExpectedPrice",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/products/pricing/v0/itemOffers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/products/pricing/v0/listingOffers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/2020-12-01/items/{asin}",
+      "covered_by": {
+        "stream": "get_catalog_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/2020-12-01/items",
+      "covered_by": {
+        "stream": "search_catalog_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/2022-04-01/items/{asin}",
+      "covered_by": {
+        "stream": "get_catalog_item_catalog_2022_04_01_items_asin"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/2022-04-01/items",
+      "covered_by": {
+        "stream": "search_catalog_items_catalog_2022_04_01_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/2024-11-01/automotive/vehicles",
+      "covered_by": {
+        "stream": "get_vehicles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/v0/categories",
+      "covered_by": {
+        "stream": "list_catalog_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/topics",
+      "covered_by": {
+        "stream": "get_browse_node_return_topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/trends",
+      "covered_by": {
+        "stream": "get_browse_node_return_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/topics",
+      "covered_by": {
+        "stream": "get_browse_node_review_topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/trends",
+      "covered_by": {
+        "stream": "get_browse_node_review_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerFeedback/2024-06-01/items/{asin}/browseNode",
+      "covered_by": {
+        "stream": "get_item_browse_node"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerFeedback/2024-06-01/items/{asin}/reviews/topics",
+      "covered_by": {
+        "stream": "get_item_review_topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customerFeedback/2024-06-01/items/{asin}/reviews/trends",
+      "covered_by": {
+        "stream": "get_item_review_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dataKiosk/2023-11-15/documents/{documentId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/dataKiosk/2023-11-15/queries/{queryId}",
+      "covered_by": {
+        "write": "cancel_query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dataKiosk/2023-11-15/queries/{queryId}",
+      "covered_by": {
+        "stream": "get_query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dataKiosk/2023-11-15/queries",
+      "covered_by": {
+        "stream": "get_queries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dataKiosk/2023-11-15/queries",
+      "covered_by": {
+        "write": "create_query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/definitions/2020-09-01/productTypes/{productType}",
+      "covered_by": {
+        "stream": "get_definitions_product_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/definitions/2020-09-01/productTypes",
+      "covered_by": {
+        "stream": "search_definitions_product_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery/2022-07-01/invoice/status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/delivery/2022-07-01/invoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/easyShip/2022-03-23/package",
+      "covered_by": {
+        "stream": "get_scheduled_package"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/easyShip/2022-03-23/package",
+      "covered_by": {
+        "write": "update_scheduled_packages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/easyShip/2022-03-23/package",
+      "covered_by": {
+        "write": "create_scheduled_package"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/easyShip/2022-03-23/packages/bulk",
+      "covered_by": {
+        "write": "create_scheduled_package_bulk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/easyShip/2022-03-23/timeSlot",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/externalFulfillment/2024-09-11/returns/{returnId}",
+      "covered_by": {
+        "stream": "get_return"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/externalFulfillment/2024-09-11/returns",
+      "covered_by": {
+        "stream": "list_returns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+      "covered_by": {
+        "stream": "retrieve_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+      "covered_by": {
+        "write": "update_package_status"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+      "covered_by": {
+        "write": "update_package"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages",
+      "covered_by": {
+        "write": "create_packages"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/shipLabels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/shippingOptions",
+      "covered_by": {
+        "stream": "retrieve_shipping_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}",
+      "covered_by": {
+        "stream": "get_shipment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/externalFulfillment/2024-09-11/shipments",
+      "covered_by": {
+        "stream": "get_shipments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/externalFulfillment/inventory/2024-09-11/inventories",
+      "covered_by": {
+        "write": "batch_inventory"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inbound/v0/prepInstructions",
+      "covered_by": {
+        "stream": "get_prep_instructions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inbound/v0/shipmentItems",
+      "covered_by": {
+        "stream": "get_shipment_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inbound/v0/shipments/{shipmentId}/billOfLading",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inbound/v0/shipments/{shipmentId}/items",
+      "covered_by": {
+        "stream": "get_shipment_items_by_shipment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inbound/v0/shipments/{shipmentId}/labels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inbound/v0/shipments",
+      "covered_by": {
+        "stream": "get_shipments_fba_inbound_v0_shipments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inbound/v1/eligibility/itemPreview",
+      "covered_by": {
+        "stream": "get_item_eligibility_preview"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/fba/inventory/v1/items/{sellerSku}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fba/inventory/v1/items/inventory",
+      "covered_by": {
+        "write": "add_inventory"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fba/inventory/v1/items",
+      "covered_by": {
+        "write": "create_inventory_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/inventory/v1/summaries",
+      "covered_by": {
+        "stream": "inventory_summaries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fba/outbound/2020-07-01/deliveryOffers",
+      "covered_by": {
+        "write": "delivery_offers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/2020-07-01/features/inventory/{featureName}/{sellerSku}",
+      "covered_by": {
+        "stream": "get_feature_sku"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/2020-07-01/features/inventory/{featureName}",
+      "covered_by": {
+        "stream": "get_feature_inventory"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/2020-07-01/features",
+      "covered_by": {
+        "stream": "get_features"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel",
+      "covered_by": {
+        "write": "cancel_fulfillment_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return",
+      "covered_by": {
+        "write": "create_fulfillment_return"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status",
+      "covered_by": {
+        "write": "submit_fulfillment_order_status_update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+      "covered_by": {
+        "stream": "get_fulfillment_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+      "covered_by": {
+        "write": "update_fulfillment_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+      "covered_by": {
+        "stream": "list_all_fulfillment_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+      "covered_by": {
+        "write": "create_fulfillment_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/2020-07-01/returnReasonCodes",
+      "covered_by": {
+        "stream": "list_return_reason_codes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/2020-07-01/tracking",
+      "covered_by": {
+        "stream": "get_package_tracking_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice/status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}",
+      "covered_by": {
+        "stream": "get_shipment_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feeds/2021-06-30/documents/{feedDocumentId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/feeds/2021-06-30/documents",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/feeds/2021-06-30/feeds/{feedId}",
+      "covered_by": {
+        "write": "cancel_feed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feeds/2021-06-30/feeds/{feedId}",
+      "covered_by": {
+        "stream": "get_feed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/feeds/2021-06-30/feeds",
+      "covered_by": {
+        "stream": "get_feeds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/feeds/2021-06-30/feeds",
+      "covered_by": {
+        "write": "create_feed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/2024-06-19/transactions",
+      "covered_by": {
+        "stream": "list_transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/2024-06-01/paymentMethods",
+      "covered_by": {
+        "stream": "get_payment_methods"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/finances/transfers/2024-06-01/payouts",
+      "covered_by": {
+        "write": "initiate_payout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/accounts/{accountId}/balance",
+      "covered_by": {
+        "stream": "list_account_balances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/accounts/{accountId}",
+      "covered_by": {
+        "stream": "get_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/accounts",
+      "covered_by": {
+        "stream": "list_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/transactions/{transactionId}",
+      "covered_by": {
+        "stream": "get_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/transactions",
+      "covered_by": {
+        "stream": "list_account_transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/finances/transfers/wallet/2024-03-01/transactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/transferPreview",
+      "covered_by": {
+        "stream": "get_transfer_preview"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+      "covered_by": {
+        "stream": "get_transfer_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+      "covered_by": {
+        "stream": "list_transfer_schedules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/v0/financialEventGroups/{eventGroupId}/financialEvents",
+      "covered_by": {
+        "stream": "list_financial_events_by_group_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/v0/financialEventGroups",
+      "covered_by": {
+        "stream": "financial_event_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/v0/financialEvents",
+      "covered_by": {
+        "stream": "list_financial_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/finances/v0/orders/{orderId}/financialEvents",
+      "covered_by": {
+        "stream": "list_financial_events_by_order_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/boxes",
+      "covered_by": {
+        "stream": "list_inbound_plan_boxes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation",
+      "covered_by": {
+        "write": "cancel_inbound_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/items",
+      "covered_by": {
+        "stream": "list_inbound_plan_items"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name",
+      "covered_by": {
+        "write": "update_inbound_plan_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/boxes",
+      "covered_by": {
+        "stream": "list_packing_group_boxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/items",
+      "covered_by": {
+        "stream": "list_packing_group_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation",
+      "covered_by": {
+        "write": "set_packing_information"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation",
+      "covered_by": {
+        "write": "confirm_packing_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+      "covered_by": {
+        "stream": "list_packing_options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+      "covered_by": {
+        "write": "generate_packing_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/pallets",
+      "covered_by": {
+        "stream": "list_inbound_plan_pallets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation",
+      "covered_by": {
+        "write": "confirm_placement_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+      "covered_by": {
+        "stream": "list_placement_options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+      "covered_by": {
+        "write": "generate_placement_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/boxes",
+      "covered_by": {
+        "stream": "list_shipment_boxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}/confirmation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}",
+      "covered_by": {
+        "stream": "get_shipment_content_update_preview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+      "covered_by": {
+        "stream": "list_shipment_content_update_previews"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryChallanDocument",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation",
+      "covered_by": {
+        "write": "confirm_delivery_window_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+      "covered_by": {
+        "stream": "list_delivery_window_options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+      "covered_by": {
+        "write": "generate_delivery_window_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/items",
+      "covered_by": {
+        "stream": "list_shipment_items"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name",
+      "covered_by": {
+        "write": "update_shipment_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/pallets",
+      "covered_by": {
+        "stream": "list_shipment_pallets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation",
+      "covered_by": {
+        "write": "cancel_self_ship_appointment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule",
+      "covered_by": {
+        "write": "schedule_self_ship_appointment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+      "covered_by": {
+        "stream": "get_self_ship_appointment_slots"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress",
+      "covered_by": {
+        "write": "update_shipment_source_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails",
+      "covered_by": {
+        "write": "update_shipment_tracking_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}",
+      "covered_by": {
+        "stream": "get_shipment_inbound_fba_2024_03_20_inbound_plans_inbound_plan_id_shipments_shipment_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation",
+      "covered_by": {
+        "write": "confirm_transportation_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+      "covered_by": {
+        "stream": "list_transportation_options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+      "covered_by": {
+        "write": "generate_transportation_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}",
+      "covered_by": {
+        "stream": "get_inbound_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/inboundPlans",
+      "covered_by": {
+        "stream": "list_inbound_plans"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans",
+      "covered_by": {
+        "write": "create_inbound_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/items/compliance",
+      "covered_by": {
+        "stream": "list_item_compliance_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/items/compliance",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/items/labels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/items/prepDetails",
+      "covered_by": {
+        "stream": "list_prep_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/items/prepDetails",
+      "covered_by": {
+        "write": "set_prep_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/fba/2024-03-20/operations/{operationId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+      "covered_by": {
+        "stream": "get_listings_item"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/listings/2021-08-01/items/{sellerId}",
+      "covered_by": {
+        "stream": "search_listings_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/listings/2021-08-01/restrictions",
+      "covered_by": {
+        "stream": "get_listings_restrictions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messaging/v1/orders/{amazonOrderId}/attributes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmCustomizationDetails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmDeliveryDetails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmOrderDetails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmServiceDetails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/digitalAccessKey",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/invoice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/legalDisclosure",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/unexpectedProblem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/orders/{amazonOrderId}/messages/warranty",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messaging/v1/orders/{amazonOrderId}",
+      "covered_by": {
+        "stream": "get_messaging_actions_for_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mfn/v0/additionalSellerInputs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mfn/v0/eligibleShippingServices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/mfn/v0/shipments/{shipmentId}",
+      "covered_by": {
+        "write": "cancel_shipment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mfn/v0/shipments/{shipmentId}",
+      "covered_by": {
+        "stream": "get_shipment_mfn_v0_shipments_shipment_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mfn/v0/shipments",
+      "covered_by": {
+        "write": "create_shipment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/notifications/v1/destinations/{destinationId}",
+      "covered_by": {
+        "write": "delete_destination"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/v1/destinations/{destinationId}",
+      "covered_by": {
+        "stream": "get_destination"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/v1/destinations",
+      "covered_by": {
+        "stream": "get_destinations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notifications/v1/destinations",
+      "covered_by": {
+        "write": "create_destination"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+      "covered_by": {
+        "write": "delete_subscription_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+      "covered_by": {
+        "stream": "get_subscription_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notifications/v1/subscriptions/{notificationType}/testNotification",
+      "covered_by": {
+        "write": "send_test_notification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/v1/subscriptions/{notificationType}",
+      "covered_by": {
+        "stream": "get_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notifications/v1/subscriptions/{notificationType}",
+      "covered_by": {
+        "write": "create_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/2026-01-01/orders/{orderId}",
+      "covered_by": {
+        "stream": "get_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/2026-01-01/orders",
+      "covered_by": {
+        "stream": "search_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/v0/orders/{orderId}/address",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/v0/orders/{orderId}/buyerInfo",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/v0/orders/{orderId}/orderItems/buyerInfo",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/v0/orders/{orderId}/orderItems",
+      "covered_by": {
+        "stream": "get_order_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/v0/orders/{orderId}/regulatedInfo",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orders/v0/orders/{orderId}/regulatedInfo",
+      "covered_by": {
+        "write": "update_verification_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/v0/orders/{orderId}/shipmentConfirmation",
+      "covered_by": {
+        "write": "confirm_shipment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/v0/orders/{orderId}/shipment",
+      "covered_by": {
+        "write": "update_shipment_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/v0/orders/{orderId}",
+      "covered_by": {
+        "stream": "get_order_orders_v0_orders_order_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/v0/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/fees/v0/feesEstimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/fees/v0/items/{Asin}/feesEstimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products/fees/v0/listings/{SellerSKU}/feesEstimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/pricing/v0/competitivePrice",
+      "covered_by": {
+        "stream": "get_competitive_pricing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/pricing/v0/items/{Asin}/offers",
+      "covered_by": {
+        "stream": "get_item_offers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/pricing/v0/listings/{SellerSKU}/offers",
+      "covered_by": {
+        "stream": "get_listing_offers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/pricing/v0/price",
+      "covered_by": {
+        "stream": "get_pricing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/replenishment/2022-11-07/offers/metrics/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/replenishment/2022-11-07/offers/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/replenishment/2022-11-07/sellingPartners/metrics/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/2021-06-30/documents/{reportDocumentId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reports/2021-06-30/reports/{reportId}",
+      "covered_by": {
+        "write": "cancel_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/2021-06-30/reports/{reportId}",
+      "covered_by": {
+        "stream": "get_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/2021-06-30/reports",
+      "covered_by": {
+        "stream": "get_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/2021-06-30/reports",
+      "covered_by": {
+        "write": "create_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reports/2021-06-30/schedules/{reportScheduleId}",
+      "covered_by": {
+        "write": "cancel_report_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/2021-06-30/schedules/{reportScheduleId}",
+      "covered_by": {
+        "stream": "get_report_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/2021-06-30/schedules",
+      "covered_by": {
+        "stream": "get_report_schedules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reports/2021-06-30/schedules",
+      "covered_by": {
+        "write": "create_report_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sales/v1/orderMetrics",
+      "covered_by": {
+        "stream": "get_order_metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sellers/v1/account",
+      "covered_by": {
+        "stream": "get_account_sellers_v1_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sellers/v1/marketplaceParticipations",
+      "covered_by": {
+        "stream": "get_marketplace_participations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/service/v1/appointmentSlots",
+      "covered_by": {
+        "stream": "get_appointment_slots"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service/v1/documents",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/service/v1/reservation/{reservationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/service/v1/reservation/{reservationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service/v1/reservation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment",
+      "covered_by": {
+        "write": "set_appointment_fulfillment_data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources",
+      "covered_by": {
+        "write": "assign_appointment_resources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}",
+      "covered_by": {
+        "write": "reschedule_appointment_for_service_job_by_service_job_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/service/v1/serviceJobs/{serviceJobId}/appointmentSlots",
+      "covered_by": {
+        "stream": "get_appointmment_slots_by_job_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service/v1/serviceJobs/{serviceJobId}/appointments",
+      "covered_by": {
+        "write": "add_appointment_for_service_job_by_service_job_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/service/v1/serviceJobs/{serviceJobId}/cancellations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/service/v1/serviceJobs/{serviceJobId}/completions",
+      "covered_by": {
+        "write": "complete_service_job_by_service_job_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/service/v1/serviceJobs/{serviceJobId}",
+      "covered_by": {
+        "stream": "get_service_job_by_service_job_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/service/v1/serviceJobs",
+      "covered_by": {
+        "stream": "get_service_jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service/v1/serviceResources/{resourceId}/capacity/fixed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service/v1/serviceResources/{resourceId}/capacity/range",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/service/v1/serviceResources/{resourceId}/schedules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v1/account",
+      "covered_by": {
+        "stream": "get_account_shipping_v1_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v1/purchaseShipment",
+      "covered_by": {
+        "write": "purchase_shipment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v1/rates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v1/shipments/{shipmentId}/cancel",
+      "covered_by": {
+        "write": "cancel_shipment_post_shipping_v1_shipments_shipment_id_cancel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v1/shipments/{shipmentId}/containers/{trackingId}/label",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v1/shipments/{shipmentId}/purchaseLabels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v1/shipments/{shipmentId}",
+      "covered_by": {
+        "stream": "get_shipment_shipping_v1_shipments_shipment_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v1/shipments",
+      "covered_by": {
+        "write": "create_shipment_post_shipping_v1_shipments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v1/tracking/{trackingId}",
+      "covered_by": {
+        "stream": "get_tracking_information"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v2/accessPoints",
+      "covered_by": {
+        "stream": "get_access_points"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v2/carrierAccountFormInputs",
+      "covered_by": {
+        "stream": "get_carrier_account_form_inputs"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping/v2/carrierAccounts/{carrierId}/unlink",
+      "covered_by": {
+        "write": "unlink_carrier_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/carrierAccounts/{carrierId}",
+      "covered_by": {
+        "write": "link_carrier_account"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping/v2/carrierAccounts/{carrierId}",
+      "covered_by": {
+        "write": "link_carrier_account_put_shipping_v2_carrier_accounts_carrier_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping/v2/carrierAccounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/claims",
+      "covered_by": {
+        "write": "create_claim"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v2/collectionForms/{collectionFormId}",
+      "covered_by": {
+        "stream": "get_collection_form"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping/v2/collectionForms/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/collectionForms",
+      "covered_by": {
+        "write": "generate_collection_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/ndrFeedback",
+      "covered_by": {
+        "write": "submit_ndr_feedback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/oneClickShipment",
+      "covered_by": {
+        "write": "one_click_shipment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping/v2/shipments/{shipmentId}/cancel",
+      "covered_by": {
+        "write": "cancel_shipment_put_shipping_v2_shipments_shipment_id_cancel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v2/shipments/{shipmentId}/documents",
+      "covered_by": {
+        "stream": "get_shipment_documents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v2/shipments/additionalInputs/schema",
+      "covered_by": {
+        "stream": "get_additional_inputs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/shipments/directPurchase",
+      "covered_by": {
+        "write": "direct_purchase_shipment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/shipments/rates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/v2/shipments",
+      "covered_by": {
+        "write": "purchase_shipment_post_shipping_v2_shipments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/v2/tracking",
+      "covered_by": {
+        "stream": "get_tracking"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shipping/v2/unmanifestedShipments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "read/search-style POST operation requires a request body; stream reads cannot send dynamic request bodies in the current engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/solicitations/v1/orders/{amazonOrderId}/solicitations/productReviewAndSellerFeedback",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation has required query parameters; writes.json supports method, path, and body fields but no query-parameter map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solicitations/v1/orders/{amazonOrderId}",
+      "covered_by": {
+        "stream": "get_solicitation_actions_for_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}/status",
+      "covered_by": {
+        "write": "update_supply_source_status"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+      "covered_by": {
+        "write": "archive_supply_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+      "covered_by": {
+        "stream": "get_supply_source"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+      "covered_by": {
+        "write": "update_supply_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplySources/2020-07-01/supplySources",
+      "covered_by": {
+        "stream": "get_supply_sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/supplySources/2020-07-01/supplySources",
+      "covered_by": {
+        "write": "create_supply_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/attributes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "restricted buyer, address, regulated-order, or messaging attribute data requires elevated/RDT-style authorization beyond the base LWA stream auth"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/documents/{invoicesDocumentId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/exports/{exportId}",
+      "covered_by": {
+        "stream": "get_invoices_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/exports",
+      "covered_by": {
+        "stream": "get_invoices_exports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tax/invoices/2024-06-19/exports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests/{shipmentId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "status/lookup endpoint is an operational probe rather than a syncable resource collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/invoices/{invoiceId}",
+      "covered_by": {
+        "stream": "get_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax/invoices/2024-06-19/invoices",
+      "covered_by": {
+        "stream": "get_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tokens/2021-03-01/restrictedDataToken",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/uploads/2020-11-01/uploadDestinations/{resource}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "security-sensitive token, secret rotation, or upload-destination operation requires elevated application scope and non-standard handling"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items",
+      "covered_by": {
+        "write": "submit_inventory_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/orders/2021-12-28/acknowledgements",
+      "covered_by": {
+        "write": "submit_acknowledgement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders/{purchaseOrderNumber}",
+      "covered_by": {
+        "stream": "get_order_vendor_direct_fulfillment_orders_2021_12_28_purchase_orders_purchase_order_numbe"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders",
+      "covered_by": {
+        "stream": "get_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/orders/v1/acknowledgements",
+      "covered_by": {
+        "write": "submit_acknowledgement_post_vendor_direct_fulfillment_orders_v1_acknowledgements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+      "covered_by": {
+        "stream": "get_order_vendor_direct_fulfillment_orders_v1_purchase_orders_purchase_order_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/orders/v1/purchaseOrders",
+      "covered_by": {
+        "stream": "get_orders_vendor_direct_fulfillment_orders_v1_purchase_orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/payments/v1/invoices",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/sandbox/2021-10-28/orders",
+      "covered_by": {
+        "write": "generate_order_scenarios"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/sandbox/2021-10-28/transactions/{transactionId}",
+      "covered_by": {
+        "stream": "get_order_scenarios"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/containerLabel",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices/{purchaseOrderNumber}",
+      "covered_by": {
+        "stream": "get_customer_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices",
+      "covered_by": {
+        "stream": "get_customer_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips/{purchaseOrderNumber}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations",
+      "covered_by": {
+        "write": "submit_shipment_confirmations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates",
+      "covered_by": {
+        "write": "submit_shipment_status_updates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/v1/customerInvoices/{purchaseOrderNumber}",
+      "covered_by": {
+        "stream": "get_customer_invoice_vendor_direct_fulfillment_shipping_v1_customer_invoices_purchase_order_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/v1/customerInvoices",
+      "covered_by": {
+        "stream": "get_customer_invoices_vendor_direct_fulfillment_shipping_v1_customer_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/v1/packingSlips/{purchaseOrderNumber}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/v1/packingSlips",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/v1/shipmentConfirmations",
+      "covered_by": {
+        "write": "submit_shipment_confirmations_post_vendor_direct_fulfillment_shipping_v1_shipment_confirmations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/v1/shipmentStatusUpdates",
+      "covered_by": {
+        "write": "submit_shipment_status_updates_post_vendor_direct_fulfillment_shipping_v1_shipment_status_updates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/v1/shippingLabels/{purchaseOrderNumber}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/transactions/2021-12-28/transactions/{transactionId}",
+      "covered_by": {
+        "stream": "get_transaction_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/directFulfillment/transactions/v1/transactions/{transactionId}",
+      "covered_by": {
+        "stream": "get_transaction_status_vendor_direct_fulfillment_transactions_v1_transactions_transaction_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/orders/v1/acknowledgements",
+      "covered_by": {
+        "write": "submit_acknowledgement_post_vendor_orders_v1_acknowledgements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+      "covered_by": {
+        "stream": "get_purchase_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/orders/v1/purchaseOrders",
+      "covered_by": {
+        "stream": "get_purchase_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/orders/v1/purchaseOrdersStatus",
+      "covered_by": {
+        "stream": "get_purchase_orders_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/payments/v1/invoices",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "operation prepares or submits binary/document payloads that the declarative JSON write path cannot model safely"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/shipping/v1/shipmentConfirmations",
+      "covered_by": {
+        "write": "submit_shipment_confirmations_post_vendor_shipping_v1_shipment_confirmations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/shipping/v1/shipments",
+      "covered_by": {
+        "stream": "get_shipment_details_vendor_shipping_v1_shipments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendor/shipping/v1/shipments",
+      "covered_by": {
+        "write": "submit_shipments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/shipping/v1/transportLabels",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "document, invoice, packing slip, or label payload/download endpoint is not a JSON object stream in the current declarative engine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor/transactions/v1/transactions/{transactionId}",
+      "covered_by": {
+        "stream": "get_transaction_vendor_transactions_v1_transactions_transaction_id"
+      }
+    }
   ]
 }

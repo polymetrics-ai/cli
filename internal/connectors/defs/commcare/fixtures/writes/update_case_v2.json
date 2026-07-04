@@ -1,0 +1,18 @@
+{
+  "record": {
+    "case_id": "case_write_fixture_1",
+    "case_name": "Fixture Patient Updated",
+    "properties": { "status": "updated" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/case/v2/case_write_fixture_1",
+    "body": {
+      "case_name": "Fixture Patient Updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "xform_id": "xform_fixture_2", "case": { "case_id": "case_write_fixture_1" } }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "website_overview",
+  "type": "object",
+  "properties": {
+    "property_id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "activeUsers": {
+      "type": "number"
+    },
+    "newUsers": {
+      "type": "number"
+    },
+    "sessions": {
+      "type": "number"
+    },
+    "screenPageViews": {
+      "type": "number"
+    },
+    "averageSessionDuration": {
+      "type": "number"
+    },
+    "bounceRate": {
+      "type": "number"
+    }
+  },
+  "x-primary-key": [
+    "property_id",
+    "date"
+  ],
+  "x-cursor-field": "date"
+}

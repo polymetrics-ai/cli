@@ -1,0 +1,20 @@
+{
+  "record": {
+    "reason": "fixture reason",
+    "comments_required": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/availability_reasons",
+    "body": {
+      "reason": "fixture reason",
+      "comments_required": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

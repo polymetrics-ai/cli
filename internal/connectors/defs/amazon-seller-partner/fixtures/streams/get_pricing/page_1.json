@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products/pricing/v0/price",
+    "query": {
+      "MarketplaceId": "synthetic-conformance-value",
+      "ItemType": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": [
+        {
+          "status": "status-fixture-1",
+          "SellerSKU": "SellerSKU-fixture-1",
+          "ASIN": "ASIN-fixture-1",
+          "Product": {}
+        }
+      ]
+    }
+  }
+}

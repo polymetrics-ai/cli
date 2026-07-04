@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReferralHero Coupon Group",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "name": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["integer", "string", "null"] },
+    "coupons": { "type": ["array", "null"], "items": { "type": "object" } }
+  }
+}

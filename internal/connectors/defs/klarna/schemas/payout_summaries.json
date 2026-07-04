@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payout_summaries",
+  "type": "object",
+  "x-primary-key": ["summary_settlement_currency", "summary_payout_date_start", "summary_payout_date_end"],
+  "required": ["summary_settlement_currency", "summary_payout_date_start", "summary_payout_date_end"],
+  "properties": {
+    "summary_total_fee_correction_amount": { "type": ["integer", "null"] },
+    "summary_payout_date_start": { "type": "string", "format": "date-time" },
+    "summary_total_release_amount": { "type": ["integer", "null"] },
+    "summary_settlement_currency": { "type": "string" },
+    "summary_payout_date_end": { "type": "string", "format": "date-time" },
+    "summary_total_tax_amount": { "type": ["integer", "null"] },
+    "summary_total_settlement_amount": { "type": ["integer", "null"] },
+    "summary_total_holdback_amount": { "type": ["integer", "null"] },
+    "summary_total_reversal_amount": { "type": ["integer", "null"] },
+    "summary_total_return_amount": { "type": ["integer", "null"] },
+    "summary_total_fee_amount": { "type": ["integer", "null"] },
+    "summary_total_commission_amount": { "type": ["integer", "null"] },
+    "summary_total_commission_reversal_amount": { "type": ["integer", "null"] },
+    "summary_total_sale_amount": { "type": ["integer", "null"] },
+    "summary_total_repay_amount": { "type": ["integer", "null"] }
+  }
+}

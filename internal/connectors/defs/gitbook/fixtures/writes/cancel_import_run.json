@@ -1,0 +1,17 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "import_run_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/org/synthetic-conformance-value/imports/synthetic-conformance-value/cancel"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "cancel_import_run_fixture_1"
+    }
+  }
+}

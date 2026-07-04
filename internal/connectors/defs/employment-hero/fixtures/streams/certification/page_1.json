@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/certifications/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "name": "Working With Children",
+        "type": "check",
+        "description": "Fixture certification",
+        "state": "NSW",
+        "mandatory": true,
+        "archived": false
+      }
+    }
+  }
+}

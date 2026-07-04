@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS CloudTrail Connection Specification",
+  "type": "object",
+  "required": [
+    "aws_key_id",
+    "aws_region_name",
+    "aws_secret_key"
+  ],
+  "properties": {
+    "aws_key_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "manual intervention needed"
+    },
+    "aws_region_name": {
+      "type": "string",
+      "description": "The default AWS Region to use, for example, us-west-1 or us-west-2. When specifying a Region inline during client initialization, this property is named region_name."
+    },
+    "aws_secret_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "manual intervention needed"
+    },
+    "lookup_attributes_filter": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string",
+      "description": "The date you would like to replicate data. Data in AWS CloudTrail is available for last 90 days only. Format: YYYY-MM-DD."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

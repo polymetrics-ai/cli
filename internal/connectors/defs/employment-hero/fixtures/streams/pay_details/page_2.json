@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/pay_details",
+    "query": {
+      "page_index": "1",
+      "item_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "pay_detail_fixture_1",
+            "employee_id": "emp_fixture_1",
+            "pay_category_id": "pay_category_fixture_1",
+            "rate": 50
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

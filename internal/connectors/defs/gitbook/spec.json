@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "GitBook Connection Specification",
   "type": "object",
-  "required": ["access_token"],
+  "required": [
+    "access_token"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
@@ -15,22 +17,213 @@
       "default": "https://api.gitbook.com/v1",
       "description": "GitBook API base URL override for tests or proxies."
     },
+    "account_name": {
+      "type": "string",
+      "description": "GitBook path parameter accountName; required when reading streams scoped by accountName."
+    },
+    "change_request_id": {
+      "type": "string",
+      "description": "GitBook path parameter changeRequestId; required when reading streams scoped by changeRequestId."
+    },
+    "collection_id": {
+      "type": "string",
+      "description": "GitBook path parameter collectionId; required when reading streams scoped by collectionId."
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "GitBook path parameter commentId; required when reading streams scoped by commentId."
+    },
+    "comment_reply_id": {
+      "type": "string",
+      "description": "GitBook path parameter commentReplyId; required when reading streams scoped by commentReplyId."
+    },
+    "conversation_id": {
+      "type": "string",
+      "description": "GitBook path parameter conversationId; required when reading streams scoped by conversationId."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "GitBook path parameter documentId; required when reading streams scoped by documentId."
+    },
+    "email_domain": {
+      "type": "string",
+      "description": "GitBook path parameter emailDomain; required when reading streams scoped by emailDomain."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "GitBook path parameter eventId; required when reading streams scoped by eventId."
+    },
+    "file_id": {
+      "type": "string",
+      "description": "GitBook path parameter fileId; required when reading streams scoped by fileId."
+    },
+    "font_id": {
+      "type": "string",
+      "description": "GitBook path parameter fontId; required when reading streams scoped by fontId."
+    },
+    "glossary_entry_id": {
+      "type": "string",
+      "description": "GitBook path parameter glossaryEntryId; required when reading streams scoped by glossaryEntryId."
+    },
+    "hostname": {
+      "type": "string",
+      "description": "GitBook path parameter hostname; required when reading streams scoped by hostname."
+    },
+    "import_run_id": {
+      "type": "string",
+      "description": "GitBook path parameter importRunId; required when reading streams scoped by importRunId."
+    },
+    "installation_id": {
+      "type": "string",
+      "description": "GitBook path parameter installationId; required when reading streams scoped by installationId."
+    },
+    "integration_name": {
+      "type": "string",
+      "description": "GitBook path parameter integrationName; required when reading streams scoped by integrationName."
+    },
+    "invite_id": {
+      "type": "string",
+      "description": "GitBook path parameter inviteId; required when reading streams scoped by inviteId."
+    },
     "organization_id": {
       "type": "string",
-      "description": "Organization ID; required for the org_members stream."
+      "description": "GitBook path parameter organizationId; required when reading streams scoped by organizationId."
+    },
+    "page_id": {
+      "type": "string",
+      "description": "GitBook path parameter pageId; required when reading streams scoped by pageId."
+    },
+    "page_path": {
+      "type": "string",
+      "description": "GitBook path parameter pagePath; required when reading streams scoped by pagePath."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "GitBook path parameter projectId; required when reading streams scoped by projectId."
+    },
+    "query": {
+      "type": "string",
+      "description": "GitBook required query parameter query; required for streams that use it."
+    },
+    "repository_name": {
+      "type": "string",
+      "description": "GitBook path parameter repositoryName; required when reading streams scoped by repositoryName."
+    },
+    "request": {
+      "type": "string",
+      "description": "GitBook required query parameter request; required for streams that use it."
+    },
+    "reusable_content_id": {
+      "type": "string",
+      "description": "GitBook path parameter reusableContentId; required when reading streams scoped by reusableContentId."
+    },
+    "review_id": {
+      "type": "string",
+      "description": "GitBook path parameter reviewId; required when reading streams scoped by reviewId."
+    },
+    "revision_id": {
+      "type": "string",
+      "description": "GitBook path parameter revisionId; required when reading streams scoped by revisionId."
+    },
+    "saml_provider_id": {
+      "type": "string",
+      "description": "GitBook path parameter samlProviderId; required when reading streams scoped by samlProviderId."
+    },
+    "share_link_id": {
+      "type": "string",
+      "description": "GitBook path parameter shareLinkId; required when reading streams scoped by shareLinkId."
+    },
+    "site_channel_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteChannelId; required when reading streams scoped by siteChannelId."
+    },
+    "site_context_connection_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteContextConnectionId; required when reading streams scoped by siteContextConnectionId."
+    },
+    "site_context_record_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteContextRecordId; required when reading streams scoped by siteContextRecordId."
+    },
+    "site_finding_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteFindingId; required when reading streams scoped by siteFindingId."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteId; required when reading streams scoped by siteId."
+    },
+    "site_mcp_server_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteMcpServerId; required when reading streams scoped by siteMcpServerId."
+    },
+    "site_question_answer_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteQuestionAnswerId; required when reading streams scoped by siteQuestionAnswerId."
+    },
+    "site_question_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteQuestionId; required when reading streams scoped by siteQuestionId."
+    },
+    "site_redirect_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteRedirectId; required when reading streams scoped by siteRedirectId."
+    },
+    "site_scan_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteScanId; required when reading streams scoped by siteScanId."
+    },
+    "site_section_group_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteSectionGroupId; required when reading streams scoped by siteSectionGroupId."
+    },
+    "site_section_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteSectionId; required when reading streams scoped by siteSectionId."
+    },
+    "site_space_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteSpaceId; required when reading streams scoped by siteSpaceId."
+    },
+    "site_topic_id": {
+      "type": "string",
+      "description": "GitBook path parameter siteTopicId; required when reading streams scoped by siteTopicId."
+    },
+    "source": {
+      "type": "string",
+      "description": "GitBook required query parameter source; required for streams that use it."
     },
     "space_id": {
       "type": "string",
-      "description": "Space ID; required for the content stream."
+      "description": "GitBook path parameter spaceId; required when reading streams scoped by spaceId."
     },
-    "page_size": {
+    "spec_slug": {
       "type": "string",
-      "default": "50",
-      "description": "Records per page (1-100)."
+      "description": "GitBook path parameter specSlug; required when reading streams scoped by specSlug."
     },
-    "mode": {
+    "subdomain": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "GitBook path parameter subdomain; required when reading streams scoped by subdomain."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "GitBook path parameter teamId; required when reading streams scoped by teamId."
+    },
+    "translation_id": {
+      "type": "string",
+      "description": "GitBook path parameter translationId; required when reading streams scoped by translationId."
+    },
+    "url": {
+      "type": "string",
+      "description": "GitBook required query parameter url; required for streams that use it."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "GitBook path parameter userId; required when reading streams scoped by userId."
+    },
+    "version_id": {
+      "type": "string",
+      "description": "GitBook path parameter versionId; required when reading streams scoped by versionId."
     }
   }
 }

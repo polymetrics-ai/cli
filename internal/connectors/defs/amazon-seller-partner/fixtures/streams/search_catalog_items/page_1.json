@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/2020-12-01/items",
+    "query": {
+      "keywords": "synthetic-conformance-value",
+      "marketplaceIds": "synthetic-conformance-value",
+      "pageSize": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "asin": "asin-fixture-1",
+          "attributes": {},
+          "identifiers": [],
+          "images": [],
+          "productTypes": [],
+          "salesRanks": [],
+          "summaries": [],
+          "variations": [],
+          "vendorDetails": []
+        }
+      ]
+    }
+  }
+}

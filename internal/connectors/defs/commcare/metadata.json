@@ -1,22 +1,25 @@
 {
   "name": "commcare",
   "display_name": "CommCare",
-  "description": "Reads CommCare forms and cases through the CommCare HQ API.",
+  "description": "Reads CommCare HQ project, application, form, case, user, group, report, location, lookup table, export, and messaging API data; writes supported JSON mutations for cases, users, groups, locations, and lookup tables.",
   "integration_type": "api",
-  "docs_url": "https://confluence.dimagi.com/display/commcarepublic/CommCare+HQ+APIs",
+  "docs_url": "https://commcare-hq.readthedocs.io/api/index.html",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external CommCare HQ API read of project forms and cases"
+    "read": "external CommCare HQ API reads across configured project resources and account-level user identity/domain endpoints",
+    "write": "external CommCare HQ mutations for cases, mobile workers, web-user invitations and access, groups, locations, lookup tables, and lookup table rows",
+    "approval": "reverse ETL writes require plan preview and approval token"
   }
 }

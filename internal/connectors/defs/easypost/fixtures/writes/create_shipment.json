@@ -1,0 +1,21 @@
+{
+  "record": {
+    "shipment": {
+      "to_address": { "id": "adr_fixture_to" },
+      "from_address": { "id": "adr_fixture_from" },
+      "parcel": { "id": "prcl_fixture_1" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shipments",
+    "body": {
+      "shipment": {
+        "to_address": { "id": "adr_fixture_to" },
+        "from_address": { "id": "adr_fixture_from" },
+        "parcel": { "id": "prcl_fixture_1" }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "shp_fixture_new", "object": "Shipment" } }
+}

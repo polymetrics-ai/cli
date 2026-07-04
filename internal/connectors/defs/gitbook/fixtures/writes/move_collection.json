@@ -1,0 +1,20 @@
+{
+  "record": {
+    "collection_id": "synthetic-conformance-value",
+    "parent": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/collections/synthetic-conformance-value/move",
+    "body": {
+      "parent": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "move_collection_fixture_1"
+    }
+  }
+}

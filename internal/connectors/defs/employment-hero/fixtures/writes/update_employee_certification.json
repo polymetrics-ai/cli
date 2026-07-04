@@ -1,0 +1,20 @@
+{
+  "record": {
+    "employee_id": "emp_fixture_1",
+    "id": "employee_cert_fixture_1",
+    "completion_date": "2026-01-01"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/certifications/employee_cert_fixture_1",
+    "body": {
+      "completion_date": "2026-01-01"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_employee_certification_fixture_response"
+    }
+  }
+}

@@ -5,13 +5,30 @@
     "body": {
       "lectures": [],
       "speakers": [
-        { "id": 99, "name": "Ada Lovelace", "company": "Fixture Co", "position": "Speaker", "email": "ada@example.com", "phone": "", "country": "US", "language": "en", "bio": "Fixture bio.", "web": "https://example.com", "event_id": 1, "order": 1 },
-        { "id": 100, "name": "Grace Hopper", "company": "Fixture Co", "position": "Speaker", "email": "grace@example.com", "phone": "", "country": "US", "language": "en", "bio": "Fixture bio.", "web": "https://example.com", "event_id": 1, "order": 2 }
+        {
+          "id": 444,
+          "name": "Fixture Speaker",
+          "email": "speaker@example.test",
+          "photo": "https://example.com/profile.png",
+          "phone": "(555) 010-0100",
+          "bio": "Sanitized fixture speaker bio.",
+          "web": "https://example.com",
+          "facebook": "https://example.com/facebook",
+          "twitter": "https://example.com/twitter",
+          "linkedIn": "https://example.com/linkedin",
+          "position": "Presenter",
+          "company": "Fixture Co",
+          "country": "US",
+          "language": "English",
+          "event_id": 1,
+          "thumbnail": "https://example.com/thumbnail.png"
+        }
       ],
       "days": [],
       "halls": [],
       "tracks": [],
-      "workshops": []
+      "workshops": [],
+      "pauses": []
     }
   }
 }

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/bonuses"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": [
+        {
+          "title": "30% discount on Pro",
+          "description": "Reward unlocked after two referrals.",
+          "referrals": 2
+        }
+      ],
+      "calls_left": 1000,
+      "timestamp": 1487659708
+    }
+  }
+}

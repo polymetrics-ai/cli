@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contact_attributes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "attribute_key_id": { "type": ["string", "null"], "description": "Mapped from the raw API's attributeKeyId field." },
+    "contact_id": { "type": ["string", "null"], "description": "Mapped from the raw API's contactId field." },
+    "value": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "description": "Mapped from the raw API's createdAt field." },
+    "updated_at": { "type": ["string", "null"], "description": "Mapped from the raw API's updatedAt field." }
+  }
+}

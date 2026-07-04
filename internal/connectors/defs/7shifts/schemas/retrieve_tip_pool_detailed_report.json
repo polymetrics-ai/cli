@@ -1,0 +1,129 @@
+{
+  "type": "object",
+  "properties": {
+    "location_id": {
+      "type": "integer",
+      "description": "Location ID"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "report_rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "A date with YYYY-MM-DD format",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "tip_pools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tip_pool_uuid": {
+                  "type": "string",
+                  "description": "The tip pool UUID",
+                  "format": "uuid"
+                },
+                "tip_pool_name": {
+                  "type": "string",
+                  "description": "The tip pool name"
+                },
+                "unassigned_tips": {
+                  "type": "array",
+                  "description": "Unassigned tips",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "net_sales": {
+                        "type": "integer",
+                        "description": "The net sales (in cents)"
+                      },
+                      "cc_tips": {
+                        "type": "integer",
+                        "description": "Tips from credit card (in cents)"
+                      },
+                      "cc_tips_withheld": {
+                        "type": "integer",
+                        "description": "Tips from credit card withheld (in cents)"
+                      },
+                      "auto_grat_tips": {
+                        "type": "integer",
+                        "description": "Auto gratuity tips (in cents)"
+                      },
+                      "cash_tips": {
+                        "type": "integer",
+                        "description": "Tips in cash (in cents)"
+                      },
+                      "declared_tips": {
+                        "type": "integer",
+                        "description": "Declared tips (in cents)"
+                      }
+                    }
+                  }
+                },
+                "assigned_tips": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Tips assigned to employees",
+                    "properties": {
+                      "net_sales": {
+                        "type": "integer",
+                        "description": "The net sales (in cents)"
+                      },
+                      "cc_tips": {
+                        "type": "integer",
+                        "description": "Tips from credit card (in cents)"
+                      },
+                      "cc_tips_withheld": {
+                        "type": "integer",
+                        "description": "Tips from credit card withheld (in cents)"
+                      },
+                      "auto_grat_tips": {
+                        "type": "integer",
+                        "description": "Auto gratuity tips (in cents)"
+                      },
+                      "cash_tips": {
+                        "type": "integer",
+                        "description": "Tips in cash (in cents)"
+                      },
+                      "declared_tips": {
+                        "type": "integer",
+                        "description": "Declared tips (in cents)"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "tip_pool_uuid",
+                "tip_pool_name",
+                "unassigned_tips",
+                "assigned_tips"
+              ]
+            }
+          }
+        },
+        "required": [
+          "date",
+          "tip_pools"
+        ]
+      }
+    }
+  },
+  "required": [
+    "location_id",
+    "location_name",
+    "report_rows"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_tip_pool_detailed_report",
+  "x-primary-key": [
+    "location_id"
+  ]
+}

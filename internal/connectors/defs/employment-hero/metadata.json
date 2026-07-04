@@ -1,23 +1,25 @@
 {
   "name": "employment-hero",
   "display_name": "Employment Hero",
-  "description": "Reads Employment Hero organisations, employees, leave requests, and teams through the Employment Hero REST API. Read-only (the API is full-refresh only).",
+  "description": "Reads Employment Hero organisations, employees, HR reference data, forms, goals, rosters, employee subresources, and exposes documented JSON mutations through the Employment Hero REST API.",
   "integration_type": "api",
-  "docs_url": "https://developer.employmenthero.com/",
+  "docs_url": "https://developer.employmenthero.com/api-references",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Employment Hero API read of organisation, employee, leave, and team data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Employment Hero API reads of organisation, employee, leave, form, goal, roster, payroll-reference, document metadata, and employee subresource data",
+    "write": "creates, updates, archives, or deletes Employment Hero HR objects such as employees, certifications, form assets, leave requests, positions, rostered shifts, timesheets, kiosk access, and work sites",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive deletes and status-changing actions are marked high risk"
   }
 }

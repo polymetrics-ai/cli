@@ -1,0 +1,36 @@
+{
+  "api": "Dixa legacy connector hook surface",
+  "docs": "https://docs.dixa.io/openapi/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy dixa connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/dixa, which delegates to internal/connectors/dixa until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/dixa conversations read path",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/dixa conversation_queue read path",
+      "covered_by": {
+        "stream": "conversation_queue"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/dixa conversation_rating read path",
+      "covered_by": {
+        "stream": "conversation_rating"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/dixa conversation_assignment read path",
+      "covered_by": {
+        "stream": "conversation_assignment"
+      }
+    }
+  ]
+}

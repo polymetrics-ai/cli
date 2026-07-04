@@ -9,13 +9,29 @@
       "items": [
         {
           "session_id": "devin-session-fixture-1",
+          "url": "https://app.devin.ai/sessions/devin-session-fixture-1",
           "title": "Fixture session 1",
-          "status": "finished",
-          "message_count": 4,
-          "user_id": "usr_fixture_1",
-          "summary": "Fixture summary 1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z"
+          "status": "exit",
+          "status_detail": "finished",
+          "category": "feature_development",
+          "subcategory": "Other",
+          "origin": "api",
+          "org_id": "org-fixture",
+          "user_id": "user-fixture-1",
+          "service_user_id": "service-user-fixture-1",
+          "playbook_id": "playbook-fixture-1",
+          "session_size": "s",
+          "num_user_messages": 2,
+          "num_devin_messages": 4,
+          "analysis": {
+            "summary": "Fixture summary"
+          },
+          "tags": ["fixture"],
+          "pull_requests": [],
+          "acus_consumed": 1.25,
+          "is_archived": false,
+          "created_at": 1767225600,
+          "updated_at": 1767229200
         }
       ],
       "has_next_page": false,

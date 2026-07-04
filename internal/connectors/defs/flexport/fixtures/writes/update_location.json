@@ -1,0 +1,31 @@
+{
+  "record": {
+    "id": "location_fixture_1",
+    "name": "Fixture Warehouse Updated",
+    "ref": "fixture-warehouse-updated",
+    "metadata": {
+      "temperature": ["cold"]
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/network/locations/location_fixture_1",
+    "body": {
+      "name": "Fixture Warehouse Updated",
+      "ref": "fixture-warehouse-updated",
+      "metadata": {
+        "temperature": ["cold"]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/network/location",
+        "id": "location_fixture_1"
+      }
+    }
+  }
+}

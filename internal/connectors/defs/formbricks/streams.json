@@ -24,6 +24,23 @@
       "schema": "schemas/surveys.json"
     },
     {
+      "name": "survey_details",
+      "path": "management/surveys/{{ fanout.id }}",
+      "records": { "path": "data", "single_object": true },
+      "fan_out": {
+        "ids_from": { "request": { "path": "management/surveys", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "survey_id" }
+      },
+      "computed_fields": {
+        "workspace_id": "{{ record.workspaceId }}",
+        "created_by": "{{ record.createdBy }}",
+        "display_option": "{{ record.displayOption }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/survey_details.json"
+    },
+    {
       "name": "responses",
       "path": "management/responses",
       "records": { "path": "data" },
@@ -33,6 +50,9 @@
         "offset_param": "skip",
         "page_size": 50
       },
+      "query": {
+        "surveyId": { "template": "{{ config.survey_id }}", "omit_when_absent": true }
+      },
       "computed_fields": {
         "survey_id": "{{ record.surveyId }}",
         "contact_id": "{{ record.contactId }}",
@@ -40,6 +60,22 @@
         "updated_at": "{{ record.updatedAt }}"
       },
       "schema": "schemas/responses.json"
+    },
+    {
+      "name": "response_details",
+      "path": "management/responses/{{ fanout.id }}",
+      "records": { "path": "data", "single_object": true },
+      "fan_out": {
+        "ids_from": { "config_key": "response_ids" },
+        "into": { "path_var": "response_id" }
+      },
+      "computed_fields": {
+        "survey_id": "{{ record.surveyId }}",
+        "contact_id": "{{ record.contactId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/response_details.json"
     },
     {
       "name": "action_classes",
@@ -53,6 +89,21 @@
       "schema": "schemas/action_classes.json"
     },
     {
+      "name": "action_class_details",
+      "path": "management/action-classes/{{ fanout.id }}",
+      "records": { "path": "data", "single_object": true },
+      "fan_out": {
+        "ids_from": { "request": { "path": "management/action-classes", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "action_class_id" }
+      },
+      "computed_fields": {
+        "workspace_id": "{{ record.workspaceId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/action_class_details.json"
+    },
+    {
       "name": "attribute_classes",
       "path": "management/attribute-classes",
       "records": { "path": "data" },
@@ -64,6 +115,90 @@
       "schema": "schemas/attribute_classes.json"
     },
     {
+      "name": "contact_attribute_keys",
+      "path": "management/contact-attribute-keys",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "is_unique": "{{ record.isUnique }}",
+        "workspace_id": "{{ record.workspaceId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/contact_attribute_keys.json"
+    },
+    {
+      "name": "contact_attribute_key_details",
+      "path": "management/contact-attribute-keys/{{ fanout.id }}",
+      "records": { "path": "data", "single_object": true },
+      "fan_out": {
+        "ids_from": { "request": { "path": "management/contact-attribute-keys", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "contact_attribute_key_id" }
+      },
+      "computed_fields": {
+        "is_unique": "{{ record.isUnique }}",
+        "workspace_id": "{{ record.workspaceId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/contact_attribute_keys.json"
+    },
+    {
+      "name": "contact_attributes",
+      "path": "management/contact-attributes",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "attribute_key_id": "{{ record.attributeKeyId }}",
+        "contact_id": "{{ record.contactId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/contact_attributes.json"
+    },
+    {
+      "name": "contacts",
+      "path": "management/contacts",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "user_id": "{{ record.userId }}",
+        "workspace_id": "{{ record.workspaceId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "contact_details",
+      "path": "management/contacts/{{ fanout.id }}",
+      "records": { "path": "data", "single_object": true },
+      "fan_out": {
+        "ids_from": { "request": { "path": "management/contacts", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "contact_id" }
+      },
+      "computed_fields": {
+        "user_id": "{{ record.userId }}",
+        "workspace_id": "{{ record.workspaceId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "me",
+      "path": "management/me",
+      "records": { "path": ".", "single_object": true },
+      "computed_fields": {
+        "id": "{{ record.organizationId }}",
+        "organization_id": "{{ record.organizationId }}",
+        "app_setup_completed": "{{ record.appSetupCompleted }}",
+        "website_setup_completed": "{{ record.websiteSetupCompleted }}",
+        "organization_access": "{{ record.organizationAccess }}",
+        "environment_permissions": "{{ record.environmentPermissions }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/me.json"
+    },
+    {
       "name": "webhooks",
       "path": "webhooks",
       "records": { "path": "data" },
@@ -73,6 +208,21 @@
         "updated_at": "{{ record.updatedAt }}"
       },
       "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "webhook_details",
+      "path": "webhooks/{{ fanout.id }}",
+      "records": { "path": "data", "single_object": true },
+      "fan_out": {
+        "ids_from": { "request": { "path": "webhooks", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "webhook_id" }
+      },
+      "computed_fields": {
+        "workspace_id": "{{ record.workspaceId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/webhook_details.json"
     }
   ]
 }

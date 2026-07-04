@@ -1,0 +1,34 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "items",
+      "method": "GET",
+      "path": "/__legacy_hook/items",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/items.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    }
+  ]
+}

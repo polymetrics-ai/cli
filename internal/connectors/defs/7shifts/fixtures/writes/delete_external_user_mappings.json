@@ -1,0 +1,13 @@
+{
+  "record": {
+    "identifier": "fixture identifier"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/company/synthetic-conformance-value/external_user_mappings/fixture identifier"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

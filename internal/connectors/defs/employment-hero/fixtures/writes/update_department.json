@@ -1,0 +1,19 @@
+{
+  "record": {
+    "department_id": "department_fixture_1",
+    "name": "Updated Department"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/departments/department_fixture_1",
+    "body": {
+      "name": "Updated Department"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_department_fixture_response"
+    }
+  }
+}

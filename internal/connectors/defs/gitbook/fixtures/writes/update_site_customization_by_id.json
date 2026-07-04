@@ -1,0 +1,117 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "styling": {
+      "synthetic": true
+    },
+    "internationalization": {
+      "synthetic": true
+    },
+    "favicon": {
+      "synthetic": true
+    },
+    "header": {
+      "synthetic": true
+    },
+    "footer": {
+      "synthetic": true
+    },
+    "themes": {
+      "synthetic": true
+    },
+    "feedback": {
+      "synthetic": true
+    },
+    "ai": {
+      "synthetic": true
+    },
+    "advanced_customization": {
+      "synthetic": true
+    },
+    "trademark": {
+      "synthetic": true
+    },
+    "external_links": {
+      "synthetic": true
+    },
+    "pagination": {
+      "synthetic": true
+    },
+    "page_actions": {
+      "synthetic": true
+    },
+    "privacy_policy": {
+      "synthetic": true
+    },
+    "social_preview": {
+      "synthetic": true
+    },
+    "social_accounts": [],
+    "insights": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/customization",
+    "body": {
+      "styling": {
+        "synthetic": true
+      },
+      "internationalization": {
+        "synthetic": true
+      },
+      "favicon": {
+        "synthetic": true
+      },
+      "header": {
+        "synthetic": true
+      },
+      "footer": {
+        "synthetic": true
+      },
+      "themes": {
+        "synthetic": true
+      },
+      "feedback": {
+        "synthetic": true
+      },
+      "ai": {
+        "synthetic": true
+      },
+      "advanced_customization": {
+        "synthetic": true
+      },
+      "trademark": {
+        "synthetic": true
+      },
+      "external_links": {
+        "synthetic": true
+      },
+      "pagination": {
+        "synthetic": true
+      },
+      "page_actions": {
+        "synthetic": true
+      },
+      "privacy_policy": {
+        "synthetic": true
+      },
+      "social_preview": {
+        "synthetic": true
+      },
+      "social_accounts": [],
+      "insights": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_site_customization_by_id_fixture_1"
+    }
+  }
+}

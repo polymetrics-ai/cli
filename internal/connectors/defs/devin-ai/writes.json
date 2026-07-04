@@ -1,0 +1,447 @@
+{
+  "actions": [
+    {
+      "name": "create_session",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions",
+      "record_schema": {
+        "type": "object",
+        "required": ["prompt"],
+        "properties": {
+          "prompt": { "type": "string" },
+          "snapshot_id": { "type": "string" },
+          "playbook_id": { "type": "string" },
+          "unlisted": { "type": "boolean" },
+          "idempotent": { "type": "boolean" },
+          "create_as_user_id": { "type": "string" },
+          "devin_mode": { "type": "string", "enum": ["normal", "fast"] },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "structured_output_schema": { "type": "object" },
+          "structured_output_required": { "type": "boolean" },
+          "attachments": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new Devin session in the organization and can consume ACUs"
+    },
+    {
+      "name": "send_session_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/messages",
+      "path_fields": ["devin_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["devin_id", "message"],
+        "properties": {
+          "devin_id": { "type": "string" },
+          "message": { "type": "string" },
+          "message_as_user_id": { "type": "string" },
+          "attachment_urls": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "sends a message to an active or suspended Devin session and may resume work"
+    },
+    {
+      "name": "append_session_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/tags",
+      "path_fields": ["devin_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["devin_id", "tags"],
+        "properties": {
+          "devin_id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "adds tags to a Devin session"
+    },
+    {
+      "name": "replace_session_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/tags",
+      "path_fields": ["devin_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["devin_id", "tags"],
+        "properties": {
+          "devin_id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "replaces all tags on a Devin session"
+    },
+    {
+      "name": "archive_session",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/archive",
+      "path_fields": ["devin_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["devin_id"],
+        "properties": {
+          "devin_id": { "type": "string" }
+        }
+      },
+      "risk": "archives a Devin session and puts it to sleep if currently running",
+      "confirm": "destructive"
+    },
+    {
+      "name": "terminate_session",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}",
+      "path_fields": ["devin_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["devin_id"],
+        "properties": {
+          "devin_id": { "type": "string" }
+        }
+      },
+      "risk": "terminates a Devin session",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_session_insights",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/insights/generate",
+      "path_fields": ["devin_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["devin_id"],
+        "properties": {
+          "devin_id": { "type": "string" }
+        }
+      },
+      "risk": "triggers on-demand generation of session insights"
+    },
+    {
+      "name": "create_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/schedules",
+      "record_schema": {
+        "type": "object",
+        "required": ["name", "prompt"],
+        "properties": {
+          "name": { "type": "string" },
+          "prompt": { "type": "string" },
+          "frequency": { "type": "string" },
+          "scheduled_at": { "type": "string" },
+          "schedule_type": { "type": "string", "enum": ["recurring", "one_time"] },
+          "playbook_id": { "type": "string" },
+          "create_as_user_id": { "type": "string" },
+          "notify_on": { "type": "string", "enum": ["always", "failure", "never"] },
+          "agent": { "type": "string", "enum": ["devin", "data_analyst"] },
+          "enabled": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a scheduled Devin session that can run automatically"
+    },
+    {
+      "name": "update_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/organizations/{{ config.org_id }}/schedules/{{ record.schedule_id }}",
+      "path_fields": ["schedule_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["schedule_id"],
+        "minProperties": 2,
+        "properties": {
+          "schedule_id": { "type": "string" },
+          "name": { "type": "string" },
+          "prompt": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "frequency": { "type": "string" },
+          "scheduled_at": { "type": "string" },
+          "schedule_type": { "type": "string", "enum": ["recurring", "one_time"] },
+          "playbook_id": { "type": "string" },
+          "run_as_user_id": { "type": "string" },
+          "notify_on": { "type": "string", "enum": ["always", "failure", "never"] },
+          "agent": { "type": "string", "enum": ["devin", "data_analyst"] },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "updates an existing scheduled Devin session"
+    },
+    {
+      "name": "delete_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3/organizations/{{ config.org_id }}/schedules/{{ record.schedule_id }}",
+      "path_fields": ["schedule_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["schedule_id"],
+        "properties": {
+          "schedule_id": { "type": "string" }
+        }
+      },
+      "risk": "soft-deletes a schedule",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_playbook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/playbooks",
+      "record_schema": {
+        "type": "object",
+        "required": ["title", "body"],
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string" },
+          "macro": { "type": "string" },
+          "structured_output_schema": { "type": "object" }
+        }
+      },
+      "risk": "creates an organization-level Devin playbook"
+    },
+    {
+      "name": "update_playbook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/organizations/{{ config.org_id }}/playbooks/{{ record.playbook_id }}",
+      "path_fields": ["playbook_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["playbook_id", "title", "body"],
+        "properties": {
+          "playbook_id": { "type": "string" },
+          "title": { "type": "string" },
+          "body": { "type": "string" },
+          "macro": { "type": "string" },
+          "structured_output_schema": { "type": "object" }
+        }
+      },
+      "risk": "replaces an organization-level Devin playbook"
+    },
+    {
+      "name": "delete_playbook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3/organizations/{{ config.org_id }}/playbooks/{{ record.playbook_id }}",
+      "path_fields": ["playbook_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["playbook_id"],
+        "properties": {
+          "playbook_id": { "type": "string" }
+        }
+      },
+      "risk": "deletes an organization-level Devin playbook",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_knowledge_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/knowledge/notes",
+      "record_schema": {
+        "type": "object",
+        "required": ["name", "body"],
+        "properties": {
+          "name": { "type": "string" },
+          "body": { "type": "string" },
+          "trigger": { "type": "string" },
+          "folder_id": { "type": "string" },
+          "folder_path": { "type": "string" },
+          "is_enabled": { "type": "boolean" },
+          "pinned_repo": { "type": "string" },
+          "macro": { "type": "string" }
+        }
+      },
+      "risk": "creates an organization-level Devin knowledge note"
+    },
+    {
+      "name": "update_knowledge_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/organizations/{{ config.org_id }}/knowledge/notes/{{ record.note_id }}",
+      "path_fields": ["note_id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["note_id", "name", "body"],
+        "properties": {
+          "note_id": { "type": "string" },
+          "name": { "type": "string" },
+          "body": { "type": "string" },
+          "trigger": { "type": "string" },
+          "folder_id": { "type": "string" },
+          "folder_path": { "type": "string" },
+          "is_enabled": { "type": "boolean" },
+          "pinned_repo": { "type": "string" },
+          "macro": { "type": "string" }
+        }
+      },
+      "risk": "replaces an organization-level Devin knowledge note"
+    },
+    {
+      "name": "delete_knowledge_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3/organizations/{{ config.org_id }}/knowledge/notes/{{ record.note_id }}",
+      "path_fields": ["note_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["note_id"],
+        "properties": {
+          "note_id": { "type": "string" }
+        }
+      },
+      "risk": "deletes an organization-level Devin knowledge note",
+      "confirm": "destructive"
+    },
+    {
+      "name": "index_repository",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/repositories/{{ record.encoded_repository_path }}/indexing",
+      "path_fields": ["encoded_repository_path"],
+      "record_schema": {
+        "type": "object",
+        "required": ["encoded_repository_path"],
+        "properties": {
+          "encoded_repository_path": {
+            "type": "string",
+            "pattern": "^[^/]+$",
+            "description": "URL-encoded repository path, for example org%2Frepo-name."
+          },
+          "branch_names": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "enables indexing for a repository and can trigger indexing jobs"
+    },
+    {
+      "name": "bulk_index_repositories",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/repositories/indexing",
+      "record_schema": {
+        "type": "object",
+        "required": ["repositories"],
+        "properties": {
+          "repositories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "repository_path": { "type": "string" },
+                "branch_names": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "enables indexing for multiple repositories and can trigger indexing jobs"
+    },
+    {
+      "name": "remove_repository_indexing",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/repositories/{{ record.encoded_repository_path }}/indexing",
+      "path_fields": ["encoded_repository_path"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["encoded_repository_path"],
+        "properties": {
+          "encoded_repository_path": {
+            "type": "string",
+            "pattern": "^[^/]+$",
+            "description": "URL-encoded repository path, for example org%2Frepo-name."
+          }
+        }
+      },
+      "risk": "disables indexing and clears configured branches for a repository",
+      "confirm": "destructive"
+    },
+    {
+      "name": "bulk_remove_repository_indexing",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/repositories/indexing",
+      "body_fields": ["repository_paths"],
+      "record_schema": {
+        "type": "object",
+        "required": ["repository_paths"],
+        "properties": {
+          "repository_paths": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "disables indexing and clears configured branches for multiple repositories",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_repository_branch_indexing",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/repositories/{{ record.encoded_repository_path }}/indexing/branches/{{ record.encoded_branch_name }}",
+      "path_fields": ["encoded_repository_path", "encoded_branch_name"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["encoded_repository_path", "encoded_branch_name"],
+        "properties": {
+          "encoded_repository_path": {
+            "type": "string",
+            "pattern": "^[^/]+$",
+            "description": "URL-encoded repository path, for example org%2Frepo-name."
+          },
+          "encoded_branch_name": {
+            "type": "string",
+            "pattern": "^[^/]+$",
+            "description": "URL-encoded branch name."
+          }
+        }
+      },
+      "risk": "removes one branch from repository indexing and can disable indexing if no branches remain",
+      "confirm": "destructive"
+    },
+    {
+      "name": "trigger_pr_review",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/organizations/{{ config.org_id }}/pr-reviews",
+      "record_schema": {
+        "type": "object",
+        "required": ["pr_url"],
+        "properties": {
+          "pr_url": { "type": "string" }
+        }
+      },
+      "risk": "triggers a Devin Review for a pull or merge request"
+    },
+    {
+      "name": "delete_secret",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v3/organizations/{{ config.org_id }}/secrets/{{ record.secret_id }}",
+      "path_fields": ["secret_id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["secret_id"],
+        "properties": {
+          "secret_id": { "type": "string" }
+        }
+      },
+      "risk": "deletes Devin secret metadata and its stored value from the organization",
+      "confirm": "destructive"
+    }
+  ]
+}

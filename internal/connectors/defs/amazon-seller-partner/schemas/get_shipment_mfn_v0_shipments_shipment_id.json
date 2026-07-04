@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_mfn_v0_shipments_shipment_id",
+  "type": "object",
+  "properties": {
+    "ShipmentId": {
+      "type": "string"
+    },
+    "AmazonOrderId": {
+      "type": "string"
+    },
+    "SellerOrderId": {
+      "type": "string"
+    },
+    "ItemList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "ShipFromAddress": {
+      "type": "object"
+    },
+    "ShipToAddress": {
+      "type": "object"
+    },
+    "PackageDimensions": {
+      "type": "object"
+    },
+    "Weight": {
+      "type": "object"
+    },
+    "Insurance": {
+      "type": "object"
+    },
+    "ShippingService": {
+      "type": "object"
+    },
+    "Label": {
+      "type": "object"
+    },
+    "Status": {
+      "type": "string"
+    },
+    "TrackingId": {
+      "type": "string"
+    },
+    "CreatedDate": {
+      "type": "string"
+    },
+    "LastUpdatedDate": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "AmazonOrderId"
+  ]
+}

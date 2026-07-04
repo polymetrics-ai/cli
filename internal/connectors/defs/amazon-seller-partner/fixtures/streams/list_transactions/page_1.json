@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/2024-06-19/transactions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "transactions": [
+          {
+            "sellingPartnerMetadata": {},
+            "relatedIdentifiers": [],
+            "transactionType": "transactionType-fixture-1",
+            "transactionId": "transactionId-fixture-1",
+            "transactionStatus": "transactionStatus-fixture-1",
+            "description": "description-fixture-1",
+            "postedDate": "postedDate-fixture-1",
+            "totalAmount": {},
+            "marketplaceDetails": {},
+            "items": [],
+            "contexts": [],
+            "breakdowns": []
+          }
+        ]
+      }
+    }
+  }
+}

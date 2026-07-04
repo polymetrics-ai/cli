@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messaging/v1/orders/synthetic-conformance-value",
+    "query": {
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": {},
+      "_embedded": {},
+      "errors": [],
+      "order_id": "order_id-fixture-1"
+    }
+  }
+}

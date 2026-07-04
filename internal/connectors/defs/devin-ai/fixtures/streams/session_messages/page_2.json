@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/organizations/synthetic-conformance-value/sessions/devin-session-fixture-1/messages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "event_id": "event-fixture-1",
+          "source": "devin",
+          "message": "Fixture content 1",
+          "created_at": 1767225600
+        }
+      ],
+      "has_next_page": false,
+      "end_cursor": null
+    }
+  }
+}

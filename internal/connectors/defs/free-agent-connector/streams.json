@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "method": "GET",
+      "path": "/__legacy_hook/contacts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/contacts.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "invoices",
+      "method": "GET",
+      "path": "/__legacy_hook/invoices",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/invoices.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "bills",
+      "method": "GET",
+      "path": "/__legacy_hook/bills",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/bills.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "projects",
+      "method": "GET",
+      "path": "/__legacy_hook/projects",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/projects.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "tasks",
+      "method": "GET",
+      "path": "/__legacy_hook/tasks",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    }
+  ]
+}

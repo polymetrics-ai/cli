@@ -1,0 +1,38 @@
+{
+  "record": {
+    "location_id": 1001,
+    "log_book_category_id": 1001,
+    "date": "2026-01-01",
+    "message": "fixture message",
+    "attachments": [
+      {
+        "file_name": "fixture file name",
+        "file_content": "fixture file content"
+      }
+    ],
+    "attachment_uuid": "00000000-0000-4000-8000-000000000001"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/log_book_posts",
+    "body": {
+      "location_id": 1001,
+      "log_book_category_id": 1001,
+      "date": "2026-01-01",
+      "message": "fixture message",
+      "attachments": [
+        {
+          "file_name": "fixture file name",
+          "file_content": "fixture file content"
+        }
+      ],
+      "attachment_uuid": "00000000-0000-4000-8000-000000000001"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

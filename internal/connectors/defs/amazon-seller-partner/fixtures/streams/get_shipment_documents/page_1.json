@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v2/shipments/synthetic-conformance-value/documents",
+    "query": {
+      "packageClientReferenceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "packageDocumentDetail": {
+          "packageDocuments": [
+            {
+              "type": "type-fixture-1",
+              "format": "format-fixture-1",
+              "contents": "contents-fixture-1",
+              "shipment_id": "shipment_id-fixture-1"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

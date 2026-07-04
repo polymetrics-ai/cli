@@ -1,0 +1,373 @@
+{
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Tip pool settings UUID",
+      "format": "uuid"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "Company ID",
+      "format": "int64"
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "Location ID",
+      "format": "int64"
+    },
+    "day_part_uuids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Day parts associated with this tip pool",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "contribution_type": {
+      "type": "string",
+      "description": "Tip pool contribution type",
+      "enum": [
+        "POS_PERCENT_TIPS_AND_SALES",
+        "MANUAL_ENTRY"
+      ]
+    },
+    "distribution_type": {
+      "type": "string",
+      "description": "Tip pool distribution type",
+      "enum": [
+        "HOURS_WORKED",
+        "ROLE_PERCENT_HOURS_WORKED",
+        "POINTS"
+      ]
+    },
+    "sales_tip_percentage": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "The proportion of sales tips or tips for unassigned roles (in percentage) you wish to contribute to the tip pool",
+      "format": "float"
+    },
+    "unmapped_contribution_method": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A field representing whether we source our unmapped contribution amounts from tips, sales receipts or remaining tips"
+    },
+    "unmapped_contribution_filters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tip pool unmapped contribution filter UUID",
+            "format": "uuid"
+          },
+          "tip_pool_settings_uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tip pool settings UUID",
+            "format": "uuid"
+          },
+          "filter_type": {
+            "type": "string",
+            "description": "The type of stakeholder filter - whether it is from a revenue center, dining option, or sales category",
+            "enum": [
+              "DINING_OPTION",
+              "REVENUE_CENTER",
+              "SALES_CATEGORY"
+            ]
+          },
+          "filter_value": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The ID that we will represent the filter with"
+          },
+          "filter_name": {
+            "type": "string",
+            "description": "The display name that the end user will see"
+          }
+        },
+        "required": [
+          "filter_type",
+          "filter_value",
+          "filter_name"
+        ]
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "Tip pool name"
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether the tip pool is enabled"
+    },
+    "tip_pool_stakeholders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Tip pool stakeholders (contributors and receivers)",
+        "properties": {
+          "uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tip pool stakeholder UUID",
+            "format": "uuid"
+          },
+          "tip_pool_settings_uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tip pool settings UUID",
+            "format": "uuid"
+          },
+          "stakeholder_type": {
+            "type": "string",
+            "description": "Whether this is a contributor or a receiver",
+            "enum": [
+              "CONTRIBUTION",
+              "DISTRIBUTION"
+            ]
+          },
+          "stakeholder_subtype": {
+            "type": "string",
+            "description": "Whether this stakeholder represents a role or a department",
+            "enum": [
+              "ROLE",
+              "DEPARTMENT"
+            ]
+          },
+          "role_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Role ID (null if stakeholder subtype is not 'ROLE')",
+            "format": "int64"
+          },
+          "department_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Department ID (null if stakeholder subtype is not 'DEPARTMENT')",
+            "format": "int64"
+          },
+          "stake_amount": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Amount of tips they contribute or receive (may be a percentage, number of points, or null, depending on stakeholder type and tip pool distribution type)",
+            "format": "float"
+          },
+          "contribution_method": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "If the stakeholder is a contribution stakeholder, this field represents whether they contribute based on percent tips, percent sales or percent remaining tips"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Tip pool stakeholder filter UUID",
+                  "format": "uuid"
+                },
+                "tip_pool_stakeholder_uuid": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Tip pool stakeholder UUID",
+                  "format": "uuid"
+                },
+                "tip_pool_settings_uuid": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Tip pool settings UUID",
+                  "format": "uuid"
+                },
+                "filter_type": {
+                  "type": "string",
+                  "description": "The type of stakeholder filter - whether it is from a revenue center, dining option, or sales category",
+                  "enum": [
+                    "DINING_OPTION",
+                    "REVENUE_CENTER",
+                    "SALES_CATEGORY"
+                  ]
+                },
+                "filter_value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The ID that we will represent the filter with"
+                },
+                "filter_name": {
+                  "type": "string",
+                  "description": "The display name that the end user will see"
+                }
+              },
+              "required": [
+                "filter_type",
+                "filter_value",
+                "filter_name"
+              ]
+            }
+          }
+        },
+        "required": [
+          "stakeholder_type",
+          "stakeholder_subtype",
+          "role_id",
+          "department_id",
+          "stake_amount",
+          "contribution_method"
+        ]
+      }
+    },
+    "tip_pool_contributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Tip types that are contributed to the tip pool",
+        "properties": {
+          "uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tip pool contribution UUID",
+            "format": "uuid"
+          },
+          "tip_pool_settings_uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tip pool settings UUID",
+            "format": "uuid"
+          },
+          "source": {
+            "type": "string",
+            "description": "Source of tip",
+            "enum": [
+              "CASH",
+              "CREDIT_CARD",
+              "DECLARED",
+              "AUTO_GRATUITY",
+              "TOTAL_PAYMENT"
+            ]
+          }
+        },
+        "required": [
+          "source"
+        ]
+      }
+    },
+    "tip_pool_cadence_settings": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Tip pool cadence settings - denotes the frequency of tip pool period calculations",
+      "properties": {
+        "uuid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tip pool cadence settings UUID",
+          "format": "uuid"
+        },
+        "tip_pool_settings_uuid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Tip pool settings UUID",
+          "format": "uuid"
+        },
+        "cadence_type": {
+          "type": "string",
+          "description": "The frequency/cadence of each tip pool settings period",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "SEMI_MONTHLY",
+            "MONTHLY"
+          ]
+        },
+        "period_start_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "What effective date does the cadence period start (only for WEEKLY, BIWEEKLY)"
+        }
+      },
+      "required": [
+        "cadence_type",
+        "period_start_date"
+      ]
+    },
+    "created": {
+      "type": "string",
+      "description": "When this tip pool was created in UTC timezone and Zulu format",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": "string",
+      "description": "When this tip pool was last modified in UTC timezone and Zulu format",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "uuid",
+    "company_id",
+    "location_id",
+    "name",
+    "contribution_type",
+    "distribution_type",
+    "sales_tip_percentage",
+    "tip_pool_stakeholders",
+    "tip_pool_contributions",
+    "enabled"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_tip_pool_settings",
+  "x-primary-key": [
+    "uuid"
+  ]
+}

@@ -1,85 +1,106 @@
 # Overview
 
-Devin AI is a wave2 migration of `internal/connectors/devin-ai` (the
-hand-written legacy connector this bundle migrates; the legacy package stays
-registered and unchanged until wave6's registry flip). It reads Devin
-sessions, session insights, session messages, playbooks, and secret metadata
-through the Devin v3 REST API's organization-scoped list endpoints. It is
-read-only: Devin has no reverse-ETL write surface legacy modeled, so
-`capabilities.write` is `false` and this bundle ships no `writes.json`.
+Devin AI reads and writes the organization-scoped JSON surface of the current
+Devin v3 REST API. The connector covers sessions and session child resources,
+playbooks, secret metadata, knowledge notes and folders, repositories,
+schedules, members, consumption, metrics, and self metadata.
+
+The bundle also defines documented JSON mutations for session lifecycle and
+messages, schedules, playbooks, knowledge notes, repository indexing, PR review
+triggers, and secret deletion. Mutations require the normal reverse-ETL plan,
+preview, approval, and execute flow.
 
 ## Auth setup
 
-Provide `api_token` as a secret: a Devin service-user API key (`cog_...`),
-sent as `Authorization: Bearer <api_token>` — identical to legacy's
-`connsdk.Bearer(secret)` construction. Provide `org_id` (required, non-secret
-config): every stream reads `/v3/organizations/{org_id}/...`, matching
-legacy's `devinPath(orgID, resource)` path construction.
+Provide `api_token` as a secret Devin service-user API key. The engine sends it
+as `Authorization: Bearer <api_token>`. Provide `org_id` as non-secret config;
+organization-scoped streams and writes use `/v3/organizations/{org_id}/...` or
+the documented `/v3beta1/organizations/{org_id}/...` beta resources.
 
-`base_url` defaults to `https://api.devin.ai` (materialized via `spec.json`'s
-`"default"`, matching legacy's `devinDefaultBaseURL` in-code fallback); an
-override must be an absolute `http`/`https` URL with a host — the engine's
-path-traversal and same-origin guards apply exactly as documented in
-conventions.md §3, matching legacy's own `devinBaseURL` scheme/host
-validation intent.
+`base_url` defaults to `https://api.devin.ai`. Override it only for tests or a
+trusted proxy; the engine applies the same-origin and path traversal guards
+described in `docs/migration/conventions.md`.
+
+Optional config:
+
+- `start_date`: RFC3339 lower bound for session-derived streams, converted to
+  Devin's Unix-seconds `created_after` query param.
+- `page_size`: page size sent as `first` on cursor-paginated list streams.
+- `metrics_time_after` and `metrics_time_before`: optional Unix-seconds bounds
+  for metrics and consumption streams.
+- `repository_filter_name`: optional repository-name filter.
+- `user_email`: optional membership email filter.
 
 ## Streams notes
 
-All 5 streams share Devin's uniform list-endpoint envelope: `GET` against an
-org-scoped resource, records extracted from the response's top-level `items`
-array, cursor pagination via `pagination.type: cursor` with
-`token_path: end_cursor` and `stop_path: has_next_page` (the next page's
-`after` query param is read from the response body's `end_cursor`, but
-pagination stops as soon as `has_next_page` is falsy regardless of whether
-`end_cursor` is still populated) — this reproduces legacy's own stop rule
-(`hasNext != "true" || strings.TrimSpace(endCursor) == ""` —
-`devinai.go:202` — either condition alone is sufficient to stop).
+Most Devin list endpoints return an `items` array plus cursor pagination with
+`end_cursor` and `has_next_page`. Those streams use the engine cursor paginator
+with `after` as the request cursor. Schedule listing uses Devin's
+`limit`/`offset` pagination. Singleton metrics, consumption, session detail,
+session tags, session attachments, and self endpoints use no pagination.
 
-`sessions`, `sessions_insights`, and `session_messages` are session-derived
-and declare `incremental.cursor_field: created_at` /
-`incremental.request_param: created_after` / `incremental.start_config_key:
-start_date`, matching legacy's `incrementalLowerBound` (state cursor, falling
-back to `start_date` config, empty for a full sync) forwarded as the
-`created_after` query param. `playbooks` and `secrets` are full-refresh
-metadata streams with no `incremental` block, matching legacy exactly (no
-`created_after` sent for either).
+Streams implemented:
 
-Every stream's `first` query param is wired from `config.page_size` via the
-optional-query dialect (`{"template": "{{ config.page_size }}", "default":
-"100"}`), defaulting to 100 when unset — matching legacy's
-`devinPageSize` (default 100, max 200).
+- `sessions`, `sessions_insights`, `session_details`, `session_messages`,
+  `session_attachments`, and `session_tags`
+- `playbooks` and `secrets`
+- `knowledge_notes` and `knowledge_folders`
+- `repositories` and `indexed_repositories`
+- `schedules`
+- `organization_users`, `organization_idp_group_users`, and `self`
+- `org_daily_consumption`, `session_daily_consumption`, and
+  `user_daily_consumption`
+- `org_usage_metrics`, `org_session_metrics`, `org_active_users_metrics`,
+  `org_daily_active_users`, `org_monthly_active_users`, `org_pr_metrics`,
+  `org_search_metrics`, and `org_weekly_active_users`
+
+Session-child streams fan out from `sessions`. User consumption fans out from
+`organization_users`. The `repositories` stream requests Devin's default
+repository indexing status payload, so the per-repository indexing status point
+endpoint is not modeled as a separate fan-out stream.
 
 ## Write actions & risks
 
-None. Legacy `devin-ai` is read-only (`Write` returns
-`connectors.ErrUnsupportedOperation`); `metadata.json` declares
-`capabilities.write: false` and this bundle ships no `writes.json`.
+Implemented actions:
+
+- Session writes: `create_session`, `send_session_message`,
+  `append_session_tags`, `replace_session_tags`, `archive_session`,
+  `terminate_session`, and `generate_session_insights`
+- Schedule writes: `create_schedule`, `update_schedule`, and `delete_schedule`
+- Playbook writes: `create_playbook`, `update_playbook`, and `delete_playbook`
+- Knowledge writes: `create_knowledge_note`, `update_knowledge_note`, and
+  `delete_knowledge_note`
+- Repository writes: `index_repository`, `bulk_index_repositories`,
+  `remove_repository_indexing`, `bulk_remove_repository_indexing`, and
+  `remove_repository_branch_indexing`
+- Other writes: `trigger_pr_review` and `delete_secret`
+
+Write actions can launch Devin work, send session messages, mutate reusable
+automation content, change repository indexing state, trigger PR reviews, or
+delete objects. `delete_secret` is intentionally limited to deleting metadata by
+id; secret creation is excluded because it would require accepting secret
+values as write-record data.
+
+Single-repository indexing writes use `encoded_repository_path` because Devin's
+path parameter is a full repository path such as `org/repo-name`, while the
+engine does not URL-encode interpolated path variables. Branch-removal writes
+also use `encoded_branch_name` for the same reason.
 
 ## Known limits
 
-- Full Devin v3 API surface (session creation, attachments, knowledge base
-  management) is out of scope for wave2; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "Pass B capability
-  expansion"}` entries. Only the 5 legacy-parity read streams are
-  implemented.
-- **Legacy's `mode: fixture` credential-free affordance is NOT part of this
-  bundle.** Legacy's `readFixture`/`fixtureMode` (`devinai.go:212-252`) emit
-  synthetic records without any network call when `config.mode ==
-  "fixture"` — this is a legacy-only testing convenience, not part of the
-  live record shape; this bundle's own `fixtures/` directory (recorded-shape,
-  sanitized) is the wave2 substitute used by `conformance`'s dynamic
-  (fixture-replay) checks, matching the wave1-pilot convention.
-- **`max_pages` is not part of this bundle's config surface (documented
-  scope narrowing, matching searxng's F6 precedent).** Legacy accepts a
-  `max_pages` config value, but the engine's `PaginationSpec.MaxPages` is a
-  static integer field with no template support (conventions.md §3's
-  pagination table) — there is no way to wire a runtime `config.max_pages`
-  value into it, so declaring the property would be dead config a caller
-  could set with no effect (F6, conventions.md). `spec.json` therefore does
-  not declare `max_pages`; a caller wanting to bound total pages read can
-  still do so externally (e.g. capping the sync scheduler), and no emitted
-  record shape differs for any accepted input.
-- All fixtures (`fixtures/streams/**`, `fixtures/check.json`) represent
-  Devin's real wire shape, including `has_next_page`/`end_cursor` exactly as
-  the API returns them (a JSON boolean and a `null` cursor on the final
-  page, not stringified or omitted).
+- Enterprise administration endpoints are excluded with explicit
+  `requires_elevated_scope` or `destructive_admin` reasons in
+  `api_surface.json`; this connector is organization-scoped.
+- Binary and presigned-file endpoints, including attachments and snapshot
+  blueprint file payloads, are excluded because the engine dialect is JSON-only.
+- Point lookups that require non-enumerable caller-supplied identifiers and do
+  not form practical ETL streams are excluded as `non_data_endpoint` or covered
+  by an equivalent list stream.
+- The single-repository indexing status point endpoint is covered by
+  `repositories.indexing_status`; fan-out to it would require URL-encoding a
+  full repository path.
+- Legacy v1 and v2 API families are excluded as deprecated. This bundle targets
+  the current Devin service-user v3 API documented from
+  `metadata.json.docs_url`.
+- Legacy `mode: fixture` remains a test/conformance affordance only; live reads
+  use the documented Devin API.

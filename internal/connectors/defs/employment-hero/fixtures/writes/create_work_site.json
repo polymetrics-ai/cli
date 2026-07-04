@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Sydney Office"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/work_sites",
+    "body": {
+      "name": "Sydney Office"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_work_site_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_item_offers",
+  "type": "object",
+  "properties": {
+    "MyOffer": {
+      "type": "boolean"
+    },
+    "offerType": {
+      "type": "string"
+    },
+    "SubCondition": {
+      "type": "string"
+    },
+    "SellerId": {
+      "type": "string"
+    },
+    "ConditionNotes": {
+      "type": "string"
+    },
+    "SellerFeedbackRating": {
+      "type": "object"
+    },
+    "ShippingTime": {
+      "type": "object"
+    },
+    "ListingPrice": {
+      "type": "object"
+    },
+    "quantityDiscountPrices": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "Points": {
+      "type": "object"
+    },
+    "Shipping": {
+      "type": "object"
+    },
+    "ShipsFrom": {
+      "type": "object"
+    },
+    "IsFulfilledByAmazon": {
+      "type": "boolean"
+    },
+    "PrimeInformation": {
+      "type": "object"
+    },
+    "IsBuyBoxWinner": {
+      "type": "boolean"
+    },
+    "IsFeaturedMerchant": {
+      "type": "boolean"
+    },
+    "asin": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

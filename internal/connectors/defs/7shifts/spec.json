@@ -2,16 +2,19 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "7shifts Connection Specification",
   "type": "object",
-  "required": ["access_token", "company_id"],
+  "required": [
+    "access_token",
+    "company_id"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "7shifts API access token. Used only for Bearer auth (Authorization: Bearer <access_token>); never logged."
+      "description": "7shifts API access token used only for Bearer auth."
     },
-    "company_id": {
+    "availability_id": {
       "type": "string",
-      "description": "7shifts company id; substituted into every company-scoped stream path (/v2/company/{{ config.company_id }}/...). Not used by the top-level companies stream."
+      "description": "Required path or query value for streams that reference availability_id."
     },
     "base_url": {
       "type": "string",
@@ -19,14 +22,110 @@
       "default": "https://api.7shifts.com",
       "description": "7shifts API base URL override for tests or proxies."
     },
+    "company_id": {
+      "type": "string",
+      "description": "7shifts company id used by company-scoped streams and write actions."
+    },
+    "date": {
+      "type": "string",
+      "description": "Required date or date-time filter for streams that reference date."
+    },
+    "date_end": {
+      "type": "string",
+      "description": "Required date or date-time filter for streams that reference date_end."
+    },
+    "date_start": {
+      "type": "string",
+      "description": "Required date or date-time filter for streams that reference date_start."
+    },
+    "department_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference department_id."
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference employee_id."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Required date or date-time filter for streams that reference end_date."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference event_id."
+    },
+    "from": {
+      "type": "string",
+      "description": "Required date or date-time filter for streams that reference from."
+    },
+    "id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference id."
+    },
+    "identifier": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference identifier."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference list_id."
+    },
+    "location_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference location_id."
+    },
+    "log_book_ids": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference log_book_ids."
+    },
+    "payroll_period_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference payroll_period_id."
+    },
+    "punches": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference punches."
+    },
+    "receipt_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference receipt_id."
+    },
+    "role_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference role_id."
+    },
+    "shift_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference shift_id."
+    },
     "start_date": {
       "type": "string",
       "format": "date-time",
-      "description": "RFC3339 lower bound; only records modified at or after this date are read on a fresh sync (sent as modified_since, a date-only YYYY-MM-DD value)."
+      "description": "Lower bound used by incremental legacy streams and by required date filters when a stream declares start_date."
     },
-    "mode": {
+    "time_off_id": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Required path or query value for streams that reference time_off_id."
+    },
+    "time_punch_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference time_punch_id."
+    },
+    "tip_pool_settings_uuid": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference tip_pool_settings_uuid."
+    },
+    "to": {
+      "type": "string",
+      "description": "Required date or date-time filter for streams that reference to."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference user_id."
+    },
+    "uuid": {
+      "type": "string",
+      "description": "Required path or query value for streams that reference uuid."
     }
   }
 }

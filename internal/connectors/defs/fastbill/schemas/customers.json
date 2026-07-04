@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_number": {
+      "type": "string"
+    },
+    "customer_type": {
+      "type": "string"
+    },
+    "organization": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "currency_code": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "customer_id"
+  ]
+}

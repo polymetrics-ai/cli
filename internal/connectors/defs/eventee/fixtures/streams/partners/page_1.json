@@ -3,8 +3,28 @@
   "response": {
     "status": 200,
     "body": [
-      { "id": 1, "company": "Acme", "description": "Fixture partner one.", "address": "1 Fixture St", "code": "acme", "email": "a@acme.test", "phone": "", "web": "https://acme.test", "sponsor": true, "exhibitor": false, "created_at": "2026-05-01T00:00:00Z", "updated_at": "2026-05-02T00:00:00Z" },
-      { "id": 2, "company": "Globex", "description": "Fixture partner two.", "address": "2 Fixture St", "code": "globex", "email": "b@globex.test", "phone": "", "web": "https://globex.test", "sponsor": false, "exhibitor": true, "created_at": "2026-05-01T00:00:00Z", "updated_at": "2026-05-02T00:00:00Z" }
+      {
+        "id": 420,
+        "company": "Fixture Partner",
+        "description": "Sanitized fixture partner.",
+        "web": "https://example.com",
+        "email": "partner@example.test",
+        "phone": "(555) 010-0101",
+        "address": "1 Fixture Way",
+        "exhibitor_info": {
+          "booth_number": "E42",
+          "photo": {
+            "url": "https://example.com/exhibitor.png",
+            "thumbnail": "https://example.com/exhibitor-thumbnail.png"
+          }
+        },
+        "sponsor_info": {
+          "photo": {
+            "url": "https://example.com/sponsor.png",
+            "thumbnail": "https://example.com/sponsor-thumbnail.png"
+          }
+        }
+      }
     ]
   }
 }

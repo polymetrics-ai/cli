@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/employment_histories",
+    "query": {
+      "page_index": "1",
+      "item_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "employment_history_fixture_1",
+            "employee_id": "emp_fixture_1",
+            "job_title": "Engineer",
+            "start_date": "2026-01-01",
+            "end_date": null
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

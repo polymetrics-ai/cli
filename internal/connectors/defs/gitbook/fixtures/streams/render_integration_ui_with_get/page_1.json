@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integrations/synthetic-conformance-value/render",
+    "query": {
+      "request": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "render_integration_ui_with_get_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture render_integration_ui_with_get",
+      "name": "Fixture render_integration_ui_with_get",
+      "status": "active",
+      "operation_id": "renderIntegrationUIWithGet"
+    }
+  }
+}

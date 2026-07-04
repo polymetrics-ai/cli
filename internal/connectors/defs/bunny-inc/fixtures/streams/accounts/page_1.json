@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": "fixture",
+      "name": "fixture",
+      "code": "fixture",
+      "accountTypeId": "fixture",
+      "currencyId": "fixture",
+      "entityId": "fixture",
+      "ownerUserId": "fixture",
+      "payingStatus": "fixture",
+      "billingCountry": "fixture",
+      "annualRevenue": 1.5,
+      "employees": 1,
+      "netPaymentDays": 1,
+      "phone": "fixture",
+      "website": "fixture",
+      "createdAt": "fixture",
+      "updatedAt": "fixture"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_replenishment_order",
+  "type": "object",
+  "properties": {
+    "confirmedOn": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "distributionIneligibleReasons": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "eligibleProducts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "orderId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "outboundShipments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shippedProducts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "orderId"
+  ]
+}

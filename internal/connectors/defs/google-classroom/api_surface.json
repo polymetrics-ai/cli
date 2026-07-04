@@ -1,0 +1,43 @@
+{
+  "api": "Google Classroom legacy connector hook surface",
+  "docs": "https://developers.google.com/classroom/reference/rest",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy google-classroom connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/google-classroom, which delegates to internal/connectors/google-classroom until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-classroom courses read path",
+      "covered_by": {
+        "stream": "courses"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-classroom teachers read path",
+      "covered_by": {
+        "stream": "teachers"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-classroom students read path",
+      "covered_by": {
+        "stream": "students"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-classroom courseWork read path",
+      "covered_by": {
+        "stream": "course_work"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-classroom announcements read path",
+      "covered_by": {
+        "stream": "announcements"
+      }
+    }
+  ]
+}

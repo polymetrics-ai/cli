@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cards",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "collection_id": {
+      "type": "integer"
+    },
+    "database_id": {
+      "type": "integer"
+    },
+    "query_type": {
+      "type": "string"
+    },
+    "display": {
+      "type": "string"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "creator_id": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

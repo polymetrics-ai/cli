@@ -1,0 +1,22 @@
+{
+  "record": {
+    "location_id": 12.34,
+    "name": "fixture name",
+    "default": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/departments",
+    "body": {
+      "location_id": 12.34,
+      "name": "fixture name",
+      "default": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/fixture/v1/synthetic-conformance-value/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": { "name": "Fixture detail item", "state": "Fixture State" },
+      "fixture_type": "city",
+      "resource_uri": "",
+      "id": "fixture_detail_item_1"
+    }
+  }
+}

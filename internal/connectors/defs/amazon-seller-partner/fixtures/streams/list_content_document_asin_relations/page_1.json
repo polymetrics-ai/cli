@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/aplus/2020-11-01/contentDocuments/synthetic-conformance-value/asins",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "asinMetadataSet": [
+        {
+          "asin": "asin-fixture-1",
+          "badgeSet": [],
+          "parent": "parent-fixture-1",
+          "title": "title-fixture-1",
+          "imageUrl": "imageUrl-fixture-1",
+          "contentReferenceKeySet": [],
+          "content_reference_key": "content_reference_key-fixture-1"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": 9281,
+    "name": "Fixture Trading LLC Updated",
+    "ref": "fixture-entity-updated"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/network/company_entities/9281",
+    "body": {
+      "name": "Fixture Trading LLC Updated",
+      "ref": "fixture-entity-updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/company_entity",
+        "id": 9281
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "self",
+  "type": "object",
+  "x-primary-key": ["principal_type"],
+  "required": ["principal_type"],
+  "properties": {
+    "principal_type": { "type": "string" },
+    "org_id": { "type": ["string", "null"] },
+    "service_user_id": { "type": ["string", "null"] },
+    "service_user_name": { "type": ["string", "null"] },
+    "user_id": { "type": ["string", "null"] },
+    "user_name": { "type": ["string", "null"] },
+    "api_key_id": { "type": ["string", "null"] },
+    "api_key_name": { "type": ["string", "null"] },
+    "devin_id": { "type": ["string", "null"] },
+    "creator_service_user_id": { "type": ["string", "null"] }
+  }
+}

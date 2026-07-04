@@ -1,0 +1,19 @@
+{
+  "record": {
+    "certification_id": "cert_fixture_1",
+    "status": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/certifications/cert_fixture_1/archive_status",
+    "body": {
+      "status": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "archive_certification_fixture_response"
+    }
+  }
+}

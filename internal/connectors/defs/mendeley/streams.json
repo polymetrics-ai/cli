@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "documents",
+      "method": "GET",
+      "path": "/__legacy_hook/documents",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/documents.json",
+      "incremental": {
+        "cursor_field": "last_modified",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "folders",
+      "method": "GET",
+      "path": "/__legacy_hook/folders",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/folders.json",
+      "incremental": {
+        "cursor_field": "modified",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "groups",
+      "method": "GET",
+      "path": "/__legacy_hook/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "annotations",
+      "method": "GET",
+      "path": "/__legacy_hook/annotations",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/annotations.json",
+      "incremental": {
+        "cursor_field": "last_modified",
+        "client_filtered": true
+      }
+    }
+  ]
+}

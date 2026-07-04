@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "id_default_group": 1,
+      "id_lang": 1,
+      "firstname": "fixture",
+      "lastname": "fixture",
+      "email": "fixture",
+      "company": "fixture",
+      "active": true,
+      "newsletter": true,
+      "date_add": "fixture",
+      "date_upd": "fixture"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Time punch ID",
+      "format": "int32"
+    },
+    "shift_id": {
+      "type": "integer",
+      "description": "Shift ID. Can be unassigned"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "The 7shifts ID of the user who is clocking in."
+    },
+    "editable_punch": {
+      "type": "boolean",
+      "description": "If true the time punch can be edited by a manager. Set to false via POS integrations"
+    },
+    "role_id": {
+      "type": "integer",
+      "description": "Role ID"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "Company ID"
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "Location ID"
+    },
+    "department_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Department ID. Defaults to 0 if not defined."
+    },
+    "hourly_wage": {
+      "type": "integer",
+      "description": "Calculated hourly wage. Use the users_wages endpoint value for accuracy"
+    },
+    "approved": {
+      "type": "boolean",
+      "description": "If true the time punch is approved"
+    },
+    "clocked_in": {
+      "type": "string",
+      "description": "The start date and time when the user clocked in. Formatted as ISO8601 datetime in UTC timezone.",
+      "format": "date-time"
+    },
+    "clocked_out": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The start date and time when the user clocked out. Formatted as ISO8601 datetime in UTC timezone.",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes for a shift"
+    },
+    "auto_clocked_out": {
+      "type": "boolean",
+      "description": "If true the time punch was auto clocked out"
+    },
+    "clocked_in_offline": {
+      "type": "boolean",
+      "description": "If true the time punch was clocked in offline"
+    },
+    "clocked_out_offline": {
+      "type": "boolean",
+      "description": "If true the time punch was clocked out offline"
+    },
+    "tips": {
+      "type": "integer",
+      "description": "Tips declared for the shift in cents"
+    },
+    "pos_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The source of the time punch. 7shift apps will be web"
+    },
+    "breaks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "custom_break_id": {
+            "type": "integer"
+          },
+          "paid": {
+            "type": "boolean"
+          },
+          "in": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "out": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "custom_break_id",
+          "paid",
+          "in",
+          "out"
+        ]
+      }
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The date and time when created. Formatted as ISO8601 datetime in UTC timezone.",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The date and time when last modified. Formatted as ISO8601 datetime in UTC timezone.",
+      "format": "date-time"
+    },
+    "deleted": {
+      "type": "boolean",
+      "description": "If true the time punch is deleted"
+    }
+  },
+  "required": [
+    "id",
+    "shift_id",
+    "user_id",
+    "editable_punch",
+    "role_id",
+    "location_id",
+    "company_id",
+    "approved",
+    "hourly_wage",
+    "clocked_in",
+    "clocked_out",
+    "notes",
+    "auto_clocked_out",
+    "clocked_in_offline",
+    "clocked_out_offline",
+    "tips",
+    "created",
+    "modified"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_time_punch_by_id",
+  "x-primary-key": [
+    "id"
+  ]
+}

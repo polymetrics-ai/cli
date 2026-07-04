@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/directFulfillment/shipping/v1/customerInvoices",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "createdAfter": "synthetic-conformance-value",
+      "createdBefore": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "customerInvoices": [
+          {
+            "purchaseOrderNumber": "purchaseOrderNumber-fixture-1",
+            "content": "content-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

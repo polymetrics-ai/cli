@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products/pricing/v0/listings/synthetic-conformance-value/offers",
+    "query": {
+      "MarketplaceId": "synthetic-conformance-value",
+      "ItemCondition": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "Offers": [
+          {
+            "MyOffer": false,
+            "offerType": "offerType-fixture-1",
+            "SubCondition": "SubCondition-fixture-1",
+            "SellerId": "SellerId-fixture-1",
+            "ConditionNotes": "ConditionNotes-fixture-1",
+            "SellerFeedbackRating": {},
+            "ShippingTime": {},
+            "ListingPrice": {},
+            "quantityDiscountPrices": [],
+            "Points": {},
+            "Shipping": {},
+            "ShipsFrom": {},
+            "IsFulfilledByAmazon": false,
+            "PrimeInformation": {},
+            "IsBuyBoxWinner": false,
+            "IsFeaturedMerchant": false,
+            "seller_sku": "seller_sku-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

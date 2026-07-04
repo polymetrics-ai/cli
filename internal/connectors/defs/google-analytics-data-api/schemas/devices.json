@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "devices",
+  "type": "object",
+  "properties": {
+    "property_id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "deviceCategory": {
+      "type": "string"
+    },
+    "operatingSystem": {
+      "type": "string"
+    },
+    "browser": {
+      "type": "string"
+    },
+    "activeUsers": {
+      "type": "number"
+    },
+    "sessions": {
+      "type": "number"
+    },
+    "screenPageViews": {
+      "type": "number"
+    }
+  },
+  "x-primary-key": [
+    "property_id",
+    "date",
+    "deviceCategory",
+    "operatingSystem",
+    "browser"
+  ],
+  "x-cursor-field": "date"
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/synthetic-conformance-value/tax_declaration",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "employee_id": "synthetic-conformance-value",
+        "tax_file_number_status": "provided",
+        "residency_status": "resident"
+      }
+    }
+  }
+}

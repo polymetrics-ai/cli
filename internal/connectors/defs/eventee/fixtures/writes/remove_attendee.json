@@ -1,0 +1,5 @@
+{
+  "record": { "email": "attendee%40example.test" },
+  "expect": { "method": "DELETE", "path": "/attendee", "body": { "email": "attendee%40example.test" } },
+  "response": { "status": 204, "body": {} }
+}

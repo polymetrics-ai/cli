@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/webhooks/wh_fixture_1" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "wh_fixture_1",
+        "url": "https://example.com/formbricks-webhook",
+        "source": "user",
+        "name": "Fixture webhook",
+        "workspaceId": "wrk_fixture_1",
+        "surveyIds": ["srv_fixture_1"],
+        "triggers": ["responseCreated", "responseUpdated"],
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      }
+    }
+  }
+}

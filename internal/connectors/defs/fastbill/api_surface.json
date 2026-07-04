@@ -1,0 +1,43 @@
+{
+  "api": "FastBill legacy connector hook surface",
+  "docs": "https://apidocs.fastbill.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy fastbill connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/fastbill, which delegates to internal/connectors/fastbill until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/fastbill customers read path",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/fastbill invoices read path",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/fastbill products read path",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/fastbill recurring_invoices read path",
+      "covered_by": {
+        "stream": "recurring_invoices"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/fastbill revenues read path",
+      "covered_by": {
+        "stream": "revenues"
+      }
+    }
+  ]
+}

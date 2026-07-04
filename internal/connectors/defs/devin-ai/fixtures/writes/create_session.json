@@ -1,0 +1,13 @@
+{
+  "record": {
+    "prompt": "Summarize the fixture repository",
+    "tags": ["fixture"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/organizations/synthetic-conformance-value/sessions",
+    "body": {
+      "prompt": "Summarize the fixture repository"
+    }
+  }
+}

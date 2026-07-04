@@ -1,0 +1,268 @@
+{
+  "type": "object",
+  "properties": {
+    "wage_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "hourly",
+        "weekly_salary",
+        "annual_salary"
+      ]
+    },
+    "current_wages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Wage ID"
+          },
+          "effective_date": {
+            "type": "string",
+            "description": "The wage effective date. Format YYYY-MM-DD",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "role_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Role ID"
+          },
+          "wage_type": {
+            "type": "string",
+            "description": "The wage type",
+            "enum": [
+              "hourly",
+              "weekly_salary",
+              "annual_salary"
+            ]
+          },
+          "wage_cents": {
+            "type": "integer",
+            "description": "The wage value. In cents"
+          },
+          "enabled_days": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Days of the week when the wage is applicable. All days keyed by full name (Sunday-Saturday).",
+            "properties": {
+              "Sunday": {
+                "type": "boolean"
+              },
+              "Monday": {
+                "type": "boolean"
+              },
+              "Tuesday": {
+                "type": "boolean"
+              },
+              "Wednesday": {
+                "type": "boolean"
+              },
+              "Thursday": {
+                "type": "boolean"
+              },
+              "Friday": {
+                "type": "boolean"
+              },
+              "Saturday": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ]
+          },
+          "allocations": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Salary allocation breakdown by location. Only applicable for salary wage types. All amount_tenths values must sum to 1000.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "location_id": {
+                  "type": "integer",
+                  "description": "Location ID"
+                },
+                "amount_tenths": {
+                  "type": "integer",
+                  "description": "Allocation amount in tenths of a percent (1\u20131000). All entries must sum to 1000."
+                }
+              },
+              "required": [
+                "location_id",
+                "amount_tenths"
+              ]
+            }
+          },
+          "created": {
+            "type": "string",
+            "description": "The created date and time of the wage. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "description": "The modified date and time of the wage. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "effective_date",
+          "role_id",
+          "wage_type",
+          "wage_cents",
+          "created",
+          "modified"
+        ]
+      }
+    },
+    "upcoming_wages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Wage ID"
+          },
+          "effective_date": {
+            "type": "string",
+            "description": "The wage effective date. Format YYYY-MM-DD",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "role_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Role ID"
+          },
+          "wage_type": {
+            "type": "string",
+            "description": "The wage type",
+            "enum": [
+              "hourly",
+              "weekly_salary",
+              "annual_salary"
+            ]
+          },
+          "wage_cents": {
+            "type": "integer",
+            "description": "The wage value. In cents"
+          },
+          "enabled_days": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Days of the week when the wage is applicable. All days keyed by full name (Sunday-Saturday).",
+            "properties": {
+              "Sunday": {
+                "type": "boolean"
+              },
+              "Monday": {
+                "type": "boolean"
+              },
+              "Tuesday": {
+                "type": "boolean"
+              },
+              "Wednesday": {
+                "type": "boolean"
+              },
+              "Thursday": {
+                "type": "boolean"
+              },
+              "Friday": {
+                "type": "boolean"
+              },
+              "Saturday": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ]
+          },
+          "allocations": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Salary allocation breakdown by location. Only applicable for salary wage types. All amount_tenths values must sum to 1000.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "location_id": {
+                  "type": "integer",
+                  "description": "Location ID"
+                },
+                "amount_tenths": {
+                  "type": "integer",
+                  "description": "Allocation amount in tenths of a percent (1\u20131000). All entries must sum to 1000."
+                }
+              },
+              "required": [
+                "location_id",
+                "amount_tenths"
+              ]
+            }
+          },
+          "created": {
+            "type": "string",
+            "description": "The created date and time of the wage. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "description": "The modified date and time of the wage. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "effective_date",
+          "role_id",
+          "wage_type",
+          "wage_cents",
+          "created",
+          "modified"
+        ]
+      }
+    },
+    "stream_key": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "stream_key",
+    "wage_type",
+    "current_wages",
+    "upcoming_wages"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_user_wages",
+  "x-primary-key": [
+    "stream_key"
+  ]
+}

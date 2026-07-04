@@ -1,0 +1,21 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "saml_provider_id": "synthetic-conformance-value",
+    "label": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/orgs/synthetic-conformance-value/saml/synthetic-conformance-value",
+    "body": {
+      "label": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_organization_saml_provider_fixture_1"
+    }
+  }
+}

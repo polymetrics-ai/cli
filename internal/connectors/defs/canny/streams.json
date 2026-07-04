@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "boards",
+      "method": "GET",
+      "path": "/__legacy_hook/boards",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/boards.json",
+      "incremental": {
+        "cursor_field": "created",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "posts",
+      "method": "GET",
+      "path": "/__legacy_hook/posts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/posts.json",
+      "incremental": {
+        "cursor_field": "created",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "comments",
+      "method": "GET",
+      "path": "/__legacy_hook/comments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/comments.json",
+      "incremental": {
+        "cursor_field": "created",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "categories",
+      "method": "GET",
+      "path": "/__legacy_hook/categories",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/categories.json",
+      "incremental": {
+        "cursor_field": "created",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "companies",
+      "method": "GET",
+      "path": "/__legacy_hook/companies",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/companies.json",
+      "incremental": {
+        "cursor_field": "created",
+        "client_filtered": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "api": "Yahoo Finance Price legacy connector hook surface",
+  "docs": "https://www.yahoofinanceapi.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy yahoo-finance-price connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/yahoo-finance-price, which delegates to internal/connectors/yahoo-finance-price until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/yahoo-finance-price prices read path",
+      "covered_by": {
+        "stream": "prices"
+      }
+    }
+  ]
+}

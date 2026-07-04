@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "FireHydrant Connection Specification",
   "type": "object",
-  "required": ["api_token"],
+  "required": [
+    "api_token"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
@@ -19,6 +21,250 @@
       "type": "integer",
       "description": "Number of records requested per page (per_page). Between 1 and 200.",
       "default": 50
+    },
+    "incident_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (incident_id)."
+    },
+    "generated_summary_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (generated_summary_id)."
+    },
+    "alert_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (alert_id)."
+    },
+    "audience_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (audience_id)."
+    },
+    "member_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (member_id)."
+    },
+    "id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (id)."
+    },
+    "change_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (change_id)."
+    },
+    "change_event_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (change_event_id)."
+    },
+    "conversation_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (conversation_id)."
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (comment_id)."
+    },
+    "field_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (field_id)."
+    },
+    "environment_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (environment_id)."
+    },
+    "slug": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (slug)."
+    },
+    "selected_value": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (selected_value)."
+    },
+    "functionality_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (functionality_id)."
+    },
+    "incident_role_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (incident_role_id)."
+    },
+    "language_code": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (language_code)."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (event_id)."
+    },
+    "type": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (type)."
+    },
+    "retrospective_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (retrospective_id)."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (task_id)."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (user_id)."
+    },
+    "integration_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (integration_id)."
+    },
+    "integration_slug": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (integration_slug)."
+    },
+    "connection_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (connection_id)."
+    },
+    "field_map_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (field_map_id)."
+    },
+    "emoji_action_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (emoji_action_id)."
+    },
+    "by_connection_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (by_connection_id)."
+    },
+    "search_zendesk_tickets_query": {
+      "type": "string",
+      "description": "Required query query parameter for FireHydrant search_zendesk_tickets."
+    },
+    "get_zendesk_customer_support_issue_ticket_id": {
+      "type": "string",
+      "description": "Required ticket_id query parameter for FireHydrant get_zendesk_customer_support_issue."
+    },
+    "measurement_definition_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (measurement_definition_id)."
+    },
+    "infra_type": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (infra_type)."
+    },
+    "infra_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (infra_id)."
+    },
+    "nunc_connection_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (nunc_connection_id)."
+    },
+    "question_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (question_id)."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (report_id)."
+    },
+    "priority_slug": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (priority_slug)."
+    },
+    "retrospective_template_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (retrospective_template_id)."
+    },
+    "runbook_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (runbook_id)."
+    },
+    "execution_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (execution_id)."
+    },
+    "step_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (step_id)."
+    },
+    "action_slug": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (action_slug)."
+    },
+    "field": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (field)."
+    },
+    "resource_type": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (resource_type)."
+    },
+    "saved_search_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (saved_search_id)."
+    },
+    "scheduled_maintenance_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (scheduled_maintenance_id)."
+    },
+    "service_dependency_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (service_dependency_id)."
+    },
+    "service_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (service_id)."
+    },
+    "severity_slug": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (severity_slug)."
+    },
+    "condition_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (condition_id)."
+    },
+    "transposer_slug": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (transposer_slug)."
+    },
+    "status_update_template_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (status_update_template_id)."
+    },
+    "task_list_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (task_list_id)."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (team_id)."
+    },
+    "schedule_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (schedule_id)."
+    },
+    "rotation_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (rotation_id)."
+    },
+    "ticketing_project_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (ticketing_project_id)."
+    },
+    "map_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (map_id)."
+    },
+    "config_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (config_id)."
+    },
+    "ticket_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (ticket_id)."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Path parameter used by FireHydrant detail/subresource streams (webhook_id)."
     }
   }
 }

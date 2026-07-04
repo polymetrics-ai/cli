@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/openapi/synthetic-conformance-value/versions",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_open_api_spec_versions_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_open_api_spec_versions",
+          "name": "Fixture list_open_api_spec_versions",
+          "status": "active",
+          "operation_id": "listOpenAPISpecVersions"
+        }
+      ]
+    }
+  }
+}

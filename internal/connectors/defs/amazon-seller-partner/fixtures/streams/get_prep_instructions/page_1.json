@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/inbound/v0/prepInstructions",
+    "query": {
+      "ShipToCountryCode": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "SKUPrepInstructionsList": [
+          {
+            "SellerSKU": "SellerSKU-fixture-1",
+            "ASIN": "ASIN-fixture-1",
+            "BarcodeInstruction": "BarcodeInstruction-fixture-1",
+            "PrepGuidance": "PrepGuidance-fixture-1",
+            "PrepInstructionList": [],
+            "AmazonPrepFeesDetailsList": []
+          }
+        ]
+      }
+    }
+  }
+}

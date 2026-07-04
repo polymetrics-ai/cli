@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/aplus/2020-11-01/contentPublishRecords",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value",
+      "asin": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "publishRecordList": [
+        {
+          "marketplaceId": "marketplaceId-fixture-1",
+          "locale": "locale-fixture-1",
+          "asin": "asin-fixture-1",
+          "contentType": "contentType-fixture-1",
+          "contentSubType": "contentSubType-fixture-1",
+          "contentReferenceKey": "contentReferenceKey-fixture-1"
+        }
+      ]
+    }
+  }
+}

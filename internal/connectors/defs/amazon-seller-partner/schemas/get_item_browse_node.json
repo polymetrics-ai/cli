@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_item_browse_node",
+  "type": "object",
+  "properties": {
+    "browseNodeId": {
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "asin": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

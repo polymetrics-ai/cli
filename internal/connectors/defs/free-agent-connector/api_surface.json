@@ -1,0 +1,43 @@
+{
+  "api": "FreeAgent legacy connector hook surface",
+  "docs": "https://dev.freeagent.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy free-agent-connector connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/free-agent-connector, which delegates to internal/connectors/free-agent-connector until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/free-agent-connector contacts read path",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/free-agent-connector invoices read path",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/free-agent-connector bills read path",
+      "covered_by": {
+        "stream": "bills"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/free-agent-connector projects read path",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/free-agent-connector tasks read path",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    }
+  ]
+}

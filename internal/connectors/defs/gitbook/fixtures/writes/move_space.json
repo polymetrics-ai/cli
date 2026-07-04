@@ -1,0 +1,20 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "parent": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/move",
+    "body": {
+      "parent": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "move_space_fixture_1"
+    }
+  }
+}

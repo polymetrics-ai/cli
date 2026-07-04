@@ -8,7 +8,7 @@
     "id": { "type": "integer" },
     "name": { "type": ["string", "null"] },
     "description": { "type": ["string", "null"] },
-    "type": { "type": ["string", "null"] },
+    "type": { "type": ["integer", "null"] },
     "code": { "type": ["string", "null"] },
     "event_id": { "type": ["integer", "null"] },
     "event_day_id": { "type": ["integer", "null"] },

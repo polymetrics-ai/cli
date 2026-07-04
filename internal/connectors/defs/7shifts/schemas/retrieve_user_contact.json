@@ -1,0 +1,70 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "company_id": {
+      "type": "integer"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pronouns": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "photo": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "File name of the User's display picture"
+    },
+    "mobile_phone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "home_phone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "employee",
+        "asst_manager",
+        "manager",
+        "employer"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "first_name",
+    "last_name",
+    "photo",
+    "type"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_user_contact",
+  "x-primary-key": [
+    "id"
+  ]
+}

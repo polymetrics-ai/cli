@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/links",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_change_request_links_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_change_request_links",
+          "name": "Fixture list_change_request_links",
+          "status": "active",
+          "operation_id": "listChangeRequestLinks"
+        }
+      ]
+    }
+  }
+}

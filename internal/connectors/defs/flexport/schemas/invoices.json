@@ -3,18 +3,14 @@
   "title": "invoices",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
-    "id": { "type": "string" },
+    "id": { "type": ["string", "integer"] },
     "_object": { "type": ["string", "null"] },
-    "invoice_number": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
-    "currency": { "type": ["string", "null"] },
-    "total": { "type": ["string", "null"] },
-    "issued_date": { "type": ["string", "null"] },
-    "due_date": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
-  }
+    "issued_at": { "type": ["string", "null"] },
+    "last_updated_at": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
 }

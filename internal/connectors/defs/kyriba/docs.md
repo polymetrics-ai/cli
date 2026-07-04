@@ -63,6 +63,25 @@ None. Kyriba is read-only (`capabilities.write: false`, no `writes.json`),
 matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`
 unconditionally (`kyriba.go:218-220`).
 
+## Pass B surface notes
+
+The public developer portal is a Gravitee portal. Its frontend config points
+to `https://api.developer.kyriba.com/portal`, and the public catalog endpoint
+`/portal/environments/DEFAULT/apis?size=200` listed 42 API products on
+2026-07-04. Examples include Bank Accounts (`https://{host}/v1/accounts`),
+Cash Balances (`https://{host}/v1/cash-balances`), Payment Transfers
+(`https://{host}/v1/payment/transfers`), Working Capital product APIs,
+platform reference-data APIs, and webhook callback products.
+
+Those are separate API products with product-specific entrypoint bases,
+scopes, and operation contracts. Representative products checked in Pass B
+(Bank Accounts and Cash Balances) exposed Markdown overview pages through the
+portal API, while direct OpenAPI candidates under `static/apis/...` returned
+404. This bundle therefore does not attach those product APIs to the legacy
+Kyriba tenant REST connector. The exclusion is recorded in
+`api_surface.json` with concrete portal evidence instead of the previous
+Pass B placeholder.
+
 ## Known limits
 
 - **`page_size`/`max_pages` are NOT configurable at runtime (documented scope

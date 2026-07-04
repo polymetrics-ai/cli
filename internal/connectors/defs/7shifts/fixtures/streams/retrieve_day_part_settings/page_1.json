@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/day_part/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "00000000-0000-4000-8000-000000000001",
+          "location_id": 1001,
+          "name": "fixture name",
+          "segments": [
+            {
+              "day_of_week": "Sunday",
+              "start_time": "12:00:00",
+              "end_time": "12:00:00",
+              "uuid": "00000000-0000-4000-8000-000000000001",
+              "day_part_uuid": "00000000-0000-4000-8000-000000000001"
+            }
+          ],
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

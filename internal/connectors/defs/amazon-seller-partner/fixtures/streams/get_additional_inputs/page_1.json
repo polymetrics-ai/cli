@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v2/shipments/additionalInputs/schema",
+    "query": {
+      "requestToken": "synthetic-conformance-value",
+      "rateId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "id": "fixture-1"
+      }
+    }
+  }
+}

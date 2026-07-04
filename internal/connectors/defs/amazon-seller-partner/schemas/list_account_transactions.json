@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_account_transactions",
+  "type": "object",
+  "properties": {
+    "accountId": {
+      "type": "string"
+    },
+    "transactionId": {
+      "type": "string"
+    },
+    "transactionType": {
+      "type": "string"
+    },
+    "transactionStatus": {
+      "type": "string"
+    },
+    "transactionRequestDate": {
+      "type": "string"
+    },
+    "expectedCompletionDate": {
+      "type": "string"
+    },
+    "transactionActualCompletionDate": {
+      "type": "string"
+    },
+    "lastUpdateDate": {
+      "type": "string"
+    },
+    "requesterName": {
+      "type": "string"
+    },
+    "transactionRequesterSource": {
+      "type": "string"
+    },
+    "transactionDescription": {
+      "type": "string"
+    },
+    "transactionSourceAccount": {
+      "type": "object"
+    },
+    "transactionDestinationAccount": {
+      "type": "object"
+    },
+    "transactionRequestAmount": {
+      "type": "object"
+    },
+    "transferRateDetails": {
+      "type": "object"
+    },
+    "transactionFinalAmount": {
+      "type": "object"
+    },
+    "transactionFailureReason": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "transactionId"
+  ]
+}

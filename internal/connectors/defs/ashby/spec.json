@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ashby Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key",
+    "start_date"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The Ashby API Key, see <a href=\\\"https://developers.ashbyhq.com/reference/authentication\\\">doc</a> here."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "UTC date and time in the format 2017-01-25T00:00:00Z. Any data before this date will not be replicated."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

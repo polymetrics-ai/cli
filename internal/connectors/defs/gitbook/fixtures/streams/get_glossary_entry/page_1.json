@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/translations-glossary/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_glossary_entry_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_glossary_entry",
+      "name": "Fixture get_glossary_entry",
+      "status": "active",
+      "operation_id": "getGlossaryEntry"
+    }
+  }
+}

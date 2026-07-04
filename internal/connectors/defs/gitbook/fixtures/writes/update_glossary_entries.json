@@ -1,0 +1,20 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "operations": []
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/translations-glossary",
+    "body": {
+      "operations": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_glossary_entries_fixture_1"
+    }
+  }
+}

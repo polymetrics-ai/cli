@@ -1,0 +1,13 @@
+{
+  "record": {
+    "devin_id": "devin-fixture-1",
+    "tags": ["fixture"]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v3/organizations/synthetic-conformance-value/sessions/devin-fixture-1/tags",
+    "body": {
+      "tags": ["fixture"]
+    }
+  }
+}

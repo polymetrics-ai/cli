@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/carrier_types" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "object": "CarrierType",
+        "type": "UspsAccount",
+        "readable": "USPS",
+        "logo": null,
+        "fields": {}
+      }
+    ]
+  }
+}

@@ -1,87 +1,68 @@
 # Overview
 
-CommCare is a mobile data-collection platform (Dimagi). This bundle reads forms and cases from a
-CommCare HQ project space through the CommCare HQ API v0.5 (`GET
-{base_url}/a/{project_space}/api/v0.5/<form|case>/`). It migrates
-`internal/connectors/commcare` (the hand-written connector) at capability parity; the legacy
-package stays registered and unchanged until wave6's registry flip.
+CommCare is a Dimagi mobile data-collection and case-management platform. This
+bundle covers the official CommCare HQ API documentation at
+https://commcare-hq.readthedocs.io/api/index.html plus the legacy connector's
+v0.5 form and case list endpoints. It reads application structure, form and
+case data, users, groups, reports, locations, lookup tables, DET exports, and
+messaging events. It also exposes declarative JSON write actions for the
+documented case v2, mobile worker, web-user invitation/access, group, location
+v2, lookup table, and lookup table row mutations.
 
-The catalog entry for this connector (`source-commcare`) is correctly labeled a source with no
-write capability, matching the legacy implementation exactly (`Capabilities.Write: false`,
-`Write()` returns `ErrUnsupportedOperation`).
+The legacy `internal/connectors/commcare` package emitted records verbatim for
+forms and cases. Every stream here therefore uses passthrough projection so
+project-defined fields, nested form payloads, case properties, permissions,
+report columns, lookup-table fields, and messaging payloads are preserved.
 
 ## Auth setup
 
-Provide a CommCare HQ API key via the `api_key` secret; it is sent as an `ApiKey`-scheme
-Authorization header (`Authorization: ApiKey <api_key>`, matching legacy's
-`connsdk.APIKeyHeader("Authorization", key, "ApiKey ")`) and is never logged. Also provide
-`project_space`, the CommCare HQ project space slug every stream path is scoped under
-(`/a/{{ config.project_space }}/api/v0.5/...`) — legacy defaults an unset `project_space` to the
-literal string `"project"` (`commcare.go:163-166`), but this bundle declares it `required` instead
-of reproducing that fallback: a silent `"project"` default is very unlikely to resolve to a real
-project space and would more likely surface as a confusing 404 than a useful default. `app_id` is
-optional; when set, it scopes both streams via an `app_id` query parameter (legacy:
-`commcare.go:106`).
+Provide `api_key` as a secret and `project_space` as config. The API key is sent
+as `Authorization: ApiKey <value>`, matching the legacy connector's
+`APIKeyHeader` behavior. `base_url` defaults to `https://www.commcarehq.org`.
+
+Several detail streams and writes require id-like config or record fields such
+as `app_id`, `case_id`, `mobile_worker_id`, `web_user_id`, `group_id`,
+`location_id`, `lookup_table_id`, and `lookup_table_item_id`. These are ordinary
+resource identifiers, not credentials.
 
 ## Streams notes
 
-Both streams (`forms`, `cases`) hit `GET /a/{project_space}/api/v0.5/<form|case>/`, extracting
-records from the top-level `objects` array (`records.path: "objects"`), matching legacy's
-`connsdk.RecordsAt(resp.Body, "objects")`. Legacy's `Read` emits every record's raw fields verbatim
-(`emit(connectors.Record(rec))`, no field-built mapping) — both streams declare
-`"projection": "passthrough"` per `docs/migration/conventions.md` §8 rule 1, so every raw field
-CommCare returns survives unfiltered, not just the primary-key/cursor fields the schema documents
-for typing purposes.
+Most list endpoints use CommCare's `objects` envelope with offset/limit
+pagination. The legacy v0.5 `forms` and `cases` streams are kept for parity.
+The documented API v1/v2 endpoints are exposed separately (`forms_v1`,
+`cases_v1`, `cases_v2`, and detail variants).
 
-Primary key is `id` for both streams; `forms`' cursor field is `received_on`, `cases`' is
-`server_modified_on`, matching legacy's `Catalog()` `CursorFields` declarations exactly. Neither
-stream declares an `incremental.request_param`: legacy's `Catalog()` publishes these cursor fields
-for manifest-surface parity, but `Read()` itself never sends a server-side filter parameter derived
-from them (no `modified_since`-style query key anywhere in `commcare.go`) — a full stream read
-always happens, on both a fresh sync and a resumed one, exactly like `searxng`'s equivalent
-declared-but-unfiltered cursor field.
-
-## Pagination
-
-Legacy paginates by following the response body's `meta.next` field, which CommCare's API returns
-as a **relative path with an embedded query string** (e.g.
-`/a/demo/api/v0.5/form/?offset=2&limit=2&app_id=app_1`), stopping when `meta.next` is absent or
-empty (`commcare.go:120-125`). This bundle instead declares `pagination.type: offset_limit`
-(`limit_param: limit`, `offset_param: offset`, `page_size: 100`), stopping on a short/empty final
-page — a **documented parity deviation** (`docs/migration/conventions.md` §5): the engine's
-`next_url` pagination type is the literal dialect match for a body-embedded next-page reference, but
-its SSRF guard (`checkOrigin`) hard-rejects any next value that parses with an empty host, which is
-exactly what a relative `meta.next` value is; `allow_cross_host: true` bypasses the guard entirely
-rather than fixing the relative-URL case narrowly, which is a strictly worse trade than the
-equivalent-in-practice `offset_limit` short-page stop. CommCare's HQ API pages exhaustively
-(`offset`/`limit` are the same query params `meta.next` itself encodes) and always terminates with a
-short/empty final page, so `offset_limit`'s stop condition and legacy's `meta.next`-absent stop
-condition agree on every input legacy itself would accept — this never changes emitted record DATA
-or cardinality for any real CommCare project, only the mechanical stop signal the engine inspects
-(the same class of deviation as the jamf-pro `totalCount` ledger entry, `docs/migration/
-conventions.md` §5 item 13). `limit=100` matches legacy's `defaultPageSize`.
+`cases_v2` and `messaging_events` use documented next-link pagination. `report_data`
+uses offset/limit pagination and extracts rows from the `data` field; its row
+shape is report-specific, so the schema intentionally allows arbitrary columns.
+Form attachments and OTA restore are excluded because they return binary/XML
+payloads rather than JSON records.
 
 ## Write actions & risks
 
-None. CommCare is read-only here (`capabilities.write: false`), matching legacy
-(`Capabilities.Write: false`) exactly — `Write` returns `ErrUnsupportedOperation` on the legacy side
-and this bundle ships no `writes.json` at all.
+Write actions are live external mutations and require the normal reverse-ETL
+plan, preview, approval, and execute flow. Covered actions include case v2
+create/update/upsert, mobile worker create/update/delete/reset email, web-user
+invitation/update/enable/disable, group create/bulk-create/update/delete,
+location v2 create/update/bulk upsert, lookup table create/update/delete, and
+lookup table row create/update/delete.
+
+The mobile-worker create/update actions intentionally model account/profile
+fields without password-bearing fixture examples. Password-reset is represented
+as its own empty-body action.
 
 ## Known limits
 
-- **`page_size`/`max_pages` config-driven overrides are not modeled.** Legacy accepts optional
-  `page_size` (default 100) and `max_pages` (default 100) config values, each validated as a
-  positive integer (`intConfig`, `commcare.go:172-180`). The engine's `offset_limit` paginator's
-  `PaginationSpec.PageSize` is a static JSON literal with no templating support (unlike
-  `stream.Query`, which does support templated, optionally-absent values), so it cannot be wired to
-  a runtime `config.*` value; there is likewise no declarative `MaxPages` override mechanism tied to
-  a config key. `limit=100` (the fixed pagination page size) matches legacy's *default* exactly. This
-  is a documented, accepted config-surface narrowing (`docs/migration/conventions.md` §5's
-  meta-rule: it never changes emitted record DATA for any input legacy itself would accept at its
-  own default) — declaring dead `page_size`/`max_pages` spec properties that no template consumes
-  would itself violate the "declared config must be consumed" rule (F6).
-- **`project_space`'s legacy default (`"project"`) is not modeled**; see Auth setup above —
-  `project_space` is `required` here instead.
-- Full CommCare HQ API surface (applications, users, form submission/receiver endpoints) is out of
-  scope for this pass; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B
-  capability expansion"}` entries.
+- Multipart uploads are excluded: application import, multimedia upload, Excel
+  case upload, and Excel lookup-table upload require file bodies the declarative
+  JSON write dialect cannot construct.
+- OpenRosa form submission endpoints are excluded because they require XForm XML
+  body construction.
+- Case v2 `POST /bulk_fetch/` is a read-style POST with an arbitrary body; stream
+  reads cannot send request bodies. Case v2 bulk create/update with a root JSON
+  array is also excluded because declarative writes send one JSON object per
+  record.
+- OTA restore is excluded because it returns XML and uses mobile-worker Basic
+  authentication rather than the project API-key JSON path.
+- Dynamic report row schemas are report-specific. The `report_data` stream uses
+  passthrough projection and an open schema to avoid dropping columns.

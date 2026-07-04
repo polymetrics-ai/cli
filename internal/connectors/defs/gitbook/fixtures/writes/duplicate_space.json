@@ -1,0 +1,16 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/duplicate"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "duplicate_space_fixture_1"
+    }
+  }
+}

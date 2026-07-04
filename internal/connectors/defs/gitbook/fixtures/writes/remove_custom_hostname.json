@@ -1,0 +1,16 @@
+{
+  "record": {
+    "hostname": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/custom-hostnames/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "remove_custom_hostname_fixture_1"
+    }
+  }
+}

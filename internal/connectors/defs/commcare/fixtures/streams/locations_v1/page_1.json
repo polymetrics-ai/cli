@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/location/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "created_at": "2026-06-01T00:00:00.000000",
+          "domain": "synthetic-conformance-value",
+          "external_id": null,
+          "id": 1,
+          "last_modified": "2026-06-01T00:00:00.000000",
+          "latitude": null,
+          "location_data": {},
+          "location_id": "location_fixture_1",
+          "location_type": "https://www.commcarehq.org/a/synthetic-conformance-value/api/location_type/v1/1/",
+          "longitude": null,
+          "name": "Fixture Location",
+          "parent": null,
+          "resource_uri": "https://www.commcarehq.org/a/synthetic-conformance-value/api/location/v1/location_fixture_1/",
+          "site_code": "fixture_location"
+        }
+      ]
+    }
+  }
+}

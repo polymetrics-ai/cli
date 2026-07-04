@@ -2,9 +2,10 @@
 
 Klarna reads Klarna settlement payouts and transactions through the Klarna Settlements API. This
 bundle migrates `internal/connectors/klarna` (the hand-written connector) to a declarative defs
-bundle at capability parity; the legacy package stays registered and unchanged until wave6's
-registry flip. The Klarna Settlements API is read-only for reverse-ETL purposes, so
-`capabilities.write` is `false` and this bundle ships no `writes.json`.
+bundle; the legacy package stays registered and unchanged until wave6's registry flip. Pass B adds
+the remaining JSON Settlements list/detail endpoints without changing legacy stream record data. The
+Klarna Settlements API is read-only for reverse-ETL purposes, so `capabilities.write` is `false` and
+this bundle ships no `writes.json`.
 
 ## Auth setup
 
@@ -30,6 +31,12 @@ projection with no `computed_fields` needed — the schema property names match 
 names exactly. `payout_summary` reads the identical `payouts` endpoint as `payouts` but re-shapes each
 record to only the settlement totals, keyed by `payout_reference` (matching legacy's
 `klarnaPayoutSummaryRecord`), via `computed_fields` hoisting all four `totals.*` fields.
+
+Pass B adds `payout_details` (`GET /settlements/v1/payouts/{payment_reference}`), driven by the
+comma-separated `config.payment_references` fan-out list, and `payout_summaries`
+(`GET /settlements/v1/payouts/summary`), driven by `config.summary_start_date` and
+`config.summary_end_date` with optional `config.summary_currency_code`. These are new streams with
+their own schemas, so they do not alter the three legacy stream record shapes.
 
 Pagination is `offset_limit` (`limit_param: size`, `offset_param: offset`, `page_size: 100`, matching
 legacy's `klarnaDefaultPageSize`/`OffsetPaginator` with Klarna's own `size`/`offset` query-param
@@ -66,6 +73,7 @@ None. The Klarna Settlements API is read-only for pm reverse-ETL purposes; `capa
   compared), this bundle sources `username` from `secrets.username` only. A caller who previously
   supplied `username` only via `Config` (the fallback path) must instead supply it as a secret; this
   is a config-shape narrowing, not a behavior change for the common (Secrets-configured) case.
-- Full Klarna API surface (per-payout transaction drill-down) is out of scope for this wave; see
-  `api_surface.json`'s `excluded: {category: out_of_scope}` entry. Only the 3 legacy-parity read
-  streams are implemented.
+- The four report endpoints (`/reports/payout-with-transactions`, `/reports/payout`,
+  `/reports/payouts-summary-with-transactions`, and `/reports/payouts-summary`) return CSV or PDF
+  payloads. They are accounted for in `api_surface.json` as `binary_payload` exclusions because the
+  declarative stream engine consumes JSON records and this pass may not add a CSV/PDF hook package.

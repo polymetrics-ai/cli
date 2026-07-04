@@ -1,0 +1,9 @@
+{
+  "record": { "user": { "name": "Fixture Child User" } },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": { "user": { "name": "Fixture Child User" } }
+  },
+  "response": { "status": 201, "body": { "id": "user_fixture_child_new", "object": "User" } }
+}

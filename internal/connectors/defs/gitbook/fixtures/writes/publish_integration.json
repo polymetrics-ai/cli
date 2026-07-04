@@ -1,0 +1,28 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "organization": "synthetic-conformance-value",
+    "title": "synthetic-conformance-value",
+    "description": "synthetic-conformance-value",
+    "script": "synthetic-conformance-value",
+    "scopes": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/synthetic-conformance-value",
+    "body": {
+      "organization": "synthetic-conformance-value",
+      "title": "synthetic-conformance-value",
+      "description": "synthetic-conformance-value",
+      "script": "synthetic-conformance-value",
+      "scopes": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "publish_integration_fixture_1"
+    }
+  }
+}

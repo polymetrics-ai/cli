@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/webhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "hook_fixture_1",
+          "object": "Webhook",
+          "mode": "test",
+          "url": "https://example.com/easypost/webhook",
+          "created_at": "2026-01-01T00:00:00Z",
+          "disabled_at": null,
+          "custom_headers": [
+            { "name": "X-Fixture-Header", "value": "fixture" }
+          ]
+        }
+      ]
+    }
+  }
+}

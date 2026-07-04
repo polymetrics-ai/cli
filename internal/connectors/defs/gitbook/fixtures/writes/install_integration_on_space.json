@@ -1,0 +1,21 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "installation_id": "synthetic-conformance-value",
+    "space": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/synthetic-conformance-value/installations/synthetic-conformance-value/spaces",
+    "body": {
+      "space": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "install_integration_on_space_fixture_1"
+    }
+  }
+}

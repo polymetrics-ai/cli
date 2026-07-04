@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/awd/2024-05-09/inboundShipments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "carrierCode": {},
+      "createdAt": "createdAt-fixture-1",
+      "destinationAddress": {},
+      "externalReferenceId": "externalReferenceId-fixture-1",
+      "orderId": "orderId-fixture-1",
+      "originAddress": {},
+      "receivedQuantity": [],
+      "shipBy": "shipBy-fixture-1",
+      "shipmentContainerQuantities": [],
+      "shipmentId": "shipmentId-fixture-1",
+      "shipmentSkuQuantities": [],
+      "destinationRegion": "destinationRegion-fixture-1",
+      "shipmentStatus": "shipmentStatus-fixture-1",
+      "trackingId": "trackingId-fixture-1",
+      "updatedAt": "updatedAt-fixture-1",
+      "warehouseReferenceId": "warehouseReferenceId-fixture-1",
+      "shipment_id": "shipment_id-fixture-1"
+    }
+  }
+}

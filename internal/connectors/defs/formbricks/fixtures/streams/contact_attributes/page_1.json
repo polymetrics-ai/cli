@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/management/contact-attributes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cat_fixture_1",
+          "attributeKeyId": "cak_fixture_1",
+          "contactId": "ctc_fixture_1",
+          "value": "fixture@example.com",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

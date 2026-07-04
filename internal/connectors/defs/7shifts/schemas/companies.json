@@ -2,17 +2,58 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "companies",
   "type": "object",
-  "x-primary-key": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "x-cursor-field": "modified",
-  "required": ["id"],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "integer" },
-    "name": { "type": ["string", "null"] },
-    "country_code": { "type": ["string", "null"] },
-    "currency": { "type": ["string", "null"] },
-    "timezone": { "type": ["string", "null"] },
-    "active": { "type": ["boolean", "null"] },
-    "created": { "type": ["string", "null"] },
-    "modified": { "type": ["string", "null"] }
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "country_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }

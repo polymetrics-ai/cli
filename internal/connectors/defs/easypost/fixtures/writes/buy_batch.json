@@ -1,0 +1,5 @@
+{
+  "record": { "id": "batch_fixture_1" },
+  "expect": { "method": "POST", "path": "/batches/batch_fixture_1/buy" },
+  "response": { "status": 200, "body": { "id": "batch_fixture_1", "object": "Batch", "state": "queued_for_purchase" } }
+}

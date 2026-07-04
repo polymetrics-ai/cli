@@ -1,0 +1,50 @@
+{
+  "api": "Mercado Ads legacy connector hook surface",
+  "docs": "https://developers.mercadolibre.com.ar/en_us/advertising",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy mercado-ads connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/mercado-ads, which delegates to internal/connectors/mercado-ads until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mercado-ads brand_advertisers read path",
+      "covered_by": {
+        "stream": "brand_advertisers"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mercado-ads display_advertisers read path",
+      "covered_by": {
+        "stream": "display_advertisers"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mercado-ads product_advertisers read path",
+      "covered_by": {
+        "stream": "product_advertisers"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mercado-ads brand_campaigns_metrics read path",
+      "covered_by": {
+        "stream": "brand_campaigns_metrics"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mercado-ads display_campaigns_metrics read path",
+      "covered_by": {
+        "stream": "display_campaigns_metrics"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mercado-ads product_campaigns_metrics read path",
+      "covered_by": {
+        "stream": "product_campaigns_metrics"
+      }
+    }
+  ]
+}

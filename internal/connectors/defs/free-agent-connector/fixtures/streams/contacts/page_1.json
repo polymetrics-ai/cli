@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "url": "fixture",
+      "first_name": "fixture",
+      "last_name": "fixture",
+      "organisation_name": "fixture",
+      "email": "fixture",
+      "phone_number": "fixture",
+      "status": "fixture",
+      "account_balance": "fixture",
+      "created_at": "fixture",
+      "updated_at": "fixture"
+    }
+  ]
+}

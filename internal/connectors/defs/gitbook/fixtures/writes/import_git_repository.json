@@ -1,0 +1,22 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "url": "synthetic-conformance-value",
+    "ref": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/git/import",
+    "body": {
+      "url": "synthetic-conformance-value",
+      "ref": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "import_git_repository_fixture_1"
+    }
+  }
+}

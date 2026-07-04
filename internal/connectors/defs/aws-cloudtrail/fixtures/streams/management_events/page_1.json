@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "EventId": "fixture",
+      "EventName": "fixture",
+      "EventSource": "fixture",
+      "EventTime": 1,
+      "Username": "fixture",
+      "AccessKeyId": "fixture",
+      "ReadOnly": "fixture",
+      "Resources": [
+        "fixture"
+      ],
+      "CloudTrailEvent": "fixture"
+    }
+  ]
+}

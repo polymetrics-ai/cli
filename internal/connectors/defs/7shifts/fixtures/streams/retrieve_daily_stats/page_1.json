@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/location/synthetic-conformance-value/daily_stats",
+    "query": {
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "summary": {
+          "current_actual_sales": 1001,
+          "current_projected_sales": 1001,
+          "past_actual_sales": 1001,
+          "past_projected_sales": 1001,
+          "current_actual_labor": 1001,
+          "current_projected_labor": 1001,
+          "past_actual_labor": 1001,
+          "current_labor_ratio": 12.34,
+          "current_labor_target": 12.34,
+          "past_labor_ratio": 12.34,
+          "current_spmh": 12.34,
+          "past_spmh": 12.34
+        },
+        "intervals": [
+          {
+            "day": "2026-01-01",
+            "start": "2026-01-01T00:00:00Z",
+            "end": "2026-01-01T00:00:00Z",
+            "actual_sales": 1001,
+            "projected_sales": 1001,
+            "past_actual_sales": 1001,
+            "past_projected_sales": 1001,
+            "actual_labor": 1001,
+            "projected_labor": 1001,
+            "projected_labor_minutes": 12.34,
+            "labor_ratio": 12.34,
+            "projected_labor_ratio": 12.34,
+            "actual_spmh": 12.34,
+            "projected_spmh": 12.34
+          }
+        ]
+      }
+    }
+  }
+}

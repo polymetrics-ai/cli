@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/content/files/synthetic-conformance-value/backlinks",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_space_file_backlinks_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_space_file_backlinks",
+          "name": "Fixture list_space_file_backlinks",
+          "status": "active",
+          "operation_id": "listSpaceFileBacklinks"
+        }
+      ]
+    }
+  }
+}

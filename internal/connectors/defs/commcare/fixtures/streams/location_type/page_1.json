@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/location_type/v1/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "administrative": true,
+      "code": "fixture_type",
+      "domain": "synthetic-conformance-value",
+      "id": "location_type_fixture_1",
+      "name": "Fixture Type",
+      "parent": null,
+      "resource_uri": "https://www.commcarehq.org/a/synthetic-conformance-value/api/location_type/v1/location_type_fixture_1/",
+      "shares_cases": false,
+      "view_descendants": false
+    }
+  }
+}

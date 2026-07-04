@@ -18,11 +18,7 @@
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Records per page (1-250), sent as the 'per' query param on the first request."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Records per page, sent as the 'per' query param on list requests. Flexport v2 documents a maximum of 100."
     }
   }
 }

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cases_v1",
+  "type": "object",
+  "x-primary-key": ["case_id"],
+  "x-cursor-field": "server_date_modified",
+  "required": ["case_id"],
+  "properties": {
+    "case_id": { "type": "string" },
+    "closed": { "type": ["boolean", "string", "null"] },
+    "date_modified": { "type": ["string", "null"] },
+    "server_date_modified": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "indices": { "type": ["object", "null"] },
+    "properties": { "type": ["object", "null"] },
+    "user_id": { "type": ["string", "null"] },
+    "xform_ids": { "type": ["array", "null"] }
+  }
+}

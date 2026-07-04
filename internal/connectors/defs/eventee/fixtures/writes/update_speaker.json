@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": 444,
+    "name": "Updated Fixture Speaker",
+    "email": "speaker-updated@example.test",
+    "photo": "https://example.com/speaker-updated.png",
+    "phone": "(555) 010-0104",
+    "bio": "Updated sanitized fixture speaker bio.",
+    "web": "https://example.com/updated",
+    "facebook": "https://example.com/facebook-updated",
+    "twitter": "https://example.com/twitter-updated",
+    "linkedIn": "https://example.com/linkedin-updated",
+    "position": "Keynote",
+    "company": "Fixture Co",
+    "country": "US",
+    "language": "English"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/speaker/444",
+    "body": { "name": "Updated Fixture Speaker", "phone": "(555) 010-0104" }
+  },
+  "response": { "status": 200, "body": { "id": 444, "name": "Updated Fixture Speaker" } }
+}

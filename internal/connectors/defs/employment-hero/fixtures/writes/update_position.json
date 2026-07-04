@@ -1,0 +1,19 @@
+{
+  "record": {
+    "position_id": "position_fixture_1",
+    "name": "Updated Position"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/positions/position_fixture_1",
+    "body": {
+      "name": "Updated Position"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_position_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "web_user_id": "web_user_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/api/web-user/v1/web_user_fixture_1/disable"
+  },
+  "response": {
+    "status": 202,
+    "body": {}
+  }
+}

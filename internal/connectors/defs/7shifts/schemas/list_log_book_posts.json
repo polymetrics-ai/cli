@@ -1,0 +1,89 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "location_id": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "user_id": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "log_book_category_id": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "date": {
+      "type": "string",
+      "description": "The posted date. Format YYYY-MM-DD",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "message": {
+      "type": "string"
+    },
+    "attachments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_name": {
+            "type": "string"
+          },
+          "full_path": {
+            "type": "string",
+            "description": "fully qualified URL for requesting the attachment"
+          },
+          "file_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_name",
+          "full_path",
+          "file_id"
+        ]
+      }
+    },
+    "log_book_comment_count": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "company_id": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "required": [
+    "id",
+    "uuid",
+    "location_id",
+    "user_id",
+    "log_book_category_id",
+    "date",
+    "message",
+    "attachments",
+    "log_book_comment_count",
+    "created",
+    "company_id"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_log_book_posts",
+  "x-primary-key": [
+    "id"
+  ]
+}

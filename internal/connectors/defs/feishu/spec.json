@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Feishu / Lark Connection Specification",
+  "type": "object",
+  "required": [
+    "app_id",
+    "app_secret",
+    "app_token",
+    "lark_host",
+    "table_id"
+  ],
+  "properties": {
+    "app_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The unique identifier for your application. Found in the Feishu/Lark Developer Console under \"Credentials & Basic Info\"."
+    },
+    "app_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The secret key used to verify your application's identity. Found alongside the App ID."
+    },
+    "app_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The unique identifier of the Bitable (Base). Found in the URL: /base/{app_token}."
+    },
+    "lark_host": {
+      "type": "string",
+      "description": "Base URL of the Feishu/Lark Open Platform. Use https://open.feishu.cn for Feishu (China mainland) accounts and https://open.larksuite.com for Lark (international) accounts."
+    },
+    "page_size": {
+      "type": "string",
+      "description": "Number of records per request. Max: 500. Default: 100."
+    },
+    "table_id": {
+      "type": "string",
+      "description": "The unique identifier of the table. Found in the URL query parameter table={table_id}."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

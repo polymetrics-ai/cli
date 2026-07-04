@@ -1,0 +1,309 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Location ID"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "Company ID"
+    },
+    "name": {
+      "type": "string",
+      "description": "Location name"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country"
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "State or province"
+    },
+    "city": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "City"
+    },
+    "formatted_address": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Full formatted address"
+    },
+    "lat": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Latitude"
+    },
+    "lng": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Longitude"
+    },
+    "place_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Internal use"
+    },
+    "timezone": {
+      "type": "string",
+      "description": "Timezone. Valid zone info name"
+    },
+    "timezone_updated": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Internal use"
+    },
+    "hash": {
+      "type": "string",
+      "description": "Internal use"
+    },
+    "mapping_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Internal use"
+    },
+    "department_based_budget": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "When true, department based budgeting is enabled"
+    },
+    "holiday_pay": {
+      "type": "boolean",
+      "description": "When true, holiday pay is enabled"
+    },
+    "auto_send_log_book_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Time the log book is automatically send"
+    },
+    "sun_hours_close": {
+      "type": "string",
+      "description": "Sunday closing time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "mon_hours_close": {
+      "type": "string",
+      "description": "Monday closing time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "tue_hours_close": {
+      "type": "string",
+      "description": "Tuesday closing time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "wed_hours_close": {
+      "type": "string",
+      "description": "Wednesday closing time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "thu_hours_close": {
+      "type": "string",
+      "description": "Thursday closing time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "fri_hours_close": {
+      "type": "string",
+      "description": "Friday closing time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "sat_hours_close": {
+      "type": "string",
+      "description": "Saturday closing time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "sun_hours_open": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Sunday opening time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "mon_hours_open": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Monday opening time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "tue_hours_open": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Tuesday opening time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "wed_hours_open": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Wednesday opening time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "thu_hours_open": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Thursday opening time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "fri_hours_open": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Friday opening time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "sat_hours_open": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Saturday opening time",
+      "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+    },
+    "sun_is_closed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If true, location is closed on Sunday"
+    },
+    "mon_is_closed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If true, location is closed on Monday"
+    },
+    "tue_is_closed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If true, location is closed on Tuesday"
+    },
+    "wed_is_closed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If true, location is closed on Wednesday"
+    },
+    "thu_is_closed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If true, location is closed on Thursday"
+    },
+    "fri_is_closed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If true, location is closed on Friday"
+    },
+    "sat_is_closed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If true, location is closed on Saturday"
+    },
+    "shift_feedback": {
+      "type": "boolean",
+      "description": "If true end of shift feedback requests are enabled"
+    },
+    "message": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Message visible to all employees"
+    },
+    "deleted": {
+      "type": "boolean",
+      "description": "If true the location is deleted"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "name",
+    "country",
+    "timezone",
+    "hash",
+    "sun_hours_close",
+    "mon_hours_close",
+    "tue_hours_close",
+    "wed_hours_close",
+    "thu_hours_close",
+    "fri_hours_close",
+    "sat_hours_close",
+    "sun_hours_open",
+    "mon_hours_open",
+    "tue_hours_open",
+    "wed_hours_open",
+    "thu_hours_open",
+    "fri_hours_open",
+    "sat_hours_open",
+    "sun_is_closed",
+    "mon_is_closed",
+    "tue_is_closed",
+    "wed_is_closed",
+    "thu_is_closed",
+    "fri_is_closed",
+    "sat_is_closed",
+    "shift_feedback",
+    "department_based_budget",
+    "state",
+    "city",
+    "formatted_address",
+    "place_id",
+    "message",
+    "created",
+    "modified"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_users_authorized_locations",
+  "x-primary-key": [
+    "id"
+  ]
+}

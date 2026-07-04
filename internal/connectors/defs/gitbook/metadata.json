@@ -1,22 +1,25 @@
 {
   "name": "gitbook",
   "display_name": "GitBook",
-  "description": "Reads GitBook users, organizations, organization members, and space content (pages) through the GitBook REST API.",
+  "description": "Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations through the GitBook API.",
   "integration_type": "api",
-  "docs_url": "https://developer.gitbook.com/",
+  "docs_url": "https://gitbook.com/docs/developers/gitbook-api/api-reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external GitBook API read of documentation content, users, and organizations"
+    "read": "external GitBook API reads across users, organizations, spaces, sites, content, permissions, integrations, analytics, search, and related resources",
+    "write": "creates, updates, publishes, archives, deletes, imports, exports, invites, permission changes, and content changes in GitBook depending on the selected write action",
+    "approval": "reverse ETL writes require plan preview and approval token before execution"
   }
 }

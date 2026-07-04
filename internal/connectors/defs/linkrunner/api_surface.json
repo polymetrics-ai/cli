@@ -1,13 +1,20 @@
 {
   "api": "Linkrunner Data API (https://api.linkrunner.io/api/v1)",
   "docs": "https://docs.linkrunner.io/sdk-less/api-reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only; the full Linkrunner surface (client SDK attribution-data/init/trigger endpoints, event tracking) is out of scope until Pass B and is not applicable to a reverse-ETL read connector",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface review against Linkrunner's SDK-less API reference plus the legacy Data API package. The two Data API endpoints implemented by legacy remain covered as read streams. Linkrunner's documented SDK-less endpoints are POST-only client-device telemetry/attribution calls that require a body-carried project token and device/install context; they are not syncable object lists and the declarative write dialect cannot safely inject a secret into a JSON body, so they are excluded with endpoint-specific reasons.",
   "endpoints": [
     { "method": "GET", "path": "/api/v1/campaigns", "covered_by": { "stream": "campaigns" } },
     { "method": "GET", "path": "/api/v1/attributed-users", "covered_by": { "stream": "attributed_users" } },
-    { "method": "POST", "path": "/api/v1/init", "excluded": { "category": "out_of_scope", "reason": "client SDK attribution endpoint, not a syncable data stream" } },
-    { "method": "POST", "path": "/api/v1/trigger", "excluded": { "category": "out_of_scope", "reason": "client SDK attribution endpoint, not a syncable data stream" } },
-    { "method": "GET", "path": "/api/v1/attribution-data", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/api/client/init", "excluded": { "category": "non_data_endpoint", "reason": "client SDK install/open telemetry call; it acknowledges attribution processing for a device install and is not a syncable object stream or reverse-ETL data mutation" } },
+    { "method": "POST", "path": "/api/client/attribution-data", "excluded": { "category": "out_of_scope", "reason": "single-install polling endpoint requiring a body-carried project token and install_instance_id/device context; not a GET list/detail resource and not expressible as a safe declarative stream without placing a secret in the request body" } },
+    { "method": "POST", "path": "/api/client/trigger", "excluded": { "category": "out_of_scope", "reason": "client-side signup/login attribution event requiring per-device install_instance_id and body-carried project token; not a practical reverse-ETL write action for this Data API connector" } },
+    { "method": "POST", "path": "/api/client/set-user-data", "excluded": { "category": "out_of_scope", "reason": "client-side user attribution metadata update requiring body-carried project token and device install context; dialect cannot safely source the project token into a JSON body" } },
+    { "method": "POST", "path": "/api/client/capture-event", "excluded": { "category": "out_of_scope", "reason": "client event telemetry endpoint, not a syncable resource; requires body-carried project token and app-device context outside the connector credential model" } },
+    { "method": "POST", "path": "/api/client/capture-payment", "excluded": { "category": "requires_elevated_scope", "reason": "payment/revenue telemetry with ad-network side effects; requires body-carried project token and per-user payment context outside this connector's approved reverse-ETL write surface" } },
+    { "method": "POST", "path": "/api/client/remove-captured-payment", "excluded": { "category": "destructive_admin", "reason": "removes captured payment attribution for refunds and can affect revenue attribution state; not safe as a generic declarative reverse-ETL action" } },
+    { "method": "POST", "path": "/api/client/update-push-token", "excluded": { "category": "out_of_scope", "reason": "device push-token telemetry endpoint requiring install_instance_id and body-carried project token; not a server-side data sync resource" } },
+    { "method": "POST", "path": "/api/client/integrations", "excluded": { "category": "out_of_scope", "reason": "client-side third-party analytics ID telemetry requiring device install context and body-carried project token; not a practical reverse-ETL object mutation" } },
+    { "method": "POST", "path": "/api/client/handle-deeplink", "excluded": { "category": "non_data_endpoint", "reason": "client deeplink-open handling endpoint for remarketing/reattribution; returns processing status, not persisted objects to sync" } }
   ]
 }

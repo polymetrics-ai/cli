@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/context-connections",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_context_connections_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_context_connections",
+          "name": "Fixture list_site_context_connections",
+          "status": "active",
+          "operation_id": "listSiteContextConnections"
+        }
+      ]
+    }
+  }
+}

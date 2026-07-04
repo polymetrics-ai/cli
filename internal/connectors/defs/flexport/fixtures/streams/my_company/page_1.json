@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/network/me/companies"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/network/me/companies",
+      "version": 2,
+      "data": {
+        "_object": "/network/company",
+        "id": "company_fixture_self",
+        "name": "Fixture Account Company",
+        "ref": "fixture-self",
+        "editable": false,
+        "metadata": {}
+      }
+    }
+  }
+}

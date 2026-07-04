@@ -1,0 +1,45 @@
+{
+  "record": {
+    "uuid": "MFfixture001",
+    "coupon_group_id": "rh200",
+    "coupons": ["FCMPFI", "U3EHFD"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/MFfixture001/coupons",
+    "body": {
+      "coupon_group_id": "rh200",
+      "coupons": ["FCMPFI", "U3EHFD"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "id": "rh200",
+        "name": "RH200",
+        "active": true,
+        "created_at": 1686563246,
+        "coupons": [
+          {
+            "code": "FCMPFI",
+            "available": true,
+            "sent_at": null,
+            "email_id": null,
+            "created_at": 1686563246
+          },
+          {
+            "code": "U3EHFD",
+            "available": true,
+            "sent_at": null,
+            "email_id": null,
+            "created_at": 1686563246
+          }
+        ]
+      },
+      "calls_left": null,
+      "timestamp": 1686676359
+    }
+  }
+}

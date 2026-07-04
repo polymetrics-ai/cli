@@ -1,0 +1,22 @@
+{
+  "record": {
+    "member_ids": [
+      "emp_fixture_1"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/kiosk_members/bulk_grant_access",
+    "body": {
+      "member_ids": [
+        "emp_fixture_1"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "bulk_grant_kiosk_access_fixture_response"
+    }
+  }
+}

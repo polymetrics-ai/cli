@@ -1,0 +1,146 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/locations/synthetic-conformance-value/engage_overview",
+    "query": {
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "location_stats": {
+          "lates": {
+            "current": 1001,
+            "previous": 1001
+          },
+          "no_shows": {
+            "current": 1001,
+            "previous": 1001
+          },
+          "sick_shifts": {
+            "current": 1001,
+            "previous": 1001
+          },
+          "shift_bids": {
+            "current": 1001,
+            "previous": 1001
+          },
+          "shift_drops": {
+            "current": 1001,
+            "previous": 1001
+          }
+        },
+        "employee_stats": {
+          "most_reliable": {
+            "id": 1001,
+            "first_name": "fixture first name",
+            "last_name": "fixture last name",
+            "photo_url": "https://example.com/fixture",
+            "primary_role": "fixture primary role"
+          },
+          "most_eager": {
+            "id": 1001,
+            "first_name": "fixture first name",
+            "last_name": "fixture last name",
+            "photo_url": "https://example.com/fixture",
+            "primary_role": "fixture primary role"
+          },
+          "most_sick": {
+            "id": 1001,
+            "first_name": "fixture first name",
+            "last_name": "fixture last name",
+            "photo_url": "https://example.com/fixture",
+            "primary_role": "fixture primary role"
+          },
+          "most_late": {
+            "id": 1001,
+            "first_name": "fixture first name",
+            "last_name": "fixture last name",
+            "photo_url": "https://example.com/fixture",
+            "primary_role": "fixture primary role"
+          },
+          "most_drops": {
+            "id": 1001,
+            "first_name": "fixture first name",
+            "last_name": "fixture last name",
+            "photo_url": "https://example.com/fixture",
+            "primary_role": "fixture primary role"
+          }
+        },
+        "engagement_scores": {
+          "most_engaged": [
+            {
+              "user": {
+                "id": 1001,
+                "first_name": "fixture first name",
+                "last_name": "fixture last name",
+                "photo_url": "https://example.com/fixture",
+                "primary_role": "fixture primary role"
+              },
+              "current_score": 1001,
+              "metrics": {
+                "shift_bids": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "dropped_shifts": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "no_shows": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "lates": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "total_shifts": 1001
+              }
+            }
+          ],
+          "least_engaged": [
+            {
+              "user": {
+                "id": 1001,
+                "first_name": "fixture first name",
+                "last_name": "fixture last name",
+                "photo_url": "https://example.com/fixture",
+                "primary_role": "fixture primary role"
+              },
+              "current_score": 1001,
+              "metrics": {
+                "shift_bids": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "dropped_shifts": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "no_shows": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "lates": {
+                  "stat": 1001,
+                  "ranking": 1001
+                },
+                "total_shifts": 1001
+              }
+            }
+          ]
+        },
+        "shift_feedback": {
+          "current": 12.34,
+          "previous": 12.34
+        },
+        "tenure": {
+          "average_tenure": 1001
+        }
+      }
+    }
+  }
+}

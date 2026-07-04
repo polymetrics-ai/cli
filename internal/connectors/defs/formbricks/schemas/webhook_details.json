@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhook_details",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "url": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "workspace_id": { "type": ["string", "null"], "description": "Mapped from the raw API's workspaceId field." },
+    "surveyIds": { "type": ["array", "null"] },
+    "triggers": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"], "description": "Mapped from the raw API's createdAt field." },
+    "updated_at": { "type": ["string", "null"], "description": "Mapped from the raw API's updatedAt field." }
+  }
+}

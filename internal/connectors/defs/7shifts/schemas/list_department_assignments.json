@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "department_id": {
+      "type": "integer",
+      "description": "Department ID"
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "Location ID"
+    },
+    "name": {
+      "type": "string",
+      "description": "Department Name"
+    },
+    "appear_on_schedule": {
+      "type": "boolean",
+      "description": "Display the employee on the schedule for this department"
+    }
+  },
+  "required": [
+    "department_id",
+    "location_id",
+    "name"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_department_assignments",
+  "x-primary-key": [
+    "location_id"
+  ]
+}

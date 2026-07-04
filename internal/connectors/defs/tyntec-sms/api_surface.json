@@ -1,13 +1,13 @@
 {
   "api": "tyntec Messaging API",
-  "docs": "https://api.tyntec.com/reference/messaging",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full tyntec Messaging API (send message, WhatsApp/Viber channels, conversations, webhooks) is out of scope until Pass B",
+  "docs": "https://api.tyntec.com/reference/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion for the tyntec SMS API surface reachable from the official API reference index. The four legacy read streams remain unchanged and the documented SMS send mutation is covered by a declarative write action. Other tyntec products linked from the same reference index (Conversations, OTP, Verify, Network APIs, Account self-service, Voice) are separate APIs and not part of this SMS connector surface.",
   "endpoints": [
     { "method": "GET", "path": "/sms/v1/messages", "covered_by": { "stream": "messages" } },
     { "method": "GET", "path": "/sms/v1/templates", "covered_by": { "stream": "templates" } },
     { "method": "GET", "path": "/sms/v1/sender-ids", "covered_by": { "stream": "sender_ids" } },
     { "method": "GET", "path": "/sms/v1/reports", "covered_by": { "stream": "delivery_reports" } },
-    { "method": "POST", "path": "/sms/v1/messages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only, no write support" } }
+    { "method": "POST", "path": "/sms/v1/messages", "covered_by": { "write": "send_message" } }
   ]
 }

@@ -52,6 +52,200 @@
         "cursor_field": "updated_at"
       },
       "schema": "schemas/rewards.json"
+    },
+    {
+      "name": "list_leaderboard",
+      "path": "/lists/{{ config.list_uuid }}/leaderboard",
+      "records": { "path": "data.ranking" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "list_bonuses",
+      "path": "/lists/{{ config.list_uuid }}/bonuses",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/list_bonuses.json"
+    },
+    {
+      "name": "subscribers_search_by_name",
+      "path": "/subscribers/search_by_name",
+      "query": {
+        "name": "{{ config.subscriber_name }}"
+      },
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "campaign_subscribers",
+      "path": "/lists/{{ config.list_uuid }}/subscribers",
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_detail",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}",
+      "records": { "path": "data", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_by_email",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/retrieve_by_email",
+      "query": {
+        "email": "{{ config.subscriber_email }}"
+      },
+      "records": { "path": "data", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_by_mwr",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/retrieve_by_mwr",
+      "query": {
+        "mwr": "{{ config.subscriber_mwr }}"
+      },
+      "records": { "path": "data", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_referrals",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}/referred",
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_level_2_all_referrals",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}/level_2_all_referrals",
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_level_3_all_referrals",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}/level_3_all_referrals",
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_level_1_referrals",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}/level_1_referrals",
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_level_2_referrals",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}/level_2_referrals",
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "subscriber_level_3_referrals",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}/level_3_referrals",
+      "records": { "path": "data.subscribers" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_subscribers.json"
+    },
+    {
+      "name": "campaign_rewards",
+      "path": "/lists/{{ config.list_uuid }}/rewards",
+      "records": { "path": "data.rewards" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_rewards.json"
+    },
+    {
+      "name": "subscriber_rewards",
+      "path": "/lists/{{ config.list_uuid }}/subscribers/{{ config.subscriber_id }}/rewards",
+      "records": { "path": "data.rewards" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/campaign_rewards.json"
+    },
+    {
+      "name": "coupon_groups",
+      "path": "/lists/{{ config.list_uuid }}/coupon_groups",
+      "records": { "path": "data.coupon_groups" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/coupon_groups.json"
+    },
+    {
+      "name": "coupon_group_coupons",
+      "path": "/lists/{{ config.list_uuid }}/coupon_groups/{{ config.coupon_group_id }}",
+      "records": { "path": "data.coupons" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/coupons.json"
     }
   ]
 }

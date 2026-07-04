@@ -1,0 +1,18 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "site_context_connection_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/context-connections/synthetic-conformance-value/sync"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "sync_site_context_connection_fixture_1"
+    }
+  }
+}

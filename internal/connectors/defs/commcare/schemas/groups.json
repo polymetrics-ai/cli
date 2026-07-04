@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "groups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "case_sharing": { "type": ["boolean", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "metadata": { "type": ["object", "null"] },
+    "path": { "type": ["array", "null"] },
+    "reporting": { "type": ["boolean", "null"] },
+    "users": { "type": ["array", "null"] }
+  }
+}

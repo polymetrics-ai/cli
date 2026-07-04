@@ -1,0 +1,19 @@
+{
+  "record": {
+    "employee_id": "emp_fixture_1",
+    "first_name": "Ada"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/personal_details",
+    "body": {
+      "first_name": "Ada"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_employee_personal_details_fixture_response"
+    }
+  }
+}

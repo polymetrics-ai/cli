@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerFeedback/2024-06-01/items/synthetic-conformance-value/browseNode",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "browseNodeId": "browseNodeId-fixture-1",
+      "displayName": "displayName-fixture-1",
+      "asin": "asin-fixture-1"
+    }
+  }
+}

@@ -1,21 +1,1099 @@
 {
-  "api": "7shifts API v2 (https://api.7shifts.com/v2)",
+  "api": "7shifts API v2 (https://api.7shifts.com, reference version 2026-01-01)",
   "docs": "https://developers.7shifts.com/reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "migration parity: the 7 legacy-parity read streams only, matching internal/connectors/7shifts capability-for-capability; 7shifts is read-only in this connector (no reverse-ETL write surface implemented) and the broader 7shifts surface (schedules, time-off, availability, wage/labor cost endpoints, punch edit requests, etc.) is out of scope until a future capability-expansion pass",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion from the 2026-01-01 ReadMe/OpenAPI reference. Non-deprecated GET endpoints are streams except side-effect/non-data endpoints; single-request object-body mutations are write actions; deprecated endpoints, auth/setup endpoints, elevated partner account creation, and root-array request bodies are explicitly excluded.",
   "endpoints": [
-    { "method": "GET", "path": "/v2/companies", "covered_by": { "stream": "companies" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/locations", "covered_by": { "stream": "locations" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/departments", "covered_by": { "stream": "departments" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/roles", "covered_by": { "stream": "roles" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/shifts", "covered_by": { "stream": "shifts" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/time_punches", "covered_by": { "stream": "time_punches" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/schedules", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/time_off", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/availability", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/wages", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v2/company/{company_id}/punch_edit_requests", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v2/company/{company_id}/shifts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "POST",
+      "path": "/oauth2/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token issuance is an authentication flow, not a data stream or reverse-ETL mutation, and the bundle uses an existing bearer token."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/batch/company/{company_id}/location/{location_id}/forecast_override",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/batch/company/{company_id}/users/role_assignments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/companies/{id}",
+      "covered_by": {
+        "stream": "view_company"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/companies/{id}",
+      "covered_by": {
+        "write": "update_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/availabilities",
+      "covered_by": {
+        "stream": "list_availabilities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/availabilities",
+      "covered_by": {
+        "write": "create_availability"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/availabilities/{availability_id}",
+      "covered_by": {
+        "write": "delete_availability"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/availabilities/{availability_id}",
+      "covered_by": {
+        "stream": "get_availability_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/availabilities/{availability_id}",
+      "covered_by": {
+        "write": "edit_availability"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/availabilities/{availability_id}/status",
+      "covered_by": {
+        "write": "update_availability_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/availability_reasons",
+      "covered_by": {
+        "stream": "list_availability_reasons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/availability_reasons",
+      "covered_by": {
+        "write": "create_availability_reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/availability_reasons/{availability_reason_id}",
+      "covered_by": {
+        "write": "delete_availability_reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/availability_reasons/{availability_reason_id}",
+      "covered_by": {
+        "write": "edit_availability_reason"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/bulk_employment_records",
+      "covered_by": {
+        "write": "upsert_bulk_employment_records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/contacts",
+      "covered_by": {
+        "stream": "list_user_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/contacts/{identifier}",
+      "covered_by": {
+        "stream": "retrieve_user_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/create_many_users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/day_part/settings",
+      "covered_by": {
+        "stream": "retrieve_day_part_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/departments",
+      "covered_by": {
+        "write": "create_department"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/departments/{department_id}",
+      "covered_by": {
+        "write": "delete_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/departments/{department_id}",
+      "covered_by": {
+        "stream": "retrieve_department"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/departments/{department_id}",
+      "covered_by": {
+        "write": "update_department"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/employment_record/{uuid}",
+      "covered_by": {
+        "write": "delete_employment_record"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/employment_record/{uuid}",
+      "covered_by": {
+        "write": "update_employment_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/employment_records",
+      "covered_by": {
+        "stream": "list_employment_record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/employment_records",
+      "covered_by": {
+        "write": "create_employment_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/events",
+      "covered_by": {
+        "stream": "get_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/events",
+      "covered_by": {
+        "write": "create_event"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/events/{event_id}",
+      "covered_by": {
+        "write": "delete_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/events/{event_id}",
+      "covered_by": {
+        "stream": "get_event"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/company/{company_id}/events/{event_id}",
+      "covered_by": {
+        "write": "edit_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/external_user_mappings",
+      "covered_by": {
+        "stream": "list_external_user_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/external_user_mappings",
+      "covered_by": {
+        "write": "create_external_user_mappings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/external_user_mappings/{identifier}",
+      "covered_by": {
+        "write": "delete_external_user_mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/external_user_mappings/{identifier}",
+      "covered_by": {
+        "stream": "retrieve_external_user_mapping"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/external_user_mappings/{identifier}",
+      "covered_by": {
+        "write": "update_external_user_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/external_user_mappings_bulk",
+      "covered_by": {
+        "write": "create_user_mappings_bulk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/inactive_reasons",
+      "covered_by": {
+        "stream": "list_inactive_reasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/labor_settings",
+      "covered_by": {
+        "stream": "retrieve_company_labor_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/location/{location_id}/daily_stats",
+      "covered_by": {
+        "stream": "retrieve_daily_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings_bulk",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/location/{location_id}/forecast_override",
+      "covered_by": {
+        "write": "delete_forecast_override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/location/{location_id}/forecast_override",
+      "covered_by": {
+        "write": "create_forecast_override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/location/{location_id}/forecast_overrides",
+      "covered_by": {
+        "write": "create_bulk_forecast_overrides"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/locations",
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/locations",
+      "covered_by": {
+        "write": "create_location"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/locations/{location_id}",
+      "covered_by": {
+        "write": "delete_location"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/locations/{location_id}",
+      "covered_by": {
+        "stream": "get_location_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/locations/{location_id}",
+      "covered_by": {
+        "write": "update_location"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/locations/{location_id}/engage_overview",
+      "covered_by": {
+        "stream": "get_engage_overview_by_location_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/locations/{location_id}/forecast_override_interval",
+      "covered_by": {
+        "write": "sync_overridden_projected_sales_interval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/locations/{location_id}/forecast_override_interval",
+      "covered_by": {
+        "write": "create_projected_sales_interval_override"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/locations/{location_id}/forecast_overrides_intervals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/locations/{location_id}/tip_pool_detailed_report",
+      "covered_by": {
+        "stream": "retrieve_tip_pool_detailed_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/locations/{location_id}/tip_pool_summary_report",
+      "covered_by": {
+        "stream": "retrieve_tip_pool_summary_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/log_book_categories",
+      "covered_by": {
+        "stream": "list_log_book_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/log_book_categories",
+      "covered_by": {
+        "write": "create_log_book_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/log_book_categories/{id}",
+      "covered_by": {
+        "write": "delete_log_book_category"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/company/{company_id}/log_book_categories/{id}",
+      "covered_by": {
+        "write": "update_log_book_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/log_book_comments",
+      "covered_by": {
+        "stream": "list_log_book_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/log_book_comments",
+      "covered_by": {
+        "write": "create_log_book_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/log_book_comments/{id}",
+      "covered_by": {
+        "write": "delete_log_book_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/log_book_comments/{id}",
+      "covered_by": {
+        "stream": "retrieve_log_book_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/log_book_posts",
+      "covered_by": {
+        "stream": "list_log_book_posts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/log_book_posts",
+      "covered_by": {
+        "write": "create_log_book_post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/log_book_posts/{id}",
+      "covered_by": {
+        "write": "delete_log_book_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/log_book_posts/{id}",
+      "covered_by": {
+        "stream": "retrieve_log_book_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/payroll_periods/{payroll_period_id}",
+      "covered_by": {
+        "stream": "get_time_clocking_payroll_period"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/receipts",
+      "covered_by": {
+        "stream": "list_sales_receipts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/receipts",
+      "covered_by": {
+        "write": "create_complete_receipt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/receipts/{receipt_id}",
+      "covered_by": {
+        "stream": "get_receipt"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/receipts/{receipt_id}",
+      "covered_by": {
+        "write": "update_complete_receipt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/receipts_summary",
+      "covered_by": {
+        "stream": "retrieve_receipts_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/roles",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/roles",
+      "covered_by": {
+        "write": "create_role"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/roles/{role_id}",
+      "covered_by": {
+        "write": "delete_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/roles/{role_id}",
+      "covered_by": {
+        "stream": "retrieve_role"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/roles/{role_id}",
+      "covered_by": {
+        "write": "update_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/shift_feedback",
+      "covered_by": {
+        "stream": "list_shift_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/shifts",
+      "covered_by": {
+        "stream": "shifts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/shifts",
+      "covered_by": {
+        "write": "post_shift"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/shifts/{shift_id}",
+      "covered_by": {
+        "write": "delete_shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/shifts/{shift_id}",
+      "covered_by": {
+        "stream": "retrieve_shift"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/shifts/{shift_id}",
+      "covered_by": {
+        "write": "update_shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/shifts_scheduled/{id}",
+      "covered_by": {
+        "stream": "list_scheduled_shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/task_list_daily_summary",
+      "covered_by": {
+        "stream": "get_task_list_daily_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/task_list_templates",
+      "covered_by": {
+        "stream": "get_task_list_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/task_list_templates",
+      "covered_by": {
+        "write": "create_task_list_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/task_list_templates/{uuid}",
+      "covered_by": {
+        "write": "delete_task_list_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/task_list_templates/{uuid}",
+      "covered_by": {
+        "stream": "get_task_list_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/task_list_templates/{uuid}",
+      "covered_by": {
+        "write": "edit_task_list_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/task_lists",
+      "covered_by": {
+        "stream": "get_task_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/task_lists/{list_id}",
+      "covered_by": {
+        "stream": "get_task_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/clear",
+      "covered_by": {
+        "write": "clear_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/complete",
+      "covered_by": {
+        "write": "complete_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/task_management_settings",
+      "covered_by": {
+        "stream": "get_task_management_settings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/task_tags",
+      "covered_by": {
+        "write": "delete_task_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/task_tags",
+      "covered_by": {
+        "write": "create_task_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/test_webhook",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Sends a test webhook notification and does not return a stable data resource for ETL."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/time_punches",
+      "covered_by": {
+        "stream": "time_punches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/time_punches",
+      "covered_by": {
+        "write": "post_time_punch"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/time_punches/{time_punch_id}",
+      "covered_by": {
+        "write": "delete_time_punch_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/time_punches/{time_punch_id}",
+      "covered_by": {
+        "stream": "get_time_punch_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/time_punches/{time_punch_id}",
+      "covered_by": {
+        "write": "put_time_punch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry",
+      "covered_by": {
+        "stream": "fetch_tip_pool_manual_entry"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry",
+      "covered_by": {
+        "write": "save_tip_pool_manual_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/tip_pool_settings",
+      "covered_by": {
+        "stream": "get_tip_pool_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/users",
+      "covered_by": {
+        "write": "post_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/users/{identifier}",
+      "covered_by": {
+        "write": "deactivate_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users/{identifier}",
+      "covered_by": {
+        "stream": "get_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/users/{identifier}",
+      "covered_by": {
+        "write": "put_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users/{user_id}/assignments",
+      "covered_by": {
+        "stream": "get_assignments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users/{user_id}/authorized_locations",
+      "covered_by": {
+        "stream": "list_users_authorized_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users/{user_id}/department_assignments",
+      "covered_by": {
+        "stream": "list_department_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/users/{user_id}/department_assignments",
+      "covered_by": {
+        "write": "create_department_assignment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/users/{user_id}/department_assignments/{department_id}",
+      "covered_by": {
+        "write": "delete_department_assignment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users/{user_id}/location_assignments",
+      "covered_by": {
+        "stream": "list_location_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/users/{user_id}/location_assignments",
+      "covered_by": {
+        "write": "create_location_assignment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/users/{user_id}/location_assignments/{location_id}",
+      "covered_by": {
+        "write": "delete_location_assignment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users/{user_id}/role_assignments",
+      "covered_by": {
+        "stream": "get_role_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/users/{user_id}/role_assignments",
+      "covered_by": {
+        "write": "create_role_assignment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}",
+      "covered_by": {
+        "write": "delete_role_assignment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}",
+      "covered_by": {
+        "write": "update_role_assignment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/users/{user_id}/wages",
+      "covered_by": {
+        "stream": "get_user_wages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/users/{user_id}/wages",
+      "covered_by": {
+        "write": "create_user_wages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/webhooks",
+      "covered_by": {
+        "stream": "list_company_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "delete_company_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/company/{company_id}/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "edit_company_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/partner_company_creation",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Creates trial accounts through the partner setup surface and is not an ordinary tenant-scoped reverse-ETL action."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/daily_sales_and_labor",
+      "covered_by": {
+        "stream": "get_daily_sales_and_labor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/hours_and_wages",
+      "covered_by": {
+        "stream": "get_hours_and_wages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time_clocking/payroll_periods",
+      "covered_by": {
+        "stream": "get_time_clocking_payroll_periods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time_off",
+      "covered_by": {
+        "stream": "get_time_off_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time_off",
+      "covered_by": {
+        "write": "create_time_off"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time_off/total_hours",
+      "covered_by": {
+        "stream": "get_total_hours"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/time_off/{time_off_id}",
+      "covered_by": {
+        "write": "delete_time_off"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time_off/{time_off_id}",
+      "covered_by": {
+        "stream": "find_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/time_off/{time_off_id}",
+      "covered_by": {
+        "write": "edit_time_off"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time_off/{time_off_id}/approve",
+      "covered_by": {
+        "write": "approve_time_off"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time_off/{time_off_id}/decline",
+      "covered_by": {
+        "write": "decline_time_off"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/time_off_settings/{company_id}",
+      "covered_by": {
+        "stream": "get_time_off_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/time_off_settings/{company_id}",
+      "covered_by": {
+        "write": "save_time_off_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/whoami",
+      "covered_by": {
+        "stream": "who_am_i"
+      }
+    }
   ]
 }

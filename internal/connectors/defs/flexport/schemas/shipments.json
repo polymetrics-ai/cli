@@ -3,19 +3,15 @@
   "title": "shipments",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
-    "id": { "type": "string" },
+    "id": { "type": ["string", "integer"] },
     "_object": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
     "transportation_mode": { "type": ["string", "null"] },
     "freight_type": { "type": ["string", "null"] },
-    "origin_port": { "type": ["string", "null"] },
-    "destination_port": { "type": ["string", "null"] },
-    "estimated_departure_date": { "type": ["string", "null"] },
-    "estimated_arrival_date": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
     "updated_at": { "type": ["string", "null"] }
-  }
+  },
+  "additionalProperties": true
 }

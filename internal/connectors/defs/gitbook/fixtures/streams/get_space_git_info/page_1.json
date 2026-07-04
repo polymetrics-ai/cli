@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/git/info"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_space_git_info_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_space_git_info",
+      "name": "Fixture get_space_git_info",
+      "status": "active",
+      "operation_id": "getSpaceGitInfo"
+    }
+  }
+}

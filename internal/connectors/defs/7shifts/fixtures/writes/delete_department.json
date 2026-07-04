@@ -1,0 +1,13 @@
+{
+  "record": {
+    "department_id": 1001
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/company/synthetic-conformance-value/departments/1001"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

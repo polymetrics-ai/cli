@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/lookup_table_item/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "data_type_id": "lookup_table_fixture_1",
+          "fields": {
+            "name": { "field_list": [{ "field_value": "MMR", "properties": { "lang": "en" } }] },
+            "price": { "field_list": [{ "field_value": "7", "properties": {} }] }
+          },
+          "id": "lookup_table_row_fixture_1",
+          "sort_key": 2
+        }
+      ]
+    }
+  }
+}

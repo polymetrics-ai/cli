@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/employment_records"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "00000000-0000-4000-8000-000000000001",
+          "company_id": 1001,
+          "user_id": 1001,
+          "hire_date": "2026-01-01",
+          "termination_date": "2026-01-01",
+          "classification": "fixture classification",
+          "locked": true,
+          "business_entity_uuid": "00000000-0000-4000-8000-000000000001"
+        }
+      ]
+    }
+  }
+}

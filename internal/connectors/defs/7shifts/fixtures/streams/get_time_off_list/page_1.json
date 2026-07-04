@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/time_off",
+    "query": {
+      "limit": "100",
+      "company_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "user_id": 1001,
+          "company_id": 1001,
+          "from_date": "2026-01-01",
+          "to_date": "2026-01-01",
+          "partial": true,
+          "partial_from": "fixture partial from",
+          "partial_to": "fixture partial to",
+          "comments": "fixture comments",
+          "status": 1001,
+          "status_action_user_id": 1001,
+          "status_action_message": "fixture status action message",
+          "category": "fixture category",
+          "created": "2026-01-01T00:00:00Z",
+          "amount_of_hours": 12.34,
+          "hours": [
+            {
+              "date": "2026-01-01",
+              "hours": 12.34
+            }
+          ]
+        }
+      ],
+      "meta": {
+        "cursor": {
+          "next": null
+        }
+      }
+    }
+  }
+}

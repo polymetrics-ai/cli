@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/inactive_reasons"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "value": "fixture value"
+        }
+      ]
+    }
+  }
+}

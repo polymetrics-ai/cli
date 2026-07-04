@@ -1,13 +1,28 @@
 {
-  "request": { "method": "GET", "path": "/organisations", "query": { "page_index": "1", "items_per_page": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations",
+    "query": {
+      "page_index": "1",
+      "item_per_page": "1"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": {
         "items": [
-          { "id": "org_fixture_1", "name": "Fixture Org", "country": "AU", "phone": "+61000000000", "logo_url": "https://example.com/logo.png" }
+          {
+            "id": "org_fixture_1",
+            "name": "Fixture Org",
+            "country": "AU",
+            "phone": "+61000000000",
+            "logo_url": "https://example.com/logo.png"
+          }
         ],
         "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
         "total_pages": 1
       }
     }

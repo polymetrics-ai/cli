@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bills",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "dated_on": {
+      "type": "string"
+    },
+    "due_on": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "total_value": {
+      "type": "string"
+    },
+    "due_value": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "url"
+  ],
+  "x-cursor-field": "updated_at"
+}

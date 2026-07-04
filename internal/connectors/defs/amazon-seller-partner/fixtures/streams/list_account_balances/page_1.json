@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/wallet/2024-03-01/accounts/synthetic-conformance-value/balance",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "balances": [
+        {
+          "accountId": "accountId-fixture-1",
+          "balanceType": "balanceType-fixture-1",
+          "balanceAmount": 1.25,
+          "balanceCurrency": "balanceCurrency-fixture-1",
+          "lastUpdateDate": "lastUpdateDate-fixture-1",
+          "account_id": "account_id-fixture-1"
+        }
+      ]
+    }
+  }
+}

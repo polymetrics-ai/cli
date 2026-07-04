@@ -1,17 +1,143 @@
 {
-  "api": "EasyPost REST API (https://www.easypost.com/docs/api)",
-  "docs": "https://www.easypost.com/docs/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (shipments, trackers, addresses, parcels, insurances). EasyPost is read-only in legacy (no reverse-ETL writes); capabilities.write is false.",
+  "api": "EasyPost REST API v2",
+  "docs": "https://docs.easypost.com/docs/shipments (official EasyPost docs fetched 2026-07-04; pages covered: core Authentication/Pagination plus Addresses, API Keys, Batches, Carrier Accounts/Metadata/Types, Customer Portal, CustomsInfo, CustomsItem, EndShipper, Events, Insurance, Claims, Luma, Orders, Parcels, Pickups, Refunds, Reports, ScanForm, Shipments, Forms, Rates, Returns, Shipping Insurance/Refund/SmartRate, SmartRate, Trackers, Users, Billing, Brand, Child Users, ReferralCustomer, Webhooks)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion for the documented EasyPost REST API v2 surface available to an API-key integration. Covered reads include all practical bulk/list GETs that the declarative engine can sync without caller-supplied object IDs, plus legacy GET /parcels retained from the hand-written connector. Covered writes include documented JSON/empty-body object lifecycle and operational actions expressible by writes.json. Exclusions are detail GETs that duplicate covered list streams, credential/billing/carrier-account administration requiring elevated scope or sensitive credentials, binary/document-download surfaces, and stateless calculation endpoints that do not mutate or expose syncable records.",
   "endpoints": [
     { "method": "GET", "path": "/shipments", "covered_by": { "stream": "shipments" } },
+    { "method": "GET", "path": "/shipments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-shipment detail; the shipments stream emits the same Shipment object shape for all discoverable shipments" } },
+    { "method": "GET", "path": "/shipments/{id}/label", "excluded": { "category": "binary_payload", "reason": "label conversion/download endpoint returns or points at label artifacts; this connector emits label metadata but does not download binary label files" } },
+    { "method": "GET", "path": "/shipments/{id}/smartrate", "excluded": { "category": "non_data_endpoint", "reason": "per-shipment SmartRate calculation requiring a caller-supplied shipment id, not a syncable record collection" } },
+    { "method": "GET", "path": "/shipments/{id}/smartrate/delivery_date", "excluded": { "category": "non_data_endpoint", "reason": "per-shipment delivery-date SmartRate calculation, not persisted syncable data" } },
+    { "method": "GET", "path": "/shipments/{id}/smartrate/precision_shipping", "excluded": { "category": "non_data_endpoint", "reason": "per-shipment precision-shipping calculation, not persisted syncable data" } },
+    { "method": "POST", "path": "/shipments", "covered_by": { "write": "create_shipment" } },
+    { "method": "POST", "path": "/shipments", "excluded": { "category": "duplicate_of", "reason": "documented options and return-shipment variants use the same POST /shipments resource; create_shipment accepts the full shipment envelope including options/is_return" } },
+    { "method": "POST", "path": "/shipments/{id}/buy", "covered_by": { "write": "buy_shipment" } },
+    { "method": "POST", "path": "/shipments/{id}/rerate", "covered_by": { "write": "rerate_shipment" } },
+    { "method": "POST", "path": "/shipments/{id}/insure", "covered_by": { "write": "insure_shipment" } },
+    { "method": "POST", "path": "/shipments/{id}/refund", "covered_by": { "write": "refund_shipment" } },
+    { "method": "POST", "path": "/shipments/{id}/forms", "covered_by": { "write": "create_shipment_form" } },
+    { "method": "POST", "path": "/shipments/luma", "covered_by": { "write": "create_luma_shipment" } },
+    { "method": "POST", "path": "/shipments/{id}/luma", "covered_by": { "write": "buy_luma_shipment" } },
+    { "method": "POST", "path": "/beta/rates", "excluded": { "category": "non_data_endpoint", "reason": "stateless rate quote calculation; does not create/update a persistent EasyPost object and returns transient quote data" } },
+
     { "method": "GET", "path": "/trackers", "covered_by": { "stream": "trackers" } },
+    { "method": "GET", "path": "/trackers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-tracker detail; the trackers stream emits the same Tracker object shape" } },
+    { "method": "POST", "path": "/trackers", "covered_by": { "write": "create_tracker" } },
+    { "method": "DELETE", "path": "/trackers/{id}", "covered_by": { "write": "delete_tracker" } },
+
     { "method": "GET", "path": "/addresses", "covered_by": { "stream": "addresses" } },
+    { "method": "GET", "path": "/addresses/{id}", "excluded": { "category": "duplicate_of", "reason": "single-address detail; the addresses stream emits the same Address object shape" } },
+    { "method": "POST", "path": "/addresses", "covered_by": { "write": "create_address" } },
+    { "method": "POST", "path": "/addresses/create_and_verify", "covered_by": { "write": "create_and_verify_address" } },
+
     { "method": "GET", "path": "/parcels", "covered_by": { "stream": "parcels" } },
+    { "method": "GET", "path": "/parcels/{id}", "excluded": { "category": "duplicate_of", "reason": "single-parcel detail; legacy EasyPost exposes a parcels list stream and the detail shape is the same Parcel object" } },
+    { "method": "POST", "path": "/parcels", "covered_by": { "write": "create_parcel" } },
+
     { "method": "GET", "path": "/insurances", "covered_by": { "stream": "insurances" } },
-    { "method": "POST", "path": "/shipments", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented shipment creation; Pass B capability expansion" } },
-    { "method": "POST", "path": "/shipments/{id}/buy", "excluded": { "category": "destructive_admin", "reason": "purchases a real postage label / incurs a charge; not modeled by legacy" } },
-    { "method": "GET", "path": "/batches", "excluded": { "category": "out_of_scope", "reason": "batch shipping workflows not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/users", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-account/user introspection, not a syncable object stream" } }
+    { "method": "GET", "path": "/insurances/{id}", "excluded": { "category": "duplicate_of", "reason": "single-insurance detail; the insurances stream emits the same Insurance object shape" } },
+    { "method": "POST", "path": "/insurances", "covered_by": { "write": "create_insurance" } },
+    { "method": "POST", "path": "/insurances/{id}/refund", "covered_by": { "write": "refund_insurance" } },
+
+    { "method": "GET", "path": "/batches", "covered_by": { "stream": "batches" } },
+    { "method": "GET", "path": "/batches/{id}", "excluded": { "category": "duplicate_of", "reason": "single-batch detail; the batches stream emits the same Batch object shape" } },
+    { "method": "POST", "path": "/batches", "covered_by": { "write": "create_batch" } },
+    { "method": "POST", "path": "/batches/{id}/add_shipments", "covered_by": { "write": "add_shipments_to_batch" } },
+    { "method": "POST", "path": "/batches/{id}/remove_shipments", "covered_by": { "write": "remove_shipments_from_batch" } },
+    { "method": "POST", "path": "/batches/{id}/buy", "covered_by": { "write": "buy_batch" } },
+    { "method": "POST", "path": "/batches/{id}/label", "covered_by": { "write": "label_batch" } },
+    { "method": "POST", "path": "/batches/{id}/scan_form", "covered_by": { "write": "create_batch_scan_form" } },
+
+    { "method": "GET", "path": "/carrier_accounts", "covered_by": { "stream": "carrier_accounts" } },
+    { "method": "GET", "path": "/carrier_accounts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-carrier-account detail; the carrier_accounts stream emits the same CarrierAccount object shape" } },
+    { "method": "POST", "path": "/carrier_accounts", "excluded": { "category": "requires_elevated_scope", "reason": "creates account-level carrier credential configuration and accepts carrier credentials; intentionally not exposed as a generic write action" } },
+    { "method": "PATCH", "path": "/carrier_accounts/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "updates carrier credential/account configuration; requires elevated account administration and sensitive credential handling" } },
+    { "method": "DELETE", "path": "/carrier_accounts/{id}", "excluded": { "category": "destructive_admin", "reason": "removes carrier-account configuration and can break live shipping workflows" } },
+
+    { "method": "GET", "path": "/metadata/carriers", "covered_by": { "stream": "carrier_metadata" } },
+    { "method": "GET", "path": "/carrier_types", "covered_by": { "stream": "carrier_types" } },
+
+    { "method": "POST", "path": "/customs_infos", "covered_by": { "write": "create_customs_info" } },
+    { "method": "GET", "path": "/customs_infos/{id}", "excluded": { "category": "out_of_scope", "reason": "single-id lookup only; there is no documented bulk CustomsInfo list stream to sync without caller-supplied IDs" } },
+    { "method": "POST", "path": "/customs_items", "covered_by": { "write": "create_customs_item" } },
+    { "method": "GET", "path": "/customs_items/{id}", "excluded": { "category": "out_of_scope", "reason": "single-id lookup only; there is no documented bulk CustomsItem list stream to sync without caller-supplied IDs" } },
+
+    { "method": "GET", "path": "/end_shippers", "covered_by": { "stream": "end_shippers" } },
+    { "method": "GET", "path": "/end_shippers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-end-shipper detail; the end_shippers stream emits the same EndShipper object shape" } },
+    { "method": "POST", "path": "/end_shippers", "covered_by": { "write": "create_end_shipper" } },
+    { "method": "PUT", "path": "/end_shippers/{id}", "covered_by": { "write": "update_end_shipper" } },
+
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/events/{id}", "excluded": { "category": "duplicate_of", "reason": "single-event detail; the events stream emits the same Event object shape" } },
+
+    { "method": "GET", "path": "/claims", "covered_by": { "stream": "claims" } },
+    { "method": "GET", "path": "/claims/{id}", "excluded": { "category": "duplicate_of", "reason": "single-claim detail; the claims stream emits the same Claim object shape" } },
+    { "method": "POST", "path": "/claims", "excluded": { "category": "binary_payload", "reason": "claim creation is documented around evidence/invoice/supporting-document attachment payloads; binary/base64 evidence upload is outside the generic JSON write surface" } },
+    { "method": "POST", "path": "/claims/{id}/cancel", "covered_by": { "write": "cancel_claim" } },
+
+    { "method": "GET", "path": "/orders/{id}", "excluded": { "category": "out_of_scope", "reason": "single-id lookup only; the docs expose order create/buy/detail but no bulk Order list stream to sync" } },
+    { "method": "POST", "path": "/orders", "covered_by": { "write": "create_order" } },
+    { "method": "POST", "path": "/orders/{id}/buy", "covered_by": { "write": "buy_order" } },
+
+    { "method": "GET", "path": "/pickups", "covered_by": { "stream": "pickups" } },
+    { "method": "GET", "path": "/pickups/{id}", "excluded": { "category": "duplicate_of", "reason": "single-pickup detail; the pickups stream emits the same Pickup object shape" } },
+    { "method": "POST", "path": "/pickups", "covered_by": { "write": "create_pickup" } },
+    { "method": "POST", "path": "/pickups/{id}/buy", "covered_by": { "write": "buy_pickup" } },
+    { "method": "POST", "path": "/pickups/{id}/cancel", "covered_by": { "write": "cancel_pickup" } },
+
+    { "method": "GET", "path": "/refunds", "covered_by": { "stream": "refunds" } },
+    { "method": "GET", "path": "/refunds/{id}", "excluded": { "category": "duplicate_of", "reason": "single-refund detail; the refunds stream emits the same Refund object shape" } },
+    { "method": "POST", "path": "/refunds", "covered_by": { "write": "create_refund" } },
+
+    { "method": "GET", "path": "/scan_forms", "covered_by": { "stream": "scan_forms" } },
+    { "method": "GET", "path": "/scan_forms/{id}", "excluded": { "category": "duplicate_of", "reason": "single-scan-form detail; the scan_forms stream emits the same ScanForm metadata shape" } },
+    { "method": "POST", "path": "/scan_forms", "covered_by": { "write": "create_scan_form" } },
+
+    { "method": "GET", "path": "/reports/{type}", "excluded": { "category": "out_of_scope", "reason": "report type is a caller-selected asynchronous export namespace rather than a fixed syncable collection; create_report covers report job creation" } },
+    { "method": "GET", "path": "/reports/{id}", "excluded": { "category": "binary_payload", "reason": "single report job/file retrieval ultimately exposes export artifacts; this connector does not download report files" } },
+    { "method": "POST", "path": "/reports/{type}", "covered_by": { "write": "create_report" } },
+
+    { "method": "POST", "path": "/luma/promise", "covered_by": { "write": "create_luma_promise" } },
+    { "method": "POST", "path": "/smartrate/deliver_by", "excluded": { "category": "non_data_endpoint", "reason": "standalone SmartRate deliver-by calculation; transient quote/estimate, not a persisted mutation or syncable collection" } },
+    { "method": "POST", "path": "/smartrate/deliver_on", "excluded": { "category": "non_data_endpoint", "reason": "standalone SmartRate deliver-on calculation; transient quote/estimate, not a persisted mutation or syncable collection" } },
+
+    { "method": "GET", "path": "/api_keys", "excluded": { "category": "requires_elevated_scope", "reason": "credential administration surface; responses include API-key metadata and are not a shipping data stream" } },
+    { "method": "POST", "path": "/api_keys", "excluded": { "category": "requires_elevated_scope", "reason": "creates account API credentials; intentionally not exposed as an automated write action" } },
+    { "method": "POST", "path": "/api_keys/{id}/disable", "excluded": { "category": "destructive_admin", "reason": "disables an API key and can break other integrations using it" } },
+    { "method": "POST", "path": "/api_keys/{id}/enable", "excluded": { "category": "requires_elevated_scope", "reason": "credential administration endpoint outside the connector's shipping data scope" } },
+    { "method": "DELETE", "path": "/api_keys/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes an API key and can permanently break other integrations using it" } },
+
+    { "method": "POST", "path": "/customer_portal/account_link", "excluded": { "category": "non_data_endpoint", "reason": "creates an embedded customer-portal session/link, not a syncable data write" } },
+
+    { "method": "GET", "path": "/users/{id}", "excluded": { "category": "out_of_scope", "reason": "single user/account detail; child_users stream covers the bulk child-user collection, and account self-detail is administrative metadata" } },
+    { "method": "PATCH", "path": "/users", "excluded": { "category": "requires_elevated_scope", "reason": "unscoped authenticated-user update can mutate account billing/recharge settings; ID-scoped update_user covers child/user object updates" } },
+    { "method": "PATCH", "path": "/users/{id}", "covered_by": { "write": "update_user" } },
+    { "method": "PATCH", "path": "/users/{id}/brand", "excluded": { "category": "binary_payload", "reason": "brand update supports image/base64 logo/ad payloads and account branding configuration, outside the generic shipping-data write surface" } },
+    { "method": "POST", "path": "/users", "covered_by": { "write": "create_child_user" } },
+    { "method": "GET", "path": "/users/children", "covered_by": { "stream": "child_users" } },
+    { "method": "DELETE", "path": "/users/{child_id}", "covered_by": { "write": "delete_child_user" } },
+
+    { "method": "GET", "path": "/referral_customers", "covered_by": { "stream": "referral_customers" } },
+    { "method": "POST", "path": "/referral_customers", "excluded": { "category": "requires_elevated_scope", "reason": "partner/referral-customer provisioning uses partner/referral-user credentials and account-management scope distinct from ordinary shipping data" } },
+    { "method": "PUT", "path": "/referral_customers/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "updates referral-customer account data using partner/referral-user credentials; elevated account-management surface" } },
+    { "method": "POST", "path": "/beta/referral_customers/payment_method", "excluded": { "category": "requires_elevated_scope", "reason": "stores referral-customer payment method references; billing/payment scope" } },
+    { "method": "POST", "path": "/beta/referral_customers/refunds", "excluded": { "category": "destructive_admin", "reason": "issues referral-customer account refunds; financial operation outside the connector's executable write surface" } },
+
+    { "method": "GET", "path": "/payment_methods", "excluded": { "category": "requires_elevated_scope", "reason": "billing/payment-method listing; sensitive financial account administration, not shipping data" } },
+    { "method": "POST", "path": "/beta/setup_intents", "excluded": { "category": "requires_elevated_scope", "reason": "payment setup intent creation for billing; requires elevated billing/payment scope" } },
+    { "method": "POST", "path": "/credit_cards", "excluded": { "category": "requires_elevated_scope", "reason": "stores credit-card/payment method references; billing/payment scope" } },
+    { "method": "POST", "path": "/beta/financial_connections_sessions", "excluded": { "category": "requires_elevated_scope", "reason": "bank-account financial connection session creation; billing/payment scope" } },
+    { "method": "POST", "path": "/bank_accounts", "excluded": { "category": "requires_elevated_scope", "reason": "stores bank-account payment method references; billing/payment scope" } },
+    { "method": "POST", "path": "/bank_accounts/{id}/charges", "excluded": { "category": "destructive_admin", "reason": "moves funds from a bank account into EasyPost balance; financial operation" } },
+    { "method": "POST", "path": "/credit_cards/{id}/charges", "excluded": { "category": "destructive_admin", "reason": "charges a credit card to fund EasyPost balance; financial operation" } },
+    { "method": "DELETE", "path": "/bank_accounts/{id}", "excluded": { "category": "destructive_admin", "reason": "removes a stored bank-account payment method; billing administration" } },
+    { "method": "DELETE", "path": "/credit_cards/{id}", "excluded": { "category": "destructive_admin", "reason": "removes a stored credit-card payment method; billing administration" } },
+
+    { "method": "GET", "path": "/webhooks", "covered_by": { "stream": "webhooks" } },
+    { "method": "GET", "path": "/webhooks/{id}", "excluded": { "category": "duplicate_of", "reason": "single-webhook detail; the webhooks stream emits the same Webhook object shape" } },
+    { "method": "POST", "path": "/webhooks", "covered_by": { "write": "create_webhook" } },
+    { "method": "PATCH", "path": "/webhooks/{id}", "covered_by": { "write": "update_webhook" } },
+    { "method": "DELETE", "path": "/webhooks/{id}", "covered_by": { "write": "delete_webhook" } }
   ]
 }

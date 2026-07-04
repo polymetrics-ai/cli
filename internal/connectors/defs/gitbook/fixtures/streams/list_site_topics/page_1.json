@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/topics"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_topics_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_topics",
+          "name": "Fixture list_site_topics",
+          "status": "active",
+          "operation_id": "listSiteTopics"
+        }
+      ]
+    }
+  }
+}

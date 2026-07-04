@@ -1,14 +1,51 @@
 {
   "api": "ReferralHero API v2 (https://app.referralhero.com/api/v2)",
-  "docs": "https://support.referralhero.com/integrate/rest-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full ReferralHero surface (campaigns management, webhooks, custom fields, exports) is out of scope until Pass B. ReferralHero is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "docs": "https://support.referralhero.com/integrate/rest-api/endpoint-reference-v2",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion from ReferralHero's v2 endpoint reference. Legacy-parity top-level streams are retained unchanged; documented campaign-scoped GET resources are modeled as config-driven streams, and documented JSON/no-body mutations are modeled as write actions.",
   "endpoints": [
+    { "method": "POST", "path": "/api/v2/lists", "covered_by": { "write": "create_list" } },
     { "method": "GET", "path": "/api/v2/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/leaderboard", "covered_by": { "stream": "list_leaderboard" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/bonuses", "covered_by": { "stream": "list_bonuses" } },
+
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers", "covered_by": { "write": "add_subscriber" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/track_referral_conversion_event", "covered_by": { "write": "track_referral_conversion_event" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/confirm", "covered_by": { "write": "confirm_subscriber_by_id" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/confirm", "covered_by": { "write": "confirm_subscriber_by_identifier" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}", "covered_by": { "write": "update_subscriber" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/add_points", "covered_by": { "write": "add_points" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/add_transactions", "covered_by": { "write": "add_transaction" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/add_bulk_transactions", "covered_by": { "write": "add_bulk_transactions" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/promote", "covered_by": { "write": "promote_subscriber" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/unlock_promoted_reward", "covered_by": { "write": "unlock_promoted_reward" } },
+
+    { "method": "GET", "path": "/api/v2/subscribers/search_by_name", "covered_by": { "stream": "subscribers_search_by_name" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers", "covered_by": { "stream": "campaign_subscribers" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}", "covered_by": { "stream": "subscriber_detail" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/retrieve_by_email", "covered_by": { "stream": "subscriber_by_email" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/retrieve_by_mwr", "covered_by": { "stream": "subscriber_by_mwr" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/referred", "covered_by": { "stream": "subscriber_referrals" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/level_2_all_referrals", "covered_by": { "stream": "subscriber_level_2_all_referrals" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/level_3_all_referrals", "covered_by": { "stream": "subscriber_level_3_all_referrals" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/level_1_referrals", "covered_by": { "stream": "subscriber_level_1_referrals" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/level_2_referrals", "covered_by": { "stream": "subscriber_level_2_referrals" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/level_3_referrals", "covered_by": { "stream": "subscriber_level_3_referrals" } },
+
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/rewards", "covered_by": { "stream": "campaign_rewards" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/rewards", "covered_by": { "stream": "subscriber_rewards" } },
+    { "method": "DELETE", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}", "covered_by": { "write": "delete_subscriber" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/update_reward_status", "covered_by": { "write": "update_reward_status" } },
+
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/coupon_groups", "covered_by": { "write": "create_coupon_group" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/coupons", "covered_by": { "write": "create_coupons" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/coupon_groups", "covered_by": { "stream": "coupon_groups" } },
+    { "method": "GET", "path": "/api/v2/lists/{uuid}/coupon_groups/{id}", "covered_by": { "stream": "coupon_group_coupons" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/unqualify", "covered_by": { "write": "unqualify_referral" } },
+    { "method": "POST", "path": "/api/v2/lists/{uuid}/subscribers/{subscriber_id}/qualify", "covered_by": { "write": "qualify_referral" } },
+
     { "method": "GET", "path": "/api/v2/subscribers", "covered_by": { "stream": "subscribers" } },
     { "method": "GET", "path": "/api/v2/referrals", "covered_by": { "stream": "referrals" } },
-    { "method": "GET", "path": "/api/v2/rewards", "covered_by": { "stream": "rewards" } },
-    { "method": "POST", "path": "/api/v2/subscribers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/api/v2/subscribers/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL writes; ReferralHero connector is read-only" } }
+    { "method": "GET", "path": "/api/v2/rewards", "covered_by": { "stream": "rewards" } }
   ]
 }

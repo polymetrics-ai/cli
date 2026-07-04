@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "annotations",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "document_id": {
+      "type": "string"
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "privacy_level": {
+      "type": "string"
+    },
+    "filehash": {
+      "type": "string"
+    },
+    "created": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "last_modified": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "last_modified"
+}

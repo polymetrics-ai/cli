@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_documents",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string"
+    },
+    "format": {
+      "type": "string"
+    },
+    "contents": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipment_id"
+  ]
+}

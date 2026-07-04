@@ -1,0 +1,14 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/user/notifications/token"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "create_user_notifications_token_fixture_1"
+    }
+  }
+}

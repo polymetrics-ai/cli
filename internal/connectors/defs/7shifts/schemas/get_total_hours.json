@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "number"
+    },
+    "category": {
+      "type": "string"
+    },
+    "hours": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "user_id",
+    "category",
+    "hours"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_total_hours",
+  "x-primary-key": [
+    "user_id"
+  ]
+}

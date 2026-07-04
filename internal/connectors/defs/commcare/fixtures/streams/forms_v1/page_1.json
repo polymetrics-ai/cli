@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/form/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "id": "form_v1_fixture_1",
+          "app_id": "app_fixture_1",
+          "archived": false,
+          "attachments": { "form.xml": { "content_type": "text/xml", "length": 1103 } },
+          "build_id": "build_fixture_1",
+          "domain": "synthetic-conformance-value",
+          "form": {
+            "#type": "data",
+            "@name": "Fixture form",
+            "meta": {
+              "instanceID": "form_v1_fixture_1",
+              "timeEnd": "2026-03-01T00:00:00Z",
+              "timeStart": "2026-03-01T00:00:00Z",
+              "userID": "mobile_worker_fixture_1",
+              "username": "worker1@example.test"
+            },
+            "question1": "fixture answer"
+          },
+          "initial_processing_complete": true,
+          "metadata": {
+            "instanceID": "form_v1_fixture_1",
+            "timeEnd": "2026-03-01T00:00:00",
+            "timeStart": "2026-03-01T00:00:00",
+            "userID": "mobile_worker_fixture_1",
+            "username": "worker1@example.test"
+          },
+          "problem": null,
+          "received_on": "2026-03-01T00:00:00Z",
+          "resource_uri": "",
+          "server_modified_on": "2026-03-01T00:00:00Z",
+          "type": "data",
+          "uiversion": "1",
+          "version": "18"
+        }
+      ]
+    }
+  }
+}

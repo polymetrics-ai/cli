@@ -1,0 +1,13 @@
+{
+  "record": {
+    "availability_reason_id": 1001
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/company/synthetic-conformance-value/availability_reasons/1001"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

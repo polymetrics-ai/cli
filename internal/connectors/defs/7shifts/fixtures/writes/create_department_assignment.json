@@ -1,0 +1,21 @@
+{
+  "record": {
+    "user_id": 1001,
+    "department_id": 1001,
+    "appear_on_schedule": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/users/1001/department_assignments",
+    "body": {
+      "department_id": 1001,
+      "appear_on_schedule": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

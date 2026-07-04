@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/tip_pool/synthetic-conformance-value/manual_entry",
+    "query": {
+      "start_date": "2020-01-01T00:00:00Z",
+      "end_date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "00000000-0000-4000-8000-000000000001",
+          "tip_pool_settings_uuid": "00000000-0000-4000-8000-000000000001",
+          "entry_date": "2026-01-01",
+          "tip_amount": 12.34,
+          "day_part_uuid": "00000000-0000-4000-8000-000000000001",
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

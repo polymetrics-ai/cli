@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/notifications/v1/destinations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": [
+        {
+          "name": "name-fixture-1",
+          "destinationId": "destinationId-fixture-1",
+          "resource": {}
+        }
+      ]
+    }
+  }
+}

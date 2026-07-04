@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/openapi",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_open_api_specs_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_open_api_specs",
+          "name": "Fixture list_open_api_specs",
+          "status": "active",
+          "operation_id": "listOpenAPISpecs"
+        }
+      ]
+    }
+  }
+}

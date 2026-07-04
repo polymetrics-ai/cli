@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/translations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_translation_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_translation",
+      "name": "Fixture get_translation",
+      "status": "active",
+      "operation_id": "getTranslation"
+    }
+  }
+}

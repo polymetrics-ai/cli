@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/agent-instructions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_organization_agent_instructions_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_organization_agent_instructions",
+      "name": "Fixture get_organization_agent_instructions",
+      "status": "active",
+      "operation_id": "getOrganizationAgentInstructions"
+    }
+  }
+}

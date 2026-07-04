@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "url": "fixture",
+      "strategy": "fixture",
+      "id": "fixture",
+      "kind": "fixture",
+      "requested_url": "fixture",
+      "final_url": "fixture",
+      "lighthouse_version": "fixture",
+      "fetch_time": "fixture",
+      "analysis_utc_timestamp": "fixture",
+      "overall_loading_experience": "fixture",
+      "performance_score": 1.5,
+      "accessibility_score": 1.5,
+      "best_practices_score": 1.5,
+      "seo_score": 1.5,
+      "pwa_score": 1.5
+    }
+  ]
+}

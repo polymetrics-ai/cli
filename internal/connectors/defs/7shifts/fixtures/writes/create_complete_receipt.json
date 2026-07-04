@@ -1,0 +1,80 @@
+{
+  "record": {
+    "location_id": 1001,
+    "receipt_date": "2026-01-01T00:00:00Z",
+    "receipt_lines": [
+      {
+        "external_item_id": "fixture-id",
+        "external_category_ids": [
+          "fixture-id"
+        ],
+        "quantity": 1001,
+        "price": 1001,
+        "gross_item_price": 1001,
+        "net_item_price": 1001,
+        "item_discount": 1001,
+        "status": "open",
+        "created": "2026-01-01T00:00:00Z"
+      }
+    ],
+    "tip_details": [
+      {
+        "type": "cc",
+        "value": 1001
+      }
+    ],
+    "net_total": 1001,
+    "status": "open",
+    "gross_total": 1001,
+    "total_receipt_discounts": 1001,
+    "tips": 1001,
+    "external_user_id": "fixture-id",
+    "revenue_center": "fixture revenue center",
+    "order_type": "dine_in",
+    "dining_option": "fixture dining option"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/receipts",
+    "body": {
+      "location_id": 1001,
+      "receipt_date": "2026-01-01T00:00:00Z",
+      "receipt_lines": [
+        {
+          "external_item_id": "fixture-id",
+          "external_category_ids": [
+            "fixture-id"
+          ],
+          "quantity": 1001,
+          "price": 1001,
+          "gross_item_price": 1001,
+          "net_item_price": 1001,
+          "item_discount": 1001,
+          "status": "open",
+          "created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "tip_details": [
+        {
+          "type": "cc",
+          "value": 1001
+        }
+      ],
+      "net_total": 1001,
+      "status": "open",
+      "gross_total": 1001,
+      "total_receipt_discounts": 1001,
+      "tips": 1001,
+      "external_user_id": "fixture-id",
+      "revenue_center": "fixture revenue center",
+      "order_type": "dine_in",
+      "dining_option": "fixture dining option"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

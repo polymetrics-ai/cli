@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipments",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "locationId": {
+      "type": "string"
+    },
+    "marketplaceAttributes": {
+      "type": "object"
+    },
+    "shipmentInfo": {
+      "type": "object"
+    },
+    "invoiceInfo": {
+      "type": "object"
+    },
+    "partyInfoList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipmentRequirements": {
+      "type": "object"
+    },
+    "charges": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "subStatus": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "lineItems": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shippingInfo": {
+      "type": "object"
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "creationDateTime": {
+      "type": "string"
+    },
+    "lastUpdatedDateTime": {
+      "type": "string"
+    },
+    "earliestPackDateTime": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

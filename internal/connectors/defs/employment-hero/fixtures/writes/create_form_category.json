@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Onboarding"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/form_categories",
+    "body": {
+      "name": "Onboarding"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_form_category_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_details_vendor_shipping_v1_shipments",
+  "type": "object",
+  "properties": {
+    "vendorShipmentIdentifier": {
+      "type": "string"
+    },
+    "transactionType": {
+      "type": "string"
+    },
+    "buyerReferenceNumber": {
+      "type": "string"
+    },
+    "transactionDate": {
+      "type": "string"
+    },
+    "currentShipmentStatus": {
+      "type": "string"
+    },
+    "currentshipmentStatusDate": {
+      "type": "string"
+    },
+    "shipmentStatusDetails": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipmentCreateDate": {
+      "type": "string"
+    },
+    "shipmentConfirmDate": {
+      "type": "string"
+    },
+    "packageLabelCreateDate": {
+      "type": "string"
+    },
+    "shipmentFreightTerm": {
+      "type": "string"
+    },
+    "sellingParty": {
+      "type": "object"
+    },
+    "shipFromParty": {
+      "type": "object"
+    },
+    "shipToParty": {
+      "type": "object"
+    },
+    "shipmentMeasurements": {
+      "type": "object"
+    },
+    "collectFreightPickupDetails": {
+      "type": "object"
+    },
+    "purchaseOrders": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "importDetails": {
+      "type": "object"
+    },
+    "containers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "transportationDetails": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "buyerReferenceNumber"
+  ]
+}

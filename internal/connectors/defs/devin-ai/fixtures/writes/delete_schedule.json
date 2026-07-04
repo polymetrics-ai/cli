@@ -1,0 +1,9 @@
+{
+  "record": {
+    "schedule_id": "sched-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v3/organizations/synthetic-conformance-value/schedules/sched-fixture-1"
+  }
+}

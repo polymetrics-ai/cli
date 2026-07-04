@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "Fixture environment",
+    "description": "Fixture environment description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/environments",
+    "body": {
+      "name": "Fixture environment",
+      "description": "Fixture environment description"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "env_fixture_1",
+      "name": "Fixture environment"
+    }
+  }
+}

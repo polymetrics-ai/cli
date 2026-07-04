@@ -1,0 +1,78 @@
+{
+  "record": {
+    "title": "fixture title",
+    "recurrence": "fixture recurrence",
+    "assignments": [
+      {
+        "location_id": 1001,
+        "department_id": 1001,
+        "role_id": 1001,
+        "user_id": 1001
+      }
+    ],
+    "description": "fixture description",
+    "due": "2026-01-01",
+    "time_frame": {
+      "start": "12:00:00",
+      "end": "12:00:00"
+    },
+    "task_templates": [
+      {
+        "title": "fixture title",
+        "description": "fixture description",
+        "sort": 1001,
+        "uuid": "00000000-0000-4000-8000-000000000001",
+        "created": "2026-01-01T00:00:00Z",
+        "task_completion": {
+          "type": "NUMBER",
+          "primitive_type": "INTEGER",
+          "unit": "C"
+        }
+      }
+    ],
+    "status": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/task_list_templates",
+    "body": {
+      "title": "fixture title",
+      "recurrence": "fixture recurrence",
+      "assignments": [
+        {
+          "location_id": 1001,
+          "department_id": 1001,
+          "role_id": 1001,
+          "user_id": 1001
+        }
+      ],
+      "description": "fixture description",
+      "due": "2026-01-01",
+      "time_frame": {
+        "start": "12:00:00",
+        "end": "12:00:00"
+      },
+      "task_templates": [
+        {
+          "title": "fixture title",
+          "description": "fixture description",
+          "sort": 1001,
+          "uuid": "00000000-0000-4000-8000-000000000001",
+          "created": "2026-01-01T00:00:00Z",
+          "task_completion": {
+            "type": "NUMBER",
+            "primitive_type": "INTEGER",
+            "unit": "C"
+          }
+        }
+      ],
+      "status": 1001
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/dataKiosk/2023-11-15/queries/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "queryId": "queryId-fixture-1",
+      "query": "query-fixture-1",
+      "createdTime": "createdTime-fixture-1",
+      "processingStatus": "processingStatus-fixture-1",
+      "processingStartTime": "processingStartTime-fixture-1",
+      "processingEndTime": "processingEndTime-fixture-1",
+      "dataDocumentId": "dataDocumentId-fixture-1",
+      "errorDocumentId": "errorDocumentId-fixture-1",
+      "pagination": {},
+      "query_id": "query_id-fixture-1"
+    }
+  }
+}

@@ -2,7 +2,12 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Amazon Seller Partner Connection Specification",
   "type": "object",
-  "required": ["lwa_app_id", "lwa_client_secret", "refresh_token", "replication_start_date"],
+  "required": [
+    "lwa_app_id",
+    "lwa_client_secret",
+    "refresh_token",
+    "replication_start_date"
+  ],
   "properties": {
     "lwa_app_id": {
       "type": "string",
@@ -50,6 +55,258 @@
       "type": "string",
       "default": "0",
       "description": "Maximum pages to read; 0, all, or unlimited exhausts the stream, matching legacy's spMaxPages."
+    },
+    "access_point_types": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for access_point_types."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for account_id."
+    },
+    "asin": {
+      "type": "string",
+      "description": "ASIN used by item, catalog, pricing, eligibility, and service lookup streams."
+    },
+    "base_amount": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for base_amount."
+    },
+    "browse_node_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for browse_node_id."
+    },
+    "carrier_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for carrier_id."
+    },
+    "collection_form_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for collection_form_id."
+    },
+    "content_reference_key": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for content_reference_key."
+    },
+    "content_update_preview_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for content_update_preview_id."
+    },
+    "country_code": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for country_code."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "RFC3339 lower bound used by streams with required createdAfter filters."
+    },
+    "created_before": {
+      "type": "string",
+      "description": "RFC3339 upper bound used by streams with required createdBefore filters."
+    },
+    "destination_country_code": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for destination_country_code."
+    },
+    "destination_currency_code": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for destination_currency_code."
+    },
+    "destination_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for destination_id."
+    },
+    "event_group_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for event_group_id."
+    },
+    "export_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for export_id."
+    },
+    "feature_name": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for feature_name."
+    },
+    "feed_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for feed_id."
+    },
+    "inbound_plan_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for inbound_plan_id."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for invoice_id."
+    },
+    "item_condition": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for item_condition."
+    },
+    "item_type": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for item_type."
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for keywords."
+    },
+    "metrics_granularity": {
+      "type": "string",
+      "description": "Sales API granularity value for order metrics."
+    },
+    "metrics_interval": {
+      "type": "string",
+      "description": "Sales API interval value for order metrics."
+    },
+    "mskus": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for mskus."
+    },
+    "notification_type": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for notification_type."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Amazon order identifier for order detail and sub-resource streams."
+    },
+    "package_client_reference_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for package_client_reference_id."
+    },
+    "package_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for package_id."
+    },
+    "package_number": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for package_number."
+    },
+    "packing_group_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for packing_group_id."
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for postal_code."
+    },
+    "product_type": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for product_type."
+    },
+    "program": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for program."
+    },
+    "purchase_order_number": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for purchase_order_number."
+    },
+    "query_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for query_id."
+    },
+    "query_type": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for query_type."
+    },
+    "rate_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for rate_id."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for report_id."
+    },
+    "report_schedule_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for report_schedule_id."
+    },
+    "report_types": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for report_types."
+    },
+    "request_token": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for request_token."
+    },
+    "return_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for return_id."
+    },
+    "seller_fulfillment_order_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for seller_fulfillment_order_id."
+    },
+    "seller_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for seller_id."
+    },
+    "seller_sku": {
+      "type": "string",
+      "description": "Seller SKU used by SKU-specific streams."
+    },
+    "service_job_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for service_job_id."
+    },
+    "ship_to_country_code": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for ship_to_country_code."
+    },
+    "shipment_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for shipment_id."
+    },
+    "sku": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for sku."
+    },
+    "sort_by": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for sort_by."
+    },
+    "source_country_code": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for source_country_code."
+    },
+    "source_currency_code": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for source_currency_code."
+    },
+    "status": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for status."
+    },
+    "store_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for store_id."
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for subscription_id."
+    },
+    "supply_source_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for supply_source_id."
+    },
+    "tracking_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for tracking_id."
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for transaction_id."
+    },
+    "transfer_schedule_id": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for transfer_schedule_id."
+    },
+    "vehicle_type": {
+      "type": "string",
+      "description": "Optional SP-API parameter value used by Pass B stream path/query templates for vehicle_type."
     }
   }
 }

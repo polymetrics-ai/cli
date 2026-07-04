@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sales/v1/orderMetrics",
+    "query": {
+      "marketplaceIds": "synthetic-conformance-value",
+      "interval": "synthetic-conformance-value",
+      "granularity": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": [
+        {
+          "interval": "interval-fixture-1",
+          "unitCount": 1,
+          "orderItemCount": 1,
+          "orderCount": 1,
+          "averageUnitPrice": {},
+          "totalSales": {}
+        }
+      ]
+    }
+  }
+}

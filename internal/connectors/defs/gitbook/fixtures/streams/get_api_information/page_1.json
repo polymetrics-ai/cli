@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_api_information_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_api_information",
+      "name": "Fixture get_api_information",
+      "status": "active",
+      "operation_id": "getApiInformation"
+    }
+  }
+}

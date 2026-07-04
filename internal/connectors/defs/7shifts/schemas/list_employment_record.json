@@ -1,0 +1,64 @@
+{
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "description": "The uuid"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "The company_id"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "The user_id"
+    },
+    "hire_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The hire_date"
+    },
+    "termination_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The termination_date"
+    },
+    "classification": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The classification"
+    },
+    "locked": {
+      "type": "boolean",
+      "description": "The locked"
+    },
+    "business_entity_uuid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The business_entity_uuid"
+    }
+  },
+  "required": [
+    "uuid",
+    "company_id",
+    "user_id",
+    "hire_date",
+    "termination_date",
+    "classification",
+    "locked",
+    "business_entity_uuid"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_employment_record",
+  "x-primary-key": [
+    "uuid"
+  ]
+}

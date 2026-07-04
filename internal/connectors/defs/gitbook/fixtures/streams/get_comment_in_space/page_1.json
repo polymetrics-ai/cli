@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/comments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reactions": [
+        {
+          "id": "get_comment_in_space_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_comment_in_space",
+          "name": "Fixture get_comment_in_space",
+          "status": "active",
+          "operation_id": "getCommentInSpace"
+        }
+      ]
+    }
+  }
+}

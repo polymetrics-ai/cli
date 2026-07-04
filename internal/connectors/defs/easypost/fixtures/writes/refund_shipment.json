@@ -1,0 +1,5 @@
+{
+  "record": { "id": "shp_fixture_1" },
+  "expect": { "method": "POST", "path": "/shipments/shp_fixture_1/refund" },
+  "response": { "status": 200, "body": { "id": "shp_fixture_1", "object": "Shipment", "refund_status": "submitted" } }
+}

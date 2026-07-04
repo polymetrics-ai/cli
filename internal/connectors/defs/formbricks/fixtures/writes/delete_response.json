@@ -1,0 +1,7 @@
+{
+  "record": { "responseId": "res_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/management/responses/res_fixture_1"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "webhook_id": 1001,
+    "url": "https://example.com/fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/company/synthetic-conformance-value/webhooks/1001",
+    "body": {
+      "url": "https://example.com/fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

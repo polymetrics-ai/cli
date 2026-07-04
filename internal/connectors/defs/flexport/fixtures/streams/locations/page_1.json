@@ -1,28 +1,47 @@
 {
   "request": {
     "method": "GET",
-    "path": "/locations"
+    "path": "/network/locations"
   },
   "response": {
     "status": 200,
     "body": {
-      "_object": "list",
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/network/locations",
+      "version": 2,
       "data": {
-        "_object": "list",
+        "_object": "/api/collections/paginated",
         "prev": null,
         "next": null,
         "data": [
           {
-            "id": "fixture-location-1",
-            "_object": "location",
+            "_object": "/network/location",
+            "id": "location_fixture_1",
             "name": "Fixture Warehouse",
-            "street_address": "1 Market St",
-            "city": "San Francisco",
-            "state": "CA",
-            "country_code": "US",
-            "zip": "94105",
-            "created_at": "2026-01-01T00:00:00Z",
-            "updated_at": "2026-01-02T00:00:00Z"
+            "ref": "fixture-warehouse",
+            "editable": true,
+            "metadata": { "temperature": ["ambient"] },
+            "address": {
+              "_object": "/address",
+              "street_address": "1 Market St",
+              "street_address2": null,
+              "city": "San Francisco",
+              "state": "CA",
+              "zip": "94105",
+              "country_code": "US"
+            },
+            "company": {
+              "_object": "/api/refs/object",
+              "ref_type": "/network/company",
+              "link": "https://api.flexport.com/network/companies/company_fixture_1",
+              "id": "company_fixture_1"
+            },
+            "contacts": {
+              "_object": "/api/refs/object",
+              "ref_type": "/network/contact",
+              "link": "https://api.flexport.com/network/contacts/contact_fixture_1",
+              "id": "contact_fixture_1"
+            }
           }
         ]
       }

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/mfn/v0/shipments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "ShipmentId": "ShipmentId-fixture-1",
+        "AmazonOrderId": "AmazonOrderId-fixture-1",
+        "SellerOrderId": "SellerOrderId-fixture-1",
+        "ItemList": [],
+        "ShipFromAddress": {},
+        "ShipToAddress": {},
+        "PackageDimensions": {},
+        "Weight": {},
+        "Insurance": {},
+        "ShippingService": {},
+        "Label": {},
+        "Status": "Status-fixture-1",
+        "TrackingId": "TrackingId-fixture-1",
+        "CreatedDate": "CreatedDate-fixture-1",
+        "LastUpdatedDate": "LastUpdatedDate-fixture-1",
+        "shipment_id": "shipment_id-fixture-1"
+      }
+    }
+  }
+}

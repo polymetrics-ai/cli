@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_order",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string"
+    },
+    "orderAliases": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "createdTime": {
+      "type": "string"
+    },
+    "lastUpdatedTime": {
+      "type": "string"
+    },
+    "programs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "associatedOrders": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "salesChannel": {
+      "type": "object"
+    },
+    "buyer": {
+      "type": "object"
+    },
+    "recipient": {
+      "type": "object"
+    },
+    "proceeds": {
+      "type": "object"
+    },
+    "payment": {
+      "type": "object"
+    },
+    "tax": {
+      "type": "object"
+    },
+    "fulfillment": {
+      "type": "object"
+    },
+    "orderItems": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "fulfillmentOrders": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "order_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "orderId"
+  ]
+}

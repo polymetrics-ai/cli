@@ -1,0 +1,29 @@
+{
+  "api": "Freightview legacy connector hook surface",
+  "docs": "https://docs.freightview.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy freightview connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/freightview, which delegates to internal/connectors/freightview until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/freightview shipments read path",
+      "covered_by": {
+        "stream": "shipments"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/freightview quotes read path",
+      "covered_by": {
+        "stream": "quotes"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/freightview tracking read path",
+      "covered_by": {
+        "stream": "tracking"
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "api": "Alpha Vantage legacy connector hook surface",
+  "docs": "https://www.alphavantage.co/documentation/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy alpha-vantage connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/alpha-vantage, which delegates to internal/connectors/alpha-vantage until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/alpha-vantage time_series_daily read path",
+      "covered_by": {
+        "stream": "time_series_daily"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/alpha-vantage time_series_weekly read path",
+      "covered_by": {
+        "stream": "time_series_weekly"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/alpha-vantage time_series_monthly read path",
+      "covered_by": {
+        "stream": "time_series_monthly"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/alpha-vantage time_series_intraday read path",
+      "covered_by": {
+        "stream": "time_series_intraday"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/alpha-vantage global_quote read path",
+      "covered_by": {
+        "stream": "global_quote"
+      }
+    }
+  ]
+}

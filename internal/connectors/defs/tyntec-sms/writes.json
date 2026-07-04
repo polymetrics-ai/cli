@@ -1,0 +1,24 @@
+{
+  "actions": [
+    {
+      "name": "send_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "sms/v1/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["to", "from", "text"],
+        "properties": {
+          "to": { "type": "string" },
+          "from": { "type": "string" },
+          "text": { "type": "string" },
+          "reference": { "type": "string" },
+          "callbackUrl": { "type": "string" }
+        }
+      },
+      "risk": "sends a billable SMS message to the recipient phone number and may notify an external user"
+    }
+  ]
+}

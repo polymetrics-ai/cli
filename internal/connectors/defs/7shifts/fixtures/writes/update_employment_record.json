@@ -1,0 +1,25 @@
+{
+  "record": {
+    "uuid": "00000000-0000-4000-8000-000000000001",
+    "hire_date": "2026-01-01",
+    "termination_date": "2026-01-01",
+    "classification": "fixture classification",
+    "business_entity_uuid": "00000000-0000-4000-8000-000000000001"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/company/synthetic-conformance-value/employment_record/00000000-0000-4000-8000-000000000001",
+    "body": {
+      "hire_date": "2026-01-01",
+      "termination_date": "2026-01-01",
+      "classification": "fixture classification",
+      "business_entity_uuid": "00000000-0000-4000-8000-000000000001"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

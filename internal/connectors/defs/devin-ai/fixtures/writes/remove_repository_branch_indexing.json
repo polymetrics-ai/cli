@@ -1,0 +1,10 @@
+{
+  "record": {
+    "encoded_repository_path": "fixture-owner%2Ffixture-repo",
+    "encoded_branch_name": "main"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v3beta1/organizations/synthetic-conformance-value/repositories/fixture-owner%2Ffixture-repo/indexing/branches/main"
+  }
+}

@@ -1,0 +1,399 @@
+{
+  "actions": [
+    {
+      "name": "create_booking_amendment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/booking_amendments",
+      "body_type": "json",
+      "body_fields": ["booking_id", "new_name", "amendment_note", "new_container_counts", "new_wants_pickup_service", "new_wants_import_customs_service", "new_wants_flexport_freight", "new_wants_bco", "new_wants_214_filing", "new_wants_ftz_entry", "new_origin_address_ref", "new_origin_port_us_cbp_port_code", "new_origin_port_loc_code", "new_destination_address_ref", "new_destination_port_us_cbp_port_code", "new_destination_port_loc_code", "new_cargo_ready_date", "new_delivery_date", "new_product_descriptions", "new_cargo", "new_metadata", "new_container_references"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["booking_id"],
+        "additionalProperties": false,
+        "properties": {
+          "booking_id": { "type": "integer" },
+          "new_name": { "type": "string" },
+          "amendment_note": { "type": "string" },
+          "new_container_counts": { "type": "object" },
+          "new_wants_pickup_service": { "type": "boolean" },
+          "new_wants_import_customs_service": { "type": "boolean" },
+          "new_wants_flexport_freight": { "type": "boolean" },
+          "new_wants_bco": { "type": "boolean" },
+          "new_wants_214_filing": { "type": "boolean" },
+          "new_wants_ftz_entry": { "type": "boolean" },
+          "new_origin_address_ref": { "type": "string" },
+          "new_origin_port_us_cbp_port_code": { "type": "string" },
+          "new_origin_port_loc_code": { "type": "string" },
+          "new_destination_address_ref": { "type": "string" },
+          "new_destination_port_us_cbp_port_code": { "type": "string" },
+          "new_destination_port_loc_code": { "type": "string" },
+          "new_cargo_ready_date": { "type": "string" },
+          "new_delivery_date": { "type": "string" },
+          "new_product_descriptions": { "type": "array", "items": { "type": "object" } },
+          "new_cargo": { "type": "object" },
+          "new_metadata": { "type": "object" },
+          "new_container_references": { "type": "object" }
+        }
+      },
+      "risk": "requests a booking amendment; Flexport may apply the change immediately or queue it for approval depending on shipment state"
+    },
+    {
+      "name": "create_booking_line_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/booking_line_items",
+      "body_type": "json",
+      "body_fields": ["purchase_order_line_item_id", "booking_id", "units"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["purchase_order_line_item_id", "booking_id", "units"],
+        "additionalProperties": false,
+        "properties": {
+          "purchase_order_line_item_id": { "type": "integer" },
+          "booking_id": { "type": "integer" },
+          "units": { "type": "integer" }
+        }
+      },
+      "risk": "adds units from a purchase-order line item to a booking"
+    },
+    {
+      "name": "create_booking",
+      "kind": "create",
+      "method": "POST",
+      "path": "/bookings",
+      "body_type": "json",
+      "body_fields": ["name", "shipper_entity_ref", "consignee_entity_ref", "notify_party", "ocean_booking", "air_booking", "trucking_booking", "origin_address_ref", "destination_address_ref", "cargo_ready_date", "delivery_date", "wants_export_customs_service", "wants_flexport_freight", "wants_import_customs_service", "wants_bco", "cargo", "special_instructions", "metadata", "declared_as_strategy", "eccn_codes", "flow_direct", "user_email"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "shipper_entity_ref", "consignee_entity_ref", "origin_address_ref", "destination_address_ref", "cargo_ready_date", "wants_export_customs_service", "cargo"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "shipper_entity_ref": { "type": "string" },
+          "consignee_entity_ref": { "type": "string" },
+          "notify_party": { "type": ["string", "null"] },
+          "ocean_booking": { "type": "object" },
+          "air_booking": { "type": "object" },
+          "trucking_booking": { "type": "object" },
+          "origin_address_ref": { "type": "string" },
+          "destination_address_ref": { "type": "string" },
+          "cargo_ready_date": { "type": "string" },
+          "delivery_date": { "type": "string" },
+          "wants_export_customs_service": { "type": "boolean" },
+          "wants_flexport_freight": { "type": "boolean" },
+          "wants_import_customs_service": { "type": "boolean" },
+          "wants_bco": { "type": "boolean" },
+          "cargo": { "type": "object" },
+          "special_instructions": { "type": "string" },
+          "metadata": { "type": "object" },
+          "declared_as_strategy": { "type": "string" },
+          "eccn_codes": { "type": "string" },
+          "flow_direct": { "type": "boolean" },
+          "user_email": { "type": "string" }
+        }
+      },
+      "risk": "creates a real Flexport booking request and can initiate operational freight workflows"
+    },
+    {
+      "name": "create_document",
+      "kind": "create",
+      "method": "POST",
+      "path": "/documents",
+      "body_type": "json",
+      "body_fields": ["file_name", "mime_type", "document_type", "memo", "document", "user_email", "shipment_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["file_name", "mime_type", "document_type", "document", "shipment_id"],
+        "additionalProperties": false,
+        "properties": {
+          "file_name": { "type": "string" },
+          "mime_type": { "type": "string" },
+          "document_type": { "type": "string" },
+          "memo": { "type": ["string", "null"] },
+          "document": { "type": "string" },
+          "user_email": { "type": "string" },
+          "shipment_id": { "type": "integer" }
+        }
+      },
+      "risk": "uploads a base64-encoded document to a shipment; incorrect documents can affect operational shipment records"
+    },
+    {
+      "name": "create_company",
+      "kind": "create",
+      "method": "POST",
+      "path": "/network/companies",
+      "body_type": "json",
+      "body_fields": ["name", "ref"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "ref": { "type": "string" }
+        }
+      },
+      "risk": "creates a company in the Flexport network"
+    },
+    {
+      "name": "update_company",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/network/companies/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "ref"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "ref": { "type": "string" }
+        }
+      },
+      "risk": "updates company name or external reference in the Flexport network"
+    },
+    {
+      "name": "create_company_entity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/network/company_entities",
+      "body_type": "json",
+      "body_fields": ["name", "company_id", "company_ref", "mailing_address", "ref", "vat_numbers"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "mailing_address"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "company_id": { "type": "string" },
+          "company_ref": { "type": "string" },
+          "mailing_address": { "type": "object" },
+          "ref": { "type": "string" },
+          "vat_numbers": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "creates a legal company entity under a Flexport network company"
+    },
+    {
+      "name": "update_company_entity",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/network/company_entities/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "mailing_address", "ref", "vat_numbers"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": ["string", "integer"] },
+          "name": { "type": "string" },
+          "mailing_address": { "type": "object" },
+          "ref": { "type": "string" },
+          "vat_numbers": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "updates company entity legal name, mailing address, reference, or VAT numbers"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/network/contacts",
+      "body_type": "json",
+      "body_fields": ["name", "email", "phone_number", "company_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "email", "phone_number"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "company_id": { "type": "string" }
+        }
+      },
+      "risk": "creates a contact in the Flexport network"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/network/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "email", "phone_number"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" }
+        }
+      },
+      "risk": "updates contact details in the Flexport network"
+    },
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/network/locations",
+      "body_type": "json",
+      "body_fields": ["name", "company_id", "address", "contact_ids", "ref", "metadata"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "company_id", "address"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "company_id": { "type": "string" },
+          "address": { "type": "object" },
+          "contact_ids": { "type": "array", "items": { "type": "string" } },
+          "ref": { "type": "string" },
+          "metadata": { "type": "object" }
+        }
+      },
+      "risk": "creates a network location and address in Flexport"
+    },
+    {
+      "name": "update_location",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/network/locations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "address", "contact_ids", "ref", "metadata"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "address": { "type": "object" },
+          "contact_ids": { "type": "array", "items": { "type": "string" } },
+          "ref": { "type": "string" },
+          "metadata": { "type": "object" }
+        }
+      },
+      "risk": "updates location identity, address, contacts, reference, or metadata"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "body_type": "json",
+      "body_fields": ["name", "sku", "description", "product_category", "country_of_origin", "client_verified", "product_properties", "classifications", "suppliers"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "sku"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "sku": { "type": "string" },
+          "description": { "type": "string" },
+          "product_category": { "type": "string" },
+          "country_of_origin": { "type": "string" },
+          "client_verified": { "type": "boolean" },
+          "product_properties": { "type": "array", "items": { "type": "object" } },
+          "classifications": { "type": "array", "items": { "type": "object" } },
+          "suppliers": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "creates a product in the Flexport Product Library"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "sku", "description", "product_category", "country_of_origin", "client_verified", "product_properties", "classifications", "suppliers"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": ["string", "integer"] },
+          "name": { "type": "string" },
+          "sku": { "type": "string" },
+          "description": { "type": "string" },
+          "product_category": { "type": "string" },
+          "country_of_origin": { "type": "string" },
+          "client_verified": { "type": "boolean" },
+          "product_properties": { "type": "array", "items": { "type": "object" } },
+          "classifications": { "type": "array", "items": { "type": "object" } },
+          "suppliers": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "risk": "updates product library fields; arrays replace the existing values when provided"
+    },
+    {
+      "name": "update_shipment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/shipments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["metadata"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "metadata"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": ["string", "integer"] },
+          "metadata": { "type": "object" }
+        }
+      },
+      "risk": "replaces shipment metadata tags; incorrect metadata can affect downstream shipment workflows"
+    },
+    {
+      "name": "create_shipments_shareable",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipments_shareable",
+      "body_type": "json",
+      "body_fields": ["shipment_ids"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["shipment_ids"],
+        "additionalProperties": false,
+        "properties": {
+          "shipment_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "creates shareable shipment URLs for the listed shipment ids"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "type": "payment_log", "start_date": "2026-01-01", "end_date": "2026-01-31" },
+  "expect": {
+    "method": "POST",
+    "path": "/reports/payment_log",
+    "body": { "start_date": "2026-01-01", "end_date": "2026-01-31" }
+  },
+  "response": { "status": 201, "body": { "id": "plrep_fixture_new", "object": "PaymentLogReport" } }
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/inbound/v0/shipments/synthetic-conformance-value/items"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "ItemData": [
+          {
+            "ShipmentId": "ShipmentId-fixture-1",
+            "SellerSKU": "SellerSKU-fixture-1",
+            "FulfillmentNetworkSKU": "FulfillmentNetworkSKU-fixture-1",
+            "QuantityShipped": 1,
+            "QuantityReceived": 1,
+            "QuantityInCase": 1,
+            "ReleaseDate": "ReleaseDate-fixture-1",
+            "PrepDetailsList": [],
+            "shipment_id": "shipment_id-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

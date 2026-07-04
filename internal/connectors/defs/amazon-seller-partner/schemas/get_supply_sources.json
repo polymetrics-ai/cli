@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_supply_sources",
+  "type": "object",
+  "properties": {
+    "alias": {
+      "type": "string"
+    },
+    "supplySourceId": {
+      "type": "string"
+    },
+    "supplySourceCode": {
+      "type": "string"
+    },
+    "address": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "supplySourceId"
+  ]
+}

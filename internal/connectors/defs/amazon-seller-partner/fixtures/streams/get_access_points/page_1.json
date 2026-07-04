@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v2/accessPoints",
+    "query": {
+      "accessPointTypes": "synthetic-conformance-value",
+      "countryCode": "synthetic-conformance-value",
+      "postalCode": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "accessPointsMap": {}
+      }
+    }
+  }
+}

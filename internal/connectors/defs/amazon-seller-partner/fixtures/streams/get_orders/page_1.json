@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "createdAfter": "synthetic-conformance-value",
+      "createdBefore": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "orders": [
+        {
+          "purchaseOrderNumber": "purchaseOrderNumber-fixture-1",
+          "orderDetails": {}
+        }
+      ]
+    }
+  }
+}

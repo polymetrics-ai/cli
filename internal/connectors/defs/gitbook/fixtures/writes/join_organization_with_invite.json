@@ -1,0 +1,17 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "invite_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/invites/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "join_organization_with_invite_fixture_1"
+    }
+  }
+}

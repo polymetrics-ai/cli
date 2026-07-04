@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/search",
+    "query": {
+      "query": "synthetic-conformance-value",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "search_organization_content_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture search_organization_content",
+          "name": "Fixture search_organization_content",
+          "status": "active",
+          "operation_id": "searchOrganizationContent"
+        }
+      ]
+    }
+  }
+}

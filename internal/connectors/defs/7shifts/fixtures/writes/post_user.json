@@ -1,0 +1,100 @@
+{
+  "record": {
+    "first_name": "fixture first name",
+    "last_name": "fixture last name",
+    "location_ids": [
+      1001
+    ],
+    "department_ids": [
+      1001
+    ],
+    "type": "employee",
+    "preferred_first_name": "fixture preferred first name",
+    "preferred_last_name": "fixture preferred last name",
+    "role_ids": [
+      1001
+    ],
+    "email": "fixture@example.com",
+    "mobile_number": "fixture mobile number",
+    "home_number": "fixture home number",
+    "address": "fixture address",
+    "postal_zip": "fixture postal zip",
+    "city": "fixture city",
+    "prov_state": "fixture prov state",
+    "invite_user": true,
+    "notes": "fixture notes",
+    "hire_date": "2026-01-01",
+    "employee_id": "fixture-id",
+    "punch_id": 1001,
+    "birth_date": "2026-01-01",
+    "language": "en",
+    "appear_as_employee": true,
+    "subscribe_to_updates": true,
+    "max_weekly_hours": 12.34,
+    "skill_level": 1,
+    "wage_cents": 12.34,
+    "wage_type": "hourly",
+    "wages": [
+      {
+        "role_id": 1001,
+        "wage_cents": 1001,
+        "effective_date": "2026-01-01"
+      }
+    ],
+    "permissions_template_id": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/users",
+    "body": {
+      "first_name": "fixture first name",
+      "last_name": "fixture last name",
+      "location_ids": [
+        1001
+      ],
+      "department_ids": [
+        1001
+      ],
+      "type": "employee",
+      "preferred_first_name": "fixture preferred first name",
+      "preferred_last_name": "fixture preferred last name",
+      "role_ids": [
+        1001
+      ],
+      "email": "fixture@example.com",
+      "mobile_number": "fixture mobile number",
+      "home_number": "fixture home number",
+      "address": "fixture address",
+      "postal_zip": "fixture postal zip",
+      "city": "fixture city",
+      "prov_state": "fixture prov state",
+      "invite_user": true,
+      "notes": "fixture notes",
+      "hire_date": "2026-01-01",
+      "employee_id": "fixture-id",
+      "punch_id": 1001,
+      "birth_date": "2026-01-01",
+      "language": "en",
+      "appear_as_employee": true,
+      "subscribe_to_updates": true,
+      "max_weekly_hours": 12.34,
+      "skill_level": 1,
+      "wage_cents": 12.34,
+      "wage_type": "hourly",
+      "wages": [
+        {
+          "role_id": 1001,
+          "wage_cents": 1001,
+          "effective_date": "2026-01-01"
+        }
+      ],
+      "permissions_template_id": 1001
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

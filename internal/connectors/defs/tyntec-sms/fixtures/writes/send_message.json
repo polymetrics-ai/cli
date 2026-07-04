@@ -1,0 +1,27 @@
+{
+  "record": {
+    "to": "+15550100001",
+    "from": "FixtureCo",
+    "text": "Fixture SMS body",
+    "reference": "sms_fixture_1",
+    "callbackUrl": "https://example.com/tyntec/callback"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sms/v1/messages",
+    "body": {
+      "to": "+15550100001",
+      "from": "FixtureCo",
+      "text": "Fixture SMS body",
+      "reference": "sms_fixture_1",
+      "callbackUrl": "https://example.com/tyntec/callback"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "msg_fixture_1",
+      "status": "ACCEPTED"
+    }
+  }
+}

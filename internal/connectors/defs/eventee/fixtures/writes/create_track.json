@@ -1,0 +1,5 @@
+{
+  "record": { "name": "Fixture Track", "color": "#336699" },
+  "expect": { "method": "POST", "path": "/label", "body": { "name": "Fixture Track", "color": "#336699" } },
+  "response": { "status": 200, "body": { "id": 758136, "name": "Fixture Track", "color": "#336699" } }
+}

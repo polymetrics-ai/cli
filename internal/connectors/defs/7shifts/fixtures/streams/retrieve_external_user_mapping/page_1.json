@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/external_user_mappings/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "user_id": 1001,
+        "external_user_id": "fixture-id",
+        "company_id": 1001,
+        "location_id": 1001,
+        "application_name": "fixture application name",
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-01T00:00:00Z",
+        "user_active": true
+      }
+    }
+  }
+}

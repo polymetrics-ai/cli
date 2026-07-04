@@ -6,23 +6,31 @@
   "response": {
     "status": 200,
     "body": {
-      "_object": "list",
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/invoices",
+      "version": 2,
       "data": {
-        "_object": "list",
+        "_object": "/api/collections/paginated",
         "prev": null,
         "next": null,
         "data": [
           {
-            "id": "fixture-invoice-1",
-            "_object": "invoice",
-            "invoice_number": "INV-FIXTURE-1",
-            "status": "open",
-            "currency": "USD",
-            "total": "1000.00",
-            "issued_date": "2026-01-01",
-            "due_date": "2026-02-01",
-            "created_at": "2026-01-01T00:00:00Z",
-            "updated_at": "2026-01-02T00:00:00Z"
+            "_object": "/invoice",
+            "id": "invoice_fixture_1",
+            "name": "FLEX-FIXTURE-1",
+            "issued_at": "2026-01-10T12:00:00Z",
+            "due_date": "2026-02-10",
+            "quote_currency_code": "USD",
+            "exchange_rate": 1.0,
+            "invoice_type": "customs",
+            "total": { "amount": "1000.00", "currency_code": "USD" },
+            "balance": { "amount": "1000.00", "currency_code": "USD" },
+            "status": "outstanding",
+            "type": "Shipment",
+            "voided_at": null,
+            "last_updated_at": "2026-01-11T12:00:00Z",
+            "items": [],
+            "notes": []
           }
         ]
       }

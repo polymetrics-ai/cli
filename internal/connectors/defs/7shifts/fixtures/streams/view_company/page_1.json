@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/companies/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 12.34,
+      "name": "fixture name",
+      "country": "fixture country",
+      "photo": "fixture photo",
+      "plan_id": "fixture-id",
+      "created": "2026-01-01T00:00:00Z",
+      "modified": "2026-01-01T00:00:00Z",
+      "expires": "2026-01-01T00:00:00Z",
+      "days_to_expire": 12.34,
+      "converted": "2026-01-01T00:00:00Z",
+      "pos": "fixture pos",
+      "status": "active",
+      "start_week_on": 12.34,
+      "meta": {
+        "signup_utm_source": "fixture signup utm source",
+        "utm_source": "fixture utm source",
+        "signup_content_source": "fixture signup content source",
+        "buy_now": true,
+        "trial_checklist_stored_locally": true,
+        "employee_count_range": "fixture employee count range",
+        "api_key": "fixture api key"
+      }
+    }
+  }
+}

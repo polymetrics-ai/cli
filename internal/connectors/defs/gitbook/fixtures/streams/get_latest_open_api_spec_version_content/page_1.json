@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/openapi/synthetic-conformance-value/versions/latest/content"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_latest_open_api_spec_version_content_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_latest_open_api_spec_version_content",
+      "name": "Fixture get_latest_open_api_spec_version_content",
+      "status": "active",
+      "operation_id": "getLatestOpenAPISpecVersionContent"
+    }
+  }
+}

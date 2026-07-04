@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/content/files",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_files_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_files",
+          "name": "Fixture list_files",
+          "status": "active",
+          "operation_id": "listFiles"
+        }
+      ]
+    }
+  }
+}

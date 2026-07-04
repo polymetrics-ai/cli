@@ -9,7 +9,8 @@
       "type": "offset_limit",
       "limit_param": "limit",
       "offset_param": "offset",
-      "page_size": 100
+      "page_size": 100,
+      "max_pages": 100
     },
     "check": {
       "method": "GET",
@@ -19,6 +20,7 @@
     "error_map": [
       { "status": 401, "hint": "commcare api_key is missing or invalid; re-run pm credentials add commcare" },
       { "status": 403, "hint": "commcare account lacks access for this project_space" },
+      { "status": 404, "hint": "commcare resource not found for this project_space or configured id" },
       { "status": 429, "class": "rate_limited", "hint": "commcare rate limit exceeded; the connector will retry with backoff" }
     ]
   },
@@ -30,9 +32,7 @@
         "app_id": { "template": "{{ config.app_id }}", "omit_when_absent": true }
       },
       "records": { "path": "objects" },
-      "incremental": {
-        "cursor_field": "received_on"
-      },
+      "incremental": { "cursor_field": "received_on" },
       "schema": "schemas/forms.json",
       "projection": "passthrough"
     },
@@ -43,10 +43,295 @@
         "app_id": { "template": "{{ config.app_id }}", "omit_when_absent": true }
       },
       "records": { "path": "objects" },
-      "incremental": {
-        "cursor_field": "server_modified_on"
-      },
+      "incremental": { "cursor_field": "server_modified_on" },
       "schema": "schemas/cases.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "applications",
+      "path": "/a/{{ config.project_space }}/api/application/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/applications.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "application",
+      "path": "/a/{{ config.project_space }}/api/application/v1/{{ config.app_id }}",
+      "records": { "path": "objects" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/applications.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "multimedia_upload_status",
+      "path": "/a/{{ config.project_space }}/apps/api/{{ config.app_id }}/multimedia/status/{{ config.processing_id }}/",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/multimedia_upload_status.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "forms_v1",
+      "path": "/a/{{ config.project_space }}/api/form/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/forms.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "form",
+      "path": "/a/{{ config.project_space }}/api/form/v1/{{ config.form_id }}/",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/forms.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "cases_v1",
+      "path": "/a/{{ config.project_space }}/api/case/v1/",
+      "records": { "path": "." },
+      "schema": "schemas/cases_v1.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "case_v1",
+      "path": "/a/{{ config.project_space }}/api/case/v1/{{ config.case_id }}/",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/cases_v1.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "cases_v2",
+      "path": "/a/{{ config.project_space }}/api/case/v2/",
+      "records": { "path": "cases" },
+      "pagination": { "type": "next_url", "next_url_path": "next" },
+      "schema": "schemas/cases_v2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "case_v2",
+      "path": "/a/{{ config.project_space }}/api/case/v2/{{ config.case_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/cases_v2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "case_v2_by_external_id",
+      "path": "/a/{{ config.project_space }}/api/case/v2/ext/{{ config.external_id }}/",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/cases_v2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "case_v2_bulk_by_ids",
+      "path": "/a/{{ config.project_space }}/api/case/v2/{{ config.case_ids }}",
+      "records": { "path": "cases" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/cases_v2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "case_v2_index_children",
+      "path": "/a/{{ config.project_space }}/api/case/v2/",
+      "query": {
+        "indices.parent": "{{ config.case_id }}"
+      },
+      "records": { "path": "cases" },
+      "pagination": { "type": "next_url", "next_url_path": "next" },
+      "schema": "schemas/cases_v2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "mobile_workers",
+      "path": "/a/{{ config.project_space }}/api/user/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/mobile_workers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "mobile_worker",
+      "path": "/a/{{ config.project_space }}/api/user/v1/{{ config.mobile_worker_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/mobile_workers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bulk_users",
+      "path": "/a/{{ config.project_space }}/api/bulk-user/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/bulk_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "web_users",
+      "path": "/a/{{ config.project_space }}/api/web-user/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/web_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "web_user",
+      "path": "/a/{{ config.project_space }}/api/web-user/v1/{{ config.web_user_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/web_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user_domains",
+      "path": "/api/user_domains/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/user_domains.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user_identity",
+      "path": "/api/identity/v1/",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/user_identity.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "groups",
+      "path": "/a/{{ config.project_space }}/api/group/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "group",
+      "path": "/a/{{ config.project_space }}/api/group/v1/{{ config.group_id }}/",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "reports",
+      "path": "/a/{{ config.project_space }}/api/simplereportconfiguration/v1/",
+      "query": { "format": "json" },
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/reports.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_data",
+      "path": "/a/{{ config.project_space }}/api/configurablereportdata/v1/{{ config.report_id }}/",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 50,
+        "max_pages": 100
+      },
+      "schema": "schemas/report_data.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "locations_v1",
+      "path": "/a/{{ config.project_space }}/api/location/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/locations_v1.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "location_v1",
+      "path": "/a/{{ config.project_space }}/api/location/v1/{{ config.location_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/locations_v1.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "locations_v2",
+      "path": "/a/{{ config.project_space }}/api/location/v2/",
+      "query": { "format": "json" },
+      "records": { "path": "objects" },
+      "schema": "schemas/locations_v2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "location_v2",
+      "path": "/a/{{ config.project_space }}/api/location/v2/{{ config.location_id }}",
+      "query": { "format": "json" },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/locations_v2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "location_types",
+      "path": "/a/{{ config.project_space }}/api/location_type/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/location_types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "location_type",
+      "path": "/a/{{ config.project_space }}/api/location_type/v1/{{ config.location_type_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/location_types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fixtures",
+      "path": "/a/{{ config.project_space }}/api/fixture/v1/",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/fixtures.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fixture_table_items",
+      "path": "/a/{{ config.project_space }}/api/fixture/v1/",
+      "query": { "fixture_type": "{{ config.fixture_type }}" },
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/fixtures.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fixture_item",
+      "path": "/a/{{ config.project_space }}/api/fixture/v1/{{ config.fixture_item_id }}/",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/fixtures.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "lookup_tables",
+      "path": "/a/{{ config.project_space }}/api/lookup_table/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/lookup_tables.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "lookup_table_rows",
+      "path": "/a/{{ config.project_space }}/api/lookup_table_item/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/lookup_table_rows.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "det_exports",
+      "path": "/a/{{ config.project_space }}/api/det_export_instance/v1/",
+      "records": { "path": "objects" },
+      "schema": "schemas/det_exports.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "messaging_events",
+      "path": "/a/{{ config.project_space }}/api/messaging-event/v1/",
+      "records": { "path": "objects" },
+      "pagination": { "type": "next_url", "next_url_path": "meta.next" },
+      "schema": "schemas/messaging_events.json",
       "projection": "passthrough"
     }
   ]

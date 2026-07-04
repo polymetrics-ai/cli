@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/pdf"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_space_pdf_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_space_pdf",
+      "name": "Fixture get_space_pdf",
+      "status": "active",
+      "operation_id": "getSpacePDF"
+    }
+  }
+}

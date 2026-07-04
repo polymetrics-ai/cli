@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/inbound/v0/shipments",
+    "query": {
+      "QueryType": "synthetic-conformance-value",
+      "MarketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "ShipmentData": [
+          {
+            "ShipmentId": "ShipmentId-fixture-1",
+            "ShipmentName": "ShipmentName-fixture-1",
+            "ShipFromAddress": {},
+            "DestinationFulfillmentCenterId": "DestinationFulfillmentCenterId-fixture-1",
+            "ShipmentStatus": "ShipmentStatus-fixture-1",
+            "LabelPrepType": "LabelPrepType-fixture-1",
+            "AreCasesRequired": false,
+            "ConfirmedNeedByDate": "ConfirmedNeedByDate-fixture-1",
+            "BoxContentsSource": "BoxContentsSource-fixture-1",
+            "EstimatedBoxContentsFee": {}
+          }
+        ]
+      }
+    }
+  }
+}

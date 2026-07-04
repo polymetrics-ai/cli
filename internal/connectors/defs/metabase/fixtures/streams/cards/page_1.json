@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "fixture",
+      "description": "fixture",
+      "collection_id": 1,
+      "database_id": 1,
+      "query_type": "fixture",
+      "display": "fixture",
+      "archived": true,
+      "creator_id": 1,
+      "created_at": "fixture",
+      "updated_at": "fixture"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": 420,
+    "company": "Updated Fixture Partner",
+    "description": "Updated sanitized fixture partner.",
+    "photo_url": "https://example.com/partner-photo-updated.png",
+    "logo_url": "https://example.com/partner-logo-updated.png",
+    "web": "https://example.com/updated",
+    "email": "partner-updated@example.test",
+    "phone": "(555) 010-0102",
+    "address": "2 Fixture Way",
+    "booth_number": "E43"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/partner/420",
+    "body": { "company": "Updated Fixture Partner", "booth_number": "E43" }
+  },
+  "response": { "status": 200, "body": { "id": 420, "company": "Updated Fixture Partner" } }
+}

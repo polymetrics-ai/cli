@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/notifications/v1/destinations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "name": "name-fixture-1",
+        "destinationId": "destinationId-fixture-1",
+        "resource": {},
+        "destination_id": "destination_id-fixture-1"
+      }
+    }
+  }
+}

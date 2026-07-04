@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "events",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "iCalUID": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "htmlLink": {
+      "type": "string"
+    },
+    "created": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "updated": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "start": {
+      "type": "object"
+    },
+    "end": {
+      "type": "object"
+    },
+    "creator": {
+      "type": "object"
+    },
+    "organizer": {
+      "type": "object"
+    },
+    "attendees": {
+      "type": "array"
+    },
+    "recurringEventId": {
+      "type": "string"
+    },
+    "etag": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated"
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "My Hours Connection Specification",
+  "type": "object",
+  "required": [
+    "email",
+    "password",
+    "start_date"
+  ],
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Your My Hours username"
+    },
+    "logs_batch_size": {
+      "type": "string",
+      "description": "Pagination size used for retrieving logs in days"
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The password associated to the username"
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Start date for collecting time logs"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_package_tracking_details",
+  "type": "object",
+  "properties": {
+    "eventDate": {
+      "type": "string"
+    },
+    "eventAddress": {
+      "type": "object"
+    },
+    "eventCode": {
+      "type": "string"
+    },
+    "eventDescription": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

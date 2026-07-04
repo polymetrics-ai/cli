@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "notes",
+  "type": "object",
+  "properties": {
+    "NoteId": {
+      "type": "string"
+    },
+    "ContactId": {
+      "type": "string"
+    },
+    "UserId": {
+      "type": "string"
+    },
+    "Note": {
+      "type": "string"
+    },
+    "IsRichText": {
+      "type": "boolean"
+    },
+    "DateCreated": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "DateDisplayedInHistory": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "NoteId"
+  ]
+}

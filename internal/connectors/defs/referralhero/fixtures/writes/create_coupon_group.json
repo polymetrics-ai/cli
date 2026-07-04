@@ -1,0 +1,33 @@
+{
+  "record": {
+    "uuid": "MFfixture001",
+    "name": "RH400",
+    "coupons": ["FIX400"],
+    "active": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/MFfixture001/coupon_groups",
+    "body": {
+      "name": "RH400",
+      "coupons": ["FIX400"],
+      "active": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "id": "rh400",
+        "name": "RH400",
+        "active": true,
+        "created_at": 1686563261,
+        "coupons": [],
+        "response": "coupon_group_created"
+      },
+      "calls_left": null,
+      "timestamp": 1686563261
+    }
+  }
+}

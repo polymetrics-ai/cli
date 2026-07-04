@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ocean/shipment_container_legs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/ocean/shipment_container_legs",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/ocean/shipment_container_leg",
+            "id": 4501396,
+            "dates": {},
+            "shipment_container": {
+              "_object": "/api/refs/object",
+              "ref_type": "/ocean/shipment_container",
+              "link": "https://api.flexport.com/ocean/shipment_containers/289140",
+              "id": 289140
+            },
+            "leg": {
+              "_object": "/api/refs/object",
+              "ref_type": "/shipment_leg",
+              "link": "https://api.flexport.com/shipment_legs/11111",
+              "id": 11111
+            }
+          }
+        ]
+      }
+    }
+  }
+}

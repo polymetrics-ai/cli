@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/content/page/synthetic-conformance-value/meta-links"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "alternates": [
+        {
+          "id": "list_space_page_meta_links_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_space_page_meta_links",
+          "name": "Fixture list_space_page_meta_links",
+          "status": "active",
+          "operation_id": "listSpacePageMetaLinks"
+        }
+      ]
+    }
+  }
+}

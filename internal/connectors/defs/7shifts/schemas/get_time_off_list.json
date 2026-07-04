@@ -1,0 +1,102 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "company_id": {
+      "type": "integer"
+    },
+    "from_date": {
+      "type": "string"
+    },
+    "to_date": {
+      "type": "string"
+    },
+    "partial": {
+      "type": "boolean"
+    },
+    "partial_from": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "time"
+    },
+    "partial_to": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "time"
+    },
+    "comments": {
+      "type": "string"
+    },
+    "status": {
+      "type": "integer"
+    },
+    "status_action_user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "status_action_message": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string"
+    },
+    "amount_of_hours": {
+      "type": "number"
+    },
+    "hours": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "hours": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "hours"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "user_id",
+    "company_id",
+    "from_date",
+    "to_date",
+    "partial",
+    "partial_from",
+    "partial_to",
+    "comments",
+    "status",
+    "status_action_user_id",
+    "status_action_message",
+    "category",
+    "created",
+    "amount_of_hours",
+    "hours"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_time_off_list",
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "record": {
+    "location_id": 1001,
+    "user_id": 1001,
+    "clocked_in": "2026-01-01T00:00:00Z",
+    "department_id": 1001,
+    "role_id": 1001,
+    "clocked_out": "2026-01-01T00:00:00Z",
+    "notes": "fixture notes",
+    "tips": 1001,
+    "breaks": [
+      {
+        "paid": true,
+        "in": "2026-01-01T00:00:00Z",
+        "out": "2026-01-01T00:00:00Z",
+        "custom_break_id": 1001
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/time_punches",
+    "body": {
+      "location_id": 1001,
+      "user_id": 1001,
+      "clocked_in": "2026-01-01T00:00:00Z",
+      "department_id": 1001,
+      "role_id": 1001,
+      "clocked_out": "2026-01-01T00:00:00Z",
+      "notes": "fixture notes",
+      "tips": 1001,
+      "breaks": [
+        {
+          "paid": true,
+          "in": "2026-01-01T00:00:00Z",
+          "out": "2026-01-01T00:00:00Z",
+          "custom_break_id": 1001
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Yahoo Finance Price Connection Specification",
+  "type": "object",
+  "required": [
+    "tickers"
+  ],
+  "properties": {
+    "interval": {
+      "type": "string",
+      "description": "The interval of between prices queried."
+    },
+    "range": {
+      "type": "string",
+      "description": "The range of prices to be queried."
+    },
+    "tickers": {
+      "type": "string",
+      "description": "Comma-separated identifiers for the stocks to be queried. Whitespaces are allowed."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

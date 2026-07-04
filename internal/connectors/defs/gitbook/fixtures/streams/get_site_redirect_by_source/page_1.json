@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/redirect",
+    "query": {
+      "source": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_site_redirect_by_source_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_site_redirect_by_source",
+      "name": "Fixture get_site_redirect_by_source",
+      "status": "active",
+      "operation_id": "getSiteRedirectBySource"
+    }
+  }
+}

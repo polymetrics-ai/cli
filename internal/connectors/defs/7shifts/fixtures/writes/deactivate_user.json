@@ -1,0 +1,21 @@
+{
+  "record": {
+    "identifier": 1001,
+    "inactive_reason": "fixture inactive reason",
+    "inactive_comments": "fixture inactive comments",
+    "would_rehire": true
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/company/synthetic-conformance-value/users/1001",
+    "body": {
+      "inactive_reason": "fixture inactive reason",
+      "inactive_comments": "fixture inactive comments",
+      "would_rehire": true
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

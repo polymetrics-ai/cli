@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/channels",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_channels_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_channels",
+          "name": "Fixture list_site_channels",
+          "status": "active",
+          "operation_id": "listSiteChannels"
+        }
+      ]
+    }
+  }
+}

@@ -6,12 +6,13 @@
       "lectures": [],
       "speakers": [],
       "days": [
-        { "id": 1, "date": "2026-06-01", "event_id": 1, "content_url": "https://example.com/content" },
-        { "id": 2, "date": "2026-06-02", "event_id": 1, "content_url": "https://example.com/content" }
+        { "id": 1, "date": "2026-06-01", "event_id": 1, "content_url": "https://example.com/content/day-1" },
+        { "id": 2, "date": "2026-06-02", "event_id": 1, "content_url": "https://example.com/content/day-2" }
       ],
       "halls": [],
       "tracks": [],
-      "workshops": []
+      "workshops": [],
+      "pauses": []
     }
   }
 }

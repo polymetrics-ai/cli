@@ -1,0 +1,24 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "url": "synthetic-conformance-value",
+    "ref": "synthetic-conformance-value",
+    "commit_message": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/git/export",
+    "body": {
+      "url": "synthetic-conformance-value",
+      "ref": "synthetic-conformance-value",
+      "commit_message": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "export_to_git_repository_fixture_1"
+    }
+  }
+}

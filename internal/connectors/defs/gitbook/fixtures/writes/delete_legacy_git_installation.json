@@ -1,0 +1,16 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/spaces/synthetic-conformance-value/git/legacy-installation"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "delete_legacy_git_installation_fixture_1"
+    }
+  }
+}

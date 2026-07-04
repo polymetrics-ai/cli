@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sso"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_sso_provider_logins_in_organization_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_sso_provider_logins_in_organization",
+          "name": "Fixture list_sso_provider_logins_in_organization",
+          "status": "active",
+          "operation_id": "listSSOProviderLoginsInOrganization"
+        }
+      ]
+    }
+  }
+}

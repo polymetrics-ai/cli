@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "time_series_daily",
+      "method": "GET",
+      "path": "/__legacy_hook/time_series_daily",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_series_daily.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "time_series_weekly",
+      "method": "GET",
+      "path": "/__legacy_hook/time_series_weekly",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_series_weekly.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "time_series_monthly",
+      "method": "GET",
+      "path": "/__legacy_hook/time_series_monthly",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_series_monthly.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "time_series_intraday",
+      "method": "GET",
+      "path": "/__legacy_hook/time_series_intraday",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_series_intraday.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "global_quote",
+      "method": "GET",
+      "path": "/__legacy_hook/global_quote",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/global_quote.json",
+      "incremental": {
+        "cursor_field": "latest_trading_day",
+        "client_filtered": true
+      }
+    }
+  ]
+}

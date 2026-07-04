@@ -1,0 +1,43 @@
+{
+  "api": "Bunny, Inc. legacy connector hook surface",
+  "docs": "https://docs.bunny.net/reference/bunnynet-api-overview",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy bunny-inc connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/bunny-inc, which delegates to internal/connectors/bunny-inc until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/bunny-inc accounts read path",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/bunny-inc contacts read path",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/bunny-inc invoices read path",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/bunny-inc payments read path",
+      "covered_by": {
+        "stream": "payments"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/bunny-inc subscriptions read path",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    }
+  ]
+}

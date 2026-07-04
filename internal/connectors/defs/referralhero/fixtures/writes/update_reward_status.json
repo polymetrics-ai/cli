@@ -1,0 +1,29 @@
+{
+  "record": {
+    "uuid": "MFfixture001",
+    "reward_id": "794765",
+    "status": "sent"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/MFfixture001/subscribers/update_reward_status",
+    "body": {
+      "reward_id": "794765",
+      "status": "sent"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "id": 794765,
+        "name": "referral signup",
+        "status": "sent",
+        "coupon_code": "cdwtmnKz8P"
+      },
+      "calls_left": null,
+      "timestamp": 1753514108
+    }
+  }
+}

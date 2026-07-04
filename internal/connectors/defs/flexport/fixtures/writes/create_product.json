@@ -1,0 +1,32 @@
+{
+  "record": {
+    "name": "Fixture Widget",
+    "sku": "SKU-FIXTURE-1",
+    "description": "Sanitized fixture product",
+    "product_category": "Apparel",
+    "country_of_origin": "US",
+    "client_verified": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products",
+    "body": {
+      "name": "Fixture Widget",
+      "sku": "SKU-FIXTURE-1",
+      "description": "Sanitized fixture product",
+      "product_category": "Apparel",
+      "country_of_origin": "US",
+      "client_verified": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/product",
+        "id": 84291
+      }
+    }
+  }
+}

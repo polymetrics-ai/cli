@@ -1,0 +1,5 @@
+{
+  "record": { "id": 572, "checkin": true },
+  "expect": { "method": "PUT", "path": "/attendee/572/checkin", "body": { "checkin": true } },
+  "response": { "status": 200, "body": { "id": 572, "email": "attendee@example.test", "checked_at": "2026-06-01 12:00:00" } }
+}

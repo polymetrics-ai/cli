@@ -7,7 +7,7 @@
     "api_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Devin service-user API key (cog_...). Used only for Bearer auth; never logged."
+      "description": "Devin service-user API key. Used only for Bearer auth; never logged."
     },
     "org_id": {
       "type": "string",
@@ -28,6 +28,22 @@
       "type": "string",
       "default": "100",
       "description": "Records per page (1-200), sent as the first query param on every stream."
+    },
+    "metrics_time_after": {
+      "type": "string",
+      "description": "Optional Unix-seconds lower bound sent as time_after on metrics and consumption streams."
+    },
+    "metrics_time_before": {
+      "type": "string",
+      "description": "Optional Unix-seconds upper bound sent as time_before on metrics and consumption streams."
+    },
+    "repository_filter_name": {
+      "type": "string",
+      "description": "Optional case-insensitive repository-name filter for the repositories stream."
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Optional exact email filter for organization user streams."
     },
     "mode": {
       "type": "string",

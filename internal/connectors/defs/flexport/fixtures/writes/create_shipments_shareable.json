@@ -1,0 +1,23 @@
+{
+  "record": {
+    "shipment_ids": [2983, 2984]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shipments_shareable",
+    "body": {
+      "shipment_ids": [2983, 2984]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "urls": [
+          "https://app.flexport.com/share/fixture"
+        ]
+      }
+    }
+  }
+}

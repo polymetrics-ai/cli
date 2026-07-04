@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Apify Dataset Connection Specification",
+  "type": "object",
+  "required": [
+    "dataset_id",
+    "token"
+  ],
+  "properties": {
+    "dataset_id": {
+      "type": "string",
+      "description": "manual intervention needed"
+    },
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Personal API token of your Apify account. In Apify Console, you can find your API token in the <a href=\"https://console.apify.com/account/integrations\">Settings section under the Integrations tab</a> after you login. See the <a href=\"https://docs.apify.com/platform/integrations/api#api-token\">Apify Docs</a> for more information."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/outbound/2020-07-01/features",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "features": [
+          {
+            "featureName": "featureName-fixture-1",
+            "featureDescription": "featureDescription-fixture-1",
+            "sellerEligible": false
+          }
+        ]
+      }
+    }
+  }
+}

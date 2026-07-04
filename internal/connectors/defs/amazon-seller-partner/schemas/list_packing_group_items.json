@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_packing_group_items",
+  "type": "object",
+  "properties": {
+    "asin": {
+      "type": "string"
+    },
+    "expiration": {
+      "type": "string"
+    },
+    "fnsku": {
+      "type": "string"
+    },
+    "labelOwner": {
+      "type": "string"
+    },
+    "manufacturingLotCode": {
+      "type": "string"
+    },
+    "msku": {
+      "type": "string"
+    },
+    "prepInstructions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    },
+    "packing_group_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

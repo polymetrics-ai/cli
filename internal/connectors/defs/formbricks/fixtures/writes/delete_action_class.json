@@ -1,0 +1,7 @@
+{
+  "record": { "actionClassId": "act_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/management/action-classes/act_fixture_1"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "member_ids": [
+      "emp_fixture_1"
+    ],
+    "notify_members": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/kiosk_members/bulk_revoke_access",
+    "body": {
+      "notify_members": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "bulk_revoke_kiosk_access_fixture_response"
+    }
+  }
+}

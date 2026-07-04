@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversation_assignment",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "integer"
+    },
+    "assigned_at": {
+      "type": "integer"
+    },
+    "assignee_id": {
+      "type": "string"
+    },
+    "assignee_name": {
+      "type": "string"
+    },
+    "assignee_email": {
+      "type": "string"
+    },
+    "transferee_name": {
+      "type": "string"
+    },
+    "transfer_time": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

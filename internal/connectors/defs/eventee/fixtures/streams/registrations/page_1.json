@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/registrations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 420,
+      "email": "registrant@example.test",
+      "first_name": "Fixture",
+      "last_name": "Registrant",
+      "photo": "https://example.com/registrant.png",
+      "phone": "+1555010102",
+      "bio": "Sanitized fixture registrant.",
+      "web": "https://example.com",
+      "facebook_link": "https://example.com/facebook",
+      "twitter_link": "https://example.com/twitter",
+      "linked_in_link": "https://example.com/linkedin",
+      "position": "Guest",
+      "company": "Fixture Co",
+      "send_email": false,
+      "group_id": 81,
+      "email_valid": true,
+      "status": "1"
+    }
+  }
+}

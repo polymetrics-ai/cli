@@ -1,0 +1,665 @@
+{
+  "actions": [
+    {
+      "name": "create_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/addresses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["address"],
+        "properties": { "address": { "type": "object" } }
+      },
+      "risk": "creates a reusable EasyPost Address object; low-risk external mutation, approval required"
+    },
+    {
+      "name": "create_and_verify_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/addresses/create_and_verify",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["address"],
+        "properties": { "address": { "type": "object" } }
+      },
+      "risk": "creates and verifies an EasyPost Address object; may return verification failures but does not buy postage, approval required"
+    },
+    {
+      "name": "create_parcel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/parcels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["parcel"],
+        "properties": { "parcel": { "type": "object" } }
+      },
+      "risk": "creates a Parcel object describing package dimensions and weight; low-risk external mutation, approval required"
+    },
+    {
+      "name": "create_customs_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customs_items",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customs_item"],
+        "properties": { "customs_item": { "type": "object" } }
+      },
+      "risk": "creates a CustomsItem declaration object used by international shipments; approval required"
+    },
+    {
+      "name": "create_customs_info",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customs_infos",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customs_info"],
+        "properties": { "customs_info": { "type": "object" } }
+      },
+      "risk": "creates a CustomsInfo declaration object used by international shipments; approval required"
+    },
+    {
+      "name": "create_shipment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["shipment"],
+        "properties": { "shipment": { "type": "object" } }
+      },
+      "risk": "creates and rates a Shipment object; does not purchase postage by itself, approval required"
+    },
+    {
+      "name": "buy_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipments/{{ record.id }}/buy",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "rate"],
+        "properties": {
+          "id": { "type": "string" },
+          "rate": { "type": "object" },
+          "insurance": { "type": "string" }
+        }
+      },
+      "risk": "purchases a live postage label for an existing Shipment and may incur carrier/account charges; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "rerate_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipments/{{ record.id }}/rerate",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "refreshes rates on an existing Shipment; external mutation of rated shipment state, approval required"
+    },
+    {
+      "name": "insure_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipments/{{ record.id }}/insure",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "amount"],
+        "properties": {
+          "id": { "type": "string" },
+          "amount": { "type": "string" }
+        }
+      },
+      "risk": "adds shipping insurance to an existing Shipment and may incur a charge; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "refund_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipments/{{ record.id }}/refund",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "requests a refund for an existing Shipment label; changes shipment refund state, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_shipment_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipments/{{ record.id }}/forms",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "form"],
+        "properties": {
+          "id": { "type": "string" },
+          "form": { "type": "object" }
+        }
+      },
+      "risk": "creates a shipment-associated form/document metadata object; approval required"
+    },
+    {
+      "name": "create_tracker",
+      "kind": "create",
+      "method": "POST",
+      "path": "/trackers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tracker"],
+        "properties": { "tracker": { "type": "object" } }
+      },
+      "risk": "creates a Tracker for a carrier tracking code; low-risk external mutation, approval required"
+    },
+    {
+      "name": "delete_tracker",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/trackers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "deletes an EasyPost Tracker object; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_batch",
+      "kind": "create",
+      "method": "POST",
+      "path": "/batches",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["batch"],
+        "properties": { "batch": { "type": "object" } }
+      },
+      "risk": "creates a Batch grouping shipments; does not buy postage by itself, approval required"
+    },
+    {
+      "name": "add_shipments_to_batch",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/{{ record.id }}/add_shipments",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "shipments"],
+        "properties": {
+          "id": { "type": "string" },
+          "shipments": { "type": "array" }
+        }
+      },
+      "risk": "adds Shipment references to an existing Batch; approval required"
+    },
+    {
+      "name": "remove_shipments_from_batch",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/{{ record.id }}/remove_shipments",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "shipments"],
+        "properties": {
+          "id": { "type": "string" },
+          "shipments": { "type": "array" }
+        }
+      },
+      "risk": "removes Shipment references from an existing Batch; approval required"
+    },
+    {
+      "name": "buy_batch",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/{{ record.id }}/buy",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "purchases postage for all eligible shipments in a Batch and may incur charges; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "label_batch",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/{{ record.id }}/label",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "file_format": { "type": "string" }
+        }
+      },
+      "risk": "generates a batch label file after purchase; external mutation of batch artifact state, approval required"
+    },
+    {
+      "name": "create_batch_scan_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "/batches/{{ record.id }}/scan_form",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "creates a ScanForm for an existing Batch; approval required"
+    },
+    {
+      "name": "create_end_shipper",
+      "kind": "create",
+      "method": "POST",
+      "path": "/end_shippers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["end_shipper"],
+        "properties": { "end_shipper": { "type": "object" } }
+      },
+      "risk": "creates an EndShipper sender identity/address record; approval required"
+    },
+    {
+      "name": "update_end_shipper",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/end_shippers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "end_shipper"],
+        "properties": {
+          "id": { "type": "string" },
+          "end_shipper": { "type": "object" }
+        }
+      },
+      "risk": "updates an EndShipper sender identity/address record; approval required"
+    },
+    {
+      "name": "create_insurance",
+      "kind": "create",
+      "method": "POST",
+      "path": "/insurances",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["insurance"],
+        "properties": { "insurance": { "type": "object" } }
+      },
+      "risk": "creates standalone shipping insurance and may incur a charge; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "refund_insurance",
+      "kind": "update",
+      "method": "POST",
+      "path": "/insurances/{{ record.id }}/refund",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "requests a refund for standalone insurance; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["order"],
+        "properties": { "order": { "type": "object" } }
+      },
+      "risk": "creates an Order grouping multiple shipments; does not buy postage by itself, approval required"
+    },
+    {
+      "name": "cancel_claim",
+      "kind": "update",
+      "method": "POST",
+      "path": "/claims/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "cancels an existing EasyPost insurance claim; external claim workflow mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "buy_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.id }}/buy",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "carrier", "service"],
+        "properties": {
+          "id": { "type": "string" },
+          "carrier": { "type": "string" },
+          "service": { "type": "string" }
+        }
+      },
+      "risk": "purchases postage for an Order and may incur charges; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_pickup",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pickups",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pickup"],
+        "properties": { "pickup": { "type": "object" } }
+      },
+      "risk": "creates a carrier pickup request for a shipment/address window; approval required"
+    },
+    {
+      "name": "buy_pickup",
+      "kind": "update",
+      "method": "POST",
+      "path": "/pickups/{{ record.id }}/buy",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "carrier", "service"],
+        "properties": {
+          "id": { "type": "string" },
+          "carrier": { "type": "string" },
+          "service": { "type": "string" }
+        }
+      },
+      "risk": "buys/schedules a carrier pickup and may incur carrier charges; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_pickup",
+      "kind": "update",
+      "method": "POST",
+      "path": "/pickups/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "cancels a scheduled Pickup; external operational mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_refund",
+      "kind": "create",
+      "method": "POST",
+      "path": "/refunds",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["refund"],
+        "properties": { "refund": { "type": "object" } }
+      },
+      "risk": "creates one or more shipment refund requests; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_scan_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "/scan_forms",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["shipments"],
+        "properties": { "shipments": { "type": "array" } }
+      },
+      "risk": "creates a ScanForm manifest for shipment IDs; approval required"
+    },
+    {
+      "name": "create_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reports/{{ record.type }}",
+      "path_fields": ["type"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type", "start_date", "end_date"],
+        "properties": {
+          "type": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" }
+        }
+      },
+      "risk": "starts an asynchronous EasyPost report export for the requested report type/date range; approval required"
+    },
+    {
+      "name": "create_luma_promise",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/luma/promise",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["shipment"],
+        "properties": { "shipment": { "type": "object" } }
+      },
+      "risk": "requests a Luma delivery promise/rating calculation; no label purchase by itself, approval required"
+    },
+    {
+      "name": "create_luma_shipment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipments/luma",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["shipment"],
+        "properties": { "shipment": { "type": "object" } }
+      },
+      "risk": "creates and buys a Shipment through Luma one-call buy and may incur postage charges; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "buy_luma_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipments/{{ record.id }}/luma",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "ruleset_name"],
+        "properties": {
+          "id": { "type": "string" },
+          "ruleset_name": { "type": "string" },
+          "planned_ship_date": { "type": "string" },
+          "deliver_by_date": { "type": "string" }
+        }
+      },
+      "risk": "buys postage for an existing Shipment through Luma and may incur charges; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_child_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user"],
+        "properties": { "user": { "type": "object" } }
+      },
+      "risk": "creates a production-only child user/sub-account under the authenticated EasyPost account; elevated account-management mutation, approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "user"],
+        "properties": {
+          "id": { "type": "string" },
+          "user": { "type": "object" }
+        }
+      },
+      "risk": "updates EasyPost user/sub-account settings such as child account name; elevated account-management mutation, approval required"
+    },
+    {
+      "name": "delete_child_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.child_id }}",
+      "path_fields": ["child_id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["child_id"],
+        "properties": { "child_id": { "type": "string" } }
+      },
+      "risk": "removes a child user from the parent account; destructive account-management mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhook"],
+        "properties": { "webhook": { "type": "object" } }
+      },
+      "risk": "registers an outbound Webhook URL/custom headers for EasyPost events; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "custom_headers": { "type": "array" }
+        }
+      },
+      "risk": "updates Webhook delivery metadata such as custom headers; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "deletes a Webhook subscription, stopping outbound event delivery; destructive external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

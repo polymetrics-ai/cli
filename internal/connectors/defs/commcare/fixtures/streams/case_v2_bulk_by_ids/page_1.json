@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/case/v2/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "matching_records": 1,
+      "missing_records": 0,
+      "cases": [
+        {
+          "case_id": "case_v2_bulk_fixture_1",
+          "external_id": "external_bulk_fixture_1",
+          "properties": { "dob": "2000-01-03" },
+          "indexed_on": "2026-05-04T00:00:00.000000Z"
+        }
+      ]
+    }
+  }
+}

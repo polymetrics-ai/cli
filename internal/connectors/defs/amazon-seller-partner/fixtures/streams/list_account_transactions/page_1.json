@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/wallet/2024-03-01/transactions",
+    "query": {
+      "accountId": "synthetic-conformance-value",
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactions": [
+        {
+          "accountId": "accountId-fixture-1",
+          "transactionId": "transactionId-fixture-1",
+          "transactionType": "transactionType-fixture-1",
+          "transactionStatus": "transactionStatus-fixture-1",
+          "transactionRequestDate": "transactionRequestDate-fixture-1",
+          "expectedCompletionDate": "expectedCompletionDate-fixture-1",
+          "transactionActualCompletionDate": "transactionActualCompletionDate-fixture-1",
+          "lastUpdateDate": "lastUpdateDate-fixture-1",
+          "requesterName": "requesterName-fixture-1",
+          "transactionRequesterSource": "transactionRequesterSource-fixture-1",
+          "transactionDescription": "transactionDescription-fixture-1",
+          "transactionSourceAccount": {},
+          "transactionDestinationAccount": {},
+          "transactionRequestAmount": {},
+          "transferRateDetails": {},
+          "transactionFinalAmount": {},
+          "transactionFailureReason": "transactionFailureReason-fixture-1"
+        }
+      ]
+    }
+  }
+}

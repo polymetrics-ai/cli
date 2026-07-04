@@ -1,0 +1,10 @@
+{
+  "data": [
+    {
+      "UserId": "fixture",
+      "FirstName": "fixture",
+      "LastName": "fixture",
+      "Timezone": "fixture"
+    }
+  ]
+}

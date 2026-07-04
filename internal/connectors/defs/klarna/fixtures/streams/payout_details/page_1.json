@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settlements/v1/payouts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payment_reference": "synthetic-conformance-value",
+      "payout_date": "2026-01-02T00:00:00Z",
+      "currency_code": "EUR",
+      "currency_code_of_registration_country": "EUR",
+      "merchant_settlement_type": "NET",
+      "merchant_id": "merchant_fixture_1",
+      "transactions": "https://api.klarna.example/settlements/v1/transactions?payment_reference=synthetic-conformance-value",
+      "totals": {
+        "settlement_amount": 1000,
+        "sale_amount": 1200,
+        "return_amount": 0,
+        "fee_amount": 200
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "hook_fixture_1",
+    "custom_headers": [
+      { "name": "X-Fixture-Header", "value": "fixture-updated" }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/webhooks/hook_fixture_1",
+    "body": {
+      "custom_headers": [
+        { "name": "X-Fixture-Header", "value": "fixture-updated" }
+      ]
+    }
+  },
+  "response": { "status": 200, "body": { "id": "hook_fixture_1", "object": "Webhook" } }
+}

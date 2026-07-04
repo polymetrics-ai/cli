@@ -1,0 +1,24 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "instructions": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/agent-instructions",
+    "body": {
+      "instructions": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_organization_agent_instructions_fixture_1"
+    }
+  }
+}

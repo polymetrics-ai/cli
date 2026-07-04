@@ -1,0 +1,29 @@
+{
+  "record": {
+    "address": {
+      "street1": "100 Fixture St",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94105",
+      "country": "US",
+      "company": "Fixture Shipping",
+      "phone": "+15550100"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/addresses",
+    "body": {
+      "address": {
+        "street1": "100 Fixture St",
+        "city": "San Francisco",
+        "state": "CA",
+        "zip": "94105",
+        "country": "US",
+        "company": "Fixture Shipping",
+        "phone": "+15550100"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "adr_fixture_new", "object": "Address" } }
+}

@@ -1,34 +1,37 @@
 {
   "request": {
     "method": "GET",
-    "path": "/companies"
+    "path": "/network/companies"
   },
   "response": {
     "status": 200,
     "body": {
-      "_object": "list",
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/network/companies",
+      "version": 2,
       "data": {
-        "_object": "list",
+        "_object": "/api/collections/paginated",
         "prev": null,
         "next": null,
         "data": [
           {
-            "id": "fixture-company-1",
-            "_object": "company",
-            "name": "Fixture Company One",
-            "legal_name": "Fixture Company One LLC",
-            "dba_name": "Fixture One",
-            "created_at": "2026-01-01T00:00:00Z",
-            "updated_at": "2026-01-02T00:00:00Z"
-          },
-          {
-            "id": "fixture-company-2",
-            "_object": "company",
-            "name": "Fixture Company Two",
-            "legal_name": "Fixture Company Two LLC",
-            "dba_name": "Fixture Two",
-            "created_at": "2026-01-01T00:00:00Z",
-            "updated_at": "2026-01-03T00:00:00Z"
+            "_object": "/network/company",
+            "id": "company_fixture_1",
+            "name": "Fixture Trading Co",
+            "ref": "fixture-company",
+            "editable": true,
+            "metadata": { "region": ["west"] },
+            "entities": [],
+            "locations": {
+              "_object": "/api/refs/collection",
+              "ref_type": "/network/location",
+              "link": "https://api.flexport.com/network/locations?f.company_ref=fixture-company"
+            },
+            "contacts": {
+              "_object": "/api/refs/collection",
+              "ref_type": "/network/contact",
+              "link": "https://api.flexport.com/network/contacts?f.company_ref=fixture-company"
+            }
           }
         ]
       }

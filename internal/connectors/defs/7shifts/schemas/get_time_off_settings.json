@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "integer"
+    },
+    "time_off_request_comment": {
+      "type": "boolean"
+    },
+    "time_off_request_notice": {
+      "type": "number"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "require_hours": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "company_id",
+    "time_off_request_comment",
+    "time_off_request_notice",
+    "categories"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_time_off_settings",
+  "x-primary-key": [
+    "company_id"
+  ]
+}

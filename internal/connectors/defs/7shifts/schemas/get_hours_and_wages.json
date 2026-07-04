@@ -1,0 +1,791 @@
+{
+  "type": "object",
+  "properties": {
+    "users": {
+      "type": "array",
+      "description": "Report data for each employee",
+      "items": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "Employee info",
+            "properties": {
+              "id": {
+                "type": "number",
+                "description": "User ID"
+              },
+              "employee_id": {
+                "type": "string",
+                "description": "Employee payroll ID"
+              },
+              "first_name": {
+                "type": "string",
+                "description": "First name"
+              },
+              "last_name": {
+                "type": "string",
+                "description": "Last name"
+              }
+            }
+          },
+          "weeks": {
+            "type": "array",
+            "description": "Report data for each work week",
+            "items": {
+              "type": "object",
+              "properties": {
+                "week": {
+                  "type": "string",
+                  "description": "Work week (first day of week)"
+                },
+                "salaried": {
+                  "type": "boolean",
+                  "description": "Whether employee is salaried during the entire week"
+                },
+                "shifts": {
+                  "type": "array",
+                  "description": "Report data for each shift or time punch",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "user_id": {
+                        "type": "number",
+                        "description": "User ID"
+                      },
+                      "date": {
+                        "type": "string",
+                        "description": "Date and time the shift or time punch started on"
+                      },
+                      "week_label": {
+                        "type": "string",
+                        "description": "Work week the shift or time punch occurred in"
+                      },
+                      "day_label": {
+                        "type": "string",
+                        "description": "Formatted day the shift or time punch started on"
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "Start and end times of shift or time punch"
+                      },
+                      "breaks": {
+                        "type": "array",
+                        "description": "Breaks",
+                        "items": {
+                          "type": "string",
+                          "description": "Description of break"
+                        }
+                      },
+                      "location_id": {
+                        "type": "number",
+                        "description": "Location ID"
+                      },
+                      "location_label": {
+                        "type": "string",
+                        "description": "Location name"
+                      },
+                      "role_id": {
+                        "type": "number",
+                        "description": "Role ID"
+                      },
+                      "role_label": {
+                        "type": "string",
+                        "description": "Role name"
+                      },
+                      "wage": {
+                        "type": "number",
+                        "description": "Hourly wage"
+                      },
+                      "status": {
+                        "type": "number",
+                        "description": "Shift flag (late, no-show, sick)"
+                      },
+                      "salaried": {
+                        "type": "boolean",
+                        "description": "Whether the employee was salaried during this shift"
+                      },
+                      "compliance_exceptions": {
+                        "type": "array",
+                        "description": "Compliance exceptions for the shift",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string",
+                              "description": "Exception date"
+                            },
+                            "violation_type": {
+                              "type": "string",
+                              "description": "Violation type of this exception"
+                            },
+                            "cost": {
+                              "type": "number",
+                              "description": "The cost of this exception (in dollars)"
+                            }
+                          }
+                        }
+                      },
+                      "total": {
+                        "type": "object",
+                        "description": "Hours and pay info for a shift or group of shifts",
+                        "properties": {
+                          "regular_hours": {
+                            "type": "number",
+                            "description": "Regular hours"
+                          },
+                          "regular_pay": {
+                            "type": "number",
+                            "description": "Regular pay"
+                          },
+                          "overtime_hours": {
+                            "type": "number",
+                            "description": "Overtime hours"
+                          },
+                          "premium_overtime_hours": {
+                            "type": "number",
+                            "description": "Premium / Double overtime hours"
+                          },
+                          "non_premium_overtime_hours": {
+                            "type": "number",
+                            "description": "Daily + Weekly + Consecutive overtime hours"
+                          },
+                          "overtime_pay": {
+                            "type": "number",
+                            "description": "Overtime pay"
+                          },
+                          "premium_overtime_pay": {
+                            "type": "number",
+                            "description": "Premium / Double overtime pay"
+                          },
+                          "non_premium_overtime_pay": {
+                            "type": "number",
+                            "description": "Daily + Weekly + Consecutive overtime pay"
+                          },
+                          "holiday_hours": {
+                            "type": "number",
+                            "description": "Holiday hours"
+                          },
+                          "holiday_pay": {
+                            "type": "number",
+                            "description": "Holiday pay"
+                          },
+                          "compliance_exceptions_pay": {
+                            "type": "number",
+                            "description": "Compliance exceptions pay"
+                          },
+                          "total_hours": {
+                            "type": "number",
+                            "description": "Total hours"
+                          },
+                          "total_pay": {
+                            "type": "number",
+                            "description": "Total pay"
+                          },
+                          "total_tips": {
+                            "type": "number",
+                            "description": "Tips declared by employee through 7punches"
+                          },
+                          "cash_tips": {
+                            "type": "number",
+                            "description": "Cash tips"
+                          },
+                          "credit_card_tips": {
+                            "type": "number",
+                            "description": "Credit card tips"
+                          },
+                          "total_payment_tips": {
+                            "type": "number",
+                            "description": "DEPRECATED - same value as credit_card_tips"
+                          },
+                          "declared_tips": {
+                            "type": "number",
+                            "description": "Declared tips either from 7punches or POS"
+                          },
+                          "pos_declared_tips": {
+                            "type": "number",
+                            "description": "Declared tips from POS"
+                          },
+                          "auto_gratuity": {
+                            "type": "number",
+                            "description": "Autogratuity"
+                          },
+                          "withheld_cc_amount": {
+                            "type": "number",
+                            "description": "Withheld CC amount"
+                          },
+                          "tip_in": {
+                            "type": "number",
+                            "description": "Tip in amount"
+                          },
+                          "tip_out": {
+                            "type": "number",
+                            "description": "Tip out amount"
+                          },
+                          "earned_tips": {
+                            "type": "number",
+                            "description": "Earned Tips"
+                          },
+                          "tips_paid": {
+                            "type": "number",
+                            "description": "Tips that have been paid by employer"
+                          },
+                          "tips_paid_on_shift": {
+                            "type": "number",
+                            "description": "Tips that have been paid on shift"
+                          },
+                          "tips_paid_on_payouts": {
+                            "type": [
+                              "number",
+                              "null"
+                            ],
+                            "description": "Tips that have been paid through tip payouts"
+                          },
+                          "tips_to_be_paid": {
+                            "type": "number",
+                            "description": "Tips owed that have not been paid by employer"
+                          }
+                        },
+                        "required": [
+                          "regular_hours",
+                          "regular_pay",
+                          "overtime_hours",
+                          "overtime_pay",
+                          "holiday_hours",
+                          "holiday_pay",
+                          "compliance_exceptions_pay",
+                          "total_hours",
+                          "total_pay",
+                          "total_tips",
+                          "cash_tips",
+                          "credit_card_tips",
+                          "total_payment_tips",
+                          "declared_tips",
+                          "auto_gratuity",
+                          "withheld_cc_amount",
+                          "tip_in",
+                          "tip_out",
+                          "earned_tips",
+                          "tips_paid",
+                          "tips_paid_on_shift",
+                          "tips_to_be_paid"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "lone_compliance_exceptions": {
+                  "type": "array",
+                  "description": "Compliance exceptions that aren't associated with any shift or time punch",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "roles": {
+            "type": "array",
+            "description": "Hours and pay totals for each role the employee worked",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role_id": {
+                  "type": "number",
+                  "description": "Role ID"
+                },
+                "role_label": {
+                  "type": "string",
+                  "description": "Role name"
+                },
+                "total": {
+                  "type": "object",
+                  "description": "Hours and pay info for a shift or group of shifts",
+                  "properties": {
+                    "regular_hours": {
+                      "type": "number",
+                      "description": "Regular hours"
+                    },
+                    "regular_pay": {
+                      "type": "number",
+                      "description": "Regular pay"
+                    },
+                    "overtime_hours": {
+                      "type": "number",
+                      "description": "Overtime hours"
+                    },
+                    "premium_overtime_hours": {
+                      "type": "number",
+                      "description": "Premium / Double overtime hours"
+                    },
+                    "non_premium_overtime_hours": {
+                      "type": "number",
+                      "description": "Daily + Weekly + Consecutive overtime hours"
+                    },
+                    "overtime_pay": {
+                      "type": "number",
+                      "description": "Overtime pay"
+                    },
+                    "premium_overtime_pay": {
+                      "type": "number",
+                      "description": "Premium / Double overtime pay"
+                    },
+                    "non_premium_overtime_pay": {
+                      "type": "number",
+                      "description": "Daily + Weekly + Consecutive overtime pay"
+                    },
+                    "holiday_hours": {
+                      "type": "number",
+                      "description": "Holiday hours"
+                    },
+                    "holiday_pay": {
+                      "type": "number",
+                      "description": "Holiday pay"
+                    },
+                    "compliance_exceptions_pay": {
+                      "type": "number",
+                      "description": "Compliance exceptions pay"
+                    },
+                    "total_hours": {
+                      "type": "number",
+                      "description": "Total hours"
+                    },
+                    "total_pay": {
+                      "type": "number",
+                      "description": "Total pay"
+                    },
+                    "total_tips": {
+                      "type": "number",
+                      "description": "Tips declared by employee through 7punches"
+                    },
+                    "cash_tips": {
+                      "type": "number",
+                      "description": "Cash tips"
+                    },
+                    "credit_card_tips": {
+                      "type": "number",
+                      "description": "Credit card tips"
+                    },
+                    "total_payment_tips": {
+                      "type": "number",
+                      "description": "DEPRECATED - same value as credit_card_tips"
+                    },
+                    "declared_tips": {
+                      "type": "number",
+                      "description": "Declared tips either from 7punches or POS"
+                    },
+                    "pos_declared_tips": {
+                      "type": "number",
+                      "description": "Declared tips from POS"
+                    },
+                    "auto_gratuity": {
+                      "type": "number",
+                      "description": "Autogratuity"
+                    },
+                    "withheld_cc_amount": {
+                      "type": "number",
+                      "description": "Withheld CC amount"
+                    },
+                    "tip_in": {
+                      "type": "number",
+                      "description": "Tip in amount"
+                    },
+                    "tip_out": {
+                      "type": "number",
+                      "description": "Tip out amount"
+                    },
+                    "earned_tips": {
+                      "type": "number",
+                      "description": "Earned Tips"
+                    },
+                    "tips_paid": {
+                      "type": "number",
+                      "description": "Tips that have been paid by employer"
+                    },
+                    "tips_paid_on_shift": {
+                      "type": "number",
+                      "description": "Tips that have been paid on shift"
+                    },
+                    "tips_paid_on_payouts": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "description": "Tips that have been paid through tip payouts"
+                    },
+                    "tips_to_be_paid": {
+                      "type": "number",
+                      "description": "Tips owed that have not been paid by employer"
+                    }
+                  },
+                  "required": [
+                    "regular_hours",
+                    "regular_pay",
+                    "overtime_hours",
+                    "overtime_pay",
+                    "holiday_hours",
+                    "holiday_pay",
+                    "compliance_exceptions_pay",
+                    "total_hours",
+                    "total_pay",
+                    "total_tips",
+                    "cash_tips",
+                    "credit_card_tips",
+                    "total_payment_tips",
+                    "declared_tips",
+                    "auto_gratuity",
+                    "withheld_cc_amount",
+                    "tip_in",
+                    "tip_out",
+                    "earned_tips",
+                    "tips_paid",
+                    "tips_paid_on_shift",
+                    "tips_to_be_paid"
+                  ]
+                },
+                "location_label": {
+                  "type": "string",
+                  "description": "Location name"
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "object",
+            "description": "Hours and pay info for a shift or group of shifts",
+            "properties": {
+              "regular_hours": {
+                "type": "number",
+                "description": "Regular hours"
+              },
+              "regular_pay": {
+                "type": "number",
+                "description": "Regular pay"
+              },
+              "overtime_hours": {
+                "type": "number",
+                "description": "Overtime hours"
+              },
+              "premium_overtime_hours": {
+                "type": "number",
+                "description": "Premium / Double overtime hours"
+              },
+              "non_premium_overtime_hours": {
+                "type": "number",
+                "description": "Daily + Weekly + Consecutive overtime hours"
+              },
+              "overtime_pay": {
+                "type": "number",
+                "description": "Overtime pay"
+              },
+              "premium_overtime_pay": {
+                "type": "number",
+                "description": "Premium / Double overtime pay"
+              },
+              "non_premium_overtime_pay": {
+                "type": "number",
+                "description": "Daily + Weekly + Consecutive overtime pay"
+              },
+              "holiday_hours": {
+                "type": "number",
+                "description": "Holiday hours"
+              },
+              "holiday_pay": {
+                "type": "number",
+                "description": "Holiday pay"
+              },
+              "compliance_exceptions_pay": {
+                "type": "number",
+                "description": "Compliance exceptions pay"
+              },
+              "total_hours": {
+                "type": "number",
+                "description": "Total hours"
+              },
+              "total_pay": {
+                "type": "number",
+                "description": "Total pay"
+              },
+              "total_tips": {
+                "type": "number",
+                "description": "Tips declared by employee through 7punches"
+              },
+              "cash_tips": {
+                "type": "number",
+                "description": "Cash tips"
+              },
+              "credit_card_tips": {
+                "type": "number",
+                "description": "Credit card tips"
+              },
+              "total_payment_tips": {
+                "type": "number",
+                "description": "DEPRECATED - same value as credit_card_tips"
+              },
+              "declared_tips": {
+                "type": "number",
+                "description": "Declared tips either from 7punches or POS"
+              },
+              "pos_declared_tips": {
+                "type": "number",
+                "description": "Declared tips from POS"
+              },
+              "auto_gratuity": {
+                "type": "number",
+                "description": "Autogratuity"
+              },
+              "withheld_cc_amount": {
+                "type": "number",
+                "description": "Withheld CC amount"
+              },
+              "tip_in": {
+                "type": "number",
+                "description": "Tip in amount"
+              },
+              "tip_out": {
+                "type": "number",
+                "description": "Tip out amount"
+              },
+              "earned_tips": {
+                "type": "number",
+                "description": "Earned Tips"
+              },
+              "tips_paid": {
+                "type": "number",
+                "description": "Tips that have been paid by employer"
+              },
+              "tips_paid_on_shift": {
+                "type": "number",
+                "description": "Tips that have been paid on shift"
+              },
+              "tips_paid_on_payouts": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Tips that have been paid through tip payouts"
+              },
+              "tips_to_be_paid": {
+                "type": "number",
+                "description": "Tips owed that have not been paid by employer"
+              }
+            },
+            "required": [
+              "regular_hours",
+              "regular_pay",
+              "overtime_hours",
+              "overtime_pay",
+              "holiday_hours",
+              "holiday_pay",
+              "compliance_exceptions_pay",
+              "total_hours",
+              "total_pay",
+              "total_tips",
+              "cash_tips",
+              "credit_card_tips",
+              "total_payment_tips",
+              "declared_tips",
+              "auto_gratuity",
+              "withheld_cc_amount",
+              "tip_in",
+              "tip_out",
+              "earned_tips",
+              "tips_paid",
+              "tips_paid_on_shift",
+              "tips_to_be_paid"
+            ]
+          },
+          "salaried": {
+            "type": "boolean",
+            "description": "Whether employee is salaried during the entire date range of the report"
+          }
+        }
+      }
+    },
+    "show_exception_costs": {
+      "type": "boolean",
+      "description": "Whether compliance exceptions and their costs should be shown"
+    },
+    "tip_tracking_enabled": {
+      "type": "boolean",
+      "description": "Whether tips from integrations should be shown"
+    },
+    "show_tips": {
+      "type": "boolean",
+      "description": "Whether we should render the tips column"
+    },
+    "total": {
+      "type": "object",
+      "description": "Hours and pay info for a shift or group of shifts",
+      "properties": {
+        "regular_hours": {
+          "type": "number",
+          "description": "Regular hours"
+        },
+        "regular_pay": {
+          "type": "number",
+          "description": "Regular pay"
+        },
+        "overtime_hours": {
+          "type": "number",
+          "description": "Overtime hours"
+        },
+        "premium_overtime_hours": {
+          "type": "number",
+          "description": "Premium / Double overtime hours"
+        },
+        "non_premium_overtime_hours": {
+          "type": "number",
+          "description": "Daily + Weekly + Consecutive overtime hours"
+        },
+        "overtime_pay": {
+          "type": "number",
+          "description": "Overtime pay"
+        },
+        "premium_overtime_pay": {
+          "type": "number",
+          "description": "Premium / Double overtime pay"
+        },
+        "non_premium_overtime_pay": {
+          "type": "number",
+          "description": "Daily + Weekly + Consecutive overtime pay"
+        },
+        "holiday_hours": {
+          "type": "number",
+          "description": "Holiday hours"
+        },
+        "holiday_pay": {
+          "type": "number",
+          "description": "Holiday pay"
+        },
+        "compliance_exceptions_pay": {
+          "type": "number",
+          "description": "Compliance exceptions pay"
+        },
+        "total_hours": {
+          "type": "number",
+          "description": "Total hours"
+        },
+        "total_pay": {
+          "type": "number",
+          "description": "Total pay"
+        },
+        "total_tips": {
+          "type": "number",
+          "description": "Tips declared by employee through 7punches"
+        },
+        "cash_tips": {
+          "type": "number",
+          "description": "Cash tips"
+        },
+        "credit_card_tips": {
+          "type": "number",
+          "description": "Credit card tips"
+        },
+        "total_payment_tips": {
+          "type": "number",
+          "description": "DEPRECATED - same value as credit_card_tips"
+        },
+        "declared_tips": {
+          "type": "number",
+          "description": "Declared tips either from 7punches or POS"
+        },
+        "pos_declared_tips": {
+          "type": "number",
+          "description": "Declared tips from POS"
+        },
+        "auto_gratuity": {
+          "type": "number",
+          "description": "Autogratuity"
+        },
+        "withheld_cc_amount": {
+          "type": "number",
+          "description": "Withheld CC amount"
+        },
+        "tip_in": {
+          "type": "number",
+          "description": "Tip in amount"
+        },
+        "tip_out": {
+          "type": "number",
+          "description": "Tip out amount"
+        },
+        "earned_tips": {
+          "type": "number",
+          "description": "Earned Tips"
+        },
+        "tips_paid": {
+          "type": "number",
+          "description": "Tips that have been paid by employer"
+        },
+        "tips_paid_on_shift": {
+          "type": "number",
+          "description": "Tips that have been paid on shift"
+        },
+        "tips_paid_on_payouts": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Tips that have been paid through tip payouts"
+        },
+        "tips_to_be_paid": {
+          "type": "number",
+          "description": "Tips owed that have not been paid by employer"
+        }
+      },
+      "required": [
+        "regular_hours",
+        "regular_pay",
+        "overtime_hours",
+        "overtime_pay",
+        "holiday_hours",
+        "holiday_pay",
+        "compliance_exceptions_pay",
+        "total_hours",
+        "total_pay",
+        "total_tips",
+        "cash_tips",
+        "credit_card_tips",
+        "total_payment_tips",
+        "declared_tips",
+        "auto_gratuity",
+        "withheld_cc_amount",
+        "tip_in",
+        "tip_out",
+        "earned_tips",
+        "tips_paid",
+        "tips_paid_on_shift",
+        "tips_to_be_paid"
+      ]
+    },
+    "start": {
+      "type": "string",
+      "description": "Start date of report date range",
+      "format": "date"
+    },
+    "end": {
+      "type": "string",
+      "description": "End date of report date range",
+      "format": "date"
+    },
+    "stream_key": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "stream_key",
+    "users",
+    "show_exception_costs",
+    "tip_tracking_enabled",
+    "show_tips",
+    "total",
+    "start",
+    "end"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_hours_and_wages",
+  "x-primary-key": [
+    "stream_key"
+  ]
+}

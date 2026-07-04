@@ -1,0 +1,20 @@
+{
+  "record": {
+    "task_id": 1001,
+    "list_id": 1001,
+    "user_id": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/task_lists/1001/tasks/1001/clear",
+    "body": {
+      "user_id": 1001
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

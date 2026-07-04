@@ -1,0 +1,21 @@
+{
+  "record": {
+    "employee_id": "emp_fixture_1",
+    "leave_category_id": "leave_category_fixture_1",
+    "start_date": "2026-01-01",
+    "end_date": "2026-01-02"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/leave_requests",
+    "body": {
+      "leave_category_id": "leave_category_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_leave_request_fixture_response"
+    }
+  }
+}

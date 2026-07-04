@@ -1,0 +1,35 @@
+{
+  "record": {
+    "file_name": "fixture-commercial-invoice.pdf",
+    "mime_type": "application/pdf",
+    "document_type": "commercial_invoice",
+    "memo": "Sanitized fixture document",
+    "document": "SGVsbG8sIFdvcmxkIQ==",
+    "user_email": "fixture.user@example.com",
+    "shipment_id": 2983
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/documents",
+    "body": {
+      "file_name": "fixture-commercial-invoice.pdf",
+      "mime_type": "application/pdf",
+      "document_type": "commercial_invoice",
+      "memo": "Sanitized fixture document",
+      "document": "SGVsbG8sIFdvcmxkIQ==",
+      "user_email": "fixture.user@example.com",
+      "shipment_id": 2983
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/document",
+        "id": "document_fixture_1",
+        "file_name": "fixture-commercial-invoice.pdf"
+      }
+    }
+  }
+}

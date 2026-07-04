@@ -1,0 +1,22 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "installation_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "external_ids": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/integrations/synthetic-conformance-value/installations/synthetic-conformance-value/sites/synthetic-conformance-value",
+    "body": {
+      "external_ids": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_integration_site_installation_fixture_1"
+    }
+  }
+}

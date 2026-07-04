@@ -1,0 +1,36 @@
+{
+  "record": {
+    "data": [
+      {
+        "external_user_id": "fixture-id",
+        "user_id": 1001,
+        "first_name": "fixture first name",
+        "last_name": "fixture last name",
+        "email": "fixture@example.com",
+        "phone_number": "fixture phone number"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/external_user_mappings_bulk",
+    "body": {
+      "data": [
+        {
+          "external_user_id": "fixture-id",
+          "user_id": 1001,
+          "first_name": "fixture first name",
+          "last_name": "fixture last name",
+          "email": "fixture@example.com",
+          "phone_number": "fixture phone number"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

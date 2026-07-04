@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/group/v1/synthetic-conformance-value/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "case_sharing": true,
+      "domain": "synthetic-conformance-value",
+      "id": "group_detail_fixture_1",
+      "metadata": {},
+      "name": "Fixture detail group",
+      "path": [],
+      "reporting": true,
+      "users": []
+    }
+  }
+}

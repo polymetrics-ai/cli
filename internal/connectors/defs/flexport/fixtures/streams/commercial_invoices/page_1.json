@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/commercial_invoices"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/commercial_invoices",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/commercial_invoice",
+            "id": "commercial_invoice_fixture_1",
+            "invoice_number": "CI-FIXTURE-1",
+            "digitization_status": "complete",
+            "line_items": [],
+            "involved_parties": [],
+            "is_related_parties": false,
+            "manufacturer_addresses": [],
+            "metadata": { "PO": ["PO-FIXTURE-1"] },
+            "total_unit_count": "10.0",
+            "total_value": { "amount": "2500.00", "currency_code": "USD" },
+            "currency": "USD",
+            "invoice_date": "2026-01-10",
+            "updated_at": "2026-01-11T12:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

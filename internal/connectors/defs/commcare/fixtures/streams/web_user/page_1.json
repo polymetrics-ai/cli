@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/web-user/v1/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "default_phone_number": null,
+      "email": "web-detail@example.test",
+      "first_name": "Web",
+      "id": "web_user_detail_fixture_1",
+      "is_admin": false,
+      "last_name": "Detail",
+      "permissions": { "doc_type": "Permissions", "edit_apps": false },
+      "phone_numbers": [],
+      "resource_uri": "",
+      "role": "Read Only",
+      "username": "web-detail@example.test"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "title": "Fixture playbook",
+    "body": "Use the fixture playbook body"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/organizations/synthetic-conformance-value/playbooks",
+    "body": {
+      "title": "Fixture playbook",
+      "body": "Use the fixture playbook body"
+    }
+  }
+}

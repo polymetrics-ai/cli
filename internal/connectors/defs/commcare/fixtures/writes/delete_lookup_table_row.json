@@ -1,0 +1,9 @@
+{
+  "record": {
+    "lookup_table_item_id": "lookup_table_row_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/a/synthetic-conformance-value/api/lookup_table_item/v1/lookup_table_row_fixture_1"
+  }
+}

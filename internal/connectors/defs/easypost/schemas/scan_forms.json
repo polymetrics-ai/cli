@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scan_forms",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "tracking_codes": { "type": ["array", "null"] },
+    "address": { "type": ["object", "null"] },
+    "status": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] },
+    "form_url": { "type": ["string", "null"] },
+    "form_file_type": { "type": ["string", "null"] },
+    "batch_id": { "type": ["string", "null"] },
+    "confirmation": { "type": ["string", "null"] }
+  }
+}

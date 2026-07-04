@@ -1,0 +1,15 @@
+{
+  "record": {
+    "employee_id": "emp_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_employee_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/task_management_settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "company_id": 1001,
+        "enabled": true,
+        "prompted_auto_assign_ids": true,
+        "has_created_list": true,
+        "can_use_task_management": true,
+        "employee_login": true,
+        "employee_reminder": true,
+        "overdue_alert": true
+      }
+    }
+  }
+}

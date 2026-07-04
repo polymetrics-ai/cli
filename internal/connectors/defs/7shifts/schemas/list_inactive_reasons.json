@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "string"
+    },
+    "stream_key": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_inactive_reasons",
+  "x-primary-key": [
+    "stream_key"
+  ],
+  "required": [
+    "stream_key"
+  ]
+}

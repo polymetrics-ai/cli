@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "description": "Department ID"
+    },
+    "company_id": {
+      "type": "number",
+      "description": "Company ID"
+    },
+    "location_id": {
+      "type": "number",
+      "description": "Location ID"
+    },
+    "name": {
+      "type": "string",
+      "description": "Department name"
+    },
+    "default": {
+      "type": "boolean",
+      "description": "If true department is set as the default for the location"
+    },
+    "deleted": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "If true the location is deleted"
+    },
+    "created": {
+      "type": "string"
+    },
+    "modified": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "location_id",
+    "name",
+    "default",
+    "deleted",
+    "created",
+    "modified"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_department",
+  "x-primary-key": [
+    "id"
+  ]
+}

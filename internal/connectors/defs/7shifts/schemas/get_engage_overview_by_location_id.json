@@ -1,0 +1,556 @@
+{
+  "type": "object",
+  "properties": {
+    "location_stats": {
+      "type": "object",
+      "properties": {
+        "lates": {
+          "type": "object",
+          "properties": {
+            "current": {
+              "type": "integer"
+            },
+            "previous": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "current",
+            "previous"
+          ]
+        },
+        "no_shows": {
+          "type": "object",
+          "properties": {
+            "current": {
+              "type": "integer"
+            },
+            "previous": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "current",
+            "previous"
+          ]
+        },
+        "sick_shifts": {
+          "type": "object",
+          "properties": {
+            "current": {
+              "type": "integer"
+            },
+            "previous": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "current",
+            "previous"
+          ]
+        },
+        "shift_bids": {
+          "type": "object",
+          "properties": {
+            "current": {
+              "type": "integer"
+            },
+            "previous": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "current",
+            "previous"
+          ]
+        },
+        "shift_drops": {
+          "type": "object",
+          "properties": {
+            "current": {
+              "type": "integer"
+            },
+            "previous": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "current",
+            "previous"
+          ]
+        }
+      },
+      "required": [
+        "lates",
+        "no_shows",
+        "sick_shifts",
+        "shift_bids",
+        "shift_drops"
+      ]
+    },
+    "employee_stats": {
+      "type": "object",
+      "properties": {
+        "most_reliable": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "photo_url": {
+              "type": "string"
+            },
+            "primary_role": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "first_name",
+            "last_name",
+            "photo_url",
+            "primary_role"
+          ]
+        },
+        "most_eager": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "photo_url": {
+              "type": "string"
+            },
+            "primary_role": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "first_name",
+            "last_name",
+            "photo_url",
+            "primary_role"
+          ]
+        },
+        "most_sick": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "photo_url": {
+              "type": "string"
+            },
+            "primary_role": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "first_name",
+            "last_name",
+            "photo_url",
+            "primary_role"
+          ]
+        },
+        "most_late": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "photo_url": {
+              "type": "string"
+            },
+            "primary_role": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "first_name",
+            "last_name",
+            "photo_url",
+            "primary_role"
+          ]
+        },
+        "most_drops": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "photo_url": {
+              "type": "string"
+            },
+            "primary_role": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "first_name",
+            "last_name",
+            "photo_url",
+            "primary_role"
+          ]
+        }
+      },
+      "required": [
+        "most_reliable",
+        "most_eager",
+        "most_sick",
+        "most_late",
+        "most_drops"
+      ]
+    },
+    "engagement_scores": {
+      "type": "object",
+      "properties": {
+        "most_engaged": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "photo_url": {
+                    "type": "string"
+                  },
+                  "primary_role": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "first_name",
+                  "last_name",
+                  "photo_url",
+                  "primary_role"
+                ]
+              },
+              "current_score": {
+                "type": "integer"
+              },
+              "metrics": {
+                "type": "object",
+                "properties": {
+                  "shift_bids": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "dropped_shifts": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "no_shows": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "lates": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "total_shifts": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "shift_bids",
+                  "dropped_shifts",
+                  "no_shows",
+                  "lates",
+                  "total_shifts"
+                ]
+              }
+            },
+            "required": [
+              "user",
+              "current_score",
+              "metrics"
+            ]
+          }
+        },
+        "least_engaged": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "photo_url": {
+                    "type": "string"
+                  },
+                  "primary_role": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "first_name",
+                  "last_name",
+                  "photo_url",
+                  "primary_role"
+                ]
+              },
+              "current_score": {
+                "type": "integer"
+              },
+              "metrics": {
+                "type": "object",
+                "properties": {
+                  "shift_bids": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "dropped_shifts": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "no_shows": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "lates": {
+                    "type": "object",
+                    "properties": {
+                      "stat": {
+                        "type": "integer"
+                      },
+                      "ranking": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "stat",
+                      "ranking"
+                    ]
+                  },
+                  "total_shifts": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "shift_bids",
+                  "dropped_shifts",
+                  "no_shows",
+                  "lates",
+                  "total_shifts"
+                ]
+              }
+            },
+            "required": [
+              "user",
+              "current_score",
+              "metrics"
+            ]
+          }
+        }
+      },
+      "required": [
+        "most_engaged",
+        "least_engaged"
+      ]
+    },
+    "shift_feedback": {
+      "type": "object",
+      "properties": {
+        "current": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "previous": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "current",
+        "previous"
+      ]
+    },
+    "tenure": {
+      "type": "object",
+      "properties": {
+        "average_tenure": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "average_tenure"
+      ]
+    },
+    "stream_key": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "stream_key",
+    "location_stats",
+    "employee_stats",
+    "engagement_scores",
+    "shift_feedback",
+    "tenure"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_engage_overview_by_location_id",
+  "x-primary-key": [
+    "stream_key"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "id": "order_fixture_1", "carrier": "USPS", "service": "Priority" },
+  "expect": {
+    "method": "POST",
+    "path": "/orders/order_fixture_1/buy",
+    "body": { "carrier": "USPS", "service": "Priority" }
+  },
+  "response": { "status": 200, "body": { "id": "order_fixture_1", "object": "Order" } }
+}

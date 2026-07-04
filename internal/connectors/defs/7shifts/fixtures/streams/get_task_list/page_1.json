@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/task_lists/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "task_list_template_uuid": "00000000-0000-4000-8000-000000000001",
+        "title": "fixture title",
+        "description": "fixture description",
+        "start": "2026-01-01T00:00:00Z",
+        "due": "2026-01-01T00:00:00Z",
+        "due_date": {
+          "start": "2026-01-01T00:00:00Z",
+          "end": "2026-01-01T00:00:00Z"
+        },
+        "tasks": [
+          {
+            "id": 1001,
+            "title": "fixture title",
+            "user_id": 1001,
+            "completed_at": "2026-01-01T00:00:00Z",
+            "task_template_uuid": "00000000-0000-4000-8000-000000000001",
+            "description": "fixture description",
+            "tags": [
+              {
+                "uuid": "00000000-0000-4000-8000-000000000001",
+                "user_id": 1001,
+                "task_id": 1001
+              }
+            ],
+            "task_completion": {
+              "type": "NUMBER",
+              "primitive_type": "INTEGER",
+              "unit": "C"
+            },
+            "task_completion_event": {
+              "user_id": 1001,
+              "completed_at": "2026-01-01T00:00:00Z",
+              "completion_value": "fixture completion value"
+            }
+          }
+        ],
+        "assignments": [
+          {
+            "company_id": 1001,
+            "location_id": 1001,
+            "department_id": 1001,
+            "role_id": 1001,
+            "user_id": 1001
+          }
+        ],
+        "recurrence": {
+          "interval": "fixture interval",
+          "rrule": "fixture rrule"
+        },
+        "time_frame": {
+          "start": "12:00:00",
+          "end": "12:00:00",
+          "start_time": "2026-01-01T00:00:00Z",
+          "end_time": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

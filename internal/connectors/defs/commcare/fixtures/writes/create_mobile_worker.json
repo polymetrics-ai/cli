@@ -1,0 +1,27 @@
+{
+  "record": {
+    "username": "new-worker",
+    "email": "new-worker@example.test",
+    "first_name": "New",
+    "last_name": "Worker",
+    "language": "en",
+    "phone_numbers": ["+15550110"],
+    "groups": ["group_fixture_1"],
+    "user_data": { "chw_id": "fixture_chw_new" },
+    "require_account_confirmation": true,
+    "send_confirmation_email_now": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/api/user/v1/",
+    "body": {
+      "username": "new-worker",
+      "email": "new-worker@example.test",
+      "require_account_confirmation": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "user_id": "mobile_worker_created_fixture_1" }
+  }
+}

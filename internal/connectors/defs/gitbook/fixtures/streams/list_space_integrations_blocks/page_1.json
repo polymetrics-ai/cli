@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/integration-blocks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "list_space_integrations_blocks_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture list_space_integrations_blocks",
+      "name": "Fixture list_space_integrations_blocks",
+      "status": "active",
+      "operation_id": "listSpaceIntegrationsBlocks"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_placement_options",
+  "type": "object",
+  "properties": {
+    "discounts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "expiration": {
+      "type": "string"
+    },
+    "fees": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "placementOptionId": {
+      "type": "string"
+    },
+    "shipmentIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "inbound_plan_id"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "record": {
+    "end_shipper": {
+      "address": {
+        "name": "Fixture Sender",
+        "company": "Fixture Shipping",
+        "street1": "164 Townsend St",
+        "city": "San Francisco",
+        "state": "CA",
+        "zip": "94107",
+        "country": "US",
+        "phone": "+15550100",
+        "email": "sender@example.com"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/end_shippers",
+    "body": {
+      "end_shipper": {
+        "address": {
+          "name": "Fixture Sender",
+          "company": "Fixture Shipping",
+          "street1": "164 Townsend St",
+          "city": "San Francisco",
+          "state": "CA",
+          "zip": "94107",
+          "country": "US",
+          "phone": "+15550100",
+          "email": "sender@example.com"
+        }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "es_fixture_new", "object": "EndShipper" } }
+}

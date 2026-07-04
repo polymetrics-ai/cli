@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payout_details",
+  "type": "object",
+  "x-primary-key": ["payment_reference"],
+  "required": ["payment_reference"],
+  "properties": {
+    "payment_reference": { "type": "string" },
+    "payout_date": { "type": ["string", "null"], "format": "date-time" },
+    "currency_code": { "type": ["string", "null"] },
+    "currency_code_of_registration_country": { "type": ["string", "null"] },
+    "merchant_settlement_type": { "type": ["string", "null"] },
+    "merchant_id": { "type": ["string", "null"] },
+    "transactions": { "type": ["string", "null"] },
+    "totals": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tax/invoices/2024-06-19/invoices",
+    "query": {
+      "pageSize": "synthetic-conformance-value",
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "invoices": [
+        {
+          "date": "date-fixture-1",
+          "errorCode": "errorCode-fixture-1",
+          "externalInvoiceId": "externalInvoiceId-fixture-1",
+          "govResponse": "govResponse-fixture-1",
+          "id": "id-fixture-1",
+          "invoiceType": "invoiceType-fixture-1",
+          "series": "series-fixture-1",
+          "status": "status-fixture-1",
+          "transactionIds": [],
+          "transactionType": "transactionType-fixture-1"
+        }
+      ]
+    }
+  }
+}

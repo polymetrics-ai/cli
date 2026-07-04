@@ -29,6 +29,22 @@
       "default": "0",
       "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
     },
+    "summary_start_date": {
+      "type": "string",
+      "description": "Required when reading payout_summaries. ISO 8601 start date/time for Klarna's /payouts/summary endpoint."
+    },
+    "summary_end_date": {
+      "type": "string",
+      "description": "Required when reading payout_summaries. ISO 8601 end date/time for Klarna's /payouts/summary endpoint."
+    },
+    "summary_currency_code": {
+      "type": "string",
+      "description": "Optional currency_code filter for Klarna's /payouts/summary endpoint."
+    },
+    "payment_references": {
+      "type": "string",
+      "description": "Comma-separated Klarna payment_reference values to read through the payout_details stream."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

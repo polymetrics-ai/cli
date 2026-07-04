@@ -1,0 +1,20 @@
+{
+  "record": {
+    "workspaceId": "wrk_fixture_1",
+    "name": "Fixture Survey",
+    "type": "link",
+    "status": "draft",
+    "displayOption": "displayOnce",
+    "questions": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/management/surveys",
+    "body": {
+      "workspaceId": "wrk_fixture_1",
+      "name": "Fixture Survey",
+      "type": "link",
+      "status": "draft"
+    }
+  }
+}

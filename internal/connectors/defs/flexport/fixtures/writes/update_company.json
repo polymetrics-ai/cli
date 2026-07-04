@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "company_fixture_1",
+    "name": "Fixture Trading Co Updated",
+    "ref": "fixture-company-updated"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/network/companies/company_fixture_1",
+    "body": {
+      "name": "Fixture Trading Co Updated",
+      "ref": "fixture-company-updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/network/company",
+        "id": "company_fixture_1"
+      }
+    }
+  }
+}

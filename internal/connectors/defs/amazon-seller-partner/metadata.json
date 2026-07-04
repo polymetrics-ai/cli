@@ -1,26 +1,29 @@
 {
   "name": "amazon-seller-partner",
   "display_name": "Amazon Seller Partner",
-  "description": "Reads Amazon Selling Partner API orders, FBA inventory summaries, and financial event groups via Login with Amazon (LWA) authentication.",
+  "description": "Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.",
   "integration_type": "api",
   "docs_url": "https://developer-docs.amazon.com/sp-api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Amazon Selling Partner API read of order, inventory, and financial data"
+    "read": "external Amazon Selling Partner API read of order, inventory, and financial data",
+    "write": "external Amazon Selling Partner API mutations such as feed/report creation, fulfillment, inventory, order, shipping, notification, and vendor workflow actions",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive/cancel/delete actions are marked destructive"
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/amazon-seller-partner (the AuthHook's real LWA refresh_token-grant path, x-amz-access-token header, and full read/pagination/incremental behavior against a real test SP-API server) -- conformance's synthetic config has no real lwa_token_url and cannot exercise mode:custom auth at all (the hook would POST to the literal string \"synthetic-conformance-value\"), so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/amazon-seller-partner for LWA refresh_token-grant auth and legacy read parity. Dynamic fixture replay cannot exercise custom LWA auth or write auth because the synthetic token URL is not a real LWA endpoint, so conformance skips auth-dependent read/write replay checks."
   }
 }

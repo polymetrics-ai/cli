@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/metadata/carriers" },
+  "response": {
+    "status": 200,
+    "body": {
+      "carriers": [
+        {
+          "name": "usps",
+          "human_readable": "USPS",
+          "predefined_packages": [
+            {
+              "carrier": "usps",
+              "name": "SmallFlatRateBox",
+              "human_readable": "Small Flat Rate Box",
+              "dimensions": ["8.6875in x 5.4375in x 1.75in"],
+              "max_weight": null
+            }
+          ],
+          "service_levels": [
+            { "name": "Priority", "human_readable": "Priority Mail" }
+          ]
+        }
+      ]
+    }
+  }
+}

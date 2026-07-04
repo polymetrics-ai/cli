@@ -1,0 +1,25 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "json_schema": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/adaptive-schema",
+    "body": {
+      "json_schema": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_site_adaptive_schema_fixture_1"
+    }
+  }
+}

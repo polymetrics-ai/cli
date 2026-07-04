@@ -1,0 +1,78 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "courses",
+      "method": "GET",
+      "path": "/__legacy_hook/courses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/courses.json",
+      "incremental": {
+        "cursor_field": "updateTime",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "teachers",
+      "method": "GET",
+      "path": "/__legacy_hook/teachers",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/teachers.json"
+    },
+    {
+      "name": "students",
+      "method": "GET",
+      "path": "/__legacy_hook/students",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/students.json"
+    },
+    {
+      "name": "course_work",
+      "method": "GET",
+      "path": "/__legacy_hook/course_work",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/course_work.json",
+      "incremental": {
+        "cursor_field": "updateTime",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "announcements",
+      "method": "GET",
+      "path": "/__legacy_hook/announcements",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/announcements.json",
+      "incremental": {
+        "cursor_field": "updateTime",
+        "client_filtered": true
+      }
+    }
+  ]
+}

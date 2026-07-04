@@ -1,0 +1,15 @@
+{
+  "api": "Google PageSpeed Insights legacy connector hook surface",
+  "docs": "https://developers.google.com/speed/docs/insights/v5/get-started",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy google-pagespeed-insights connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/google-pagespeed-insights, which delegates to internal/connectors/google-pagespeed-insights until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-pagespeed-insights pagespeed_reports read path",
+      "covered_by": {
+        "stream": "pagespeed_reports"
+      }
+    }
+  ]
+}

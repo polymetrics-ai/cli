@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_payment_methods",
+  "type": "object",
+  "properties": {
+    "accountHolderName": {
+      "type": "string"
+    },
+    "paymentMethodId": {
+      "type": "string"
+    },
+    "tail": {
+      "type": "string"
+    },
+    "expiryDate": {
+      "type": "object"
+    },
+    "countryCode": {
+      "type": "string"
+    },
+    "paymentMethodType": {
+      "type": "string"
+    },
+    "assignmentType": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "paymentMethodId"
+  ]
+}

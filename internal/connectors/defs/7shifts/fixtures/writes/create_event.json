@@ -1,0 +1,40 @@
+{
+  "record": {
+    "location_ids": [
+      1001
+    ],
+    "start_date": "2026-01-01",
+    "start_time": "12:00:00",
+    "end_time": "12:00:00",
+    "end_date": "2026-01-01",
+    "title": "fixture title",
+    "is_multi_day": true,
+    "description": "fixture description",
+    "color": "ff0000",
+    "recurrence": "fixture recurrence"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/events",
+    "body": {
+      "location_ids": [
+        1001
+      ],
+      "start_date": "2026-01-01",
+      "start_time": "12:00:00",
+      "end_time": "12:00:00",
+      "end_date": "2026-01-01",
+      "title": "fixture title",
+      "is_multi_day": true,
+      "description": "fixture description",
+      "color": "ff0000",
+      "recurrence": "fixture recurrence"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

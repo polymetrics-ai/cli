@@ -1,0 +1,317 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "User ID"
+    },
+    "identity_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Internal use"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "Company ID"
+    },
+    "first_name": {
+      "type": "string",
+      "description": "First Name"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Last Name"
+    },
+    "preferred_first_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Preferred first name"
+    },
+    "preferred_last_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Preferred last name"
+    },
+    "pronouns": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Pronouns"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email Address"
+    },
+    "mobile_number": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Mobile Number"
+    },
+    "home_number": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Home Number"
+    },
+    "birth_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Birthdate. Format YYYY-MM-DD",
+      "format": "date"
+    },
+    "address": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Address"
+    },
+    "postal_zip": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Zip or postal code"
+    },
+    "city": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "City"
+    },
+    "prov_state": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "State or province"
+    },
+    "invite_status": {
+      "type": "string",
+      "description": "Invitation status to join 7shifts for the first time",
+      "enum": [
+        "accepted",
+        "pending",
+        "required",
+        "missing_contact_info"
+      ]
+    },
+    "active": {
+      "type": "boolean",
+      "description": "If true user is active in allowed to login. If false the user has been deactivated/deleted"
+    },
+    "photo": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Photo url"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "User notes"
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Timezone.  Valid zone info name"
+    },
+    "type": {
+      "type": "string",
+      "description": "User type",
+      "enum": [
+        "employee",
+        "asst_manager",
+        "manager",
+        "employer"
+      ]
+    },
+    "employee_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Employee ID"
+    },
+    "max_weekly_hours": {
+      "type": "string",
+      "description": "Maximum weekly hours user is set to work"
+    },
+    "punch_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Value used during clock in/out in 7shifts applications"
+    },
+    "created": {
+      "type": "string"
+    },
+    "modified": {
+      "type": "string"
+    },
+    "invited": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The date that the user has been sent an invitation to join 7shifts, null if not invited."
+    },
+    "invite_accepted": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The date that the user accepted their 7shifts invitation, null if not accepted."
+    },
+    "is_new": {
+      "type": "boolean",
+      "description": "If true user is new"
+    },
+    "appear_as_employee": {
+      "type": "boolean",
+      "description": "If true user can be assigned shifts. This applies to managers, asst_manager and employers."
+    },
+    "subscribe_to_updates": {
+      "type": "boolean",
+      "description": "If true this user is subscribed to updates from 7shifts. This includes announcing new features for 7shifts"
+    },
+    "language": {
+      "type": "string",
+      "description": "Specified language. In ISO 639-1 format"
+    },
+    "push": {
+      "type": "boolean",
+      "description": "Are mobile push notifications enabled for the user"
+    },
+    "skill_level": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Current assigned skill level"
+    },
+    "hourly_wage": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Users current hourly wage in cents"
+    },
+    "wage_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The type of wage the user will receive"
+    },
+    "sms_me_schedules": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "If the user should receive sms notifications for shifts"
+    },
+    "notify_ot_risk": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Should notifications be sent if the user is at risk of overtime hours"
+    },
+    "permissions_template_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "The ID of the permission template currently assigned to the user."
+    },
+    "reactivation_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Invitation status to re-join 7shifts after initially being deactivated",
+      "enum": [
+        "accepted",
+        "pending",
+        "expired"
+      ]
+    },
+    "meta": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "readonly_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "identity_status": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Indicates whether an identity was created, updated, or lead to an Identity merge from the preceding request",
+          "enum": [
+            "created",
+            "updated",
+            "merging_identities"
+          ]
+        }
+      }
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "first_name",
+    "photo",
+    "active",
+    "last_name",
+    "email",
+    "mobile_number",
+    "home_number",
+    "birth_date",
+    "address",
+    "postal_zip",
+    "city",
+    "prov_state",
+    "invite_status",
+    "notes",
+    "timezone",
+    "type",
+    "punch_id",
+    "employee_id",
+    "max_weekly_hours",
+    "invited",
+    "invite_accepted",
+    "is_new"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_user",
+  "x-primary-key": [
+    "id"
+  ]
+}

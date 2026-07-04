@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_item_review_topics",
+  "type": "object",
+  "properties": {
+    "topic": {
+      "type": "string"
+    },
+    "asinMetrics": {
+      "type": "object"
+    },
+    "parentAsinMetrics": {
+      "type": "object"
+    },
+    "browseNodeMetrics": {
+      "type": "object"
+    },
+    "childAsinMetrics": {
+      "type": "object"
+    },
+    "reviewSnippets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "subtopics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "asin": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

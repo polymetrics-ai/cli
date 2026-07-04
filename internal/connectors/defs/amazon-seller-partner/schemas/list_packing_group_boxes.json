@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_packing_group_boxes",
+  "type": "object",
+  "properties": {
+    "boxId": {
+      "type": "string"
+    },
+    "contentInformationSource": {
+      "type": "string"
+    },
+    "destinationRegion": {
+      "type": "object"
+    },
+    "dimensions": {
+      "type": "object"
+    },
+    "externalContainerIdentifier": {
+      "type": "string"
+    },
+    "externalContainerIdentifierType": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "packageId": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "templateName": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "object"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    },
+    "packing_group_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "packageId"
+  ]
+}

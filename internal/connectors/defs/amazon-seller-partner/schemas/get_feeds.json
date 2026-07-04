@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_feeds",
+  "type": "object",
+  "properties": {
+    "feedId": {
+      "type": "string"
+    },
+    "feedType": {
+      "type": "string"
+    },
+    "marketplaceIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "createdTime": {
+      "type": "string"
+    },
+    "processingStatus": {
+      "type": "string"
+    },
+    "processingStartTime": {
+      "type": "string"
+    },
+    "processingEndTime": {
+      "type": "string"
+    },
+    "resultFeedDocumentId": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "feedId"
+  ]
+}

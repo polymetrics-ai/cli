@@ -1,0 +1,21 @@
+{
+  "record": {
+    "external_id": "external_case_write_fixture_1",
+    "case_type": "patient",
+    "case_name": "Fixture External Patient",
+    "owner_id": "mobile_worker_fixture_1",
+    "properties": { "status": "active" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/case/v2/ext/external_case_write_fixture_1/",
+    "body": {
+      "case_type": "patient",
+      "case_name": "Fixture External Patient"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "xform_id": "xform_fixture_3", "case": { "case_id": "case_external_write_fixture_1" } }
+  }
+}

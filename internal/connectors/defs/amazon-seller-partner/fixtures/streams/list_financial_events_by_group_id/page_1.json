@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/v0/financialEventGroups/synthetic-conformance-value/financialEvents",
+    "query": {
+      "MaxResultsPerPage": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "FinancialEvents": {
+          "ShipmentEventList": [
+            {
+              "AmazonOrderId": "AmazonOrderId-fixture-1",
+              "SellerOrderId": "SellerOrderId-fixture-1",
+              "MarketplaceName": "MarketplaceName-fixture-1",
+              "StoreName": "StoreName-fixture-1",
+              "OrderChargeList": [],
+              "OrderChargeAdjustmentList": [],
+              "ShipmentFeeList": [],
+              "ShipmentFeeAdjustmentList": [],
+              "OrderFeeList": [],
+              "OrderFeeAdjustmentList": [],
+              "DirectPaymentList": [],
+              "PostedDate": "PostedDate-fixture-1",
+              "ShipmentItemList": [],
+              "ShipmentItemAdjustmentList": [],
+              "event_group_id": "event_group_id-fixture-1"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

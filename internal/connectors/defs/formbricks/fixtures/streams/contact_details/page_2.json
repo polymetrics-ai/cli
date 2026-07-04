@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/management/contacts/ctc_fixture_1" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "ctc_fixture_1",
+        "userId": "user_fixture_1",
+        "workspaceId": "wrk_fixture_1",
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    }
+  }
+}

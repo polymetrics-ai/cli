@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversation_rating",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "integer"
+    },
+    "rating_score": {
+      "type": "integer"
+    },
+    "rating_message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

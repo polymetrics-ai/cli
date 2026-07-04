@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_all_fulfillment_orders",
+  "type": "object",
+  "properties": {
+    "sellerFulfillmentOrderId": {
+      "type": "string"
+    },
+    "marketplaceId": {
+      "type": "string"
+    },
+    "displayableOrderId": {
+      "type": "string"
+    },
+    "displayableOrderDate": {
+      "type": "string"
+    },
+    "displayableOrderComment": {
+      "type": "string"
+    },
+    "shippingSpeedCategory": {
+      "type": "string"
+    },
+    "deliveryWindow": {
+      "type": "object"
+    },
+    "destinationAddress": {
+      "type": "object"
+    },
+    "fulfillmentAction": {
+      "type": "string"
+    },
+    "fulfillmentPolicy": {
+      "type": "string"
+    },
+    "codSettings": {
+      "type": "object"
+    },
+    "receivedDate": {
+      "type": "string"
+    },
+    "fulfillmentOrderStatus": {
+      "type": "string"
+    },
+    "statusUpdatedDate": {
+      "type": "string"
+    },
+    "notificationEmails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "featureConstraints": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "sellerFulfillmentOrderId"
+  ]
+}

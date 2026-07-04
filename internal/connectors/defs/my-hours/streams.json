@@ -1,0 +1,70 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "clients",
+      "method": "GET",
+      "path": "/__legacy_hook/clients",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "projects",
+      "method": "GET",
+      "path": "/__legacy_hook/projects",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "users",
+      "method": "GET",
+      "path": "/__legacy_hook/users",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "tags",
+      "method": "GET",
+      "path": "/__legacy_hook/tags",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "time_logs",
+      "method": "GET",
+      "path": "/__legacy_hook/time_logs",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_logs.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "item": {
+      "synthetic": true
+    },
+    "position": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/structure/sort",
+    "body": {
+      "item": {
+        "synthetic": true
+      },
+      "position": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "sort_site_structure_fixture_1"
+    }
+  }
+}

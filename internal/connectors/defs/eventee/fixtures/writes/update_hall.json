@@ -1,0 +1,5 @@
+{
+  "record": { "id": 42, "name": "Updated Fixture Hall" },
+  "expect": { "method": "PATCH", "path": "/hall/42", "body": { "name": "Updated Fixture Hall" } },
+  "response": { "status": 200, "body": { "id": 42, "name": "Updated Fixture Hall" } }
+}

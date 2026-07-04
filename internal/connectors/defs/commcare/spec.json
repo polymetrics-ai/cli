@@ -11,21 +11,77 @@
     },
     "project_space": {
       "type": "string",
-      "description": "CommCare HQ project space slug; substituted into every stream path (a/{{ config.project_space }}/api/v0.5/<resource>/)."
+      "description": "CommCare HQ project space slug; substituted into project-scoped API paths."
     },
     "app_id": {
       "type": "string",
-      "description": "Optional CommCare application id; when set, scopes both streams to this app via the app_id query parameter."
+      "description": "Optional CommCare application id; used by application detail, multimedia status, and as a form/case filter where supported."
+    },
+    "processing_id": {
+      "type": "string",
+      "description": "Application multimedia upload processing id for polling upload status."
+    },
+    "form_id": {
+      "type": "string",
+      "description": "Form submission id for form detail endpoints."
+    },
+    "case_id": {
+      "type": "string",
+      "description": "Case id for case detail, child-index, and case update endpoints."
+    },
+    "case_ids": {
+      "type": "string",
+      "description": "Comma-separated case ids for the Case Data API v2 GET bulk-by-id endpoint."
+    },
+    "external_id": {
+      "type": "string",
+      "description": "External id for Case Data API v2 external-id lookups and upserts."
+    },
+    "mobile_worker_id": {
+      "type": "string",
+      "description": "Mobile worker id for user detail and mutation endpoints."
+    },
+    "web_user_id": {
+      "type": "string",
+      "description": "Web user id for web-user detail and mutation endpoints."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Group id for group detail and mutation endpoints."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Report id for the configurable report data endpoint."
+    },
+    "location_id": {
+      "type": "string",
+      "description": "Location id for Location API v1/v2 detail and update endpoints."
+    },
+    "location_type_id": {
+      "type": "string",
+      "description": "Location type id for location type detail endpoints."
+    },
+    "fixture_item_id": {
+      "type": "string",
+      "description": "Fixture item id for the legacy fixture item endpoint."
+    },
+    "fixture_type": {
+      "type": "string",
+      "description": "Fixture table name for filtering legacy fixture items."
+    },
+    "lookup_table_id": {
+      "type": "string",
+      "description": "Lookup table id for update and delete actions."
+    },
+    "lookup_table_item_id": {
+      "type": "string",
+      "description": "Lookup table row id for update and delete actions."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://www.commcarehq.org",
       "description": "CommCare HQ base URL override for self-hosted instances, tests, or proxies."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
     }
   }
 }

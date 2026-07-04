@@ -1,0 +1,112 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Role ID"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "Company ID"
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "Location ID"
+    },
+    "department_id": {
+      "type": "integer",
+      "description": "Department ID"
+    },
+    "color": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Hex colour adapted for light mode backgrounds via WCAG contrast adjustment"
+    },
+    "num_stations": {
+      "type": "integer",
+      "description": "The number of stations this role contains"
+    },
+    "name": {
+      "type": "string",
+      "description": "Role name"
+    },
+    "job_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Job code"
+    },
+    "sort": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "The order in which the roles will be listed in the web app"
+    },
+    "stations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Station ID"
+          },
+          "station_number": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of this station"
+          }
+        }
+      }
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The ISO8601 date and time in UTC when the role was created",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The ISO8601 date and time in UTC when the role was modified",
+      "format": "date-time"
+    },
+    "is_tipped_role": {
+      "type": "boolean",
+      "description": "When true, role is tipped. Otherwise the role is non tipped"
+    },
+    "color_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Color code"
+    },
+    "color_dark": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Hex colour adapted for dark mode backgrounds via WCAG contrast adjustment"
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_role",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ]
+}

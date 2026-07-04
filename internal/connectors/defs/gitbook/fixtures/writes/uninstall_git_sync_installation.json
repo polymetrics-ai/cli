@@ -1,0 +1,16 @@
+{
+  "record": {
+    "installation_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/git/installations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "uninstall_git_sync_installation_fixture_1"
+    }
+  }
+}

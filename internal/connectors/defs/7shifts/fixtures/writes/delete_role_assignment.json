@@ -1,0 +1,14 @@
+{
+  "record": {
+    "role_id": 1001,
+    "user_id": 1001
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/company/synthetic-conformance-value/users/1001/role_assignments/1001"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

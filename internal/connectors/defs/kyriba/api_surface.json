@@ -1,13 +1,14 @@
 {
   "api": "Kyriba tenant REST API v1 (https://api.kyriba.com/api/v1, tenant-overridable)",
   "docs": "https://developer.kyriba.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Migration of internal/connectors/kyriba: the 4 legacy-parity read collection endpoints only (bank-accounts, transactions, statements, payments). Kyriba deployments vary by tenant; legacy itself keeps live support bounded to these documented-style v1 collection endpoints. Kyriba's full documented API surface (cash positioning, forecasting, exposures, admin/config endpoints, and any tenant-specific extensions) is out of scope until Pass B.",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B review of internal/connectors/kyriba. The declarative bundle preserves the 4 legacy-parity tenant REST collection endpoints (bank-accounts, transactions, statements, payments). The public Kyriba developer portal at https://api.developer.kyriba.com/portal/environments/DEFAULT/apis exposes a catalog of 42 separate API products with distinct entrypoint bases (for example /v1/accounts, /v1/cash-balances, /v1/payment/transfers, /workcap/v2, webhook callback products), but representative product docs expose public overview/change-log pages rather than operation-level OpenAPI pages through the portal API.",
   "endpoints": [
     { "method": "GET", "path": "/bank-accounts", "covered_by": { "stream": "bank_accounts" } },
     { "method": "GET", "path": "/transactions", "covered_by": { "stream": "transactions" } },
     { "method": "GET", "path": "/statements", "covered_by": { "stream": "statements" } },
     { "method": "GET", "path": "/payments", "covered_by": { "stream": "payments" } },
-    { "method": "GET", "path": "/cash-positions, /forecasts, /exposures, and other tenant-specific v1 collections", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; not implemented by legacy" } }
+    { "method": "GET", "path": "/portal/environments/DEFAULT/apis", "excluded": { "category": "out_of_scope", "reason": "developer-portal catalog endpoint for discovering separate Kyriba API products, not a tenant business-data collection to sync through this connector" } },
+    { "method": "GET", "path": "/v1/accounts, /v1/cash-balances, /v1/cash-flows, /v1/payment/*, /workcap/*, /platform/*, /core/*, webhook callback product bases", "excluded": { "category": "out_of_scope", "reason": "separate Kyriba API products with their own entrypoint bases, scopes, and operation contracts; public portal exposes overview/change-log pages but no operation-level OpenAPI page for this connector to model safely without changing it from tenant REST collection parity into a multi-product platform connector" } }
   ]
 }

@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_order_orders_v0_orders_order_id",
+  "type": "object",
+  "properties": {
+    "AmazonOrderId": {
+      "type": "string"
+    },
+    "SellerOrderId": {
+      "type": "string"
+    },
+    "PurchaseDate": {
+      "type": "string"
+    },
+    "LastUpdateDate": {
+      "type": "string"
+    },
+    "OrderStatus": {
+      "type": "string"
+    },
+    "FulfillmentChannel": {
+      "type": "string"
+    },
+    "SalesChannel": {
+      "type": "string"
+    },
+    "OrderChannel": {
+      "type": "string"
+    },
+    "ShipServiceLevel": {
+      "type": "string"
+    },
+    "OrderTotal": {
+      "type": "object"
+    },
+    "NumberOfItemsShipped": {
+      "type": "integer"
+    },
+    "NumberOfItemsUnshipped": {
+      "type": "integer"
+    },
+    "PaymentExecutionDetail": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "PaymentMethod": {
+      "type": "string"
+    },
+    "PaymentMethodDetails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "MarketplaceId": {
+      "type": "string"
+    },
+    "ShipmentServiceLevelCategory": {
+      "type": "string"
+    },
+    "EasyShipShipmentStatus": {
+      "type": "string"
+    },
+    "CbaDisplayableShippingLabel": {
+      "type": "string"
+    },
+    "OrderType": {
+      "type": "string"
+    },
+    "EarliestShipDate": {
+      "type": "string"
+    },
+    "LatestShipDate": {
+      "type": "string"
+    },
+    "EarliestDeliveryDate": {
+      "type": "string"
+    },
+    "LatestDeliveryDate": {
+      "type": "string"
+    },
+    "IsBusinessOrder": {
+      "type": "boolean"
+    },
+    "IsPrime": {
+      "type": "boolean"
+    },
+    "IsPremiumOrder": {
+      "type": "boolean"
+    },
+    "IsGlobalExpressEnabled": {
+      "type": "boolean"
+    },
+    "ReplacedOrderId": {
+      "type": "string"
+    },
+    "IsReplacementOrder": {
+      "type": "boolean"
+    },
+    "PromiseResponseDueDate": {
+      "type": "string"
+    },
+    "IsEstimatedShipDateSet": {
+      "type": "boolean"
+    },
+    "IsSoldByAB": {
+      "type": "boolean"
+    },
+    "IsIBA": {
+      "type": "boolean"
+    },
+    "DefaultShipFromLocationAddress": {
+      "type": "object"
+    },
+    "BuyerInvoicePreference": {
+      "type": "string"
+    },
+    "BuyerTaxInformation": {
+      "type": "object"
+    },
+    "FulfillmentInstruction": {
+      "type": "object"
+    },
+    "IsISPU": {
+      "type": "boolean"
+    },
+    "IsAccessPointOrder": {
+      "type": "boolean"
+    },
+    "MarketplaceTaxInfo": {
+      "type": "object"
+    },
+    "SellerDisplayName": {
+      "type": "string"
+    },
+    "ShippingAddress": {
+      "type": "object"
+    },
+    "BuyerInfo": {
+      "type": "object"
+    },
+    "AutomatedShippingSettings": {
+      "type": "object"
+    },
+    "HasRegulatedItems": {
+      "type": "boolean"
+    },
+    "ElectronicInvoiceStatus": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "order_id"
+  ]
+}

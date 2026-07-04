@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/case/v2/ext/synthetic-conformance-value/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "domain": "synthetic-conformance-value",
+      "case_id": "case_v2_external_fixture_1",
+      "case_type": "patient",
+      "case_name": "Fixture external patient",
+      "external_id": "synthetic-conformance-value",
+      "owner_id": "mobile_worker_fixture_1",
+      "indexed_on": "2026-05-03T00:00:00.000000Z",
+      "closed": false,
+      "date_closed": null,
+      "properties": {},
+      "indices": {}
+    }
+  }
+}

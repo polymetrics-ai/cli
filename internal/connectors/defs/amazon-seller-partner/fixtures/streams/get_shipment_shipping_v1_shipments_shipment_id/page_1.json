@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v1/shipments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "shipmentId": "shipmentId-fixture-1",
+        "clientReferenceId": "clientReferenceId-fixture-1",
+        "shipFrom": {},
+        "shipTo": {},
+        "acceptedRate": {},
+        "shipper": {},
+        "containers": [],
+        "shipment_id": "shipment_id-fixture-1"
+      }
+    }
+  }
+}

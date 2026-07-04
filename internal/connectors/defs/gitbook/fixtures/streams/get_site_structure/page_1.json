@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/structure"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "structure": [
+        {
+          "id": "get_site_structure_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_site_structure",
+          "name": "Fixture get_site_structure",
+          "status": "active",
+          "operation_id": "getSiteStructure"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,391 @@
+{
+  "actions": [
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["website", "name"],
+        "properties": {
+          "website": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a live ReferralHero campaign/list in the account; external mutation, approval required"
+    },
+    {
+      "name": "add_subscriber",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "email"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "crypto_wallet_address": { "type": "string" },
+          "other_identifier_value": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "transaction_id": { "type": "string" },
+          "conversion_category": { "type": "string" },
+          "conversion_value": { "type": ["number", "string"] },
+          "device": { "type": "string" },
+          "source": { "type": "string" },
+          "double_optin": { "type": "boolean" },
+          "points": { "type": "integer" },
+          "referrer": { "type": "string" },
+          "extra_field": { "type": "string" },
+          "extra_field_2": { "type": "string" },
+          "domain": { "type": "string" },
+          "stripe_customer_id": { "type": "string" },
+          "advocate_name": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates or registers a live subscriber in a ReferralHero campaign and may trigger campaign email/referral workflows; approval required"
+    },
+    {
+      "name": "track_referral_conversion_event",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/track_referral_conversion_event",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "email"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "crypto_wallet_address": { "type": "string" },
+          "other_identifier_value": { "type": "string" },
+          "referrer": { "type": "string" },
+          "conversion_value": { "type": ["number", "string"] },
+          "stripe_customer_id": { "type": "string" },
+          "transaction_id": { "type": "string" },
+          "product_id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "confirms/unconfirms referral conversion state and may create a referral when a referrer is provided; external mutation, approval required"
+    },
+    {
+      "name": "confirm_subscriber_by_id",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/confirm",
+      "path_fields": ["uuid", "subscriber_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "subscriber_id"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "subscriber_id": { "type": "string" }
+        }
+      },
+      "risk": "confirms a verified referral/subscriber conversion in the campaign; external mutation, approval required"
+    },
+    {
+      "name": "confirm_subscriber_by_identifier",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/confirm",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "email"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "email": { "type": "string" },
+          "crypto_wallet_address": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "other_identifier_value": { "type": "string" }
+        }
+      },
+      "risk": "confirms a verified referral/subscriber conversion by unique identifier; external mutation, approval required"
+    },
+    {
+      "name": "update_subscriber",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}",
+      "path_fields": ["uuid", "subscriber_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "subscriber_id"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "subscriber_id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "crypto_wallet_address": { "type": "string" },
+          "other_identifier_value": { "type": "string" },
+          "extra_field": { "type": "string" },
+          "extra_field_2": { "type": "string" },
+          "points": { "type": ["integer", "string"] },
+          "stripe_customer_id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "updates profile, identifier, points, address, or tag fields for a verified subscriber; external mutation, approval required"
+    },
+    {
+      "name": "add_points",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/add_points",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "email", "points"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "crypto_wallet_address": { "type": "string" },
+          "other_identifier_value": { "type": "string" },
+          "points": { "type": ["integer", "string"] }
+        }
+      },
+      "risk": "adds points to a subscriber, changing contest/reward standings; external mutation, approval required"
+    },
+    {
+      "name": "add_transaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/add_transactions",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "email", "amount"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "crypto_wallet_address": { "type": "string" },
+          "other_identifier_value": { "type": "string" },
+          "amount": { "type": ["number", "string"] },
+          "transaction_id": { "type": "string" },
+          "product_id": { "type": "string" },
+          "lifetime_spend": { "type": ["number", "string"] },
+          "reward_value": { "type": ["number", "string"] }
+        }
+      },
+      "risk": "records a transaction against a subscriber and may affect conversion/reward calculations; external mutation, approval required"
+    },
+    {
+      "name": "add_bulk_transactions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/add_bulk_transactions",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "transactions"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["amount"],
+              "properties": {
+                "email": { "type": "string" },
+                "phone_number": { "type": "string" },
+                "crypto_wallet_address": { "type": "string" },
+                "other_identifier_value": { "type": "string" },
+                "amount": { "type": ["number", "string"] },
+                "transaction_id": { "type": "string" },
+                "product_id": { "type": "string" },
+                "lifetime_spend": { "type": ["number", "string"] },
+                "reward_value": { "type": ["number", "string"] }
+              }
+            }
+          }
+        }
+      },
+      "risk": "records up to 500 transactions in one call and emails an admin CSV result; high-blast-radius external mutation, approval required"
+    },
+    {
+      "name": "promote_subscriber",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/promote",
+      "path_fields": ["uuid", "subscriber_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "subscriber_id"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "subscriber_id": { "type": "string" }
+        }
+      },
+      "risk": "promotes a subscriber into the campaign winners/promoted state; external mutation, approval required"
+    },
+    {
+      "name": "unlock_promoted_reward",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/unlock_promoted_reward",
+      "path_fields": ["uuid", "subscriber_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "subscriber_id"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "subscriber_id": { "type": "string" }
+        }
+      },
+      "risk": "unlocks a promoted reward for a subscriber, changing reward fulfillment state; external mutation, approval required"
+    },
+    {
+      "name": "delete_subscriber",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}",
+      "path_fields": ["uuid", "subscriber_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "subscriber_id"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "subscriber_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a subscriber from a live campaign; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_reward_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/update_reward_status",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "reward_id", "status"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "reward_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["sent", "resent", "canceled"] }
+        }
+      },
+      "risk": "changes fulfillment status for an unlocked reward; external mutation, approval required"
+    },
+    {
+      "name": "create_coupon_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/coupon_groups",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "name", "coupons", "active"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "name": { "type": "string" },
+          "coupons": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": ["boolean", "string"] }
+        }
+      },
+      "risk": "creates a campaign coupon group and coupon inventory; external mutation, approval required"
+    },
+    {
+      "name": "create_coupons",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/coupons",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "coupon_group_id", "coupons"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "coupon_group_id": { "type": "string" },
+          "coupons": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "adds redeemable coupon codes to an existing campaign coupon group; external mutation, approval required"
+    },
+    {
+      "name": "unqualify_referral",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/unqualify",
+      "path_fields": ["uuid", "subscriber_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "subscriber_id"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "subscriber_id": { "type": "string" }
+        }
+      },
+      "risk": "marks a referral/subscriber as unqualified, changing campaign qualification and reward state; external mutation, approval required"
+    },
+    {
+      "name": "qualify_referral",
+      "kind": "update",
+      "method": "POST",
+      "path": "/lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/qualify",
+      "path_fields": ["uuid", "subscriber_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid", "subscriber_id"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "subscriber_id": { "type": "string" }
+        }
+      },
+      "risk": "marks a referral/subscriber as qualified, changing campaign qualification and reward state; external mutation, approval required"
+    }
+  ]
+}

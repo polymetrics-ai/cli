@@ -1,0 +1,26 @@
+{
+  "record": {
+    "id": "shp_fixture_1",
+    "form": {
+      "type": "return_packing_slip",
+      "barcode": "RMA123456",
+      "line_items": [
+        { "product": { "title": "Fixture Product", "barcode": "123456789012" }, "units": 1 }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shipments/shp_fixture_1/forms",
+    "body": {
+      "form": {
+        "type": "return_packing_slip",
+        "barcode": "RMA123456",
+        "line_items": [
+          { "product": { "title": "Fixture Product", "barcode": "123456789012" }, "units": 1 }
+        ]
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "id": "form_fixture_1", "object": "Form" } }
+}

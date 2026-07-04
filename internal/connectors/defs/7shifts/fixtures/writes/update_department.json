@@ -1,0 +1,21 @@
+{
+  "record": {
+    "department_id": 1001,
+    "name": "fixture name",
+    "default": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/company/synthetic-conformance-value/departments/1001",
+    "body": {
+      "name": "fixture name",
+      "default": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

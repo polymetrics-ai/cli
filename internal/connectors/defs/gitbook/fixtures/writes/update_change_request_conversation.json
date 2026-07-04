@@ -1,0 +1,22 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "change_request_id": "synthetic-conformance-value",
+    "conversation_id": "synthetic-conformance-value",
+    "title": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/conversations/synthetic-conformance-value",
+    "body": {
+      "title": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_change_request_conversation_fixture_1"
+    }
+  }
+}

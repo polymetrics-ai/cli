@@ -1,0 +1,9 @@
+{
+  "record": { "parcel": { "length": "10", "width": "8", "height": "4", "weight": "16" } },
+  "expect": {
+    "method": "POST",
+    "path": "/parcels",
+    "body": { "parcel": { "length": "10", "width": "8", "height": "4", "weight": "16" } }
+  },
+  "response": { "status": 201, "body": { "id": "prcl_fixture_new", "object": "Parcel" } }
+}

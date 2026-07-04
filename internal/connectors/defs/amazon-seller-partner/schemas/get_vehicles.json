@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_vehicles",
+  "type": "object",
+  "properties": {
+    "make": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "variantName": {
+      "type": "string"
+    },
+    "bodyStyle": {
+      "type": "string"
+    },
+    "driveType": {
+      "type": "string"
+    },
+    "energy": {
+      "type": "string"
+    },
+    "engineOutput": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "manufacturingStartDate": {
+      "type": "object"
+    },
+    "manufacturingStopDate": {
+      "type": "object"
+    },
+    "lastProcessedDate": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "identifiers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true
+}

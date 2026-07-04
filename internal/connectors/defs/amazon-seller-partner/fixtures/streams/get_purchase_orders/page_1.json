@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/orders/v1/purchaseOrders",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "orders": [
+          {
+            "purchaseOrderNumber": "purchaseOrderNumber-fixture-1",
+            "purchaseOrderState": "purchaseOrderState-fixture-1",
+            "orderDetails": {}
+          }
+        ]
+      }
+    }
+  }
+}

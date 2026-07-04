@@ -1,61 +1,29 @@
 # Overview
 
-GitBook is a Tier-1 declarative-HTTP wave2 fan-out migration. It reads GitBook users,
-organizations, organization members, and space content (pages) through the GitBook REST API v1.
-This bundle migrates `internal/connectors/gitbook` (the hand-written connector); the legacy package
-stays registered and unchanged until wave6's registry flip.
+GitBook is a Tier-1 declarative HTTP connector for GitBook API v1. This Pass B bundle was expanded against GitBook's official OpenAPI spec at https://api.gitbook.com/openapi.json and API reference at https://gitbook.com/docs/developers/gitbook-api/api-reference. It covers 185 read streams and 170 write actions while keeping the four legacy stream names for compatibility: `users`, `organizations`, `org_members`, and `content`.
 
 ## Auth setup
 
-Provide a GitBook API access token via the `access_token` secret; it is used only for Bearer auth
-(`Authorization: Bearer <access_token>`) and is never logged. `base_url` defaults to
-`https://api.gitbook.com/v1` and can be overridden for tests or proxies.
+Provide a GitBook personal access token via the `access_token` secret. The engine sends it as `Authorization: Bearer <token>`; the value is marked `x-secret` in `spec.json` and is not logged or copied into fixtures. `base_url` defaults to `https://api.gitbook.com/v1`.
+
+Most Pass B streams are scoped by GitBook entity identifiers such as `organization_id`, `space_id`, `site_id`, `page_id`, `collection_id`, and related IDs. These identifiers are optional globally but required at read time for the stream whose path interpolates them.
 
 ## Streams notes
 
-- `users` — `GET /user`, a single-object (non-paginated) endpoint returning the authenticated
-  GitBook user. `pagination: {"type": "none"}` overrides the base cursor pagination for this
-  stream. `display_name`/`photo_url` are renamed from the raw API's camelCase `displayName`/
-  `photoURL` via `computed_fields`.
-- `organizations` — `GET /orgs`, a paginated list of organizations the authenticated user belongs
-  to. Records live at `items`; `created_at` is renamed from the raw `createdAt` field via
-  `computed_fields`. `url` is extracted from the raw API's nested `urls.location` field (GitBook
-  returns `urls` as an object, e.g. `{"location": "https://app.gitbook.com/o/<id>"}`, not a bare
-  string) so the output stays a schema-conformant `["string", "null"]` value rather than passing
-  the whole nested object through.
-- `org_members` — `GET /orgs/{{ config.organization_id }}/members`, members of the configured
-  organization. `organization_id` is a required-at-read-time config value (interpolated into the
-  path; an unset value hard-errors, matching legacy's explicit "config organization_id is required"
-  check). Real GitBook member payloads nest the user under a `user` sub-object (`user.id`,
-  `user.displayName`, `user.email`); `computed_fields` reaches into that nesting the same way
-  legacy's `mapRecord` does. `role` is a flat top-level field on the member object and needs no
-  rename (schema projection copies it verbatim).
-- `content` — `GET /spaces/{{ config.space_id }}/content/pages`, the page tree of the configured
-  space. `space_id` is a required-at-read-time config value. Records live at `pages`.
+The legacy streams retain their original schema projection and record shaping: `users` flattens `displayName`/`photoURL`, `organizations` flattens `createdAt` and `urls.location`, `org_members` flattens nested `user` fields, and `content` reads page records from `pages`.
 
-All 4 streams share the base's cursor pagination (`type: cursor`, `cursor_param: page`,
-`token_path: next.page`, matching GitBook's `{"items":[...],"next":{"page":"<cursor>"}}` convention
-and its `?page=<cursor>&limit=<n>` request shape); `users` overrides pagination to `none` since
-`/user` returns a single object, not a list. GitBook exposes no incremental cursor for any of these
-resources (legacy declares no `CursorFields`), so every stream here is full-refresh only, matching
-legacy exactly.
+New Pass B streams use the OpenAPI operation ID as the stream name in snake_case and `projection: passthrough` with a minimal permissive schema. List responses read from the documented array envelope such as `items` or `pages`; detail responses read the JSON object root. Cursor pagination follows GitBook's `next.page` convention where present and terminates on fixtures without a next token. GitBook does not document stable incremental cursors for these REST resources, so all streams are full-refresh.
 
 ## Write actions & risks
 
-None. GitBook is a read-only source in this connector (legacy `Capabilities.Write` is `false`); no
-`writes.json` file is present.
+This bundle declares 170 write actions for documented JSON/no-body GitBook mutations. Action names are the OpenAPI operation IDs converted to snake_case. Path identifiers are supplied as record fields, JSON request bodies are built from non-path record fields, and DELETE actions are marked destructive with idempotent `404` handling.
+
+Writes can create, update, publish, archive, delete, import, export, invite, change permissions, merge change requests, manage integrations/sites/spaces/content, and trigger other GitBook workflows. Reverse ETL callers must use plan, preview, approval, execute; dry-run previews resolve request method and path without exposing secrets.
 
 ## Known limits
 
-- Full GitBook API surface (space content editing/creation, integrations, webhooks, change
-  requests) is out of scope for wave2; see `api_surface.json`'s `excluded: {category: out_of_scope,
-  reason: "Pass B capability expansion"}` entries. Only the 4 legacy-parity read streams are
-  implemented.
-- `organization_id`/`space_id` are required config values only when reading `org_members`/`content`
-  respectively; the engine's path-interpolation hard-errors if either is absent when that stream is
-  read, matching legacy's explicit `resolveResource` validation.
-- GitBook's official developer documentation site (`https://developer.gitbook.com/`) renders its
-  API reference client-side; concrete wire-shape details (e.g. the `org_members` nested `user`
-  object) were sourced from the legacy connector's own tolerant mapping code and its inline comments
-  ("real payloads" nest under `user`), which is authoritative ground truth per migration
-  convention — not a documentation gap requiring a blocker.
+- Three documented GET endpoints return `text/event-stream` and are excluded because the declarative reader extracts JSON records only.
+- `PUT /orgs/{organizationId}/sites/{siteId}/context-records` is excluded because its request body is a root JSON array, while the current write engine builds object bodies from record fields.
+- New Pass B schemas are intentionally permissive passthrough schemas until dedicated per-resource projections are reviewed. The four legacy streams keep strict legacy-compatible projections.
+- Generated write schemas type path identifiers and require documented required fields where known, but leave nested JSON body fields permissive. The declarative engine forwards non-path record fields as the request body; stricter nested request-body validation can be added later without changing request construction.
+- Optional query filters are not all modeled; required GET query parameters are represented in `spec.json`, while optional filters can be added later without changing endpoint coverage.

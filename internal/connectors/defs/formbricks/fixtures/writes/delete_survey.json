@@ -1,0 +1,7 @@
+{
+  "record": { "surveyId": "srv_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/management/surveys/srv_fixture_1"
+  }
+}

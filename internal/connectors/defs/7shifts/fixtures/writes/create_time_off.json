@@ -1,0 +1,52 @@
+{
+  "record": {
+    "user_id": 1001,
+    "company_id": 1001,
+    "from_date": "2026-01-01",
+    "to_date": "2026-01-01",
+    "partial": true,
+    "status": 1001,
+    "category": "fixture category",
+    "partial_from": "fixture partial from",
+    "partial_to": "fixture partial to",
+    "comments": "fixture comments",
+    "hours": [
+      {
+        "date": "2026-01-01",
+        "num_hours": 12.34
+      }
+    ],
+    "status_action_user_id": 1001,
+    "status_action_message": "fixture status action message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/time_off",
+    "body": {
+      "user_id": 1001,
+      "company_id": 1001,
+      "from_date": "2026-01-01",
+      "to_date": "2026-01-01",
+      "partial": true,
+      "status": 1001,
+      "category": "fixture category",
+      "partial_from": "fixture partial from",
+      "partial_to": "fixture partial to",
+      "comments": "fixture comments",
+      "hours": [
+        {
+          "date": "2026-01-01",
+          "num_hours": 12.34
+        }
+      ],
+      "status_action_user_id": 1001,
+      "status_action_message": "fixture status action message"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "uuid": "00000000-0000-4000-8000-000000000001"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/company/synthetic-conformance-value/employment_record/00000000-0000-4000-8000-000000000001"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

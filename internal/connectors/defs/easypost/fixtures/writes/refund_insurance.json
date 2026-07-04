@@ -1,0 +1,5 @@
+{
+  "record": { "id": "ins_fixture_1" },
+  "expect": { "method": "POST", "path": "/insurances/ins_fixture_1/refund" },
+  "response": { "status": 200, "body": { "id": "ins_fixture_1", "object": "Insurance", "status": "cancelled" } }
+}

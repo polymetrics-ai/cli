@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v2/collectionForms/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collectionsFormDocument": {
+        "base64EncodedContent": "base64EncodedContent-fixture-1",
+        "documentFormat": "documentFormat-fixture-1",
+        "collection_form_id": "collection_form_id-fixture-1"
+      }
+    }
+  }
+}

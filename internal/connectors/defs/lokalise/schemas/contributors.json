@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contributors",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "integer"
+    },
+    "email": {
+      "type": "string"
+    },
+    "fullname": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "created_at_timestamp": {
+      "type": "integer"
+    },
+    "is_admin": {
+      "type": "boolean"
+    },
+    "is_reviewer": {
+      "type": "boolean"
+    },
+    "languages": {
+      "type": "array"
+    },
+    "role_id": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "user_id"
+  ]
+}

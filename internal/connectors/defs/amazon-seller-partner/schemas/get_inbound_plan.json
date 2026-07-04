@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_inbound_plan",
+  "type": "object",
+  "properties": {
+    "createdAt": {
+      "type": "string"
+    },
+    "inboundPlanId": {
+      "type": "string"
+    },
+    "lastUpdatedAt": {
+      "type": "string"
+    },
+    "marketplaceIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "name": {
+      "type": "string"
+    },
+    "packingOptions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "placementOptions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "sourceAddress": {
+      "type": "object"
+    },
+    "status": {
+      "type": "string"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "inboundPlanId"
+  ]
+}

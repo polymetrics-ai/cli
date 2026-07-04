@@ -1,0 +1,16 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/integrations/synthetic-conformance-value/dev"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "disable_integration_development_mode_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "id": "batch_fixture_1", "file_format": "PDF" },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/batch_fixture_1/label",
+    "body": { "file_format": "PDF" }
+  },
+  "response": { "status": 200, "body": { "id": "batch_fixture_1", "object": "Batch", "label_url": "https://example.com/fixture/batch-label.pdf" } }
+}

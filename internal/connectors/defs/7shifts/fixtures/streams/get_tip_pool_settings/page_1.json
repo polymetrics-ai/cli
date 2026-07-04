@@ -1,0 +1,73 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/tip_pool_settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "00000000-0000-4000-8000-000000000001",
+          "company_id": 1001,
+          "location_id": 1001,
+          "name": "fixture name",
+          "contribution_type": "POS_PERCENT_TIPS_AND_SALES",
+          "distribution_type": "HOURS_WORKED",
+          "sales_tip_percentage": 12.34,
+          "tip_pool_stakeholders": [
+            {
+              "stakeholder_type": "CONTRIBUTION",
+              "stakeholder_subtype": "ROLE",
+              "role_id": 1001,
+              "department_id": 1001,
+              "stake_amount": 12.34,
+              "contribution_method": "fixture contribution method",
+              "uuid": "00000000-0000-4000-8000-000000000001",
+              "tip_pool_settings_uuid": "00000000-0000-4000-8000-000000000001",
+              "filters": [
+                {
+                  "filter_type": "DINING_OPTION",
+                  "filter_value": "fixture filter value",
+                  "filter_name": "fixture filter name",
+                  "uuid": "00000000-0000-4000-8000-000000000001",
+                  "tip_pool_stakeholder_uuid": "00000000-0000-4000-8000-000000000001",
+                  "tip_pool_settings_uuid": "00000000-0000-4000-8000-000000000001"
+                }
+              ]
+            }
+          ],
+          "tip_pool_contributions": [
+            {
+              "source": "CASH",
+              "uuid": "00000000-0000-4000-8000-000000000001",
+              "tip_pool_settings_uuid": "00000000-0000-4000-8000-000000000001"
+            }
+          ],
+          "enabled": true,
+          "day_part_uuids": [
+            "00000000-0000-4000-8000-000000000001"
+          ],
+          "unmapped_contribution_method": "fixture unmapped contribution method",
+          "unmapped_contribution_filters": [
+            {
+              "filter_type": "DINING_OPTION",
+              "filter_value": "fixture filter value",
+              "filter_name": "fixture filter name",
+              "uuid": "00000000-0000-4000-8000-000000000001",
+              "tip_pool_settings_uuid": "00000000-0000-4000-8000-000000000001"
+            }
+          ],
+          "tip_pool_cadence_settings": {
+            "cadence_type": "DAILY",
+            "period_start_date": "2026-01-01",
+            "uuid": "00000000-0000-4000-8000-000000000001",
+            "tip_pool_settings_uuid": "00000000-0000-4000-8000-000000000001"
+          },
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

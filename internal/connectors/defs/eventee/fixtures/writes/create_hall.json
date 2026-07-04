@@ -1,0 +1,5 @@
+{
+  "record": { "name": "Fixture Hall" },
+  "expect": { "method": "POST", "path": "/hall", "body": { "name": "Fixture Hall" } },
+  "response": { "status": 200, "body": { "id": 42, "name": "Fixture Hall" } }
+}

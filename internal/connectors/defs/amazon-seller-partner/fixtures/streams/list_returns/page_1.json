@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/externalFulfillment/2024-09-11/returns",
+    "query": {
+      "maxResults": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "returns": [
+        {
+          "id": "id-fixture-1",
+          "returnLocationId": "returnLocationId-fixture-1",
+          "merchantSku": "merchantSku-fixture-1",
+          "returnType": "returnType-fixture-1",
+          "returnSubType": "returnSubType-fixture-1",
+          "numberOfUnits": 1,
+          "status": "status-fixture-1",
+          "fulfillmentLocationId": "fulfillmentLocationId-fixture-1",
+          "creationDateTime": "creationDateTime-fixture-1",
+          "lastUpdatedDateTime": "lastUpdatedDateTime-fixture-1",
+          "returnMetadata": {},
+          "returnShippingInfo": {},
+          "marketplaceChannelDetails": {},
+          "otpDetails": {},
+          "packageDeliveryMode": "packageDeliveryMode-fixture-1",
+          "replanningDetails": {}
+        }
+      ]
+    }
+  }
+}

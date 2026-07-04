@@ -1,0 +1,29 @@
+{
+  "record": {
+    "id": 2983,
+    "metadata": {
+      "purchase_order": ["PO-FIXTURE-1"],
+      "owner": ["logistics"]
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/shipments/2983",
+    "body": {
+      "metadata": {
+        "purchase_order": ["PO-FIXTURE-1"],
+        "owner": ["logistics"]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/shipments",
+        "id": 2983
+      }
+    }
+  }
+}

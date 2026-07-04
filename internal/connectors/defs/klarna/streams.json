@@ -39,6 +39,29 @@
       "schema": "schemas/transactions.json"
     },
     {
+      "name": "payout_details",
+      "path": "/settlements/v1/payouts/{{ fanout.id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": { "config_key": "payment_references" },
+        "into": { "path_var": "payment_reference" }
+      },
+      "schema": "schemas/payout_details.json"
+    },
+    {
+      "name": "payout_summaries",
+      "path": "/settlements/v1/payouts/summary",
+      "query": {
+        "start_date": "{{ config.summary_start_date }}",
+        "end_date": "{{ config.summary_end_date }}",
+        "currency_code": { "template": "{{ config.summary_currency_code }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/payout_summaries.json"
+    },
+    {
       "name": "payout_summary",
       "path": "/settlements/v1/payouts",
       "records": { "path": "payouts" },

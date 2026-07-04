@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "id_manufacturer": {
+      "type": "integer"
+    },
+    "id_supplier": {
+      "type": "integer"
+    },
+    "id_category_default": {
+      "type": "integer"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "price": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "date_add": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "date_upd": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "date_upd"
+}

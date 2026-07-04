@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pocket Connection Specification",
+  "type": "object",
+  "required": [
+    "access_token",
+    "consumer_key"
+  ],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The user's Pocket access token."
+    },
+    "consumer_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Your application's Consumer Key."
+    },
+    "content_type": {
+      "type": "string",
+      "description": "Select the content type of the items to retrieve."
+    },
+    "detail_type": {
+      "type": "string",
+      "description": "Select the granularity of the information about each item."
+    },
+    "domain": {
+      "type": "string",
+      "description": "Only return items from a particular `domain`."
+    },
+    "favorite": {
+      "type": "string",
+      "description": "Retrieve only favorited items."
+    },
+    "search": {
+      "type": "string",
+      "description": "Only return items whose title or url contain the `search` string."
+    },
+    "since": {
+      "type": "string",
+      "description": "Only return items modified since the given timestamp."
+    },
+    "sort": {
+      "type": "string",
+      "description": "Sort retrieved items by the given criteria."
+    },
+    "state": {
+      "type": "string",
+      "description": "Select the state of the items to retrieve."
+    },
+    "tag": {
+      "type": "string",
+      "description": "Return only items tagged with this tag name. Use _untagged_ for retrieving only untagged items."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/time_off/total_hours",
+    "query": {
+      "company_id": "synthetic-conformance-value",
+      "employee_id": "synthetic-conformance-value",
+      "date_start": "synthetic-conformance-value",
+      "date_end": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "user_id": 12.34,
+          "category": "fixture category",
+          "hours": 12.34
+        }
+      ]
+    }
+  }
+}

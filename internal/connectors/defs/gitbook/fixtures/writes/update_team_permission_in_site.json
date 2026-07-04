@@ -1,0 +1,22 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "team_id": "synthetic-conformance-value",
+    "role": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/permissions/teams/synthetic-conformance-value",
+    "body": {
+      "role": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_team_permission_in_site_fixture_1"
+    }
+  }
+}

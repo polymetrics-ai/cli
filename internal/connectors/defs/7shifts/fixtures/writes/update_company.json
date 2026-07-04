@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": 1001,
+    "name": "fixture name",
+    "country": "fixture country",
+    "photo": "fixture photo",
+    "pos": "fixture pos"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/companies/1001",
+    "body": {
+      "name": "fixture name",
+      "country": "fixture country",
+      "photo": "fixture photo",
+      "pos": "fixture pos"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

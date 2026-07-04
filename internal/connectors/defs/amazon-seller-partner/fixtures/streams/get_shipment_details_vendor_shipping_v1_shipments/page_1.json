@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/shipping/v1/shipments",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "shipments": [
+          {
+            "vendorShipmentIdentifier": "vendorShipmentIdentifier-fixture-1",
+            "transactionType": "transactionType-fixture-1",
+            "buyerReferenceNumber": "buyerReferenceNumber-fixture-1",
+            "transactionDate": "transactionDate-fixture-1",
+            "currentShipmentStatus": "currentShipmentStatus-fixture-1",
+            "currentshipmentStatusDate": "currentshipmentStatusDate-fixture-1",
+            "shipmentStatusDetails": [],
+            "shipmentCreateDate": "shipmentCreateDate-fixture-1",
+            "shipmentConfirmDate": "shipmentConfirmDate-fixture-1",
+            "packageLabelCreateDate": "packageLabelCreateDate-fixture-1",
+            "shipmentFreightTerm": "shipmentFreightTerm-fixture-1",
+            "sellingParty": {},
+            "shipFromParty": {},
+            "shipToParty": {},
+            "shipmentMeasurements": {},
+            "collectFreightPickupDetails": {},
+            "purchaseOrders": [],
+            "importDetails": {},
+            "containers": [],
+            "transportationDetails": {}
+          }
+        ]
+      }
+    }
+  }
+}

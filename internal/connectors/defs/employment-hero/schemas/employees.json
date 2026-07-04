@@ -2,28 +2,210 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "employees",
   "type": "object",
-  "x-primary-key": ["id"],
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "additionalProperties": true,
   "properties": {
-    "id": { "type": "string" },
-    "first_name": { "type": ["string", "null"] },
-    "middle_name": { "type": ["string", "null"] },
-    "last_name": { "type": ["string", "null"] },
-    "known_as": { "type": ["string", "null"] },
-    "title": { "type": ["string", "null"] },
-    "job_title": { "type": ["string", "null"] },
-    "role": { "type": ["string", "null"] },
-    "account_email": { "type": ["string", "null"] },
-    "company_email": { "type": ["string", "null"] },
-    "personal_email": { "type": ["string", "null"] },
-    "company_mobile": { "type": ["string", "null"] },
-    "personal_mobile_number": { "type": ["string", "null"] },
-    "gender": { "type": ["string", "null"] },
-    "date_of_birth": { "type": ["string", "null"] },
-    "country": { "type": ["string", "null"] },
-    "location": { "type": ["string", "null"] },
-    "start_date": { "type": ["string", "null"] },
-    "employing_entity": { "type": ["string", "null"] },
-    "primary_manager": { "type": ["string", "null"] }
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "first_name": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "middle_name": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "last_name": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "known_as": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "job_title": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "role": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "account_email": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "company_email": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "personal_email": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "company_mobile": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "personal_mobile_number": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "gender": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "date_of_birth": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "country": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "start_date": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "employing_entity": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "primary_manager": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
   }
 }

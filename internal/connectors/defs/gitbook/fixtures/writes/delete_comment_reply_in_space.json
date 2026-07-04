@@ -1,0 +1,18 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "comment_id": "synthetic-conformance-value",
+    "comment_reply_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/spaces/synthetic-conformance-value/comments/synthetic-conformance-value/replies/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "delete_comment_reply_in_space_fixture_1"
+    }
+  }
+}

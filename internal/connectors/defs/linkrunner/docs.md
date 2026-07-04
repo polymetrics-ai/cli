@@ -4,7 +4,9 @@
 
 Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API
 (`https://api.linkrunner.io/api/v1`). Read-only: Linkrunner has no approved reverse-ETL write
-surface, matching the legacy `internal/connectors/linkrunner` package.
+surface, matching the legacy `internal/connectors/linkrunner` package. Pass B also reviewed
+Linkrunner's SDK-less API reference; those documented endpoints are client-device telemetry calls,
+not server-side sync resources.
 
 ## Auth setup
 
@@ -33,6 +35,14 @@ a narrowing.
 ## Write actions & risks
 
 None. Linkrunner is read-only in pm (`capabilities.write: false`), matching legacy.
+The documented SDK-less POST endpoints (`/api/client/init`, `/api/client/attribution-data`,
+`/api/client/trigger`, `/api/client/set-user-data`, `/api/client/capture-event`,
+`/api/client/capture-payment`, `/api/client/remove-captured-payment`,
+`/api/client/update-push-token`, `/api/client/integrations`, and
+`/api/client/handle-deeplink`) all require a project token in the JSON body plus device/install
+context. The current declarative write dialect cannot safely inject secrets into JSON bodies, and
+these calls represent client telemetry, attribution, or payment/revenue side effects rather than
+ordinary reverse-ETL object mutations.
 
 ## Known limits
 
@@ -49,9 +59,11 @@ None. Linkrunner is read-only in pm (`capabilities.write: false`), matching lega
   (`docs/migration/conventions.md`, wave2 sweep class C3). The `attributed_users` single-page
   fixture requests `limit=100` to match.
 - Linkrunner's public docs (`docs.linkrunner.io/sdk-less/api-reference`) describe the client SDK
-  surface (`init`/`attribution-data`/`trigger`), not this connector's Data API endpoints
-  (`/campaigns`, `/attributed-users`); the legacy Go connector and its test suite are the
-  authoritative source for this bundle's request/response shapes, per migration convention (legacy
-  is ground truth over docs).
-- Pass B (any additional Linkrunner Data API surface beyond the 2 legacy streams) is out of scope;
-  see `api_surface.json`.
+  surface, not this connector's Data API endpoints (`/campaigns`, `/attributed-users`); the legacy
+  Go connector and its test suite are the authoritative source for this bundle's Data API
+  request/response shapes, per migration convention (legacy is ground truth over docs when the
+  public docs omit the legacy API).
+- Pass B did not add SDK-less writes because they require body-carried secrets and device context
+  that would either leak credentials through write records or create client-telemetry side effects
+  from a server-side ETL connector. Each documented SDK-less endpoint is accounted for in
+  `api_surface.json`.

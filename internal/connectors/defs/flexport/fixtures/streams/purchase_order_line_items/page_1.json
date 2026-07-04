@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/purchase_order_line_items"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/purchase_order_line_items",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/purchase_orders/line_item",
+            "id": 9988,
+            "purchase_order": {
+              "_object": "/api/refs/object",
+              "ref_type": "/purchase_order",
+              "link": "https://api.flexport.com/purchase_orders/2983",
+              "id": 2983
+            },
+            "line_item_number": 1,
+            "item_key": "item-fixture-1",
+            "units": 50,
+            "unit_cost": { "amount": "25.00", "currency_code": "USD" },
+            "incoterm": "FOB",
+            "transportation_mode": "ocean",
+            "cargo_ready_date": "2026-01-10",
+            "must_arrive_date": "2026-02-15",
+            "metadata": { "SKU": ["SKU-FIXTURE-1"] }
+          }
+        ]
+      }
+    }
+  }
+}

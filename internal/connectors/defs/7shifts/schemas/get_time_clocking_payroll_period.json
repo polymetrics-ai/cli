@@ -1,0 +1,90 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "The id of the payroll period.",
+      "format": "int64"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "The id of the company for the payroll period.",
+      "format": "int64"
+    },
+    "closed": {
+      "type": "boolean",
+      "description": "Whether the payroll period has been finalized."
+    },
+    "start": {
+      "type": "string",
+      "description": "The start date of the payroll period."
+    },
+    "end": {
+      "type": "string",
+      "description": "The end date of the payroll period."
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The id of the pay period state."
+          },
+          "location_id": {
+            "type": "integer",
+            "description": "The location id of the company."
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "Whether or not the pay period is closed"
+          },
+          "processed": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The date the pay period was processed for an export.",
+            "format": "date"
+          },
+          "modified_by_user_id": {
+            "type": "integer",
+            "description": "The user id of the user who modified the pay period. This may indicate an employee or a server process. Server processes will have a negative user id."
+          },
+          "closed_or_reopened_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "It is one representation of ISO8601/RFC3339 date time format"
+          }
+        },
+        "required": [
+          "id",
+          "location_id",
+          "closed",
+          "processed",
+          "modified_by_user_id",
+          "closed_or_reopened_at"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "start",
+    "end",
+    "closed",
+    "states"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_time_clocking_payroll_period",
+  "x-primary-key": [
+    "id"
+  ]
+}

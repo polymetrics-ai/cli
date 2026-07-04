@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/task_list_templates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "company_id": 1001,
+        "uuid": "00000000-0000-4000-8000-000000000001",
+        "title": "fixture title",
+        "description": "fixture description",
+        "status": 1001,
+        "created": "2026-01-01T00:00:00Z",
+        "activated_at": "2026-01-01T00:00:00Z",
+        "task_templates": [
+          {
+            "title": "fixture title",
+            "description": "fixture description",
+            "sort": 1001,
+            "uuid": "00000000-0000-4000-8000-000000000001",
+            "created": "2026-01-01T00:00:00Z",
+            "task_completion": {
+              "type": "NUMBER",
+              "primitive_type": "INTEGER",
+              "unit": "C"
+            }
+          }
+        ],
+        "assignments": [
+          {
+            "location_id": 1001,
+            "department_id": 1001,
+            "role_id": 1001,
+            "user_id": 1001
+          }
+        ],
+        "recurrence": "fixture recurrence",
+        "due": "2026-01-01",
+        "time_frame": {
+          "start": "12:00:00",
+          "end": "12:00:00"
+        }
+      }
+    }
+  }
+}

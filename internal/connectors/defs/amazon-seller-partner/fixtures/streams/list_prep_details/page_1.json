@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/inbound/fba/2024-03-20/items/prepDetails",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value",
+      "mskus": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "mskuPrepDetails": [
+        {
+          "allOwnersConstraint": "allOwnersConstraint-fixture-1",
+          "labelOwnerConstraint": "labelOwnerConstraint-fixture-1",
+          "msku": "msku-fixture-1",
+          "prepCategory": "prepCategory-fixture-1",
+          "prepOwnerConstraint": "prepOwnerConstraint-fixture-1",
+          "prepTypes": []
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google PageSpeed Insights Connection Specification",
+  "type": "object",
+  "required": [
+    "categories",
+    "strategies",
+    "urls"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google PageSpeed API Key. See <a href=\"https://developers.google.com/speed/docs/insights/v5/get-started#APIKey\">here</a>. The key is optional - however the API is heavily rate limited when using without API Key. Creating and using the API key therefore is recommended. The key is case sensitive."
+    },
+    "categories": {
+      "type": "string",
+      "description": "Defines which Lighthouse category to run. One or many of: \"accessibility\", \"best-practices\", \"performance\", \"pwa\", \"seo\"."
+    },
+    "strategies": {
+      "type": "string",
+      "description": "The analyses strategy to use. Either \"desktop\" or \"mobile\"."
+    },
+    "urls": {
+      "type": "string",
+      "description": "The URLs to retrieve pagespeed information from. The connector will attempt to sync PageSpeed reports for all the defined URLs. Format: https://(www.)url.domain"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

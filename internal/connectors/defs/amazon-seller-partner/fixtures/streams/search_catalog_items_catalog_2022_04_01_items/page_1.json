@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/2022-04-01/items",
+    "query": {
+      "marketplaceIds": "synthetic-conformance-value",
+      "pageSize": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "asin": "asin-fixture-1",
+          "attributes": {},
+          "classifications": [],
+          "dimensions": [],
+          "identifiers": [],
+          "images": [],
+          "productTypes": [],
+          "relationships": [],
+          "salesRanks": [],
+          "summaries": [],
+          "vendorDetails": []
+        }
+      ]
+    }
+  }
+}

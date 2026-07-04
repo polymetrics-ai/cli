@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture Break",
+    "description": "<p>Sanitized fixture break.</p>",
+    "start": "2026-06-01 10:00:00",
+    "end": "2026-06-01 10:30:00"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pause",
+    "body": {
+      "name": "Fixture Break",
+      "start": "2026-06-01 10:00:00",
+      "end": "2026-06-01 10:30:00"
+    }
+  },
+  "response": { "status": 200, "body": { "id": 240, "name": "Fixture Break" } }
+}

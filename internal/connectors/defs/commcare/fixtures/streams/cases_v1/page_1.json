@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/case/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "case_id": "case_v1_fixture_1",
+        "closed": false,
+        "date_closed": null,
+        "date_modified": "2026-04-01T00:00:00Z",
+        "domain": "synthetic-conformance-value",
+        "indices": {},
+        "properties": {
+          "case_name": "Fixture case",
+          "case_type": "fixture_case",
+          "date_opened": "2026-04-01T00:00:00Z",
+          "external_id": "external_fixture_1",
+          "owner_id": "mobile_worker_fixture_1"
+        },
+        "server_date_modified": "2026-04-01T00:00:00Z",
+        "server_date_opened": "2026-04-01T00:00:00Z",
+        "user_id": "mobile_worker_fixture_1",
+        "version": "1.0",
+        "xform_ids": ["form_v1_fixture_1"]
+      }
+    ]
+  }
+}

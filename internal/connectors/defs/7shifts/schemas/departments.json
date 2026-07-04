@@ -2,15 +2,46 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "departments",
   "type": "object",
-  "x-primary-key": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "x-cursor-field": "modified",
-  "required": ["id"],
+  "required": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "integer" },
-    "company_id": { "type": ["integer", "null"] },
-    "location_id": { "type": ["integer", "null"] },
-    "name": { "type": ["string", "null"] },
-    "created": { "type": ["string", "null"] },
-    "modified": { "type": ["string", "null"] }
+    "id": {
+      "type": "integer"
+    },
+    "company_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "location_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }

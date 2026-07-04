@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/integrations/synthetic-conformance-value/installation_status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_organization_integration_status_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_organization_integration_status",
+      "name": "Fixture get_organization_integration_status",
+      "status": "active",
+      "operation_id": "getOrganizationIntegrationStatus"
+    }
+  }
+}

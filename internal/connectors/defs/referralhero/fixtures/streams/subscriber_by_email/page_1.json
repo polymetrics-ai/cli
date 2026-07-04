@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/subscribers/retrieve_by_email",
+    "query": {
+      "email": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "subscriber_retrieved",
+        "id": "sub_fixture_1",
+        "name": "Jane Fixture",
+        "email": "jane.fixture@example.com",
+        "code": "c4fb914e",
+        "verified": true,
+        "points": 10,
+        "created_at": 1738954543,
+        "last_updated_at": 1738954701
+      },
+      "calls_left": 1000,
+      "timestamp": 1487676070
+    }
+  }
+}
