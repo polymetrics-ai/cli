@@ -27,7 +27,7 @@
       "schema": "schemas/contacts.json",
       "incremental": {
         "cursor_field": "updated_at",
-        "client_filtered": true
+        "request_param": "updated_since"
       }
     },
     {
@@ -40,7 +40,7 @@
       "schema": "schemas/invoices.json",
       "incremental": {
         "cursor_field": "updated_at",
-        "client_filtered": true
+        "request_param": "updated_since"
       }
     },
     {
@@ -53,7 +53,7 @@
       "schema": "schemas/bills.json",
       "incremental": {
         "cursor_field": "updated_at",
-        "client_filtered": true
+        "request_param": "updated_since"
       }
     },
     {
@@ -66,7 +66,7 @@
       "schema": "schemas/projects.json",
       "incremental": {
         "cursor_field": "updated_at",
-        "client_filtered": true
+        "request_param": "updated_since"
       }
     },
     {
@@ -79,7 +79,7 @@
       "schema": "schemas/tasks.json",
       "incremental": {
         "cursor_field": "updated_at",
-        "client_filtered": true
+        "request_param": "updated_since"
       }
     }
   ]

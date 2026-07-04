@@ -36,12 +36,14 @@ declare (same shape as gmail's sole custom-mode candidate).
 One stream, `datasets`, primary-keyed on `id`, incrementally cursored on `updated_at`
 (`incremental.request_param: modifiedSince`, `param_format: rfc3339`, `start_config_key:
 start_date`) — matches legacy's `incrementalLowerBound` (state cursor, falling back to
-`start_date`). Pagination is `offset_limit` (`limit`/`offset` query params, `page_size` from
-`config.page_size`, default 100) with the engine's standard short-page stop — matches legacy's
-`harvest` loop exactly (offset advances by `page_size` until a page returns fewer than `page_size`
-records). `computed_fields` stamps the `dataset_name` marker onto every record (legacy's `rec
-["dataset_name"] = dataset`, streams.go's routing table has only one dataset per connector
-instance, so this is a static-literal-shaped config reference, not a per-record derivation).
+`start_date`). Pagination is `offset_limit` (`limit`/`offset` query params, fixed `page_size: 100`)
+with the engine's standard short-page stop, matching legacy's default page size and unbounded
+`max_pages` behavior. `computed_fields` stamps the `dataset_name` marker onto every record
+(legacy's `rec["dataset_name"] = dataset`, streams.go's routing table has only one dataset per
+connector instance, so this is a static-literal-shaped config reference, not a per-record
+derivation) and uses `coalesce` to preserve legacy's alternate `id` (`record_id`/`key`/`uid`) and
+`updated_at` (`modified_at`/`last_modified`/`timestamp`) fallbacks when those alternate fields are
+present.
 
 Records are extracted from the page body's `records` array (`records.path: "records"`), the API's
 documented envelope shape: each item carries `id`, `raw_data` (the dataset row payload, an opaque
@@ -56,17 +58,17 @@ matching legacy's `ErrUnsupportedOperation` (`nexus_datasets.go` `Write`).
 
 ## Known limits
 
-- **Defensive per-record fallback chains are not modeled.** Legacy's `nexusDatasetRecord` falls back
-  to `modified_at`/`last_modified`/`timestamp` when a record's `updated_at` field is absent, and
-  falls back to `record_id`/`key`/`uid` when `id` is absent (streams.go's `firstNonEmpty` helper) —
-  defensive handling for a malformed/non-conforming export row. The declarative dialect has no
-  "first non-null of several record paths" primitive (`computed_fields` resolves exactly one
-  template per output field); only the documented primary shape (`id`, `updated_at` present
-  verbatim) is modeled. This never changes emitted data for any dataset export row that matches the
-  API's documented contract (`id`/`updated_at` always present) — it only narrows coverage for an
-  already-malformed row outside that contract, which legacy itself only tolerates defensively. If a
-  live tenant's export genuinely omits `id`/`updated_at` on well-formed rows, that is a real gap to
-  revisit (Pass B), not a silent behavior change for any legacy-accepted well-formed input.
+- **`page_size`/`max_pages` runtime overrides are not modeled.** Legacy accepts `config.page_size`
+  (1-1000, default 100) and `config.max_pages` (0/`all`/`unlimited` = unbounded). The engine's
+  `offset_limit` pagination fields are fixed bundle literals, so `spec.json` intentionally does not
+  declare dead config properties. The bundle matches legacy defaults: `limit=100` and unbounded
+  pages.
+- **The raw-record `raw_data` fallback is not modeled.** Legacy's `nexusDatasetRecord` sets
+  `raw_data` to the entire raw row when the documented `raw_data` envelope is absent. The current
+  `computed_fields` dialect can coalesce `record.*` paths but cannot copy the root `record` object
+  into a field, so this defensive malformed-row fallback remains an engine gap. Legacy also treats
+  empty strings as missing in the `id`/`updated_at` fallback chain; `coalesce` is first-non-null, so
+  it models absent/null alternate keys but not empty-string fallback semantics.
 - **The HMAC canonicalization scheme (`method + "\n" + path + "\n" + timestamp`) is legacy's own
   best-effort implementation**, not a scheme independently verified against Infor's own signing
   spec (legacy's own doc comment: "the exact upstream canonicalization may differ across Infor

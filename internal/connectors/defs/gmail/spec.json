@@ -48,8 +48,7 @@
     },
     "include_spam_and_trash": {
       "type": "string",
-      "default": "false",
-      "description": "When 'true', includes SPAM and TRASH in list results (includeSpamTrash=true)."
+      "description": "When 'true', includes SPAM and TRASH in list results (includeSpamTrash=true). Unset keeps Gmail's default exclusion, matching legacy's omitted-param false default."
     },
     "page_size": {
       "type": "string",

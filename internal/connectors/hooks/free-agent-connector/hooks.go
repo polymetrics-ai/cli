@@ -26,6 +26,14 @@ func (h Hooks) ConnectorName() string { return "free-agent-connector" }
 
 var streamAliases = map[string]string{}
 
+var handledStreams = map[string]struct{}{
+	"contacts": {},
+	"invoices": {},
+	"bills":    {},
+	"projects": {},
+	"tasks":    {},
+}
+
 func (h Hooks) connector() connectors.Connector {
 	if h.Connector != nil {
 		return h.Connector
@@ -48,6 +56,9 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 	}
 	if req.Stream == "" {
 		return true, fmt.Errorf("free-agent-connector" + " stream name is required")
+	}
+	if _, ok := handledStreams[req.Stream]; !ok {
+		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

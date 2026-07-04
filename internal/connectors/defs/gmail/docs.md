@@ -104,9 +104,9 @@ so none of these 4 streams declare an `incremental` block — full_refresh only,
 (`InitialState` always seeds an empty cursor for them). The `start_date` config value is NOT
 modeled as pagination/incremental for these 4 streams: it was legacy's own client-side Gmail
 search-query filter (`after:<unix-seconds>`, applied via the `q` query param, gmail.go:282-296)
-rather than the engine's `incremental.request_param` machinery — an equivalent `q` search-query
-template is not implemented in this pass (Known limits); this Pass B run prioritized breadth of new
-resources/writes over reworking that pre-existing, already-documented limitation.
+rather than the engine's `incremental.request_param` machinery. The bundle wires the same
+`q=after:<unix-seconds>` query template via the engine's `unix_seconds` filter and also wires
+legacy's `includeSpamTrash` filter for `messages`/`threads`/`drafts`/`labels`.
 
 ## Write actions & risks
 
@@ -152,15 +152,16 @@ detail-GET endpoints this reasoning does not extend to.
 
 ## Known limits
 
-- **`start_date`/`include_spam_and_trash` search-query filters are declared in `spec.json` but not
-  wired into a stream `query` template** — legacy's `q=after:<unix-seconds>` and
-  `includeSpamTrash=true` filters (gmail.go:264-296) predate this bundle's adoption of the engine's
-  opt-in optional-query dialect (`stream.Query`'s object form with `omit_when_absent`, conventions.md
-  §3) and were not reworked in this Pass B pass, which prioritized breadth of new resources/writes.
-  Left undeclared in `streams.json` (not silently wrong; see conventions.md F6 — a spec property
-  with no wired template is dead config, and both fields are retained in `spec.json` only as
-  forward-compatible surface for a follow-up pass). Deferred, tracked here rather than silently
-  dropped.
+- **`start_date` invalid-value handling is stricter than legacy's silent ignore**: legacy parsed
+  `config.start_date` as RFC3339 and, if parsing failed, simply omitted the `q=after:<unix-seconds>`
+  filter (gmail.go:288-296). The declarative bundle uses the engine's `unix_seconds` interpolation
+  filter, so a malformed `start_date` fails the read instead of degrading to an unfiltered full read.
+  For valid RFC3339 values, the emitted-data filter matches legacy.
+- **Explicit `include_spam_and_trash=false` is sent as `includeSpamTrash=false` instead of being
+  omitted**: when unset, the param is omitted exactly like legacy's false default; when set to
+  `"true"`, it sends legacy's `includeSpamTrash=true`. The query dialect has no value-equality gate,
+  so an explicitly configured `"false"` is sent as the API-equivalent false value rather than being
+  omitted.
 - **`token_url` https-only enforcement is stricter than legacy's `validatedURL`** (which accepted
   plain `http` too, gmail.go:342-357): the hook only accepts `https://` overrides. This is
   documented as a parity deviation (never stricter for any *production* Google OAuth endpoint,

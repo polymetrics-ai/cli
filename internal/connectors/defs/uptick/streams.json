@@ -131,6 +131,78 @@
         "start_config_key": "start_date"
       },
       "schema": "schemas/assets.json"
+    },
+    {
+      "name": "quotes",
+      "path": "/api/v2.14/quotes/",
+      "query": {
+        "page_size": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/quotes.json"
+    },
+    {
+      "name": "purchaseorders",
+      "path": "/api/v2.14/purchaseorders/",
+      "query": {
+        "page_size": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/purchaseorders.json"
+    },
+    {
+      "name": "forms",
+      "path": "/api/v2.14/forms/",
+      "query": {
+        "page_size": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v2.14/users/",
+      "query": {
+        "page_size": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "teams",
+      "path": "/api/v2.14/teams/",
+      "query": {
+        "page_size": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "stockitems",
+      "path": "/api/v2.14/stockitems/",
+      "query": {
+        "page_size": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/stockitems.json"
     }
   ]
 }

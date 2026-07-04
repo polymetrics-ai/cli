@@ -1,9 +1,9 @@
 {
   "name": "uptick",
   "display_name": "Uptick",
-  "description": "Reads Uptick field service management data (tasks, clients, properties, invoices, assets) through the Uptick REST API using OAuth2 password-grant auth.",
+  "description": "Reads Uptick field service management data through the Uptick REST API using OAuth2 password-grant auth.",
   "integration_type": "api",
-  "docs_url": "https://developer.uptick.com/",
+  "docs_url": "https://support.uptickhq.com/en/articles/6728314-uptick-api-overview-and-patch-notes",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Uptick field service management API read of tasks, clients, properties, invoices, and assets",
+    "read": "external Uptick field service management API reads for tasks, clients, properties, invoices, assets, quotes, purchase orders, forms, users, teams, and stock items",
     "approval": "none; read-only, no reverse-ETL write surface"
   },
   "conformance": {

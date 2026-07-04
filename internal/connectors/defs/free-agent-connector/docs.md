@@ -8,7 +8,11 @@ Use the same configuration and secret names accepted by the legacy `free-agent-c
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+The declared streams are static shadows used for schema, catalog, and surface validation. Their
+incremental blocks mirror legacy's server-side `updated_since` request parameter; they do not claim
+client-side filtering. The Tier-2 hook handles reads and checks by calling the legacy connector,
+preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The
+declarative paths under `/__legacy_hook/` are not live API endpoints.
 
 ## Write actions & risks
 

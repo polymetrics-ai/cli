@@ -38,16 +38,6 @@
       "format": "date-time",
       "description": "RFC3339 lower bound for the modifiedSince query filter on the first sync (superseded by the persisted incremental cursor on subsequent syncs)."
     },
-    "page_size": {
-      "type": "string",
-      "default": "100",
-      "description": "Records per page (1-1000, limit query param)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Hard cap on pages read per sync; 0, \"all\", or \"unlimited\" means unbounded."
-    },
     "mode": {
       "type": "string",
       "description": "Set to \"fixture\" to emit deterministic canned records with no network access (test/conformance-harness affordance only, never set in production)."

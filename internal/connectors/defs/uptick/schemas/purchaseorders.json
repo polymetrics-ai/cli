@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "supplier": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total": {
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  }
+}

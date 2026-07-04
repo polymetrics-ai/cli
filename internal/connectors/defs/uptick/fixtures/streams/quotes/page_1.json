@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2.14/quotes/",
+    "query": {
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 101,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-01T00:00:00.000000Z",
+          "ref": "QUO-101",
+          "status": "draft",
+          "description": "Fixture quote",
+          "total": 1250
+        }
+      ],
+      "links": {
+        "next": null
+      }
+    }
+  }
+}

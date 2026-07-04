@@ -30,7 +30,9 @@
       "name": "messages",
       "path": "/users/{{ config.user_id }}/messages",
       "query": {
-        "maxResults": "{{ config.page_size }}"
+        "maxResults": "{{ config.page_size }}",
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
       },
       "records": { "path": "messages" },
       "computed_fields": {
@@ -42,7 +44,9 @@
       "name": "threads",
       "path": "/users/{{ config.user_id }}/threads",
       "query": {
-        "maxResults": "{{ config.page_size }}"
+        "maxResults": "{{ config.page_size }}",
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
       },
       "records": { "path": "threads" },
       "computed_fields": {
@@ -54,7 +58,9 @@
       "name": "drafts",
       "path": "/users/{{ config.user_id }}/drafts",
       "query": {
-        "maxResults": "{{ config.page_size }}"
+        "maxResults": "{{ config.page_size }}",
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
       },
       "records": { "path": "drafts" },
       "computed_fields": {
@@ -66,6 +72,10 @@
     {
       "name": "labels",
       "path": "/users/{{ config.user_id }}/labels",
+      "query": {
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
+      },
       "records": { "path": "labels" },
       "pagination": { "type": "none" },
       "computed_fields": {

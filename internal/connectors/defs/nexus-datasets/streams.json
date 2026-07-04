@@ -30,6 +30,8 @@
         "start_config_key": "start_date"
       },
       "computed_fields": {
+        "id": "{{ coalesce record.id record.record_id record.key record.uid }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at record.last_modified record.timestamp }}",
         "dataset_name": "{{ config.dataset_name }}"
       },
       "schema": "schemas/datasets.json"
