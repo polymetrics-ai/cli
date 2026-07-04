@@ -8,6 +8,7 @@
   "properties": {
     "lat": { "type": "string" },
     "lon": { "type": "string" },
+    "timezone": { "type": "string" },
     "sender_name": { "type": ["string", "null"] },
     "event": { "type": "string" },
     "start": { "type": "integer" },

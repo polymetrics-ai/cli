@@ -44,9 +44,9 @@ not just the primary-key fields the schema documents for typing purposes. The on
 `documents`' `id` field: Convex's real system field is `_id`, and legacy additionally stamps a
 compatibility `id` alias whenever the raw record has no native `id` of its own
 (`if out["id"] == nil && out["_id"] != nil { out["id"] = out["_id"] }`, `convex.go:118-120`). This
-bundle reproduces the alias via a `computed_fields` entry (`"id": "{{ record._id }}"`); since Convex
-documents never carry a native `id` field of their own (only `_id`), this always resolves the same
-way legacy's own conditional does in practice, and `x-primary-key: ["id"]` names the computed field
+bundle reproduces the guarded alias via a `coalesce` computed field
+(`"id": "{{ coalesce record.id record._id }}"`), preserving a user-supplied raw `id` when present
+and filling from `_id` only when absent/null. `x-primary-key: ["id"]` names the resulting field
 directly.
 
 Pagination for `documents` is `pagination.type: cursor` (`cursor_param: cursor`, `token_path:

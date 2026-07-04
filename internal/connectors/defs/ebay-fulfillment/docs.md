@@ -42,6 +42,7 @@ recommended follow-up work, not part of this pass.
 - `orders` — `GET /sell/fulfillment/v1/order` (records at `orders`), `offset_limit` pagination
   (`limit`/`offset` query params). `computed_fields` flattens `buyer.username` ->
   `buyer_username` and `pricingSummary.total.{value,currency}` -> `total_value`/`total_currency`;
+  `line_item_count` is derived with the `length` filter over the raw `lineItems` array;
   every other field is a bare `{{ record.<camelCase> }}` rename (typed extraction preserves the
   raw wire type). Primary key `order_id`; incremental cursor `creation_date`, sent as an eBay
   `creationdate:[<value>..]` `filter` query param (`omit_when_absent: true` — absent on a
@@ -121,15 +122,6 @@ unconditionally; `capabilities.write` is `false` and this bundle ships no `write
   `order_line_items`/`shipping_fulfillments` `StreamHook`, by contrast, DOES read
   `config.page_size` directly (1-1000, default 50, matching legacy's `resolvePageSize` bounds) — a
   malformed/unset value falls back to the default rather than erroring.
-- **`orders`'s `line_item_count` is NOT migrated.** Legacy derives this field as
-  `len(lineItems)` on the raw order object — a value with no wire equivalent. Declarative
-  `computed_fields` has no array-length reference, and porting `orders` into the hook (alongside
-  `order_line_items`/`shipping_fulfillments`) to compute it would push
-  `internal/connectors/hooks/ebay-fulfillment/hooks.go` over the Tier-2 400-line hard cap
-  (`docs/migration/conventions.md` §1). The same count is always independently derivable
-  downstream by counting `order_line_items` rows grouped by `order_id`; documented as an
-  ACCEPTABLE, non-data-altering deviation (the field simply isn't emitted, rather than emitted
-  incorrectly).
 - **`api_host`/`base_url` config-surface narrowing.** Legacy accepts either `api_host` or
   `base_url` (whichever is set; `api_host` wins if both are), plus a Basic-credential
   `refresh_token_endpoint` override, each independently scheme/host-validated

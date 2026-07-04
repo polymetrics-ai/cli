@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -135,6 +136,27 @@ func interpolate(template string, vars Vars, urlencodeDefault bool) (string, err
 // injection surfaces (THREAT-MODEL §2) and no filter in this dialect is
 // meant to legitimately produce or pass through newlines.
 func resolveExpr(expr string, vars Vars, urlencodeDefault bool) (string, error) {
+	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
+		if err != nil {
+			return "", err
+		}
+		rawVal, found, err := resolveCoalesceRecordValue(vars.Record, paths)
+		if err != nil {
+			return "", err
+		}
+		if !found {
+			return "", &unresolvedKeyError{Namespace: "record", Key: strings.Join(paths, " ")}
+		}
+		val := stringify(rawVal)
+		if strings.ContainsAny(val, "\r\n") {
+			return "", fmt.Errorf("interpolate: resolved value for %q contains CR/LF", strings.TrimSpace(expr))
+		}
+		if urlencodeDefault {
+			return applyFilterValue("urlencode", val, val)
+		}
+		return val, nil
+	}
+
 	parts := strings.Split(expr, "|")
 	ref := strings.TrimSpace(parts[0])
 
@@ -172,6 +194,47 @@ func resolveExpr(expr string, vars Vars, urlencodeDefault bool) (string, error) 
 		rawVal = cur
 	}
 	return cur, nil
+}
+
+func coalesceRecordPathsExpression(expr string) ([]string, bool, error) {
+	inner := strings.TrimSpace(expr)
+	if inner != "coalesce" && !strings.HasPrefix(inner, "coalesce ") {
+		return nil, false, nil
+	}
+	if strings.Contains(inner, "|") {
+		return nil, true, fmt.Errorf("interpolate: coalesce does not support filter chains")
+	}
+	fields := strings.Fields(inner)
+	if len(fields) < 3 {
+		return nil, true, fmt.Errorf("interpolate: coalesce requires at least two record paths")
+	}
+	paths := make([]string, 0, len(fields)-1)
+	for _, ref := range fields[1:] {
+		const prefix = "record."
+		if !strings.HasPrefix(ref, prefix) || ref == prefix {
+			return nil, true, fmt.Errorf("interpolate: coalesce supports only record.* references, got %q", ref)
+		}
+		paths = append(paths, strings.TrimPrefix(ref, prefix))
+	}
+	return paths, true, nil
+}
+
+func resolveCoalesceRecordValue(record map[string]any, paths []string) (any, bool, error) {
+	for _, path := range paths {
+		val, err := resolveRecordPathValue(record, strings.Split(path, "."))
+		if err != nil {
+			var unresolved *unresolvedKeyError
+			if errors.As(err, &unresolved) && unresolved.Namespace == "record" {
+				continue
+			}
+			return nil, false, err
+		}
+		if val == nil {
+			continue
+		}
+		return val, true, nil
+	}
+	return nil, false, nil
 }
 
 // unresolvedKeyError is the typed sentinel for "reference resolved to
@@ -373,6 +436,8 @@ func applyFilterValue(filter, val string, rawVal any) (string, error) {
 		return base64.StdEncoding.EncodeToString([]byte(val)), nil
 	case filter == "last_path_segment":
 		return lastPathSegment(val), nil
+	case filter == "length":
+		return strconv.Itoa(arrayLength(rawVal)), nil
 	case strings.HasPrefix(filter, "join:"):
 		sep := strings.TrimPrefix(filter, "join:")
 		return applyJoinFilter(sep, rawVal)
@@ -381,6 +446,14 @@ func applyFilterValue(filter, val string, rawVal any) (string, error) {
 	default:
 		return "", fmt.Errorf("interpolate: unknown filter %q", filter)
 	}
+}
+
+func arrayLength(rawVal any) int {
+	arr, ok := rawVal.([]any)
+	if !ok {
+		return 0
+	}
+	return len(arr)
 }
 
 // applyJoinFilter joins an array-valued rawVal with sep (F7 meta-rule
@@ -644,6 +717,7 @@ var knownFilterNames = map[string]bool{
 	"unix_seconds":      true,
 	"base64":            true,
 	"last_path_segment": true,
+	"length":            true,
 }
 
 func isKnownFilter(filter string) bool {
@@ -720,7 +794,15 @@ func checkNamespaceRef(ref string, specKeys map[string]bool) error {
 func ResolveCheck(template string, specKeys map[string]bool) error {
 	matches := templatePattern.FindAllStringSubmatch(template, -1)
 	for _, m := range matches {
-		segs := strings.Split(m[1], "|")
+		inner := strings.TrimSpace(m[1])
+		if _, ok, err := coalesceRecordPathsExpression(inner); ok || err != nil {
+			if err != nil {
+				return fmt.Errorf("resolve check: %w", err)
+			}
+			continue
+		}
+
+		segs := strings.Split(inner, "|")
 		ref := strings.TrimSpace(segs[0])
 		for _, f := range segs[1:] {
 			filter := strings.TrimSpace(f)

@@ -22,21 +22,38 @@
       "path": "/users",
       "query": { "page_size": "{{ config.page_size }}" },
       "records": { "path": "users" },
-      "schema": "schemas/users.json"
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.email record.first_name record.display_name }}",
+        "updated_at": "{{ coalesce record.updated_at record.created_at }}"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
     },
     {
       "name": "meetings",
       "path": "/users/{{ config.user_id }}/meetings",
       "query": { "page_size": "{{ config.page_size }}" },
       "records": { "path": "meetings" },
-      "schema": "schemas/meetings.json"
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid }}",
+        "name": "{{ coalesce record.name record.topic }}",
+        "updated_at": "{{ coalesce record.updated_at record.start_time }}"
+      },
+      "schema": "schemas/meetings.json",
+      "projection": "passthrough"
     },
     {
       "name": "webinars",
       "path": "/users/{{ config.user_id }}/webinars",
       "query": { "page_size": "{{ config.page_size }}" },
       "records": { "path": "webinars" },
-      "schema": "schemas/webinars.json"
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid }}",
+        "name": "{{ coalesce record.name record.topic }}",
+        "updated_at": "{{ coalesce record.updated_at record.start_time }}"
+      },
+      "schema": "schemas/webinars.json",
+      "projection": "passthrough"
     }
   ]
 }

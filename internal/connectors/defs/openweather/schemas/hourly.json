@@ -8,6 +8,7 @@
   "properties": {
     "lat": { "type": "string" },
     "lon": { "type": "string" },
+    "timezone": { "type": "string" },
     "dt": { "type": "integer" },
     "temp": { "type": ["number", "null"] },
     "feels_like": { "type": ["number", "null"] },

@@ -35,7 +35,8 @@
         "responder_uri": "{{ record.responderUri }}",
         "title": "{{ record.info.title }}",
         "document_title": "{{ record.info.documentTitle }}",
-        "description": "{{ record.info.description }}"
+        "description": "{{ record.info.description }}",
+        "item_count": "{{ record.items | length }}"
       },
       "schema": "schemas/forms.json"
     },

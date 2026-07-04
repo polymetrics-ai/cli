@@ -46,10 +46,9 @@ page_1.json` set `pages.next: null`, satisfying `fixtures_present`/`read_fixture
 `pagination_terminates` (which exercises this bundle's only non-marker-excluded stream and expects
 exactly 1 request for exactly 1 fixture page).
 
-Legacy's shared `simplecastRecord` mapper derives `title` via `first(item, "title", "name")` — both
-streams' real wire shape uses `title` directly (confirmed by legacy's own fixture/test shape), so
-plain schema projection (an exact-key-match copy) reproduces the identical value with no
-`computed_fields` rename needed; the `name` fallback is never exercised on real Simplecast responses.
+Legacy's shared `simplecastRecord` mapper derives `title` via `first(item, "title", "name")` and
+`updated_at` via `first(item, "updated_at", "published_at")`; both fallback chains are modeled with
+`coalesce` computed fields on both streams.
 
 ## Write actions & risks
 

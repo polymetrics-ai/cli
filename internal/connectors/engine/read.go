@@ -334,11 +334,16 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
+		responseFields, err := extractResponseFields(resp.Body, stream.ResponseFields)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
 
 		for _, raw := range rawRecords {
 			if err := ctx.Err(); err != nil {
 				return err
 			}
+			raw = mergeResponseFields(raw, responseFields)
 			if !passesFilter(raw, stream.Records.Filter) {
 				continue
 			}
@@ -840,6 +845,37 @@ func extractRecords(body []byte, spec RecordsSpec) ([]connsdk.Record, error) {
 	return connsdk.RecordsAt(body, recordsPathOf(spec))
 }
 
+func extractResponseFields(body []byte, fields map[string]string) (map[string]any, error) {
+	if len(fields) == 0 {
+		return nil, nil
+	}
+	root, err := decodeJSONKeyed(body)
+	if err != nil {
+		return nil, err
+	}
+	out := make(map[string]any, len(fields))
+	for name, path := range fields {
+		if val := selectPathKeyed(root, path); val != nil {
+			out[name] = val
+		}
+	}
+	return out, nil
+}
+
+func mergeResponseFields(raw map[string]any, fields map[string]any) map[string]any {
+	if len(fields) == 0 {
+		return raw
+	}
+	out := make(map[string]any, len(raw)+len(fields))
+	for k, v := range raw {
+		out[k] = v
+	}
+	for k, v := range fields {
+		out[k] = v
+	}
+	return out
+}
+
 // recordsAtKeyed selects the JSON object found at path in body and explodes
 // EACH VALUE into its own connsdk.Record — {"111":{...},"222":{...}} becomes
 // 2 records — instead of connsdk.RecordsAt's ordinary behavior of returning
@@ -1027,6 +1063,35 @@ func applyComputedFields(projected, raw map[string]any, cfg map[string]string, c
 	}
 	vars := Vars{Record: raw, Config: cfg}
 	for name, tmpl := range computed {
+		if paths, ok, err := bareCoalesceRecordReferences(tmpl); ok || err != nil {
+			if err != nil {
+				return fmt.Errorf("engine: computed_fields %q: %w", name, err)
+			}
+			val, found, err := resolveCoalesceRecordValue(raw, paths)
+			if err != nil {
+				return fmt.Errorf("engine: computed_fields %q: %w", name, err)
+			}
+			if !found {
+				delete(projected, name)
+				continue
+			}
+			projected[name] = val
+			continue
+		}
+
+		if path, ok := bareRecordLengthReference(tmpl); ok {
+			val, err := resolveRecordPathValue(raw, strings.Split(path, "."))
+			if err != nil {
+				if isUnresolvedRecordPath(err) {
+					projected[name] = 0
+					continue
+				}
+				return fmt.Errorf("engine: computed_fields %q: %w", name, err)
+			}
+			projected[name] = arrayLength(val)
+			continue
+		}
+
 		if path, ok := bareRecordPathReference(tmpl); ok {
 			val, err := resolveRecordPathValue(raw, strings.Split(path, "."))
 			if err != nil {
@@ -1056,6 +1121,31 @@ func applyComputedFields(projected, raw map[string]any, cfg map[string]string, c
 	return nil
 }
 
+func bareCoalesceRecordReferences(tmpl string) ([]string, bool, error) {
+	inner, ok := bareTemplateInner(tmpl)
+	if !ok {
+		return nil, false, nil
+	}
+	return coalesceRecordPathsExpression(inner)
+}
+
+func bareRecordLengthReference(tmpl string) (path string, ok bool) {
+	inner, ok := bareTemplateInner(tmpl)
+	if !ok {
+		return "", false
+	}
+	parts := strings.Split(inner, "|")
+	if len(parts) != 2 || strings.TrimSpace(parts[1]) != "length" {
+		return "", false
+	}
+	ref := strings.TrimSpace(parts[0])
+	const prefix = "record."
+	if !strings.HasPrefix(ref, prefix) || ref == prefix {
+		return "", false
+	}
+	return strings.TrimPrefix(ref, prefix), true
+}
+
 // bareRecordPathReference reports whether tmpl is EXACTLY one `{{ ... }}`
 // template covering the whole string (no surrounding literal text, no second
 // `{{ }}` occurrence) whose inner expression is a plain `record.<path>`
@@ -1065,6 +1155,21 @@ func applyComputedFields(projected, raw map[string]any, cfg map[string]string, c
 // filtered reference, or any mixed/multi-part template returns ok=false so
 // the caller falls through to ordinary string Interpolate.
 func bareRecordPathReference(tmpl string) (path string, ok bool) {
+	inner, ok := bareTemplateInner(tmpl)
+	if !ok {
+		return "", false
+	}
+	if strings.Contains(inner, "|") {
+		return "", false
+	}
+	const prefix = "record."
+	if !strings.HasPrefix(inner, prefix) {
+		return "", false
+	}
+	return strings.TrimPrefix(inner, prefix), true
+}
+
+func bareTemplateInner(tmpl string) (string, bool) {
 	matches := templatePattern.FindAllStringSubmatchIndex(tmpl, -1)
 	if len(matches) != 1 {
 		return "", false
@@ -1075,15 +1180,7 @@ func bareRecordPathReference(tmpl string) (path string, ok bool) {
 		// surrounding literal text (a mixed template like "count={{ record.count }}").
 		return "", false
 	}
-	inner := strings.TrimSpace(tmpl[m[2]:m[3]])
-	if strings.Contains(inner, "|") {
-		return "", false
-	}
-	const prefix = "record."
-	if !strings.HasPrefix(inner, prefix) {
-		return "", false
-	}
-	return strings.TrimPrefix(inner, prefix), true
+	return strings.TrimSpace(tmpl[m[2]:m[3]]), true
 }
 
 // isUnresolvedRecordPath reports whether err is the typed unresolvedKeyError

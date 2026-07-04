@@ -1031,6 +1031,156 @@ func TestReadComputedFieldsBareRecordPathPreservesNativeType(t *testing.T) {
 	}
 }
 
+func TestReadComputedFieldsCoalescePreservesNativeType(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[
+			{"id":"existing","_id":"fallback","updated_at":"2026-01-01T00:00:00Z","meta":{"count":42}},
+			{"_id":"fallback-only","updated_at":"2026-01-02T00:00:00Z","alt_count":7},
+			{"id":null,"_id":"null-id-fallback","updated_at":"2026-01-03T00:00:00Z","alt_count":9},
+			{"id":null,"updated_at":"2026-01-04T00:00:00Z","alt_count":null}
+		]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{
+			"id":         "{{ coalesce record.id record._id }}",
+			"best_count": "{{ coalesce record.meta.count record.alt_count }}",
+		},
+	})
+	raw := json.RawMessage(`{
+		"type": "object", "x-primary-key": ["id"], "x-cursor-field": "updated_at",
+		"properties": {
+			"id": {"type": ["string", "null"]}, "updated_at": {"type": "string"},
+			"best_count": {"type": ["integer", "null"]}
+		}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 4 {
+		t.Fatalf("records = %+v", recs)
+	}
+	if recs[0]["id"] != "existing" {
+		t.Fatalf("record 0 id = %#v, want existing", recs[0]["id"])
+	}
+	if recs[1]["id"] != "fallback-only" {
+		t.Fatalf("record 1 id = %#v, want fallback-only", recs[1]["id"])
+	}
+	if recs[2]["id"] != "null-id-fallback" {
+		t.Fatalf("record 2 id = %#v, want null-id-fallback", recs[2]["id"])
+	}
+	if _, ok := recs[3]["id"]; ok {
+		t.Fatalf("record 3 id = %#v, want omitted when every coalesce path is absent/null", recs[3]["id"])
+	}
+	for i, want := range []int{42, 7, 9} {
+		got := recs[i]["best_count"]
+		if _, isString := got.(string); isString {
+			t.Fatalf("record %d best_count = %#v (%T), want native number, not string", i, got, got)
+		}
+		if fmt.Sprint(got) != fmt.Sprint(want) {
+			t.Fatalf("record %d best_count = %#v, want %d", i, got, want)
+		}
+	}
+	if _, ok := recs[3]["best_count"]; ok {
+		t.Fatalf("record 3 best_count = %#v, want omitted when every coalesce path is absent/null", recs[3]["best_count"])
+	}
+}
+
+func TestReadComputedFieldsLengthFilterEmitsTypedInt(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":[
+			{"id":"array","updated_at":"2026-01-01T00:00:00Z","items":[{"sku":"a"},{"sku":"b"},{"sku":"c"}]},
+			{"id":"null","updated_at":"2026-01-02T00:00:00Z","items":null},
+			{"id":"absent","updated_at":"2026-01-03T00:00:00Z"},
+			{"id":"object","updated_at":"2026-01-04T00:00:00Z","items":{"sku":"x"}}
+		]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:        RecordsSpec{Path: "data"},
+		ComputedFields: map[string]string{"item_count": "{{ record.items | length }}"},
+	})
+	raw := json.RawMessage(`{
+		"type": "object", "x-primary-key": ["id"], "x-cursor-field": "updated_at",
+		"properties": {
+			"id": {"type": "string"}, "updated_at": {"type": "string"},
+			"item_count": {"type": "integer"}
+		}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 4 {
+		t.Fatalf("records = %+v", recs)
+	}
+	want := []int{3, 0, 0, 0}
+	for i := range want {
+		got := recs[i]["item_count"]
+		if _, isString := got.(string); isString {
+			t.Fatalf("record %d item_count = %#v (%T), want typed int, not string", i, got, got)
+		}
+		if got != want[i] {
+			t.Fatalf("record %d item_count = %#v, want %d", i, got, want[i])
+		}
+	}
+}
+
+func TestReadResponseFieldsCopiesTopLevelSiblings(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{
+			"timezone": "America/Chicago",
+			"hourly": [
+				{"id":"h1","dt":1767225600},
+				{"id":"h2","dt":1767229200}
+			]
+		}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records:        RecordsSpec{Path: "hourly"},
+		ResponseFields: map[string]string{"timezone": "timezone"},
+	})
+	raw := json.RawMessage(`{
+		"type": "object",
+		"x-primary-key": ["id"],
+		"properties": {
+			"id": {"type": "string"},
+			"dt": {"type": "integer"},
+			"timezone": {"type": "string"}
+		}
+	}`)
+	sch, err := CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Schemas["widgets"] = &StreamSchema{Schema: sch, PrimaryKey: sch.PrimaryKeys(), CursorField: sch.CursorFieldName()}
+
+	recs, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 2 {
+		t.Fatalf("records = %+v", recs)
+	}
+	for i, rec := range recs {
+		if rec["timezone"] != "America/Chicago" {
+			t.Fatalf("record %d timezone = %#v, want America/Chicago", i, rec["timezone"])
+		}
+	}
+}
+
 // TestReadComputedFieldsFilteredOrMixedTemplateKeepsStringSemantics locks in
 // the OTHER half of A1's ruling: a template with a filter stage (join:,
 // unix_seconds, etc.) or with more than a single bare {{ record.path }}

@@ -211,6 +211,7 @@ type StreamSpec struct {
 	Pagination     *PaginationSpec       `json:"pagination,omitempty"` // overrides base
 	Incremental    *IncrementalSpec      `json:"incremental,omitempty"`
 	ComputedFields map[string]string     `json:"computed_fields,omitempty"`
+	ResponseFields map[string]string     `json:"response_fields,omitempty"`
 	Projection     string                `json:"projection,omitempty"` // "schema" (default) | "passthrough"
 	SchemaRef      string                `json:"schema"`
 	Conformance    *ConformanceMarker    `json:"conformance,omitempty"`

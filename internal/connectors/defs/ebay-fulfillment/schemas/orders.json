@@ -16,6 +16,7 @@
     "buyer_username": { "type": ["string", "null"] },
     "sales_record_reference": { "type": ["string", "null"] },
     "total_value": { "type": ["string", "null"] },
-    "total_currency": { "type": ["string", "null"] }
+    "total_currency": { "type": ["string", "null"] },
+    "line_item_count": { "type": "integer" }
   }
 }

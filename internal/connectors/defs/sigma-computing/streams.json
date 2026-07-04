@@ -26,8 +26,8 @@
       },
       "records": { "path": "entries" },
       "computed_fields": {
-        "name": "{{ record.name }}",
-        "updated_at": "{{ record.updatedAt }}"
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
       },
       "schema": "schemas/workbooks.json"
     },
@@ -39,8 +39,8 @@
       },
       "records": { "path": "entries" },
       "computed_fields": {
-        "name": "{{ record.name }}",
-        "updated_at": "{{ record.updatedAt }}"
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
       },
       "schema": "schemas/datasets.json"
     },
@@ -52,8 +52,8 @@
       },
       "records": { "path": "entries" },
       "computed_fields": {
-        "name": "{{ record.name }}",
-        "updated_at": "{{ record.updatedAt }}"
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
       },
       "schema": "schemas/teams.json"
     },
@@ -65,8 +65,8 @@
       },
       "records": { "path": "entries" },
       "computed_fields": {
-        "name": "{{ record.name }}",
-        "updated_at": "{{ record.updatedAt }}"
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
       },
       "schema": "schemas/members.json"
     }

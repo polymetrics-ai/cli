@@ -10,6 +10,7 @@
     "responder_uri": { "type": ["string", "null"] },
     "title": { "type": ["string", "null"] },
     "document_title": { "type": ["string", "null"] },
-    "description": { "type": ["string", "null"] }
+    "description": { "type": ["string", "null"] },
+    "item_count": { "type": "integer" }
   }
 }

@@ -60,6 +60,8 @@ API's camelCase `formId`/`revisionId`/`responderUri` to the schema's snake_case 
 the nested `info` object for `title`/`documentTitle`/`description` — plain schema projection copies
 by exact top-level key match only, so both the rename and the nested-object reach require
 `computed_fields` (mirrors gmail's `drafts` stream reaching into its own nested `message` object).
+`item_count` is derived with the `length` filter over the raw `items` array, matching legacy's
+`mapFormRecord`.
 
 `form_items` reads the IDENTICAL `GET /forms/{{ fanout.id }}` endpoint as `forms` (Google Forms has
 no dedicated "list items" endpoint; item data is embedded in the form resource) but selects the
@@ -99,17 +101,6 @@ write path for Google Forms (`Write` always returns `ErrUnsupportedOperation`).
 
 ## Known limits
 
-- **`forms.item_count` is NOT migrated.** Legacy's `mapFormRecord` (`streams.go:96-111`) derives
-  `item_count` as `len(item["items"])` — the length of the SAME `items` array the `form_items`
-  stream already publishes in full, one record per item. The engine's `computed_fields` dialect has
-  no array-length/count filter (`docs/migration/conventions.md` §3's filter list: `urlencode`,
-  `unix_seconds`, `base64`, `join:<sep>`, `last_path_segment`, `const:<value>` — none compute a
-  count), so this single derived field cannot be expressed in `streams.json` alone. Adding a
-  `RecordHook` for this one field alone would push this bundle to a 3rd de-facto responsibility
-  beyond AuthHook/CheckHook for a field whose underlying data is already fully published via
-  `form_items`; downstream consumers can derive an equivalent count themselves
-  (`COUNT(*) GROUP BY form_id` over `form_items`) with no data loss. Documented here as a deliberate,
-  non-blocking scope narrowing rather than a silent drop.
 - **`token_url` https-only enforcement is stricter than legacy's `resolveHTTPURL`** (which accepted
   plain `http` for both `base_url` and `token_url`): the hook only accepts `https://` overrides for
   `token_url` specifically. This is documented as a parity deviation (never stricter for any

@@ -30,7 +30,7 @@
       },
       "records": { "path": "documents" },
       "computed_fields": {
-        "id": "{{ record._id }}"
+        "id": "{{ coalesce record.id record._id }}"
       },
       "schema": "schemas/documents.json",
       "projection": "passthrough"

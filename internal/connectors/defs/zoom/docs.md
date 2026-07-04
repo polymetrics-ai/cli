@@ -36,6 +36,12 @@ materialized from the spec default when unset) — because Zoom's pagination typ
 (not `page_number`), `page_size` here is an ordinary per-stream query template, not a paginator's
 static field, so it stays genuinely config-overridable exactly like legacy.
 
+All three streams use `projection: "passthrough"` because legacy's `mapRecord` copied every raw
+wire field before filling missing derived fields. The legacy alternate-key chains are modeled with
+`coalesce`: users fill `name` from `email`/`first_name`/`display_name` and `updated_at` from
+`created_at`; meetings and webinars fill `id` from `uuid`, `name` from `topic`, and `updated_at`
+from `start_time` only when the primary field is absent or null.
+
 ## Write actions & risks
 
 None. Legacy `zoom` is read-only (`Write` returns `connectors.ErrUnsupportedOperation`);
@@ -43,16 +49,6 @@ None. Legacy `zoom` is read-only (`Write` returns `connectors.ErrUnsupportedOper
 
 ## Known limits
 
-- **The `idKeys`/`nameKeys`/`cursorKeys` alternate-key fallback chains are not modeled.** Legacy's
-  `mapRecord` (`zoom.go:200-215`) falls back to `uuid` for `id` (meetings/webinars only), to
-  `email`/`first_name`/`display_name` (users) or `topic` (meetings/webinars) for `name`, and to
-  `created_at` (users) or `start_time` (meetings/webinars) for `updated_at`, but ONLY when the
-  primary key is absent from the raw record. The engine's `computed_fields` dialect has no
-  coalesce-across-multiple-alternate-keys filter (conventions.md §3); this bundle relies on
-  Zoom's documented wire shape always including a top-level `id` field on every user, meeting,
-  and webinar object, which is the common case the alternate keys defensively guard against but
-  which the documented API surface never actually produces. Documented scope narrowing, not
-  silent divergence.
 - **`max_pages` is not modeled.** Legacy exposes a config-driven `max_pages` override (`0`/`all`/
   `unlimited` meaning unbounded, or a positive integer hard cap, `zoom.go:272-282`). The engine's
   `PaginationSpec.MaxPages` is a static bundle-level integer, not config-templated, so there is no

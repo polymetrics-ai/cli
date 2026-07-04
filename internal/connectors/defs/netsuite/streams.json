@@ -24,9 +24,9 @@
       "path": "/customer",
       "records": { "path": "items" },
       "computed_fields": {
-        "entity_id": "{{ record.entityId }}",
-        "name": "{{ record.companyName }}",
-        "status": "{{ record.status }}",
+        "entity_id": "{{ coalesce record.entityId record.tranId }}",
+        "name": "{{ coalesce record.companyName record.name record.title }}",
+        "status": "{{ coalesce record.status record.entityStatus }}",
         "last_modified_date": "{{ record.lastModifiedDate }}"
       },
       "schema": "schemas/customer_record.json"
@@ -36,9 +36,9 @@
       "path": "/vendor",
       "records": { "path": "items" },
       "computed_fields": {
-        "entity_id": "{{ record.entityId }}",
-        "name": "{{ record.companyName }}",
-        "status": "{{ record.status }}",
+        "entity_id": "{{ coalesce record.entityId record.tranId }}",
+        "name": "{{ coalesce record.companyName record.name record.title }}",
+        "status": "{{ coalesce record.status record.entityStatus }}",
         "last_modified_date": "{{ record.lastModifiedDate }}"
       },
       "schema": "schemas/customer_record.json"
@@ -48,9 +48,9 @@
       "path": "/inventoryItem",
       "records": { "path": "items" },
       "computed_fields": {
-        "entity_id": "{{ record.entityId }}",
-        "name": "{{ record.companyName }}",
-        "status": "{{ record.status }}",
+        "entity_id": "{{ coalesce record.entityId record.tranId }}",
+        "name": "{{ coalesce record.companyName record.name record.title }}",
+        "status": "{{ coalesce record.status record.entityStatus }}",
         "last_modified_date": "{{ record.lastModifiedDate }}"
       },
       "schema": "schemas/customer_record.json"
@@ -60,9 +60,9 @@
       "path": "/salesOrder",
       "records": { "path": "items" },
       "computed_fields": {
-        "entity_id": "{{ record.entityId }}",
-        "name": "{{ record.companyName }}",
-        "status": "{{ record.status }}",
+        "entity_id": "{{ coalesce record.entityId record.tranId }}",
+        "name": "{{ coalesce record.companyName record.name record.title }}",
+        "status": "{{ coalesce record.status record.entityStatus }}",
         "last_modified_date": "{{ record.lastModifiedDate }}"
       },
       "schema": "schemas/customer_record.json"

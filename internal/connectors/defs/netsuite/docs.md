@@ -61,7 +61,9 @@ with the engine's standard short-page stop — matches legacy's `harvest` loop e
 advances by the number of records returned each page until a page returns zero records or the
 response's `hasMore` field is false; see Known limits for the `hasMore`-vs-short-page nuance).
 Records are extracted from the page body's `items` array (`records.path: "items"`), NetSuite's
-documented REST Record API list envelope shape.
+documented REST Record API list envelope shape. The shared legacy fallback chains for
+`entity_id` (`entityId` then `tranId`), `name` (`companyName` then `name` then `title`), and
+`status` (`status` then `entityStatus`) are modeled with `coalesce` computed fields.
 
 No `incremental` block is declared for any stream, matching legacy exactly: legacy's `Read` never
 applies a server-side `lastModifiedDate` filter (there is no `request_param`/`param_format` wiring
@@ -90,23 +92,6 @@ None. NetSuite is a read-only source connector (`capabilities.write: false`); th
   exact derivation for any caller-side tooling). This is a documented config-surface narrowing
   (every legacy-accepted `realm`-implies-`base_url` shape has an operator-reachable equivalent), not
   a data-shape regression once configured.
-- **Per-field fallback chains are not modeled.** Legacy's shared `record()` mapper uses
-  `first(item, "entityId", "tranId")` for `entity_id`, `first(item, "companyName", "name",
-  "title")` for `name`, and `first(item, "status", "entityStatus")` for `status` — a "first
-  non-null of several raw paths" fallback the declarative dialect has no primitive for
-  (`computed_fields` resolves exactly one template per output field; see
-  `docs/migration/conventions.md`'s nexus-datasets `docs.md` for the identical class of gap). This
-  bundle wires the PRIMARY path only for each field (`entityId`, `companyName`, `status`,
-  matching what the `customer`/`vendor` resources' documented shape actually returns) and does not
-  fall back to the secondary paths (`tranId`, `name`/`title`, `entityStatus`). This never changes
-  emitted data for any `customer`/`vendor`/`inventoryItem` record that carries the documented
-  primary field — it only narrows coverage for a record shape that omits the primary field and
-  relies on legacy's defensive fallback, which none of the four allow-listed resources' documented
-  schemas require in practice. `sales_orders`' `entityId` primary path (rather than `tranId`) is
-  the one resource where the legacy fallback ORDER (`entityId` first, `tranId` second) is
-  genuinely reachable in practice — a `salesOrder` record's transaction number is more commonly
-  surfaced as `tranId`; readers relying on `sales_orders.entity_id` should verify against a live
-  NetSuite account.
 - **`hasMore`-vs-short-page double stop signal.** Legacy's `harvest` stops when `!hasMore(resp.Body)
   || len(records) == 0` — i.e. it reads the body's `hasMore` boolean field in addition to the
   short-page stop. The engine's `offset_limit` paginator implements only the short-page stop

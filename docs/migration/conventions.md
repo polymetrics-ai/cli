@@ -196,7 +196,10 @@ returns the final non-empty `/`-delimited segment of the resolved value — a tr
 ignored, a value with no `/` at all passes through unchanged, never errors — the sanctioned way to
 derive a HAL/URI-keyed API's trailing-segment id, e.g. `"id": "{{ record.uri | last_path_segment
 }}"` for calendly's `idFromURI(uri)` legacy convention; use this instead of a RecordHook for any
-URI-shaped derived-id field), `const:<value>` (S3 engine mini-wave item 1, below: discards the
+URI-shaped derived-id field), `length` (counts a raw array value; non-array values count as `0`;
+inside `computed_fields`, the exact single-reference form `{{ record.items | length }}` emits a
+native integer, while ordinary string interpolation still returns the decimal text form),
+`const:<value>` (S3 engine mini-wave item 1, below: discards the
 resolved value entirely and always returns the literal text after the first `:` — its purpose is
 composing with `omit_when_absent`/`default` to express "send this FIXED literal iff a reference
 resolves" without depending on the reference's own value; the gating reference must still fail to
@@ -432,6 +435,32 @@ output untouched. When porting a pilot's stringify-workaround (chargebee's ~30 f
 github's `user_id`/`author_id`/`committer_id`/`workflow_run_id`), re-tighten the schema back to the
 real type and flip the parity lock-in test from string-equality to native-type equality — do not
 leave the widened union in place now that typed extraction exists.
+
+**`coalesce` in `computed_fields` — first present, non-null raw record value** (Pass B fidelity
+follow-up mini-wave): a computed field may be a single expression of the form
+`{{ coalesce record.a record.b record.c }}`. Each argument MUST be a `record.*` path; `config.*` and
+`secrets.*` are not accepted in this form. The engine walks the paths left-to-right and copies the
+first value that is both present and non-null into the projected record, preserving the raw JSON type
+exactly like the bare `{{ record.path }}` typed-extraction path above. If every path is absent or
+null, the computed field is omitted; when filling the field itself, put that field's current raw key
+first (e.g. `"id": "{{ coalesce record.id record._id }}"`) to express legacy `id = id ?? _id`
+without clobbering an already-present `id`.
+
+**`length` in `computed_fields` — array length as a native integer** (Pass B fidelity follow-up
+mini-wave): the exact single-reference form `{{ record.items | length }}` writes `len(items)` as a
+Go integer into the projected record. A missing path, JSON null, or non-array value writes `0`,
+matching legacy Go `len(x)`-style mapper behavior used for line/item count fields. This typed
+integer behavior is scoped to `computed_fields`; elsewhere `length` remains an ordinary string
+filter because `Interpolate` returns strings by contract.
+
+**`response_fields` — top-level response values stamped onto extracted records**: when a legacy
+mapper copied a response-level sibling onto every record extracted from a nested section (for
+example OpenWeather's top-level `timezone` beside `hourly[]`/`daily[]`), declare
+`"response_fields": { "timezone": "timezone" }` on the stream. Each map entry is
+output-field-name → dotted response-body path. The raw value at that response path is copied into
+each extracted raw record before projection and `computed_fields`; missing/null response paths are
+omitted. Use this only for response metadata genuinely shared by every record in that response, not
+as a replacement for ordinary `record.*` computed fields.
 
 **`config.*` in `computed_fields` — Config only, Secrets is EXCLUDED by design** (gap-loop cycle-1
 item 2, REVIEW-A.md adjudication A3/`ENGINE_GAP` G0): before this increment, `computed_fields`

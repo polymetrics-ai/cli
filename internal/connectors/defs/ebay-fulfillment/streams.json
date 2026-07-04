@@ -61,7 +61,8 @@
         "sales_record_reference": "{{ record.salesRecordReference }}",
         "buyer_username": "{{ record.buyer.username }}",
         "total_value": "{{ record.pricingSummary.total.value }}",
-        "total_currency": "{{ record.pricingSummary.total.currency }}"
+        "total_currency": "{{ record.pricingSummary.total.currency }}",
+        "line_item_count": "{{ record.lineItems | length }}"
       },
       "schema": "schemas/orders.json"
     },

@@ -8,6 +8,7 @@
   "properties": {
     "lat": { "type": "string" },
     "lon": { "type": "string" },
+    "timezone": { "type": "string" },
     "dt": { "type": "integer" },
     "sunrise": { "type": ["integer", "null"] },
     "sunset": { "type": ["integer", "null"] },

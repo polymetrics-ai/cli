@@ -18,6 +18,8 @@ request (no pagination — the One Call endpoint is not paginated) and extracts 
 single response document: `current` is a single object (`records.path: "current"`, one record),
 `hourly`/`daily`/`alerts` are arrays. `lat`/`lon` are required config values stamped onto every
 record via `computed_fields` so rows stay location-identifiable, matching legacy's `annotate`.
+The response-level `timezone` sibling is stamped onto every extracted record via
+`response_fields`, also matching legacy's `annotate`.
 Optional `units` (`standard`/`metric`/`imperial`) and `lang` query parameters are wired via the
 `omit_when_absent` optional-query dialect, matching legacy's conditional `query.Set`. `daily`'s
 nested `temp: {day, min, max}` object is flattened into `temp_day`/`temp_min`/`temp_max` via
@@ -57,14 +59,6 @@ None. OpenWeather is a read-only weather API; `capabilities.write` is `false` an
   `weather[0].main`/`.description`/`.icon` from the array. This is an `ENGINE_GAP` candidate (no
   array-index primitive exists anywhere in the dialect) — if a future engine increment adds one,
   re-tighten these three fields back in.
-- **The `timezone` sibling field is dropped from parity for the same reason.** Legacy reads the
-  response's top-level `timezone` string once per request and stamps it onto every record of every
-  section. `computed_fields` templates resolve only against the record extracted at
-  `stream.records.path` (confirmed against `internal/connectors/engine/read.go`'s
-  `applyComputedFields`/`rawRecords` scoping) — a sibling top-level field outside that extracted
-  scope (like `timezone`, which lives beside `current`/`hourly`/`daily`/`alerts`, not inside any of
-  them) is unreachable from any stream's computed_fields. Not modeled in this migration; the same
-  `ENGINE_GAP` note applies.
 - The wider OpenWeather product surface (5-day/3-hour forecast, air pollution, geocoding,
   historical weather via `/onecall/timemachine`) is out of scope for this wave; see
   `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`

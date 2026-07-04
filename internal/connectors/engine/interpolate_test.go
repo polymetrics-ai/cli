@@ -244,6 +244,40 @@ func TestApplyFilterJoinNonArrayErrors(t *testing.T) {
 	}
 }
 
+// --- length filter: computed_fields use this to emit typed integer counts;
+// ordinary interpolation still returns a string because Interpolate's public
+// contract is string-valued. ---
+
+func TestApplyFilterLengthCountsArray(t *testing.T) {
+	vars := baseVars()
+	vars.Record["items"] = []any{"a", "b", "c"}
+	got, err := Interpolate("{{ record.items | length }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate length filter: unexpected error: %v", err)
+	}
+	if got != "3" {
+		t.Fatalf("Interpolate(length) = %q, want 3", got)
+	}
+}
+
+func TestApplyFilterLengthNonArrayIsZero(t *testing.T) {
+	vars := baseVars()
+	vars.Record["items"] = map[string]any{"sku": "x"}
+	got, err := Interpolate("{{ record.items | length }}", vars)
+	if err != nil {
+		t.Fatalf("Interpolate length filter: unexpected error: %v", err)
+	}
+	if got != "0" {
+		t.Fatalf("Interpolate(length non-array) = %q, want 0", got)
+	}
+}
+
+func TestApplyFilterLengthKnownToResolveCheck(t *testing.T) {
+	if err := ResolveCheck("{{ record.items | length }}", map[string]bool{}); err != nil {
+		t.Fatalf("ResolveCheck: unexpected error for known filter length: %v", err)
+	}
+}
+
 // --- last_path_segment filter (gap-loop item 4, REVIEW-B.md finding 1 /
 // cross-cutting adjudication 1): calendly's dropped derived `id` field
 // (legacy idFromURI(uri) — the trailing segment of a HAL/URI-shaped field)
@@ -620,6 +654,22 @@ func TestResolveCheckAcceptsFanoutIDReference(t *testing.T) {
 	}
 }
 
+func TestResolveCheckAcceptsCoalesceRecordReferences(t *testing.T) {
+	if err := ResolveCheck("{{ coalesce record.id record._id record.uuid }}", map[string]bool{}); err != nil {
+		t.Fatalf("ResolveCheck: unexpected error for coalesce record references: %v", err)
+	}
+}
+
+func TestResolveCheckRejectsCoalesceSecretsReference(t *testing.T) {
+	err := ResolveCheck("{{ coalesce record.id secrets.token }}", map[string]bool{})
+	if err == nil {
+		t.Fatalf("ResolveCheck: expected error for coalesce secrets reference")
+	}
+	if !strings.Contains(err.Error(), "secrets.token") {
+		t.Fatalf("ResolveCheck coalesce secrets error = %q, want it to name secrets.token", err.Error())
+	}
+}
+
 // --- ResolveCheckWhen: full when-grammar (==, in, truthiness) static parsing
 // (S3 engine mini-wave item 2, wave1-pilot SUMMARY.md carried queue /
 // REVIEW-A.md re-review R1/R3): ResolveCheck's bare namespace.key-only
@@ -737,6 +787,7 @@ func TestResolveCheckFilterNameValidation(t *testing.T) {
 		{"single known filter", "/repos/{{ config.repository | urlencode }}", false},
 		{"chained known filters", "/repos/{{ config.repository | urlencode | base64 }}", false},
 		{"join filter prefix form", "{{ record.tags | join:, }}", false},
+		{"length filter", "{{ record.tags | length }}", false},
 		{"unknown single filter", "/repos/{{ config.repository | bogus }}", true},
 		{"unknown filter in a chain", "/repos/{{ config.repository | urlencode | bogus }}", true},
 	}

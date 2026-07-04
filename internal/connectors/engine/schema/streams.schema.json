@@ -150,6 +150,7 @@
             }
           },
           "computed_fields": { "type": "object" },
+          "response_fields": { "type": "object" },
           "projection": { "type": "string", "enum": ["schema", "passthrough"] },
           "schema": { "type": "string" },
           "conformance": {

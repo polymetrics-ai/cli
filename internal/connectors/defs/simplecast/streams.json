@@ -22,6 +22,10 @@
         "type": "next_url",
         "next_url_path": "pages.next.href"
       },
+      "computed_fields": {
+        "title": "{{ coalesce record.title record.name }}",
+        "updated_at": "{{ coalesce record.updated_at record.published_at }}"
+      },
       "schema": "schemas/podcasts.json"
     },
     {
@@ -32,6 +36,10 @@
       "pagination": {
         "type": "next_url",
         "next_url_path": "pages.next.href"
+      },
+      "computed_fields": {
+        "title": "{{ coalesce record.title record.name }}",
+        "updated_at": "{{ coalesce record.updated_at record.published_at }}"
       },
       "schema": "schemas/episodes.json"
     }

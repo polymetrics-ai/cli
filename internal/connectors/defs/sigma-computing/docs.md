@@ -31,8 +31,8 @@ endpoints — every stream emits the identical 4-field record shape (`id`, `name
 `updated_at`), even though `email` is a members-only concept and workbooks/datasets/teams are
 unlikely to ever populate it; this bundle reproduces that exact shared-mapper shape rather than
 narrowing any stream's schema, matching legacy's actual emitted data field-for-field. `name` and
-`updated_at` are renamed from the raw `name`/`updatedAt` via `computed_fields` (kept explicit for
-symmetry, even though `name` requires no actual key rename) to make the parity mapping legible.
+`updated_at` are mapped via `coalesce` computed fields to reproduce legacy's fallback chains:
+`name` then `displayName`, and `updatedAt` then `updated_at`.
 None of the four streams expose a real server-side incremental filter in legacy (no
 date-range/updated-since query parameter is ever sent); `x-cursor-field: updated_at` is declared
 purely as catalog/sort-key metadata matching legacy's own `CursorFields` declaration
@@ -47,15 +47,6 @@ None. Sigma Computing's legacy connector is read-only (`Write` returns
 
 ## Known limits
 
-- **Fallback field names are not modeled.** Legacy's `sigmaRecord` mapper reads `name` with a
-  fallback from `name` to `displayName`, and `updated_at` with a fallback from `updatedAt` to
-  `updated_at` (`sigma_computing.go:147-149`, `first(item, "name", "displayName")` /
-  `first(item, "updatedAt", "updated_at")`). This bundle implements only the PRIMARY field of each
-  pair — there is no coalesce/first-non-null filter in this dialect's `computed_fields`
-  templating. Legacy's own test suite (`sigma_computing_test.go`) only ever exercises the primary
-  field names (`name`, `updatedAt`); this is judged an ACCEPTABLE, documented scope-narrowing
-  rather than an `ENGINE_GAP`, per the `encharge` bundle's identical precedent for an unexercised
-  defensive fallback.
 - **`max_pages` is not runtime-configurable.** Legacy exposes a `max_pages` config override
   (`0`/`all`/`unlimited` for unbounded, or a positive integer hard cap,
   `sigma_computing.go:227-237`). The engine's `PaginationSpec.MaxPages` is a fixed
