@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalog/blueprints/synthetic-conformance-value.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 3,
+      "title": "Fixture Blueprint",
+      "brand": "FixtureBrand",
+      "model": "fixture-model",
+      "images": [
+        "https://example.com/printify/blueprint.svg"
+      ]
+    }
+  }
+}

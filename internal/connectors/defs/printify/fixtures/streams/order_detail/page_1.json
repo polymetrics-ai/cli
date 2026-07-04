@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/shops/synthetic-conformance-value/orders/synthetic-conformance-value.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "o1",
+      "app_order_id": "app-order-fixture",
+      "address_to": {
+        "country": "US"
+      },
+      "line_items": [],
+      "metadata": {},
+      "status": "pending",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

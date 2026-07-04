@@ -205,5 +205,15 @@
       "Fetched the current Sentry API docs and official getsentry/sentry-api-schema OpenAPI inventory.",
       "Kept the legacy four streams unchanged and replaced placeholder api_surface exclusions with a complete endpoint inventory and concrete blocked reasons."
     ]
+  },
+  {
+    "name": "printify",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Legacy printify mapRecord emits a nested raw field containing the full source API object for every stream. The declarative engine can project declared fields or pass through raw top-level fields, but it cannot copy the whole raw record under a single computed output key without a whole-record computed_fields primitive or a RecordHook.",
+    "evidence": [
+      "internal/connectors/printify/printify.go:204",
+      "internal/connectors/defs/printify/docs.md"
+    ],
+    "attempts": 1
   }
 ]

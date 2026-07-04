@@ -1,0 +1,9 @@
+{
+  "record": {
+    "product_id": "product_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/shops/synthetic-conformance-value/products/product_fixture_1.json"
+  }
+}

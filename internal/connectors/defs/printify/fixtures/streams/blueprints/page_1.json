@@ -1,5 +1,8 @@
 {
-  "request": { "method": "GET", "path": "/catalog/blueprints.json" },
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalog/blueprints.json"
+  },
   "response": {
     "status": 200,
     "body": [
@@ -9,7 +12,9 @@
         "description": "Fixture description",
         "brand": "FixtureBrand",
         "model": "11736",
-        "images": ["https://images.printify.com/fixture1"]
+        "images": [
+          "https://example.com/printify/blueprint.svg"
+        ]
       }
     ]
   }

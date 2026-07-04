@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reporting_tag_options_all",
+  "type": "object",
+  "x-primary-key": [
+    "option_id"
+  ],
+  "properties": {
+    "option_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

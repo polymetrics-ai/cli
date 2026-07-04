@@ -2,20 +2,39 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "reports",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
-  "required": ["id"],
+  "x-primary-key": [
+    "report_id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "report_id": { "type": "string" },
-    "report_name": { "type": ["string", "null"] },
-    "report_number": { "type": ["string", "null"] },
-    "status": { "type": ["string", "null"] },
-    "total": { "type": ["number", "null"] },
-    "currency_code": { "type": ["string", "null"] },
-    "submitted_date": { "type": ["string", "null"] },
-    "created_time": { "type": ["string", "null"] },
-    "modified_time": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
-  }
+    "report_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-cursor-field": "modified_time"
 }

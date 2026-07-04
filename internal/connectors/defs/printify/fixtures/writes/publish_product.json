@@ -1,0 +1,19 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "title": true,
+    "description": true,
+    "images": true,
+    "variants": true,
+    "tags": true,
+    "keyFeatures": true,
+    "shipping_template": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/products/product_fixture_1/publish.json",
+    "body": {
+      "title": true
+    }
+  }
+}

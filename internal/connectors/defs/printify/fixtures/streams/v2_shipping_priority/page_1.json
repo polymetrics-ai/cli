@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/catalog/blueprints/synthetic-conformance-value/print_providers/synthetic-conformance-value/shipping/priority.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "type": "variant_shipping_priority_us",
+          "id": "23494",
+          "attributes": {
+            "shippingType": "priority",
+            "variantId": 23494
+          }
+        }
+      ]
+    }
+  }
+}

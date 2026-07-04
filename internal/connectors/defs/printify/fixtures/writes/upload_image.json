@@ -1,0 +1,13 @@
+{
+  "record": {
+    "file_name": "fixture-image.png",
+    "url": "https://example.com/fixture-image.png"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/uploads/images.json",
+    "body": {
+      "file_name": "fixture-image.png"
+    }
+  }
+}

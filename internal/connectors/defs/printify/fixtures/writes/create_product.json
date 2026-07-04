@@ -1,0 +1,17 @@
+{
+  "record": {
+    "title": "Fixture product",
+    "blueprint_id": 6,
+    "print_provider_id": 5,
+    "variants": [],
+    "print_areas": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/products.json",
+    "body": {
+      "title": "Fixture product",
+      "blueprint_id": 6
+    }
+  }
+}

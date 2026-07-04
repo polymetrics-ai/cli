@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalog/print_providers/synthetic-conformance-value.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 5,
+      "title": "Fixture Provider",
+      "location": {
+        "city": "Brooklyn",
+        "country": "US"
+      },
+      "blueprints": [
+        {
+          "id": 3,
+          "title": "Fixture Blueprint"
+        }
+      ]
+    }
+  }
+}

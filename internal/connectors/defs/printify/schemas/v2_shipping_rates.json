@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "v2_shipping_rates",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "attributes": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "blueprint_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "print_provider_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "shipping_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

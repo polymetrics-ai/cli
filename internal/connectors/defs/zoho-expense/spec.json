@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Zoho Expense Connection Specification",
   "type": "object",
-  "required": ["access_token"],
+  "required": [
+    "access_token"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
@@ -17,21 +19,65 @@
     },
     "organization_id": {
       "type": "string",
-      "description": "Optional Zoho Expense organization ID; sent as the organization_id query parameter on every request when set."
+      "description": "Zoho Expense organization ID. Sent as the X-com-zoho-expense-organizationid header for organization-scoped endpoints and as the documented organization_id query parameter for reporting tag endpoints."
     },
     "page_size": {
       "type": "string",
       "default": "200",
-      "description": "Records per page (1-200)."
+      "description": "Records per page for legacy documentation continuity; pagination uses the static bundle default."
     },
     "max_pages": {
       "type": "string",
       "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+      "description": "Maximum pages for legacy documentation continuity; pagination uses the static bundle default."
     },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "currency_id": {
+      "type": "string",
+      "description": "Optional currency_id used by Zoho Expense detail streams."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Optional customer_id used by Zoho Expense detail streams."
+    },
+    "advance_payment_id": {
+      "type": "string",
+      "description": "Optional advance_payment_id used by Zoho Expense detail streams."
+    },
+    "expense_category_id": {
+      "type": "string",
+      "description": "Optional expense_category_id used by Zoho Expense detail streams."
+    },
+    "expense_report_id": {
+      "type": "string",
+      "description": "Optional expense_report_id used by Zoho Expense detail streams."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Optional project_id used by Zoho Expense detail streams."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Optional tag_id used by Zoho Expense detail streams."
+    },
+    "tax_id": {
+      "type": "string",
+      "description": "Optional tax_id used by Zoho Expense detail streams."
+    },
+    "tax_group_id": {
+      "type": "string",
+      "description": "Optional tax_group_id used by Zoho Expense detail streams."
+    },
+    "trip_id": {
+      "type": "string",
+      "description": "Optional trip_id used by Zoho Expense detail streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Optional user_id used by Zoho Expense detail streams."
     }
   }
 }

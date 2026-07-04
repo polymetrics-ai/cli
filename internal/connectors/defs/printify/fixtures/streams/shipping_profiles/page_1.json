@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalog/blueprints/synthetic-conformance-value/print_providers/synthetic-conformance-value/shipping.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "handling_time": {
+        "value": 3,
+        "unit": "day"
+      },
+      "profiles": [
+        {
+          "variant_ids": [
+            17390
+          ],
+          "first_item": {
+            "amount": 399,
+            "currency": "USD"
+          },
+          "additional_items": {
+            "amount": 199,
+            "currency": "USD"
+          },
+          "countries": [
+            "US"
+          ]
+        }
+      ]
+    }
+  }
+}

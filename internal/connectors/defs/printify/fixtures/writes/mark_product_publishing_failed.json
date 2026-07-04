@@ -1,0 +1,13 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "reason": "fixture timeout"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/products/product_fixture_1/publishing_failed.json",
+    "body": {
+      "reason": "fixture timeout"
+    }
+  }
+}

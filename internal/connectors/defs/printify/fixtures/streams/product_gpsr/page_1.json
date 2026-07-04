@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/shops/synthetic-conformance-value/products/synthetic-conformance-value/gpsr.json"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "title": "GPSR information",
+        "text": "Fixture responsible party, 1 Fixture St"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "advance_payments",
+  "type": "object",
+  "x-primary-key": [
+    "advance_payment_id"
+  ],
+  "properties": {
+    "advance_payment_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

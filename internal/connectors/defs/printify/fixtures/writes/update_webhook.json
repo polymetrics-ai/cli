@@ -1,0 +1,13 @@
+{
+  "record": {
+    "webhook_id": "webhook_fixture_1",
+    "url": "https://example.com/webhooks/order-updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/shops/synthetic-conformance-value/webhooks/webhook_fixture_1.json",
+    "body": {
+      "url": "https://example.com/webhooks/order-updated"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "webhook_id": "webhook_fixture_1",
+    "anything": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/webhooks/webhook_fixture_1/simulate",
+    "body": {
+      "anything": "fixture"
+    }
+  }
+}

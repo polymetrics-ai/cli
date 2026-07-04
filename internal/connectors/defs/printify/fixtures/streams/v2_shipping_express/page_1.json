@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/catalog/blueprints/synthetic-conformance-value/print_providers/synthetic-conformance-value/shipping/express.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "type": "variant_shipping_express_us",
+          "id": "23494",
+          "attributes": {
+            "shippingType": "express",
+            "variantId": 23494
+          }
+        }
+      ]
+    }
+  }
+}

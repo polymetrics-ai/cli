@@ -1,0 +1,10 @@
+{
+  "record": {
+    "webhook_id": "webhook_fixture_1",
+    "host": "example.com"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/shops/synthetic-conformance-value/webhooks/webhook_fixture_1.json"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "image_id": "image_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/uploads/image_fixture_1/archive.json"
+  }
+}

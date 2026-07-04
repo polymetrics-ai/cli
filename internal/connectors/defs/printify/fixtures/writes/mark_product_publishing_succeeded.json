@@ -1,0 +1,19 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "external": {
+      "id": "external_fixture_1",
+      "handle": "https://example.com/products/fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/products/product_fixture_1/publishing_succeeded.json",
+    "body": {
+      "external": {
+        "id": "external_fixture_1",
+        "handle": "https://example.com/products/fixture"
+      }
+    }
+  }
+}

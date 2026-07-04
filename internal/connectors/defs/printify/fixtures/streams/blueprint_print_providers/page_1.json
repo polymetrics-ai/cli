@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalog/blueprints/synthetic-conformance-value/print_providers.json"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 5,
+        "title": "Fixture Provider",
+        "decoration_methods": [
+          "embroidery"
+        ]
+      }
+    ]
+  }
+}

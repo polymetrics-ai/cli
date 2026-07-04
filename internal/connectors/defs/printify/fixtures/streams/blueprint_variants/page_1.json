@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalog/blueprints/synthetic-conformance-value/print_providers/synthetic-conformance-value/variants.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 5,
+      "title": "Fixture Provider",
+      "variants": [
+        {
+          "id": 17390,
+          "title": "Fixture Variant",
+          "options": {
+            "color": "Black"
+          },
+          "placeholders": [],
+          "decoration_methods": [
+            "embroidery"
+          ],
+          "is_available": true
+        }
+      ]
+    }
+  }
+}
