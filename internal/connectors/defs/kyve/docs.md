@@ -37,11 +37,8 @@ see Known limits.
   `item["name"]`, `item["runtime"]`).
 - `stakers` (`GET /kyve/query/v1beta1/stakers`, records at `stakers`) and `funders`
   (`GET /kyve/query/v1beta1/funders`, records at `funders`) both use legacy's `accountRecord`
-  shape: `address` and `amount` read directly off the raw record. Legacy's real mapper is
-  `first(item, "address", "account")`/`first(item, "amount", "balance")` — a defensive two-key
-  fallback the engine's `computed_fields` dialect cannot express (no coalesce/first-of filter
-  exists). This bundle wires only the PRIMARY key of each pair (`address`, `amount`); see Known
-  limits.
+  shape: `address`/`amount` are read from the primary raw keys with legacy's defensive fallbacks
+  (`account`, `balance`) via `coalesce`.
 - `validators` (`GET /cosmos/staking/v1beta1/validators`, records at `validators`): emits
   `operator_address`/`status` directly and `moniker` from the nested `description.moniker` path,
   matching legacy `validatorRecord` exactly (`nested(item, "description", "moniker")`).
@@ -55,22 +52,6 @@ are on-chain transactions, not something this connector or its legacy predecesso
 
 ## Known limits
 
-- **`stakers`/`funders`' secondary field-name fallback is not modeled.** Legacy's `accountRecord`
-  reads `address` OR `account` (whichever is present) and `amount` OR `balance` (whichever is
-  present) per record. The engine's `computed_fields` dialect resolves a single fixed reference path
-  per output field with no coalesce/first-of mechanism, so only the first (primary) key name of
-  each pair is wired (`address`, `amount`). A live record whose ONLY populated key is the secondary
-  name (`account` with no `address`, or `balance` with no `amount`) would silently emit `null` for
-  that field here, whereas legacy would emit the secondary value. Live verification against the
-  public Korellia `funders` endpoint (2026-07-03) shows real records use `address` (not `account`)
-  as the top-level field and nest their real balance under `stats.total_used_funds[].amount` (not a
-  flat `balance` field at all) — legacy's own `balance` fallback branch appears to already be dead
-  against the current live wire shape, and neither key name is a nested-path lookup legacy itself
-  ever performed, so this bundle intentionally does not attempt to model the nested balance shape
-  either (out of scope; a `computed_fields` deviation, not a correctness regression relative to
-  legacy's own — already partially stale — mapping). Documented here rather than filed as an
-  `ENGINE_GAP` because the fallback is a defensive convenience, not a behavior any currently-passing
-  legacy test exercises (`kyve_test.go` only exercises `pools`).
 - **`stakers` endpoint is not implemented on the live public Korellia network** (verified
   2026-07-03: `GET /kyve/query/v1beta1/stakers` returns a gRPC-gateway `{"code":12,"message":"Not
   Implemented"}` body, not a 404). This is a live-network-state fact, not a bundle defect — the

@@ -40,8 +40,8 @@
       },
       "schema": "schemas/events.json",
       "computed_fields": {
-        "api_id": "{{ record.id }}",
-        "calendar_api_id": "{{ record.calendar_id }}"
+        "api_id": "{{ coalesce record.api_id record.id }}",
+        "calendar_api_id": "{{ coalesce record.calendar_api_id record.calendar_id }}"
       }
     },
     {
@@ -55,11 +55,11 @@
         "event_id": "{{ config.event_api_id }}"
       },
       "computed_fields": {
-        "api_id": "{{ record.id }}",
-        "event_api_id": "{{ config.event_api_id }}",
-        "name": "{{ record.user_name }}",
-        "email": "{{ record.user_email }}",
-        "user_api_id": "{{ record.user_id }}"
+        "api_id": "{{ coalesce record.api_id record.id }}",
+        "event_api_id": "{{ record.event_api_id }}",
+        "name": "{{ coalesce record.name record.user_name }}",
+        "email": "{{ coalesce record.email record.user_email }}",
+        "user_api_id": "{{ coalesce record.user_api_id record.user_id }}"
       }
     },
     {
@@ -76,8 +76,8 @@
         "type": "none"
       },
       "computed_fields": {
-        "api_id": "{{ record.id }}",
-        "access_level": "{{ record.id | const:host }}"
+        "api_id": "{{ coalesce record.api_id record.id }}",
+        "access_level": "{{ record.access_level }}"
       }
     },
     {

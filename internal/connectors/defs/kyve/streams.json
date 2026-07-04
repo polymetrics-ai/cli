@@ -34,8 +34,8 @@
       "query": { "pagination.limit": "{{ config.page_size }}" },
       "records": { "path": "stakers" },
       "computed_fields": {
-        "address": "{{ record.address }}",
-        "amount": "{{ record.amount }}"
+        "address": "{{ coalesce record.address record.account }}",
+        "amount": "{{ coalesce record.amount record.balance }}"
       },
       "schema": "schemas/stakers.json"
     },
@@ -45,8 +45,8 @@
       "query": { "pagination.limit": "{{ config.page_size }}" },
       "records": { "path": "funders" },
       "computed_fields": {
-        "address": "{{ record.address }}",
-        "amount": "{{ record.amount }}"
+        "address": "{{ coalesce record.address record.account }}",
+        "amount": "{{ coalesce record.amount record.balance }}"
       },
       "schema": "schemas/funders.json"
     },

@@ -17,6 +17,7 @@ There are 7 write actions for documented JSON customer-key mutations: create col
 ## Known limits
 
 - Legacy `/v1` streams are retained for emitted-record parity even though current PayFit documentation now centers on `/companies/{companyId}/...` endpoints.
+- `max_pages` and current-endpoint `maxResults` are not runtime-configurable in this bundle; legacy `/v1` streams keep the configurable `limit`, while current paginated endpoints use the fixed documented `maxResults=50`.
 - Optional filters such as collaborator email, absence status/date range, and include-in-progress contracts are not modeled because the read dialect lacks optional per-stream query omission for arbitrary config keys. Required date/pay-period parameters are modeled with `pay_period`.
 - Binary download endpoints for payslips, company documents, payment files, and CSV accounting exports are excluded; their JSON list/metadata endpoints are covered where documented.
 - The OAuth introspection and webhook-dashboard helper URLs are documented operational endpoints, not syncable data resources; they are listed as `non_data_endpoint` exclusions.

@@ -108,7 +108,7 @@
         "ids_from": {
           "request": { "path": "/v1/collections", "records_path": "collections", "id_field": "id" }
         },
-        "into": { "path_var": "collection_id" },
+        "into": { "path_var": "id" },
         "stamp_field": "collection_id"
       },
       "schema": "schemas/collection_media.json",

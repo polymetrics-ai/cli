@@ -19,6 +19,7 @@ The bundle exposes 40 POST write actions for documented Luma mutations, includin
 ## Known limits
 
 - The old `docs.lu.ma` URL is retired; metadata points to `docs.luma.com`, and `api_surface.json` points at the OpenAPI document.
-- The current OpenAPI uses `id` and `calendar_id`; legacy stream schemas still expose `api_id` and `calendar_api_id` by computed fields where needed.
+- The current OpenAPI uses `id` and `calendar_id`; legacy stream schemas still expose `api_id` and `calendar_api_id` by computed fields that prefer legacy wire keys (`api_id`, `calendar_api_id`, `event_api_id`, `user_api_id`) and fall back to current OpenAPI record keys (`id`, `calendar_id`, `user_id`) where the dialect supports a record-to-record fallback.
+- `event_hosts.access_level` is copied only when the source host object includes it. The earlier standalone host-list endpoint carried this field; the current event-detail hosts array may omit it, and the bundle does not fabricate a replacement value.
 - Optional filter query parameters from the OpenAPI are not all surfaced as config options in this pass; streams cover the base list/detail resources and required identifiers.
 - Luma's image flow creates an upload URL only. Uploading binary image bytes to that URL is outside this connector's JSON write dialect and is not modeled as a separate write action.

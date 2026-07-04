@@ -53,7 +53,7 @@ static-query precedent for the same reason the `next_url` paginator has no page-
   collection. Pexels' docs state plainly that collections themselves cannot be created or listed by
   arbitrary id — there is no way to discover a collection id except by first listing collections —
   so this stream uses `fan_out` (`ids_from.request` against `my_collections`' own `GET
-  /v1/collections` endpoint, `into.path_var: collection_id`, `stamp_field: collection_id`) to drive
+  /v1/collections` endpoint, `into.path_var: id`, `stamp_field: collection_id`) to drive
   one `/v1/collections/{id}` sub-sequence per collection this account owns, stamping the source
   collection's id onto every emitted media record. Each item in `media` carries Pexels' own `type`
   discriminator (`"Photo"` or `"Video"`) and the two shapes' fields differ (a `Photo` has `src`/

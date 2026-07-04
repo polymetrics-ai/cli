@@ -75,7 +75,7 @@
         "ids_from": {
           "request": { "path": "/trips", "records_path": "trips", "id_field": "id" }
         },
-        "into": { "path_var": "trip_id" },
+        "into": { "path_var": "id" },
         "stamp_field": "trip_id"
       },
       "schema": "schemas/trip_custom_fields.json",
