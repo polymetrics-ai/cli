@@ -50,12 +50,11 @@ a full stream read, matching legacy exactly.
 
 `accountNumber`-vs-`account_number` field-name tolerance (legacy's `first`
 helper, preferring a raw `accountNumber` and falling back to an
-already-snake_case `account_number`) is not modeled: fixtures record the real
-Kyriba wire shape (`accountNumber`), and schema projection maps it via the
-raw API's actual field name only. Kyriba's real wire format is always
-`accountNumber` (confirmed by legacy's own comment and its own test fixture),
-so the `account_number` fallback branch in `first()` is legacy dead code for
-any real Kyriba tenant response — not a live parity concern.
+already-snake_case `account_number`) is modeled with `computed_fields`
+`{{ coalesce record.accountNumber record.account_number }}` on
+`bank_accounts`, `transactions`, and `statements`. Fixtures record the real
+Kyriba wire shape (`accountNumber`), while the emitted record keeps legacy's
+`account_number` field.
 
 ## Write actions & risks
 

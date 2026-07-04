@@ -10,7 +10,10 @@ Provide an Invoiced API key via the `api_key` secret. The API key is sent as the
 
 List endpoints read top-level JSON arrays with page-number pagination using `page` and `per_page`, starting at page 1 with a default page size of 100. Detail and singleton endpoints read top-level JSON objects with pagination disabled. New Pass B streams use passthrough projection with permissive schemas so the engine preserves the documented response object without narrowing fields that legacy never modeled.
 
-The original five legacy streams keep their schema projection and client-filtered `updated_at` cursor behavior because the legacy connector does not send a server-side updated-at filter to Invoiced.
+The original five legacy streams keep their schema projection and bare `updated_at` cursor metadata.
+Legacy publishes `CursorFields: ["updated_at"]` for these streams but does not send a server-side
+updated-at filter and does not client-filter emitted records, so the bundle declares only
+`incremental.cursor_field` with no `request_param` or `client_filtered` behavior.
 
 ## Write actions & risks
 

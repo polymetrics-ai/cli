@@ -30,18 +30,21 @@
       "name": "bank_accounts",
       "path": "/bank-accounts",
       "records": { "path": "data" },
+      "computed_fields": { "account_number": "{{ coalesce record.accountNumber record.account_number }}" },
       "schema": "schemas/bank_accounts.json"
     },
     {
       "name": "transactions",
       "path": "/transactions",
       "records": { "path": "data" },
+      "computed_fields": { "account_number": "{{ coalesce record.accountNumber record.account_number }}" },
       "schema": "schemas/transactions.json"
     },
     {
       "name": "statements",
       "path": "/statements",
       "records": { "path": "data" },
+      "computed_fields": { "account_number": "{{ coalesce record.accountNumber record.account_number }}" },
       "schema": "schemas/statements.json"
     },
     {

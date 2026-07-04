@@ -50,7 +50,7 @@
         "ids_from": {
           "request": { "path": "/api/v2/items", "records_path": "data", "id_field": "id" }
         },
-        "into": { "path_var": "item_id" },
+        "into": { "path_var": "id" },
         "stamp_field": "item_id"
       },
       "schema": "schemas/responses.json",
@@ -74,7 +74,7 @@
         "ids_from": {
           "request": { "path": "/api/v2/items", "records_path": "data", "id_field": "id" }
         },
-        "into": { "path_var": "item_id" },
+        "into": { "path_var": "id" },
         "stamp_field": "item_id"
       },
       "schema": "schemas/questions.json",

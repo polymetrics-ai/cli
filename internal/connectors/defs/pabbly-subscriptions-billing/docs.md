@@ -52,8 +52,9 @@ only, never wired into an actual request parameter — so this bundle matches th
 exactly rather than inventing an incremental filter legacy never had.
 
 Pagination for the 4 legacy-parity streams follows legacy's own `next_page`-in-body convention: the
-response body's `next_page` field carries the literal value of the NEXT `page` query parameter to
-send — modeled as `pagination.type: cursor` with `token_path: next_page` and `cursor_param: page`.
+first request sends `page=1`, and the response body's `next_page` field carries the literal value
+of the NEXT `page` query parameter to send — modeled as `pagination.type: cursor` with
+`token_path: next_page` and `cursor_param: page`.
 Pagination stops when `next_page` is absent or empty, identical to legacy's
 `strings.TrimSpace(next) == ""` check; no `stop_path` is declared since legacy has no separate
 boolean stop signal beyond the token itself. `per_page` is sent on every request from the
@@ -84,10 +85,12 @@ added, fixed as part of this pass).
 
 ## Known limits
 
-- `page_size`/`max_pages` config validation (legacy's numeric-range and `all`/`unlimited` keyword
-  parsing) is not reproduced at the bundle-config level; the engine treats `page_size` as an opaque
-  string substituted directly into the `per_page` query param. This never changes emitted record
-  DATA for any legacy-valid input; it only narrows client-side input validation.
+- `page_size` config validation (legacy's numeric range parsing) is not reproduced at the
+  bundle-config level; the engine treats `page_size` as an opaque string substituted directly into
+  the `per_page` query param. This never changes emitted record DATA for any legacy-valid input; it
+  only narrows client-side input validation.
+- `max_pages` is not runtime-configurable in this bundle. `PaginationSpec.MaxPages` is static rather
+  than config-templated, so declaring a `max_pages` spec key would be dead config.
 - No `incremental` block is declared on any stream, matching legacy's real (lack of) incremental
   filtering behavior exactly — not a narrowing. `x-cursor-field` remains declared on 3 of the 4
   legacy-parity schemas purely as catalog/candidate-cursor metadata, mirroring legacy's own

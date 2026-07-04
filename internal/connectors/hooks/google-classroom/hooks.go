@@ -3,7 +3,6 @@ package googleclassroom
 
 import (
 	"context"
-	"fmt"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
@@ -26,6 +25,14 @@ func (h Hooks) ConnectorName() string { return "google-classroom" }
 
 var streamAliases = map[string]string{"course_work": "courseWork"}
 
+var handledStreams = map[string]struct{}{
+	"courses":       {},
+	"teachers":      {},
+	"students":      {},
+	"courseWork":    {},
+	"announcements": {},
+}
+
 func (h Hooks) connector() connectors.Connector {
 	if h.Connector != nil {
 		return h.Connector
@@ -47,7 +54,10 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 		req.Stream = legacyName
 	}
 	if req.Stream == "" {
-		return true, fmt.Errorf("google-classroom" + " stream name is required")
+		req.Stream = "courses"
+	}
+	if _, ok := handledStreams[req.Stream]; !ok {
+		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

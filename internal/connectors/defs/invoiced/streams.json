@@ -48,8 +48,7 @@
         "path": ""
       },
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
+        "cursor_field": "updated_at"
       },
       "schema": "schemas/customers.json"
     },
@@ -60,8 +59,7 @@
         "path": ""
       },
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
+        "cursor_field": "updated_at"
       },
       "schema": "schemas/invoices.json"
     },
@@ -72,8 +70,7 @@
         "path": ""
       },
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
+        "cursor_field": "updated_at"
       },
       "schema": "schemas/payments.json"
     },
@@ -84,8 +81,7 @@
         "path": ""
       },
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
+        "cursor_field": "updated_at"
       },
       "schema": "schemas/subscriptions.json"
     },
@@ -96,8 +92,7 @@
         "path": ""
       },
       "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
+        "cursor_field": "updated_at"
       },
       "schema": "schemas/estimates.json"
     },

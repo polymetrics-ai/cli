@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "path": "/subscriptions",
-    "query": { "per_page": "synthetic-conformance-value" }
+    "query": { "page": "1", "per_page": "synthetic-conformance-value" }
   },
   "response": {
     "status": 200,

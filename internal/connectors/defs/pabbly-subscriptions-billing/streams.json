@@ -21,28 +21,40 @@
     {
       "name": "customers",
       "path": "/customers",
-      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
       "records": { "path": "data" },
       "schema": "schemas/customers.json"
     },
     {
       "name": "subscriptions",
       "path": "/subscriptions",
-      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
       "records": { "path": "data" },
       "schema": "schemas/subscriptions.json"
     },
     {
       "name": "plans",
       "path": "/plans",
-      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
       "records": { "path": "data" },
       "schema": "schemas/plans.json"
     },
     {
       "name": "invoices",
       "path": "/invoices",
-      "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
       "records": { "path": "data" },
       "schema": "schemas/invoices.json"
     },
