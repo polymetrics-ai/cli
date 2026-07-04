@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/audit_logs",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "audit_fixture_1",
+          "object": "audit_log",
+          "project_id": "synthetic-conformance-value",
+          "action_type": "project.updated",
+          "target_type": "project",
+          "target_identifier": "synthetic-conformance-value",
+          "actor_type": "user",
+          "actor_identifier": "user_fixture_1",
+          "occurred_at": 1735689600000,
+          "additional_data": {
+          }
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/audit_logs"
+    }
+  }
+}

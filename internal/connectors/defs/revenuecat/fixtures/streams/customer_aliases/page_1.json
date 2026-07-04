@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/aliases",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "alias_fixture_1",
+          "object": "customer_alias",
+          "created_at": 1735689600000
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/aliases"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/integrations/webhooks/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "object": "webhook_integration",
+      "project_id": "synthetic-conformance-value",
+      "name": "Fixture Webhook",
+      "url": "https://example.invalid/webhook",
+      "environment": "sandbox",
+      "event_types": [
+        "INITIAL_PURCHASE"
+      ],
+      "app_id": "app_fixture_1",
+      "created_at": 1735689600000
+    }
+  }
+}

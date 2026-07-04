@@ -1,0 +1,2011 @@
+{
+  "actions": [
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a RevenueCat project"
+    },
+    {
+      "name": "create_app",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/apps",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a RevenueCat app in the configured project"
+    },
+    {
+      "name": "update_app",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/apps/{{ record.app_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "app_id"
+        ],
+        "properties": {
+          "app_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing RevenueCat app",
+      "path_fields": [
+        "app_id"
+      ]
+    },
+    {
+      "name": "delete_app",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/apps/{{ record.app_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "app_id"
+        ],
+        "properties": {
+          "app_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "permanently deletes a RevenueCat app and its configuration",
+      "path_fields": [
+        "app_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a RevenueCat customer"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "permanently deletes a RevenueCat customer",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "assign_customer_offering",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/assign_offering",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "assigns or clears a customer offering override",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "grant_customer_entitlement",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/grant_entitlement",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id",
+          "entitlement_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "grants an entitlement to a customer",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "restore_purchase_by_order_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/restore_purchase_by_order_id",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id",
+          "order_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "order_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a Google Play purchase by order id",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "revoke_customer_granted_entitlement",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/revoke_granted_entitlement",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id",
+          "entitlement_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "revokes a granted customer entitlement",
+      "path_fields": [
+        "customer_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "transfer_customer_data",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/transfer",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id",
+          "destination_customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "destination_customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "transfers subscriptions and purchases to another customer",
+      "path_fields": [
+        "customer_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_customer_attributes",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/attributes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id",
+          "attributes"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "attributes": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "sets customer attributes",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "create_virtual_currencies_transaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/virtual_currencies/transactions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id",
+          "currency_code",
+          "amount"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a virtual currency transaction for a customer",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "update_virtual_currencies_balance",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/customers/{{ record.customer_id }}/virtual_currencies/update_balance",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id",
+          "currency_code",
+          "balance"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "balance": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates a customer virtual currency balance without creating a transaction",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "create_entitlement",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/entitlements",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lookup_key",
+          "display_name"
+        ],
+        "properties": {
+          "lookup_key": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates an entitlement"
+    },
+    {
+      "name": "update_entitlement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "entitlement_id"
+        ],
+        "properties": {
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an entitlement",
+      "path_fields": [
+        "entitlement_id"
+      ]
+    },
+    {
+      "name": "delete_entitlement",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "entitlement_id"
+        ],
+        "properties": {
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "deletes an entitlement",
+      "path_fields": [
+        "entitlement_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "archive_entitlement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}/actions/archive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "entitlement_id"
+        ],
+        "properties": {
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "archives an entitlement",
+      "path_fields": [
+        "entitlement_id"
+      ]
+    },
+    {
+      "name": "unarchive_entitlement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}/actions/unarchive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "entitlement_id"
+        ],
+        "properties": {
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "unarchives an entitlement",
+      "path_fields": [
+        "entitlement_id"
+      ]
+    },
+    {
+      "name": "attach_products_to_entitlement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}/actions/attach_products",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "entitlement_id",
+          "product_ids"
+        ],
+        "properties": {
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "product_ids": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "attaches products to an entitlement",
+      "path_fields": [
+        "entitlement_id"
+      ]
+    },
+    {
+      "name": "detach_products_from_entitlement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}/actions/detach_products",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "entitlement_id",
+          "product_ids"
+        ],
+        "properties": {
+          "entitlement_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "product_ids": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "detaches products from an entitlement",
+      "path_fields": [
+        "entitlement_id"
+      ]
+    },
+    {
+      "name": "create_webhook_integration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/integrations/webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "url"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a webhook integration that sends events to the configured URL"
+    },
+    {
+      "name": "update_webhook_integration",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/integrations/webhooks/{{ record.webhook_integration_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "webhook_integration_id"
+        ],
+        "properties": {
+          "webhook_integration_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates a webhook integration",
+      "path_fields": [
+        "webhook_integration_id"
+      ]
+    },
+    {
+      "name": "delete_webhook_integration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/integrations/webhooks/{{ record.webhook_integration_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "webhook_integration_id"
+        ],
+        "properties": {
+          "webhook_integration_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a webhook integration",
+      "path_fields": [
+        "webhook_integration_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_offering",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/offerings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lookup_key",
+          "display_name"
+        ],
+        "properties": {
+          "lookup_key": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates an offering"
+    },
+    {
+      "name": "update_offering",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/offerings/{{ record.offering_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "offering_id"
+        ],
+        "properties": {
+          "offering_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an offering",
+      "path_fields": [
+        "offering_id"
+      ]
+    },
+    {
+      "name": "delete_offering",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/offerings/{{ record.offering_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "offering_id"
+        ],
+        "properties": {
+          "offering_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "deletes an offering and attached packages",
+      "path_fields": [
+        "offering_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "archive_offering",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/offerings/{{ record.offering_id }}/actions/archive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "offering_id"
+        ],
+        "properties": {
+          "offering_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "archives an offering",
+      "path_fields": [
+        "offering_id"
+      ]
+    },
+    {
+      "name": "unarchive_offering",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/offerings/{{ record.offering_id }}/actions/unarchive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "offering_id"
+        ],
+        "properties": {
+          "offering_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "unarchives an offering",
+      "path_fields": [
+        "offering_id"
+      ]
+    },
+    {
+      "name": "create_package",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/offerings/{{ record.offering_id }}/packages",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "offering_id",
+          "lookup_key",
+          "display_name"
+        ],
+        "properties": {
+          "offering_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "lookup_key": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a package in an offering",
+      "path_fields": [
+        "offering_id"
+      ]
+    },
+    {
+      "name": "update_package",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/packages/{{ record.package_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "package_id"
+        ],
+        "properties": {
+          "package_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates a package",
+      "path_fields": [
+        "package_id"
+      ]
+    },
+    {
+      "name": "delete_package",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/packages/{{ record.package_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "package_id"
+        ],
+        "properties": {
+          "package_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a package",
+      "path_fields": [
+        "package_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "attach_products_to_package",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/packages/{{ record.package_id }}/actions/attach_products",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "package_id",
+          "product_ids"
+        ],
+        "properties": {
+          "package_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "product_ids": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "attaches products to a package",
+      "path_fields": [
+        "package_id"
+      ]
+    },
+    {
+      "name": "detach_products_from_package",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/packages/{{ record.package_id }}/actions/detach_products",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "package_id",
+          "product_ids"
+        ],
+        "properties": {
+          "package_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "product_ids": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "detaches products from a package",
+      "path_fields": [
+        "package_id"
+      ]
+    },
+    {
+      "name": "create_paywall",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/paywalls",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "offering_id"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "offering_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a paywall"
+    },
+    {
+      "name": "update_paywall",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/{{ config.project_id }}/paywalls/{{ record.paywall_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "paywall_id"
+        ],
+        "properties": {
+          "paywall_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates a paywall draft",
+      "path_fields": [
+        "paywall_id"
+      ]
+    },
+    {
+      "name": "delete_paywall",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/paywalls/{{ record.paywall_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "paywall_id"
+        ],
+        "properties": {
+          "paywall_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a paywall",
+      "path_fields": [
+        "paywall_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_paywall_version",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/paywalls/{{ record.paywall_id }}/versions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "paywall_id"
+        ],
+        "properties": {
+          "paywall_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a paywall version",
+      "path_fields": [
+        "paywall_id"
+      ]
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/products",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "store_identifier",
+          "type",
+          "app_id",
+          "display_name"
+        ],
+        "properties": {
+          "store_identifier": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "app_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a product"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/products/{{ record.product_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates a product",
+      "path_fields": [
+        "product_id"
+      ]
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/products/{{ record.product_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a product",
+      "path_fields": [
+        "product_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "archive_product",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/products/{{ record.product_id }}/actions/archive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "archives a product",
+      "path_fields": [
+        "product_id"
+      ]
+    },
+    {
+      "name": "unarchive_product",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/products/{{ record.product_id }}/actions/unarchive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "unarchives a product",
+      "path_fields": [
+        "product_id"
+      ]
+    },
+    {
+      "name": "create_product_in_store",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/products/{{ record.product_id }}/create_in_store",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "pushes a product to the configured store",
+      "path_fields": [
+        "product_id"
+      ]
+    },
+    {
+      "name": "refund_purchase",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/purchases/{{ record.purchase_id }}/actions/refund",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "purchase_id"
+        ],
+        "properties": {
+          "purchase_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "refunds a Web Billing purchase",
+      "path_fields": [
+        "purchase_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ record.subscription_id }}/actions/cancel",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "subscription_id"
+        ],
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "cancels an active Web Billing subscription",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "extend_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ record.subscription_id }}/actions/extend",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "subscription_id"
+        ],
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "extends the current billing period of a subscription",
+      "path_fields": [
+        "subscription_id"
+      ]
+    },
+    {
+      "name": "refund_subscription",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ record.subscription_id }}/actions/refund",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "subscription_id"
+        ],
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "refunds an active Web Billing subscription",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "refund_subscription_transaction",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ record.subscription_id }}/transactions/{{ record.transaction_id }}/actions/refund",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "subscription_id",
+          "transaction_id"
+        ],
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "transaction_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "refunds a Play Store or Galaxy subscription transaction",
+      "path_fields": [
+        "subscription_id",
+        "transaction_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "create_virtual_currency",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/virtual_currencies",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "code",
+          "name"
+        ],
+        "properties": {
+          "code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a virtual currency"
+    },
+    {
+      "name": "update_virtual_currency",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/virtual_currencies/{{ record.virtual_currency_code }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "virtual_currency_code"
+        ],
+        "properties": {
+          "virtual_currency_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates a virtual currency",
+      "path_fields": [
+        "virtual_currency_code"
+      ]
+    },
+    {
+      "name": "delete_virtual_currency",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ config.project_id }}/virtual_currencies/{{ record.virtual_currency_code }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "virtual_currency_code"
+        ],
+        "properties": {
+          "virtual_currency_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a virtual currency",
+      "path_fields": [
+        "virtual_currency_code"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "archive_virtual_currency",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/virtual_currencies/{{ record.virtual_currency_code }}/actions/archive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "virtual_currency_code"
+        ],
+        "properties": {
+          "virtual_currency_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "archives a virtual currency",
+      "path_fields": [
+        "virtual_currency_code"
+      ]
+    },
+    {
+      "name": "unarchive_virtual_currency",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ config.project_id }}/virtual_currencies/{{ record.virtual_currency_code }}/actions/unarchive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "virtual_currency_code"
+        ],
+        "properties": {
+          "virtual_currency_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "unarchives a virtual currency",
+      "path_fields": [
+        "virtual_currency_code"
+      ]
+    }
+  ]
+}

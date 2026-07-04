@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "offering_id": "offering_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/paywalls",
+    "body": {
+      "name": "Fixture Name",
+      "offering_id": "offering_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

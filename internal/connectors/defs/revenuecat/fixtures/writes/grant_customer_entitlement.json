@@ -1,0 +1,18 @@
+{
+  "record": {
+    "customer_id": "cust_fixture_1",
+    "entitlement_id": "ent_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers/cust_fixture_1/actions/grant_entitlement",
+    "body": {
+      "entitlement_id": "ent_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

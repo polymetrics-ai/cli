@@ -1,0 +1,14 @@
+{
+  "record": {
+    "product_id": "prod_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/products/prod_fixture_1/create_in_store"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

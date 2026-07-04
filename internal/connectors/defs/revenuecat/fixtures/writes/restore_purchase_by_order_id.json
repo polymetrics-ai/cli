@@ -1,0 +1,18 @@
+{
+  "record": {
+    "customer_id": "cust_fixture_1",
+    "order_id": "order_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers/cust_fixture_1/actions/restore_purchase_by_order_id",
+    "body": {
+      "order_id": "order_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

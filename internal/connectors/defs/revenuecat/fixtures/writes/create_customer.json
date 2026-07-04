@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers",
+    "body": {
+      "id": "id_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "package_id": "pkg_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/synthetic-conformance-value/packages/pkg_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "type": "subscription"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/apps",
+    "body": {
+      "name": "Fixture Name",
+      "type": "subscription"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

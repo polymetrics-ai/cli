@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/apps/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "object": "app",
+      "name": "Fixture App",
+      "project_id": "synthetic-conformance-value",
+      "created_at": 1735689600000,
+      "type": "ios"
+    }
+  }
+}

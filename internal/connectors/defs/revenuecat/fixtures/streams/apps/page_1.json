@@ -16,18 +16,13 @@
           "id": "app_fixture_1",
           "object": "app",
           "name": "Fixture App 1",
-          "project_id": "proj_fixture_1",
-          "created_at": 1735689600000
-        },
-        {
-          "id": "app_fixture_2",
-          "object": "app",
-          "name": "Fixture App 2",
-          "project_id": "proj_fixture_1",
-          "created_at": 1735776000000
+          "project_id": "synthetic-conformance-value",
+          "created_at": 1735689600000,
+          "type": "ios"
         }
       ],
-      "next_page": null
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/apps"
     }
   }
 }

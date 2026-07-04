@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/attributes",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "object": "customer_attribute",
+          "name": "plan",
+          "value": "fixture",
+          "updated_at": 1735689600000
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/attributes"
+    }
+  }
+}

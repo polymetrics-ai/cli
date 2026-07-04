@@ -1,0 +1,20 @@
+{
+  "record": {
+    "offering_id": "offering_fixture_1",
+    "lookup_key": "fixture_lookup_key",
+    "display_name": "Fixture Display Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/offerings/offering_fixture_1/packages",
+    "body": {
+      "lookup_key": "fixture_lookup_key",
+      "display_name": "Fixture Display Name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

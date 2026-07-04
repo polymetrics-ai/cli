@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customer_id": "cust_fixture_1",
+    "currency_code": "currency_code_fixture_1",
+    "balance": 100
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers/cust_fixture_1/virtual_currencies/update_balance",
+    "body": {
+      "currency_code": "currency_code_fixture_1",
+      "balance": 100
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/charts/synthetic-conformance-value/options",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "chart_options",
+      "resolutions": [
+
+      ],
+      "segments": [
+
+      ],
+      "filters": [
+
+      ]
+    }
+  }
+}

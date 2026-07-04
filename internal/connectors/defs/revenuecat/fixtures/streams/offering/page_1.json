@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/offerings/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "object": "offering",
+      "lookup_key": "default",
+      "display_name": "Default",
+      "is_current": true,
+      "created_at": 1735689600000,
+      "project_id": "synthetic-conformance-value",
+      "paywall_id": "paywall_fixture_1",
+      "state": "active"
+    }
+  }
+}

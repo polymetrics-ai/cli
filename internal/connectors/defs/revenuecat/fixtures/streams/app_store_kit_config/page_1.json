@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/apps/synthetic-conformance-value/store_kit_config",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "store_kit_config_file",
+      "contents": {
+        "bundle_id": "com.fixture.app"
+      }
+    }
+  }
+}

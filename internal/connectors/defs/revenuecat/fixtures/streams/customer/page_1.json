@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "object": "customer",
+      "project_id": "synthetic-conformance-value",
+      "first_seen_at": 1735689600000,
+      "last_seen_at": 1735689600000
+    }
+  }
+}

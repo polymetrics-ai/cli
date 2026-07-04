@@ -16,18 +16,13 @@
           "id": "cust_fixture_1",
           "object": "customer",
           "app_user_id": "user_fixture_1",
+          "project_id": "synthetic-conformance-value",
           "created_at": 1735689600000,
           "updated_at": 1735689600000
-        },
-        {
-          "id": "cust_fixture_2",
-          "object": "customer",
-          "app_user_id": "user_fixture_2",
-          "created_at": 1735776000000,
-          "updated_at": 1735776000000
         }
       ],
-      "next_page": null
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/customers"
     }
   }
 }

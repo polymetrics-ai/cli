@@ -1,0 +1,14 @@
+{
+  "record": {
+    "app_id": "app_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/synthetic-conformance-value/apps/app_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

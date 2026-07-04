@@ -1,0 +1,14 @@
+{
+  "record": {
+    "product_id": "prod_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/synthetic-conformance-value/products/prod_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

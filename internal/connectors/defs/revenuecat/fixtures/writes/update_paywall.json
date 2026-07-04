@@ -1,0 +1,14 @@
+{
+  "record": {
+    "paywall_id": "paywall_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/synthetic-conformance-value/paywalls/paywall_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

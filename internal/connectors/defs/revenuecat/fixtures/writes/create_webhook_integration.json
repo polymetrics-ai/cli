@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "url": "https://example.invalid/revenuecat-webhook"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/integrations/webhooks",
+    "body": {
+      "name": "Fixture Name",
+      "url": "https://example.invalid/revenuecat-webhook"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

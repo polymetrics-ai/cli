@@ -15,19 +15,16 @@
         {
           "id": "prod_fixture_1",
           "object": "product",
-          "store_identifier": "com.fixture.app.monthly",
+          "store_identifier": "com.fixture.monthly",
           "type": "subscription",
-          "created_at": 1735689600000
-        },
-        {
-          "id": "prod_fixture_2",
-          "object": "product",
-          "store_identifier": "com.fixture.app.annual",
-          "type": "subscription",
-          "created_at": 1735776000000
+          "created_at": 1735689600000,
+          "app_id": "synthetic-conformance-value",
+          "display_name": "Fixture Product",
+          "state": "active"
         }
       ],
-      "next_page": null
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/products"
     }
   }
 }

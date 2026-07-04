@@ -1,0 +1,26 @@
+{
+  "record": {
+    "customer_id": "cust_fixture_1",
+    "attributes": {
+      "plan": {
+        "value": "fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers/cust_fixture_1/attributes",
+    "body": {
+      "attributes": {
+        "plan": {
+          "value": "fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

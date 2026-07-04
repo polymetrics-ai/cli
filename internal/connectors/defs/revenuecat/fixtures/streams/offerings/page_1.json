@@ -15,19 +15,17 @@
         {
           "id": "offering_fixture_1",
           "object": "offering",
+          "lookup_key": "default",
           "identifier": "default",
-          "description": "Fixture default offering",
-          "created_at": 1735689600000
-        },
-        {
-          "id": "offering_fixture_2",
-          "object": "offering",
-          "identifier": "promo",
-          "description": "Fixture promo offering",
-          "created_at": 1735776000000
+          "display_name": "Default",
+          "description": "Fixture offering",
+          "created_at": 1735689600000,
+          "project_id": "synthetic-conformance-value",
+          "state": "active"
         }
       ],
-      "next_page": null
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/offerings"
     }
   }
 }

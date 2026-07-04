@@ -1,0 +1,15 @@
+{
+  "record": {
+    "subscription_id": "sub_fixture_1",
+    "transaction_id": "txn_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/subscriptions/sub_fixture_1/transactions/txn_fixture_1/actions/refund"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

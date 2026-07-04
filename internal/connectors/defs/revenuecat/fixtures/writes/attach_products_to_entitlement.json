@@ -1,0 +1,22 @@
+{
+  "record": {
+    "entitlement_id": "ent_fixture_1",
+    "product_ids": [
+      "prod_fixture_1"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/entitlements/ent_fixture_1/actions/attach_products",
+    "body": {
+      "product_ids": [
+        "prod_fixture_1"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

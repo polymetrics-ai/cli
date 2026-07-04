@@ -1,0 +1,14 @@
+{
+  "record": {
+    "virtual_currency_code": "COIN"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/virtual_currencies/COIN/actions/unarchive"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

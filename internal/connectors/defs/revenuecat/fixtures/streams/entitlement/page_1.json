@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/entitlements/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "object": "entitlement",
+      "project_id": "synthetic-conformance-value",
+      "lookup_key": "pro",
+      "display_name": "Pro",
+      "created_at": 1735689600000,
+      "state": "active"
+    }
+  }
+}

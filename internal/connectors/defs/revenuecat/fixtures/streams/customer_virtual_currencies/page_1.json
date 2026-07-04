@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/virtual_currencies",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "object": "virtual_currency_balance",
+          "currency_code": "COIN",
+          "balance": 100,
+          "description": "Fixture balance",
+          "name": "Coins"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/virtual_currencies"
+    }
+  }
+}

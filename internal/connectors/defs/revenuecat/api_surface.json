@@ -1,20 +1,717 @@
 {
-  "api": "RevenueCat REST API v2 (https://api.revenuecat.com/v2)",
-  "docs": "https://www.revenuecat.com/docs/api-v1",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (projects, apps, products, offerings, customers); legacy ships no writes (capabilities.write is false) and the full RevenueCat surface (receipts, subscriber attributes/attribution, entitlement grants, purchase/refund/cancel/defer/extend transaction mutations) is out of scope until Pass B.",
+  "api": "RevenueCat REST API v2",
+  "docs": "https://www.revenuecat.com/docs/api-v2",
+  "reviewed_at": "2026-07-04",
+  "scope": "RevenueCat REST API v2 project, app, customer, entitlement, offering, package, product, purchase, subscription, invoice, paywall, webhook integration, virtual currency, audit log, chart, and metrics endpoints. API v1 is a separate key family and is not mixed into this v2 connector surface.",
   "endpoints": [
-    { "method": "GET", "path": "/v2/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/v2/projects/{project_id}/apps", "covered_by": { "stream": "apps" } },
-    { "method": "GET", "path": "/v2/projects/{project_id}/products", "covered_by": { "stream": "products" } },
-    { "method": "GET", "path": "/v2/projects/{project_id}/offerings", "covered_by": { "stream": "offerings" } },
-    { "method": "GET", "path": "/v2/projects/{project_id}/customers", "covered_by": { "stream": "customers" } },
-    { "method": "POST", "path": "/v1/receipts", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented purchase receipt recording; Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/subscriptions/{product_identifier}/revoke", "excluded": { "category": "destructive_admin", "reason": "subscription revoke/refund mutation; legacy never implemented writes" } },
-    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/subscriptions/{product_identifier}/defer", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented subscription deferral; Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/transactions/{store_transaction_identifier}/refund", "excluded": { "category": "destructive_admin", "reason": "transaction refund mutation; legacy never implemented writes" } },
-    { "method": "DELETE", "path": "/v1/subscribers/{app_user_id}", "excluded": { "category": "destructive_admin", "reason": "subscriber deletion; legacy never implemented writes" } },
-    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/attributes", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented attribute updates; Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1/subscribers/{app_user_id}/entitlements/{entitlement_identifier}/promotional", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented promotional entitlement grants; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps",
+      "covered_by": {
+        "stream": "apps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/offerings",
+      "covered_by": {
+        "stream": "offerings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps/{app_id}",
+      "covered_by": {
+        "stream": "app"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps/{app_id}/public_api_keys",
+      "covered_by": {
+        "stream": "app_public_api_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps/{app_id}/store_kit_config",
+      "covered_by": {
+        "stream": "app_store_kit_config"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/audit_logs",
+      "covered_by": {
+        "stream": "audit_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/charts/{chart_name}",
+      "covered_by": {
+        "stream": "chart_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/charts/{chart_name}/options",
+      "covered_by": {
+        "stream": "chart_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/collaborators",
+      "covered_by": {
+        "stream": "collaborators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}",
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/active_entitlements",
+      "covered_by": {
+        "stream": "customer_active_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/aliases",
+      "covered_by": {
+        "stream": "customer_aliases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/attributes",
+      "covered_by": {
+        "stream": "customer_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/customer_center",
+      "covered_by": {
+        "stream": "customer_center"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/invoices",
+      "covered_by": {
+        "stream": "customer_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/purchases",
+      "covered_by": {
+        "stream": "customer_purchases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/subscriptions",
+      "covered_by": {
+        "stream": "customer_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies",
+      "covered_by": {
+        "stream": "customer_virtual_currencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/entitlements",
+      "covered_by": {
+        "stream": "entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}",
+      "covered_by": {
+        "stream": "entitlement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}/products",
+      "covered_by": {
+        "stream": "entitlement_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/integrations/webhooks",
+      "covered_by": {
+        "stream": "webhook_integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}",
+      "covered_by": {
+        "stream": "webhook_integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/metrics/overview",
+      "covered_by": {
+        "stream": "overview_metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/metrics/revenue",
+      "covered_by": {
+        "stream": "revenue_metric"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/offerings/{offering_id}",
+      "covered_by": {
+        "stream": "offering"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/offerings/{offering_id}/packages",
+      "covered_by": {
+        "stream": "offering_packages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/packages/{package_id}",
+      "covered_by": {
+        "stream": "package"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/packages/{package_id}/products",
+      "covered_by": {
+        "stream": "package_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/paywalls",
+      "covered_by": {
+        "stream": "paywalls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}",
+      "covered_by": {
+        "stream": "paywall"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/products/{product_id}",
+      "covered_by": {
+        "stream": "product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/purchases",
+      "covered_by": {
+        "stream": "purchases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/purchases/{purchase_id}",
+      "covered_by": {
+        "stream": "purchase"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/purchases/{purchase_id}/entitlements",
+      "covered_by": {
+        "stream": "purchase_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}",
+      "covered_by": {
+        "stream": "subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/authenticated_management_url",
+      "covered_by": {
+        "stream": "subscription_authenticated_management_url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/entitlements",
+      "covered_by": {
+        "stream": "subscription_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/transactions",
+      "covered_by": {
+        "stream": "subscription_transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/virtual_currencies",
+      "covered_by": {
+        "stream": "virtual_currencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}",
+      "covered_by": {
+        "stream": "virtual_currency"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "invoice file endpoint returns a binary or document payload rather than JSON records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/apps",
+      "covered_by": {
+        "write": "create_app"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/apps/{app_id}",
+      "covered_by": {
+        "write": "update_app"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/apps/{app_id}",
+      "covered_by": {
+        "write": "delete_app"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/customers/{customer_id}",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/actions/assign_offering",
+      "covered_by": {
+        "write": "assign_customer_offering"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/actions/grant_entitlement",
+      "covered_by": {
+        "write": "grant_customer_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/actions/restore_purchase_by_order_id",
+      "covered_by": {
+        "write": "restore_purchase_by_order_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/actions/revoke_granted_entitlement",
+      "covered_by": {
+        "write": "revoke_customer_granted_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/actions/transfer",
+      "covered_by": {
+        "write": "transfer_customer_data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/attributes",
+      "covered_by": {
+        "write": "set_customer_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies/transactions",
+      "covered_by": {
+        "write": "create_virtual_currencies_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies/update_balance",
+      "covered_by": {
+        "write": "update_virtual_currencies_balance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/entitlements",
+      "covered_by": {
+        "write": "create_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}",
+      "covered_by": {
+        "write": "update_entitlement"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}",
+      "covered_by": {
+        "write": "delete_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/archive",
+      "covered_by": {
+        "write": "archive_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/unarchive",
+      "covered_by": {
+        "write": "unarchive_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/attach_products",
+      "covered_by": {
+        "write": "attach_products_to_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/detach_products",
+      "covered_by": {
+        "write": "detach_products_from_entitlement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/integrations/webhooks",
+      "covered_by": {
+        "write": "create_webhook_integration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}",
+      "covered_by": {
+        "write": "update_webhook_integration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}",
+      "covered_by": {
+        "write": "delete_webhook_integration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/offerings",
+      "covered_by": {
+        "write": "create_offering"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/offerings/{offering_id}",
+      "covered_by": {
+        "write": "update_offering"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/offerings/{offering_id}",
+      "covered_by": {
+        "write": "delete_offering"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/offerings/{offering_id}/actions/archive",
+      "covered_by": {
+        "write": "archive_offering"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/offerings/{offering_id}/actions/unarchive",
+      "covered_by": {
+        "write": "unarchive_offering"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/offerings/{offering_id}/packages",
+      "covered_by": {
+        "write": "create_package"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/packages/{package_id}",
+      "covered_by": {
+        "write": "update_package"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/packages/{package_id}",
+      "covered_by": {
+        "write": "delete_package"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/packages/{package_id}/actions/attach_products",
+      "covered_by": {
+        "write": "attach_products_to_package"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/packages/{package_id}/actions/detach_products",
+      "covered_by": {
+        "write": "detach_products_from_package"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/paywalls",
+      "covered_by": {
+        "write": "create_paywall"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}",
+      "covered_by": {
+        "write": "update_paywall"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}",
+      "covered_by": {
+        "write": "delete_paywall"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}/versions",
+      "covered_by": {
+        "write": "create_paywall_version"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/products",
+      "covered_by": {
+        "write": "create_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/products/{product_id}",
+      "covered_by": {
+        "write": "update_product"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/products/{product_id}",
+      "covered_by": {
+        "write": "delete_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/products/{product_id}/actions/archive",
+      "covered_by": {
+        "write": "archive_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/products/{product_id}/actions/unarchive",
+      "covered_by": {
+        "write": "unarchive_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/products/{product_id}/create_in_store",
+      "covered_by": {
+        "write": "create_product_in_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/purchases/{purchase_id}/actions/refund",
+      "covered_by": {
+        "write": "refund_purchase"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/extend",
+      "covered_by": {
+        "write": "extend_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/refund",
+      "covered_by": {
+        "write": "refund_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/transactions/{transaction_id}/actions/refund",
+      "covered_by": {
+        "write": "refund_subscription_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/virtual_currencies",
+      "covered_by": {
+        "write": "create_virtual_currency"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}",
+      "covered_by": {
+        "write": "update_virtual_currency"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}",
+      "covered_by": {
+        "write": "delete_virtual_currency"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/archive",
+      "covered_by": {
+        "write": "archive_virtual_currency"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/unarchive",
+      "covered_by": {
+        "write": "unarchive_virtual_currency"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/media_assets",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "media asset upload is multipart/binary payload handling outside the declarative JSON write dialect"
+      }
+    }
   ]
 }

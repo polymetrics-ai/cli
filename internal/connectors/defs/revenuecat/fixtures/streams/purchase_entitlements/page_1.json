@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/purchases/synthetic-conformance-value/entitlements",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "ent_fixture_1",
+          "object": "entitlement",
+          "project_id": "synthetic-conformance-value",
+          "lookup_key": "pro",
+          "display_name": "Pro",
+          "created_at": 1735689600000,
+          "state": "active"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/purchases/synthetic-conformance-value/entitlements"
+    }
+  }
+}

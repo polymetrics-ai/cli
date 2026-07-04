@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/purchases",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "purchase_fixture_1",
+          "object": "purchase",
+          "customer_id": "cust_fixture_1",
+          "product_id": "prod_fixture_1",
+          "purchased_at": 1735689600000,
+          "status": "active",
+          "store_purchase_identifier": "synthetic-conformance-value"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/purchases"
+    }
+  }
+}

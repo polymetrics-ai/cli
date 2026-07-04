@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/paywalls",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "paywall_fixture_1",
+          "object": "paywall",
+          "name": "Fixture Paywall",
+          "offering_id": "offering_fixture_1",
+          "created_at": 1735689600000,
+          "published_at": 1735689600000,
+          "automatically_scale_font_size": true
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/paywalls"
+    }
+  }
+}

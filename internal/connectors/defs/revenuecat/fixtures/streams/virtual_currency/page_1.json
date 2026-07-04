@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/virtual_currencies/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": "COIN",
+      "object": "virtual_currency",
+      "project_id": "synthetic-conformance-value",
+      "name": "Coins",
+      "description": "Fixture currency",
+      "created_at": 1735689600000,
+      "state": "active"
+    }
+  }
+}

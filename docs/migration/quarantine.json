@@ -215,5 +215,18 @@
       "internal/connectors/defs/printify/docs.md"
     ],
     "attempts": 1
+  },
+  {
+    "name": "sap-fieldglass",
+    "blocker_type": "DOCS_UNREACHABLE",
+    "reason": "The public metadata docs_url resolves to the SAP Business Accelerator Hub package, whose Fieldglass REST artifacts expose only catalog metadata anonymously. The downloadable OpenAPI/$value content for specific Fieldglass artifacts redirects to SAP login, while the accessible catalog documents generic /api/vc/connector/<connector name> download/upload resources rather than the legacy /api/v1/workers, /api/v1/job_postings, and /api/v1/time_sheets JSON endpoints. Expanding Pass B from partial catalog names would invent paths, methods, and record shapes.",
+    "evidence": [
+      "metadata docs_url: https://api.sap.com/package/SAPFieldglass/rest",
+      "catalog OData entry for activeWorkerDownload: ServiceUrl=https://sandbox.api.sap.com/api/vc/connector, Title=Active Worker Download",
+      "curl https://api.sap.com/odata/1.0/catalog.svc/APIContent.APIs('activeWorkerDownload')/$value redirects to SAP login",
+      "SAP Help REST API Integration guide documents connector resource URL https://<SAP Fieldglass environment URL>/api/vc/connector/<connector name> and says detailed connector specs live in SAP Connector Library",
+      "internal/connectors/sap-fieldglass/sap_fieldglass.go"
+    ],
+    "attempts": 1
   }
 ]
