@@ -1,23 +1,66 @@
 {
-  "api": "SpaceX API v4 (https://api.spacexdata.com/v4)",
+  "api": "SpaceX API v4/v5 (https://api.spacexdata.com)",
   "docs": "https://github.com/r-spacex/SpaceX-API/tree/master/docs",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 11 legacy-parity list/singleton read streams only, matching internal/connectors/spacex-api's exact endpoint set; query-based filtering (POST /v4/<resource>/query) and single-record-by-id lookups are out of scope until Pass B",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion, verified against the live GitHub docs tree (github.com/r-spacex/SpaceX-API/tree/master/docs, fetched 2026-07-03: capsules/company/cores/crew/dragons/history/landpads/launches/launchpads/payloads/roadster/rockets/ships/starlink, each with all.md/one.md/query.md docs pages -- launches additionally has latest.md/next.md/upcoming.md/past.md and is documented at v5, alongside the legacy v4 route this bundle still uses) and the models/ Mongoose schema source (models/history.js confirms the shared mongoose-id id-stamping plugin applies to every resource, including history, whose docs.md truncated JSON example omits it). The live api.spacexdata.com origin is currently unreachable (Cloudflare 525 SSL-handshake-failed on every endpoint as of this review, consistent with widely-reported reports that the project's origin server is defunct/unmaintained) -- this pass is based on the still-published, versioned API docs and model source, the authoritative documented surface, not a live probe. The API is entirely public/unauthenticated and publishes NO mutation endpoints of any kind: it is a read-only public dataset of historical/reference SpaceX data with no accounts, no user-scoped resources, and no documented write path. All 13 documented GET list resources (the 11 already-covered legacy streams plus 'cores', 'dragons' and 'history', newly added this pass) are now covered_by a stream. Each resource's single-record-by-id GET (/{id}) is excluded as duplicate_of its list stream (the full list already contains every record the by-id lookup would return). launches additionally publishes 4 filtered-view GET aliases (latest, next, upcoming, past) that return a subset/reshaping of the same launches list stream's record population -- all excluded as duplicate_of. Every resource's POST /<resource>/query MongoDB-query-DSL endpoint (arbitrary nested {query, options} filter/sort/pagination body, per docs/queries.md) is excluded as out_of_scope: it is a read operation (not a mutation, so it cannot be modeled as a writes.json action) whose request body is an open-ended Mongoose query object with no fixed field set the dialect's templated stream.query can express, and the plain list stream already returns the full record population the query DSL would filter a subset of -- no read capability is lost by omitting it, only server-side filtering convenience.",
   "endpoints": [
-    { "method": "GET", "path": "/v4/launches", "covered_by": { "stream": "launches" } },
-    { "method": "GET", "path": "/v4/rockets", "covered_by": { "stream": "rockets" } },
     { "method": "GET", "path": "/v4/capsules", "covered_by": { "stream": "capsules" } },
-    { "method": "GET", "path": "/v4/crew", "covered_by": { "stream": "crew" } },
-    { "method": "GET", "path": "/v4/payloads", "covered_by": { "stream": "payloads" } },
-    { "method": "GET", "path": "/v4/starlink", "covered_by": { "stream": "starlink" } },
-    { "method": "GET", "path": "/v4/launchpads", "covered_by": { "stream": "launchpads" } },
-    { "method": "GET", "path": "/v4/landpads", "covered_by": { "stream": "landpads" } },
-    { "method": "GET", "path": "/v4/ships", "covered_by": { "stream": "ships" } },
-    { "method": "GET", "path": "/v4/roadster", "covered_by": { "stream": "roadster" } },
+    { "method": "GET", "path": "/v4/capsules/{id}", "excluded": { "category": "duplicate_of", "reason": "single-capsule detail; identical record shape already covered by the capsules list stream's full result set" } },
+    { "method": "POST", "path": "/v4/capsules/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the capsules stream already returns the full population any query would filter a subset of" } },
+
     { "method": "GET", "path": "/v4/company", "covered_by": { "stream": "company" } },
-    { "method": "GET", "path": "/v4/launches/{id}", "excluded": { "category": "duplicate_of", "reason": "single-record-by-id lookup covered by the 'launches' list stream's full result set" } },
-    { "method": "GET", "path": "/v4/launches/latest", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v4/launches/next", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/v4/launches/query", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/v4/company/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search over the single company document; a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the company stream already returns the sole document any query would filter" } },
+
+    { "method": "GET", "path": "/v4/cores", "covered_by": { "stream": "cores" } },
+    { "method": "GET", "path": "/v4/cores/{id}", "excluded": { "category": "duplicate_of", "reason": "single-core detail; identical record shape already covered by the cores list stream's full result set" } },
+    { "method": "POST", "path": "/v4/cores/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the cores stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/crew", "covered_by": { "stream": "crew" } },
+    { "method": "GET", "path": "/v4/crew/{id}", "excluded": { "category": "duplicate_of", "reason": "single-crew-member detail; identical record shape already covered by the crew list stream's full result set" } },
+    { "method": "POST", "path": "/v4/crew/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the crew stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/dragons", "covered_by": { "stream": "dragons" } },
+    { "method": "GET", "path": "/v4/dragons/{id}", "excluded": { "category": "duplicate_of", "reason": "single-Dragon-capsule-type detail; identical record shape already covered by the dragons list stream's full result set" } },
+    { "method": "POST", "path": "/v4/dragons/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the dragons stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/history", "covered_by": { "stream": "history" } },
+    { "method": "GET", "path": "/v4/history/{id}", "excluded": { "category": "duplicate_of", "reason": "single-history-event detail; identical record shape already covered by the history list stream's full result set" } },
+    { "method": "POST", "path": "/v4/history/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the history stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/landpads", "covered_by": { "stream": "landpads" } },
+    { "method": "GET", "path": "/v4/landpads/{id}", "excluded": { "category": "duplicate_of", "reason": "single-landpad detail; identical record shape already covered by the landpads list stream's full result set" } },
+    { "method": "POST", "path": "/v4/landpads/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the landpads stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/launches", "covered_by": { "stream": "launches" } },
+    { "method": "GET", "path": "/v5/launches", "excluded": { "category": "duplicate_of", "reason": "current-generation launches list endpoint at v5 (this bundle's launches stream targets the legacy v4 alias for the same collection under config.base_url, unchanged behavior); v4 and v5 return the same record population differing only in crew-field shape (docs/launches/v5/README.md)" } },
+    { "method": "GET", "path": "/v4/launches/{id}", "excluded": { "category": "duplicate_of", "reason": "single-launch detail; identical record shape already covered by the launches list stream's full result set" } },
+    { "method": "GET", "path": "/v5/launches/latest", "excluded": { "category": "duplicate_of", "reason": "single most-recent-launch view; a filtered subset of the same records the launches list stream already returns in full" } },
+    { "method": "GET", "path": "/v5/launches/next", "excluded": { "category": "duplicate_of", "reason": "single next-scheduled-launch view; a filtered subset of the same records the launches list stream already returns in full" } },
+    { "method": "GET", "path": "/v5/launches/upcoming", "excluded": { "category": "duplicate_of", "reason": "upcoming=true filtered view; a filtered subset of the same records the launches list stream already returns in full (callers can filter client-side on the emitted upcoming field)" } },
+    { "method": "GET", "path": "/v5/launches/past", "excluded": { "category": "duplicate_of", "reason": "upcoming=false filtered view; a filtered subset of the same records the launches list stream already returns in full (callers can filter client-side on the emitted upcoming field)" } },
+    { "method": "POST", "path": "/v5/launches/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the launches stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/launchpads", "covered_by": { "stream": "launchpads" } },
+    { "method": "GET", "path": "/v4/launchpads/{id}", "excluded": { "category": "duplicate_of", "reason": "single-launchpad detail; identical record shape already covered by the launchpads list stream's full result set" } },
+    { "method": "POST", "path": "/v4/launchpads/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the launchpads stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/payloads", "covered_by": { "stream": "payloads" } },
+    { "method": "GET", "path": "/v4/payloads/{id}", "excluded": { "category": "duplicate_of", "reason": "single-payload detail; identical record shape already covered by the payloads list stream's full result set" } },
+    { "method": "POST", "path": "/v4/payloads/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the payloads stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/roadster", "covered_by": { "stream": "roadster" } },
+    { "method": "POST", "path": "/v4/roadster/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (this endpoint's own docs note it supports only the 'select' field-projection option, no pagination); a read operation, not a mutation; the roadster stream already returns the sole document any query would filter" } },
+
+    { "method": "GET", "path": "/v4/rockets", "covered_by": { "stream": "rockets" } },
+    { "method": "GET", "path": "/v4/rockets/{id}", "excluded": { "category": "duplicate_of", "reason": "single-rocket detail; identical record shape already covered by the rockets list stream's full result set" } },
+    { "method": "POST", "path": "/v4/rockets/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the rockets stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/ships", "covered_by": { "stream": "ships" } },
+    { "method": "GET", "path": "/v4/ships/{id}", "excluded": { "category": "duplicate_of", "reason": "single-ship detail; identical record shape already covered by the ships list stream's full result set" } },
+    { "method": "POST", "path": "/v4/ships/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the ships stream already returns the full population any query would filter a subset of" } },
+
+    { "method": "GET", "path": "/v4/starlink", "covered_by": { "stream": "starlink" } },
+    { "method": "GET", "path": "/v4/starlink/{id}", "excluded": { "category": "duplicate_of", "reason": "single-Starlink-satellite detail; identical record shape already covered by the starlink list stream's full result set" } },
+    { "method": "POST", "path": "/v4/starlink/query", "excluded": { "category": "out_of_scope", "reason": "MongoDB-query-DSL search (arbitrary {query, options} body); a read operation, not a mutation, with no fixed field set this dialect's templated stream.query can express; the starlink stream already returns the full population any query would filter a subset of" } }
   ]
 }

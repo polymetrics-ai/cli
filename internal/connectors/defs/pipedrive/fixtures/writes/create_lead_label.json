@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Hot Lead", "color": "red" },
+  "expect": {
+    "method": "POST",
+    "path": "/leadLabels",
+    "body": { "name": "Fixture Hot Lead", "color": "red" }
+  },
+  "response": { "status": 201, "body": { "success": true, "data": { "id": "62d1a9c0-e0e0-11ea-9e0c-a5b6f0d7d9f0", "name": "Fixture Hot Lead" } } }
+}

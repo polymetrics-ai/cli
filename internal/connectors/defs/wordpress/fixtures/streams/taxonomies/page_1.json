@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/taxonomies" },
+  "response": {
+    "status": 200,
+    "body": {
+      "category": {
+        "name": "Categories",
+        "slug": "category",
+        "description": "",
+        "types": ["post"],
+        "hierarchical": true,
+        "rest_base": "categories"
+      },
+      "post_tag": {
+        "name": "Tags",
+        "slug": "post_tag",
+        "description": "",
+        "types": ["post"],
+        "hierarchical": false,
+        "rest_base": "tags"
+      }
+    }
+  }
+}

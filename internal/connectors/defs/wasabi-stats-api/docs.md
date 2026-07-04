@@ -31,15 +31,39 @@ whose contents determine the auth mode," and `Value` is otherwise unused by the 
 
 ## Streams notes
 
-Two streams, both primary-keyed on `id`, cursor-field `date`: `bucket_stats` (`GET v1/stats`) and
-`account_stats` (`GET v1/accounts`), both un-paginated (`pagination: {"type": "none"}`, matching
-legacy exactly — `streamEndpoints` declares no pagination anywhere) and both reading records from
-the response body's `data` array (`records.path: "data"`).
+**Pass B correction**: legacy (and this bundle's prior version) targeted `GET v1/stats` and
+`GET v1/accounts` — neither is a real Wasabi Stats API path. Researching the live docs
+(`docs.wasabi.com/apidocs/wasabi-stats-api` and its per-endpoint sub-pages) turned up the real,
+currently-documented standalone-account surface: exactly 4 GET endpoints under
+`/v1/standalone/utilizations`. This bundle now targets the real paths while keeping the exact same
+2 stream names/schemas/primary-key/cursor-field legacy already exposed, so downstream
+catalog/manifest consumers see no shape change: `bucket_stats` now reads `GET
+v1/standalone/utilizations/bucket` (real API: bare top-level JSON array, `records.path: ""`) and
+`account_stats` now reads `GET v1/standalone/utilizations` (real API: `{"PageInfo":{...},
+"Records":[...]}`, `records.path: "Records"`). Both are un-paginated (`pagination: {"type":
+"none"}` — the real API's own `pageNum`/`pageSize` query params exist, but this bundle sends only
+a fixed `pageSize=100` per request and does not implement multi-page traversal, matching legacy's
+un-paginated behavior exactly for the record volumes this connector was built for).
 
-Both streams send `start_date` as a query parameter **only when `config.start_date` is configured**
-(`omit_when_absent: true` — the optional-query dialect, conventions.md §3), matching legacy's Read
-path exactly (`wasabi_stats_api.go:100-102`: `if start := ...; start != "" { q.Set("start_date",
-start) }`). This differs deliberately from `base.check`'s `start_date` handling (below).
+The real API returns PascalCase field names (`BucketUtilizationNum`, `AcctNum`, `StartTime`,
+`PaddedStorageSizeBytes`, etc.) — every schema property is populated via a `computed_fields` rename
+(bare `{{ record.X }}` references trigger typed extraction, preserving each field's real JSON
+type — integers stay integers, no stringify-workaround). `id` is derived from the real API's own
+unique numeric identifier (`BucketUtilizationNum` / `UtilizationNum`) via `{{ record.X |
+last_path_segment }}` (forces string output for the schema's `"type": "string"` id field, the same
+pattern VWO's `campaigns.id` uses for its own bare-integer wire id). `storage_bytes` aliases the
+real API's `PaddedStorageSizeBytes` (billable storage after Wasabi's minimum-object-size rule) to
+keep this bundle's pre-existing field name; `account_stats`' `object_count` aliases
+`NumBillableObjects` the same way. Both streams also expose the full real record (`bucket_num`,
+`acct_num`, `region`, all the `Num*Calls`/`*Bytes` counters) as additional schema properties beyond
+legacy's original narrower field set — this is Pass B's full-surface-expansion mandate: everything
+the real API actually returns is now modeled, not just the subset legacy's narrower shape captured.
+
+Both streams send `from` as a query parameter **only when `config.start_date` is configured**
+(`omit_when_absent: true` — the optional-query dialect, conventions.md §3), mirroring legacy's
+`start_date`-passthrough behavior one-for-one but under the real API's own query parameter name
+(`from`, not `start_date` — Wasabi's docs default this to "the date of the last month from today"
+when omitted). This differs deliberately from `base.check`'s `from` handling (below).
 
 **`hooks/wasabi-stats-api/hooks.go`'s `RecordHook` ports legacy's per-record `id`-fallback
 derivation**, which no `computed_fields` template can express (a computed field is a single
@@ -77,13 +101,23 @@ legacy's `ErrUnsupportedOperation` (`wasabi_stats_api.go:125-127`).
   custom-auth-only skip_dynamic precedent (conventions.md's conformance section: "a custom-auth
   `AuthHook` whose real request needs a config value... conformance's synthetic non-secret config...
   can never meaningfully populate").
-- **`base.check`'s `start_date` query param is always present (even as an empty string) when
+- **`base.check`'s `from` query param is always present (even as an empty string) when
   `config.start_date` is unset**, deliberately DIFFERENT from the two streams' `omit_when_absent`
   behavior: legacy's `Check` (`wasabi_stats_api.go:66`) unconditionally builds
   `url.Values{"start_date": []string{strings.TrimSpace(cfg.Config["start_date"])}}` — always
   setting the key, never omitting it, even when the trimmed value is `""` — while legacy's `Read`
   (`wasabi_stats_api.go:100-102`) omits the param entirely when empty. This bundle reproduces both
   behaviors faithfully via two different `stream.Query` dialect shapes (`check.query` uses
-  `"default": ""`, always present; the streams use `"omit_when_absent": true`) rather than
-  collapsing them to one shared shape, since collapsing would change accepted-input behavior for
-  whichever side lost its distinct handling.
+  `"default": ""`, always present under the real API's `from` key; the streams use
+  `"omit_when_absent": true`) rather than collapsing them to one shared shape, since collapsing
+  would change accepted-input behavior for whichever side lost its distinct handling.
+- **`api_surface.json`'s excluded endpoints, Pass B**: the real API's two single-bucket detail
+  lookups (`/v1/standalone/utilizations/bucket/{bucketName}` and `.../{bucketNumber}`) are excluded
+  as `duplicate_of` `bucket_stats` — same record shape, and `bucket_stats` already returns every
+  bucket's records in one call, so a per-bucket detail endpoint adds no reachable data. The
+  Control-Account/Sub-Account aggregate endpoint (`/v1/utilizations`) is excluded as
+  `requires_elevated_scope`: it needs a Wasabi Account Control "Primary Partner API Key" (a
+  reseller/control-account credential), a fundamentally different auth scope from the standalone
+  Root/billing-permission access key this bundle's `spec.json` collects — adding it would require a
+  new secret field and is out of scope for this connector's identity as a standalone-account
+  integration.

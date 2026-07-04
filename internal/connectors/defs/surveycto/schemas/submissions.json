@@ -2,12 +2,15 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "submissions",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "submissionDate",
-  "required": ["id"],
+  "x-primary-key": ["form_id", "submissionId"],
+  "x-cursor-field": "completionDate",
+  "required": ["submissionId", "form_id"],
   "properties": {
-    "id": { "type": "string" },
-    "form_id": { "type": ["string", "null"] },
-    "submissionDate": { "type": ["string", "null"] }
+    "submissionId": { "type": "string" },
+    "form_id": { "type": "string" },
+    "reviewStatus": { "type": ["string", "null"] },
+    "formDefinitionVersion": { "type": ["integer", "null"] },
+    "submissionDate": { "type": ["string", "null"] },
+    "completionDate": { "type": ["string", "null"] }
   }
 }

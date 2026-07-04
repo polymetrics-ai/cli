@@ -1,0 +1,218 @@
+{
+  "actions": [
+    {
+      "name": "create_reservation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pms/reservations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["unitId", "arrivalDate", "departureDate"],
+        "properties": {
+          "unitId": { "type": "integer" },
+          "arrivalDate": { "type": "string" },
+          "departureDate": { "type": "string" },
+          "rateTypeId": { "type": "integer" },
+          "guaranteePolicyId": { "type": "integer" },
+          "reservationTypeId": { "type": "integer" },
+          "contactId": { "type": "integer" },
+          "occupants": { "type": "array" },
+          "notes": { "type": "string" },
+          "isTaxable": { "type": "boolean" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "creates a new guest reservation and blocks the unit's availability for the given date range; external mutation, approval required"
+    },
+    {
+      "name": "create_unit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pms/units",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "shortName": { "type": "string" },
+          "shortDescription": { "type": "string" },
+          "longDescription": { "type": "string" },
+          "notes": { "type": "string" },
+          "maxPets": { "type": "number" },
+          "minimumAgeLimit": { "type": "integer" },
+          "phone": { "type": "string" },
+          "websiteUrl": { "type": "string" },
+          "nodeId": { "type": "integer" },
+          "unitTypeId": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new rentable unit/property record; external mutation, approval required"
+    },
+    {
+      "name": "update_unit",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/pms/units/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "shortName", "shortDescription", "longDescription", "notes", "maxPets", "minimumAgeLimit", "phone", "websiteUrl", "nodeId", "unitTypeId"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "shortName": { "type": "string" },
+          "shortDescription": { "type": "string" },
+          "longDescription": { "type": "string" },
+          "notes": { "type": "string" },
+          "maxPets": { "type": "number" },
+          "minimumAgeLimit": { "type": "integer" },
+          "phone": { "type": "string" },
+          "websiteUrl": { "type": "string" },
+          "nodeId": { "type": "integer" },
+          "unitTypeId": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing unit's descriptive/configuration fields; a changed nodeId or unitTypeId affects rate/availability grouping for future reservations"
+    },
+    {
+      "name": "create_owner",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pms/owners",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "isActive": { "type": "boolean" },
+          "streetAddress": { "type": "string" },
+          "locality": { "type": "string" },
+          "region": { "type": "string" },
+          "postal": { "type": "string" },
+          "country": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "creates a new property owner record; external mutation, approval required"
+    },
+    {
+      "name": "update_owner",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/pms/owners/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "isActive", "streetAddress", "locality", "region", "postal", "country", "phone", "email", "notes"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "isActive": { "type": "boolean" },
+          "streetAddress": { "type": "string" },
+          "locality": { "type": "string" },
+          "region": { "type": "string" },
+          "postal": { "type": "string" },
+          "country": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing owner's contact/status fields; setting isActive:false affects that owner's active-unit reporting"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/crm/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["firstName", "lastName"],
+        "properties": {
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "primaryEmail": { "type": "string" },
+          "secondaryEmail": { "type": "string" },
+          "homePhone": { "type": "string" },
+          "cellPhone": { "type": "string" },
+          "streetAddress": { "type": "string" },
+          "locality": { "type": "string" },
+          "region": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "country": { "type": "string" },
+          "notes": { "type": "string" },
+          "isVip": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new CRM contact (guest, lead, or owner-linked person record); external mutation, approval required. Tremendous-adjacent restricted fields (taxId, paymentType, ACH banking fields) are not modeled — see docs.md Known limits"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/crm/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["firstName", "lastName", "primaryEmail", "secondaryEmail", "homePhone", "cellPhone", "streetAddress", "locality", "region", "postalCode", "country", "notes", "isVip"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "primaryEmail": { "type": "string" },
+          "secondaryEmail": { "type": "string" },
+          "homePhone": { "type": "string" },
+          "cellPhone": { "type": "string" },
+          "streetAddress": { "type": "string" },
+          "locality": { "type": "string" },
+          "region": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "country": { "type": "string" },
+          "notes": { "type": "string" },
+          "isVip": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing CRM contact's identity/contact-method fields"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/crm/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a CRM contact; irreversible, and may disassociate the contact from any reservations that reference it"
+    }
+  ]
+}

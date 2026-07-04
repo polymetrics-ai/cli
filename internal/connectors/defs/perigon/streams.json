@@ -44,6 +44,53 @@
       "records": { "path": "stories" },
       "projection": "passthrough",
       "schema": "schemas/stories.json"
+    },
+    {
+      "name": "journalists",
+      "path": "/v1/journalists/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/journalists.json"
+    },
+    {
+      "name": "sources",
+      "path": "/v1/sources/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/sources.json"
+    },
+    {
+      "name": "companies",
+      "path": "/v1/companies/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "people",
+      "path": "/v1/people/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/people.json"
+    },
+    {
+      "name": "topics",
+      "path": "/v1/topics/all",
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/topics.json"
     }
   ]
 }

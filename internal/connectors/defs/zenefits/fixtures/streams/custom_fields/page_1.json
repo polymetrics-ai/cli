@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/core/custom_fields" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "custom_field_fixture_1",
+            "name": "Fixture Field",
+            "custom_field_type": "text",
+            "help_text": "A fixture custom field",
+            "help_url": null,
+            "is_sensitive": false,
+            "is_field_required": false,
+            "can_manager_view_field": true,
+            "can_person_view_field": true,
+            "can_person_edit_field": true,
+            "custom_field_values": { "object": "/meta/ref/list", "ref_object": "/core/custom_field_values", "url": "https://api.zenefits.com/core/custom_fields/custom_field_fixture_1/custom_field_values" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/core/custom_fields"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

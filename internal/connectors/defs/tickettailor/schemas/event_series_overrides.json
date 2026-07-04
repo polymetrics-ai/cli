@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_series_overrides",
+  "type": "object",
+  "x-primary-key": ["id", "event_series_id"],
+  "required": ["id", "event_series_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "max_sellable_tickets": { "type": ["integer", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "event_series_id": { "type": "string" }
+  }
+}

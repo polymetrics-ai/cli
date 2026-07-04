@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/activities",
+    "query": { "page": "1", "limit": "10" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "metadata": { "url": "/activities", "object_type": "list", "total_count": 1, "has_more": false },
+      "list": [
+        {
+          "metadata": { "url": "/activities/95920001", "list_url": "/activities", "parent": "/", "object_type": "record", "record_type": "activity" },
+          "record": {
+            "id": 95920001,
+            "ownerid": 90505,
+            "createddate": "2026-01-01 00:00:00",
+            "modifieddate": "2026-01-01 00:00:00"
+          }
+        }
+      ]
+    }
+  }
+}

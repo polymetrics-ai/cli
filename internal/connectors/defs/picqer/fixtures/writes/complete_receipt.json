@@ -1,0 +1,9 @@
+{
+  "record": { "idreceipt": 901, "status": "completed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/receipts/901",
+    "body": { "status": "completed" }
+  },
+  "response": { "status": 200, "body": { "idreceipt": 901, "status": "processing" } }
+}

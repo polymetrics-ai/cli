@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture Folder" },
+  "expect": { "method": "PATCH", "path": "/survey_folders/1" }
+}

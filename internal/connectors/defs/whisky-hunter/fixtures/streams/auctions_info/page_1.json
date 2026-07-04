@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/api/auctions_info" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "slug": "fixture-auction-one", "name": "Fixture Auction One", "url": "https://fixture-auction-one.example.com", "buyers_fee": 10.0, "sellers_fee": 0.0, "reserve_fee": 4.0, "listing_fee": 3.0, "base_currency": "GBP" }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_plans/1": "" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "offset": 0,
+      "limit": 250,
+      "size": 1,
+      "_links": { "next": null, "prev": null },
+      "plans": [
+        { "id": 1, "project_id": 1, "name": "Fixture Plan 1", "description": "Fixture plan", "milestone_id": 1, "assignedto_id": 1, "is_completed": false, "completed_on": null, "created_by": 1, "created_on": 1767225600, "passed_count": 0, "failed_count": 0, "untested_count": 5, "url": "https://example.testrail.io/index.php?/plans/view/1" }
+      ]
+    }
+  }
+}

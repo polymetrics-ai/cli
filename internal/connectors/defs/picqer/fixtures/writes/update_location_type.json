@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1301, "name": "Fixture Location Type Updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/location_types/1301",
+    "body": { "name": "Fixture Location Type Updated" }
+  },
+  "response": { "status": 200, "body": { "id": 1301, "name": "Fixture Location Type Updated" } }
+}

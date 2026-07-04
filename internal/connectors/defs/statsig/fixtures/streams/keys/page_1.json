@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/keys", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "key": "fixture_key_placeholder_1",
+          "type": "SERVER",
+          "description": "fixture record",
+          "scopes": ["omni_read_only"],
+          "environments": ["production"],
+          "primaryTargetApp": null,
+          "secondaryTargetApps": [],
+          "status": "active",
+          "lastUsed": null
+        }
+      ]
+    }
+  }
+}

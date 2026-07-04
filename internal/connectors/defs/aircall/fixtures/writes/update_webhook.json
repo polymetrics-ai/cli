@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 5001,
+    "active": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/webhooks/5001",
+    "body": {
+      "active": false
+    }
+  }
+}

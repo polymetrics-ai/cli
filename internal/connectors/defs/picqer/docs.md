@@ -1,10 +1,17 @@
 # Overview
 
-Picqer is a wave2 fan-out declarative-HTTP migration. It reads Picqer products, customers,
-orders, picklists, warehouses, and suppliers through the Picqer REST API
-(`GET https://<organization>.picqer.com/api/v1/<resource>`). This bundle is a capability-parity
-port of `internal/connectors/picqer` (the hand-written connector it migrates); the legacy package
-stays registered and unchanged until wave6's registry flip.
+Picqer is a wave2 fan-out declarative-HTTP migration, expanded to the full documented v1 surface in
+Pass B. It reads 30 Picqer resources (products, customers, orders, picklists, warehouses,
+suppliers, tags, purchase orders, receipts, returns, return statuses/reasons, backorders, comments,
+stock history, users, product/customer/order fields, pricelists, shipping providers, VAT groups,
+locations, location types, picking containers, picklist batches, shipments, packagings, packing
+stations, webshop orders, and webhooks) through the Picqer REST API
+(`GET https://<organization>.picqer.com/api/v1/<resource>`), and writes 36 practical mutations
+(customer/supplier/tag CRUD, product update, order lifecycle, purchase-order lifecycle and
+receiving, return CRUD, backorder processing, location/location-type/picking-container/packaging
+CRUD, picklist-batch and shipment creation, and webhook create/delete). This bundle originated as a
+capability-parity port of `internal/connectors/picqer` (the hand-written connector it migrates); the
+legacy package stays registered and unchanged until wave6's registry flip.
 
 ## Auth setup
 
@@ -23,25 +30,53 @@ bundle makes versus legacy's config surface.
 
 ## Streams notes
 
-All six streams (`products`, `customers`, `orders`, `picklists`, `warehouses`, `suppliers`) are
-simple list endpoints (`GET /<resource>`) with `"projection": "passthrough"` — legacy's
-`mapRecord` returns every raw field unchanged (`out := connectors.Record(rec)`) and only adds an
-`id` alias, it never drops fields via schema-shaped filtering (`picqer.go:101-112`). This bundle
-reproduces that exactly: every raw field survives, and a `computed_fields.id` entry copies the
-resource-specific numeric key (`idproduct`/`idcustomer`/`idorder`/`idpicklist`/`idwarehouse`/
-`idsupplier`) into a uniform `id` field via typed bare-reference extraction (preserves Picqer's
-real integer wire type, no stringification).
+All 30 streams are simple list endpoints (`GET /<resource>`) with `"projection": "passthrough"` —
+the original 6 legacy-parity streams (`products`, `customers`, `orders`, `picklists`, `warehouses`,
+`suppliers`) return every raw field unchanged plus a `computed_fields.id` alias
+(`idproduct`/`idcustomer`/`idorder`/`idpicklist`/`idwarehouse`/`idsupplier` copied into a uniform
+`id` field via typed bare-reference extraction, preserving Picqer's real integer wire type, no
+stringification); the 24 Pass-B-added streams (`tags`, `purchaseorders`, `receipts`, `returns`,
+`return_statuses`, `return_reasons`, `backorders`, `comments`, `stockhistory`, `users`,
+`product_fields`, `customer_fields`, `order_fields`, `pricelists`, `shippingproviders`,
+`vatgroups`, `locations`, `location_types`, `picking_containers`, `picklist_batches`, `shipments`,
+`packagings`, `packingstations`, `webshoporders`, `hooks`) follow the identical passthrough +
+`computed_fields.id` shape, each keyed off that resource's own `id<resource>`-prefixed primary key.
+`receipts` (`GET /receipts`) is Picqer's v2 goods-receiving session resource: `idreceipt`,
+`idwarehouse`, `version`, `supplier`/`purchaseorder` linkage objects, `receiptid`, `status`
+(`processing`/`completed`), `completed_by`, `amount_received`, `completed_at`, `created`, `updated`,
+and the nested `products[]` line-item array survive verbatim under passthrough projection.
 
 Pagination is `offset_limit` with `offset_param: offset` and no `limit_param` — matching legacy's
 `connsdk.OffsetPaginator{OffsetParam: "offset", PageSize: size}` (`picqer.go:82`), which never
 sends a page-size query parameter at all (`LimitParam` is left empty in legacy); the paginator
 stops when a page returns fewer than `page_size` (100) records, a purely client-side threshold,
-never a server-enforced page size.
+never a server-enforced page size. This is unchanged for every Pass-B-added stream too.
 
 ## Write actions & risks
 
-None. Picqer's legacy connector is read-only (`Capabilities.Write: false`); this bundle ships no
-`writes.json`.
+36 write actions across customer/supplier/tag CRUD, product update, order lifecycle
+(pause/resume/reopen/cancel), purchase-order lifecycle (create/mark-as-purchased/close/cancel),
+receipt lifecycle (create/complete), return CRUD, backorder processing, location/location-type
+CRUD, picking-container CRUD, picklist-batch and shipment creation, packaging CRUD, and webhook
+create/delete (`create_hook`/`delete_hook`). See `metadata.json`'s `risk.approval` for the exact
+low-risk-vs-approval-required split.
+
+`complete_receipt` (`PUT /receipts/{idreceipt}`) sends Picqer's documented completion body
+verbatim — `{"status": "completed"}` — via `body_fields: ["status"]`; Picqer applies received stock
+quantities in the background and the synchronous response does not reflect the status change yet
+(callers must re-read the `receipts` stream to observe `status: "completed"`). `create_receipt`
+(`POST /receipts`) only models the `idpurchaseorder`-required shape; Picqer's v2 API also accepts
+`idsupplier` in place of `idpurchaseorder` for a supplier-only (not-yet-purchase-order-linked)
+receiving session — see Known limits.
+
+`cancel_order`/`cancel_purchaseorder`/`delete_customer`/`delete_tag`/`delete_return`/
+`delete_location`/`delete_hook` are `kind: "delete"` with `missing_ok_status: [404]` (idempotent);
+`create_hook`/`create_customer`/`create_supplier`/`create_tag`/`create_purchaseorder`/
+`create_receipt`/`create_return`/`create_location`/`create_location_type`/
+`create_picking_container`/`create_picklist_batch`/`create_packaging` require no approval
+(low-risk, non-destructive); every `update_*`/`pause_order`/`resume_order`/`reopen_order`/
+`mark_purchaseorder_as_purchased`/`close_purchaseorder`/`complete_receipt`/`process_backorders`
+action requires approval per `metadata.json`.
 
 ## Known limits
 
@@ -61,3 +96,20 @@ None. Picqer's legacy connector is read-only (`Capabilities.Write: false`); this
   Picqer's real API never emits a bare `id` field on these resources (only the prefixed
   `id<resource>` keys), this guard is dead code in practice and the engine's unconditional
   `computed_fields.id` copy is capability parity for every real Picqer response.
+- **`create_receipt`'s `idsupplier`-in-place-of-`idpurchaseorder` alternative is not modeled.**
+  Picqer's v2 receipts API accepts either `idpurchaseorder` (received against an existing purchase
+  order) or `idsupplier` (a supplier-only receiving session that Picqer later reconciles into a
+  new purchase order for any unmatched products) — a named-field OR, the same shape as stripe's
+  `create_customer` ledger item 1. The draft-07 dialect this engine uses has no `anyOf`/`oneOf`, so
+  `create_receipt`'s `record_schema` only models the `idpurchaseorder`-required branch; a
+  supplier-only receiving session cannot be started through this action. Out of scope for this
+  pass, not silently wrong — `idpurchaseorder` is real, general-purpose Picqer behavior for a
+  purchase-order-linked receipt, which is the common case.
+- **Sub-resource receiving actions are out of scope.** Picqer's full receiving workflow also
+  includes `GET /receipts/{idreceipt}/expected-products`, `POST /receipts/{idreceipt}/products`
+  (add a received product line, with `automatic`/`purchaseorder_product`/`new` strategy variants),
+  and `POST /receipts/{idreceipt}/products/{idreceipt_product}/revert` — see `api_surface.json` for
+  each endpoint's specific exclusion reason. These are fine-grained line-item edits of a receipt
+  already covered by the `receipts` stream and `create_receipt`/`complete_receipt` actions, not
+  independent business objects; `complete_receipt` covers the terminal lifecycle transition a
+  reverse-ETL caller actually needs.

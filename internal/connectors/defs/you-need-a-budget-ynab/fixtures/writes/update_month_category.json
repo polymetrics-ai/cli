@@ -1,0 +1,19 @@
+{
+  "record": {
+    "month": "2026-01-01",
+    "category_id": "category_fixture_1",
+    "category": {
+      "budgeted": 55000
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/budgets/synthetic-conformance-value/months/2026-01-01/categories/category_fixture_1",
+    "body": {
+      "category": {
+        "budgeted": 55000
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "data": { "category": { "id": "category_fixture_1", "budgeted": 55000 } } } }
+}

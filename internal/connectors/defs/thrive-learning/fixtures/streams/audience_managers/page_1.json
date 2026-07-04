@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/audiences/63f8c5361b9c80d3274b0001/managers",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "userId": "63f8c5361b9c80d3274be1",
+        "reference": "user1",
+        "email": "fixture1@example.com",
+        "permissions": {
+          "audienceManager": {
+            "manageMembers": true
+          }
+        }
+      }
+    ]
+  }
+}

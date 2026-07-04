@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ip_pools",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "signing_domain": { "type": ["string", "null"] },
+    "fbl_signing_domain": { "type": ["string", "null"] },
+    "auto_warmup_overflow_pool": { "type": ["string", "null"] },
+    "ips": { "type": ["array", "null"] }
+  }
+}

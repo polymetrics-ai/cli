@@ -1,0 +1,9 @@
+{
+  "record": { "title": "Fixture Lead", "person_id": 10 },
+  "expect": {
+    "method": "POST",
+    "path": "/leads",
+    "body": { "title": "Fixture Lead", "person_id": 10 }
+  },
+  "response": { "status": 201, "body": { "success": true, "data": { "id": "adf21880-e0e0-11ea-9e0c-a5b6f0d7d9f0", "title": "Fixture Lead" } } }
+}

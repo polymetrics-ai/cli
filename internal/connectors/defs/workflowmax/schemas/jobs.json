@@ -2,12 +2,22 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "jobs",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
-  "required": ["id"],
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
   "properties": {
-    "id": { "type": "string" },
+    "uuid": { "type": "string" },
+    "jobNumber": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "clientUUID": { "type": ["string", "null"] },
+    "clientContactUUID": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "clientOrderNumber": { "type": ["string", "null"] },
+    "budget": { "type": ["number", "null"] },
+    "jobStatusUUID": { "type": ["string", "null"] },
+    "jobCategoryUUID": { "type": ["string", "null"] },
+    "priority": { "type": ["string", "null"] },
+    "startDate": { "type": ["string", "null"] },
+    "dueDate": { "type": ["string", "null"] },
+    "completedDate": { "type": ["string", "null"] }
   }
 }

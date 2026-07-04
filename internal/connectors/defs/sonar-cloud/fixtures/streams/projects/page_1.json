@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/projects/search",
+    "query": {
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "paging": { "pageIndex": 1, "pageSize": 100, "total": 1 },
+      "components": [
+        {
+          "organization": "fixture-org",
+          "key": "fixture-org_fixture-repo",
+          "name": "fixture-repo",
+          "qualifier": "TRK",
+          "visibility": "public",
+          "lastAnalysisDate": "2026-01-01T00:00:00+0000",
+          "revision": "fixture0000000000000000000000000000000000"
+        }
+      ]
+    }
+  }
+}

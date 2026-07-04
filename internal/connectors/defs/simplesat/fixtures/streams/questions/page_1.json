@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/questions/",
+    "path": "/questions",
     "query": {
       "page_size": "synthetic-conformance-value"
     }
@@ -9,18 +9,27 @@
   "response": {
     "status": 200,
     "body": {
-      "results": [
+      "next": null,
+      "previous": null,
+      "count": 2,
+      "questions": [
         {
-          "id": 201,
-          "created_at": "2026-01-01T00:00:00Z",
-          "name": "fixture questions 1",
-          "rating": 5
+          "id": 301,
+          "survey": { "id": 201 },
+          "order": 1,
+          "metric": "csat",
+          "text": "How satisfied were you?",
+          "rating_scale": true,
+          "required": true
         },
         {
-          "id": 202,
-          "created_at": "2026-01-02T00:00:00Z",
-          "name": "fixture questions 2",
-          "rating": 4
+          "id": 302,
+          "survey": { "id": 201 },
+          "order": 2,
+          "metric": "nps",
+          "text": "How likely are you to recommend us?",
+          "rating_scale": true,
+          "required": false
         }
       ]
     }

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "asset_fixture_1",
+    "displayName": "renamed-fixture.png",
+    "altText": "A fixture asset"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/assets/asset_fixture_1",
+    "body": {
+      "displayName": "renamed-fixture.png",
+      "altText": "A fixture asset"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "asset_fixture_1",
+      "displayName": "renamed-fixture.png",
+      "altText": "A fixture asset"
+    }
+  }
+}

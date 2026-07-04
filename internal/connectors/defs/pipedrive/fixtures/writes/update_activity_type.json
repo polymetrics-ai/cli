@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1, "name": "Fixture Activity Type Updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/activityTypes/1",
+    "body": { "name": "Fixture Activity Type Updated" }
+  },
+  "response": { "status": 200, "body": { "success": true, "data": { "id": 1, "name": "Fixture Activity Type Updated" } } }
+}

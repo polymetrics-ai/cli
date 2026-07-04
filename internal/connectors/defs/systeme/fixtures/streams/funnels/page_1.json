@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/funnels", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "funnel_fixture_1", "name": "Fixture Funnel" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/account" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": {
+        "email": "fixture@example.test",
+        "firstname": "Fixture",
+        "lastname": "User",
+        "page_credits": 500
+      }
+    }
+  }
+}

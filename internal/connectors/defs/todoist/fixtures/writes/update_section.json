@@ -1,0 +1,12 @@
+{
+  "record": { "id": "sec_fixture_1", "name": "Renamed Fixture Section" },
+  "expect": {
+    "method": "POST",
+    "path": "/sections/sec_fixture_1",
+    "body": { "name": "Renamed Fixture Section" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "sec_fixture_1", "name": "Renamed Fixture Section" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/people/all", "query": { "page": "1", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "numResults": 1,
+      "results": [
+        { "wikidataId": "Q_fixture_1", "name": "Fixture Person", "abstract": "A fixture public figure.", "occupation": [{ "label": "Politician" }], "updatedAt": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

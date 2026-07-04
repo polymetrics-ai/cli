@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/responses/search",
+    "query": {
+      "page_size": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "count": 1,
+      "responses": [
+        {
+          "id": 501,
+          "survey": { "id": 201 },
+          "tags": ["fixture"],
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z",
+          "ip_address": null,
+          "language": "en",
+          "ticket": { "id": "ticket_fixture_1", "external_id": "ext-ticket-1", "subject": "Fixture ticket" },
+          "team_members": [],
+          "customer": { "id": 401, "email": "fixture1@example.com" },
+          "answers": [{ "id": 101, "choice": "fixture1@example.com" }],
+          "source": "email"
+        }
+      ]
+    }
+  }
+}

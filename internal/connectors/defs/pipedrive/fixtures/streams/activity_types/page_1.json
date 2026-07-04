@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/activityTypes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 1,
+          "name": "Call",
+          "icon_key": "call",
+          "color": "FFFFFF",
+          "order_nr": 1,
+          "key_string": "call",
+          "active_flag": true,
+          "is_custom_flag": false,
+          "add_time": "2026-01-01 00:00:00",
+          "update_time": "2026-01-01 00:00:00"
+        }
+      ]
+    }
+  }
+}

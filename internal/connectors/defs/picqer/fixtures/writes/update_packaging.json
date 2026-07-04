@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1701, "name": "Fixture Packaging Updated", "active": false },
+  "expect": {
+    "method": "PUT",
+    "path": "/packagings/1701",
+    "body": { "name": "Fixture Packaging Updated", "active": false }
+  },
+  "response": { "status": 200, "body": { "id": 1701, "name": "Fixture Packaging Updated", "active": false } }
+}

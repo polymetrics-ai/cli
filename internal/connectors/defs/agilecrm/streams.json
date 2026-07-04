@@ -59,6 +59,42 @@
       "records": { "path": "." },
       "pagination": { "type": "none" },
       "schema": "schemas/milestone.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/workflows",
+      "query": { "page_size": "50" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "last_record_field": "cursor"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "tickets_filters",
+      "path": "/tickets/filters",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/tickets_filters.json"
+    },
+    {
+      "name": "tickets",
+      "path": "/tickets/filter",
+      "query": { "page_size": "25" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "last_record_field": "cursor"
+      },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/tickets/filters", "records_path": ".", "id_field": "id" } },
+        "into": { "query_param": "filter_id" },
+        "stamp_field": "filter_id"
+      },
+      "schema": "schemas/tickets.json"
     }
   ]
 }

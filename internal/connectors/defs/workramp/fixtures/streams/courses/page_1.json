@@ -1,12 +1,244 @@
 {
-  "request": { "method": "GET", "path": "/v1/courses", "query": { "page": "1", "limit": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/guides",
+    "query": {
+      "page": "1",
+      "per_page": "20"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
-      "data": [
-        { "id": "course_fixture_1", "title": "Fixture Course 1", "updated_at": "2026-01-01T00:00:00Z" },
-        { "id": "course_fixture_2", "title": "Fixture Course 2", "updated_at": "2026-01-02T00:00:00Z" }
-      ]
+      "page": 1,
+      "per_page": 20,
+      "has_more": true,
+      "item_count": 20,
+      "url": "/api/v1/guides",
+      "data": {
+        "guides": [
+          {
+            "id": "guide-fixture-1",
+            "title": "Fixture Guide 1",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000001,
+            "updated_at": 1700000000001,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-2",
+            "title": "Fixture Guide 2",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000002,
+            "updated_at": 1700000000002,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-3",
+            "title": "Fixture Guide 3",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000003,
+            "updated_at": 1700000000003,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-4",
+            "title": "Fixture Guide 4",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000004,
+            "updated_at": 1700000000004,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-5",
+            "title": "Fixture Guide 5",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000005,
+            "updated_at": 1700000000005,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-6",
+            "title": "Fixture Guide 6",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000006,
+            "updated_at": 1700000000006,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-7",
+            "title": "Fixture Guide 7",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000007,
+            "updated_at": 1700000000007,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-8",
+            "title": "Fixture Guide 8",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000008,
+            "updated_at": 1700000000008,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-9",
+            "title": "Fixture Guide 9",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000009,
+            "updated_at": 1700000000009,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-10",
+            "title": "Fixture Guide 10",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000010,
+            "updated_at": 1700000000010,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-11",
+            "title": "Fixture Guide 11",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000011,
+            "updated_at": 1700000000011,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-12",
+            "title": "Fixture Guide 12",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000012,
+            "updated_at": 1700000000012,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-13",
+            "title": "Fixture Guide 13",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000013,
+            "updated_at": 1700000000013,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-14",
+            "title": "Fixture Guide 14",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000014,
+            "updated_at": 1700000000014,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-15",
+            "title": "Fixture Guide 15",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000015,
+            "updated_at": 1700000000015,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-16",
+            "title": "Fixture Guide 16",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000016,
+            "updated_at": 1700000000016,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-17",
+            "title": "Fixture Guide 17",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000017,
+            "updated_at": 1700000000017,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-18",
+            "title": "Fixture Guide 18",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000018,
+            "updated_at": 1700000000018,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-19",
+            "title": "Fixture Guide 19",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000019,
+            "updated_at": 1700000000019,
+            "tags": [
+              "Fixture"
+            ]
+          },
+          {
+            "id": "guide-fixture-20",
+            "title": "Fixture Guide 20",
+            "num_total_tasks": 5,
+            "num_total_test_questions": 3,
+            "created_at": 1700000000020,
+            "updated_at": 1700000000020,
+            "tags": [
+              "Fixture"
+            ]
+          }
+        ]
+      }
     }
   }
 }

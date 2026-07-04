@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/event_series/es_fixture_1/waitlist_signups",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "wl_fixture_1",
+          "event_id": "ev_fixture_1",
+          "email": "waitlist1@example.com",
+          "notified_date": null,
+          "created_at": 1767225600
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

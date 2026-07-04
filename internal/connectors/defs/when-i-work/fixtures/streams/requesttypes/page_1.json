@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/2/requesttypes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "request-types": [
+        { "id": 1, "name": "Fixture Vacation", "built_in": true, "enabled": true, "is_deleted": false }
+      ]
+    }
+  }
+}

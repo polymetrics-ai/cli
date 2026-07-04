@@ -1,0 +1,7 @@
+{
+  "record": { "subject": "Fixture Task", "type": "EMAIL", "due": 1767225601, "priority_type": "HIGH", "status": "YET_TO_START" },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks"
+  }
+}

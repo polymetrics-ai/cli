@@ -8,6 +8,8 @@
     "id": { "type": "string" },
     "type": { "type": ["string", "null"] },
     "source": { "type": ["object", "null"] },
-    "target": { "type": ["object", "null"] }
+    "target": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
   }
 }

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "P-2001"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/products/P-2001"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "record": {
+    "id": "subscription_fixture_1",
+    "plan_id": "plan_fixture_2",
+    "customer_id": "cus_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/subscription/subscription_fixture_1/update"
+  }
+}

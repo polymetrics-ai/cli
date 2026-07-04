@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "rules",
+  "type": "object",
+  "x-primary-key": ["key"],
+  "required": ["key"],
+  "properties": {
+    "key": { "type": "string" },
+    "repo": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "severity": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "lang": { "type": ["string", "null"] },
+    "langName": { "type": ["string", "null"] },
+    "isTemplate": { "type": ["boolean", "null"] },
+    "isExternal": { "type": ["boolean", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

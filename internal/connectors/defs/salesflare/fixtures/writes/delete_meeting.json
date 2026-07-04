@@ -1,0 +1,5 @@
+{
+  "record": { "meeting_id": "mtg_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/meetings/mtg_fixture_1" },
+  "response": { "status": 200, "body": {} }
+}

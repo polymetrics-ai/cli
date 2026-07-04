@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/alerting/teams" },
+  "response": {
+    "status": 200,
+    "body": {
+      "teams": [
+        {
+          "id": 800001,
+          "name": "Fixture Team",
+          "members": [{ "id": 700001, "name": "Fixture Contact", "type": "user" }]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "sys_id": "user_fixture_1",
+    "active": "false"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/now/table/sys_user/user_fixture_1",
+    "body": {
+      "active": "false"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "result": { "sys_id": "user_fixture_1", "active": "false" } }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/editions",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "status": "ok",
+        "userTier": "developer",
+        "total": 2,
+        "results": [
+          {
+            "id": "uk",
+            "path": "uk",
+            "edition": "UK",
+            "webTitle": "new guardian uk front page",
+            "webUrl": "https://www.theguardian.com/uk",
+            "apiUrl": "https://content.guardianapis.com/uk"
+          },
+          {
+            "id": "us",
+            "path": "us",
+            "edition": "US",
+            "webTitle": "new guardian us front page",
+            "webUrl": "https://www.theguardian.com/us",
+            "apiUrl": "https://content.guardianapis.com/us"
+          }
+        ]
+      }
+    }
+  }
+}

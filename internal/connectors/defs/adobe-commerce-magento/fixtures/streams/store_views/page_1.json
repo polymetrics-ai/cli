@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/store/storeViews" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "code": "default",
+        "website_id": 1,
+        "group_id": 1,
+        "name": "Default Store View",
+        "is_active": true
+      },
+      {
+        "id": 0,
+        "code": "admin",
+        "website_id": 0,
+        "group_id": 0,
+        "name": "Admin",
+        "is_active": true
+      }
+    ]
+  }
+}

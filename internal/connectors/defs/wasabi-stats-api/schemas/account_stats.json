@@ -8,10 +8,34 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "Legacy fills this from the raw record's own 'id' field when present; when absent, legacy derives it as the first non-empty value of bucket, then date, then the literal stream name 'account_stats' (hooks/wasabi-stats-api/hooks.go's RecordHook ports this fallback verbatim). account_stats records have no 'bucket' field, so this effectively falls back to date, then the literal stream name, for this stream."
+      "description": "Stamped via computed_fields from the real API's UtilizationNum field (the wire's own unique record identifier). hooks/wasabi-stats-api/hooks.go's RecordHook fallback (first non-empty of bucket, then date, then the literal stream name) only fires on the rare record the real API ever emits with no id at all -- ported verbatim from legacy for defense-in-depth, not expected to trigger against the documented Wasabi Stats API response shape."
     },
-    "date": { "type": ["string", "null"], "format": "date-time" },
-    "storage_bytes": { "type": ["integer", "null"] },
-    "object_count": { "type": ["integer", "null"] }
+    "utilization_num": { "type": ["integer", "null"], "description": "Real API field UtilizationNum: the unique numeric id of this account-utilization record." },
+    "acct_num": { "type": ["integer", "null"], "description": "Real API field AcctNum: the Wasabi account number this record belongs to." },
+    "acct_plan_num": { "type": ["integer", "null"], "description": "Real API field AcctPlanNum." },
+    "date": { "type": ["string", "null"], "format": "date-time", "description": "Computed from the real API's StartTime field (the start of this utilization record's reporting window)." },
+    "start_time": { "type": ["string", "null"], "format": "date-time" },
+    "end_time": { "type": ["string", "null"], "format": "date-time" },
+    "create_time": { "type": ["string", "null"], "format": "date-time" },
+    "num_billable_objects": { "type": ["integer", "null"] },
+    "num_billable_deleted_objects": { "type": ["integer", "null"] },
+    "raw_storage_size_bytes": { "type": ["integer", "null"] },
+    "storage_bytes": { "type": ["integer", "null"], "description": "Alias of the real API's PaddedStorageSizeBytes (billable storage after Wasabi's minimum-object-size rule is applied), kept under this bundle's pre-existing field name for parity with legacy's own schema." },
+    "object_count": { "type": ["integer", "null"], "description": "Alias of the real API's NumBillableObjects, kept under this bundle's pre-existing field name for parity with legacy's own schema." },
+    "metadata_storage_size_bytes": { "type": ["integer", "null"] },
+    "deleted_storage_size_bytes": { "type": ["integer", "null"] },
+    "orphaned_storage_size_bytes": { "type": ["integer", "null"] },
+    "min_storage_charge_bytes": { "type": ["integer", "null"] },
+    "num_api_calls": { "type": ["integer", "null"] },
+    "upload_bytes": { "type": ["integer", "null"] },
+    "download_bytes": { "type": ["integer", "null"] },
+    "storage_wrote_bytes": { "type": ["integer", "null"] },
+    "storage_read_bytes": { "type": ["integer", "null"] },
+    "num_get_calls": { "type": ["integer", "null"] },
+    "num_put_calls": { "type": ["integer", "null"] },
+    "num_delete_calls": { "type": ["integer", "null"] },
+    "num_list_calls": { "type": ["integer", "null"] },
+    "num_head_calls": { "type": ["integer", "null"] },
+    "delete_bytes": { "type": ["integer", "null"] }
   }
 }

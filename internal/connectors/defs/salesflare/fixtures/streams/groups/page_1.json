@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/groups" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture Sales Team" },
+        { "id": 2, "name": "Fixture Support Team" }
+      ]
+    }
+  }
+}

@@ -6,23 +6,26 @@
   "properties": {
     "merchant_id": {
       "type": "string",
-      "x-secret": true,
-      "description": "Xsolla merchant ID, used as the Basic auth username. Never logged."
+      "description": "Xsolla merchant ID (integer, shown in Publisher Account > Company settings > Company). Used as the Basic auth username and substituted into every merchant-scoped path segment. Not a credential by itself; never sufficient to authenticate without api_key."
     },
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "Xsolla merchant API key, used as the Basic auth password. Never logged."
+      "description": "Xsolla merchant (or project) API key, used as the Basic auth password. Never logged."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://api.xsolla.com/merchant/v2",
-      "description": "Xsolla merchant API base URL override for tests or proxies."
+      "description": "Xsolla Pay Station / Merchant API v2 base URL override for tests or proxies."
     },
-    "project_id": {
+    "datetime_from": {
       "type": "string",
-      "description": "Xsolla project ID; required for the 'orders' and 'transactions' streams (substituted into their project-scoped paths)."
+      "description": "Period start (YYYY-MM-DD), passed as the 'datetime_from' query param on date-bounded reads (transactions_registry, financial_reports, payouts, payout_currency_breakdown)."
+    },
+    "datetime_to": {
+      "type": "string",
+      "description": "Period end (YYYY-MM-DD), passed as the 'datetime_to' query param on date-bounded reads. financial_reports requires the datetime_from/datetime_to window to be 92 days or less (Xsolla API constraint, not enforced client-side)."
     },
     "mode": {
       "type": "string",

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/dealStages", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "dealStages": [
+        {
+          "id": "1",
+          "title": "Fixture Stage",
+          "group": "1",
+          "order": "1",
+          "color": "C481DF",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

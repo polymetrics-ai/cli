@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "plan_id": "plan_fixture_1",
+    "gateway_type": "Test",
+    "gateway_id": "gateway_fixture_1",
+    "method_id": "method_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscription/cus_fixture_1"
+  }
+}

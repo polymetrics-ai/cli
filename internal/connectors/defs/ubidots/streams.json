@@ -43,6 +43,31 @@
       "path": "api/v2.0/events/",
       "records": { "path": "results" },
       "schema": "schemas/events.json"
+    },
+    {
+      "name": "device_groups",
+      "path": "api/v2.0/device_groups/",
+      "records": { "path": "results" },
+      "schema": "schemas/device_groups.json"
+    },
+    {
+      "name": "device_types",
+      "path": "api/v2.0/device_types/",
+      "records": { "path": "results" },
+      "schema": "schemas/device_types.json"
+    },
+    {
+      "name": "variable_values",
+      "path": "api/v1.6/variables/{{ fanout.id }}/values/",
+      "records": { "path": "results" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "api/v2.0/variables/", "records_path": "results", "id_field": "id" }
+        },
+        "into": { "path_var": "variable_id" },
+        "stamp_field": "variable_id"
+      },
+      "schema": "schemas/variable_values.json"
     }
   ]
 }

@@ -1,13 +1,117 @@
 {
   "api": "Visma e-conomic REST API (https://restapi.e-conomic.com)",
   "docs": "https://restdocs.e-conomic.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the single legacy-parity customers read stream only; the full e-conomic surface (invoices, products, orders, ledger, accounting years, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every practical list-endpoint read stream and every dialect-expressible CRUD mutation across the connector's declared core commercial surface (customers, suppliers, products, invoices, orders, quotes, and the reference/master-data collections they depend on). Accounting-ledger-internal resources with no independent top-level collection semantics useful to a data-sync connector (accounting-years/entries/periods, journals, vouchers, layouts, templates, employees, app-roles, projects, cost-types, contacts/delivery-locations as customer sub-resources) are excluded as out_of_scope, documented per-endpoint below rather than as a blanket bucket.",
   "endpoints": [
     { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/orders", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/customers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/customers", "covered_by": { "write": "create_customer" } },
+    { "method": "GET", "path": "/customers/{customerNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the customers list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/customers/{customerNumber}", "covered_by": { "write": "update_customer" } },
+    { "method": "DELETE", "path": "/customers/{customerNumber}", "covered_by": { "write": "delete_customer" } },
+    { "method": "GET", "path": "/customers/{customerNumber}/contacts", "excluded": { "category": "out_of_scope", "reason": "customer contact-person sub-resource; no independent top-level collection identity, and the customers stream's own record already carries the contacts list as a nested field" } },
+    { "method": "POST", "path": "/customers/{customerNumber}/contacts", "excluded": { "category": "requires_elevated_scope", "reason": "sub-resource create nested under a specific customerNumber path segment; the dialect's writes.json actions target one fixed collection path per action, not a per-parent-record nested sub-collection with no fan_out declared for it" } },
+    { "method": "GET", "path": "/customers/{customerNumber}/deliveryLocations", "excluded": { "category": "out_of_scope", "reason": "customer delivery-location sub-resource; no independent top-level collection, nested under a specific customerNumber" } },
+    { "method": "GET", "path": "/customers/{customerNumber}/invoices/booked", "excluded": { "category": "duplicate_of", "reason": "per-customer invoice sub-listing; identical record shape to the invoices_booked stream, already covered by that stream (unfiltered by customer)" } },
+    { "method": "GET", "path": "/customers/{customerNumber}/invoices/drafts", "excluded": { "category": "duplicate_of", "reason": "per-customer invoice sub-listing; identical record shape to the invoices_drafts stream, already covered by that stream (unfiltered by customer)" } },
+    { "method": "GET", "path": "/customers/{customerNumber}/totals", "excluded": { "category": "non_data_endpoint", "reason": "aggregate balance/turnover computation for a single customer, not a syncable object-list record" } },
+
+    { "method": "GET", "path": "/suppliers", "covered_by": { "stream": "suppliers" } },
+    { "method": "POST", "path": "/suppliers", "covered_by": { "write": "create_supplier" } },
+    { "method": "GET", "path": "/suppliers/{supplierNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the suppliers list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/suppliers/{supplierNumber}", "covered_by": { "write": "update_supplier" } },
+    { "method": "DELETE", "path": "/suppliers/{supplierNumber}", "covered_by": { "write": "delete_supplier" } },
+
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "POST", "path": "/products", "covered_by": { "write": "create_product" } },
+    { "method": "GET", "path": "/products/{productNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the products list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/products/{productNumber}", "covered_by": { "write": "update_product" } },
+    { "method": "DELETE", "path": "/products/{productNumber}", "covered_by": { "write": "delete_product" } },
+
+    { "method": "GET", "path": "/invoices/booked", "covered_by": { "stream": "invoices_booked" } },
+    { "method": "GET", "path": "/invoices/booked/{bookedInvoiceNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the invoices_booked list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/invoices/booked/{bookedInvoiceNumber}/pdf", "excluded": { "category": "binary_payload", "reason": "returns a rendered PDF binary, not a JSON record this dialect's schema/write model can express" } },
+    { "method": "GET", "path": "/invoices/drafts", "covered_by": { "stream": "invoices_drafts" } },
+    { "method": "GET", "path": "/invoices/drafts/{draftInvoiceNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the invoices_drafts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/invoices/drafts", "excluded": { "category": "requires_elevated_scope", "reason": "draft invoice creation requires composing invoice line items (product/quantity/account references) with e-conomic's own totals/VAT computation contract, which this dialect has no line-item sub-array write shape for beyond a flat record body; a malformed line composition would silently diverge from what a real e-conomic client sends" } },
+    { "method": "PUT", "path": "/invoices/drafts/{draftInvoiceNumber}", "excluded": { "category": "requires_elevated_scope", "reason": "same line-item composition gap as draft invoice creation above" } },
+    { "method": "DELETE", "path": "/invoices/drafts/{draftInvoiceNumber}", "excluded": { "category": "out_of_scope", "reason": "draft invoice deletion; breadth left for a future wave once the paired create/update line-item gap above is closed (deleting a resource this connector cannot itself create is a narrower, lower-value mutation to add in isolation)" } },
+    { "method": "GET", "path": "/invoices/drafts/{draftInvoiceNumber}/templates/booking-instructions", "excluded": { "category": "non_data_endpoint", "reason": "returns a booking-instructions template body used only as an intermediate step to construct a POST /invoices/booked request; not itself a syncable record" } },
+    { "method": "POST", "path": "/invoices/booked", "excluded": { "category": "requires_elevated_scope", "reason": "books a draft invoice into a final, legally-relevant accounting state using the booking-instructions template from GET /invoices/drafts/{n}/templates/booking-instructions as its request body; expressing this two-step compound sequence (template fetch + dependent POST) is beyond a single declarative writes.json action and would need a WriteHook, which Pass B scope for this connector does not introduce" } },
+
+    { "method": "GET", "path": "/orders/drafts", "covered_by": { "stream": "orders_drafts" } },
+    { "method": "GET", "path": "/orders/drafts/{orderNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the orders_drafts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/orders/drafts", "excluded": { "category": "requires_elevated_scope", "reason": "draft order creation requires composing order line items (product/quantity references), the same line-item composition gap as draft invoices above" } },
+    { "method": "PUT", "path": "/orders/drafts/{orderNumber}", "excluded": { "category": "requires_elevated_scope", "reason": "same line-item composition gap as draft order creation above" } },
+    { "method": "DELETE", "path": "/orders/drafts/{orderNumber}", "excluded": { "category": "out_of_scope", "reason": "draft order deletion; breadth left for a future wave, mirroring the draft-invoice-delete narrowing above" } },
+    { "method": "GET", "path": "/orders/sent", "covered_by": { "stream": "orders_sent" } },
+    { "method": "GET", "path": "/orders/sent/{orderNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the orders_sent list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/orders/sent", "excluded": { "category": "requires_elevated_scope", "reason": "moves a draft order to sent status by POSTing the full order document (including its line items) to this collection; expressing the draft-to-sent transition faithfully needs the same order-line-item body shape the dialect cannot compose (see draft order creation above), not merely a path change" } },
+    { "method": "POST", "path": "/orders/{orderNumber}/attachment/file", "excluded": { "category": "binary_payload", "reason": "multipart file attachment upload, not a JSON record this dialect's write body construction can express" } },
+
+    { "method": "GET", "path": "/quotes/drafts", "covered_by": { "stream": "quotes_drafts" } },
+    { "method": "GET", "path": "/quotes/drafts/{quoteNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the quotes_drafts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/quotes/drafts", "excluded": { "category": "requires_elevated_scope", "reason": "draft quote creation requires composing quote line items, the same line-item composition gap as draft invoices/orders above" } },
+    { "method": "PUT", "path": "/quotes/drafts/{quoteNumber}", "excluded": { "category": "requires_elevated_scope", "reason": "same line-item composition gap as draft quote creation above" } },
+    { "method": "DELETE", "path": "/quotes/drafts/{quoteNumber}", "excluded": { "category": "out_of_scope", "reason": "draft quote deletion; breadth left for a future wave, mirroring the draft-invoice/order-delete narrowing above" } },
+    { "method": "GET", "path": "/quotes/sent", "covered_by": { "stream": "quotes_sent" } },
+    { "method": "GET", "path": "/quotes/sent/{quoteNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the quotes_sent list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/quotes/sent", "excluded": { "category": "requires_elevated_scope", "reason": "moves a draft quote to sent status by POSTing the full quote document (including line items); same line-item body shape gap as orders/sent above" } },
+
+    { "method": "GET", "path": "/departments", "covered_by": { "stream": "departments" } },
+    { "method": "GET", "path": "/departments/{departmentNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the departments list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/departments", "excluded": { "category": "out_of_scope", "reason": "department master-data creation; low practical write demand relative to the connector's core commercial write surface (customers/suppliers/products/units/payment-terms), left for a future wave" } },
+    { "method": "PUT", "path": "/departments/{departmentNumber}", "excluded": { "category": "out_of_scope", "reason": "same low-priority master-data write narrowing as department creation above" } },
+
+    { "method": "GET", "path": "/payment-terms", "covered_by": { "stream": "payment_terms" } },
+    { "method": "POST", "path": "/payment-terms", "covered_by": { "write": "create_payment_term" } },
+    { "method": "GET", "path": "/payment-terms/{paymentTermsNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the payment_terms list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/payment-terms/{paymentTermsNumber}", "covered_by": { "write": "update_payment_term" } },
+    { "method": "DELETE", "path": "/payment-terms/{paymentTermsNumber}", "covered_by": { "write": "delete_payment_term" } },
+
+    { "method": "GET", "path": "/units", "covered_by": { "stream": "units" } },
+    { "method": "POST", "path": "/units", "covered_by": { "write": "create_unit" } },
+    { "method": "GET", "path": "/units/{unitNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the units list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/units/{unitNumber}", "covered_by": { "write": "update_unit" } },
+    { "method": "DELETE", "path": "/units/{unitNumber}", "covered_by": { "write": "delete_unit" } },
+
+    { "method": "GET", "path": "/vat-types", "covered_by": { "stream": "vat_types" } },
+    { "method": "GET", "path": "/vat-types/{vatTypeNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the vat_types list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/vat-zones", "covered_by": { "stream": "vat_zones" } },
+    { "method": "GET", "path": "/vat-zones/{vatZoneNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the vat_zones list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/accounts/{accountNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/accounts/{accountNumber}/accounting-years/{year}/entries", "excluded": { "category": "out_of_scope", "reason": "general-ledger entry line drill-down nested under a specific account and accounting year; genuinely accounting-internal detail beyond this connector's declared customers/suppliers/products/invoicing surface" } },
+
+    { "method": "GET", "path": "/customer-groups", "covered_by": { "stream": "customer_groups" } },
+    { "method": "GET", "path": "/customer-groups/{customerGroupNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the customer_groups list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/customer-groups/{customerGroupNumber}/customers", "excluded": { "category": "duplicate_of", "reason": "per-group customer sub-listing; identical record shape to the customers stream, already covered by that stream (unfiltered by group)" } },
+
+    { "method": "GET", "path": "/product-groups", "covered_by": { "stream": "product_groups" } },
+    { "method": "GET", "path": "/product-groups/{productGroupNumber}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET; identical record shape to the product_groups list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/supplier-groups", "excluded": { "category": "out_of_scope", "reason": "supplier master-data grouping collection; no corresponding write requirement in this pass and lower practical read demand than the customer/product group equivalents already covered" } },
+
+    { "method": "GET", "path": "/accounting-years", "excluded": { "category": "out_of_scope", "reason": "general-ledger fiscal-year container resource; accounting-internal, not part of this connector's declared customers/suppliers/products/invoicing/master-data surface" } },
+    { "method": "GET", "path": "/accounting-years/{year}", "excluded": { "category": "duplicate_of", "reason": "single-item detail GET on the already out-of-scope accounting-years collection" } },
+    { "method": "GET", "path": "/accounting-years/{year}/entries", "excluded": { "category": "out_of_scope", "reason": "raw general-ledger journal entry lines; accounting-internal, out of this connector's declared surface" } },
+    { "method": "GET", "path": "/accounting-years/{year}/periods", "excluded": { "category": "out_of_scope", "reason": "fiscal period sub-resource of the already out-of-scope accounting-years collection" } },
+    { "method": "GET", "path": "/accounting-years/{year}/totals", "excluded": { "category": "non_data_endpoint", "reason": "aggregate fiscal-year total computation, not a syncable object-list record" } },
+
+    { "method": "GET", "path": "/journals", "excluded": { "category": "out_of_scope", "reason": "accounting journal (ledger book) metadata; accounting-internal, out of this connector's declared surface" } },
+    { "method": "GET", "path": "/journals/{journalNumber}/entries", "excluded": { "category": "out_of_scope", "reason": "raw journal entry lines nested under a specific journal; accounting-internal detail, out of scope" } },
+    { "method": "GET", "path": "/journals/{journalNumber}/vouchers", "excluded": { "category": "out_of_scope", "reason": "accounting voucher documents nested under a specific journal; accounting-internal, out of scope" } },
+
+    { "method": "GET", "path": "/employees", "excluded": { "category": "out_of_scope", "reason": "HR/timesheet-adjacent resource with no relationship to this connector's declared customers/suppliers/products/invoicing surface" } },
+    { "method": "GET", "path": "/app-roles", "excluded": { "category": "out_of_scope", "reason": "e-conomic app-permission/role metadata (integration-account administration), not business data this connector syncs" } },
+    { "method": "GET", "path": "/currencies", "excluded": { "category": "out_of_scope", "reason": "static ISO-4217 currency reference list; every record this connector reads already carries its own currency code inline, so a separate lookup stream adds no additional data" } },
+    { "method": "GET", "path": "/layouts", "excluded": { "category": "out_of_scope", "reason": "invoice/order print-layout template metadata; presentation configuration, not business data" } },
+    { "method": "GET", "path": "/templates", "excluded": { "category": "out_of_scope", "reason": "reusable document template metadata; presentation configuration, not business data" } },
+    { "method": "GET", "path": "/projects", "excluded": { "category": "out_of_scope", "reason": "time/project-tracking dimension resource with no relationship to this connector's declared customers/suppliers/products/invoicing surface" } },
+    { "method": "GET", "path": "/cost-types", "excluded": { "category": "out_of_scope", "reason": "project cost-type reference dimension; only meaningful alongside the already out-of-scope projects resource" } },
+    { "method": "GET", "path": "/payment-types", "excluded": { "category": "out_of_scope", "reason": "static payment-method reference list; no independent business-data value beyond what invoice/order records already carry inline" } },
+    { "method": "GET", "path": "/self", "excluded": { "category": "non_data_endpoint", "reason": "agreement/account self-identification metadata endpoint, not a syncable business-data record" } }
   ]
 }

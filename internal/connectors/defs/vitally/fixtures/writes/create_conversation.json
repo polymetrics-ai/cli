@@ -1,0 +1,20 @@
+{
+  "record": {
+    "externalId": "thread-fixture-1",
+    "subject": "Regarding your account",
+    "messages": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/resources/conversations",
+    "body": {
+      "externalId": "thread-fixture-1",
+      "subject": "Regarding your account",
+      "messages": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "conv_fixture_1", "externalId": "thread-fixture-1" }
+  }
+}

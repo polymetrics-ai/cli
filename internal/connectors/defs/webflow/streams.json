@@ -33,6 +33,139 @@
       "path": "/v2/sites/{{ config.site_id }}/forms",
       "records": { "path": "forms" },
       "schema": "schemas/forms.json"
+    },
+    {
+      "name": "sites",
+      "path": "/v2/sites",
+      "records": { "path": "sites" },
+      "schema": "schemas/sites.json"
+    },
+    {
+      "name": "assets",
+      "path": "/v2/sites/{{ config.site_id }}/assets",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/assets.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v2/sites/{{ config.site_id }}/webhooks",
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "redirects",
+      "path": "/v2/sites/{{ config.site_id }}/redirects",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "redirects" },
+      "schema": "schemas/redirects.json"
+    },
+    {
+      "name": "form_submissions",
+      "path": "/v2/sites/{{ config.site_id }}/form_submissions",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "formSubmissions" },
+      "schema": "schemas/form_submissions.json"
+    },
+    {
+      "name": "orders",
+      "path": "/v2/sites/{{ config.site_id }}/orders",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "orders" },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "products",
+      "path": "/v2/sites/{{ config.site_id }}/products",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "custom_domains",
+      "path": "/v2/sites/{{ config.site_id }}/custom_domains",
+      "records": { "path": "customDomains" },
+      "schema": "schemas/custom_domains.json"
+    },
+    {
+      "name": "components",
+      "path": "/v2/sites/{{ config.site_id }}/components",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "components" },
+      "schema": "schemas/components.json"
+    },
+    {
+      "name": "asset_folders",
+      "path": "/v2/sites/{{ config.site_id }}/asset_folders",
+      "records": { "path": "assetFolders" },
+      "schema": "schemas/asset_folders.json"
+    },
+    {
+      "name": "ecommerce_settings",
+      "path": "/v2/sites/{{ config.site_id }}/ecommerce/settings",
+      "records": { "path": "." },
+      "schema": "schemas/ecommerce_settings.json"
+    },
+    {
+      "name": "collection_items",
+      "path": "/v2/collections/{{ fanout.id }}/items",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "lastUpdated",
+        "request_param": "lastUpdated[gte]"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/v2/sites/{{ config.site_id }}/collections",
+            "records_path": "collections",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "id" },
+        "stamp_field": "collectionId"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "cursor_advances' generic re-read harness is not fan_out-aware: it seeds a capture server that always answers 200 with an empty body, but this stream's fan_out.ids_from.request issues its own preliminary GET /v2/sites/{site_id}/collections id-listing request FIRST against that same always-empty capture server, so zero collection ids ever resolve and the per-collection items sub-sequence (the request that would actually carry lastUpdated[gte]) is never issued at all; the harness's single captured-value slot would in any case only ever record whichever request shape hit it last. This is a harness limitation (checkCursorAdvances has no fan_out-aware two-phase variant), not a bundle defect. Proven live by internal/connectors/paritytest/webflow/parity_test.go's TestParityWebflow_CollectionItemsFanOutSendsLastUpdatedOnResumedSync (asserts the real two-phase read sends lastUpdated[gte]=<seeded cursor> on the per-collection sub-sequence) and TestParityWebflow_CollectionItemsFreshSyncOmitsLastUpdated (asserts a fresh sync omits the param entirely)."
+      },
+      "schema": "schemas/collection_items.json"
     }
   ]
 }

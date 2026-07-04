@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "page_access_groups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "page_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "external_identifier": { "type": ["string", "null"] },
+    "page_access_user_ids": { "type": ["array", "null"], "items": { "type": "string" } },
+    "metric_ids": { "type": ["array", "null"], "items": { "type": "string" } },
+    "component_ids": { "type": ["array", "null"], "items": { "type": "string" } },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

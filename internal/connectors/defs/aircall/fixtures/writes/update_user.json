@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 1001,
+    "name": "Fixture Agent Updated",
+    "available": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/1001",
+    "body": {
+      "name": "Fixture Agent Updated",
+      "available": false
+    }
+  }
+}

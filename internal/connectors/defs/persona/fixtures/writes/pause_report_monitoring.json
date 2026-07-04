@@ -1,0 +1,11 @@
+{
+  "record": { "id": "rep_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/reports/rep_fixture_1/pause"
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "rep_fixture_1", "type": "report/watchlist", "attributes": { "status": "paused" } } }
+  }
+}

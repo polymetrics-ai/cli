@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segments",
+  "type": "object",
+  "x-primary-key": ["token"],
+  "required": ["token"],
+  "properties": {
+    "token": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "priority": { "type": ["integer", "null"] },
+    "track_unallocated": { "type": ["boolean", "null"] },
+    "filter": { "type": ["string", "null"] },
+    "workspace_token": { "type": ["string", "null"] },
+    "parent_segment_token": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

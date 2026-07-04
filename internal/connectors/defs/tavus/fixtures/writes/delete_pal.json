@@ -1,0 +1,8 @@
+{
+  "record": { "id": "pal_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/pals/pal_fixture_1"
+  },
+  "response": { "status": 200, "body": {} }
+}

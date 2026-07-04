@@ -1,0 +1,10 @@
+{
+  "record": {
+    "resource_report_token": "rr_fixture_1",
+    "title": "Updated Resource Report"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/resource_reports/rr_fixture_1"
+  }
+}

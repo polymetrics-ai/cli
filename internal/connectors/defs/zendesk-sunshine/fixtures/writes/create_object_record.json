@@ -1,0 +1,24 @@
+{
+  "record": {
+    "data": {
+      "type": "asset",
+      "external_id": "fixture-ext-1",
+      "attributes": { "name": "Fixture Created Asset" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/objects/records",
+    "body": {
+      "data": {
+        "type": "asset",
+        "external_id": "fixture-ext-1",
+        "attributes": { "name": "Fixture Created Asset" }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "data": { "id": "object_fixture_created_1", "type": "asset", "external_id": "fixture-ext-1" } }
+  }
+}

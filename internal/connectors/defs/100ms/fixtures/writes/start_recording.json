@@ -1,0 +1,17 @@
+{
+  "record": {
+    "room_id": "room_fixture_1",
+    "meeting_url": "https://example.com/meeting/fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recordings/room/room_fixture_1/start",
+    "body": {
+      "meeting_url": "https://example.com/meeting/fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "recording_fixture_1", "room_id": "room_fixture_1", "status": "starting" }
+  }
+}

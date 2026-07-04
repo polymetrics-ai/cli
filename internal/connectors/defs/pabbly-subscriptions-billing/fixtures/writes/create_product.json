@@ -1,0 +1,7 @@
+{
+  "record": { "product_name": "Fixture Product" },
+  "expect": {
+    "method": "POST",
+    "path": "/product/create"
+  }
+}

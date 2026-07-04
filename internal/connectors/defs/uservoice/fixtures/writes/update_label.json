@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "5001",
+    "name": "Fixture Renamed Label"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/admin/labels/5001",
+    "body": {
+      "name": "Fixture Renamed Label"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "labels": [{ "id": 5001, "name": "Fixture Renamed Label" }] }
+  }
+}

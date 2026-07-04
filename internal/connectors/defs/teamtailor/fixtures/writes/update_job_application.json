@@ -1,0 +1,21 @@
+{
+  "record": {
+    "data": {
+      "id": "application_fixture_1",
+      "type": "job-applications",
+      "attributes": { "cover-letter": "Fixture updated cover letter" }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/job-applications/application_fixture_1",
+    "body": {
+      "data": {
+        "id": "application_fixture_1",
+        "type": "job-applications",
+        "attributes": { "cover-letter": "Fixture updated cover letter" }
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "data": { "id": "application_fixture_1", "type": "job-applications" } } }
+}

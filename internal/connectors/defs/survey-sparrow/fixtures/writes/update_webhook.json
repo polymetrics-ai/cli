@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "url": "https://example.com/updated-hook" },
+  "expect": { "method": "PUT", "path": "/webhooks/1" }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sections",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "status": "ok",
+        "userTier": "developer",
+        "total": 2,
+        "results": [
+          {
+            "id": "world",
+            "webTitle": "World news",
+            "webUrl": "https://www.theguardian.com/world",
+            "apiUrl": "https://content.guardianapis.com/world",
+            "editions": [
+              {
+                "id": "world",
+                "webTitle": "World news",
+                "webUrl": "https://www.theguardian.com/world",
+                "apiUrl": "https://content.guardianapis.com/world",
+                "code": "default"
+              }
+            ]
+          },
+          {
+            "id": "football",
+            "webTitle": "Football",
+            "webUrl": "https://www.theguardian.com/football",
+            "apiUrl": "https://content.guardianapis.com/football",
+            "editions": [
+              {
+                "id": "football",
+                "webTitle": "Football",
+                "webUrl": "https://www.theguardian.com/football",
+                "apiUrl": "https://content.guardianapis.com/football",
+                "code": "default"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

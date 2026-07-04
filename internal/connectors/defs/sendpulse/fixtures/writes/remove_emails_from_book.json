@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "emails": ["subscriber1@example.com"]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/addressbooks/1/emails"
+  }
+}

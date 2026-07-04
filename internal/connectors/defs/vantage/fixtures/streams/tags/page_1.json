@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "key": "team",
+          "values_count": 3
+        }
+      ],
+      "links": {
+        "self": "https://api.vantage.sh/v2/tags?page=1"
+      }
+    }
+  }
+}

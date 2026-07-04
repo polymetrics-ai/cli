@@ -1,0 +1,7 @@
+{
+  "record": { "id": 6001 },
+  "expect": {
+    "method": "PUT",
+    "path": "/calls/6001/archive"
+  }
+}

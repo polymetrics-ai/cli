@@ -1,0 +1,25 @@
+{
+  "record": {
+    "scheduled_transaction": {
+      "account_id": "account_fixture_1",
+      "date": "2026-08-01",
+      "amount": -120000,
+      "payee_name": "Fixture Landlord",
+      "frequency": "monthly"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/budgets/synthetic-conformance-value/scheduled_transactions",
+    "body": {
+      "scheduled_transaction": {
+        "account_id": "account_fixture_1",
+        "date": "2026-08-01",
+        "amount": -120000,
+        "payee_name": "Fixture Landlord",
+        "frequency": "monthly"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "scheduled_transaction": { "id": "scheduled_txn_new_fixture" } } } }
+}

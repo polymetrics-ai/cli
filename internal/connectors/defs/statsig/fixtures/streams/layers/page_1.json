@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/layers", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "layer_fixture_1",
+          "name": "Fixture Layer One",
+          "description": "fixture record",
+          "idType": "userID",
+          "isImplicitLayer": false
+        }
+      ]
+    }
+  }
+}

@@ -16,8 +16,8 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://www.sendowl.com/api/v1",
-      "description": "SendOwl API base URL. Defaults to https://www.sendowl.com/api/v1, matching legacy's in-code default. Also usable as a base URL override for tests/proxies."
+      "default": "https://www.sendowl.com",
+      "description": "SendOwl API host, with no /api/v1 (or /api/v1_2, /api/v1_3) suffix -- each stream/write's own path now carries its own API version segment, since SendOwl's real documented surface spans v1 (products/subscriptions/packages/licenses), v1_2 (discounts), and v1_3 (orders list/show/update). Legacy's own in-code default was https://www.sendowl.com/api/v1 with every path relative to that; this bundle moves the /api/v1 segment into each path instead so a v1_2/v1_3 stream/write can coexist with the v1 ones under ONE base_url (see docs.md Known limits) -- the final resolved URL for every pre-existing (orders/products/subscriptions) stream/check is byte-identical to before."
     },
     "mode": {
       "type": "string",

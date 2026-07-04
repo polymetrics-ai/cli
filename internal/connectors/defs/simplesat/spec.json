@@ -12,21 +12,17 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.simplesat.io/api",
-      "description": "Simplesat API base URL override for tests or proxies."
+      "default": "https://api.simplesat.io/api/v1",
+      "description": "Simplesat v1 API base URL override for tests or proxies."
     },
     "page_size": {
       "type": "integer",
       "default": 100,
-      "description": "Number of records requested per page (page_size query param), 1-1000."
+      "description": "Number of records requested per page (page_size query param), 1-250 (customers) or provider default elsewhere."
     },
-    "start_date": {
+    "created_after": {
       "type": "string",
-      "description": "Optional start_date query filter passed through verbatim."
-    },
-    "end_date": {
-      "type": "string",
-      "description": "Optional end_date query filter passed through verbatim."
+      "description": "Optional customers-stream created_after (RFC3339) query filter, passed through verbatim."
     }
   }
 }

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/alerting/contacts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": 700001,
+          "name": "Fixture Contact",
+          "paused": false,
+          "type": "user",
+          "owner": true,
+          "notification_targets": {
+            "email": [{ "severity": "HIGH", "address": "fixture1@example.com" }],
+            "sms": []
+          },
+          "teams": []
+        }
+      ]
+    }
+  }
+}

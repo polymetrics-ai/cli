@@ -1,14 +1,14 @@
 {
   "name": "pingdom",
   "display_name": "Pingdom",
-  "description": "Reads Pingdom checks, probes, actions, maintenance windows, and reference data through API 3.1.",
+  "description": "Reads Pingdom checks, probes, actions, maintenance windows/occurrences, alerting contacts/teams, credits, transaction checks, and reference data, and writes check/contact/team/maintenance mutations through API 3.1.",
   "integration_type": "api",
   "docs_url": "https://docs.pingdom.com/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Pingdom API read of uptime monitoring configuration and event data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Pingdom API read of uptime/transaction monitoring configuration, alerting configuration, account credits, and event data",
+    "write": "creates/updates/deletes uptime checks, alerting contacts and teams, and maintenance windows",
+    "approval": "required for update_check/update_contact/update_team/delete_check/delete_contact/delete_team/delete_maintenance; create_check/create_contact/create_team/create_maintenance require no approval (low-risk, non-destructive)"
   }
 }

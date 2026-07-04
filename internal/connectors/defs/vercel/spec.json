@@ -19,6 +19,10 @@
       "type": "string",
       "format": "date-time",
       "description": "Optional RFC3339 lower-bound value sent verbatim as the 'from' query param when set; omitted entirely when unset (legacy: vercel.go:72-74 only calls q.Set when trimmed non-empty). Not a stateful incremental cursor - legacy never persists or advances this value across reads."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Optional Vercel Team ID sent as the 'teamId' query param on every request when set. Required by Vercel's own API for team-scoped access tokens; omitted entirely for personal-account tokens."
     }
   }
 }

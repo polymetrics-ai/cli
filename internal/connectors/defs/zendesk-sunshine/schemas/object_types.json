@@ -7,6 +7,7 @@
   "properties": {
     "id": { "type": "string", "description": "Mapped from the raw API's key field via a computed_fields rename." },
     "schema": { "type": ["object", "null"] },
-    "created_at": { "type": ["string", "null"] }
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
   }
 }

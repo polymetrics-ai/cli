@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/coupons",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "code": "FIXTURE101",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 101,
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

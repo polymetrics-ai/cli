@@ -46,6 +46,40 @@
       },
       "schema": "schemas/invoices.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "invoice_lines",
+      "path": "/invoices/lines",
+      "records": { "path": "invoice_lines" },
+      "incremental": {
+        "cursor_field": "issuing_date",
+        "request_param": "issuing_date_gte",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/invoice_lines.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoice_profiles",
+      "path": "/profiles",
+      "records": { "path": "profiles" },
+      "schema": "schemas/invoice_profiles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "trip_custom_fields",
+      "path": "/trips/{{ fanout.id }}/custom-fields",
+      "records": { "path": ".", "single_object": true },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/trips", "records_path": "trips", "id_field": "id" }
+        },
+        "into": { "path_var": "trip_id" },
+        "stamp_field": "trip_id"
+      },
+      "schema": "schemas/trip_custom_fields.json",
+      "projection": "passthrough"
     }
   ]
 }

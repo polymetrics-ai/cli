@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/crm/contacts",
+    "query": {
+      "page": "2",
+      "size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "contacts": [
+          {
+            "id": 101,
+            "firstName": "Fixture101",
+            "lastName": "Contact",
+            "name": "Fixture101 Contact",
+            "primaryEmail": "fixture101@example.com",
+            "secondaryEmail": null,
+            "homePhone": null,
+            "cellPhone": null,
+            "workPhone": null,
+            "streetAddress": null,
+            "locality": null,
+            "region": null,
+            "postalCode": null,
+            "country": null,
+            "notes": null,
+            "isVip": true,
+            "isOwnerContact": true,
+            "createdAt": "2026-01-02T00:00:00Z",
+            "updatedAt": "2026-01-02T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

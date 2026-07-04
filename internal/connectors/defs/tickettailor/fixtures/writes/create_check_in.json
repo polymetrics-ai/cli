@@ -1,0 +1,10 @@
+{
+  "record": {
+    "issued_ticket_id": "it_fixture_1",
+    "quantity": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/check_ins"
+  }
+}

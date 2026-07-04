@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/subaccounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 1001,
+          "name": "Fixture Subaccount",
+          "status": "active",
+          "ip_pool": "fixture_ip_pool",
+          "compliance_status": "active"
+        }
+      ]
+    }
+  }
+}

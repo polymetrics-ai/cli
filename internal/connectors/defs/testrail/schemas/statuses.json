@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "statuses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "label": { "type": ["string", "null"] },
+    "is_system": { "type": ["boolean", "null"] },
+    "is_untested": { "type": ["boolean", "null"] },
+    "is_final": { "type": ["boolean", "null"] }
+  }
+}

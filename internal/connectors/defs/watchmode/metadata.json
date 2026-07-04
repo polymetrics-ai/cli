@@ -1,9 +1,9 @@
 {
   "name": "watchmode",
   "display_name": "Watchmode",
-  "description": "Reads Watchmode search results and streaming source metadata. Read-only.",
+  "description": "Reads Watchmode title search results, streaming sources, regions, networks, genres, list-titles, releases, per-title details/sources/seasons/episodes/cast-crew, and person details. Read-only.",
   "integration_type": "api",
-  "docs_url": "https://api.watchmode.com/",
+  "docs_url": "https://api.watchmode.com/docs",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
@@ -14,7 +14,7 @@
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external Watchmode API read of public title search/streaming source metadata",
+    "read": "external Watchmode API read of public title/streaming-source/person media metadata",
     "approval": "none; read-only public media metadata connector"
   }
 }

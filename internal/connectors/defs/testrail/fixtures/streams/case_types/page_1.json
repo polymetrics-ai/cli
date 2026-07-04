@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_case_types": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Automated", "is_default": false },
+      { "id": 6, "name": "Functional", "is_default": true }
+    ]
+  }
+}

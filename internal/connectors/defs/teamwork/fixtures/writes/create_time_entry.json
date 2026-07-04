@@ -1,0 +1,9 @@
+{
+  "record": { "project_id": "1", "time-entry": { "description": "Fixture time entry", "date": "20260102", "hours": "2", "minutes": "30", "person-id": "1" } },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/time_entries.json",
+    "body": { "time-entry": { "description": "Fixture time entry", "date": "20260102", "hours": "2", "minutes": "30", "person-id": "1" } }
+  },
+  "response": { "status": 201, "body": { "id": "2" } }
+}

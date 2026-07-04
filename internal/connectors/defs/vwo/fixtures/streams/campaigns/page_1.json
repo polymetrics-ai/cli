@@ -1,20 +1,3215 @@
 {
-  "request": { "method": "GET", "path": "/campaigns" },
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/campaigns",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
-      "campaigns": [
+      "_data": [
         {
           "id": 501,
-          "name": "Fixture Homepage Test",
+          "name": "Fixture Campaign 1",
+          "type": "ab",
+          "platform": "website",
           "status": "RUNNING",
-          "created_at": "2026-01-01T00:00:00Z"
+          "createdOn": 1767225601,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
         },
         {
           "id": 502,
-          "name": "Fixture Checkout Test",
-          "status": "PAUSED",
-          "created_at": "2026-01-02T00:00:00Z"
+          "name": "Fixture Campaign 2",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225602,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 503,
+          "name": "Fixture Campaign 3",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225603,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 504,
+          "name": "Fixture Campaign 4",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225604,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 505,
+          "name": "Fixture Campaign 5",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225605,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 506,
+          "name": "Fixture Campaign 6",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225606,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 507,
+          "name": "Fixture Campaign 7",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225607,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 508,
+          "name": "Fixture Campaign 8",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225608,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 509,
+          "name": "Fixture Campaign 9",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225609,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 510,
+          "name": "Fixture Campaign 10",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225610,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 511,
+          "name": "Fixture Campaign 11",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225611,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 512,
+          "name": "Fixture Campaign 12",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225612,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 513,
+          "name": "Fixture Campaign 13",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225613,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 514,
+          "name": "Fixture Campaign 14",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225614,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 515,
+          "name": "Fixture Campaign 15",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225615,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 516,
+          "name": "Fixture Campaign 16",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225616,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 517,
+          "name": "Fixture Campaign 17",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225617,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 518,
+          "name": "Fixture Campaign 18",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225618,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 519,
+          "name": "Fixture Campaign 19",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225619,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 520,
+          "name": "Fixture Campaign 20",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225620,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 521,
+          "name": "Fixture Campaign 21",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225621,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 522,
+          "name": "Fixture Campaign 22",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225622,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 523,
+          "name": "Fixture Campaign 23",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225623,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 524,
+          "name": "Fixture Campaign 24",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225624,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 525,
+          "name": "Fixture Campaign 25",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225625,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 526,
+          "name": "Fixture Campaign 26",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225626,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 527,
+          "name": "Fixture Campaign 27",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225627,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 528,
+          "name": "Fixture Campaign 28",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225628,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 529,
+          "name": "Fixture Campaign 29",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225629,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 530,
+          "name": "Fixture Campaign 30",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225630,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 531,
+          "name": "Fixture Campaign 31",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225631,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 532,
+          "name": "Fixture Campaign 32",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225632,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 533,
+          "name": "Fixture Campaign 33",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225633,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 534,
+          "name": "Fixture Campaign 34",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225634,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 535,
+          "name": "Fixture Campaign 35",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225635,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 536,
+          "name": "Fixture Campaign 36",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225636,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 537,
+          "name": "Fixture Campaign 37",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225637,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 538,
+          "name": "Fixture Campaign 38",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225638,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 539,
+          "name": "Fixture Campaign 39",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225639,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 540,
+          "name": "Fixture Campaign 40",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225640,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 541,
+          "name": "Fixture Campaign 41",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225641,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 542,
+          "name": "Fixture Campaign 42",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225642,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 543,
+          "name": "Fixture Campaign 43",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225643,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 544,
+          "name": "Fixture Campaign 44",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225644,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 545,
+          "name": "Fixture Campaign 45",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225645,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 546,
+          "name": "Fixture Campaign 46",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225646,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 547,
+          "name": "Fixture Campaign 47",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225647,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 548,
+          "name": "Fixture Campaign 48",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225648,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 549,
+          "name": "Fixture Campaign 49",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225649,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 550,
+          "name": "Fixture Campaign 50",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225650,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 551,
+          "name": "Fixture Campaign 51",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225651,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 552,
+          "name": "Fixture Campaign 52",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225652,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 553,
+          "name": "Fixture Campaign 53",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225653,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 554,
+          "name": "Fixture Campaign 54",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225654,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 555,
+          "name": "Fixture Campaign 55",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225655,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 556,
+          "name": "Fixture Campaign 56",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225656,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 557,
+          "name": "Fixture Campaign 57",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225657,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 558,
+          "name": "Fixture Campaign 58",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225658,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 559,
+          "name": "Fixture Campaign 59",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225659,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 560,
+          "name": "Fixture Campaign 60",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225660,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 561,
+          "name": "Fixture Campaign 61",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225661,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 562,
+          "name": "Fixture Campaign 62",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225662,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 563,
+          "name": "Fixture Campaign 63",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225663,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 564,
+          "name": "Fixture Campaign 64",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225664,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 565,
+          "name": "Fixture Campaign 65",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225665,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 566,
+          "name": "Fixture Campaign 66",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225666,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 567,
+          "name": "Fixture Campaign 67",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225667,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 568,
+          "name": "Fixture Campaign 68",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225668,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 569,
+          "name": "Fixture Campaign 69",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225669,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 570,
+          "name": "Fixture Campaign 70",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225670,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 571,
+          "name": "Fixture Campaign 71",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225671,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 572,
+          "name": "Fixture Campaign 72",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225672,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 573,
+          "name": "Fixture Campaign 73",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225673,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 574,
+          "name": "Fixture Campaign 74",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225674,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 575,
+          "name": "Fixture Campaign 75",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225675,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 576,
+          "name": "Fixture Campaign 76",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225676,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 577,
+          "name": "Fixture Campaign 77",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225677,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 578,
+          "name": "Fixture Campaign 78",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225678,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 579,
+          "name": "Fixture Campaign 79",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225679,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 580,
+          "name": "Fixture Campaign 80",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225680,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 581,
+          "name": "Fixture Campaign 81",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225681,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 582,
+          "name": "Fixture Campaign 82",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225682,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 583,
+          "name": "Fixture Campaign 83",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225683,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 584,
+          "name": "Fixture Campaign 84",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225684,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 585,
+          "name": "Fixture Campaign 85",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225685,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 586,
+          "name": "Fixture Campaign 86",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225686,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 587,
+          "name": "Fixture Campaign 87",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225687,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 588,
+          "name": "Fixture Campaign 88",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225688,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 589,
+          "name": "Fixture Campaign 89",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225689,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 590,
+          "name": "Fixture Campaign 90",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225690,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 591,
+          "name": "Fixture Campaign 91",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225691,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 592,
+          "name": "Fixture Campaign 92",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225692,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 593,
+          "name": "Fixture Campaign 93",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225693,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 594,
+          "name": "Fixture Campaign 94",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225694,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 595,
+          "name": "Fixture Campaign 95",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225695,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 596,
+          "name": "Fixture Campaign 96",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225696,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 597,
+          "name": "Fixture Campaign 97",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225697,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 598,
+          "name": "Fixture Campaign 98",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225698,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 599,
+          "name": "Fixture Campaign 99",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225699,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
+        },
+        {
+          "id": 600,
+          "name": "Fixture Campaign 100",
+          "type": "ab",
+          "platform": "website",
+          "status": "RUNNING",
+          "createdOn": 1767225700,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 1
+          },
+          "primaryGoal": 1,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 2
+          }
         }
       ]
     }

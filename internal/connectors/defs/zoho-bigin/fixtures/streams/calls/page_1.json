@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/Calls" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "call_fixture_1", "Subject": "Fixture Call One", "Call_Type": "Outbound", "Call_Duration": "300", "Call_Start_Time": "2026-01-01T09:00:00+00:00" },
+        { "id": "call_fixture_2", "Subject": "Fixture Call Two", "Call_Type": "Inbound", "Call_Duration": "120", "Call_Start_Time": "2026-01-02T09:00:00+00:00" }
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "scope_slug": "fixture-team", "name": "Fixture Team Intro Call", "duration": 30 },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/scopes/fixture-team/links",
+    "body": { "name": "Fixture Team Intro Call", "duration": 30 }
+  },
+  "response": { "status": 201, "body": { "id": "lnk_fixture_scope_new", "name": "Fixture Team Intro Call" } }
+}

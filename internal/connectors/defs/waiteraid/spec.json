@@ -7,22 +7,21 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.waiteraid.com",
-      "description": "WaiterAid API base URL. Defaults to the public WaiterAid API host."
+      "default": "https://app.waiteraid.com",
+      "description": "WaiterAid API base URL. Pass B correction: the real, currently-documented WaiterAid API is served from app.waiteraid.com/wa-api/<method> (POST-method, query-string-parameterized endpoints), not api.waiteraid.com/<resource> (a REST-shaped host/path this bundle previously modeled but the real API does not expose -- see docs.md)."
     },
     "auth_hash": {
       "type": "string",
       "x-secret": true,
-      "description": "WaiterAid auth hash, sent as the X-Auth-Hash header on every request."
+      "description": "WaiterAid auth hash (obtained once via the real API's own /wa-api/auth?username=&password=&restaurant= endpoint -- this bundle expects a pre-obtained hash, matching legacy's config contract, not username/password directly). Pass B correction: sent as the real API's own 'auth_hash' QUERY parameter on every request, not the X-Auth-Hash header this bundle previously (and legacy) sent -- the real WaiterAid API has no documented header-based auth of any kind, only query-string auth_hash (or username/password, which this bundle does not collect)."
     },
     "restid": {
       "type": "string",
-      "x-secret": true,
-      "description": "WaiterAid restaurant ID, sent as the X-Restaurant-ID header on every request."
+      "description": "WaiterAid restaurant ID (a plain numeric identifier, NOT a credential -- reclassified from x-secret in this Pass B revision since it is not credential-shaped; see docs.md). Pass B correction: sent as the real API's own 'restid' QUERY parameter on every request (mandatory on every documented endpoint), not the X-Restaurant-ID header this bundle previously (and legacy) sent."
     },
     "start_date": {
       "type": "string",
-      "description": "Optional start_date query parameter passed through to the reservations endpoint verbatim. Not used as a stateful incremental cursor by legacy."
+      "description": "Optional date filter (YYYY-MM-DD), sent as the real getBooking/searchBooking endpoint's own 'date' query parameter when configured. Renamed in intent from legacy's 'start_date' (config-shape backward compatible: the property name is unchanged) since the real API's own parameter is a single exact-match date filter named 'date', not a lower-bound range filter -- see docs.md."
     }
   }
 }

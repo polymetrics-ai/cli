@@ -1,14 +1,14 @@
 {
   "name": "sendowl",
   "display_name": "SendOwl",
-  "description": "Reads SendOwl orders, products, and subscriptions through the SendOwl API.",
+  "description": "Reads SendOwl orders, products, subscriptions, discounts, bundles, and licenses, and writes product/subscription/discount/bundle lifecycle mutations and order actions (refund, cancel subscription, resend email) through the SendOwl API.",
   "integration_type": "api",
   "docs_url": "https://www.sendowl.com/developers/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external SendOwl API read of order, product, and subscription data"
+    "read": "external SendOwl API read of order, product, subscription, discount, bundle, and license data",
+    "write": "external SendOwl API mutation, including a real financial refund action (refund_order)",
+    "approval": "reverse ETL plan approval required before writes"
   }
 }

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "assignments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "audienceId": { "type": ["string", "null"] },
+    "primaryContentId": { "type": ["string", "null"] },
+    "alternativeContentIds": { "type": ["array", "null"] },
+    "hideAlternativeContent": { "type": ["boolean", "null"] },
+    "completionPeriod": { "type": ["object", "null"] },
+    "recurrence": { "type": ["object", "null"] },
+    "isActive": { "type": ["boolean", "null"] },
+    "isDeleted": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "deletedAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

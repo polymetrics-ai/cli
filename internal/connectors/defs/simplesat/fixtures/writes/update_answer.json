@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "101",
+    "comment": "Updated fixture comment"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/answers/101",
+    "body": {
+      "comment": "Updated fixture comment"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 101, "comment": "Updated fixture comment" }
+  }
+}

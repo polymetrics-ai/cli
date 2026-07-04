@@ -1,0 +1,19 @@
+{
+  "record": {
+    "category": {
+      "name": "Fixture New Category",
+      "category_group_id": "category_group_fixture_1"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/budgets/synthetic-conformance-value/categories",
+    "body": {
+      "category": {
+        "name": "Fixture New Category",
+        "category_group_id": "category_group_fixture_1"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "category": { "id": "category_new_fixture" } } } }
+}

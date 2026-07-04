@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "17567131",
+    "status": "approved"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/referral/17567131/status",
+    "body": {
+      "status": "approved"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "status": "approved" } }
+  }
+}

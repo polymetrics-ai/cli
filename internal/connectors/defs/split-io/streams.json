@@ -60,6 +60,31 @@
       },
       "records": { "path": "objects" },
       "schema": "schemas/segments.json"
+    },
+    {
+      "name": "groups",
+      "path": "/internal/api/v2/groups",
+      "pagination": { "type": "none" },
+      "records": { "path": "objects" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "traffic_types",
+      "path": "/internal/api/v2/trafficTypes/ws/{{ config.workspace_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/traffic_types.json"
+    },
+    {
+      "name": "users",
+      "path": "/internal/api/v2/users",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "nextMarker"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
     }
   ]
 }

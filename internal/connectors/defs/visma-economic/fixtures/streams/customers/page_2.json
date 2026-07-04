@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "skippages": "1",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "customerNumber": 101,
+          "name": "Fixture Customer 101",
+          "currency": "EUR",
+          "email": "fixture101@example.com",
+          "lastUpdated": "2026-02-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

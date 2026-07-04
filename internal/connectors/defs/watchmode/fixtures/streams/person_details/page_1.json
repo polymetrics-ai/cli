@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v1/person/synthetic-conformance-value/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 7110004,
+      "full_name": "Fixture Person",
+      "first_name": "Fixture",
+      "last_name": "Person",
+      "tmdb_id": null,
+      "imdb_id": null,
+      "main_profession": "Actor",
+      "date_of_birth": "1980-01-01",
+      "date_of_death": null,
+      "place_of_birth": "Fixture City",
+      "gender": "m",
+      "known_for": [3173903, 3173904],
+      "relevance_percentile": 95.5
+    }
+  }
+}

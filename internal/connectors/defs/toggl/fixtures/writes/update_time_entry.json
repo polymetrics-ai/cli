@@ -1,0 +1,7 @@
+{
+  "record": { "id": 1, "description": "Updated fixture time entry" },
+  "expect": {
+    "method": "PUT",
+    "path": "/workspaces/synthetic-conformance-value/time_entries/1"
+  }
+}

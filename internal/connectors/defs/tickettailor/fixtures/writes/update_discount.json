@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "di_fixture_1",
+    "name": "Renamed Discount"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/discounts/di_fixture_1"
+  }
+}

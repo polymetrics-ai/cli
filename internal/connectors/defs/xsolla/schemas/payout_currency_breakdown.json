@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payout_currency_breakdown",
+  "type": "object",
+  "x-primary-key": ["IsoCurrency"],
+  "required": ["IsoCurrency"],
+  "properties": {
+    "IsoCurrency": { "type": "string" },
+    "PaymentsAmount": { "type": ["number", "null"] },
+    "SumCommissionAgent": { "type": ["number", "null"] },
+    "SumCommissionUserTaxes": { "type": ["number", "null"] },
+    "SumItems": { "type": ["number", "null"] },
+    "SumNominalSum": { "type": ["number", "null"] },
+    "SumOutProject": { "type": ["number", "null"] },
+    "SumPayoutSum": { "type": ["number", "null"] },
+    "TaxesOfPayments": { "type": ["number", "null"] },
+    "DirectTaxesOfPayments": { "type": ["number", "null"] }
+  }
+}

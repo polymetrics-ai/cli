@@ -8,7 +8,17 @@
   "properties": {
     "id": { "type": "string" },
     "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"], "description": "Campaign type, e.g. ab, multivariate, split, feature-test." },
+    "platform": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] }
+    "created_at": { "type": ["integer", "null"], "description": "Real API field createdOn: Unix seconds timestamp." },
+    "is_deleted": { "type": ["boolean", "null"] },
+    "primary_url": { "type": ["string", "null"] },
+    "urls": { "type": ["array", "null"], "description": "Array of {type, value} URL-matching objects." },
+    "labels": { "type": ["array", "null"] },
+    "created_by": { "type": ["object", "null"], "description": "Raw {id, name, imageUrl} object of the campaign's creator, passed through unchanged." },
+    "goals": { "type": ["object", "null"], "description": "Raw {partialCollection, offset, totalCount} goal-summary object, passed through unchanged (see the excluded per-campaign goals detail endpoint in api_surface.json for full goal records)." },
+    "primary_goal": { "type": ["integer", "null"], "description": "Id of this campaign's primary goal." },
+    "variations": { "type": ["object", "null"], "description": "Raw {partialCollection, totalCount} variation-summary object, passed through unchanged." }
   }
 }

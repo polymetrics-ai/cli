@@ -1,7 +1,7 @@
 {
-  "request": { "method": "GET", "path": "/answers/" },
+  "request": { "method": "GET", "path": "/surveys" },
   "response": {
     "status": 200,
-    "body": { "results": [] }
+    "body": { "next": null, "previous": null, "count": 0, "surveys": [] }
   }
 }

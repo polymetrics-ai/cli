@@ -47,6 +47,18 @@
         "display_name": "{{ record.displayName }}"
       },
       "schema": "schemas/business_units.json"
+    },
+    {
+      "name": "categories",
+      "path": "/v1/business-units/{{ config.business_unit_id }}/categories",
+      "pagination": { "type": "none" },
+      "records": { "path": "categories" },
+      "computed_fields": {
+        "category_id": "{{ record.categoryId }}",
+        "display_name": "{{ record.displayName }}",
+        "is_primary": "{{ record.isPrimary }}"
+      },
+      "schema": "schemas/categories.json"
     }
   ]
 }

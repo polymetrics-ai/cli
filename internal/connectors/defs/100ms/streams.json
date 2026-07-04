@@ -45,6 +45,40 @@
       "query": { "limit": "100" },
       "records": { "path": "data" },
       "schema": "schemas/templates.json"
+    },
+    {
+      "name": "live_streams",
+      "path": "/live-streams",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/live_streams.json"
+    },
+    {
+      "name": "external_streams",
+      "path": "/external-streams",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/external_streams.json"
+    },
+    {
+      "name": "recording_assets",
+      "path": "/recording-assets",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/recording_assets.json"
+    },
+    {
+      "name": "webhook_events",
+      "path": "/analytics/webhooks",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "events" },
+      "schema": "schemas/webhook_events.json"
     }
   ]
 }

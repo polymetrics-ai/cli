@@ -12,7 +12,13 @@
         "token": "{{ secrets.client_refresh_token }}"
       }
     ],
-    "pagination": { "type": "none" },
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 200
+    },
     "check": {
       "method": "GET",
       "path": "/Pipelines"
@@ -42,7 +48,82 @@
       "path": "/settings/fields",
       "records": { "path": "fields" },
       "schema": "schemas/fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "contacts",
+      "path": "/Contacts",
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "companies",
+      "path": "/Accounts",
+      "records": { "path": "data" },
+      "schema": "schemas/companies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "products",
+      "path": "/Products",
+      "records": { "path": "data" },
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tasks",
+      "path": "/Tasks",
+      "records": { "path": "data" },
+      "schema": "schemas/tasks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "events",
+      "path": "/Events",
+      "records": { "path": "data" },
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "calls",
+      "path": "/Calls",
+      "records": { "path": "data" },
+      "schema": "schemas/calls.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notes",
+      "path": "/Notes",
+      "records": { "path": "data" },
+      "schema": "schemas/notes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "type": "AllUsers" },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tags",
+      "path": "/settings/tags",
+      "query": { "module": "{{ config.module_name }}" },
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "modules",
+      "path": "/settings/modules",
+      "records": { "path": "modules" },
+      "schema": "schemas/modules.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
     }
   ]
 }

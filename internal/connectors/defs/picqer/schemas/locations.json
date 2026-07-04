@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idlocation": { "type": "integer" },
+    "idwarehouse": { "type": ["integer", "null"] },
+    "parent_idlocation": { "type": ["integer", "null"] },
+    "type": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "remarks": { "type": ["string", "null"] },
+    "unlink_on_empty": { "type": ["boolean", "null"] },
+    "location_type": { "type": ["object", "null"] },
+    "is_bulk_location": { "type": ["boolean", "null"] },
+    "is_exclusive_location": { "type": ["boolean", "null"] }
+  }
+}

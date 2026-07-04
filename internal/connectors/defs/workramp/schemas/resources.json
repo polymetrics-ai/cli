@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "resources",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "createdAt": { "type": ["number", "null"] },
+    "updatedAt": { "type": ["number", "null"] }
+  }
+}

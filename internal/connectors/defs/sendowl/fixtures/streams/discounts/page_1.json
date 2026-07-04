@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/api/v1_2/discounts", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 301,
+        "code": "FIXTURE10",
+        "discount_percentage": "10",
+        "discount_flat_rate": null,
+        "currency_code": "USD",
+        "start_at": "2026-01-01T00:00:00Z",
+        "end_at": "2026-12-31T00:00:00Z",
+        "max_uses": 100,
+        "current_uses": 1,
+        "created_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

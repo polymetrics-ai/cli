@@ -17,6 +17,14 @@
       "type": "string",
       "x-secret": true,
       "description": "Zendesk API token, used as the Basic auth password alongside '{email}/token' as the username."
+    },
+    "object_type": {
+      "type": "string",
+      "description": "Optional legacy object type key to filter the objects stream (sent as the ?type= query param). Zendesk's Legacy Object Records endpoint requires at least one filter parameter; omitting this returns every type-unfiltered record the account exposes to an unfiltered request, matching legacy's own unfiltered call -- but the real API 400s if the account has no default-filterable view, see docs.md Known limits."
+    },
+    "relationship_type": {
+      "type": "string",
+      "description": "Optional legacy relationship type key to filter the relationships stream (sent as the ?type= query param). Same 400-without-a-filter caveat as object_type, see docs.md Known limits."
     }
   }
 }

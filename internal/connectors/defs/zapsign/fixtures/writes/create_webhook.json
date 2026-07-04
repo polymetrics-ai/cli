@@ -1,0 +1,20 @@
+{
+  "record": {
+    "url": "https://example.com/hooks/zapsign",
+    "type": "doc_signed",
+    "enabled": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks/",
+    "body": {
+      "url": "https://example.com/hooks/zapsign",
+      "type": "doc_signed",
+      "enabled": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "webhook_fixture_created_1" }
+  }
+}

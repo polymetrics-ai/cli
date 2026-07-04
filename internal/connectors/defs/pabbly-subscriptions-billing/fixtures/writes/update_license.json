@@ -1,0 +1,11 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "license_id": "license_fixture_1",
+    "license_codes": "FIXTURECODE1\nFIXTURECODE2\nFIXTURECODE3"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/product_fixture_1/licenses/license_fixture_1"
+  }
+}

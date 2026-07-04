@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/organizations/users.php",
+    "query": {
+      "page": "0",
+      "limit": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "email": "fixture1@example.com", "label": "Fixture User One" },
+      { "id": 2, "email": "fixture2@example.com", "label": "Fixture User Two" }
+    ]
+  }
+}

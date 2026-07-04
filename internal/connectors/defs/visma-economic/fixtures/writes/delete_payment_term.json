@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": 2
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/payment-terms/2"
+  }
+}

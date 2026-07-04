@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerGroups/search",
+    "query": {
+      "searchCriteria[currentPage]": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "code": "Fixture Group 101",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        }
+      ],
+      "search_criteria": {
+        "page_size": 100,
+        "current_page": 2
+      },
+      "total_count": 101
+    }
+  }
+}

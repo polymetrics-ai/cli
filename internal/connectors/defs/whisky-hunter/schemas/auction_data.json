@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "auction_data",
+  "type": "object",
+  "x-primary-key": ["auction_slug", "dt"],
+  "required": ["auction_slug", "dt"],
+  "properties": {
+    "dt": { "type": "string", "description": "First day of the aggregation month, YYYY-MM-DD." },
+    "auction_slug": { "type": "string" },
+    "auction_name": { "type": ["string", "null"] },
+    "winning_bid_mean": { "type": ["number", "null"] },
+    "auction_trading_volume": { "type": ["number", "null"] },
+    "auction_lots_count": { "type": ["integer", "null"] },
+    "all_auctions_lots_count": { "type": ["integer", "null"] }
+  }
+}

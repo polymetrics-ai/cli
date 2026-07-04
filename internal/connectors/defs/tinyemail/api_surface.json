@@ -1,14 +1,14 @@
 {
-  "api": "tinyEmail REST API v1",
-  "docs": "https://tinyemail.com/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (subscribers, lists, campaigns); tinyEmail's write/mutation endpoints and other resources (automations, templates) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "api": "tinyEmail API (Enterprise-only public surface)",
+  "docs": "https://docs-api.tinyemail.com/ (readme.io-hosted reference; also linked from https://tinyemail.com/api and https://docs.tinyemail.com/)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion. Ground truth is tinyEmail's own readme.io-hosted API reference (docs-api.tinyemail.com), fetched directly (its embedded page-sidebar JSON was parsed to enumerate every reference/endpoint page tinyEmail itself has published). That reference declares EXACTLY ONE documented endpoint in the entire product: `POST /segment/customer` ('Import Customer', under the 'Customers' category) — now implemented as the `create_subscriber` write action below. Independent corroboration: tinyEmail's API is explicitly described (per tinyEmail support/community sources) as an Enterprise-only, request-access feature organized around 'Campaigns and Contacts' with 'Contact Members' (list subscriptions) and 'Sender Details', consistent with a deliberately minimal, mostly write-only integration surface (a marketing-automation import/upsert endpoint, not a full data-export API) rather than an under-documented one this review failed to find more of. `GET /v1/subscribers`, `/v1/lists`, and `/v1/campaigns` — the 3 read streams this bundle has carried since its original migration — do NOT appear anywhere in tinyEmail's own published API reference; they are preserved completely unchanged for parity (conventions.md §5's meta-rule: never change accepted-input behavior for an existing stream) on the working assumption that they reflect a real, working, but undocumented/legacy tinyEmail API surface the original connector author had access to (plausibly an earlier or account-specific API generation predating the current public reference). This bundle does not fabricate additional undocumented endpoints beyond what already existed pre-Pass-B; the ONE new capability added here (`create_subscriber`) is the ONE endpoint tinyEmail itself actually publishes.",
   "endpoints": [
+    { "method": "POST", "path": "/segment/customer", "covered_by": { "write": "create_subscriber" } },
     { "method": "GET", "path": "/v1/subscribers", "covered_by": { "stream": "subscribers" } },
     { "method": "GET", "path": "/v1/lists", "covered_by": { "stream": "lists" } },
     { "method": "GET", "path": "/v1/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "POST", "path": "/v1/subscribers", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/automations", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/templates", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    { "method": "GET", "path": "/v1/automations", "excluded": { "category": "out_of_scope", "reason": "no automations resource of any kind is documented anywhere in tinyEmail's own published API reference (docs-api.tinyemail.com); this path was carried in a prior version of this file as a hypothetical Pass B target but could not be corroborated against any real source and is removed as a fabricated guess" } },
+    { "method": "GET", "path": "/v1/templates", "excluded": { "category": "out_of_scope", "reason": "no templates resource of any kind is documented anywhere in tinyEmail's own published API reference (docs-api.tinyemail.com); this path was carried in a prior version of this file as a hypothetical Pass B target but could not be corroborated against any real source and is removed as a fabricated guess" } }
   ]
 }

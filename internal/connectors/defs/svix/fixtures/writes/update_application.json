@@ -1,0 +1,7 @@
+{
+  "record": { "id": "app_fixture_1", "name": "Renamed Fixture Application" },
+  "expect": {
+    "method": "PUT",
+    "path": "/app/app_fixture_1"
+  }
+}

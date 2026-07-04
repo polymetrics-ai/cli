@@ -1,14 +1,14 @@
 {
   "name": "sharepoint-lists-enterprise",
   "display_name": "SharePoint Lists Enterprise",
-  "description": "Reads SharePoint lists and list items through Microsoft Graph. Read-only.",
+  "description": "Reads and writes SharePoint lists and list items through Microsoft Graph.",
   "integration_type": "api",
   "docs_url": "https://learn.microsoft.com/en-us/graph/api/resources/list?view=graph-rest-1.0",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,7 +18,8 @@
   },
   "risk": {
     "read": "external Microsoft Graph API read of SharePoint list and list-item data",
-    "approval": "none; read-only, no reverse-ETL writes"
+    "write": "creates/updates SharePoint lists and list items (rows and their column values) on the configured site via Microsoft Graph",
+    "approval": "none for list/list-item create-update (low-risk CRM/CMS-style data, no destructive deletes implemented)"
   },
   "conformance": {
     "skip_dynamic": true,

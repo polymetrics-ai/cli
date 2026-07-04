@@ -1,0 +1,9 @@
+{
+  "record": { "face_id": "replica_fixture_1", "pal_id": "pal_fixture_1", "conversation_name": "Fixture New Conversation" },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations",
+    "body": { "face_id": "replica_fixture_1", "pal_id": "pal_fixture_1", "conversation_name": "Fixture New Conversation" }
+  },
+  "response": { "status": 200, "body": { "conversation_id": "conversation_fixture_new", "status": "active", "conversation_url": "https://tavus.daily.co/conversation_fixture_new" } }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "emails_in_book",
+  "type": "object",
+  "x-primary-key": ["email"],
+  "required": ["email"],
+  "properties": {
+    "email": { "type": "string" },
+    "status": { "type": ["integer", "null"] },
+    "book_id": { "type": ["string", "null"] }
+  }
+}

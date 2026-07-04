@@ -1,0 +1,9 @@
+{
+  "record": {
+    "segment_token": "sgmt_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/segments/sgmt_fixture_1"
+  }
+}

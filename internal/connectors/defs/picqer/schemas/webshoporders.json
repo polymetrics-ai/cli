@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webshoporders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idcompany_webshop_order": { "type": "integer" },
+    "idcompany_webshop": { "type": ["integer", "null"] },
+    "idorder": { "type": ["integer", "null"] },
+    "foreign_id": { "type": ["string", "null"] },
+    "foreign_number": { "type": ["string", "null"] },
+    "foreign_status": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "reason": { "type": ["string", "null"] },
+    "ordered": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] }
+  }
+}

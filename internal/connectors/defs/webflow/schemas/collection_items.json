@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "collection_items",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "lastUpdated",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "cmsLocaleId": { "type": ["string", "null"] },
+    "lastPublished": { "type": ["string", "null"], "format": "date-time" },
+    "lastUpdated": { "type": ["string", "null"], "format": "date-time" },
+    "createdOn": { "type": ["string", "null"], "format": "date-time" },
+    "isArchived": { "type": ["boolean", "null"] },
+    "isDraft": { "type": ["boolean", "null"] },
+    "fieldData": { "type": ["object", "null"] },
+    "collectionId": { "type": ["string", "null"], "description": "Stamped by fan_out with the collection id (read from this site's own collections list) that produced this record." }
+  }
+}

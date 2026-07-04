@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/recording-assets", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "asset_fixture_1",
+          "job_id": "job_fixture_1",
+          "room_id": "room_fixture_1",
+          "session_id": "session_fixture_1",
+          "type": "room-vod",
+          "path": "recordings/fixture/asset_fixture_1.mp4",
+          "duration": 60,
+          "size": 102400,
+          "status": "completed"
+        }
+      ],
+      "last": ""
+    }
+  }
+}

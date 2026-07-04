@@ -8,6 +8,9 @@
     "id": { "type": "string", "description": "Mapped from the raw API's token field via a computed_fields rename." },
     "name": { "type": ["string", "null"] },
     "status": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] }
+    "folder_path": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "last_update_at": { "type": ["string", "null"] }
   }
 }

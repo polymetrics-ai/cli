@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture Team",
+    "user_ids": [1001, 1002]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/teams",
+    "body": {
+      "name": "Fixture Team",
+      "user_ids": [1001, 1002]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "team": { "id": 2001, "name": "Fixture Team" } }
+  }
+}

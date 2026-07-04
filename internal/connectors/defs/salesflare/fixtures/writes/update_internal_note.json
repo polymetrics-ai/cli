@@ -1,0 +1,5 @@
+{
+  "record": { "message_id": "msg_fixture_1", "content": "Fixture internal note edited" },
+  "expect": { "method": "PUT", "path": "/messages/msg_fixture_1" },
+  "response": { "status": 200, "body": { "message_id": "msg_fixture_1" } }
+}

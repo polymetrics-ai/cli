@@ -44,6 +44,27 @@
       "records": { "path": "." },
       "projection": "passthrough",
       "schema": "schemas/comments.json"
+    },
+    {
+      "name": "labels",
+      "path": "/labels",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/labels.json"
+    },
+    {
+      "name": "collaborators",
+      "path": "/projects/{{ fanout.id }}/collaborators",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/projects", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collaborators.json"
     }
   ]
 }

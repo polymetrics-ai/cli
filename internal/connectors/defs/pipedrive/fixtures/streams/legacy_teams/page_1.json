@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/legacyTeams" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 1,
+          "name": "Fixture Team",
+          "description": "Fixture sales team",
+          "manager_id": 1,
+          "users": [1],
+          "active_flag": true,
+          "deleted_flag": false,
+          "add_time": "2026-01-01 00:00:00",
+          "created_by_user_id": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/target_app", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "target_app_fixture_1", "name": "Fixture Target App One" }
+      ]
+    }
+  }
+}

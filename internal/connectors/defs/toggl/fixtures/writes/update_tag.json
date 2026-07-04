@@ -1,0 +1,7 @@
+{
+  "record": { "id": 5, "name": "renamed-fixture-tag" },
+  "expect": {
+    "method": "PUT",
+    "path": "/workspaces/synthetic-conformance-value/tags/5"
+  }
+}

@@ -1,10 +1,15 @@
 # Overview
 
 Workday is a wave2 fan-out declarative-HTTP migration. It reads Workday tenant data — workers,
-organizations, and positions — through a conservative subset of the Workday tenant API
+organizations, and positions — through a conservative subset of the Workday tenant REST API
 (`GET {base_url}/ccx/api/v1/{tenant}/...`). This bundle is engine-vs-legacy parity-tested against
 `internal/connectors/workday` (the hand-written connector it migrates); the legacy package stays
 registered and unchanged until wave6's registry flip.
+
+**Pass B full-surface expansion status: BLOCKED (`DOCS_UNREACHABLE`).** This bundle's real API
+documentation is not publicly reachable — see Known limits for the full writeup. The 3
+legacy-parity streams below were re-verified against the only available source of truth (the
+legacy Go implementation) and are unchanged; no new streams or writes were added this pass.
 
 ## Auth setup
 
@@ -59,6 +64,29 @@ None. Legacy `Write` always returns `connectors.ErrUnsupportedOperation`; `capab
 
 ## Known limits
 
+- **`DOCS_UNREACHABLE`: Workday's real REST API reference is not publicly accessible.** This
+  bundle's `metadata.json.docs_url` previously pointed at
+  `https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html`, which
+  resolves to the Workday Web Services (WWS) directory — a completely different, SOAP-based product
+  (WSDL/XSD-described) from the REST `ccx/api/v1` interface this bundle and the legacy connector
+  actually call. That was a pre-existing metadata error, now corrected to point at the real REST API
+  directory (`https://community.workday.com/sites/default/files/file-hosting/restapi/`). However,
+  the real REST API directory is a JavaScript single-page app whose per-service OpenAPI 2.0 specs
+  (`staffing_v1_*_oas2.json`, `common_v1_*_oas2.json`, and similar — the services that would document
+  the full `workers`/`organizations`/`positions` field shapes and any sibling endpoints) are fetched
+  client-side from a path that returns HTTP 404 to an unauthenticated request, and the equivalent
+  `community.workday.com/rest/reference` landing page requires HTTP Basic auth (verified live:
+  `401` with `WWW-Authenticate: Basic realm="Sling (Development)"`), gated behind a Workday
+  customer/partner login this migration agent does not have. Third-party "Workday REST API
+  reference" pages found via web search (e.g. `workday.rest`) were checked and found to be
+  low-confidence, apparently auto-generated aggregator content that materially conflicts with the
+  legacy connector's own verified base path (inventing a `/ccx/service/customreport2/{tenant}` base
+  URL, for example) — not a trustworthy source to expand a real integration's surface from. Per
+  `docs/migration/conventions.md` §6, this is a `DOCS_UNREACHABLE` blocker: no version of "read the
+  real docs and add every practical endpoint" is possible for Workday without an actual tenant/
+  partner login, which is out of scope for this migration pass. The 3 existing streams
+  (`workers`/`organizations`/`positions`) remain the full, honest coverage this bundle can respectably
+  claim; no additional streams, writes, or field-shape changes were guessed at or invented.
 - **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config-driven
   overrides (`boundedInt`/`readMaxPages`, `workday.go:213-241`, bounded 1-500 for `page_size`). The
   engine's `page_number` paginator's `PageSize`/`MaxPages` fields are plain integers with no

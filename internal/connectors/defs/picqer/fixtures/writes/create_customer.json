@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Customer", "emailaddress": "fixture@example.com" },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": { "name": "Fixture Customer", "emailaddress": "fixture@example.com" }
+  },
+  "response": { "status": 200, "body": { "idcustomer": 401, "name": "Fixture Customer" } }
+}

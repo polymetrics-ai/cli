@@ -1,0 +1,11 @@
+{
+  "record": { "id": "txn_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/transactions/txn_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "txn_fixture_1", "type": "transaction", "attributes": { "status": "redacted" } } }
+  }
+}

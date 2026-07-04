@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Filter", "conditions": { "glue": "and", "conditions": [] }, "type": "deals" },
+  "expect": {
+    "method": "POST",
+    "path": "/filters",
+    "body": { "name": "Fixture Filter", "conditions": { "glue": "and", "conditions": [] }, "type": "deals" }
+  },
+  "response": { "status": 201, "body": { "success": true, "data": { "id": 1, "name": "Fixture Filter" } } }
+}

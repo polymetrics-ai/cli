@@ -1,0 +1,11 @@
+{
+  "record": { "bookName": "Fixture Book" },
+  "expect": {
+    "method": "POST",
+    "path": "/addressbooks"
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 999 }
+  }
+}

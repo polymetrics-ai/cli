@@ -28,11 +28,38 @@
       "projection": "passthrough"
     },
     {
+      "name": "form_fields",
+      "path": "/forms/{{ config.form_hash }}/fields.json",
+      "records": { "path": "Fields" },
+      "schema": "schemas/form_fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
       "name": "entries",
       "path": "/forms/{{ config.form_hash }}/entries.json",
       "records": { "path": "Entries" },
       "schema": "schemas/entries.json",
-      "projection": "passthrough"
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "pageStart",
+        "limit_param": "pageSize",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "form_comments",
+      "path": "/forms/{{ config.form_hash }}/comments.json",
+      "records": { "path": "Comments" },
+      "schema": "schemas/form_comments.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "pageStart",
+        "limit_param": "pageSize",
+        "page_size": 25
+      }
     },
     {
       "name": "reports",
@@ -40,6 +67,35 @@
       "records": { "path": "Reports" },
       "schema": "schemas/reports.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "report_fields",
+      "path": "/reports/{{ config.report_hash }}/fields.json",
+      "records": { "path": "Fields" },
+      "schema": "schemas/report_fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "report_entries",
+      "path": "/reports/{{ config.report_hash }}/entries.json",
+      "records": { "path": "Entries" },
+      "schema": "schemas/report_entries.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "pageStart",
+        "limit_param": "pageSize",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "report_widgets",
+      "path": "/reports/{{ config.report_hash }}/widgets.json",
+      "records": { "path": "Widgets" },
+      "schema": "schemas/report_widgets.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
     }
   ]
 }

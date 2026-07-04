@@ -1,0 +1,143 @@
+{
+  "actions": [
+    {
+      "name": "create_dataset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/datasets",
+      "body_type": "json",
+      "body_fields": ["id", "title", "discriminator", "uniqueRecordField", "allowOfflineUpdates"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["discriminator"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "discriminator": { "type": "string", "enum": ["CASES", "ENUMERATORS", "DATA"] },
+          "uniqueRecordField": { "type": "string" },
+          "allowOfflineUpdates": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new server dataset (a general-purpose, enumerator, or case-management dataset); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_dataset",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/datasets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["title", "discriminator", "uniqueRecordField", "allowOfflineUpdates"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "discriminator"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "discriminator": { "type": "string", "enum": ["CASES", "ENUMERATORS", "DATA"] },
+          "uniqueRecordField": { "type": "string" },
+          "allowOfflineUpdates": { "type": "boolean" }
+        }
+      },
+      "risk": "updates an existing dataset's metadata/configuration (the dataset type/discriminator itself cannot be changed after creation, per SurveyCTO's own API); external mutation, no approval required"
+    },
+    {
+      "name": "delete_dataset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/datasets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a dataset and its records; approval required"
+    },
+    {
+      "name": "create_dataset_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/datasets/{{ record.dataset_id }}/records",
+      "path_fields": ["dataset_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["dataset_id"],
+        "properties": {
+          "dataset_id": { "type": "string" }
+        }
+      },
+      "risk": "adds a new record to a dataset; the field name set is dataset-defined (SurveyCTO's own DatasetRecordFieldMap has no fixed schema), so record_schema only requires the routing field dataset_id -- every other record property is sent verbatim as the record's field-name/value map; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["username", "roleId", "password"],
+        "properties": {
+          "username": { "type": "string" },
+          "roleId": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "risk": "creates a new SurveyCTO server user AND sets their initial password in the same call; a credential-provisioning action, not an ordinary data mutation -- approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.username }}",
+      "path_fields": ["username"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["username"],
+        "properties": {
+          "username": { "type": "string" },
+          "roleId": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing user's password and/or role; a credential-provisioning action when password is set -- approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.username }}",
+      "path_fields": ["username"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["username"],
+        "properties": {
+          "username": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a server user and revokes their access; approval required"
+    }
+  ]
+}

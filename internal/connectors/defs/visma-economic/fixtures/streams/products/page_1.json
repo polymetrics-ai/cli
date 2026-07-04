@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "productNumber": "P-1001",
+          "name": "Fixture Widget",
+          "description": "A fixture widget",
+          "costPrice": 10.5,
+          "salesPrice": 19.99,
+          "barred": false,
+          "lastUpdated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "productNumber": "P-1002",
+          "name": "Fixture Gadget",
+          "description": "A fixture gadget",
+          "costPrice": 5.0,
+          "salesPrice": 9.99,
+          "barred": false,
+          "lastUpdated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

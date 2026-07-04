@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture Owner" },
+  "expect": {
+    "method": "POST",
+    "path": "/pms/owners"
+  }
+}

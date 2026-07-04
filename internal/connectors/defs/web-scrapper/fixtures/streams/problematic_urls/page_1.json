@@ -1,0 +1,421 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/scraping-job/synthetic-conformance-value/problematic-urls",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "url": "https://example.test/failed/1",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/2",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/3",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/4",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/5",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/6",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/7",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/8",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/9",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/10",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/11",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/12",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/13",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/14",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/15",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/16",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/17",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/18",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/19",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/20",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/21",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/22",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/23",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/24",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/25",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/26",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/27",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/28",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/29",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/30",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/31",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/32",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/33",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/34",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/35",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/36",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/37",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/38",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/39",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/40",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/41",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/42",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/43",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/44",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/45",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/46",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/47",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/48",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/49",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/50",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/51",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/52",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/53",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/54",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/55",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/56",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/57",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/58",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/59",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/60",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/61",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/62",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/63",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/64",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/65",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/66",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/67",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/68",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/69",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/70",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/71",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/72",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/73",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/74",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/75",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/76",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/77",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/78",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/79",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/80",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/81",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/82",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/83",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/84",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/85",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/86",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/87",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/88",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/89",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/90",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/91",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/92",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/93",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/94",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/95",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/96",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/97",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/98",
+          "type": "empty"
+        },
+        {
+          "url": "https://example.test/failed/99",
+          "type": "failed"
+        },
+        {
+          "url": "https://example.test/empty/100",
+          "type": "empty"
+        }
+      ],
+      "current_page": 1,
+      "last_page": 2,
+      "total": 101,
+      "per_page": 100
+    }
+  }
+}

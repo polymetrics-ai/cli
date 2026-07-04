@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/persons" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture Person One", "email": "person1@example.com" }
+      ]
+    }
+  }
+}

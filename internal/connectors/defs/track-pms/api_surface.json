@@ -1,15 +1,2226 @@
 {
-  "api": "Track PMS API (https://www.trackhs.com/api)",
-  "docs": "https://www.trackhs.com/api",
+  "api": "Track PMS / TrackHS API v1.9 (per-domain OpenAPI specs published at https://developer.trackhs.com/reference, covering PMS reservations/units/owners, CRM contacts/companies/leads, channel, guest-communications, and system domains; fetched 2026-07-03)",
+  "docs": "https://developer.trackhs.com/reference",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (reservations, guests, units, owners). Track PMS write endpoints (create/update reservation, guest, unit) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "scope": "Pass B full-surface expansion against Track PMS's complete published per-domain OpenAPI specs (hundreds of real operations across the PMS, CRM, channel, guest-communications, and system domains). Covered: the 4 legacy-parity read streams (reservations, guests, units, owners, at legacy's own paths/response shapes, unchanged) plus 2 new Pass B streams (contacts at the real /crm/contacts endpoint, unit_types) and 7 new write actions (create_reservation, create_unit, update_unit, create_owner, update_owner, create_contact, update_contact, delete_contact) covering every dialect-expressible core-resource mutation. Excluded: the vast per-reservation/per-unit/per-owner operational sub-resource graph (access codes, payment plans, fees, room configuration, housekeeping/channel mapping, owner statements/transactions/fractional-ownership, tax/policy configuration) as out_of_scope or requires_elevated_scope depending on whether it is admin taxonomy configuration or a narrow nested workflow; binary-payload endpoints (images, PDFs); and entire distinct CRM sub-domains (companies, leads, surveys, email/text marketing, campaigns, tags, inquiries) that would each need their own dedicated stream/write/schema set as a follow-on. See docs.md Known limits for two significant pre-existing legacy/real-API discrepancies this research surfaced (legacy's /reservations, /guests, /units, /owners paths and bare-array response shape do not match the currently-documented /pms/reservations, /crm/contacts /pms/units, /pms/owners paths and _embedded.<resource> HAL response envelope; and legacy's Bearer-token auth does not match the currently-documented per-tenant Basic/HMAC auth) \u2014 both are left as-is per the meta-rule (no accepted-input behavior change), not silently corrected.",
   "endpoints": [
-    { "method": "GET", "path": "/reservations", "covered_by": { "stream": "reservations" } },
-    { "method": "GET", "path": "/guests", "covered_by": { "stream": "guests" } },
-    { "method": "GET", "path": "/units", "covered_by": { "stream": "units" } },
-    { "method": "GET", "path": "/owners", "covered_by": { "stream": "owners" } },
-    { "method": "POST", "path": "/reservations", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented reservation creation; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/reservations/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented reservation mutation; Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/reservations/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive delete not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/crm/campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/campaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/campaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/crm/campaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/campaigns/{campaignId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/campaigns/{campaignId}/stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/companies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/companies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/companies/{companyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/crm/companies/{companyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/companies/{companyId}/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/companies/{companyId}/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/companies/{companyId}/attachments/{attachmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/companies/{companyId}/attachments/{attachmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/crm/companies/{companyId}/attachments/{attachmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/companies/{companyId}/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/companies/{companyId}/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/companies/{companyId}/contacts/{contactId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/companies/{companyId}/contacts/{contactId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/crm/companies/{companyId}/contacts/{contactId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/contacts/{contactId}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/contacts/{contactId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single contact detail lookup by id; the contacts stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/crm/contacts/{contactId}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/contacts/{contactId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a full-replace PUT variant of the same ContactsRequest payload the PATCH-based update_contact write already covers; this connector's per-record write model only needs one update verb per resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/contacts/{contactId}/companies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/contacts/{contactId}/companies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/contacts/{contactId}/companies/{companyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/contacts/{contactId}/companies/{companyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/crm/contacts/{contactId}/companies/{companyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/contacts/{contactId}/merge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/contacts/{contactId}/payment-methods",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/contacts/{contactId}/payment-methods",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/contacts/{contactId}/payment-methods/{paymentMethodId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/contacts/{contactId}/payment-methods/{paymentMethodId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/email-templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/email-templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/email-templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/email-templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/email-templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/email-templates/{templateId}/merge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/email-templates/{templateId}/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/inquiries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/inquiries/{inquiryId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/inquiries/{inquiryId}/candidate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/inquiries/{inquiryId}/merge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/inquiries/{inquiryId}/messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/leads",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/auto-close",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/leads/auto-close",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/leads/auto-close/{leadAutoCloseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/auto-close/{leadAutoCloseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/leads/auto-close/{leadAutoCloseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/lost-reasons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/leads/lost-reasons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/leads/lost-reasons/{leadLostReasonId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/lost-reasons/{leadLostReasonId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/leads/lost-reasons/{leadLostReasonId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/leads/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/leads/status/{leadStatusId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/status/{leadStatusId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/leads/status/{leadStatusId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/leads/types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/leads/types/{leadTypesId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/types/{leadTypesId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/leads/types/{leadTypesId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/leads/{leadId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/leads/{leadId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/leads/{leadId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/survey/questions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/survey/questions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/survey/questions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/surveys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/surveys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/surveys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/surveys/questions/{questionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/surveys/questions/{questionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/surveys/questions/{questionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/surveys/responses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/surveys/responses/questions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/surveys/responses/questions/{responseQuestionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/surveys/responses/{responseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/surveys/responses/{responseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/crm/surveys/{surveyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/surveys/{surveyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/crm/surveys/{surveyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/tasks/{taskId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/crm/tasks/{taskId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/text",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/text/conversations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/text/conversations/{conversationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/text/{textId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guests",
+      "covered_by": {
+        "stream": "guests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/owners",
+      "covered_by": {
+        "stream": "owners"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners",
+      "covered_by": {
+        "write": "create_owner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/contracts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/contracts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/owners/contracts/{contractId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/contracts/{contractId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/owners/contracts/{contractId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/fractionals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/fractionals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/owners/fractionals/{fractionalId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/fractionals/{fractionalId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/owners/fractionals/{fractionalId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/fractionals/{fractionalId}/inventory",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/fractionals/{fractionalId}/inventory",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/owners/fractionals/{fractionalId}/inventory/{inventoryId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/fractionals/{fractionalId}/inventory/{inventoryId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/owners/fractionals/{fractionalId}/inventory/{inventoryId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/fractionals/{fractionalId}/inventory/{inventoryId}/assign",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/fractionals/{fractionalId}/owners",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/fractionals/{fractionalId}/owners",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/owners/fractionals/{fractionalId}/owners/{fractionalOwnerId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/fractionals/{fractionalId}/owners/{fractionalOwnerId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/owners/fractionals/{fractionalId}/owners/{fractionalOwnerId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/statements/bulk-generate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements/bulk-generate/{jobId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/owners/statements/{statementId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements/{statementId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements/{statementId}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "PDF rendering of an owner statement; binary payload with no declarative dialect representation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements/{statementId}/reservations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements/{statementId}/reservations/{reservationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements/{statementId}/transactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/statements/{statementId}/transactions/{transactionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/{ownerId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single owner detail lookup by id; the owners stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/owners/{ownerId}",
+      "covered_by": {
+        "write": "update_owner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/{ownerId}/charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/{ownerId}/charges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/{ownerId}/charges/{transactionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/owners/{ownerId}/charges/{transactionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/{ownerId}/payments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/{ownerId}/transactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/{ownerId}/transactions/{transactionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/{ownerId}/units",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/owners/{ownerId}/units",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/owners/{ownerId}/units/{unitOwnerId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/owners/{ownerId}/units/{unitOwnerId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/owners/{ownerId}/units/{unitOwnerId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "owner-accounting sub-resource (unit-ownership assignment, fractional-ownership groups, owner statements/transactions/charges, contracts); a distinct owner-accounting domain nested under a single owner rather than primary owner record data, and the owners stream/create_owner/update_owner writes already cover the core owner resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations",
+      "covered_by": {
+        "write": "create_reservation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/cancellation-policies",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/cancellation-policies",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/cancellation-policies/{policyId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/reservations/cancellation-policies/{policyId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/cancellation-reasons",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/cancellation-reasons",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/cancellation-reasons/{reasonId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/cancellation-reasons/{reasonId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/reservations/cancellation-reasons/{reasonId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/discount-reasons",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/discount-reasons",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/discount-reasons/{reasonId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/reservations/discount-reasons/{reasonId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/policies/guarantees",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/policies/guarantees",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/policies/guarantees/{guaranteeId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/policies/guarantees/{guaranteeId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/reservations/policies/guarantees/{guaranteeId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/travel-insurance-products",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/travel-insurance-products",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/travel-insurance-products/{productId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/travel-insurance-products/{productId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/reservations/travel-insurance-products/{productId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/types",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/types",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/types/{typeId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/types/{typeId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/reservations/types/{typeId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single reservation detail lookup by id; the reservations stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/{reservationId}/access-code",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/access-code",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/access-code",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/{reservationId}/access-code/suspend",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/access-code/suspend",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/{reservationId}/agent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/agent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/agreement",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/attachments/{attachmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/reservations/{reservationId}/attachments/{attachmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/available-fees",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/fees",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/fees",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/{reservationId}/fees/{feeId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/fees/{feeId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/reservations/{reservationId}/fees/{feeId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/reservations/{reservationId}/guarantee-policy",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reservation-policy/type/reason configuration (cancellation policies, guarantee policies, reservation types, travel-insurance products, cancellation/discount reasons); PMS-admin taxonomy configuration that governs how reservations behave, not reservation record data itself, and typically restricted to admin-role API credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/occupant",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/payment-automation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/payment-plans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/payment-plans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/payment-plans/{paymentPlanId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/reservations/{reservationId}/payment-plans/{paymentPlanId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/rates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/rates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/refresh",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/security-deposit",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/stay",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/{reservationId}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/reservations/{reservationId}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/reservations/{reservationId}/travel-agent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/travel-agent",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/type",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/reservations/{reservationId}/unlock",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-reservation sub-resource operation (door-lock access codes, guest agreement/attachments, payment plans, fees, rate changes, security deposits, tags, agent/travel-agent assignment); each is a narrow operational workflow nested under a single reservation rather than primary reservation record data, and the create_reservation write already covers the core booking action this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units",
+      "covered_by": {
+        "write": "create_unit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/bed-types",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/bed-types",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/units/bed-types/{bedTypesId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/bed-types/{bedTypesId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/units/bed-types/{bedTypesId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/delta",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/lodging-types",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/lodging-types",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/units/lodging-types/{lodgingTypesId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/lodging-types/{lodgingTypesId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/units/lodging-types/{lodgingTypesId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/roles/{rolesId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/types",
+      "covered_by": {
+        "stream": "unit_types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unit-type creation is config-heavy admin scaffolding (default roles, bed types, rate rules) better reviewed as its own follow-on; the unit_types stream already covers read access to the resulting objects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/units/types/{unitTypeId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes a unit type taxonomy entry likely referenced by existing units; destructive admin configuration change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/types/{unitTypeId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single unit-type detail lookup by id; the unit_types stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/units/types/{unitTypeId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unit-type update; same reasoning as unit-type creation above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/zones",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/zones",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/units/zones/{zoneId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/zones/{zoneId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/units/zones/{zoneId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unit-taxonomy configuration (bed types, lodging types, roles, housekeeping/maintenance zones); PMS-admin reference-data configuration, not unit record data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single unit detail lookup by id; the units stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/units/{unitId}",
+      "covered_by": {
+        "write": "update_unit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/{unitId}/activate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "activates/deactivates a unit for booking; a narrow status-toggle action layered on the update_unit write's more general field-update capability, deferred as a follow-on rather than a distinct write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/channels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/{unitId}/channels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/channels/{channelId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/{unitId}/channels/{channelId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/clean-status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/units/{unitId}/clean-status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/daily-pricing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/units/{unitId}/daily-pricing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/units/{unitId}/daily-pricing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/{unitId}/deactivate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "activates/deactivates a unit for booking; a narrow status-toggle action layered on the update_unit write's more general field-update capability, deferred as a follow-on rather than a distinct write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/images",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "per-unit image asset list/upload; binary image resource, not declarative record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/{unitId}/images",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "per-unit image asset list/upload; binary image resource, not declarative record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/units/{unitId}/images/{imageId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "per-unit image asset update/removal; binary image resource, not declarative record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/images/{imageId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "per-unit image asset list/upload; binary image resource, not declarative record data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/units/{unitId}/images/{imageId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "per-unit image asset update/removal; binary image resource, not declarative record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/pricing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/rooms",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/{unitId}/rooms",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/units/{unitId}/rooms/{roomId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/rooms/{roomId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pms/units/{unitId}/rooms/{roomId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pms/units/{unitId}/taxes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pms/units/{unitId}/taxes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pms/units/{unitId}/taxes/{unitTaxId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pms/units/{unitId}/taxes/{unitTaxId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reservations",
+      "covered_by": {
+        "stream": "reservations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{tagId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tagId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tags/{tagId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "distinct CRM sub-domain (tasks, companies, leads, surveys, email-template/text/SMS marketing, inquiries, campaigns, tags) separate from the contacts resource this pass covers; each is its own object family with its own create/update/delete lifecycle and would need its own dedicated stream/write/schema set, a follow-on scope decision rather than an in-pass addition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/units",
+      "covered_by": {
+        "stream": "units"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pms/units/{unitId}/availability",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pms/units/{unitId}/daily-pricing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/pms/units/{unitId}/daily-pricing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/pms/units/{unitId}/daily-pricing",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-unit sub-resource operation (real-time pricing/availability, room configuration, housekeeping clean-status, distribution-channel mapping, unit-level tax overrides, images, activate/deactivate); each is a narrow operational workflow nested under a single unit rather than primary unit record data, and the units stream/create_unit/update_unit writes already cover the core unit resource this pass targets"
+      }
+    }
   ]
 }

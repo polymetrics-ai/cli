@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/components",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "components": [
+        {
+          "id": "component_fixture_101",
+          "name": "Fixture Component 101",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 100,
+        "total": 101
+      }
+    }
+  }
+}

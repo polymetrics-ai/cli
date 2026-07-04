@@ -1,0 +1,11 @@
+{
+  "record": { "id": 123 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/sitemap/123"
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true, "data": "ok" }
+  }
+}

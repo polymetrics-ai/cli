@@ -1,0 +1,364 @@
+{
+  "actions": [
+    {
+      "name": "create_gate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/gates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isEnabled": { "type": "boolean" },
+          "idType": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_gate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/gates/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isEnabled": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_gate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/gates/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_dynamic_config",
+      "kind": "create",
+      "method": "POST",
+      "path": "/dynamic_configs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isEnabled": { "type": "boolean" },
+          "idType": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_dynamic_config",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/dynamic_configs/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isEnabled": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_dynamic_config",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/dynamic_configs/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/segments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["id_list", "rule_based", "analysis_list", "user_store_id_list"] },
+          "description": { "type": "string" },
+          "idType": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/segments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isCore": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isCore": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_target_app",
+      "kind": "create",
+      "method": "POST",
+      "path": "/target_app",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_target_app",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/target_app/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_target_app",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/target_app/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_holdout",
+      "kind": "create",
+      "method": "POST",
+      "path": "/holdouts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "idType": { "type": "string" },
+          "teamID": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_holdout",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/holdouts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_layer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/layers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "idType"],
+        "properties": {
+          "name": { "type": "string" },
+          "idType": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_layer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/layers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/keys",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["description", "type"],
+        "properties": {
+          "description": { "type": "string" },
+          "type": { "type": "string", "enum": ["SERVER", "CLIENT", "CONSOLE", "SCIM", "ORG"] },
+          "scopes": { "type": "array", "items": { "type": "string" } },
+          "environments": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation creating a live API credential; approval required"
+    },
+    {
+      "name": "delete_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/keys/{{ record.key }}",
+      "path_fields": ["key"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key"],
+        "properties": { "key": { "type": "string" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a live API credential; approval required"
+    }
+  ]
+}

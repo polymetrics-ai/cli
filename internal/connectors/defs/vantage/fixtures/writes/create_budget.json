@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Budget",
+    "period_amount": "1000.0"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/budgets"
+  }
+}

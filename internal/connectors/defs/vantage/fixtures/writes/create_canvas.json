@@ -1,0 +1,10 @@
+{
+  "record": {
+    "title": "Fixture Canvas",
+    "prompt": "Show me AWS costs"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/canvases"
+  }
+}

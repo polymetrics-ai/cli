@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stores",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "st_fixture_1",
+          "name": "Fixture Store",
+          "currency": "gbp"
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

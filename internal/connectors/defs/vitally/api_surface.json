@@ -1,14 +1,53 @@
 {
-  "api": "Vitally REST API (https://docs.vitally.io/pushing-data-to-vitally/rest-api)",
-  "docs": "https://docs.vitally.io/pushing-data-to-vitally/rest-api",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave1 pilot migration: the 1 legacy-parity read stream only (accounts); minimal-honest api_surface per docs/migration/conventions.md section 2 / DECISIONS.md #4 — full Vitally API-surface research (every documented endpoint) is Pass B (wave5), not this pilot fan-out.",
+  "api": "Vitally REST API (https://docs.vitally.io/en/collections/10410457-rest-api)",
+  "docs": "https://docs.vitally.io/en/articles/9880649-rest-api-overview",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: researched against the live REST API Overview page plus its 6 per-resource sub-pages (Accounts, Users, Notes, Conversations, Tasks, NPS Responses). The public REST API 'currently supports creating, updating, retrieving and listing Users, Accounts, Conversations, Tasks, Notes and NPS Responses' (verbatim from the overview page) -- this is the documented FULL extent of the REST surface; every list/create/update/delete endpoint across all 6 resources is now covered as a stream or write action. Excluded: every single-object GET-by-id detail endpoint (duplicate_of the corresponding list stream's per-item shape), sub-scoped list variants (accounts-for-organization, users-for-account/organization, notes/conversations/tasks/NPS-responses-for-account/organization) whose records are already reachable via the top-level list stream, the account health-score-breakdown sub-resource, and the custom-fields DEFINITION endpoint (distinct from setting trait values, which every resource's create/update write already supports).",
   "endpoints": [
     { "method": "GET", "path": "/resources/accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "POST", "path": "/resources/accounts", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy implements no write path for accounts (Write returns ErrUnsupportedOperation)" } },
-    { "method": "GET", "path": "/resources/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a users stream" } },
-    { "method": "GET", "path": "/resources/notes", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a notes stream" } },
-    { "method": "GET", "path": "/resources/conversations", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a conversations stream" } },
-    { "method": "POST", "path": "/resources/customFields", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement custom field ingestion" } }
+    { "method": "GET", "path": "/resources/organizations/{organizationId}/accounts", "excluded": { "category": "duplicate_of", "reason": "org-scoped accounts list; identical per-item record shape to the accounts stream, already covered by that stream (client-side filter on organizationId reproduces this scope)" } },
+    { "method": "GET", "path": "/resources/accounts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/accounts/{id}/healthScores", "excluded": { "category": "out_of_scope", "reason": "per-account health-score BREAKDOWN sub-resource (component scoring factors), not the account record itself (already covered by the accounts stream's own healthScore field); Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/resources/accounts", "covered_by": { "write": "create_account" } },
+    { "method": "PUT", "path": "/resources/accounts/{id}", "covered_by": { "write": "update_account" } },
+
+    { "method": "GET", "path": "/resources/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/resources/accounts/{accountId}/users", "excluded": { "category": "duplicate_of", "reason": "account-scoped users list; identical per-item record shape to the users stream, already covered by that stream (each user record's own accounts[] array carries this association)" } },
+    { "method": "GET", "path": "/resources/organizations/{organizationId}/users", "excluded": { "category": "duplicate_of", "reason": "org-scoped users list; identical per-item record shape to the users stream, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/users/{id}", "excluded": { "category": "duplicate_of", "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/users/search", "excluded": { "category": "duplicate_of", "reason": "single-user lookup by externalId/email/emailSubdomain; same record shape as the users stream, reachable via client-side filtering of that stream rather than a distinct list-shaped resource" } },
+    { "method": "POST", "path": "/resources/users", "covered_by": { "write": "create_user" } },
+    { "method": "PUT", "path": "/resources/users/{id}", "covered_by": { "write": "update_user" } },
+
+    { "method": "GET", "path": "/resources/notes", "covered_by": { "stream": "notes" } },
+    { "method": "GET", "path": "/resources/accounts/{accountId}/notes", "excluded": { "category": "duplicate_of", "reason": "account-scoped notes list; identical per-item record shape to the notes stream (which carries its own accountId field), already covered by that stream" } },
+    { "method": "GET", "path": "/resources/notes/{id}", "excluded": { "category": "duplicate_of", "reason": "single-note detail; identical record shape to the notes list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/resources/notes", "covered_by": { "write": "create_note" } },
+    { "method": "PUT", "path": "/resources/notes/{id}", "covered_by": { "write": "update_note" } },
+    { "method": "DELETE", "path": "/resources/notes/{id}", "covered_by": { "write": "delete_note" } },
+
+    { "method": "GET", "path": "/resources/conversations", "covered_by": { "stream": "conversations" } },
+    { "method": "GET", "path": "/resources/accounts/{accountId}/conversations", "excluded": { "category": "duplicate_of", "reason": "account-scoped conversations list; identical per-item record shape to the conversations stream, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/organizations/{organizationId}/conversations", "excluded": { "category": "duplicate_of", "reason": "org-scoped conversations list; identical per-item record shape to the conversations stream, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/conversations/{id}", "excluded": { "category": "out_of_scope", "reason": "single-conversation detail INCLUDING its full messages array; the list stream's own docs note messages are NOT included on list reads, and modeling the per-message sub-shape (with, to/cc/bcc participant objects) as a distinct nested stream is Pass B breadth-vs-cost triage for a follow-up pass, not this one" } },
+    { "method": "POST", "path": "/resources/conversations", "covered_by": { "write": "create_conversation" } },
+    { "method": "PUT", "path": "/resources/conversations/{id}", "covered_by": { "write": "update_conversation" } },
+    { "method": "DELETE", "path": "/resources/conversations/{id}", "covered_by": { "write": "delete_conversation" } },
+
+    { "method": "GET", "path": "/resources/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/resources/accounts/{accountId}/tasks", "excluded": { "category": "duplicate_of", "reason": "account-scoped tasks list; identical per-item record shape to the tasks stream (which carries its own accountId field), already covered by that stream" } },
+    { "method": "GET", "path": "/resources/organizations/{organizationId}/tasks", "excluded": { "category": "duplicate_of", "reason": "org-scoped tasks list; identical per-item record shape to the tasks stream, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/tasks/{id}", "excluded": { "category": "duplicate_of", "reason": "single-task detail; identical record shape to the tasks list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/resources/tasks", "covered_by": { "write": "create_task" } },
+    { "method": "PUT", "path": "/resources/tasks/{id}", "covered_by": { "write": "update_task" } },
+
+    { "method": "GET", "path": "/resources/npsResponses", "covered_by": { "stream": "nps_responses" } },
+    { "method": "GET", "path": "/resources/accounts/{accountId}/npsResponses", "excluded": { "category": "duplicate_of", "reason": "account-scoped NPS-response list; identical per-item record shape to the nps_responses stream, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/organizations/{organizationId}/npsResponses", "excluded": { "category": "duplicate_of", "reason": "org-scoped NPS-response list; identical per-item record shape to the nps_responses stream, already covered by that stream" } },
+    { "method": "GET", "path": "/resources/npsResponses/{id}", "excluded": { "category": "duplicate_of", "reason": "single-NPS-response detail; identical record shape to the nps_responses list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/resources/npsResponses", "covered_by": { "write": "create_nps_response" } },
+    { "method": "PUT", "path": "/resources/npsResponses/{id}", "covered_by": { "write": "update_nps_response" } },
+
+    { "method": "POST", "path": "/resources/customFields", "excluded": { "category": "out_of_scope", "reason": "custom-field/trait-DEFINITION management endpoint (defining new trait keys in Vitally's schema), distinct from setting trait VALUES on an existing record, which every resource's create/update write action already supports via its traits object; Pass B breadth-vs-cost triage" } }
   ]
 }

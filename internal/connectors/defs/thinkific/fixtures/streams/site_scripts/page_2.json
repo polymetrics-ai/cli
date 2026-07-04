@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/site_scripts",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "content": "console.log('fixture');",
+          "src": null,
+          "name": "Fixture Script 101",
+          "description": "A fixture site script",
+          "location": "footer",
+          "load_method": "async",
+          "category": "analytics",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

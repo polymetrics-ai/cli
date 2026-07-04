@@ -2,12 +2,17 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "clients",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
-  "required": ["id"],
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
   "properties": {
-    "id": { "type": "string" },
+    "uuid": { "type": "string" },
     "name": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "exportCode": { "type": ["string", "null"] },
+    "clientManagerUUID": { "type": ["string", "null"] },
+    "jobManagerUUID": { "type": ["string", "null"] },
+    "referralSource": { "type": ["string", "null"] },
+    "prospect": { "type": ["boolean", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "favorite": { "type": ["boolean", "null"] }
   }
 }

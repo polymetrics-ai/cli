@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/labels" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "label_fixture_1",
+        "name": "Food",
+        "color": "charcoal",
+        "order": 1,
+        "is_favorite": false
+      },
+      {
+        "id": "label_fixture_2",
+        "name": "Urgent",
+        "color": "red",
+        "order": 2,
+        "is_favorite": true
+      }
+    ]
+  }
+}

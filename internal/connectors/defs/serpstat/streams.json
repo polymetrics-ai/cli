@@ -29,6 +29,14 @@
       "records": { "path": "result.data" },
       "schema": "schemas/domain_competitors.json",
       "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/serpstat and internal/connectors/hooks/serpstat/hooks_test.go" }
+    },
+    {
+      "name": "domain_urls",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "result.data" },
+      "schema": "schemas/domain_urls.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/hooks/serpstat/hooks_test.go -- Pass B addition with no legacy internal/connectors/serpstat equivalent, so no paritytest coverage exists for this stream specifically (only domain_keywords/domain_competitors have a legacy parity baseline)" }
     }
   ]
 }

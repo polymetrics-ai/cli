@@ -1,7 +1,7 @@
 {
   "name": "us-census",
   "display_name": "US Census",
-  "description": "Reads configured datasets from the US Census Bureau's API via a caller-supplied query path and query-string qualifier.",
+  "description": "Reads configured datasets from the US Census Bureau's API via a caller-supplied query path and query-string qualifier, and reads the Bureau's own published dataset catalog.",
   "integration_type": "api",
   "docs_url": "https://www.census.gov/data/developers/guidance/api-user-guide.html",
   "release_stage": "ga",
@@ -14,11 +14,7 @@
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external US Census Bureau API read of a caller-configured dataset endpoint",
+    "read": "external US Census Bureau API read of a caller-configured dataset endpoint, plus the Bureau's own public dataset catalog (no auth required for the catalog)",
     "approval": "none; read-only, no reverse-ETL write surface"
-  },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "StreamHook-handled (the query stream's real wire shape is a top-level JSON array-of-arrays -- a header row of caller-driven field names followed by data rows -- which has no declarative records/schema equivalent since the field set is a function of the caller's own query_path/query_params 'get=' qualifier, not a fixed schema); hook-covered, proven live by internal/connectors/hooks/us-census/hooks_test.go, mirroring monday's identical StreamHook skip_dynamic precedent (conventions.md Tier-2 hook table)"
   }
 }

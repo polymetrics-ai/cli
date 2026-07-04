@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "category_fixture_1",
+    "category": {
+      "name": "Fixture Renamed Category"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/budgets/synthetic-conformance-value/categories/category_fixture_1",
+    "body": {
+      "category": {
+        "name": "Fixture Renamed Category"
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "data": { "category": { "id": "category_fixture_1" } } } }
+}

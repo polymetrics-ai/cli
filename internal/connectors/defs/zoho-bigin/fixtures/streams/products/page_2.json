@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/Products", "query": { "page": "2", "per_page": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "product_fixture_3", "Product_Name": "Fixture Product Three", "Product_Code": "FIX-3", "Unit_Price": 9.99, "display_value": "Fixture Product Three" }
+      ],
+      "info": { "page": 2, "per_page": 200, "count": 1, "more_records": false }
+    }
+  }
+}

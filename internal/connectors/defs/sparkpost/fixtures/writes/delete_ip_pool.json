@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "fixture_ip_pool"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ip-pools/fixture_ip_pool"
+  }
+}

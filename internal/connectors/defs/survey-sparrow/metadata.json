@@ -1,14 +1,14 @@
 {
   "name": "survey-sparrow",
   "display_name": "SurveySparrow",
-  "description": "Reads SurveySparrow surveys, contacts, responses, and questions through the SurveySparrow API.",
+  "description": "Reads and manages SurveySparrow surveys, contacts, responses, questions, channels, contact lists/properties, reminders, reputation platforms/reviews, survey folders, ticket fields, tickets, teams, roles, variables, webhooks, users, templates, email themes, and expressions through the SurveySparrow API.",
   "integration_type": "api",
   "docs_url": "https://developers.surveysparrow.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external SurveySparrow API read of survey, contact, response, and question data",
-    "approval": "none; read-only"
+    "read": "external SurveySparrow API read of survey, contact, response, question, and 18 additional catalog resource types",
+    "write": "external mutation of SurveySparrow surveys, contacts, questions, contact lists/properties, survey folders, teams, tickets, webhooks, users, reminders, variables, and channels, including irreversible deletes and live-user-account creation/deletion",
+    "approval": "read: none; write: required for all mutation actions"
   }
 }

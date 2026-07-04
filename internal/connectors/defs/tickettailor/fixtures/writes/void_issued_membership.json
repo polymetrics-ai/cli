@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "im_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/issued_memberships/im_fixture_1/void"
+  }
+}

@@ -1,0 +1,370 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "email"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "available": { "type": "boolean" },
+          "time_zone": { "type": "string" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "creates a new Aircall agent seat, which may consume a billable license; external mutation, approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "available": { "type": "boolean" },
+          "time_zone": { "type": "string" },
+          "language": { "type": "string" },
+          "wrap_up_time": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing agent's profile/availability; a visible change for that agent's call routing"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "user_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "creates a new team container; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently removes a team; agents assigned to it lose that team's routing/membership immediately"
+    },
+    {
+      "name": "add_user_to_team",
+      "kind": "update",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/users/{{ record.user_id }}",
+      "path_fields": ["team_id", "user_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["team_id", "user_id"],
+        "properties": {
+          "team_id": { "type": "integer" },
+          "user_id": { "type": "integer" }
+        }
+      },
+      "risk": "adds an agent to a team, changing that agent's call routing/membership; low-risk, reversible via remove_user_from_team"
+    },
+    {
+      "name": "remove_user_from_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/users/{{ record.user_id }}",
+      "path_fields": ["team_id", "user_id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["team_id", "user_id"],
+        "properties": {
+          "team_id": { "type": "integer" },
+          "user_id": { "type": "integer" }
+        }
+      },
+      "risk": "removes an agent from a team, changing that agent's call routing/membership immediately"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "company_name": { "type": "string" },
+          "information": { "type": "string" },
+          "is_shared": { "type": "boolean" },
+          "phone_numbers": { "type": "array" },
+          "emails": { "type": "array" }
+        }
+      },
+      "risk": "creates a new shared/personal directory contact; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "company_name": { "type": "string" },
+          "information": { "type": "string" },
+          "is_shared": { "type": "boolean" },
+          "phone_numbers": { "type": "array" },
+          "emails": { "type": "array" }
+        }
+      },
+      "risk": "mutates an existing contact's directory record, including its full phone_numbers/emails arrays (a partial array here replaces the previous set)"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently removes a directory contact; irreversible"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "color"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new call-tagging label; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "renames or recolors an existing tag; a visible change everywhere the tag is already applied"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently removes a tag; it is un-applied from every call that previously carried it"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "events"],
+        "properties": {
+          "url": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": "boolean" }
+        }
+      },
+      "risk": "registers a new outbound webhook that will POST live call/event data to an external URL of the caller's choosing; verify the target endpoint before enabling"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "url": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing webhook's target URL, subscribed events, or active state; a changed url redirects future event deliveries to a different endpoint"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+    },
+    {
+      "name": "archive_call",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/calls/{{ record.id }}/archive",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "marks a call as archived, hiding it from default call-list views; reversible via unarchive_call"
+    },
+    {
+      "name": "unarchive_call",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/calls/{{ record.id }}/unarchive",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "restores a previously archived call to default call-list views"
+    },
+    {
+      "name": "comment_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calls/{{ record.id }}/comments",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["content"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "content"],
+        "properties": {
+          "id": { "type": "integer" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "adds an internal comment note to a call record; visible to other agents with call access, no external side effect"
+    },
+    {
+      "name": "tag_call",
+      "kind": "update",
+      "method": "POST",
+      "path": "/calls/{{ record.id }}/tags",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["tag_ids"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "tag_ids"],
+        "properties": {
+          "id": { "type": "integer" },
+          "tag_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "applies the given tags to a call; additive, does not remove tags already present"
+    }
+  ]
+}

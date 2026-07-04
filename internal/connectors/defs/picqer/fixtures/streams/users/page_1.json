@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "iduser": 201,
+        "idpacking_station": 1,
+        "username": "fixture_user",
+        "first_name": "Fixture",
+        "last_name": "User",
+        "emailaddress": "fixture@example.com",
+        "language": "en",
+        "admin": true,
+        "active": true,
+        "last_login_at": "2026-01-01T00:00:00Z",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

@@ -18,7 +18,7 @@
     "start_date": {
       "type": "string",
       "format": "date-time",
-      "description": "Optional RFC3339 lower bound sent as the start_date query parameter, when set."
+      "description": "Optional RFC3339 lower bound sent as the start_date query parameter, when set. Applies only to the affiliates stream, matching legacy's own single conditional query.Set call."
     }
   }
 }

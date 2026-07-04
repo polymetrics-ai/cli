@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/sources/all", "query": { "page": "1", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "numResults": 1,
+      "results": [
+        { "id": "source-fixture-1", "name": "Fixture Source", "domain": "example.com", "paywall": false, "globalRank": 1000, "monthlyVisits": 500000, "updatedAt": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

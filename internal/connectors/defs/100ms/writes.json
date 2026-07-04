@@ -1,0 +1,135 @@
+{
+  "actions": [
+    {
+      "name": "create_room",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rooms",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "template_id": { "type": "string" },
+          "region": { "type": "string" },
+          "large_room": { "type": "boolean" },
+          "max_duration_seconds": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new 100ms room, or upserts an existing room's template if the same name is reused (100ms's own documented create-with-existing-name behavior); external mutation, approval required"
+    },
+    {
+      "name": "update_room",
+      "kind": "update",
+      "method": "POST",
+      "path": "/rooms/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "region": { "type": "string" },
+          "max_duration_seconds": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing room's metadata, or disables/re-enables it via the enabled field (100ms's disable/enable API is the same POST /rooms/{id} endpoint); disabling blocks all future joins to that room. External mutation, approval required"
+    },
+    {
+      "name": "create_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/templates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "roles": { "type": "object" },
+          "settings": { "type": "object" }
+        }
+      },
+      "risk": "creates a new room-policy template (roles/settings); external mutation, approval required"
+    },
+    {
+      "name": "create_room_code",
+      "kind": "create",
+      "method": "POST",
+      "path": "/room-codes/room/{{ record.room_id }}",
+      "path_fields": ["room_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["room_id"],
+        "properties": {
+          "room_id": { "type": "string" }
+        }
+      },
+      "risk": "generates join-authentication room codes for every role in the named room; codes act as join credentials, external mutation, approval required"
+    },
+    {
+      "name": "update_room_code",
+      "kind": "update",
+      "method": "POST",
+      "path": "/room-codes/code",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["code", "enabled"],
+        "properties": {
+          "code": { "type": "string" },
+          "enabled": { "type": "boolean" }
+        }
+      },
+      "risk": "enables or disables a specific join-credential room code; disabling revokes that code's ability to join. External mutation, approval required"
+    },
+    {
+      "name": "start_recording",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recordings/room/{{ record.room_id }}/start",
+      "path_fields": ["room_id"],
+      "body_type": "json",
+      "body_fields": ["meeting_url", "resolution"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["room_id"],
+        "properties": {
+          "room_id": { "type": "string" },
+          "meeting_url": { "type": "string" },
+          "resolution": { "type": "object" }
+        }
+      },
+      "risk": "starts a composite recording job for the named room; consumes recording/storage quota. External mutation, approval required"
+    },
+    {
+      "name": "stop_recording",
+      "kind": "update",
+      "method": "POST",
+      "path": "/recordings/room/{{ record.room_id }}/stop",
+      "path_fields": ["room_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["room_id"],
+        "properties": {
+          "room_id": { "type": "string" }
+        }
+      },
+      "risk": "stops all recording jobs currently running in the named room; external mutation, approval required"
+    }
+  ]
+}

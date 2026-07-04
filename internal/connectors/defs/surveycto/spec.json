@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "SurveyCTO Connection Specification",
   "type": "object",
-  "required": ["username", "password"],
+  "required": ["username", "password", "base_url"],
   "properties": {
     "username": {
       "type": "string",
@@ -17,25 +17,15 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "SurveyCTO API base URL override for tests or proxies. Takes precedence over server_name when both are set."
+      "description": "SurveyCTO API base URL, e.g. https://<server_name>.surveycto.com/api/v2. Required (see server_name below for why this bundle cannot derive it automatically)."
     },
     "server_name": {
       "type": "string",
-      "description": "Bare SurveyCTO server name (no scheme/path), used to derive https://<server_name>.surveycto.com/api/v2 when base_url is unset."
+      "description": "Bare SurveyCTO server name (no scheme/path), for documentation/reference only -- not wired into any template. Legacy derived https://<server_name>.surveycto.com/api/v2 from this value in Go; the engine's declarative dialect has no base-URL-derivation mechanism (see docs.md Known limits), so base_url must be supplied directly."
     },
     "form_id": {
       "type": "string",
-      "description": "SurveyCTO form ID; required for the submissions stream, which is scoped to a single form."
-    },
-    "page_size": {
-      "type": "string",
-      "default": "100",
-      "description": "Records per page (1-1000)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+      "description": "SurveyCTO form ID; required for the submissions stream, which is scoped to a single form (the real API has no 'list all form ids' stream-friendly endpoint -- see docs.md Known limits)."
     },
     "mode": {
       "type": "string",

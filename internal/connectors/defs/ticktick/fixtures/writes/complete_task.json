@@ -1,0 +1,14 @@
+{
+  "record": {
+    "projectId": "proj_fixture_1",
+    "id": "task_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/project/proj_fixture_1/task/task_fixture_1/complete"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

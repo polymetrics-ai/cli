@@ -1,0 +1,10 @@
+{
+  "record": {
+    "voucher_id": "vo_fixture_1",
+    "id": "vc_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/vouchers/vo_fixture_1/codes/vc_fixture_1/void"
+  }
+}

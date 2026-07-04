@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "100ms External Stream",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "room_id": { "type": ["string", "null"] },
+    "session_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "destination": { "type": ["string", "null"] },
+    "meeting_url": { "type": ["string", "null"] },
+    "recording": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "started_at": { "type": ["string", "null"] },
+    "stopped_at": { "type": ["string", "null"] }
+  }
+}

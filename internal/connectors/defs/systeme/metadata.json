@@ -1,14 +1,14 @@
 {
   "name": "systeme",
   "display_name": "Systeme",
-  "description": "Reads Systeme.io contacts through the Systeme.io API. Read-only.",
+  "description": "Reads Systeme.io contacts, tags, contact fields, funnels, and funnel steps, and writes contact/tag/contact-field/funnel lifecycle mutations and contact-tag assignment, through the Systeme.io public API.",
   "integration_type": "api",
-  "docs_url": "https://systeme.io/api",
+  "docs_url": "https://developer.systeme.io/reference/api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Systeme.io API read of contact data",
-    "approval": "none; read-only"
+    "read": "external Systeme.io API read of contact, tag, funnel, and funnel-step data",
+    "write": "external Systeme.io API mutation (contact/tag/contact-field/funnel lifecycle, contact-tag assignment)",
+    "approval": "reverse ETL plan approval required before writes"
   }
 }

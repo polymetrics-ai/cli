@@ -1,0 +1,10 @@
+{
+  "record": {
+    "recommendation_view_token": "rv_fixture_1",
+    "title": "Updated View"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/recommendation_views/rv_fixture_1"
+  }
+}

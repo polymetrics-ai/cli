@@ -2,33 +2,17 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "questions",
   "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
-  "required": [
-    "id"
-  ],
+  "x-primary-key": ["id"],
+  "required": ["id"],
   "properties": {
-    "id": {
-      "type": "integer"
-    },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "rating": {
-      "type": [
-        "integer",
-        "null"
-      ]
-    }
+    "id": { "type": "integer" },
+    "survey": { "type": ["object", "null"] },
+    "order": { "type": ["integer", "null"] },
+    "metric": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] },
+    "rating_scale": { "type": ["boolean", "null"] },
+    "required": { "type": ["boolean", "null"] },
+    "choices": { "type": ["array", "null"], "items": { "type": "string" } },
+    "rules": { "type": ["array", "null"], "items": { "type": "object" } }
   }
 }

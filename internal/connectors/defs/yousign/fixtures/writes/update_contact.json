@@ -1,0 +1,8 @@
+{
+  "record": { "id": "contact_fixture_1", "job_title": "Fixture Updated Title" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/contacts/contact_fixture_1",
+    "body": { "job_title": "Fixture Updated Title" }
+  }
+}

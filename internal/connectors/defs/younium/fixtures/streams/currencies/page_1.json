@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/Currency", "query": { "Take": "100", "Skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "cur_fixture_1", "code": "SEK" },
+        { "id": "cur_fixture_2", "code": "USD" }
+      ]
+    }
+  }
+}

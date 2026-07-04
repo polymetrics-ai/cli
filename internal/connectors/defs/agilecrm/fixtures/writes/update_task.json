@@ -1,0 +1,7 @@
+{
+  "record": { "id": "20", "status": "COMPLETED" },
+  "expect": {
+    "method": "PUT",
+    "path": "/tasks/partial-update"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/widgets.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Widgets": [
+        {
+          "Hash": "widget_fixture_1",
+          "Name": "Fixture Widget 1",
+          "Size": "small",
+          "Type": "pie",
+          "TypeDesc": "Pie Chart"
+        },
+        {
+          "Hash": "widget_fixture_2",
+          "Name": "Fixture Widget 2",
+          "Size": "fill",
+          "Type": "bigNumber",
+          "TypeDesc": "Big Number"
+        }
+      ]
+    }
+  }
+}

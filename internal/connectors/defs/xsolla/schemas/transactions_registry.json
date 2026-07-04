@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions_registry",
+  "type": "object",
+  "x-primary-key": ["transaction_id"],
+  "x-cursor-field": "transaction_transfer_date",
+  "required": ["transaction_id"],
+  "properties": {
+    "transaction_id": { "type": "integer" },
+    "transaction_transfer_date": { "type": ["string", "null"] },
+    "transaction": {
+      "type": ["object", "null"],
+      "properties": {
+        "id": { "type": ["integer", "null"] },
+        "external_id": { "type": ["string", "null"] },
+        "status": { "type": ["string", "null"] },
+        "transfer_date": { "type": ["string", "null"] },
+        "dry_run": { "type": ["integer", "null"] },
+        "direct_account": { "type": ["integer", "null"] },
+        "refund_reason": { "type": ["string", "null"] },
+        "refund_reason_comment": { "type": ["string", "null"] },
+        "project": { "type": ["object", "null"] },
+        "payment_method": { "type": ["object", "null"] }
+      }
+    },
+    "user": {
+      "type": ["object", "null"],
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "name": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "phone": { "type": ["string", "null"] },
+        "country": { "type": ["string", "null"] },
+        "custom": { "type": ["string", "null"] },
+        "marketplace": { "type": ["string", "null"] },
+        "ip": { "type": ["string", "null"] }
+      }
+    },
+    "user_balance": { "type": ["object", "null"] },
+    "purchase": { "type": ["object", "null"] }
+  }
+}

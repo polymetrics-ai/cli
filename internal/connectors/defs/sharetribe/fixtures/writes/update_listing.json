@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "listing_fixture_1",
+    "description": "Updated by fixture write test"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/listings/update",
+    "body": {
+      "id": "listing_fixture_1",
+      "description": "Updated by fixture write test"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "listing_fixture_1", "type": "listing" } }
+  }
+}

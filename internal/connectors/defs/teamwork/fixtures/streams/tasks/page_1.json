@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tasks.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "todo-items": [
+        { "id": "1", "content": "Fixture Task 1", "description": "Fixture task description", "todo-list-id": "1", "todo-list-name": "Fixture Tasklist 1", "project-id": "1", "project-name": "Fixture Project 1", "status": "new", "priority": "medium", "created-on": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

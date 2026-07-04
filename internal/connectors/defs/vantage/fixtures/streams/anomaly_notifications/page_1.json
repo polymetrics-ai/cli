@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/anomaly_notifications"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "anomaly_notifications": [
+        {
+          "token": "anml_fixture_1",
+          "cost_report_token": "cr_fixture_1",
+          "threshold": 500,
+          "user_tokens": [
+            "usr_fixture_1"
+          ],
+          "recipient_channels": [],
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "self": "https://api.vantage.sh/v2/anomaly_notifications?page=1"
+      }
+    }
+  }
+}

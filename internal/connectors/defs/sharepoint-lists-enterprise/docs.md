@@ -1,10 +1,12 @@
 # Overview
 
-SharePoint Lists Enterprise is a wave2 fan-out declarative-HTTP migration. It reads SharePoint
-lists and list items through Microsoft Graph (`GET https://graph.microsoft.com/v1.0/sites/<site
-id>/lists[/<list id>/items]`). This bundle is capability-parity migrated from
-`internal/connectors/sharepoint-lists-enterprise` (the hand-written connector it migrates); the
-legacy package stays registered and unchanged until wave6's registry flip.
+SharePoint Lists Enterprise reads and writes SharePoint lists and list items through Microsoft
+Graph (`https://graph.microsoft.com/v1.0/sites/<site id>/lists[/<list id>/items]`). Read behavior
+is capability-parity migrated from `internal/connectors/sharepoint-lists-enterprise` (the
+hand-written connector it migrates; the legacy package stays registered and unchanged until
+wave6's registry flip and was read-only). This Pass B expansion adds list/list-item create+update
+write actions the legacy connector never implemented, going beyond strict read-only parity per the
+Pass B full-surface-expansion charter (see Write actions & risks).
 
 ## Auth setup
 
@@ -57,8 +59,37 @@ documentation surface").
 
 ## Write actions & risks
 
-None. SharePoint Lists Enterprise is read-only (`capabilities.write: false`, no `writes.json`),
-matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
+Pass B adds 4 write actions covering the create+update surface of Microsoft Graph's `list`/
+`listItem` resources (Graph docs: `list-create.md`, `list-update` shape documented alongside
+`list-get`, `listitem-create.md`, `listitem-update.md`):
+
+- `create_list` (`kind: create`, `POST /sites/{{ config.site_id }}/lists`) — creates a new list
+  (with any custom `columns`/`list.template` declared in the submitted record) on the configured
+  site. Low-risk, no approval required.
+- `update_list` (`kind: update`, `PATCH /sites/{{ config.site_id }}/lists/{{ record.id }}`) —
+  mutates an existing list's `displayName`/`description` by id.
+- `create_list_item` (`kind: create`, `POST /sites/{{ config.site_id }}/lists/{{
+  config.list_id }}/items`) — creates a new item (row) in the configured list; the submitted
+  record must wrap column values in a `fields` object, matching Graph's own listItem-create
+  request shape exactly.
+- `update_list_item` (`kind: update`, `PATCH /sites/{{ config.site_id }}/lists/{{
+  config.list_id }}/items/{{ record.id }}/fields`) — mutates an existing item's column values via
+  Graph's `fields` sub-resource (a `fieldValueSet`); the request body is the record minus `id`
+  (the path already carries it), matching Graph's own partial-update semantics for this endpoint
+  exactly — only the submitted column names change, every other column is left alone. This is the
+  practically useful update shape (Graph's separate bare `PATCH .../items/{item-id}` endpoint,
+  documented under the identical "Update listItem" method, is excluded in `api_surface.json` as
+  `duplicate_of` this action — see there for the reasoning).
+
+**Deliberately NOT implemented**: `DELETE /sites/{site-id}/lists/{list-id}` (whole-list delete) and
+`DELETE /sites/{site-id}/lists/{list-id}/items/{item-id}` (item delete) — both excluded in
+`api_surface.json` as `destructive_admin`. Legacy exposed zero mutation capability at all; this
+expansion's write additions are scoped to the reversible/low-risk create+update surface, never a
+destructive delete of an entire list or its rows.
+
+`create_list`/`update_list` need only `site_id`; `create_list_item`/`update_list_item` additionally
+need `list_id` configured (the list whose items are being written), mirroring the `list_items`
+read stream's own `list_id` requirement.
 
 ## Known limits
 

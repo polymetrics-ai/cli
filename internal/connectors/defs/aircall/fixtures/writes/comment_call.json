@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": 6001,
+    "content": "Fixture comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/calls/6001/comments",
+    "body": {
+      "content": "Fixture comment"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "comment": { "id": 7001, "content": "Fixture comment" } }
+  }
+}

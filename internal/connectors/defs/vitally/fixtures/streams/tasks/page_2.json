@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/tasks",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "from": "fixture_cursor_tasks_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "task_fixture_3",
+          "createdAt": "2026-01-03T00:00:00Z",
+          "updatedAt": "2026-01-03T00:00:00Z",
+          "externalId": null,
+          "organizationId": null,
+          "accountId": "acct_fixture_3",
+          "name": "Archived task",
+          "description": null,
+          "dueDate": null,
+          "completedAt": null,
+          "tags": [],
+          "archivedAt": "2026-01-04T00:00:00Z",
+          "meetingId": null,
+          "source": null,
+          "categoryId": null,
+          "assignedToId": null,
+          "completedById": null,
+          "traits": {}
+        }
+      ],
+      "next": null
+    }
+  }
+}

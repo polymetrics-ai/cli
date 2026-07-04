@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "store_pages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "urlSlug": { "type": ["string", "null"] },
+    "isEnabled": { "type": ["boolean", "null"] }
+  }
+}

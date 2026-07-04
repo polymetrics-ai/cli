@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/suppliers",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "supplierNumber": 1,
+          "name": "Fixture Supplier ApS",
+          "currency": "DKK",
+          "city": "Aarhus",
+          "country": "Denmark",
+          "email": "supplier1@example.com"
+        },
+        {
+          "supplierNumber": 2,
+          "name": "Fixture Supplier A/S",
+          "currency": "EUR",
+          "city": "Copenhagen",
+          "country": "Denmark",
+          "email": "supplier2@example.com"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "after": "fixture-users-cursor-2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "next_cursor": null },
+      "data": [
+        { "id": "user_fixture_2", "first_name": "Fixture", "last_name": "Two", "email": "fixture2@example.com", "role": "member", "status": "invited", "is_active": false, "created_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

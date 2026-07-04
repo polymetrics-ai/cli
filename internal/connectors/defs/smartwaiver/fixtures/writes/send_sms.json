@@ -1,0 +1,30 @@
+{
+  "record": {
+    "templateId": "tp_fixture_1",
+    "number": "+15550100"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v4/sms",
+    "body": {
+      "templateId": "tp_fixture_1",
+      "number": "+15550100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "version": 4,
+      "id": "fixture-req-id-sms-0001",
+      "ts": "2026-01-01T00:00:00Z",
+      "type": "sms",
+      "sms": {
+        "id": "sm_fixture_1",
+        "phone": "+15550100",
+        "template": { "uuid": "tp_fixture_1", "title": "Fixture Template One" },
+        "status": 1,
+        "date": "2026-01-01 00:00:00"
+      }
+    }
+  }
+}

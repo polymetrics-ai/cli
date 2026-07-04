@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/groups",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "name": "Fixture Group 101",
+          "token": "tok_fixture_101",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

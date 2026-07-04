@@ -1,0 +1,7 @@
+{
+  "record": { "id": "trtmpl_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/connector/trtmpl_fixture_1"
+  }
+}

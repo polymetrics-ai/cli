@@ -1,0 +1,4 @@
+{
+  "record": { "id": "holdout_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/holdouts/holdout_fixture_1" }
+}

@@ -1,0 +1,4 @@
+{
+  "record": { "url": "https://example.com/hook", "survey_id": 1, "http_method": "POST" },
+  "expect": { "method": "POST", "path": "/webhooks" }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/settings/modules" },
+  "response": {
+    "status": 200,
+    "body": {
+      "modules": [
+        { "id": "module_fixture_1", "api_name": "Deals", "module_name": "Deals", "singular_label": "Pipeline", "plural_label": "Pipelines", "creatable": true, "editable": true, "deletable": true, "viewable": true, "api_supported": true },
+        { "id": "module_fixture_2", "api_name": "Contacts", "module_name": "Contacts", "singular_label": "Contact", "plural_label": "Contacts", "creatable": true, "editable": true, "deletable": true, "viewable": true, "api_supported": true }
+      ]
+    }
+  }
+}

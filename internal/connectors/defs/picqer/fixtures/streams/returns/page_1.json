@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/returns", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idreturn": 801,
+        "idreturn_status": 1,
+        "idcustomer": 401,
+        "idorder": 301,
+        "idtemplate": 2,
+        "returnid": "R2026-0001",
+        "name": "Fixture Customer",
+        "contactname": null,
+        "address": "Fixture Street 1",
+        "zipcode": "1000 AA",
+        "city": "Fixture City",
+        "country": "NL",
+        "emailaddress": "fixture@example.com"
+      }
+    ]
+  }
+}

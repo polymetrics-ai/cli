@@ -6,13 +6,11 @@
       { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
     ],
     "pagination": {
-      "type": "page_number",
-      "page_param": "page",
-      "size_param": "limit",
-      "start_page": 1,
-      "page_size": 100
+      "type": "next_url",
+      "next_url_path": "links.next",
+      "allow_cross_host": true
     },
-    "check": { "method": "GET", "path": "/events", "query": { "page": "1", "limit": "1" } },
+    "check": { "method": "GET", "path": "/events", "query": { "limit": "1" } },
     "error_map": [
       { "status": 401, "hint": "tickettailor api_key is missing or invalid; re-run pm credentials add tickettailor" },
       { "status": 403, "hint": "tickettailor account lacks access for this request" },
@@ -23,6 +21,7 @@
     {
       "name": "events",
       "path": "/events",
+      "query": { "limit": "100" },
       "records": { "path": "data" },
       "projection": "passthrough",
       "schema": "schemas/events.json"
@@ -30,6 +29,7 @@
     {
       "name": "orders",
       "path": "/orders",
+      "query": { "limit": "100" },
       "records": { "path": "data" },
       "projection": "passthrough",
       "schema": "schemas/orders.json"
@@ -37,9 +37,153 @@
     {
       "name": "issued_tickets",
       "path": "/issued_tickets",
+      "query": { "limit": "100" },
       "records": { "path": "data" },
       "projection": "passthrough",
       "schema": "schemas/issued_tickets.json"
+    },
+    {
+      "name": "event_series",
+      "path": "/event_series",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/event_series.json"
+    },
+    {
+      "name": "holds",
+      "path": "/holds",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/holds.json"
+    },
+    {
+      "name": "discounts",
+      "path": "/discounts",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/discounts.json"
+    },
+    {
+      "name": "membership_types",
+      "path": "/membership_types",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/membership_types.json"
+    },
+    {
+      "name": "issued_memberships",
+      "path": "/issued_memberships",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/issued_memberships.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "stores",
+      "path": "/stores",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/stores.json"
+    },
+    {
+      "name": "vouchers",
+      "path": "/vouchers",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/vouchers.json"
+    },
+    {
+      "name": "checkout_forms",
+      "path": "/checkout_forms",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/checkout_forms.json"
+    },
+    {
+      "name": "voucher_codes",
+      "path": "/vouchers/{{ fanout.id }}/codes",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/vouchers", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "voucher_id" },
+        "stamp_field": "voucher_id"
+      },
+      "schema": "schemas/voucher_codes.json"
+    },
+    {
+      "name": "checkout_form_elements",
+      "path": "/checkout_forms/{{ fanout.id }}/elements",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/checkout_forms", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "checkout_form_id" },
+        "stamp_field": "checkout_form_id"
+      },
+      "schema": "schemas/checkout_form_elements.json"
+    },
+    {
+      "name": "event_series_overrides",
+      "path": "/event_series/{{ fanout.id }}/overrides",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/event_series", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "event_series_id" },
+        "stamp_field": "event_series_id"
+      },
+      "schema": "schemas/event_series_overrides.json"
+    },
+    {
+      "name": "event_series_waitlist_signups",
+      "path": "/event_series/{{ fanout.id }}/waitlist_signups",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/event_series", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "event_series_id" },
+        "stamp_field": "event_series_id"
+      },
+      "schema": "schemas/event_series_waitlist_signups.json"
+    },
+    {
+      "name": "overview",
+      "path": "/overview",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "overview"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/overview.json"
     }
   ]
 }

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "recipients": [
+      {
+        "address": {
+          "email": "fixture@example.com"
+        }
+      }
+    ],
+    "content": {
+      "subject": "hi",
+      "from": "sender@example.com",
+      "text": "hello"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/transmissions"
+  }
+}

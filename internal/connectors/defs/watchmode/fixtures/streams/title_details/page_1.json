@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/v1/title/synthetic-conformance-value/details/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 3173903,
+      "title": "Fixture Title",
+      "original_title": "Fixture Title",
+      "plot_overview": "A deterministic fixture plot overview.",
+      "type": "movie",
+      "runtime_minutes": 120,
+      "year": 1984,
+      "end_year": null,
+      "release_date": "1984-10-26",
+      "imdb_id": "tt0088247",
+      "tmdb_id": 218,
+      "tmdb_type": "movie",
+      "genre_names": ["Action", "Science Fiction"],
+      "user_rating": 8.1,
+      "critic_score": 84,
+      "us_rating": "R",
+      "poster": "https://cdn.watchmode.com/posters/fixture.jpg",
+      "backdrop": "https://cdn.watchmode.com/backdrops/fixture.jpg"
+    }
+  }
+}

@@ -1,11 +1,72 @@
 {
-  "api": "Sage HR API v1 (https://developers.sage.hr/)",
+  "api": "Sage HR API v1.0 (https://developers.sage.hr/; OpenAPI spec mirrored at https://raw.githubusercontent.com/api-evangelist/sage-hr/main/openapi/sage-hr-openapi.yml, fetched 2026-07-03 since developers.sage.hr/apidoc.sage.hr itself return Cloudflare bot-challenge 403s to automated fetches)",
   "docs": "https://developers.sage.hr/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2-fan-out migration: the 3 legacy-parity read streams only (employees, teams, timeoff_requests); Sage HR's write endpoints (employee/timeoff creation and approval actions) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "scope": "Pass B full-surface expansion against the complete documented Sage HR v1.0 OpenAPI spec (47 paths). 14 read streams covering employees, teams, time off/leave management (requests, policies, KIT days, out-of-office, individual allowance reports), terminated employees, termination reasons, positions, recruitment positions and per-position applicants (fan_out), and onboarding/offboarding/document task categories. 10 write actions covering employee create/update/termination, employee custom-field update, time off request creation, KIT day creation and status transitions, leave policy KIT-day configuration, and onboarding/offboarding task creation. Excluded: multipart/file-upload endpoints (documents, recruitment applicant creation with resume attachment) the dialect cannot express (body_type has no multipart/binary support), the deeply-nested dynamic-date-keyed timesheets clock-in payload, the entire Vikarina payroll-bridge integration surface (10 endpoints; a separate third-party payroll product's data-transfer bridge, not a Sage HR data resource), single-object detail endpoints that duplicate an already-covered list stream's record shape, and read-only aggregate/reporting snapshots with no per-record identity (performance goal progress overviews).",
   "endpoints": [
-    { "method": "GET", "path": "/v1/employees", "covered_by": { "stream": "employees" } },
-    { "method": "GET", "path": "/v1/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/v1/timeoff/requests", "covered_by": { "stream": "timeoff_requests" } }
+    { "method": "GET", "path": "/employees", "covered_by": { "stream": "employees" } },
+    { "method": "POST", "path": "/employees", "covered_by": { "write": "create_employee" } },
+    { "method": "GET", "path": "/employees/{id}", "excluded": { "category": "duplicate_of", "reason": "single-employee detail; identical record shape to the employees list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/employees/{id}", "covered_by": { "write": "update_employee" } },
+    { "method": "GET", "path": "/employees/{id}/compensations", "excluded": { "category": "out_of_scope", "reason": "per-employee compensation history sub-resource; a fan_out read over every employee id would require N employee-scoped requests per sync for a low-cardinality, rarely-changing field set — Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/employees/{id}/custom-fields", "excluded": { "category": "out_of_scope", "reason": "per-employee custom-field value sub-resource; a fan_out read over every employee id would require N employee-scoped requests per sync — Pass B breadth-vs-cost triage" } },
+    { "method": "PUT", "path": "/employees/{id}/custom-fields/{custom_field_id}", "covered_by": { "write": "update_employee_custom_field" } },
+    { "method": "GET", "path": "/employees/{id}/leave-management/balances", "excluded": { "category": "out_of_scope", "reason": "per-employee leave-balance sub-resource; a fan_out read over every employee id would require N employee-scoped requests per sync — Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/employees/{id}/terminations", "covered_by": { "write": "terminate_employee" } },
+
+    { "method": "GET", "path": "/teams", "covered_by": { "stream": "teams" } },
+
+    { "method": "GET", "path": "/terminated-employees", "covered_by": { "stream": "terminated_employees" } },
+    { "method": "GET", "path": "/terminated-employees/{id}", "excluded": { "category": "duplicate_of", "reason": "single-terminated-employee detail; identical record shape to the terminated_employees list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/termination-reasons", "covered_by": { "stream": "termination_reasons" } },
+
+    { "method": "GET", "path": "/positions", "covered_by": { "stream": "positions" } },
+
+    { "method": "GET", "path": "/leave-management/requests", "covered_by": { "stream": "timeoff_requests" } },
+    { "method": "POST", "path": "/leave-management/requests", "covered_by": { "write": "create_timeoff_request" } },
+    { "method": "GET", "path": "/leave-management/policies", "covered_by": { "stream": "leave_policies" } },
+    { "method": "GET", "path": "/leave-management/policies/{id}", "excluded": { "category": "duplicate_of", "reason": "single-policy detail; identical record shape to the leave_policies list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/leave-management/policies/{id}", "covered_by": { "write": "update_leave_policy_kit_days" } },
+    { "method": "GET", "path": "/leave-management/kit-days", "excluded": { "category": "requires_elevated_scope", "reason": "requires BOTH a policy_id and an employee_id as required query filters with no listing/discovery endpoint for either dimension independent of the other; not a syncable top-level collection without externally-supplied ids in hand" } },
+    { "method": "POST", "path": "/leave-management/kit-days", "covered_by": { "write": "create_kit_day" } },
+    { "method": "PATCH", "path": "/leave-management/kit-days/{id}", "covered_by": { "write": "update_kit_day_status" } },
+    { "method": "GET", "path": "/leave-management/out-of-office-today", "covered_by": { "stream": "out_of_office_today" } },
+    { "method": "GET", "path": "/leave-management/reports/individual-allowances", "covered_by": { "stream": "individual_allowances" } },
+
+    { "method": "GET", "path": "/recruitment/positions", "covered_by": { "stream": "recruitment_positions" } },
+    { "method": "GET", "path": "/recruitment/positions/{id}", "excluded": { "category": "duplicate_of", "reason": "single-recruitment-position detail; identical record shape to the recruitment_positions list stream's per-item object (plus an embedded applicants array already covered by the recruitment_applicants fan_out stream), already covered" } },
+    { "method": "GET", "path": "/recruitment/positions/{id}/applicants", "covered_by": { "stream": "recruitment_applicants" } },
+    { "method": "POST", "path": "/recruitment/positions/{id}/applicants", "excluded": { "category": "binary_payload", "reason": "multipart/form-data body carrying an optional resume/attachment file upload (applicant[attachment]); the dialect's body_type has no multipart/binary support" } },
+    { "method": "GET", "path": "/recruitment/applicants/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "no top-level list/search endpoint exists to enumerate applicant ids independent of a specific recruitment position; applicants are already reachable via the recruitment_applicants fan_out stream, which is the syncable discovery path" } },
+    { "method": "GET", "path": "/recruitment/applicants/{id}/actions", "excluded": { "category": "out_of_scope", "reason": "per-applicant audit-log/timeline sub-resource; a second-level fan_out (over every applicant returned by the recruitment_applicants fan_out) is beyond this pass's breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/onboarding/categories", "covered_by": { "stream": "onboarding_categories" } },
+    { "method": "POST", "path": "/onboarding/tasks", "covered_by": { "write": "create_onboarding_task" } },
+    { "method": "GET", "path": "/offboarding/categories", "covered_by": { "stream": "offboarding_categories" } },
+    { "method": "POST", "path": "/offboarding/tasks", "covered_by": { "write": "create_offboarding_task" } },
+
+    { "method": "GET", "path": "/documents/categories", "covered_by": { "stream": "document_categories" } },
+    { "method": "POST", "path": "/documents", "excluded": { "category": "binary_payload", "reason": "multipart/form-data body carrying a required file upload (file); the dialect's body_type has no multipart/binary support" } },
+
+    { "method": "GET", "path": "/performance/goals/quarterly-progress/company-goals", "excluded": { "category": "non_data_endpoint", "reason": "org-wide quarterly goal-progress aggregate snapshot with no per-record identity, not a syncable object stream" } },
+    { "method": "GET", "path": "/performance/goals/quarterly-progress/individual-goals", "excluded": { "category": "non_data_endpoint", "reason": "org-wide quarterly goal-progress aggregate snapshot with no per-record identity, not a syncable object stream" } },
+    { "method": "GET", "path": "/performance/goals/quarterly-progress/team-goals", "excluded": { "category": "non_data_endpoint", "reason": "org-wide quarterly goal-progress aggregate snapshot with no per-record identity, not a syncable object stream" } },
+    { "method": "GET", "path": "/performance/goals/quarterly-progress/overall", "excluded": { "category": "non_data_endpoint", "reason": "a single scalar-nested rollup object (company/individual/team adjusted-vs-actual counts), not a syncable object stream" } },
+
+    { "method": "POST", "path": "/timesheets/clock-in", "excluded": { "category": "binary_payload", "reason": "request body is a dynamic date-string-keyed nested object (clocked_time: {\"YYYY/MM/DD\": {employee_id: [{clock_in, clock_out}, ...]}}); the dialect's body_type (json/form/none over a fixed field set) cannot express an arbitrary caller-supplied key structure" } },
+
+    { "method": "POST", "path": "/vikarina/appointments", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/bank-accounts", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/bonuses", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/contract-information", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/job-positions", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/leave-types", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/newstarter-employees", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/organization-structure", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/salaries", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/terminated-employees", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/timesheets", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } },
+    { "method": "POST", "path": "/vikarina/unused-days", "excluded": { "category": "out_of_scope", "reason": "Vikarina payroll-bridge integration endpoint; transfers Sage HR data INTO a third-party payroll product, not a Sage HR data resource in its own right" } }
   ]
 }

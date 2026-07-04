@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Net 14",
+    "paymentTermsType": "netCash",
+    "duration": 14
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment-terms"
+  }
+}

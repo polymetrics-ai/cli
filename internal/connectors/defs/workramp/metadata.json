@@ -1,14 +1,14 @@
 {
   "name": "workramp",
   "display_name": "WorkRamp",
-  "description": "Reads WorkRamp users, groups, and courses through REST API endpoints. Read-only.",
+  "description": "Reads and writes WorkRamp users and groups, and reads guides, resources, and SCORM courses, through the real WorkRamp Employee Learning Cloud API (app.workramp.com/api/v1).",
   "integration_type": "api",
   "docs_url": "https://developers.workramp.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external WorkRamp API read of user, group, and course data",
-    "approval": "none; read-only"
+    "read": "external WorkRamp API read of user, group, guide, resource, and SCORM-course data",
+    "write": "external mutation of WorkRamp users and groups (create/update/delete); actions are attributed to the API key's owning admin user; approval required",
+    "approval": "writes require approval; reads are none"
   }
 }

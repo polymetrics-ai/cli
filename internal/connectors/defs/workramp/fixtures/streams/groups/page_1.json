@@ -1,12 +1,28 @@
 {
-  "request": { "method": "GET", "path": "/v1/groups", "query": { "page": "1", "limit": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/groups",
+    "query": {}
+  },
   "response": {
     "status": 200,
-    "body": {
-      "data": [
-        { "id": "group_fixture_1", "name": "Fixture Group 1", "updated_at": "2026-01-01T00:00:00Z" },
-        { "id": "group_fixture_2", "name": "Fixture Group 2", "updated_at": "2026-01-02T00:00:00Z" }
-      ]
-    }
+    "body": [
+      {
+        "id": 8,
+        "enterpriseId": 23,
+        "name": "Fixture Group 1",
+        "description": null,
+        "createdAt": 1700000000000,
+        "updatedAt": 1700000000000
+      },
+      {
+        "id": 9,
+        "enterpriseId": 23,
+        "name": "Fixture Group 2",
+        "description": null,
+        "createdAt": 1700000001000,
+        "updatedAt": 1700000001000
+      }
+    ]
   }
 }

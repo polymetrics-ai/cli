@@ -1,0 +1,9 @@
+{
+  "record": { "idsupplier": 501, "name": "Fixture Supplier Updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/suppliers/501",
+    "body": { "name": "Fixture Supplier Updated" }
+  },
+  "response": { "status": 200, "body": { "idsupplier": 501, "name": "Fixture Supplier Updated" } }
+}

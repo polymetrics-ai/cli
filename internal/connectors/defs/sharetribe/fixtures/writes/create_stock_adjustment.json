@@ -1,0 +1,18 @@
+{
+  "record": {
+    "listingId": "listing_fixture_1",
+    "quantity": 2
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/stock_adjustments/create",
+    "body": {
+      "listingId": "listing_fixture_1",
+      "quantity": 2
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "stock_adjustment_fixture_1", "type": "stockAdjustment" } }
+  }
+}

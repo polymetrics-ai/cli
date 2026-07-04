@@ -1,0 +1,22 @@
+{
+  "record": {
+    "collection_id": "collection_fixture_1",
+    "id": "item_fixture_1",
+    "fieldData": { "name": "Updated Fixture Item" }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/collections/collection_fixture_1/items/item_fixture_1",
+    "body": {
+      "fieldData": { "name": "Updated Fixture Item" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "item_fixture_1",
+      "lastUpdated": "2026-01-02T00:00:00.000Z",
+      "fieldData": { "name": "Updated Fixture Item" }
+    }
+  }
+}

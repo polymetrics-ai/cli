@@ -1,0 +1,9 @@
+{
+  "record": {
+    "cost_alert_token": "ca_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/cost_alerts/ca_fixture_1"
+  }
+}

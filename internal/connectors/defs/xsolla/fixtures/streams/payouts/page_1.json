@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/reports/transfers"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "payout": { "id": 1, "date": "2026-01-03T00:00:00+00:00", "note": "fixture payout note", "currency": "USD" },
+        "transfer": { "date": "2026-01-05T00:00:00+00:00", "note": "004357", "currency": "USD" },
+        "rate": 1,
+        "canceled": 0
+      }
+    ]
+  }
+}

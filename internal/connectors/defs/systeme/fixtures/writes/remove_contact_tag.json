@@ -1,0 +1,7 @@
+{
+  "record": { "contact_id": "contact_fixture_1", "tag_id": "tag_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/contact_fixture_1/tags/tag_fixture_1"
+  }
+}

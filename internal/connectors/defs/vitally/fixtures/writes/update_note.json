@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "note_fixture_1",
+    "subject": "Updated fixture note"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resources/notes/note_fixture_1",
+    "body": {
+      "subject": "Updated fixture note"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "note_fixture_1", "subject": "Updated fixture note" }
+  }
+}

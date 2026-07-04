@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "301",
+    "discount_percentage": "20",
+    "max_uses": "200",
+    "end_at": "2027-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1_2/discounts/301"
+  }
+}

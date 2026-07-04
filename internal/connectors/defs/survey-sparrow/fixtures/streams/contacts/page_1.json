@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/contacts", "query": { "page": "1", "limit": "100" } },
+  "request": { "method": "GET", "path": "/contacts", "query": { "page": "1", "limit": "50" } },
   "response": {
     "status": 200,
     "body": {

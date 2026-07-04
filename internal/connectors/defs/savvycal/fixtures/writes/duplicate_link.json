@@ -1,0 +1,8 @@
+{
+  "record": { "id": "lnk_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/links/lnk_fixture_1/duplicate"
+  },
+  "response": { "status": 201, "body": { "id": "lnk_fixture_dup", "name": "Fixture Scheduling Link (copy)" } }
+}

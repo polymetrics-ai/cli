@@ -1,0 +1,475 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags",
+    "query": {
+      "page": "1",
+      "page-size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "status": "ok",
+        "total": 51,
+        "startIndex": 1,
+        "pageSize": 50,
+        "currentPage": 1,
+        "pages": 2,
+        "results": [
+          {
+            "id": "world/fixture-tag-1",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 1",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-1",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-1",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-2",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 2",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-2",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-2",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-3",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 3",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-3",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-3",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-4",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 4",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-4",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-4",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-5",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 5",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-5",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-5",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-6",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 6",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-6",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-6",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-7",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 7",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-7",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-7",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-8",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 8",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-8",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-8",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-9",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 9",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-9",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-9",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-10",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 10",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-10",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-10",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-11",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 11",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-11",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-11",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-12",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 12",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-12",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-12",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-13",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 13",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-13",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-13",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-14",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 14",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-14",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-14",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-15",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 15",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-15",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-15",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-16",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 16",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-16",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-16",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-17",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 17",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-17",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-17",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-18",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 18",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-18",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-18",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-19",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 19",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-19",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-19",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-20",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 20",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-20",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-20",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-21",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 21",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-21",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-21",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-22",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 22",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-22",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-22",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-23",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 23",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-23",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-23",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-24",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 24",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-24",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-24",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-25",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 25",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-25",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-25",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-26",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 26",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-26",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-26",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-27",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 27",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-27",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-27",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-28",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 28",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-28",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-28",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-29",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 29",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-29",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-29",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-30",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 30",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-30",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-30",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-31",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 31",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-31",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-31",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-32",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 32",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-32",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-32",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-33",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 33",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-33",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-33",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-34",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 34",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-34",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-34",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-35",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 35",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-35",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-35",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-36",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 36",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-36",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-36",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-37",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 37",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-37",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-37",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-38",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 38",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-38",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-38",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-39",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 39",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-39",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-39",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-40",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 40",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-40",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-40",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-41",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 41",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-41",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-41",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-42",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 42",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-42",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-42",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-43",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 43",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-43",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-43",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-44",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 44",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-44",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-44",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-45",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 45",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-45",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-45",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-46",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 46",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-46",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-46",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-47",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 47",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-47",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-47",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-48",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 48",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-48",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-48",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-49",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 49",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-49",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-49",
+            "sectionId": "world",
+            "sectionName": "World news"
+          },
+          {
+            "id": "world/fixture-tag-50",
+            "type": "keyword",
+            "webTitle": "Fixture Tag 50",
+            "webUrl": "https://www.theguardian.com/world/fixture-tag-50",
+            "apiUrl": "https://content.guardianapis.com/world/fixture-tag-50",
+            "sectionId": "world",
+            "sectionName": "World news"
+          }
+        ]
+      }
+    }
+  }
+}

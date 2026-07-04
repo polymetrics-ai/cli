@@ -4,7 +4,7 @@
     "status": 200,
     "body": {
       "data": [
-        { "id": "app_fixture_3", "name": "Fixture Application Three", "createdAt": "2026-01-03T00:00:00Z" }
+        { "id": "app_fixture_3", "name": "Fixture Application Three", "createdAt": "2026-01-03T00:00:00Z", "updatedAt": "2026-01-03T00:00:00Z" }
       ],
       "iterator": "",
       "done": true

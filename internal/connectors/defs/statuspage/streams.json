@@ -45,6 +45,42 @@
       "path": "/pages/{{ config.page_id }}/subscribers",
       "records": { "path": "." },
       "schema": "schemas/subscribers.json"
+    },
+    {
+      "name": "component_groups",
+      "path": "/pages/{{ config.page_id }}/component-groups",
+      "records": { "path": "." },
+      "schema": "schemas/component_groups.json"
+    },
+    {
+      "name": "metrics",
+      "path": "/pages/{{ config.page_id }}/metrics",
+      "records": { "path": "." },
+      "schema": "schemas/metrics.json"
+    },
+    {
+      "name": "metrics_providers",
+      "path": "/pages/{{ config.page_id }}/metrics_providers",
+      "records": { "path": "." },
+      "schema": "schemas/metrics_providers.json"
+    },
+    {
+      "name": "page_access_groups",
+      "path": "/pages/{{ config.page_id }}/page_access_groups",
+      "records": { "path": "." },
+      "schema": "schemas/page_access_groups.json"
+    },
+    {
+      "name": "page_access_users",
+      "path": "/pages/{{ config.page_id }}/page_access_users",
+      "records": { "path": "." },
+      "schema": "schemas/page_access_users.json"
+    },
+    {
+      "name": "incident_templates",
+      "path": "/pages/{{ config.page_id }}/incident_templates",
+      "records": { "path": "." },
+      "schema": "schemas/incident_templates.json"
     }
   ]
 }

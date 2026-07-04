@@ -1,0 +1,7 @@
+{
+  "record": { "url": "https://example.com/hook", "event": "CONTACT_CREATED" },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks"
+  }
+}

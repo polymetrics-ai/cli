@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture Discount",
+    "code": "FIXTURE10",
+    "type": "percentage"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/discounts"
+  }
+}

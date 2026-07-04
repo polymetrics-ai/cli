@@ -1,0 +1,4 @@
+{
+  "record": { "id": "target_app_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/target_app/target_app_fixture_1" }
+}

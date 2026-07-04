@@ -1,0 +1,10 @@
+{
+  "record": {
+    "cost_report_token": "cr_fixture_1",
+    "title": "Updated Report"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/cost_reports/cr_fixture_1"
+  }
+}

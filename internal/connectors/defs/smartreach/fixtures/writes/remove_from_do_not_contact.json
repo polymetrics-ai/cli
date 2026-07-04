@@ -1,0 +1,16 @@
+{
+  "record": {
+    "dnc_ids": ["dnc_fixture_1"]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/do-not-contact",
+    "body": {
+      "dnc_ids": ["dnc_fixture_1"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "deleted_count": 1 }
+  }
+}

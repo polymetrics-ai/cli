@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "skills",
+  "type": "object",
+  "x-primary-key": ["skill_id"],
+  "required": ["skill_id"],
+  "properties": {
+    "skill_id": { "type": "string" },
+    "display_name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] }
+  }
+}

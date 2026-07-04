@@ -2,8 +2,38 @@
 
 Oveit is an event ticketing/access-control platform. This bundle is a Tier-1 declarative migration
 of `internal/connectors/oveit` (legacy Go package, read-only): it reads `events`, `orders`, and
-`attendees` from the documented Oveit API (`GET https://oveit.com/api/{events,orders,attendees}`).
-The legacy package stays registered and unchanged until wave6's registry flip.
+`attendees` from legacy's own fictional API shape (`GET https://oveit.com/api/{events,orders,
+attendees}`, HTTP Basic auth). The legacy package stays registered and unchanged until wave6's
+registry flip.
+
+## API surface (Pass B) — the real API does not match legacy's shape at all
+
+`metadata.json`'s `docs_url` (previously `https://oveit.com/api/`) 404s live; the real, current
+Oveit API documentation was located at `https://l.oveit.com/api-documentation/` (found via web
+search, since the stale docs_url no longer resolves to any content) and `docs_url` has been
+updated to point there. Researching it surfaced a fact this bundle's original migration predates:
+**the real Oveit API bears no resemblance to what legacy — and, by inheritance, this bundle —
+implement.** The real API is entirely `POST`-based against paths like `/seller/events`,
+`/events/attendees`, `/crm/orders`, `/tickets/checkin`, `/wallet/credit`, etc., authenticated by a
+token-exchange flow (`POST /seller/login` with an organizer email+password returns an access token
+with its own `expires_at`, sent as a request **parameter** — or, per one endpoint's own docs, a
+Bearer header — on every subsequent call), never HTTP Basic auth against endpoints literally named
+`/events`/`/orders`/`/attendees`. Legacy's own package comment already flags its approach as
+approximate: "a conservative read-only connector for documented Oveit API resources... sends
+\[email/password\] as HTTP Basic auth."
+
+`api_surface.json` now documents the REAL, full Oveit endpoint surface (recovered from
+`l.oveit.com`'s Events/Tickets/Attendees/RFID/Virtual-wallets/Advanced-data/Turnstile/Channel-
+Partner-Management doc pages) instead of repeating the fictional 3-endpoint surface legacy
+invented. Every real endpoint is excluded as `requires_elevated_scope` or `duplicate_of`: the root
+cause is that Oveit's real `POST /seller/login` token-exchange auth has no equivalent among this
+dialect's declarative auth modes (`bearer`/`basic`/`api_key_header`/`api_key_query`/
+`oauth2_client_credentials`) — it is a textbook token-exchange `AuthHook` shape (design conventions
+Tier-2 table: "token-exchange auth (GitHub App JWT→installation token)") — and this pass's
+instructions explicitly forbid creating a new hook package. This bundle's 3 existing streams keep
+legacy's fictional shape completely unchanged (not migrated to the real API), since correctly
+migrating them would require exactly the hook this pass cannot add. This gap is reported, not
+silently worked around — see Known limits.
 
 ## Auth setup
 
@@ -63,3 +93,16 @@ None. Oveit's legacy connector is read-only (`Write` always returns `ErrUnsuppor
   is capped only by the API's own `next_page` exhaustion, matching the common case of an unset
   `max_pages` in legacy) — a caller needing a hard page-count cap can rely on `MaxPages`-equivalent
   behavior once/if this bundle adds a `max_pages` spec property in a later Pass B increment.
+- **BLOCKED (`AUTH_COMPLEX`): the real Oveit API cannot be reached at all with this bundle's
+  current auth, and no real endpoint from the real API (events, orders, attendees, tickets,
+  check-in/scan, RFID pairing, virtual wallets, turnstile, channel-partner-management) can be added
+  as a new stream or write action until this is resolved.** Oveit's real auth is `POST
+  /seller/login` (organizer email+password) → an access token with its own `expires_at`, sent as a
+  request parameter (or Bearer header, per one endpoint) on every subsequent call — a
+  token-exchange flow this dialect's declarative `auth` modes cannot express (no
+  `oauth2_client_credentials`-shaped grant fits; it needs a genuine `AuthHook`, e.g. github's
+  RS256-JWT-to-installation-token exchange). This pass's instructions forbid creating a new hook
+  package, so this is reported as a blocker rather than worked around: resolving it requires either
+  a Tier-2 `hooks/oveit/` package (a future increment, out of this pass's scope) or accepting that
+  this connector's true capability ceiling is the 3 streams legacy already (fictionally)
+  approximates. See `api_surface.json` for the full real-endpoint-by-real-endpoint breakdown.

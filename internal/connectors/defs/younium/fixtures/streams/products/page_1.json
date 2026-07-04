@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/Products", "query": { "Take": "100", "Skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "prod_fixture_1", "name": "Fixture Product One", "modified": "2026-01-01T00:00:00Z" },
+        { "id": "prod_fixture_2", "name": "Fixture Product Two", "modified": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

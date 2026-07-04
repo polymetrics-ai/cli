@@ -1,14 +1,14 @@
 {
   "name": "tremendous",
   "display_name": "Tremendous",
-  "description": "Reads Tremendous campaigns, orders, rewards, and funding sources through API list endpoints.",
+  "description": "Reads and writes Tremendous campaigns, orders, rewards, funding sources, products, invoices, and members through the Tremendous API.",
   "integration_type": "api",
   "docs_url": "https://developers.tremendous.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Tremendous API read of campaign, order, reward, and funding source data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Tremendous API read of campaign, order, reward, funding source, product, invoice, and member data",
+    "write": "external mutation with real financial impact: create_order spends funding-source balance to issue rewards; approve_order/reject_order/cancel_reward/resend_reward act on already-issued rewards; create_invoice/delete_invoice/create_member/create_webhook/delete_webhook are organization-administration mutations",
+    "approval": "create_order, approve_order, reject_order, cancel_reward, and create_member move money or grant organization access and require approval; create_invoice, delete_invoice, resend_reward, generate_reward_link, create_webhook, and delete_webhook are lower-risk/reversible-adjacent actions that execute without approval"
   }
 }

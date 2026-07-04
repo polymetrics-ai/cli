@@ -63,6 +63,20 @@
       "query": { "per_page": "50" },
       "records": { "path": "teams" },
       "schema": "schemas/teams.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "query": { "per_page": "50" },
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "query": { "per_page": "50" },
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

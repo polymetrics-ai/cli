@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "notes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "external_id": { "type": ["string", "null"] },
+    "account_id": { "type": ["string", "null"] },
+    "organization_id": { "type": ["string", "null"] },
+    "category_id": { "type": ["string", "null"] },
+    "author_id": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "note": { "type": ["string", "null"], "description": "Note body, may include HTML." },
+    "note_date": { "type": ["string", "null"], "format": "date-time" },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "traits": { "type": ["object", "null"] },
+    "source": { "type": ["string", "null"], "description": "Name of the integration that created the note, if any." },
+    "archived_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

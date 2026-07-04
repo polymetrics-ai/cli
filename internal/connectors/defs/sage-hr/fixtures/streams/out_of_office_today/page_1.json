@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/leave-management/out-of-office-today" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 501, "policy_id": 1, "employee_id": 1, "details": "Fixture vacation", "start_date": "2026-01-05", "end_date": "2026-01-05", "hours": 3.5 }
+      ]
+    }
+  }
+}

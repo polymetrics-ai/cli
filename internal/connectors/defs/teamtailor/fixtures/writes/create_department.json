@@ -1,0 +1,19 @@
+{
+  "record": {
+    "data": {
+      "type": "departments",
+      "attributes": { "name": "Fixture New Department" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/departments",
+    "body": {
+      "data": {
+        "type": "departments",
+        "attributes": { "name": "Fixture New Department" }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "id": "department_fixture_new", "type": "departments" } } }
+}

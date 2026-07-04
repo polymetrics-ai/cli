@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices/lines",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "invoice_lines": [
+        {
+          "id": "line_fixture_1",
+          "expense_date": "2026-01-01",
+          "description": "FLIGHT for Trip ID trip_fixture_1",
+          "quantity": 1,
+          "unit_price": "20.00000000",
+          "tax_percentage": "0E-8",
+          "tax_amount": "0E-8",
+          "tax_regime": "STAR",
+          "total_amount": "20.00000000",
+          "invoice_serial_number": "INV-FIXTURE-1",
+          "profile_id": "profile_fixture_1",
+          "profile_name": "Fixture Company Ltd",
+          "invoice_mode": "reseller",
+          "invoice_status": "paid",
+          "issuing_date": "2026-01-01",
+          "due_date": "2026-01-01",
+          "currency": "EUR"
+        }
+      ],
+      "limit": 50,
+      "offset": 0,
+      "total": 1
+    }
+  }
+}

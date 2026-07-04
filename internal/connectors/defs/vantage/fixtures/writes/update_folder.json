@@ -1,0 +1,10 @@
+{
+  "record": {
+    "folder_token": "fldr_fixture_1",
+    "title": "Updated Folder"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/folders/fldr_fixture_1"
+  }
+}

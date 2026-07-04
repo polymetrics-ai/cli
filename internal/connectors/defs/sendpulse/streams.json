@@ -44,6 +44,26 @@
       "records": { "path": "." },
       "schema": "schemas/senders.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "blacklist",
+      "path": "/blacklist",
+      "records": { "path": "." },
+      "schema": "schemas/blacklist.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "emails_in_book",
+      "path": "/addressbooks/{{ fanout.id }}/emails",
+      "records": { "path": "." },
+      "schema": "schemas/emails_in_book.json",
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": { "request": { "path": "/addressbooks", "records_path": ".", "id_field": "id" } },
+        "into": { "path_var": "parent_id" },
+        "stamp_field": "book_id"
+      }
     }
   ]
 }

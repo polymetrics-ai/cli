@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "es_fixture_1",
+    "status": "published"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/event_series/es_fixture_1/status"
+  }
+}

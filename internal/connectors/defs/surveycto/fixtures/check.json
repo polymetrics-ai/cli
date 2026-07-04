@@ -1,7 +1,7 @@
 {
-  "request": { "method": "GET", "path": "/forms", "query": { "limit": "1" } },
+  "request": { "method": "GET", "path": "/datasets", "query": { "limit": "1" } },
   "response": {
     "status": 200,
-    "body": { "forms": [] }
+    "body": { "total": 0, "limit": 1, "data": [], "nextCursor": null }
   }
 }

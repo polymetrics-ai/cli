@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/hours",
+    "query": {
+      "page": "2",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 101,
+        "uid": "hourfixture0101",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 101",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 102,
+        "uid": "hourfixture0102",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 102",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      }
+    ]
+  }
+}

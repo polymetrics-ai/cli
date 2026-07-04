@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/campaigns/501/variations",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_data": [
+        {
+          "id": 1,
+          "name": "Control",
+          "isControl": true,
+          "isDisabled": false,
+          "percentSplit": 50,
+          "platform": "website"
+        },
+        {
+          "id": 2,
+          "name": "Variation 1",
+          "isControl": false,
+          "isDisabled": false,
+          "percentSplit": 50,
+          "platform": "website"
+        }
+      ]
+    }
+  }
+}

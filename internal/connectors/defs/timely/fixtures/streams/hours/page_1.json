@@ -1,0 +1,2015 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/hours",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "uid": "hourfixture0001",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 1",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 2,
+        "uid": "hourfixture0002",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 2",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 3,
+        "uid": "hourfixture0003",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 3",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 4,
+        "uid": "hourfixture0004",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 4",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 5,
+        "uid": "hourfixture0005",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 5",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 6,
+        "uid": "hourfixture0006",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 6",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 7,
+        "uid": "hourfixture0007",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 7",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 8,
+        "uid": "hourfixture0008",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 8",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 9,
+        "uid": "hourfixture0009",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 9",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 10,
+        "uid": "hourfixture0010",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 10",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 11,
+        "uid": "hourfixture0011",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 11",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 12,
+        "uid": "hourfixture0012",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 12",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 13,
+        "uid": "hourfixture0013",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 13",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 14,
+        "uid": "hourfixture0014",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 14",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 15,
+        "uid": "hourfixture0015",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 15",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 16,
+        "uid": "hourfixture0016",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 16",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 17,
+        "uid": "hourfixture0017",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 17",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 18,
+        "uid": "hourfixture0018",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 18",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 19,
+        "uid": "hourfixture0019",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 19",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 20,
+        "uid": "hourfixture0020",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 20",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 21,
+        "uid": "hourfixture0021",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 21",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 22,
+        "uid": "hourfixture0022",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 22",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 23,
+        "uid": "hourfixture0023",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 23",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 24,
+        "uid": "hourfixture0024",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 24",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 25,
+        "uid": "hourfixture0025",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 25",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 26,
+        "uid": "hourfixture0026",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 26",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 27,
+        "uid": "hourfixture0027",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 27",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 28,
+        "uid": "hourfixture0028",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 28",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 29,
+        "uid": "hourfixture0029",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 29",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 30,
+        "uid": "hourfixture0030",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 30",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 31,
+        "uid": "hourfixture0031",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 31",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 32,
+        "uid": "hourfixture0032",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 32",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 33,
+        "uid": "hourfixture0033",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 33",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 34,
+        "uid": "hourfixture0034",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 34",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 35,
+        "uid": "hourfixture0035",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 35",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 36,
+        "uid": "hourfixture0036",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 36",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 37,
+        "uid": "hourfixture0037",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 37",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 38,
+        "uid": "hourfixture0038",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 38",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 39,
+        "uid": "hourfixture0039",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 39",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 40,
+        "uid": "hourfixture0040",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 40",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 41,
+        "uid": "hourfixture0041",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 41",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 42,
+        "uid": "hourfixture0042",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 42",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 43,
+        "uid": "hourfixture0043",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 43",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 44,
+        "uid": "hourfixture0044",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 44",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 45,
+        "uid": "hourfixture0045",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 45",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 46,
+        "uid": "hourfixture0046",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 46",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 47,
+        "uid": "hourfixture0047",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 47",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 48,
+        "uid": "hourfixture0048",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 48",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 49,
+        "uid": "hourfixture0049",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 49",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 50,
+        "uid": "hourfixture0050",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 50",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 51,
+        "uid": "hourfixture0051",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 51",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 52,
+        "uid": "hourfixture0052",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 52",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 53,
+        "uid": "hourfixture0053",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 53",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 54,
+        "uid": "hourfixture0054",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 54",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 55,
+        "uid": "hourfixture0055",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 55",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 56,
+        "uid": "hourfixture0056",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 56",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 57,
+        "uid": "hourfixture0057",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 57",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 58,
+        "uid": "hourfixture0058",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 58",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 59,
+        "uid": "hourfixture0059",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 59",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 60,
+        "uid": "hourfixture0060",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 60",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 61,
+        "uid": "hourfixture0061",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 61",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 62,
+        "uid": "hourfixture0062",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 62",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 63,
+        "uid": "hourfixture0063",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 63",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 64,
+        "uid": "hourfixture0064",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 64",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 65,
+        "uid": "hourfixture0065",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 65",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 66,
+        "uid": "hourfixture0066",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 66",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 67,
+        "uid": "hourfixture0067",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 67",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 68,
+        "uid": "hourfixture0068",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 68",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 69,
+        "uid": "hourfixture0069",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 69",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 70,
+        "uid": "hourfixture0070",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 70",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 71,
+        "uid": "hourfixture0071",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 71",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 72,
+        "uid": "hourfixture0072",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 72",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 73,
+        "uid": "hourfixture0073",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 73",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 74,
+        "uid": "hourfixture0074",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 74",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 75,
+        "uid": "hourfixture0075",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 75",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 76,
+        "uid": "hourfixture0076",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 76",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 77,
+        "uid": "hourfixture0077",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 77",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 78,
+        "uid": "hourfixture0078",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 78",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 79,
+        "uid": "hourfixture0079",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 79",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 80,
+        "uid": "hourfixture0080",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 80",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 81,
+        "uid": "hourfixture0081",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 81",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 82,
+        "uid": "hourfixture0082",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 82",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 83,
+        "uid": "hourfixture0083",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 83",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 84,
+        "uid": "hourfixture0084",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 84",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 85,
+        "uid": "hourfixture0085",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 85",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 86,
+        "uid": "hourfixture0086",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 86",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 87,
+        "uid": "hourfixture0087",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 87",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 88,
+        "uid": "hourfixture0088",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 88",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 89,
+        "uid": "hourfixture0089",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 89",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 90,
+        "uid": "hourfixture0090",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 90",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 91,
+        "uid": "hourfixture0091",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 91",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 92,
+        "uid": "hourfixture0092",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 92",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 93,
+        "uid": "hourfixture0093",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 93",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 94,
+        "uid": "hourfixture0094",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 94",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 95,
+        "uid": "hourfixture0095",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 95",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 96,
+        "uid": "hourfixture0096",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 96",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 97,
+        "uid": "hourfixture0097",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 97",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 98,
+        "uid": "hourfixture0098",
+        "project": {
+          "id": 5002
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 98",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 99,
+        "uid": "hourfixture0099",
+        "project": {
+          "id": 5000
+        },
+        "user": {
+          "id": 6001
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 99",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      },
+      {
+        "id": 100,
+        "uid": "hourfixture0100",
+        "project": {
+          "id": 5001
+        },
+        "user": {
+          "id": 6000
+        },
+        "day": "2026-01-01",
+        "note": "Fixture time entry 100",
+        "from": "2026-01-01T09:00:00Z",
+        "to": "2026-01-01T10:00:00Z",
+        "billed": false,
+        "billable": true,
+        "deleted": false,
+        "external_id": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225600
+      }
+    ]
+  }
+}

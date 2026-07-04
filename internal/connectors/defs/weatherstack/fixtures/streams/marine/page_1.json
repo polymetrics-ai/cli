@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/marine", "query": { "latitude": "synthetic-conformance-value", "longitude": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "location": { "name": "Fixture Marine Location", "country": "Fixture Country", "region": "", "lat": "45.000", "lon": "-2.000", "timezone_id": "Etc/UTC", "localtime": "2026-01-01 00:00", "localtime_epoch": 1767225600, "utc_offset": "0.0" },
+      "current": { "observation_time": "12:00 AM", "temperature": 14, "weather_code": 113, "weather_descriptions": ["Clear"], "wind_speed": 10, "wind_degree": 180, "wind_dir": "S", "pressure": 1015, "precip": 0, "humidity": 78, "cloudcover": 5, "feelslike": 13, "uv_index": 2, "visibility": 10, "water_temperature": 16, "swell_height": 1.2, "swell_direction": 210, "swell_period": 8 }
+    }
+  }
+}

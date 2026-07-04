@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets/synthetic-conformance-value/scheduled_transactions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "scheduled_transactions": [
+          {
+            "id": "scheduled_txn_fixture_1",
+            "date_first": "2026-01-01",
+            "date_next": "2026-08-01",
+            "frequency": "monthly",
+            "amount": -120000,
+            "memo": "fixture rent",
+            "flag_color": null,
+            "account_id": "account_fixture_1",
+            "payee_id": "payee_fixture_1",
+            "payee_name": "Fixture Landlord",
+            "category_id": "category_fixture_1",
+            "category_name": "Rent",
+            "deleted": false
+          },
+          {
+            "id": "scheduled_txn_fixture_2",
+            "date_first": "2026-01-05",
+            "date_next": "2026-08-05",
+            "frequency": "monthly",
+            "amount": -1500,
+            "memo": null,
+            "flag_color": "red",
+            "account_id": "account_fixture_1",
+            "payee_id": null,
+            "payee_name": null,
+            "category_id": "category_fixture_2",
+            "category_name": "Subscriptions",
+            "deleted": false
+          }
+        ],
+        "server_knowledge": 42
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets/synthetic-conformance-value/categories"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "category_groups": [
+          {
+            "id": "category_group_fixture_1",
+            "name": "Fixture Everyday Expenses",
+            "hidden": false,
+            "internal": false,
+            "deleted": false,
+            "categories": [
+              {
+                "id": "category_fixture_1",
+                "category_group_id": "category_group_fixture_1",
+                "name": "Groceries",
+                "hidden": false,
+                "budgeted": 50000,
+                "activity": -25000,
+                "balance": 25000,
+                "deleted": false
+              }
+            ]
+          },
+          {
+            "id": "category_group_fixture_2",
+            "name": "Fixture Fun Money",
+            "hidden": false,
+            "internal": false,
+            "deleted": false,
+            "categories": [
+              {
+                "id": "category_fixture_2",
+                "category_group_id": "category_group_fixture_2",
+                "name": "Dining Out",
+                "hidden": false,
+                "budgeted": 20000,
+                "activity": -5000,
+                "balance": 15000,
+                "deleted": false
+              }
+            ]
+          }
+        ],
+        "server_knowledge": 42
+      }
+    }
+  }
+}

@@ -1,13 +1,1479 @@
 {
-  "api": "UserVoice API v2 (https://api.uservoice.com)",
-  "docs": "https://developer.uservoice.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (suggestions); minimal-honest api_surface per docs/migration/conventions.md section 2 / DECISIONS.md #4 - full UserVoice API-surface research (every documented endpoint) is Pass B (wave5), not this fan-out.",
+  "api": "UserVoice Admin API v2 (https://<subdomain>.uservoice.com/api/v2, per the real OpenAPI reference at uservoice.uservoice.com/api/v2/public/doc/api-v2-reference)",
+  "docs": "https://developer.uservoice.com/docs/api/v2/reference/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against UserVoice's real, currently-published Admin API v2 OpenAPI spec (185 endpoint+method combinations across 133 paths). The original legacy-parity suggestions stream targets /api/v2/suggestions (no /admin/ segment) verbatim for accepted-input parity; every other endpoint below is the real /api/v2/admin/... surface. 8 new read streams and 8 new write actions cover the practical core of feedback-management data (forums/users/categories/statuses/labels/comments/notes/teams, plus suggestion and comment/label/note lifecycle writes). The remainder is excluded across account-administration (permissions/teams-assignment/subdomains/user-block), UI/presentation configuration (themes/views/translatable_strings), analytics/reporting (impact_reports/segments/importance_scores/suggestion_activity_entries), integration bookkeeping (external_accounts/external_users/feedback_connector_configurations), bulk-only operations with no single-record shape (import/batch/bulk_delete/merge/link), and single-object detail endpoints duplicating an already-covered list stream's record shape.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/suggestions", "covered_by": { "stream": "suggestions" } },
-    { "method": "POST", "path": "/api/v2/suggestions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy implements no write path (Write returns ErrUnsupportedOperation)" } },
-    { "method": "GET", "path": "/api/v2/forums", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a forums stream" } },
-    { "method": "GET", "path": "/api/v2/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a users stream" } },
-    { "method": "GET", "path": "/api/v2/comments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a comments stream" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/suggestions",
+      "covered_by": {
+        "stream": "suggestions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "file-attachment metadata list keyed to a two-step multipart upload/token workflow this dialect has no multipart-body primitive for; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "requires a multipart/form-data file upload to obtain an attachment token; this dialect has no multipart body construction primitive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/attachments/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-attachment detail; same excluded resource as the attachments list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/attachments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "attachment deletion is a minor cleanup action on an already out-of-scope resource (see attachments list exclusion)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/audit_features",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal audit/reporting metadata over feature records, not a primary syncable object; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/audit_features/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope audit_features list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/categories/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail; identical record shape to the categories list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/comments",
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/comments",
+      "covered_by": {
+        "write": "create_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/comments/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail; identical record shape to the comments list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/comments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "comment body/state edit beyond create; breadth-vs-cost triage for this pass, create_comment already covers the primary comment-creation mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/comments/{id}/approve",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "comment moderation action; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/comments/{id}/delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "soft-deletes/moderates an existing comment; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/comments/{id}/restore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "comment moderation restore action; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/comments/{id}/spam",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "marks a comment as spam, a moderation/visibility-destroying action; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/custom_fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "account-schema configuration (custom field definitions), not syncable feedback data; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/custom_fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-field-definition authoring is account-schema configuration, not syncable feedback data; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/custom_fields/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single custom-field-definition detail; same excluded resource as the custom_fields list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/custom_fields/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-field-definition authoring is account-schema configuration, not syncable feedback data; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/custom_fields/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes a custom field definition, an account-schema change; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/external_accounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "external_accounts is external-identity-mapping metadata for SSO/integration bookkeeping, not primary feedback data; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_accounts/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk batch-import operation with no single-record shape this dialect models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_accounts/bulk_delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk multi-record delete by ID; far higher blast radius than any single-record write this dialect expresses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_accounts/bulk_delete_by_external_id",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk multi-record delete by external ID; far higher blast radius than any single-record write this dialect expresses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_accounts/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk import operation with no single-record shape this dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/external_accounts/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope external_accounts list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/external_users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "external_users is external-identity-mapping metadata for SSO/integration bookkeeping, not primary feedback data; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_users/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk batch-import operation with no single-record shape this dialect models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_users/bulk_delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk multi-record delete by ID; far higher blast radius than any single-record write this dialect expresses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_users/bulk_delete_by_external_id",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk multi-record delete by external ID; far higher blast radius than any single-record write this dialect expresses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/external_users/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk import operation with no single-record shape this dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/external_users/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope external_users list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feature_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-roadmap feature-status taxonomy; a smaller, roadmap-tool-specific resource outside this pass's feedback-data focus"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feature_statuses/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope feature_statuses list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/features",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-roadmap feature tracking (a separate roadmapping object model layered on top of suggestions); breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/features",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "roadmap feature creation; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/features/unlink_jira_issue/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Jira integration unlink action on an already out-of-scope roadmap resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/features/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope features list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/features/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "roadmap feature edit; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/features/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes a roadmap feature; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/features/{id}/link_jira_issue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Jira integration link action on an already out-of-scope roadmap resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feedback_atoms",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "granular structured-feedback-extraction sub-objects (an analysis layer under feedback_records); breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feedback_atoms/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope feedback_atoms list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feedback_connector_configurations",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "integration/connector configuration metadata, not syncable feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/feedback_connector_configurations",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "integration/connector configuration authoring, not syncable feedback data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feedback_connector_configurations/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope feedback_connector_configurations list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/feedback_connector_configurations/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "integration/connector configuration editing, not syncable feedback data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/feedback_connector_configurations/{id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "integration/connector configuration deletion, not syncable feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/feedback_connector_configurations/{id}/test",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "connection-test action, not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feedback_records",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw multi-channel feedback ingestion records (a separate ingestion pipeline object from suggestions); breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/feedback_records",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw feedback ingestion; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/feedback_records/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope feedback_records list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/feedback_records/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "feedback record edit; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/feedback_records/{id}/delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "soft-deletes a feedback record; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/feedback_records/{id}/undelete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "restore action on an already out-of-scope resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/forum_invitations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pending private-forum invitation list, a small operator-managed access-control set; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/forum_invitations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a forum access invitation email; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/forum_invitations/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope forum_invitations list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/forum_invitations/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "revokes a pending forum invitation; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/forums",
+      "covered_by": {
+        "stream": "forums"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/forums/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail; identical record shape to the forums list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/impact_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved-report configuration objects (dashboard/analytics definitions), not underlying feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/impact_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved-report authoring, not underlying feedback data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/impact_reports/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope impact_reports list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/impact_reports/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved-report editing, not underlying feedback data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/impact_reports/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes a saved report configuration; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/importance_responses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw importance-survey response records feeding importance_scores; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/importance_responses/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope importance_responses list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/importance_scores",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "derived per-user/per-suggestion importance analytics scores, not primary feedback data; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/importance_scores",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "importance-score authoring; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/importance_scores/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope importance_scores list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/internal_flags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal moderation flag records (spam/abuse signals), an admin-tooling resource distinct from the primary suggestions/comments data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/internal_flags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal flag authoring; admin-tooling resource, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/internal_flags/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope internal_flags list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/internal_flags/{id}/clear",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "moderation-flag-clearing action on an already out-of-scope resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/internal_status_updates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal (non-public) status-change annotations, a smaller admin-tooling sibling of status_updates; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/internal_status_updates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal status-update authoring; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/internal_status_updates/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope internal_status_updates list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/internal_status_updates/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal status-update editing; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/internal_statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal (non-public) status taxonomy sibling of the covered statuses stream; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/internal_statuses/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope internal_statuses list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/labels",
+      "covered_by": {
+        "stream": "labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/labels",
+      "covered_by": {
+        "write": "create_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/labels/attach",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "attaches an existing label to a suggestion; a many-to-many join mutation this pass does not model (create_label/update_label cover label lifecycle itself)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/labels/detach",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "detaches a label from a suggestion; same join-mutation scope narrowing as labels/attach"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/labels/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-label detail; identical record shape to the labels list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/labels/{id}",
+      "covered_by": {
+        "write": "update_label"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/labels/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes a label definition (removing it from every tagged suggestion); out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/notes",
+      "covered_by": {
+        "stream": "notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/notes",
+      "covered_by": {
+        "write": "create_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/notes/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail; identical record shape to the notes list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/notes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal-note body edit beyond create; breadth-vs-cost triage for this pass, create_note already covers the primary note-creation mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/notes/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes an internal note; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/nps_ratings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "NPS survey response records, a satisfaction-measurement resource distinct from suggestions/comments; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/nps_ratings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "NPS rating ingestion; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/nps_ratings/bulk_delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk multi-record delete by ID; far higher blast radius than any single-record write this dialect expresses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/nps_ratings/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope nps_ratings list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/nps_ratings/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes an NPS rating record; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "account/team member permission-grant records; account-administration surface requiring elevated admin scope, not primary feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "grants a new admin permission/invite; account-administration mutation requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/permissions/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope permissions list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/permissions/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "edits an admin permission grant; account-administration mutation requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/permissions/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "revokes an admin permission grant; account-administration mutation, out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/permissions/{id}/resend",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "resends an admin invitation email; account-administration action requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/product_areas",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-taxonomy grouping metadata layered on top of features/suggestions; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/product_areas/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope product_areas list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/segmented_values",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-segmentation trait-value records, an analytics/targeting resource distinct from primary feedback data; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/segmented_values/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope segmented_values list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/segments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved user-segment definitions (analytics/targeting configuration), not primary feedback data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/segments/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope segments list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/service_hook_logs",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "webhook-delivery diagnostic log entries, operational telemetry rather than syncable feedback data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/status_updates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "public status-change announcement records (a broader sibling of internal_status_updates); breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/status_updates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "public status-update authoring; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/status_updates/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope status_updates list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/status_updates/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "status-update editing; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/status_updates/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes a public status-update announcement; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/statuses",
+      "covered_by": {
+        "stream": "statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/statuses/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail; identical record shape to the statuses list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/subdomains/current",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "current-account subdomain/branding introspection, not syncable feedback data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/subdomains/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes the account's public subdomain, an account-identity mutation requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/suggested_merges",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "system-suggested duplicate-suggestion merge candidates, a moderation-assist resource distinct from primary suggestion data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/suggested_merges/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope suggested_merges list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggested_merges/{id}/reject",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "rejects a system-suggested merge candidate; moderation action on an already out-of-scope resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/suggestion_activity_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "derived activity-timeline feed (a computed rollup over comments/votes/status-changes already covered by their own streams), not primary data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/suggestions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the real admin-namespaced suggestions list endpoint returns the same suggestion record type the legacy-shaped suggestions stream already covers (at /api/v2/suggestions, no admin/ segment, preserved for accepted-input parity); adding a second, differently-pathed suggestions list stream here would duplicate that record type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions",
+      "covered_by": {
+        "write": "create_suggestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk import operation with no single-record shape this dialect models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/link",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "links two suggestions as related; a relationship-graph mutation this pass does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/link_to_feature",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "links a suggestion to an already out-of-scope roadmap feature"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/list_priority",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk suggestion re-prioritization/reordering; no single-record shape this dialect models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/merge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "merges two suggestions into one, a destructive relationship mutation more complex than a plain field update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/unlink",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unlinks two related suggestions; same relationship-graph scope narrowing as suggestions/link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/unlink_from_feature",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unlinks a suggestion from an already out-of-scope roadmap feature"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/suggestions/unlink_jira_issue/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Jira integration unlink action; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/suggestions/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail; identical record shape to the suggestions list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{id}",
+      "covered_by": {
+        "write": "update_suggestion"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{id}/approve",
+      "covered_by": {
+        "write": "approve_suggestion"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{id}/assign_owner",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "assigns an admin owner to a suggestion; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{id}/delete",
+      "covered_by": {
+        "write": "delete_suggestion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/suggestions/{id}/feature_ids",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "derived id-list sub-view of an already out-of-scope roadmap linkage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/{id}/link_jira_issue",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Jira integration link action; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/{id}/link_vsts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "[alpha] VSTS/Azure DevOps integration link action; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{id}/publish",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "publishes a suggestion (a narrower variant of approve_suggestion); approve_suggestion already covers the primary visibility-lifecycle write, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{id}/restore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "restores a soft-deleted suggestion; the inverse of delete_suggestion, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{id}/spam",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "marks a suggestion as spam, a moderation/visibility-destroying action distinct from delete_suggestion; out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/{id}/subscribe",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscribes the caller to suggestion notifications; a per-user notification-preference mutation, not core feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/{id}/unmerge",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reverses a suggestion merge; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions/{id}/unsubscribe",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unsubscribes the caller from suggestion notifications; same notification-preference scope narrowing as subscribe"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/supporter_messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "automated supporter-communication message records (e.g. status-update emails sent to voters), operational messaging rather than primary feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/supporter_messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "composes/sends a supporter communication message; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/supporter_messages/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope supporter_messages list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/supporters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-suggestion supporter (voter) join records; a many-to-many relationship resource, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/teams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team creation is account-administration configuration; breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/teams/assign",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "assigns an admin user to a team; account-administration mutation requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/teams/unassign",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes an admin user from a team; account-administration mutation requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/teams/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-team detail; identical record shape to the teams list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/teams/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "edits a team's name/composition; account-administration mutation requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/teams/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a team; account-administration mutation requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/theme_sets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "portal visual-theme configuration bundles, UI presentation config rather than feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/theme_sets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "theme-set authoring; UI presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/theme_sets/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope theme_sets list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/theme_sets/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "theme-set editing; UI presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/themes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "individual portal theme detail; UI presentation config, not feedback data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/translatable_strings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "portal UI localization string catalog, presentation config rather than feedback data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/translatable_strings/{locale}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-locale detail of the already out-of-scope translatable_strings list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/translatable_strings/{locale}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "localization string editing; presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/translatable_strings/{locale}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "localization string reset/deletion; presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/users/current",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-caller identity introspection, not a syncable object stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/users/find_or_create",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "idempotent upsert-by-email helper; the plain create_user shape this dialect would model does not exist as its own endpoint, and this compound find-or-create semantic is better served by a future dedicated write if requested"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/users/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail; identical record shape to the users list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/users/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes a user and anonymizes their submitted content (GDPR right-to-erasure); irreversible, out of scope for this pass's write surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/users/{id}/block",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "blocks a user account from the portal; account-moderation action requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/users/{id}/export",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "triggers a GDPR right-to-access data export for a user; account-administration action requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/users/{id}/unblock",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "unblocks a user account; account-moderation action requiring elevated admin scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/views",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved admin-console filter/view configurations, UI presentation config rather than feedback data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/admin/views",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved-view authoring; UI presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/admin/views/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record detail of the already out-of-scope views list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/views/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved-view editing; UI presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/admin/views/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "saved-view deletion; UI presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/admin/views/{id}/share",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "shares a saved view with other admins; UI presentation config, breadth-vs-cost triage for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/oauth/revoke",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token revocation; credential lifecycle management, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/oauth/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token issuance; this bundle authenticates via a caller-supplied Bearer api_key secret directly (matching legacy), not a dialect-driven OAuth2 token exchange"
+      }
+    }
   ]
 }

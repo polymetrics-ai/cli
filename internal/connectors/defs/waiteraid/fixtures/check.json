@@ -1,7 +1,7 @@
 {
-  "request": { "method": "GET", "path": "/reservations" },
+  "request": { "method": "POST", "path": "/wa-api/searchBooking", "query": { "restid": "synthetic-conformance-value" } },
   "response": {
     "status": 200,
-    "body": { "reservations": [] }
+    "body": { "status": "OK", "bookings": [] }
   }
 }

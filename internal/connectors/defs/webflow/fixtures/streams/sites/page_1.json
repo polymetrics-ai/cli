@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/v2/sites" },
+  "response": {
+    "status": 200,
+    "body": {
+      "sites": [
+        {
+          "id": "site_fixture_1",
+          "workspaceId": "workspace_fixture_1",
+          "displayName": "Fixture Site One",
+          "shortName": "fixture-site-one",
+          "timeZone": "America/Los_Angeles",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "lastPublished": "2026-01-02T00:00:00.000Z",
+          "parentFolderId": null
+        },
+        {
+          "id": "site_fixture_2",
+          "workspaceId": "workspace_fixture_1",
+          "displayName": "Fixture Site Two",
+          "shortName": "fixture-site-two",
+          "timeZone": "America/Los_Angeles",
+          "createdOn": "2026-01-03T00:00:00.000Z",
+          "lastUpdated": "2026-01-04T00:00:00.000Z",
+          "lastPublished": null,
+          "parentFolderId": null
+        }
+      ]
+    }
+  }
+}

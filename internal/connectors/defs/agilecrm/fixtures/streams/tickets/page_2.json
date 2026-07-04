@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/tickets/filter", "query": { "filter_id": "601", "page_size": "25" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 701,
+        "subject": "Fixture ticket one",
+        "status": "OPEN",
+        "type": "PROBLEM",
+        "priority": "LOW",
+        "source": "EMAIL",
+        "requester_name": "Fixture Requester",
+        "requester_email": "fixture-requester@example.com",
+        "contactID": 1,
+        "created_time": 1767225601,
+        "last_updated_time": 1767225601,
+        "is_spam": false,
+        "is_favorite": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "collection_id": "collection_fixture_1",
+    "id": "item_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/collections/collection_fixture_1/items/item_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

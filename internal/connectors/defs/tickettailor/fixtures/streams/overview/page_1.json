@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/overview",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "box_office_name": "Fixture Box Office",
+      "currency": "gbp",
+      "credits": 100
+    }
+  }
+}

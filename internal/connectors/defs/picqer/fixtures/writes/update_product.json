@@ -1,0 +1,9 @@
+{
+  "record": { "idproduct": 101, "name": "Fixture Product Updated", "active": true },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/101",
+    "body": { "name": "Fixture Product Updated", "active": true }
+  },
+  "response": { "status": 200, "body": { "idproduct": 101, "name": "Fixture Product Updated", "active": true } }
+}

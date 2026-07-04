@@ -1,0 +1,149 @@
+{
+  "actions": [
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/webhooks/create",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "organization", "url"],
+        "properties": {
+          "name": { "type": "string" },
+          "organization": { "type": "string" },
+          "url": { "type": "string" },
+          "project": { "type": "string" },
+          "secret": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a project or organization webhook that will receive analysis-completion callbacks; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/webhooks/update",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhook", "name", "url"],
+        "properties": {
+          "webhook": { "type": "string" },
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "secret": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; changes an existing webhook's callback URL/secret; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/webhooks/delete",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["webhook"],
+        "properties": {
+          "webhook": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; permanently removes a webhook; approval required"
+    },
+    {
+      "name": "add_issue_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/issues/add_comment",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue", "text"],
+        "properties": {
+          "issue": { "type": "string" },
+          "text": { "type": "string" },
+          "isFeedback": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; adds a permanent comment to an issue; approval required"
+    },
+    {
+      "name": "assign_issue",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/issues/assign",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue"],
+        "properties": {
+          "issue": { "type": "string" },
+          "assignee": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; assigns or unassigns (empty assignee) an issue; approval required"
+    },
+    {
+      "name": "set_issue_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/issues/set_tags",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue"],
+        "properties": {
+          "issue": { "type": "string" },
+          "tags": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; replaces an issue's full tag set (empty tags clears them); approval required"
+    },
+    {
+      "name": "do_issue_transition",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/issues/do_transition",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issue", "transition"],
+        "properties": {
+          "issue": { "type": "string" },
+          "transition": {
+            "type": "string",
+            "enum": ["confirm", "unconfirm", "reopen", "resolve", "falsepositive", "close", "wontfix", "accept", "resolveasreviewed", "resolveassafe", "resolveasacknowledged", "resetastoreview"]
+          },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; moves an issue through its workflow (e.g. resolve, wontfix, falsepositive); some transitions require elevated project permissions on the live API; approval required"
+    },
+    {
+      "name": "set_project_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/project_tags/set",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project", "tags"],
+        "properties": {
+          "project": { "type": "string" },
+          "tags": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; replaces a project's full tag set; approval required"
+    }
+  ]
+}

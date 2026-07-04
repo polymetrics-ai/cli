@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/trips",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "trips": [
+        {
+          "id": "trip_fixture_1",
+          "trip_name": "Fixture Trip 1",
+          "status": "confirmed",
+          "modified": "2026-01-01T00:01:00Z"
+        }
+      ],
+      "limit": 50,
+      "offset": 0,
+      "total": 1
+    }
+  }
+}

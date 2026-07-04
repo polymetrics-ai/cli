@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/PaymentTerms", "query": { "Take": "100", "Skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "pt_fixture_1", "name": "NET30" },
+        { "id": "pt_fixture_2", "name": "NET60" }
+      ]
+    }
+  }
+}

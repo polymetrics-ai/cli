@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/tags", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "id": "1",
+          "tag": "Fixture Tag",
+          "tagType": "contact",
+          "description": "Fixture tag description",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "subscriber_count": "3"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

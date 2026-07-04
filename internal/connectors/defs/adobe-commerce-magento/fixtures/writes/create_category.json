@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture New Category", "parent_id": 2, "is_active": true },
+  "expect": {
+    "method": "POST",
+    "path": "/categories"
+  }
+}

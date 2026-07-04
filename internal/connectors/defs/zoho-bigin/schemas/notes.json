@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "notes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "Note_Title": { "type": ["string", "null"] },
+    "Note_Content": { "type": ["string", "null"] },
+    "Parent_Id": { "type": ["object", "null"], "description": "Lookup object {id, name, module} naming the record this note is attached to." },
+    "Owner": { "type": ["object", "null"] },
+    "Created_Time": { "type": ["string", "null"] },
+    "Modified_Time": { "type": ["string", "null"] }
+  }
+}

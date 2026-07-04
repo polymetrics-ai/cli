@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vouchers",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "vo_fixture_1",
+          "name": "Fixture Voucher",
+          "type": "single",
+          "value": 1000,
+          "total_codes": 10,
+          "available_codes": 8,
+          "expiry": 1798848000
+        },
+        {
+          "id": "vo_fixture_2",
+          "name": "Fixture Voucher 2",
+          "type": "multi",
+          "value": 2000,
+          "total_codes": 5,
+          "available_codes": 5,
+          "expiry": null
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

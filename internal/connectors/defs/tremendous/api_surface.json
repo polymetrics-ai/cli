@@ -1,14 +1,484 @@
 {
-  "api": "Tremendous API v2 (https://developers.tremendous.com/)",
+  "api": "Tremendous API v2 (OpenAPI 3.0.2 spec embedded per-endpoint at https://developers.tremendous.com/reference/<slug>.md, fetched 2026-07-03; servers: https://testflight.tremendous.com/api/v2 sandbox, https://api.tremendous.com/api/v2 production)",
   "docs": "https://developers.tremendous.com/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (campaigns, orders, rewards, funding_sources). Tremendous's write endpoints (create order, create reward, generate funding source) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "scope": "Pass B full-surface expansion. Covered: the 4 legacy-parity read streams (campaigns, orders, rewards, funding_sources, unchanged) plus 3 new Pass B streams (products, invoices, members) and 11 new write actions (create_order, approve_order, reject_order, cancel_reward, resend_reward, generate_reward_link, create_invoice, delete_invoice, create_member, create_webhook, delete_webhook) covering every dialect-expressible mutation Tremendous documents outside organization/connected-org/fraud-rule administration. Excluded: Tremendous Connect embedded-partner-platform administration (connected organizations/members, a distinct product requiring separate enablement), fraud-review/fraud-rule security administration, organization self-administration (create sub-org, create API key), async report-generation jobs (no declarative one-shot representation), binary invoice CSV/PDF exports, topups (an alternate account-funding mechanism distinct from the invoices flow this pass covers), campaign creation/update (config-heavy admin action deferred as a follow-on), balance_transactions (no stable id field in Tremendous's own schema to key a stream on), and single-item detail/duplicate-of-list endpoints already covered by their corresponding list stream.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/api/v2/orders", "covered_by": { "stream": "orders" } },
-    { "method": "GET", "path": "/api/v2/rewards", "covered_by": { "stream": "rewards" } },
-    { "method": "GET", "path": "/api/v2/funding_sources", "covered_by": { "stream": "funding_sources" } },
-    { "method": "POST", "path": "/api/v2/orders", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented order creation; Pass B capability expansion" } },
-    { "method": "GET", "path": "/api/v2/rewards/{id}", "excluded": { "category": "out_of_scope", "reason": "single-reward retrieval not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/balance_transactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "balance_transactions has no stable id field in Tremendous's own published schema (created_at/amount/action/description/order only) \u2014 there is no real API property to declare as x-primary-key without inventing a synthetic composite key the API itself does not expose; the balance_transactions.order sub-object already duplicates data the orders stream covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "campaign creation was not modeled by legacy and is a config-heavy (branding/message/product-selection) admin action better reviewed as its own follow-on rather than folded into this pass; the existing campaigns stream already covers read access to the resulting objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/campaigns/{id}",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/campaigns/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "campaign update (branding/message/product-selection admin config) was not modeled by legacy; a distinct follow-on decision from this pass's read/order/reward/invoice/member/webhook write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/connected_organizations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/connected_organizations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/connected_organizations/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/connected_organizations/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/connected_organizations/{id}/members",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/connected_organizations/{id}/members",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/connected_organizations/{id}/members/sessions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/connected_organizations/{id}/members/{member_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/connected_organizations/{id}/members/{member_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Tremendous Connect embedded-partner-platform administration (connected organizations and their members); a distinct partner/reseller product surface requiring Tremendous Connect enablement, out of scope for this direct-account connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-field definition list (reporting/analytics tagging metadata for rewards); config metadata, not primary reward/order object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-field definitions must first be added by an admin via the Tremendous Dashboard per Tremendous's own docs; the API-side create is a narrow admin-config action layered on top of order/reward data this pass already covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/forex",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static currency exchange-rate reference lookup; not an account object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/fraud_reviews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "fraud-review/fraud-rule administration is an organization security/risk function distinct from ordinary reward data; blocking/releasing a fraud-held reward or reconfiguring fraud rules is a security-sensitive admin action out of this pass's create/read scope for reward and order data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/fraud_reviews/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "fraud-review/fraud-rule administration is an organization security/risk function distinct from ordinary reward data; blocking/releasing a fraud-held reward or reconfiguring fraud rules is a security-sensitive admin action out of this pass's create/read scope for reward and order data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/fraud_reviews/{id}/block",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "fraud-review/fraud-rule administration is an organization security/risk function distinct from ordinary reward data; blocking/releasing a fraud-held reward or reconfiguring fraud rules is a security-sensitive admin action out of this pass's create/read scope for reward and order data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/fraud_reviews/{id}/release",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "fraud-review/fraud-rule administration is an organization security/risk function distinct from ordinary reward data; blocking/releasing a fraud-held reward or reconfiguring fraud rules is a security-sensitive admin action out of this pass's create/read scope for reward and order data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/fraud_rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "fraud-review/fraud-rule administration is an organization security/risk function distinct from ordinary reward data; blocking/releasing a fraud-held reward or reconfiguring fraud rules is a security-sensitive admin action out of this pass's create/read scope for reward and order data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/fraud_rules/{rule_type}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "fraud-review/fraud-rule administration is an organization security/risk function distinct from ordinary reward data; blocking/releasing a fraud-held reward or reconfiguring fraud rules is a security-sensitive admin action out of this pass's create/read scope for reward and order data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/fraud_rules/{rule_type}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "fraud-review/fraud-rule administration is an organization security/risk function distinct from ordinary reward data; blocking/releasing a fraud-held reward or reconfiguring fraud rules is a security-sensitive admin action out of this pass's create/read scope for reward and order data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/funding_sources",
+      "covered_by": {
+        "stream": "funding_sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/funding_sources/{id}",
+      "covered_by": {
+        "stream": "funding_sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/invoices",
+      "covered_by": {
+        "write": "create_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/invoices/{id}",
+      "covered_by": {
+        "write": "delete_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/invoices/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single invoice detail lookup by id; the invoices stream's list endpoint already returns this record's full field set, and per Tremendous's own docs this endpoint's only additional value (retrieving already-deleted invoices) is a narrow edge case not worth a dedicated stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/invoices/{id}/csv",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "CSV export of an invoice's associated rewards/orders; a binary/text-file download payload with no declarative dialect representation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/invoices/{id}/pdf",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "PDF rendering of an invoice; binary payload with no declarative dialect representation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/members",
+      "covered_by": {
+        "write": "create_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/members/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single member detail lookup by id; the members stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/order_approvals/{id}/approve",
+      "covered_by": {
+        "write": "approve_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/order_approvals/{id}/reject",
+      "covered_by": {
+        "write": "reject_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/orders",
+      "covered_by": {
+        "write": "create_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/orders/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single order detail lookup by id; the orders stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/organizations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per Tremendous's own docs, this always returns exactly the single organization the calling API key belongs to; not a syncable multi-record object stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/organizations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new sub-organization within the Tremendous account; organization-administration action, not reward/order/campaign object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/organizations/create_api_key",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "creates a new API key for the organization; a credential-issuance action, never a reverse-ETL write, and unrelated to the API key this connector itself authenticates with"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single product detail lookup by id; the products stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "kicks off an asynchronous report-generation job (polled via GET or a REPORTS webhook event); an async job-queue interaction pattern with no declarative one-shot stream/write representation in this dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/reports/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "polls the status/download-URL of an async report job; only meaningful paired with the create_report job-kickoff this pass does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/rewards",
+      "covered_by": {
+        "stream": "rewards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/rewards/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single reward detail lookup by id; the rewards stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/rewards/{id}/cancel",
+      "covered_by": {
+        "write": "cancel_reward"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/rewards/{id}/generate_link",
+      "covered_by": {
+        "write": "generate_reward_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/rewards/{id}/resend",
+      "covered_by": {
+        "write": "resend_reward"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "static list of role IDs available for the create_member/update-member role field; reference/lookup data for member administration, not primary reward/order/campaign object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/topups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "topup list; topups are out of scope for the reason above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/topups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "an alternate account-balance-funding mechanism (a recurring auto-reload configuration) distinct from the one-time invoice flow this pass already covers via create_invoice/delete_invoice; a follow-on decision, not core reward/order data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/topups/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single topup detail; topups are out of scope for the reason above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "returns the organization's single webhook (Tremendous supports exactly one per organization); the create_webhook/delete_webhook writes already round-trip this same object, and there is no meaningful multi-record list to stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/webhooks/{id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per Tremendous's own docs an organization can only ever have exactly ONE webhook; the plural list-webhooks endpoint already returns that same single webhook object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks/{id}/events",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static list of event-type names that can be sent to a webhook; reference/lookup data, not account object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/webhooks/{id}/simulate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers a synthetic test webhook delivery for the caller's own integration-testing purposes; a developer-testing utility action, not a reverse-ETL object mutation"
+      }
+    }
   ]
 }

@@ -29,6 +29,10 @@
       "type": "string",
       "description": "Optional 'limit' query param passed through verbatim on 'accounts'/'transactions' reads."
     },
+    "month": {
+      "type": "string",
+      "description": "YYYY-MM-01 month identifier (or the 'current' alias) required by the 'months' stream's per-month detail path; also accepted by scheduled-transaction reads' since_date-equivalent narrowing is not applicable here (months has no since_date param)."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

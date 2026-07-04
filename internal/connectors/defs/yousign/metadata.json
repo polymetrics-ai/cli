@@ -1,14 +1,14 @@
 {
   "name": "yousign",
   "display_name": "Yousign",
-  "description": "Reads Yousign signature requests, contacts, and documents through the Yousign REST API.",
+  "description": "Reads and writes Yousign signature requests, contacts, documents, webhooks, templates, users, and workflow sessions through the Yousign REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.yousign.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Yousign API read of signature request, contact, and document data",
-    "approval": "none; read-only"
+    "read": "external Yousign API read of signature request, contact, document, webhook, template, user, and workflow session data",
+    "write": "external mutation of e-signature-critical Yousign records: signature request creation/activation (may immediately notify signers by email) and cancellation (irreversible), contact create/update/delete, and webhook subscription create/delete",
+    "approval": "required for all write actions; cancel_signature_request, delete_contact, and delete_webhook require explicit destructive confirmation"
   }
 }

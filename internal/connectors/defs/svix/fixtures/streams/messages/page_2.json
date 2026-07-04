@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/app/app_fixture_1/msg", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "msg_fixture_1",
+          "eventId": null,
+          "eventType": "user.signup",
+          "payload": { "email": "fixture1@example.com" },
+          "channels": null,
+          "tags": null,
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "iterator": "",
+      "done": true
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoice_profiles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "payment_method_type": { "type": ["string", "null"] },
+    "billing_period": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "billing_information": { "type": ["object", "null"] }
+  }
+}

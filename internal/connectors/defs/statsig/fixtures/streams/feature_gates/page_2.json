@@ -1,10 +1,23 @@
 {
-  "request": { "method": "GET", "path": "/gates", "query": { "limit": "100", "offset": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/gates",
+    "query": {
+      "limit": "100",
+      "page": "2"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": [
-        { "id": "gate_fixture_3", "name": "Fixture Gate Three", "description": "fixture record", "status": "inactive", "isEnabled": false }
+        {
+          "id": "gate_fixture_3",
+          "name": "Fixture Gate Three",
+          "description": "fixture record",
+          "status": "inactive",
+          "isEnabled": false
+        }
       ]
     }
   }

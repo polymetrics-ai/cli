@@ -1,0 +1,16 @@
+{
+  "record": {
+    "fields": { "Title": "Fixture Item" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sites/fixture-site/lists/fixture-list/items",
+    "body": {
+      "fields": { "Title": "Fixture Item" }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "item_fixture_1", "fields": { "Title": "Fixture Item" } }
+  }
+}

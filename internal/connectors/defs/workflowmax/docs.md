@@ -1,71 +1,109 @@
 # Overview
 
-WorkflowMax is a wave2 fan-out declarative-HTTP migration. It reads jobs, clients, and contacts
-through the WorkflowMax API (`GET {{ config.base_url }}/...`). This bundle is migrated from
-`internal/connectors/workflowmax` (the hand-written connector it replaces); the legacy package
-stays registered and unchanged until wave6's registry flip. Read-only (`capabilities.write` is
-`false`, matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`).
+WorkflowMax reads and writes jobs, clients, and client contacts through the real WorkflowMax
+API v2 (`https://api.workflowmax2.com/v2/...`, documented at
+[api-docs.workflowmax.com](https://api-docs.workflowmax.com/)). This bundle was originally
+migrated from `internal/connectors/workflowmax` (the hand-written connector); this Pass B pass
+researched the real, currently-documented v2 API (WorkflowMax's own docs note the legacy XML v1
+API has been superseded by a JSON v2 API) and corrected the bundle's paths/auth/query surface to
+match it, while keeping the same 3 legacy-parity resource families (jobs, clients, contacts) and
+adding writes. `capabilities.write` is now `true`.
 
 ## Auth setup
 
-Provide a WorkflowMax API access token via the `access_token` secret; it is sent as a Bearer
-token on every request (`mode: bearer`), matching legacy's `connsdk.Bearer(token)`. `base_url`
-defaults to `https://api.workflowmax2.com` (legacy's `defaultBaseURL`) and may be overridden for
-test proxies.
+Provide a WorkflowMax API v2 OAuth2 access token via the `access_token` secret; it is sent as a
+Bearer token on every request (`mode: bearer`). WorkflowMax v2 additionally **requires** an
+`account-id` header on every request identifying the Xero/WorkflowMax organisation — provide it
+via the required `account_id` config property (`streams.json`'s `base.headers` sends
+`account-id: {{ config.account_id }}` on every read AND write request, matching Stripe's
+`Stripe-Account`-header golden pattern in `docs/migration/conventions.md` §3). `base_url` defaults
+to `https://api.workflowmax2.com` (matching legacy's own `defaultBaseURL`, which correctly names
+the real v2 host) and may be overridden for test proxies.
 
 ## Streams notes
 
-All 3 streams (`jobs`, `clients`, `contacts`) share the identical envelope (records at the
-top-level `data` array) and `page_number` pagination (`page`/`page_size` query params, matching
-legacy's `PageNumberPaginator{PageParam: "page", SizeParam: "page_size", StartPage: 1}`). The
-base pagination block's `page_size: 100` mirrors legacy's `defaultPageSize`; legacy bounds it to
-a max of 500 (`maxPageSize`) and `max_pages` defaults to 1 (legacy's `readMaxPages` default) when
-unset — a config-driven `page_size`/`max_pages` override is not modeled (see Known limits).
+`jobs` (`GET /v2/jobs`) and `clients` (`GET /v2/clients`) share the identical envelope (records at
+the top-level `data` array, matching legacy's `recordsPath: "data"`) and `page_number` pagination
+(`page`/`pageSize` query params — the real v2 parameter name is `pageSize`, not legacy's
+`page_size`). `page_size` config defaults to 100; `max_pages` defaults to 1 (matching legacy's own
+unset-`max_pages` default). Both streams declare an optional `updatedSince` query param
+(`{{ config.updated_since }}`, `omit_when_absent: true`) wired to the real v2 `updatedSince`
+date-range filter documented for both endpoints — this is a genuinely new, real server-side filter
+neither legacy nor the pre-Pass-B bundle modeled; it is deliberately NOT wired as an `incremental`
+block (no state-cursor-driven auto-advance), since legacy itself never issued any server-side
+filter and adding automatic cursor-driven filtering here would be new sync-mode behavior beyond
+Pass B's full-surface-coverage scope, not a parity port. Leaving `updated_since` unset (the
+default) reproduces legacy's exact always-full-read behavior.
+
 `jobs` ships a genuine two-page conformance fixture (`fixtures/streams/jobs/{page_1,page_2}.json`)
-at the real `page_size: 100`: page 1 carries a full 100 records (proving the paginator requests a
-second page only when a page is genuinely full, per `docs/migration/conventions.md` §4) and page 2
-carries a single, honestly short final record. `clients`/`contacts` share the identical base
-100-per-page default and ship a single fixture page (2 records, an honestly short final page under
-a 100 page-size, matching legacy's own default).
+at the real `pageSize: 100`: page 1 carries a full 100 records and page 2 carries a single,
+honestly short final record. `clients` ships a single fixture page (2 records, an honestly short
+final page under a 100 page size).
 
-`jobs` (`GET /jobs`) emits `id`/`name`/`updated_at`, matching legacy's field set exactly.
-`clients` (`GET /clients`) emits the identical shape. `contacts` (`GET /contacts`) additionally
-emits `email`. Primary key is `id` for every stream; `updated_at` is declared as the incremental
-cursor field for manifest-surface parity, matching legacy's `cursorFields`, though neither legacy
-nor this bundle actually issues a server-side incremental filter — legacy's `Read` performs a
-full stream read every time regardless of any prior cursor.
+`jobs` emits the real v2 field set: `uuid` (primary key), `jobNumber`, `name`, `clientUUID`,
+`clientContactUUID`, `description`, `clientOrderNumber`, `budget`, `jobStatusUUID`,
+`jobCategoryUUID`, `priority`, `startDate`, `dueDate`, `completedDate`. `clients` emits `uuid`
+(primary key), `name`, `exportCode`, `clientManagerUUID`, `jobManagerUUID`, `referralSource`,
+`prospect`, `archived`, `favorite`. Both streams declare `"projection": "passthrough"` (matching
+legacy's verbatim-emit behavior and the post-wave2 §8 rule 1) so every real v2 field survives, not
+just the ones enumerated in each schema. Neither stream declares `x-cursor-field`/`incremental`:
+the real v2 list responses do not surface a per-item `updatedAt` cursor field in the base (no
+`includes=`) response shape this bundle reads, so there is no schema property to name as a cursor —
+matching this bundle's decision to expose `updatedSince` as a plain optional config filter (above)
+rather than a stateful `incremental` block.
 
-All 3 streams declare `"projection": "passthrough"`. Legacy's `Read` emits the raw API record
-verbatim (`return emit(connectors.Record(rec))`, `workflowmax.go:109-111`, fed by
-`connsdk.Harvest`'s unfiltered `RecordsAt` decode) with no field-building/filtering —
-`streamEndpoints[stream].fields` is consumed only by `Catalog` (`workflowmax.go:69-79`), never by
-`Read`. Any real WorkflowMax field beyond each stream's narrow catalog schema survives to the
-emitted record exactly as legacy would emit it. Declaring the default `"schema"` projection mode
-here would silently narrow every emitted record to the catalog schema's properties — a silent,
-undocumented parity deviation from legacy's verbatim passthrough — so `passthrough` is required,
-matching `docs/migration/conventions.md`'s projection rule (§3) and the post-wave2 §8 rule 1:
-legacy's raw `emit(record)` with no `mapRecord` field-building is the mechanical signal to use
-`passthrough`.
+**`contacts` is no longer a stream.** The pre-Pass-B bundle declared a `GET /contacts` stream, but
+WorkflowMax v2 has **no bare list endpoint for client contacts at all** — verified against
+api-docs.workflowmax.com's full `client-contact` endpoint set, which is exactly `POST
+/v2/clients/contacts` (create), `GET /v2/clients/contacts/{uuid}` (get by id), `PUT
+/v2/clients/contacts/{uuid}` (update), and `DELETE /v2/clients/contacts/{uuid}` (delete) — never a
+collection GET. `legacy`'s `GET /contacts` path does not correspond to any endpoint in the real,
+currently-documented v2 API (nor the deprecated v1 XML API, which this bundle does not target).
+Client contacts are exposed through the `create_client_contact`/`update_client_contact`/
+`delete_client_contact` write actions instead; per-client contact data is also visible nested
+inside a `clients` stream record's real API response when the (not-yet-modeled) `includes=contacts`
+query is added in a future pass. See Known limits.
 
 ## Write actions & risks
 
-None. Legacy `workflowmax.go`'s `Write` returns `connectors.ErrUnsupportedOperation`
-unconditionally; `capabilities.write` is `false` and this bundle ships no `writes.json`.
+`capabilities.write` is now `true` (previously `false`). Eight actions, all requiring the same
+Bearer + `account-id` header pair as reads:
+
+- `create_client` (`POST /v2/clients`) / `update_client` (`PUT /v2/clients/{uuid}`) /
+  `delete_client` (`DELETE /v2/clients/{uuid}`) — creates, updates, or permanently deletes a
+  WorkflowMax client record.
+- `create_job` (`POST /v2/jobs`) / `delete_job` (`DELETE /v2/jobs/{identifier}`) — creates or
+  permanently deletes a WorkflowMax job. `update_job` (`PUT /v2/jobs/{identifier}`) is
+  **excluded** (see `api_surface.json`): its real request body accepts a large partial-update
+  surface (status/category/priority/staff-assignment/custom-field transitions) not modeled by this
+  pass.
+- `create_client_contact` (`POST /v2/clients/contacts`) / `update_client_contact` (`PUT
+  /v2/clients/contacts/{uuid}`) / `delete_client_contact` (`DELETE /v2/clients/contacts/{uuid}`).
+
+All eight risk-annotated as external mutations requiring approval (`delete_*` further flagged as
+permanent deletes). `delete_client`/`delete_job`/`delete_client_contact` use `body_type: "none"`
+(pure path-parameterized DELETE, no body); the rest use `body_type: "json"`.
 
 ## Known limits
 
-- **`page_size`/`max_pages` config-driven overrides are not modeled.** Legacy reads
-  `config["page_size"]` (bounded 1-500) and `config["max_pages"]` (default 1) at request time via
-  `boundedInt`/`readMaxPages`. The engine's `page_number` paginator reads `PaginationSpec.PageSize`
-  from the static `streams.json` `base.pagination` block only — there is no per-request
-  config-driven override mechanism for either value in the current dialect (matching the same gap
-  documented for other page-number-paginated wave2 bundles, e.g. `docs/migration/conventions.md`
-  §3's optional-query-dialect discussion). `page_size`/`max_pages` remain declared in `spec.json`
-  as documentation of legacy's accepted config surface, but neither is wired into any template in
-  this bundle.
-- **No incremental filter is modeled**, matching legacy: `updated_at` is declared as
-  `x-cursor-field` for manifest parity, but WorkflowMax's `/jobs`, `/clients`, and `/contacts`
-  endpoints (as legacy calls them) accept no time-range query parameter — both connectors always
-  perform a full stream read on every sync.
-- The full WorkflowMax API surface (job/client/contact mutation, invoicing, timesheets) is out of
-  scope for this wave; see `api_surface.json`'s `excluded` entries.
+- **Legacy's paths did not correspond to the real API.** Legacy's `GET /jobs`, `GET /clients`, and
+  `GET /contacts` (no `/v2` prefix, no `account-id` header) do not match any endpoint in
+  WorkflowMax's real, currently-documented v2 API — the real v2 surface requires `/v2/<resource>`
+  paths and a mandatory `account-id` header, and has no bare `GET /contacts` at all. This Pass B
+  pass corrects the bundle to the real, working v2 surface (documented above) rather than
+  preserving legacy's non-functional paths; this is a genuine bug-fix, not a parity-narrowing
+  deviation, since legacy's original paths would 404/401 against the real live API.
+- **`page_size`/`max_pages` config-driven per-request overrides are not modeled.** The engine's
+  `page_number` paginator reads `PaginationSpec.PageSize` from the static `streams.json`
+  `base.pagination` block only; `page_size`/`max_pages` remain declared in `spec.json` as
+  documentation of the accepted config surface.
+- **`updated_since` is a plain optional filter, not a stateful `incremental` block** — see Streams
+  notes above for the reasoning; a future pass could add a real `incremental` block once a stable
+  per-item cursor field is confirmed in the live response shape.
+- **Client contacts have no list/sync stream** (see Streams notes above) — only get-by-id (used
+  internally to validate updates) and the three write actions are covered; a bare contacts list
+  simply does not exist in the real API.
+- The remaining real WorkflowMax v2 surface (staff, billable tasks, costs, custom fields/rates,
+  leads, quotes, quote-variations, invoices, payments, purchase orders, suppliers/supplier-contacts,
+  timesheets, capacity-plan, and all binary document-upload endpoints) is out of scope for this
+  migration; see `api_surface.json`'s `excluded` entries for the full per-endpoint accounting.

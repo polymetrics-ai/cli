@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/core/employments" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "employment_fixture_1",
+            "comp_type": "salary",
+            "employment_type": "full_time",
+            "hire_date": "2026-01-01",
+            "annual_salary": "90000.0000",
+            "pay_rate": null,
+            "termination_date": null,
+            "termination_type": null,
+            "working_hours_per_week": null,
+            "is_active": true,
+            "person": { "object": "/meta/ref/detail", "ref_object": "/core/people", "url": "https://api.zenefits.com/core/people/person_fixture_1" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/core/employments"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

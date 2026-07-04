@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "userID": "user_fixture_1",
+          "email": "fixture1@example.com",
+          "firstName": "Fixture",
+          "lastName": "User",
+          "role": "admin"
+        }
+      ]
+    }
+  }
+}

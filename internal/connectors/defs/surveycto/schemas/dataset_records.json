@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "dataset_records",
+  "type": "object",
+  "x-primary-key": ["dataset_id", "recordId"],
+  "x-cursor-field": "modifiedAt",
+  "required": ["recordId", "dataset_id"],
+  "properties": {
+    "recordId": { "type": "string" },
+    "dataset_id": { "type": "string" },
+    "values": { "type": ["object", "null"] },
+    "modifiedAt": { "type": ["string", "null"] }
+  }
+}

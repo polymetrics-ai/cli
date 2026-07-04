@@ -1,13 +1,1254 @@
 {
-  "api": "Pennylane External API v2",
-  "docs": "https://pennylane.com/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; legacy exposes no write actions and this bundle adds none",
+  "api": "Pennylane External API v2 (https://app.pennylane.com/api/external/v2)",
+  "docs": "https://pennylane.readme.io/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against the real, current Pennylane API v2 reference (159 documented endpoints, retrieved via https://pennylane.readme.io/llms.txt and individual reference pages' embedded OpenAPI specs). 5 read streams + 8 write actions pre-existed from wave2; Pass B adds 3 read streams (supplier_invoices, transactions, bank_accounts), 1 write action (create_product), and stop_path:has_more to the shared cursor pagination (the docs describe has_more, not next_cursor absence alone, as the authoritative stop signal). Every remaining endpoint is excluded with a specific reason: duplicate_of covers single-resource-by-id GETs and per-parent sub-resource lists this bundle's existing/new list streams already return in full or has no id source to fan out over; requires_elevated_scope covers real capability gaps (compound multi-line-item writes, lifecycle/status-transition writes, reconciliation/matching writes, and entire resource domains \u00e2\u20ac\u201d ledger/journals under the documented 2026 scope migration, billing_subscriptions, quotes, purchase_requests, mandates \u00e2\u20ac\u201d not yet modeled) tracked for future increments, never silently faked; binary_payload covers every multipart file-upload endpoint (this dialect has no multipart body_type); non_data_endpoint covers async export jobs, computed reports, and the /me endpoint; out_of_scope covers pure notification/email-send side effects with no reverse-ETL analog; deprecated covers the one endpoint the docs themselves mark deprecated.",
   "endpoints": [
-    { "method": "GET", "path": "/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/customer_invoices", "covered_by": { "stream": "customer_invoices" } },
-    { "method": "GET", "path": "/suppliers", "covered_by": { "stream": "suppliers" } },
-    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
-    { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } }
+    {
+      "method": "POST",
+      "path": "/exports/agl",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "kicks off an async Analytical General Ledger export job (returns a job id polled by a separate GET); no declarative StreamHook-free way to poll an async job to completion and no natural stream/write shape for a fire-and-poll accounting export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exports/agl/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "retrieves a single async export job's status/result by id; no dynamic-id enumeration source (ids only come from the POST above, which this bundle does not call) and no meaningful stream shape for a one-off job poll"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/exports/fec",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "kicks off an async FEC export job (returns a job id polled by a separate GET); no declarative StreamHook-free way to poll an async job to completion and no natural stream/write shape for a fire-and-poll accounting export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exports/fec/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "retrieves a single async export job's status/result by id; no dynamic-id enumeration source (ids only come from the POST above, which this bundle does not call) and no meaningful stream shape for a one-off job poll"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/exports/gl",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "kicks off an async General Ledger export job (returns a job id polled by a separate GET); no declarative StreamHook-free way to poll an async job to completion and no natural stream/write shape for a fire-and-poll accounting export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exports/gl/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "retrieves a single async export job's status/result by id; no dynamic-id enumeration source (ids only come from the POST above, which this bundle does not call) and no meaningful stream shape for a one-off job poll"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fiscal_years",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "a small, rarely-changing per-company configuration list (fiscal year boundaries) rather than an operational data stream; genuinely low-value as a sync stream but not modeled today, tracked for a future increment rather than silently promoted to a stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/journals/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the journals list covers the same fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/journals",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "a ledger-scoped accounting configuration list undergoing a documented 2026 API behavior migration (old ledger scope vs new journals:readonly/all scopes); deferred until the migration's sunset phase completes rather than committing to a shape that changes under this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/journals",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new accounting journal (ledger structure), not a transactional data write; same ledger-scope migration caveat as List journals above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_accounts/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the ledger accounts list covers the same fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_accounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "chart-of-accounts configuration list under the same documented 2026 ledger-scope migration as journals above; deferred until the migration completes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ledger_accounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a chart-of-accounts ledger account, an accounting configuration write rather than a transactional data write; deferred alongside the ledger-scope migration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ledger_accounts/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a chart-of-accounts ledger account; same accounting-configuration deferral as create above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ledger_attachments",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "docs mark this endpoint DEPRECATED in favor of the File Attachments Upload endpoint (postfileattachments); not modeled per the deprecated-endpoint convention"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_entries/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the ledger entries list covers the same fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_entries",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw double-entry bookkeeping journal-entry list undergoing the same documented 2026 ledger-scope migration as journals/ledger_accounts above; deferred until the migration completes rather than committing to a pre-migration shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_entries/{id}/ledger_entry_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no dynamic ledger-entry-id enumeration source given ledger_entries itself is deferred above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ledger_entries",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a raw double-entry bookkeeping journal entry; deferred alongside the ledger-scope migration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ledger_entries",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a raw ledger entry; same deferral"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ledger_entry_lines/unletter",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "un-letters (unreconciles) ledger entry lines; an accounting-reconciliation write deferred alongside the ledger-scope migration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_entry_lines/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; deferred alongside ledger_entries above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_entry_lines",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "raw ledger-entry-line list; deferred alongside the ledger-scope migration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_entry_lines/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; deferred alongside ledger_entry_lines above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ledger_entry_lines/{id}/lettered_ledger_entry_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; deferred alongside ledger_entry_lines above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ledger_entry_lines/letter",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reconciles (letters) ledger entry lines together; deferred alongside the ledger-scope migration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ledger_entry_lines/{id}/categories",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "replaces analytical categories on a ledger entry line; deferred alongside the ledger-scope migration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trial_balance",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns a computed accounting report (trial balance for a period), not individual records with a stable primary key across syncs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the categories list stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/category_groups/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource view of records the categories stream already returns in full (every category carries its own category_group_id)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/categories",
+      "covered_by": {
+        "write": "create_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/categories/{id}",
+      "covered_by": {
+        "write": "update_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/category_groups/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "per-id fetch of a small, rarely-changing grouping-configuration resource with no bundle-level id source to enumerate; tracked for a future fan_out increment alongside List category groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/category_groups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "a small, rarely-changing grouping-configuration list (category groups organize categories) rather than an operational data stream; not modeled today, tracked for a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_subscriptions/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the billing subscriptions list would cover the same fields if modeled"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_subscriptions/{id}/invoice_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no bundle-level billing-subscription-id source to fan out over"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_subscriptions/{id}/invoice_line_sections",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as invoice_lines above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_subscriptions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Pennylane's own recurring-billing-subscription feature (customers billed by Pennylane itself), a distinct resource from the customer_invoices/quotes this bundle already reads; not modeled today, tracked for a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_subscriptions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a Pennylane billing subscription that starts generating recurring customer invoices automatically; a real capability gap tracked for a future increment given the List endpoint above is not yet modeled either"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/billing_subscriptions/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a Pennylane billing subscription; same deferral as create above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/customers",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the customers stream already reads in full via ordinary polling; the customers stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/customer_invoices",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the customer_invoices stream already reads in full via ordinary polling; the customer_invoices stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/ledger_entry_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the ledger_entry_lines stream already reads in full via ordinary polling; the ledger_entry_lines stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/products",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the products stream already reads in full via ordinary polling; the products stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/quotes",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the quotes stream already reads in full via ordinary polling; the quotes stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/suppliers",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the suppliers stream already reads in full via ordinary polling; the suppliers stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/supplier_invoices",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the supplier_invoices stream already reads in full via ordinary polling; the supplier_invoices stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changelogs/transactions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a change-feed (create/update/delete diff events, retained only 4 weeks) over records the transactions stream already reads in full via ordinary polling; the transactions stream is the source of truth this bundle syncs, not the ephemeral changelog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/commercial_documents/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id over a unified view that already overlaps customer_invoices/quotes this bundle reads via their own dedicated streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/commercial_documents/{id}/appendices",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no bundle-level commercial-document-id source to fan out over"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/commercial_documents/{id}/invoice_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/commercial_documents/{id}/invoice_line_sections",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/commercial_documents",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a unified read-only view spanning customer invoices, credit notes, and quotes this bundle already reads via its own dedicated customer_invoices stream (and quotes, if added) \u2014 modeling it as a second stream would duplicate the same underlying records under a different envelope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/commercial_documents/{id}/appendices",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart file upload (an appendix attachment); this dialect's declarative body_type is json/form/none, no multipart support"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoice_templates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "a small, rarely-changing invoice-template configuration list rather than an operational data stream; not modeled today"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_invoices/e_invoice_imports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports a customer invoice from an uploaded e-invoice file (Factur-X PDF / UBL / CII XML); requires a binary file body, no multipart support in this dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotes/{id}/customer_invoices",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a customer invoice from an existing quote; requires the quotes resource (not modeled \u2014 see quotes below) as its id source"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customer_invoices/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "deletes a single draft invoice by id; no dynamic-id enumeration source distinct from the customer_invoices stream's own ids, and a delete-by-id write action needs a real record with that id supplied by the caller rather than an enumerable id list \u2014 tracked as a future write-action increment, not a stream gap"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_invoices/{id}/finalize",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "converts a draft invoice/credit note to finalized (irreversible, no further edits); a lifecycle-transition write distinct from ordinary field updates, tracked for a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the customer_invoices stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}/appendices",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no bundle-level customer-invoice-id source to fan out over economically"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}/custom_header_fields",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}/invoice_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}/invoice_line_sections",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}/matched_transactions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices/{id}/payments",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as appendices above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_invoices",
+      "covered_by": {
+        "stream": "customer_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_invoices/imports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports an invoice with an attached file; requires a binary file body, no multipart support in this dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_invoices/{id}/link_credit_note",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "links an existing credit note to a customer invoice; a relationship-linking write distinct from ordinary field updates, tracked for a future increment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_invoices/{id}/mark_as_paid",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "marks an invoice paid without automatic bank reconciliation; a lifecycle/status-transition write distinct from ordinary field updates, tracked for a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_invoices",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a draft or finalized customer invoice/credit note with nested invoice-line items; a materially more complex compound write (line items, tax computation, category links) than this bundle's existing single-object create/update actions, tracked for a future increment rather than a partial/lossy model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_invoices/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-invoice analytical-category assignment; deferred alongside the customer invoice create/update actions above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_invoices/{id}/send_by_email",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers Pennylane's own transactional email delivery of an invoice PDF to the customer; a notification side-effect, not a data mutation with a reverse-ETL analog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_invoices/{id}/send_to_pa",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "submits a customer e-invoice to the French Plateforme Agr\u00e9\u00e9e (PA) e-invoicing network; a regulatory-submission action with its own irreversible state machine, tracked for a future increment rather than modeled as an ordinary write"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_invoices/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a customer invoice's nested line items/categories; deferred alongside the create action above given the same compound-write complexity"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_invoices/{id}/imported",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates an imported (non-draft) customer invoice; same compound-write deferral as ordinary update above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company_customers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the customers stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the customers stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no bundle-level customer-id source to fan out over economically"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/contacts",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as categories above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/individual_customers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the customers stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/company_customers",
+      "covered_by": {
+        "write": "create_company_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/individual_customers",
+      "covered_by": {
+        "write": "create_individual_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/company_customers/{id}",
+      "covered_by": {
+        "write": "update_company_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-customer analytical-category assignment write; deferred alongside the customer_invoices categorize action given the same nested-relationship shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/individual_customers/{id}",
+      "covered_by": {
+        "write": "update_individual_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the products stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "covered_by": {
+        "write": "create_product"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{id}",
+      "covered_by": {
+        "write": "update_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/file_attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart file upload (max 100MB) producing an attachment id consumed by other import/appendix endpoints; this dialect's declarative body_type is json/form/none, no multipart support"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sepa_mandates/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a customer's SEPA direct-debit mandate; a payment-instrument write with no bundle-level mandate-id source to target, tracked for a future increment alongside the mandate list/create actions below"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gocardless_mandates/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; deferred alongside List gocardless mandates below"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gocardless_mandates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "GoCardless direct-debit payment-mandate list; a distinct payment-instrument domain from the invoicing/ledger data this bundle otherwise reads, not modeled today"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pro_account_mandate_migrations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists mandates eligible for Pro Account migration, a narrow one-time-migration-tooling endpoint gated on Pro Account + merchant profile features most companies do not have enabled"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pro_account_mandate_mail_requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a customer-facing email requesting a Pro Account SEPA mandate signature; a notification side-effect, not a data mutation with a reverse-ETL analog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sepa_mandates/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; deferred alongside List SEPA mandates below"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sepa_mandates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SEPA direct-debit payment-mandate list; same payment-instrument-domain deferral as GoCardless mandates above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gocardless_mandate_associations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "associates an existing GoCardless mandate with a customer; payment-instrument write deferred alongside the mandate list/create actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gocardless_mandate_cancellations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cancels a GoCardless mandate; same payment-instrument-domain deferral"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gocardless_mandate_mail_requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a customer-facing email requesting a GoCardless mandate signature; a notification side-effect, not a data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pro_account_mandate_migrations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "migrates a mandate to Pro Account; narrow one-time-migration-tooling action gated on Pro Account features, same deferral as the migration-candidates list above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sepa_mandates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a SEPA direct-debit mandate; payment-instrument write deferred alongside the mandate list actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pro_account_mandates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists Pro Account payment mandates; gated on Pro Account + merchant profile features, same deferral as the migration-candidates list above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sepa_mandates/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a SEPA mandate; payment-instrument write deferred alongside the mandate list/create actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pa_registrations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists the company's French e-invoicing Plateforme Agr\u00e9\u00e9e (PA) registration status per SIRET/SIREN; narrow regulatory-onboarding-status metadata rather than operational billing data, not modeled today"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quotes/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; deferred alongside List quotes below"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quotes/{id}/appendices",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; deferred alongside quotes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quotes/{id}/invoice_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; deferred alongside quotes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quotes/{id}/invoice_line_sections",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; deferred alongside quotes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quotes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "quotes/estimates are a pre-invoicing sales-pipeline resource distinct from the accounting data (customers, invoices, suppliers, products, categories) this bundle otherwise reads; not modeled today, tracked for a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotes/{id}/appendices",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart file upload (a quote appendix); no multipart support in this dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a quote with nested line items; deferred alongside the quotes list given quotes are not modeled as a stream/resource in this bundle yet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotes/{id}/send_by_email",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers transactional email delivery of a quote PDF to the customer; a notification side-effect, not a data mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/quotes/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a quote's nested line items; deferred alongside quotes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/quotes/{id}/status",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "transitions a quote's status (e.g. accepted/declined); a lifecycle-transition write deferred alongside quotes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchase_requests/imports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports a purchase order file and auto-validates the resulting purchase request; requires a binary file body, no multipart support"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchase_requests/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; deferred alongside List purchase requests below"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchase_requests",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "pre-purchase approval-workflow resource distinct from the accounting data this bundle otherwise reads; not modeled today, tracked for a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/supplier_invoices/e_invoice_imports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports a supplier invoice from an uploaded e-invoice file; requires a binary file body, no multipart support"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplier_invoices/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the supplier_invoices stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplier_invoices/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no bundle-level supplier-invoice-id source to fan out over economically"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplier_invoices/{id}/invoice_lines",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as categories above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplier_invoices/{id}/matched_transactions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as categories above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplier_invoices/{id}/payments",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as categories above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/supplier_invoices",
+      "covered_by": {
+        "stream": "supplier_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/supplier_invoices/imports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "imports a supplier invoice with an attached file; requires a binary file body, no multipart support"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/supplier_invoices/{id}/linked_purchase_requests",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "links a purchase request to a supplier invoice; relationship-linking write deferred alongside purchase_requests (not modeled)"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/supplier_invoices/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a supplier invoice's nested line items/categories; same compound-write complexity deferral as customer invoice update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/supplier_invoices/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-invoice analytical-category assignment; deferred alongside the supplier invoice update action above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/supplier_invoices/{id}/e_invoice_status",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "applies an e-invoicing lifecycle transition (dispute/refuse/undispute); a regulatory-workflow transition, tracked for a future increment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/supplier_invoices/{id}/payment_status",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a supplier invoice's payment status; a lifecycle-transition write distinct from ordinary field updates, tracked for a future increment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/supplier_invoices/{id}/validate_accounting",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "transitions a supplier invoice into the Complete accounting state; a lifecycle-transition write, tracked for a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the suppliers stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no bundle-level supplier-id source to fan out over economically"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers",
+      "covered_by": {
+        "stream": "suppliers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/suppliers",
+      "covered_by": {
+        "write": "create_supplier"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/suppliers/{id}",
+      "covered_by": {
+        "write": "update_supplier"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/suppliers/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-supplier analytical-category assignment write; deferred alongside the customer/invoice categorize actions given the same nested-relationship shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank_accounts/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the bank_accounts stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank_accounts",
+      "covered_by": {
+        "stream": "bank_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank_establishments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "a static reference list of supported banking establishments (for connecting a new bank account), not transactional company data; not modeled today"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bank_accounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates/registers a new bank account for the company; a structural account-provisioning write distinct from the transactional customer/supplier/product writes this bundle already exposes, tracked for a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a manual banking transaction; a distinct financial-record write from the customer/supplier/product mutations this bundle exposes today, tracked for a future increment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customer_invoices/{id}/matched_transactions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "unmatches a transaction from a customer invoice; a relationship-unlinking write with no bundle-level match-id source to target, deferred alongside the matched-transaction linking actions below"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/supplier_invoices/{id}/matched_transactions",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "unmatches a transaction from a supplier invoice; same relationship-unlinking deferral as the customer-invoice variant above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource fetch by id; no dynamic-id enumeration source and the transactions stream already returns every field this endpoint does"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list with no bundle-level transaction-id source to fan out over economically"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{id}/matched_invoices",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent sub-resource list; same gap as categories above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_invoices/{id}/matched_transactions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "matches a transaction to a customer invoice (reconciliation write); relationship-linking write with a compound two-resource shape, tracked for a future increment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/supplier_invoices/{id}/matched_transactions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "matches a transaction to a supplier invoice; same reconciliation-write deferral as the customer-invoice variant above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/transactions/{id}/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-transaction analytical-category assignment write; deferred alongside the customer/supplier/customer-invoice categorize actions given the same nested-relationship shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/transactions/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a bank transaction's fields; a distinct financial-record write from the customer/supplier/product mutations this bundle exposes today, tracked for a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns metadata about the authenticated company/user/token itself, not a syncable business-data collection with a stable per-record identity across companies"
+      }
+    }
   ]
 }

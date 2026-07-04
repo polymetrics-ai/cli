@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "labels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "full_name": { "type": ["string", "null"] },
+    "level": { "type": ["integer", "null"] },
+    "can_recommend": { "type": ["boolean", "null"] },
+    "open_suggestions_count": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

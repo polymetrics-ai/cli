@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Product",
+    "price": 1500
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products"
+  }
+}

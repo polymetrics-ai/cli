@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time_entries.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "time-entries": [
+        { "id": "1", "person-id": "1", "project-id": "1", "todo-item-id": "1", "description": "Fixture time entry", "hours": "2", "minutes": "30", "date": "20260102", "isbillable": "1", "created-at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

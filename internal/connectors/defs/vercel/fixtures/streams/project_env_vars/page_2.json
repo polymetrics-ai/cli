@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v10/projects/prj_fixture_1/env"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "envs": [
+        {
+          "id": "env_fixture_1",
+          "key": "API_URL",
+          "type": "plain",
+          "target": [
+            "production"
+          ],
+          "createdAt": 1767225600000,
+          "updatedAt": 1767225600000
+        }
+      ]
+    }
+  }
+}

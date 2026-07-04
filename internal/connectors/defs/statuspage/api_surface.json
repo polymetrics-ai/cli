@@ -1,15 +1,894 @@
 {
   "api": "Statuspage API v1 (https://api.statuspage.io/v1)",
-  "docs": "https://developer.statuspage.io/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (pages, components, incidents, subscribers); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "docs": "https://developer.statuspage.io/ (Redoc-rendered OpenAPI 3.0.0 spec embedded in the page as __redoc_state.spec.data)",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion: full documented Statuspage API v1 surface (112 method+path endpoints across pages, components, incidents, subscribers, component groups, metrics, metrics providers, page access groups/users, incident templates, organizations) reviewed against the real embedded OpenAPI 3.0.0 spec; 10 GET list resources implemented as streams; ALL mutation endpoints are BLOCKED (ENGINE_GAP, see docs.md) because the API requires a Rails-style nested params envelope (e.g. POST /incidents expects {\"incident\": {...}}) that the current declarative write dialect cannot express without a new hook package, which this pass is not authorized to create -- capabilities.write remains false",
   "endpoints": [
-    { "method": "GET", "path": "/v1/pages", "covered_by": { "stream": "pages" } },
-    { "method": "GET", "path": "/v1/pages/{page_id}/components", "covered_by": { "stream": "components" } },
-    { "method": "GET", "path": "/v1/pages/{page_id}/incidents", "covered_by": { "stream": "incidents" } },
-    { "method": "GET", "path": "/v1/pages/{page_id}/subscribers", "covered_by": { "stream": "subscribers" } },
-    { "method": "POST", "path": "/v1/pages/{page_id}/incidents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/pages/{page_id}/metrics", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/pages/{page_id}/users", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/permissions/{user_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level user/permission listing requires an organization-admin-scoped API key, a different credential class/scope than the page-scoped Console API key this bundle's spec.json documents"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}/permissions/{user_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level user/permission management requires an organization-admin-scoped API key (a different credential class/scope than the page-scoped Console API key this bundle's spec.json documents), and is additionally subject to the same params-envelope gap as ordinary CRUD"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level user/permission listing requires an organization-admin-scoped API key, a different credential class/scope than the page-scoped Console API key this bundle's spec.json documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level user/permission management requires an organization-admin-scoped API key (a different credential class/scope than the page-scoped Console API key this bundle's spec.json documents), and is additionally subject to the same params-envelope gap as ordinary CRUD"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organization_id}/users/{user_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level user/permission management requires an organization-admin-scoped API key (a different credential class/scope than the page-scoped Console API key this bundle's spec.json documents), and is additionally subject to the same params-envelope gap as ordinary CRUD"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages",
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-page GET returning the same fields the /pages list stream already reads for every page on the account; a convenience single-record fetch, not distinct catalog data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/component-groups",
+      "covered_by": {
+        "stream": "component_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/component-groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/component-groups/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the component_groups list stream already reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/component-groups/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/component-groups/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/component-groups/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/component-groups/{id}/uptime",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "computed uptime-percentage analytics for a date range, not catalog/config data -- an analytical read model layered on top of the components/component_groups streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/components",
+      "covered_by": {
+        "stream": "components"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/components/{component_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the components list stream already reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/components/{component_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/components/{component_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/components/{component_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/components/{component_id}/page_access_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/components/{component_id}/page_access_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/components/{component_id}/page_access_users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/components/{component_id}/page_access_users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/components/{component_id}/uptime",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "computed uptime-percentage analytics for a date range, not catalog/config data -- an analytical read model layered on top of the components/component_groups streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incident_templates",
+      "covered_by": {
+        "stream": "incident_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/incident_templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents",
+      "covered_by": {
+        "stream": "incidents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/incidents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/active_maintenance",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "server-side status filter over the same /incidents list stream already reads in full (client-side filtering on the already-covered incidents stream's status/scheduled_for fields produces the identical subset without a second stream declaration)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/scheduled",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "server-side status filter over the same /incidents list stream already reads in full (client-side filtering on the already-covered incidents stream's status/scheduled_for fields produces the identical subset without a second stream declaration)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/unresolved",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "server-side status filter over the same /incidents list stream already reads in full (client-side filtering on the already-covered incidents stream's status/scheduled_for fields produces the identical subset without a second stream declaration)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/upcoming",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "server-side status filter over the same /incidents list stream already reads in full (client-side filtering on the already-covered incidents stream's status/scheduled_for fields produces the identical subset without a second stream declaration)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/{incident_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the incidents list stream already reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/incidents/{incident_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/incidents/{incident_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/incidents/{incident_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/incidents/{incident_id}/incident_updates/{incident_update_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/incidents/{incident_id}/incident_updates/{incident_update_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/{incident_id}/postmortem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "incident postmortem document content, a specialized nested sub-resource of a single incident; the incidents stream already carries postmortem_body/postmortem_published_at summary fields, full postmortem CRUD is out of scope this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/incidents/{incident_id}/postmortem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/incidents/{incident_id}/postmortem",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/incidents/{incident_id}/postmortem/publish",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "postmortem publish/revert is a notify-subscribers-and-publish-publicly workflow action (publish emails/tweets subscribers per the incident's notification settings), not a plain record update; also subject to the same params-envelope gap as ordinary CRUD"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/incidents/{incident_id}/postmortem/revert",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "postmortem publish/revert is a notify-subscribers-and-publish-publicly workflow action (publish emails/tweets subscribers per the incident's notification settings), not a plain record update; also subject to the same params-envelope gap as ordinary CRUD"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/{incident_id}/subscribers",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists a single incident's subscriber subset, reachable by cross-referencing the subscribers stream's components/incident association fields; not distinct catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/incidents/{incident_id}/subscribers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET duplicating the incidents/{incident_id}/subscribers list above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id}/resend_confirmation",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "subscriber-communication side-effect action (re-sends/toggles a real email or SMS notification to an end subscriber) layered on top of the same Rails params-envelope gap (see ENGINE_GAP note on plain CRUD writes) -- even once the envelope gap is closed, this remains a notification-triggering action requiring human approval beyond plain record CRUD"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/metrics",
+      "covered_by": {
+        "stream": "metrics"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/metrics/data",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "bulk metric-datapoint ingestion endpoint accepting a timeseries array payload (timestamp+value pairs), not a single catalog record the declarative write dialect's per-record body model expresses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/metrics/{metric_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the metrics list stream already reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/metrics/{metric_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/metrics/{metric_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/metrics/{metric_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/metrics/{metric_id}/data",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "bulk metric-datapoint ingestion endpoint accepting a timeseries array payload (timestamp+value pairs), not a single catalog record the declarative write dialect's per-record body model expresses"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/metrics/{metric_id}/data",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "bulk metric-datapoint ingestion endpoint accepting a timeseries array payload (timestamp+value pairs), not a single catalog record the declarative write dialect's per-record body model expresses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/metrics_providers",
+      "covered_by": {
+        "stream": "metrics_providers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/metrics_providers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the metrics_providers list stream already reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists metrics already reachable via the /metrics list stream filtered by metrics_provider_id; a cross-reference convenience endpoint, not distinct catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/page_access_groups",
+      "covered_by": {
+        "stream": "page_access_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/page_access_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the page_access_groups list stream already reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists a single access group's component bindings, a subset of the component_ids field the page_access_groups stream already reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components/{component_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/page_access_users",
+      "covered_by": {
+        "stream": "page_access_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/page_access_users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the page_access_users list stream already reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists a single access user's component/metric bindings, a cross-reference sub-view of data already reachable from the page_access_users/components/metrics streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components/{component_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists a single access user's component/metric bindings, a cross-reference sub-view of data already reachable from the page_access_users/components/metrics streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics/{metric_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/status_embed_config",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "page-embed-widget display configuration (colors/fonts for an embeddable status badge), not catalog/config data this connector's streams model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pages/{page_id}/status_embed_config",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/status_embed_config",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/subscribers",
+      "covered_by": {
+        "stream": "subscribers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/subscribers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/subscribers/count",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscriber-count/histogram aggregate analytics or an already-covered status-filtered subset of the subscribers stream, not distinct catalog data requiring its own stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/subscribers/histogram_by_state",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscriber-count/histogram aggregate analytics or an already-covered status-filtered subset of the subscribers stream, not distinct catalog data requiring its own stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/subscribers/reactivate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "subscriber-communication side-effect action (re-sends/toggles a real email or SMS notification to an end subscriber) layered on top of the same Rails params-envelope gap (see ENGINE_GAP note on plain CRUD writes) -- even once the envelope gap is closed, this remains a notification-triggering action requiring human approval beyond plain record CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/subscribers/resend_confirmation",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "subscriber-communication side-effect action (re-sends/toggles a real email or SMS notification to an end subscriber) layered on top of the same Rails params-envelope gap (see ENGINE_GAP note on plain CRUD writes) -- even once the envelope gap is closed, this remains a notification-triggering action requiring human approval beyond plain record CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/subscribers/unsubscribe",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "subscriber-communication side-effect action (re-sends/toggles a real email or SMS notification to an end subscriber) layered on top of the same Rails params-envelope gap (see ENGINE_GAP note on plain CRUD writes) -- even once the envelope gap is closed, this remains a notification-triggering action requiring human approval beyond plain record CRUD"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/subscribers/unsubscribed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscriber-count/histogram aggregate analytics or an already-covered status-filtered subset of the subscribers stream, not distinct catalog data requiring its own stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/subscribers/{subscriber_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the subscribers list stream already reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/subscribers/{subscriber_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pages/{page_id}/subscribers/{subscriber_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP (blocker filed, see docs.md Known limits): Statuspage mutation endpoints require a Rails-style nested top-level params envelope (e.g. POST /incidents expects {\"incident\": {...}}, not the record's fields flat) that the declarative write dialect cannot express: write.go's buildJSONBody/buildForm always send either every non-path-field record key flat, or an explicit body_fields allow-list flat -- there is no mechanism to additionally nest the resulting object under a fixed literal top-level key. Implementing this correctly needs either a new `body_envelope`/`wrap_key` writes.json field (Tier-1 dialect extension) or a WriteHook (Tier-2) with a single wrap-and-forward line; per this pass's constraints no new hook package may be created for statuspage, so every mutation on this API is blocked pending an engine dialect extension or an orchestrator-approved hook addition. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/subscribers/{subscriber_id}/resend_confirmation",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "subscriber-communication side-effect action (re-sends/toggles a real email or SMS notification to an end subscriber) layered on top of the same Rails params-envelope gap (see ENGINE_GAP note on plain CRUD writes) -- even once the envelope gap is closed, this remains a notification-triggering action requiring human approval beyond plain record CRUD"
+      }
+    }
   ]
 }

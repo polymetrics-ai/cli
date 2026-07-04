@@ -1,0 +1,30 @@
+{
+  "record": {
+    "endpoint": "https://example.com/webhooks/smartwaiver",
+    "emailValidationRequired": "both",
+    "create": false,
+    "webhookNumber": 1
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v4/webhooks/configure",
+    "body": {
+      "endpoint": "https://example.com/webhooks/smartwaiver",
+      "emailValidationRequired": "both",
+      "create": false,
+      "webhookNumber": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "version": 4,
+      "id": "fixture-req-id-webhook-0001",
+      "ts": "2026-01-01T00:00:00Z",
+      "type": "webhooks",
+      "webhooks": [
+        { "endpoint": "https://example.com/webhooks/smartwaiver", "emailValidationRequired": "both" }
+      ]
+    }
+  }
+}

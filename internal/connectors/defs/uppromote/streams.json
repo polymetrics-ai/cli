@@ -20,6 +20,71 @@
       },
       "records": { "path": "affiliates" },
       "schema": "schemas/affiliates.json"
+    },
+    {
+      "name": "programs",
+      "path": "api/v2/programs",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 10
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/programs.json"
+    },
+    {
+      "name": "coupons",
+      "path": "api/v2/coupons",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 10
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/coupons.json"
+    },
+    {
+      "name": "referrals",
+      "path": "api/v2/referrals",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 10
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/referrals.json"
+    },
+    {
+      "name": "unpaid_payments",
+      "path": "api/v2/payments/unpaid",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 10
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/unpaid_payments.json"
+    },
+    {
+      "name": "paid_payments",
+      "path": "api/v2/payments/paid",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 10
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/paid_payments.json"
     }
   ]
 }

@@ -1,15 +1,107 @@
 {
-  "api": "Ticket Tailor REST API v1",
+  "api": "Ticket Tailor REST API v1 (https://app.tickettailor-stitching.com/openapi.yml, linked from https://developers.tickettailor.com/)",
   "docs": "https://developers.tickettailor.com/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (events, orders, issued_tickets); Ticket Tailor's write/mutation endpoints and other resources (venues, ticket_types, discount_codes, box_office) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "scope": "Pass B full-surface expansion against the published OpenAPI spec (fetched 2026-07-03 via the Docusaurus site's own openapi-docs plugin config, api.specPath = https://app.tickettailor-stitching.com/openapi.yml). IMPORTANT DISCOVERY: the real API's actual pagination convention for every list endpoint -- including the 3 original legacy-parity streams (events/orders/issued_tickets) -- is cursor-based (starting_after/ending_before/limit query params, a data[]/links{next,previous} envelope), NOT the page/limit page-number convention the legacy connector and the wave2 bundle both used; page/limit is not a documented parameter on any Ticket Tailor list endpoint and would silently never advance past page 1 against the live API (the real cursor param, starting_after, was simply never sent). This was a genuine functional defect (never a deliberately documented parity decision, see docs.md), not a Pass B scope choice, so it is FIXED in this pass: all list streams (original 3 plus every new one) now declare pagination.type=next_url reading links.next (a same-host RELATIVE path+query string per Ticket Tailor's own documented example, e.g. '/v1/events?starting_after=ev_123' -- allow_cross_host:true is required purely because the value has no scheme+host at all, not because it targets a different host; see docs.md). 17 read streams total (3 original plus 14 new: event_series, holds, discounts, membership_types, issued_memberships, products, stores, vouchers, checkout_forms, voucher_codes, checkout_form_elements, event_series_overrides, event_series_waitlist_signups, overview) and 25 write actions covering event-series/hold/discount/membership/voucher/product lifecycle, ticket issuance/voiding/check-in, and order payment confirmation. Excluded: single-object detail endpoints duplicating an already-covered list stream, ticket-type/ticket-group/bundle/override sub-resource mutations under event_series (breadth-vs-cost triage, matching bitly's precedent for narrower nested-configuration sub-resources), checkout-form-element updates, store updates, membership photo-share lookup, ping/overview non-list utility endpoints (overview IS covered as a single-object stream; ping is excluded), and 2 writes with a bare-JSON-nested-object-in-a-form-body ambiguity this dialect cannot verify (create_hold/update_hold's ticket_type_id field).",
   "endpoints": [
     { "method": "GET", "path": "/v1/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/v1/events/{event_id}", "excluded": { "category": "duplicate_of", "reason": "single-event detail; identical record shape to the events list stream's per-item object, already covered by that stream" } },
+
     { "method": "GET", "path": "/v1/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/v1/orders/{order_id}", "excluded": { "category": "duplicate_of", "reason": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/orders/{order_id}", "covered_by": { "write": "update_order" } },
+    { "method": "POST", "path": "/v1/orders/{order_id}/confirm-payment-received", "covered_by": { "write": "confirm_order_payment_received" } },
+
     { "method": "GET", "path": "/v1/issued_tickets", "covered_by": { "stream": "issued_tickets" } },
-    { "method": "GET", "path": "/v1/venues", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/ticket_types", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/discount_codes", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1/box_office/checkin", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } }
+    { "method": "POST", "path": "/v1/issued_tickets", "covered_by": { "write": "create_issued_ticket" } },
+    { "method": "GET", "path": "/v1/issued_tickets/{issued_ticket_id}", "excluded": { "category": "duplicate_of", "reason": "single-issued-ticket detail; identical record shape to the issued_tickets list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/issued_tickets/{issued_ticket_id}/void", "covered_by": { "write": "void_issued_ticket" } },
+
+    { "method": "POST", "path": "/v1/check_ins", "covered_by": { "write": "create_check_in" } },
+    { "method": "GET", "path": "/v1/check_ins", "excluded": { "category": "out_of_scope", "reason": "a raw check-in event log rather than a stable entity list (each check-in is a point-in-time action against an issued ticket already fully represented by the issued_tickets stream's own checked_in field); Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v1/event_series", "covered_by": { "stream": "event_series" } },
+    { "method": "POST", "path": "/v1/event_series", "covered_by": { "write": "create_event_series" } },
+    { "method": "GET", "path": "/v1/event_series/{event_series_id}", "excluded": { "category": "duplicate_of", "reason": "single-event-series detail; identical record shape to the event_series list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}", "covered_by": { "write": "update_event_series" } },
+    { "method": "DELETE", "path": "/v1/event_series/{event_series_id}", "covered_by": { "write": "delete_event_series" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/status", "covered_by": { "write": "change_event_series_status" } },
+
+    { "method": "GET", "path": "/v1/event_series/{event_series_id}/events", "excluded": { "category": "out_of_scope", "reason": "event occurrences of a series are already reachable through the top-level events stream (each occurrence carries its own id/dates); adding a second, series-scoped fan_out view of the identical record shape would be a duplicate of intent, not a distinct resource" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/events", "excluded": { "category": "out_of_scope", "reason": "creates a new occurrence within an event series; narrower event-scheduling sub-resource mutation, Pass B breadth-vs-cost triage (event_series' own create/update/status writes cover the primary lifecycle)" } },
+    { "method": "GET", "path": "/v1/event_series/{event_series_id}/events/{event_occurrence_id}", "excluded": { "category": "duplicate_of", "reason": "single-occurrence detail; same record shape as the top-level events stream's per-item object" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/events/{event_occurrence_id}", "excluded": { "category": "out_of_scope", "reason": "updates a single event occurrence's schedule; narrower sub-resource mutation, Pass B breadth-vs-cost triage" } },
+    { "method": "DELETE", "path": "/v1/event_series/{event_series_id}/events/{event_occurrence_id}", "excluded": { "category": "out_of_scope", "reason": "deletes a single event occurrence; narrower sub-resource mutation, Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v1/event_series/{event_series_id}/overrides", "covered_by": { "stream": "event_series_overrides" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/overrides", "excluded": { "category": "out_of_scope", "reason": "creates a schedule override for an event series; narrower sub-resource configuration mutation, Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/overrides/{override_id}", "excluded": { "category": "out_of_scope", "reason": "updates a schedule override; same narrow sub-resource mutation reasoning as the override create above" } },
+
+    { "method": "GET", "path": "/v1/event_series/{event_series_id}/waitlist_signups", "covered_by": { "stream": "event_series_waitlist_signups" } },
+    { "method": "DELETE", "path": "/v1/event_series/{event_series_id}/waitlist_signup/{waitlist_signup_id}", "excluded": { "category": "out_of_scope", "reason": "removes a single waitlist signup; narrow sub-resource mutation, Pass B breadth-vs-cost triage" } },
+
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/bundles", "excluded": { "category": "out_of_scope", "reason": "creates a ticket bundle configuration; narrow event-configuration sub-resource mutation with no corresponding read stream to round-trip against, Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/bundles/{bundle_id}", "excluded": { "category": "out_of_scope", "reason": "updates a ticket bundle configuration; same narrow sub-resource reasoning as bundle create above" } },
+    { "method": "DELETE", "path": "/v1/event_series/{event_series_id}/bundles/{bundle_id}", "excluded": { "category": "out_of_scope", "reason": "deletes a ticket bundle configuration; same narrow sub-resource reasoning as bundle create above" } },
+
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/ticket_groups", "excluded": { "category": "out_of_scope", "reason": "creates a ticket-type grouping configuration; narrow event-configuration sub-resource mutation with no corresponding read stream, Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/ticket_groups/{ticket_group_id}", "excluded": { "category": "out_of_scope", "reason": "updates a ticket-group configuration; same narrow sub-resource reasoning as ticket-group create above" } },
+    { "method": "DELETE", "path": "/v1/event_series/{event_series_id}/ticket_groups/{ticket_group_id}", "excluded": { "category": "out_of_scope", "reason": "deletes a ticket-group configuration; same narrow sub-resource reasoning as ticket-group create above" } },
+
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/ticket_types", "excluded": { "category": "out_of_scope", "reason": "creates a ticket type configuration; narrow event-configuration sub-resource mutation with no corresponding read stream, Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/event_series/{event_series_id}/ticket_types/{ticket_type_id}", "excluded": { "category": "out_of_scope", "reason": "updates a ticket type configuration; same narrow sub-resource reasoning as ticket-type create above" } },
+    { "method": "DELETE", "path": "/v1/event_series/{event_series_id}/ticket_types/{ticket_type_id}", "excluded": { "category": "out_of_scope", "reason": "deletes a ticket type configuration; same narrow sub-resource reasoning as ticket-type create above" } },
+
+    { "method": "GET", "path": "/v1/holds", "covered_by": { "stream": "holds" } },
+    { "method": "POST", "path": "/v1/holds", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: the documented request body's required ticket_type_id field is a JSON object (additionalProperties, e.g. {tt_1: 1, tt_2: 5}) sent inside an application/x-www-form-urlencoded body -- this dialect's form-body construction (engine/write.go buildForm/stringifyAny) can only stringify a nested object value as a single JSON-string-valued form field, not the bracket-notation (ticket_type_id[tt_1]=1) or repeated-key form encoding a nested object in a form body typically requires; unverifiable which encoding Ticket Tailor's real endpoint expects without a live test, so not implemented rather than guessed" } },
+    { "method": "GET", "path": "/v1/holds/{hold_id}", "excluded": { "category": "duplicate_of", "reason": "single-hold detail; identical record shape to the holds list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/holds/{hold_id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same nested-object-in-form-body ambiguity as POST /v1/holds above (this endpoint's ticket_type_id field is optional but carries the identical encoding ambiguity whenever it is set)" } },
+    { "method": "DELETE", "path": "/v1/holds/{hold_id}", "covered_by": { "write": "delete_hold" } },
+
+    { "method": "GET", "path": "/v1/discounts", "covered_by": { "stream": "discounts" } },
+    { "method": "POST", "path": "/v1/discounts", "covered_by": { "write": "create_discount" } },
+    { "method": "GET", "path": "/v1/discounts/{discount_id}", "excluded": { "category": "duplicate_of", "reason": "single-discount detail; identical record shape to the discounts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/discounts/{discount_id}", "covered_by": { "write": "update_discount" } },
+    { "method": "DELETE", "path": "/v1/discounts/{discount_id}", "covered_by": { "write": "delete_discount" } },
+
+    { "method": "GET", "path": "/v1/membership_types", "covered_by": { "stream": "membership_types" } },
+    { "method": "POST", "path": "/v1/membership_types", "covered_by": { "write": "create_membership_type" } },
+    { "method": "GET", "path": "/v1/membership_types/{membership_type_id}", "excluded": { "category": "duplicate_of", "reason": "single-membership-type detail; identical record shape to the membership_types list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/membership_types/{membership_type_id}", "excluded": { "category": "out_of_scope", "reason": "updates a membership type's validity/conditions configuration; narrow sub-resource mutation, Pass B breadth-vs-cost triage (create/delete already cover the primary lifecycle)" } },
+    { "method": "DELETE", "path": "/v1/membership_types/{membership_type_id}", "covered_by": { "write": "delete_membership_type" } },
+
+    { "method": "GET", "path": "/v1/issued_memberships", "covered_by": { "stream": "issued_memberships" } },
+    { "method": "POST", "path": "/v1/issued_memberships", "covered_by": { "write": "create_issued_membership" } },
+    { "method": "GET", "path": "/v1/issued_memberships/{issued_membership_id}", "excluded": { "category": "duplicate_of", "reason": "single-issued-membership detail; identical record shape to the issued_memberships list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/issued_memberships/{issued_membership_id}", "covered_by": { "write": "update_issued_membership" } },
+    { "method": "POST", "path": "/v1/issued_memberships/{issued_membership_id}/void", "covered_by": { "write": "void_issued_membership" } },
+    { "method": "POST", "path": "/v1/issued_membership_redemptions/{event_id}", "excluded": { "category": "out_of_scope", "reason": "records a membership redemption at check-in time for a specific event; narrow operational sub-workflow distinct from the membership lifecycle writes already covered, Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/membership_photo_share", "excluded": { "category": "non_data_endpoint", "reason": "returns a single photo-URL lookup by issued-membership code, not a syncable object stream" } },
+
+    { "method": "GET", "path": "/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "POST", "path": "/v1/products", "covered_by": { "write": "create_product" } },
+    { "method": "GET", "path": "/v1/products/{product_id}", "excluded": { "category": "duplicate_of", "reason": "single-product detail; identical record shape to the products list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/products/{product_id}", "covered_by": { "write": "update_product" } },
+    { "method": "DELETE", "path": "/v1/products/{product_id}", "covered_by": { "write": "delete_product" } },
+
+    { "method": "GET", "path": "/v1/stores", "covered_by": { "stream": "stores" } },
+    { "method": "GET", "path": "/v1/stores/{store_id}", "excluded": { "category": "duplicate_of", "reason": "single-store detail; identical record shape to the stores list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/stores/{store_id}", "excluded": { "category": "out_of_scope", "reason": "updates store-level currency/product configuration; a single-tenant configuration endpoint (most box offices have exactly one store) with limited reverse-ETL value, Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v1/vouchers", "covered_by": { "stream": "vouchers" } },
+    { "method": "POST", "path": "/v1/vouchers", "covered_by": { "write": "create_voucher" } },
+    { "method": "GET", "path": "/v1/vouchers/{voucher_id}", "excluded": { "category": "duplicate_of", "reason": "single-voucher detail; identical record shape to the vouchers list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/vouchers/{voucher_id}", "covered_by": { "write": "update_voucher" } },
+    { "method": "DELETE", "path": "/v1/vouchers/{voucher_id}", "covered_by": { "write": "delete_voucher" } },
+    { "method": "GET", "path": "/v1/vouchers/{voucher_id}/codes", "covered_by": { "stream": "voucher_codes" } },
+    { "method": "POST", "path": "/v1/vouchers/{voucher_id}/codes/{voucher_code_id}/void", "covered_by": { "write": "void_voucher_code" } },
+
+    { "method": "GET", "path": "/v1/checkout_forms", "covered_by": { "stream": "checkout_forms" } },
+    { "method": "GET", "path": "/v1/checkout_forms/{checkout_form_id}/elements", "covered_by": { "stream": "checkout_form_elements" } },
+    { "method": "GET", "path": "/v1/checkout_forms/{checkout_form_id}/elements/{checkout_form_element_id}", "excluded": { "category": "duplicate_of", "reason": "single-checkout-form-element detail; identical record shape to the checkout_form_elements fan_out stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/checkout_forms/{checkout_form_id}/elements/{checkout_form_element_id}", "excluded": { "category": "out_of_scope", "reason": "updates a single checkout-form question/element's configuration; narrow sub-resource mutation, Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v1/overview", "covered_by": { "stream": "overview" } },
+    { "method": "GET", "path": "/v1/ping", "excluded": { "category": "non_data_endpoint", "reason": "a liveness/health-check endpoint returning a static {version} payload, not a syncable object stream" } }
   ]
 }

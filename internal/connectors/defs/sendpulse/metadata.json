@@ -1,14 +1,14 @@
 {
   "name": "sendpulse",
   "display_name": "SendPulse",
-  "description": "Reads SendPulse address books, campaigns, and senders through the SendPulse API.",
+  "description": "Reads SendPulse address books, campaigns, senders, per-book emails, and the account blacklist, and writes address-book/sender/blacklist lifecycle mutations and campaign create/cancel actions through the SendPulse API.",
   "integration_type": "api",
   "docs_url": "https://sendpulse.com/integrations/api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,11 +17,12 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external SendPulse API read of address book, campaign, and sender data",
-    "approval": "none; read-only"
+    "read": "external SendPulse API read of address book, campaign, sender, per-book-email, and blacklist data",
+    "write": "external SendPulse API mutation, including creating email campaigns that may send to real subscribers",
+    "approval": "reverse ETL plan approval required before writes"
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/sendpulse (this bundle has no Tier-2 hook, so there is no paritytest package for this wave)."
+    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check (including write_request_shape) would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction, write_schemas_valid, surface_complete) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/sendpulse (this bundle has no Tier-2 hook, so there is no paritytest package for this wave); the write actions are net-new capability with no legacy behavior to compare against at all (legacy's Write always returned ErrUnsupportedOperation) -- their correctness is asserted by the fixtures/writes/*.json request-shape documentation and by connectorgen validate's static write_schemas_valid/write_path_fields checks."
   }
 }

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "user_fixture_1",
+    "email": "updated@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resources/users/user_fixture_1",
+    "body": {
+      "email": "updated@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "user_fixture_1", "email": "updated@example.com" }
+  }
+}

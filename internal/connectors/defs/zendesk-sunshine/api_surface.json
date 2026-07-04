@@ -1,14 +1,28 @@
 {
-  "api": "Zendesk Sunshine custom objects API (https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/)",
-  "docs": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (object_types, objects, relationships); write endpoints (create custom object record, create relationship, etc.) are out of scope for this pass",
+  "api": "Zendesk Sunshine legacy custom objects API (https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/custom-objects-api/)",
+  "docs": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/custom-objects-api/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion over the legacy (pre-2026 'Sunshine') custom objects API, which Zendesk is sunsetting July 27, 2026: every practical GET list resource is a stream, and every mutation still genuinely supported today (Zendesk blocked NEW object/relationship TYPE creation as of January 15, 2026, but record-level create/update/delete of EXISTING types remains supported) is a writes.json action. Detail-by-id endpoints are excluded as duplicate_of their list stream; type/relationship-type creation is excluded as deprecated (blocked by Zendesk itself, not a dialect limitation); search, jobs, and events are excluded as out_of_scope for the reasons noted per-endpoint.",
   "endpoints": [
     { "method": "GET", "path": "/objects/types", "covered_by": { "stream": "object_types" } },
+    { "method": "GET", "path": "/objects/types/{object_type_key}", "excluded": { "category": "duplicate_of", "reason": "detail-by-key view of a record already fully emitted by the object_types list stream" } },
+    { "method": "POST", "path": "/objects/types", "excluded": { "category": "deprecated", "reason": "Zendesk blocked creating new legacy object types as of January 15, 2026 (documented sunset ahead of the full legacy API removal on July 27, 2026); the endpoint still exists but every request against it now fails account-side" } },
+    { "method": "PUT", "path": "/objects/types/{object_type_key}", "excluded": { "category": "deprecated", "reason": "updates a legacy object type's schema; Zendesk's own docs describe legacy object types as immutable in practice once created and the platform is being sunset -- not modeled as a live write given the imminent removal" } },
+    { "method": "DELETE", "path": "/objects/types/{object_type_key}", "covered_by": { "write": "delete_object_type" } },
     { "method": "GET", "path": "/objects/records", "covered_by": { "stream": "objects" } },
+    { "method": "POST", "path": "/objects/records", "covered_by": { "write": "create_object_record" } },
+    { "method": "PUT", "path": "/objects/records", "covered_by": { "write": "upsert_object_record_by_external_id" } },
+    { "method": "DELETE", "path": "/objects/records/{object_record_id}", "covered_by": { "write": "delete_object_record" } },
+    { "method": "POST", "path": "/objects/query", "excluded": { "category": "out_of_scope", "reason": "the Search Legacy Object Records endpoint takes a nested comparison-operator query DSL (property + operator/value pairs, optional _created_at/_updated_at range objects) that has no declarative representation in this dialect's flat query-param/body-field model; the objects stream's own config-driven ?type= filter (see spec.json's object_type) covers the common single-type-filter case" } },
+    { "method": "GET", "path": "/objects/events", "excluded": { "category": "out_of_scope", "reason": "Legacy Custom Objects Events is itself deprecated per Zendesk's own docs and was limited to accounts enrolled in a now-closed EAP; not available to new/most accounts" } },
+    { "method": "GET", "path": "/relationships/types", "covered_by": { "stream": "relationship_types" } },
+    { "method": "GET", "path": "/relationships/types/{relationship_type_key}", "excluded": { "category": "duplicate_of", "reason": "detail-by-key view of a record already fully emitted by the relationship_types list stream" } },
+    { "method": "POST", "path": "/relationships/types", "excluded": { "category": "deprecated", "reason": "Zendesk blocked creating new legacy relationship types as of January 15, 2026" } },
+    { "method": "DELETE", "path": "/relationships/types/{relationship_type_key}", "covered_by": { "write": "delete_relationship_type" } },
     { "method": "GET", "path": "/relationships/records", "covered_by": { "stream": "relationships" } },
-    { "method": "POST", "path": "/objects/records", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/objects/types", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/relationships/records", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/relationships/records", "covered_by": { "write": "create_relationship_record" } },
+    { "method": "DELETE", "path": "/relationships/records/{relationship_record_id}", "covered_by": { "write": "delete_relationship_record" } },
+    { "method": "GET", "path": "/objects/records/{object_record_id}/related/{relationship_type_key}", "excluded": { "category": "duplicate_of", "reason": "returns the set of object records related to one specific record via one specific relationship type -- the same relationship data the relationships stream's ?type= filter already exposes, scoped further by a single source record id the declarative dialect has no per-record fan-out-by-path-segment primitive for without a fan_out spec keyed on an id list this bundle does not otherwise collect" } },
+    { "method": "POST", "path": "/jobs", "excluded": { "category": "out_of_scope", "reason": "asynchronous bulk-batch job submission (fire-and-forget POST returning a job id, requiring separate polling); this dialect's write model is synchronous per-record and has no job-polling follow-up primitive" } }
   ]
 }

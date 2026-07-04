@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/Deals", "query": { "page": "2", "per_page": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "record_fixture_3", "name": "Fixture Deal Three", "Deal_Name": "Fixture Deal Three", "display_value": "Fixture Deal Three" }
+      ],
+      "info": { "page": 2, "per_page": 200, "count": 1, "more_records": false }
+    }
+  }
+}

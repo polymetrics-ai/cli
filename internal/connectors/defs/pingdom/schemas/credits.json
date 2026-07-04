@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "credits",
+  "description": "Pingdom's /credits endpoint returns a single account-wide credits/limits bundle rather than a collection of individually-keyed records; this stream emits the whole 'credits' object as one record, matching the reference stream's single_object shape.",
+  "type": "object",
+  "properties": {
+    "checklimit": { "type": ["integer", "null"] },
+    "availablechecks": { "type": ["integer", "null"] },
+    "useddefault": { "type": ["integer", "null"] },
+    "usedtransaction": { "type": ["integer", "null"] },
+    "availablesms": { "type": ["integer", "null"] },
+    "availablesmstests": { "type": ["integer", "null"] },
+    "autofillsms": { "type": ["boolean", "null"] },
+    "autofillsms_amount": { "type": ["integer", "null"] },
+    "autofillsms_when_left": { "type": ["integer", "null"] },
+    "max_sms_overage": { "type": ["integer", "null"] },
+    "availablerumsites": { "type": ["integer", "null"] }
+  }
+}

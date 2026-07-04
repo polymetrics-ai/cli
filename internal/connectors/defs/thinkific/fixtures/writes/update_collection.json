@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Renamed Collection"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/public/v1/collections/1",
+    "body": {
+      "name": "Renamed Collection"
+    }
+  }
+}

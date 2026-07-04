@@ -71,6 +71,30 @@
       "records": { "path": "dnc" },
       "schema": "schemas/do_not_contact.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "users",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "accounts",
+      "path": "search/accounts",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "accounts" },
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
     }
   ]
 }

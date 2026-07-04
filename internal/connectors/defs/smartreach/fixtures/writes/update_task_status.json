@@ -1,0 +1,17 @@
+{
+  "record": {
+    "task_id": "task_fixture_1",
+    "status_type": "done"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tasks/task_fixture_1/status",
+    "body": {
+      "status_type": "done"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "task_fixture_1", "status_type": "done" }
+  }
+}

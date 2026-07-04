@@ -1,0 +1,7 @@
+{
+  "record": { "sku": "FIXTURE-SKU-1", "name": "Fixture Widget 1 Renamed", "price": 12.99 },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/FIXTURE-SKU-1"
+  }
+}

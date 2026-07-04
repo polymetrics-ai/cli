@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/terminated-employees", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 21, "termination_date": "2025-05-28", "employee_number": "T01", "email": "fixture21@example.com", "first_name": "Fixture", "last_name": "TermOne", "employment_start_date": "2020-08-25", "position": "Engineer" },
+        { "id": 22, "termination_date": "2025-06-01", "employee_number": "T02", "email": "fixture22@example.com", "first_name": "Fixture", "last_name": "TermTwo", "employment_start_date": "2019-03-01", "position": "Analyst" }
+      ],
+      "meta": { "current_page": 1, "next_page": 2, "previous_page": null, "total_pages": 2, "per_page": 2, "total_entries": 3 }
+    }
+  }
+}

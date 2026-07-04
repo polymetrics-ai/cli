@@ -13,6 +13,7 @@
     "check": { "method": "GET", "path": "/app" },
     "error_map": [
       { "status": 401, "hint": "svix api_key is missing or invalid; re-run pm credentials add svix" },
+      { "status": 404, "hint": "svix resource not found; the app_id/endpoint_id/event type name in the request may not exist" },
       { "status": 429, "class": "rate_limited", "hint": "svix rate limit exceeded; the connector will retry with backoff" }
     ]
   },
@@ -23,9 +24,81 @@
       "query": { "limit": "50" },
       "records": { "path": "data" },
       "computed_fields": {
-        "created_at": "{{ record.createdAt }}"
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
       },
       "schema": "schemas/applications.json"
+    },
+    {
+      "name": "endpoints",
+      "path": "/app/{{ fanout.id }}/endpoint",
+      "query": { "limit": "50" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/app", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "app_id" },
+        "stamp_field": "app_id"
+      },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/endpoints.json"
+    },
+    {
+      "name": "event_types",
+      "path": "/event-type",
+      "query": { "limit": "50", "with_content": "true", "include_archived": "true" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/event_types.json"
+    },
+    {
+      "name": "messages",
+      "path": "/app/{{ fanout.id }}/msg",
+      "query": { "limit": "50" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/app", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "app_id" },
+        "stamp_field": "app_id"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "background_tasks",
+      "path": "/background-task",
+      "query": { "limit": "50" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/background_tasks.json"
+    },
+    {
+      "name": "connectors",
+      "path": "/connector",
+      "query": { "limit": "50" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/connectors.json"
+    },
+    {
+      "name": "operational_webhook_endpoints",
+      "path": "/operational-webhook/endpoint",
+      "query": { "limit": "50" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/operational_webhook_endpoints.json"
     }
   ]
 }

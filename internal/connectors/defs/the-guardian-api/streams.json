@@ -31,6 +31,46 @@
         "published_at": "{{ record.webPublicationDate }}"
       },
       "schema": "schemas/search.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "response.results" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "sections",
+      "path": "/sections",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "response.results" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/sections.json"
+    },
+    {
+      "name": "editions",
+      "path": "/editions",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "response.results" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/editions.json"
+    },
+    {
+      "name": "content",
+      "path": "/{{ config.content_id }}",
+      "records": { "path": "response.content", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "title": "{{ record.webTitle }}",
+        "published_at": "{{ record.webPublicationDate }}"
+      },
+      "schema": "schemas/content.json"
     }
   ]
 }

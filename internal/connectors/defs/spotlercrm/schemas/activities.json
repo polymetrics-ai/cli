@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modifieddate",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "ownerid": { "type": ["integer", "null"] },
+    "createddate": { "type": ["string", "null"] },
+    "modifieddate": { "type": ["string", "null"] }
+  }
+}

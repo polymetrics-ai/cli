@@ -1,0 +1,313 @@
+{
+  "actions": [
+    {
+      "name": "create_video",
+      "kind": "create",
+      "method": "POST",
+      "path": "/videos",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["replica_id"],
+        "properties": {
+          "replica_id": { "type": "string" },
+          "video_name": { "type": "string" },
+          "script": { "type": "string" },
+          "audio_url": { "type": "string" },
+          "background_url": { "type": "string" },
+          "callback_url": { "type": "string" }
+        }
+      },
+      "risk": "generates a new async video render from a face and script/audio; consumes video-generation minutes on the account"
+    },
+    {
+      "name": "delete_video",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/videos/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a generated video and its hosted/download URLs"
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "face_id": { "type": "string" },
+          "pal_id": { "type": "string" },
+          "conversation_name": { "type": "string" },
+          "conversational_context": { "type": "string" },
+          "callback_url": { "type": "string" },
+          "audio_only": { "type": "boolean" }
+        }
+      },
+      "risk": "starts a real-time video conversation, which begins consuming conversational-minutes billing immediately and (unless test_mode) places a live call"
+    },
+    {
+      "name": "end_conversation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/conversations/{{ record.id }}/end",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "ends an active conversation for every participant; routine call cleanup, not destructive to conversation history (compare delete_conversation)"
+    },
+    {
+      "name": "delete_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a conversation and its recorded history; use end_conversation instead for routine call cleanup"
+    },
+    {
+      "name": "create_pal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["default_face_id"],
+        "properties": {
+          "pal_name": { "type": "string" },
+          "system_prompt": { "type": "string" },
+          "pipeline_mode": { "type": "string" },
+          "default_face_id": { "type": "string" },
+          "document_ids": { "type": "array", "items": { "type": "string" } },
+          "guardrail_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new PAL persona; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_pal",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pals/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a PAL; any conversation still referencing its pal_id will fail to start"
+    },
+    {
+      "name": "create_guardrail",
+      "kind": "create",
+      "method": "POST",
+      "path": "/guardrails",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["guardrail_name", "guardrail_prompt"],
+        "properties": {
+          "guardrail_name": { "type": "string" },
+          "guardrail_prompt": { "type": "string" },
+          "modality": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new behavioral guardrail; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_guardrail",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/guardrails/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a guardrail; any PAL referencing it via guardrail_ids loses that behavioral boundary immediately"
+    },
+    {
+      "name": "create_objective",
+      "kind": "create",
+      "method": "POST",
+      "path": "/objectives",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["objective_name", "objective_prompt"],
+              "properties": {
+                "objective_name": { "type": "string" },
+                "objective_prompt": { "type": "string" },
+                "confirmation_mode": { "type": "string" },
+                "output_variables": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates one or more new PAL objectives; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_objective",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/objectives/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes an objective; any PAL referencing it via objectives_id loses that goal-oriented instruction immediately"
+    },
+    {
+      "name": "create_document",
+      "kind": "create",
+      "method": "POST",
+      "path": "/documents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["document_url"],
+        "properties": {
+          "document_url": { "type": "string" },
+          "document_name": { "type": "string" },
+          "callback_url": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "uploads a document to the knowledge base; processing is asynchronous and the document becomes available to PALs only once status reaches ready"
+    },
+    {
+      "name": "delete_document",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/documents/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a knowledge-base document and its processed data; any PAL referencing it via document_ids loses that knowledge source immediately"
+    },
+    {
+      "name": "create_pronunciation_dictionary",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pronunciation-dictionaries",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "rules": { "type": "array" }
+        }
+      },
+      "risk": "creates a new pronunciation dictionary; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_pronunciation_dictionary",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pronunciation-dictionaries/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a pronunciation dictionary and removes it from every linked PAL"
+    }
+  ]
+}

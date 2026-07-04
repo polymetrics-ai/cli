@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/credits" },
+  "response": {
+    "status": 200,
+    "body": {
+      "credits": {
+        "checklimit": 18,
+        "availablechecks": 5,
+        "useddefault": 6,
+        "usedtransaction": 7,
+        "availablesms": 20,
+        "availablesmstests": 7,
+        "autofillsms": false,
+        "autofillsms_amount": 0,
+        "autofillsms_when_left": 0,
+        "max_sms_overage": 0,
+        "availablerumsites": 0
+      }
+    }
+  }
+}

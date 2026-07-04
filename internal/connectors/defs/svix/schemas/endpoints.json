@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "endpoints",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id", "app_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "app_id": { "type": "string" },
+    "uid": { "type": ["string", "null"] },
+    "url": { "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "disabled": { "type": ["boolean", "null"] },
+    "channels": { "type": ["array", "null"] },
+    "filterTypes": { "type": ["array", "null"] },
+    "metadata": { "type": ["object", "null"] },
+    "rateLimit": { "type": ["integer", "null"] },
+    "throttleRate": { "type": ["integer", "null"] },
+    "version": { "type": ["integer", "null"] },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

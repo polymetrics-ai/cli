@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/units",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "unitNumber": 1,
+          "name": "hours"
+        },
+        {
+          "unitNumber": 2,
+          "name": "pcs"
+        }
+      ]
+    }
+  }
+}

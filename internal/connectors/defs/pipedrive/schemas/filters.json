@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "filters",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "filter_code": { "type": ["string", "null"] },
+    "is_editable": { "type": ["boolean", "null"] },
+    "active_flag": { "type": ["boolean", "null"] },
+    "type": { "type": ["string", "null"] },
+    "temporary_flag": { "type": ["boolean", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "add_time": { "type": ["string", "null"] },
+    "update_time": { "type": ["string", "null"] },
+    "visible_to": { "type": ["string", "null"] },
+    "last_used_time": { "type": ["string", "null"] },
+    "custom_view_id": { "type": ["integer", "null"] }
+  }
+}

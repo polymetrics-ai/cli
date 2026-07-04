@@ -1,0 +1,5 @@
+{
+  "record": { "id": 900010 },
+  "expect": { "method": "DELETE", "path": "/maintenance/900010" },
+  "response": { "status": 200, "body": { "message": "Deletion of maintenance window was successful!" } }
+}

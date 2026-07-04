@@ -1,0 +1,4 @@
+{
+  "record": { "id": "tag_fixture_1", "description": "updated fixture record" },
+  "expect": { "method": "PATCH", "path": "/tags/tag_fixture_1" }
+}

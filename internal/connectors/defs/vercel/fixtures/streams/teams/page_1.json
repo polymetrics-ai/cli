@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/teams"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "teams": [
+        {
+          "id": "team_fixture_1",
+          "slug": "fixture-team",
+          "name": "Fixture Team"
+        }
+      ],
+      "pagination": {
+        "count": 1,
+        "next": null,
+        "prev": null
+      }
+    }
+  }
+}

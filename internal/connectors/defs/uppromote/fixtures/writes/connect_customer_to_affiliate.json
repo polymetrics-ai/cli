@@ -1,0 +1,18 @@
+{
+  "record": {
+    "affiliate_email": "fixture1@example.com",
+    "customer_email": "customer-fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/affiliate/create-connect-customer",
+    "body": {
+      "affiliate_email": "fixture1@example.com",
+      "customer_email": "customer-fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "affiliate_id": 1969236, "affiliate_email": "fixture1@example.com" } }
+  }
+}

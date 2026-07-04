@@ -1,9 +1,13 @@
 # Overview
 
-Todoist is a wave2 fan-out declarative-HTTP migration. It reads projects, sections, tasks, and
-comments from the Todoist REST API v2 (`GET https://api.todoist.com/rest/v2/...`). This bundle is
-migrated at capability parity from `internal/connectors/todoist` (the hand-written connector it
-replaces); the legacy package stays registered and unchanged until wave6's registry flip.
+Todoist reads projects, sections, tasks, comments, labels, and project collaborators, and writes
+project/section/task/comment/label create, update, and delete actions (plus task close/reopen),
+through the Todoist REST API v2 (`https://api.todoist.com/rest/v2/...`). This bundle originated as
+a capability-parity migration from `internal/connectors/todoist` (the hand-written connector it
+replaces; the legacy package stays registered and unchanged until wave6's registry flip) and was
+then expanded to Todoist's full documented REST v2 surface (Pass B): 28 operations across 13 paths
+per a community-maintained OpenAPI 3.1 document for this exact API (matching this bundle's
+`base_url` exactly), covering every GET/write shape Todoist's REST v2 API exposes.
 
 ## Auth setup
 
@@ -44,11 +48,45 @@ sent only when configured (legacy: `todoist.go:78-85`, `strings.TrimSpace` then 
 query dialect (conventions.md §3) — both params are left off the request entirely when their
 config keys are unset, exactly like legacy's conditional `q.Set` calls.
 
+**`labels`** (`GET /labels`) is a new Pass B stream for Todoist's personal-label resource: a small,
+unpaginated list, same shape as the other 4 original streams.
+
+**`collaborators`** (`GET /projects/{project_id}/collaborators`) is a new Pass B stream using the
+engine's `fan_out` dialect (conventions.md §3): the id-listing preliminary request re-reads the
+`projects` list endpoint (`ids_from.request`, `records_path: ""` since Todoist's `/projects`
+response is a bare top-level array), then issues one collaborators request per resolved project id
+(`into.path_var: "project_id"`), stamping `project_id` onto every emitted collaborator record
+(`stamp_field`) so a caller can tell which project each collaborator belongs to. Primary key is
+`["id", "project_id"]` (composite) since the same person can collaborate on more than one project.
+
 ## Write actions & risks
 
-None. Todoist's legacy connector is read-only (package doc: "implements a read-only native Go
-connector for the Todoist REST API"); `capabilities.write` is `false` and this bundle ships no
-`writes.json`, matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`.
+- **`create_project`/`update_project`/`delete_project`** (`POST /projects`, `POST
+  /projects/{id}`, `DELETE /projects/{id}`) create, rename/re-style, or permanently delete a
+  project. Deleting a project also deletes every section/task/comment inside it — irreversible.
+- **`create_section`/`update_section`/`delete_section`** (`POST /sections`, `POST
+  /sections/{id}`, `DELETE /sections/{id}`) create, rename, or permanently delete a section.
+  Deleting a section also deletes every task inside it — irreversible.
+- **`create_task`/`update_task`/`delete_task`** (`POST /tasks`, `POST /tasks/{id}`, `DELETE
+  /tasks/{id}`) create, mutate, or permanently delete a task. Delete is irreversible.
+- **`close_task`/`reopen_task`** (`POST /tasks/{id}/close`, `POST /tasks/{id}/reopen`) mark a task
+  completed (a recurring task instead advances to its next occurrence) or return a completed task
+  to the active list.
+- **`create_comment`/`update_comment`/`delete_comment`** (`POST /comments`, `POST
+  /comments/{id}`, `DELETE /comments/{id}`) post, edit, or permanently delete a comment on a task
+  or project.
+- **`create_label`/`update_label`/`delete_label`** (`POST /labels`, `POST /labels/{id}`, `DELETE
+  /labels/{id}`) create, rename/re-style, or permanently delete a personal label. Deleting or
+  renaming a label affects every task already tagged with it.
+
+Every write action uses `body_type: json` — Todoist's real REST v2 API accepts a flat JSON request
+body for every one of these mutations (confirmed by the API's own documented example request
+bodies), so no engine dialect gap blocks any write here (contrast e.g. Timely, whose API requires a
+nested envelope body the engine cannot express).
+
+Every `delete_*` action declares `missing_ok_status: [404]` (idempotent delete): re-deleting an
+already-deleted resource counts as written, not failed, matching the engine's standard idempotent-
+delete semantics (conventions.md §3).
 
 ## Known limits
 
@@ -59,6 +97,10 @@ connector for the Todoist REST API"); `capabilities.write` is `false` and this b
   bundle's schemas and fixtures target the live path only. The engine's own conformance/
   fixture-replay harness (`internal/connectors/conformance`) provides the credential-free test
   affordance this bundle needs, so no fixture-mode equivalent is needed here.
-- **No pagination is modeled for any stream**, matching legacy exactly — none of the four Todoist
-  REST v2 list endpoints legacy calls are paginated in the hand-written connector, so this bundle
-  declares no `pagination` block anywhere and ships single-page fixtures for every stream.
+- **No pagination is modeled for any read stream**, matching legacy's original 4 streams — none of
+  the Todoist REST v2 list endpoints this bundle calls are paginated (Todoist's REST v2 API returns
+  the full list in one response for every resource here), so no `pagination` block is declared
+  anywhere and every stream ships single-page fixtures.
+- **No update-collaborators/remove-collaborator write.** Todoist's REST v2 API exposes no
+  mutation endpoint for project collaborators at all (collaborator management is Sync-API/UI-only);
+  `collaborators` is read-only, matching the real documented surface.

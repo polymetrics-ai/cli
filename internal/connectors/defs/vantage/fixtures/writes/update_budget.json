@@ -1,0 +1,10 @@
+{
+  "record": {
+    "budget_token": "bgt_fixture_1",
+    "name": "Updated Budget"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/budgets/bgt_fixture_1"
+  }
+}

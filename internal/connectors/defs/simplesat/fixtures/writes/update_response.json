@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "501",
+    "survey_id": 201,
+    "tags": ["updated-fixture"]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/responses/501/update",
+    "body": {
+      "survey_id": 201,
+      "tags": ["updated-fixture"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 501, "tags": ["updated-fixture"] }
+  }
+}

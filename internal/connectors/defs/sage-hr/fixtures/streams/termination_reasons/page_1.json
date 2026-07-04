@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/termination-reasons", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "New job", "code": "NJ", "type": "voluntary" },
+        { "id": 2, "name": "End of internship", "code": null, "type": "involuntary" }
+      ],
+      "meta": { "current_page": 1, "next_page": 2, "previous_page": null, "total_pages": 2, "per_page": 2, "total_entries": 3 }
+    }
+  }
+}

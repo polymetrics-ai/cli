@@ -1,0 +1,5 @@
+{
+  "record": { "meeting_id": "mtg_fixture_1", "title": "Fixture Kickoff Meeting Rescheduled" },
+  "expect": { "method": "PUT", "path": "/meetings/mtg_fixture_1" },
+  "response": { "status": 200, "body": { "meeting_id": "mtg_fixture_1" } }
+}

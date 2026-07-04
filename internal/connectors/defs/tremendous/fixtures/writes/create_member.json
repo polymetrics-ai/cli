@@ -1,0 +1,7 @@
+{
+  "record": { "email": "fixture-member@example.com", "role": "ADMIN" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/members"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "var_fixture_1",
+    "name": "Fixture Variable Renamed"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2.0/variables/var_fixture_1/",
+    "body": {
+      "name": "Fixture Variable Renamed"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "var_fixture_1", "name": "Fixture Variable Renamed" }
+  }
+}

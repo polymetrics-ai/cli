@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v10/projects",
+    "query": {
+      "until": "1767139200000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        {
+          "id": "prj_fixture_2",
+          "name": "fixture-app-2",
+          "accountId": "team_fixture_1",
+          "framework": "vite",
+          "createdAt": 1767052800000,
+          "updatedAt": 1767052800000
+        }
+      ],
+      "pagination": {
+        "count": 1,
+        "next": null,
+        "prev": null
+      }
+    }
+  }
+}

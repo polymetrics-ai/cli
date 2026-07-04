@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/products",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "product_id": "product_fixture_101",
+          "product": {
+            "id": "product_fixture_101",
+            "fieldData": {
+              "name": "Fixture Product 101"
+            }
+          },
+          "skus": []
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 100,
+        "total": 101
+      }
+    }
+  }
+}

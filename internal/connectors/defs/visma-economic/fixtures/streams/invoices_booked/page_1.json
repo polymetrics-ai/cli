@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices/booked",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "bookedInvoiceNumber": 5001,
+          "date": "2026-01-05",
+          "currency": "DKK",
+          "netAmount": 1000.0,
+          "grossAmount": 1250.0,
+          "vatAmount": 250.0,
+          "dueDate": "2026-02-05",
+          "lastUpdated": "2026-01-05T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

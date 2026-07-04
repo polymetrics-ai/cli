@@ -1,20 +1,21 @@
 {
   "name": "webflow",
   "display_name": "Webflow",
-  "description": "Reads Webflow site collections, pages, and forms for a configured site using the Webflow Data API v2.",
+  "description": "Reads Webflow sites, collections, collection items, pages, forms, form submissions, assets, asset folders, webhooks, redirects, custom domains, components, orders, products, and ecommerce settings, and writes CMS collection-item lifecycle actions, form-submission hidden-field updates, asset metadata, webhook subscriptions, and ecommerce order/inventory mutations, using the Webflow Data API v2.",
   "integration_type": "api",
   "docs_url": "https://developers.webflow.com/data/reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external Webflow API read of site collections, pages, and forms",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Webflow API read of site collections, pages, forms, assets, webhooks, redirects, ecommerce orders/products, and CMS collection items for a configured site",
+    "write": "external mutations against a live Webflow site: CMS collection-item create/update/delete/publish, form-submission hidden-field updates, asset rename/delete, webhook subscribe/unsubscribe, and ecommerce order fulfillment/refund/inventory changes; publish/fulfill/refund actions have customer- or site-visitor-visible side effects and refund is irreversible",
+    "approval": "required for all write actions; refund_order and publish_collection_item are high-risk (irreversible financial action / immediate live-site visibility) and should be gated more strictly than the others"
   }
 }

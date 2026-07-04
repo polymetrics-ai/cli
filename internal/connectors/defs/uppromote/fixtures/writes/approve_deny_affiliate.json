@@ -1,0 +1,18 @@
+{
+  "record": {
+    "affiliate_email": "fixture1@example.com",
+    "status": "approved"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/affiliate/active",
+    "body": {
+      "affiliate_email": "fixture1@example.com",
+      "status": "approved"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "affiliate_id": 1969236, "status": "approved" } }
+  }
+}

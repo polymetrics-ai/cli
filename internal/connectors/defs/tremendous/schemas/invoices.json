@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "po_number": { "type": ["string", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "international": { "type": ["boolean", "null"] },
+    "status": { "type": ["string", "null"] },
+    "orders": { "type": ["array", "null"] },
+    "rewards": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "paid_at": { "type": ["string", "null"] }
+  }
+}

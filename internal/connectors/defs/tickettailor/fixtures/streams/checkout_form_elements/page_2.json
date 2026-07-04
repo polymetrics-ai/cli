@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/checkout_forms/cf_fixture_1/elements",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cfe_fixture_1",
+          "question": "What is your T-shirt size?",
+          "type": "select",
+          "required": false,
+          "per_ticket": true
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

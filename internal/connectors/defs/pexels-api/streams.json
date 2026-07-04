@@ -73,6 +73,46 @@
       },
       "records": { "path": "videos" },
       "schema": "schemas/popular_videos.json"
+    },
+    {
+      "name": "featured_collections",
+      "path": "/v1/collections/featured",
+      "query": {
+        "page": "1",
+        "per_page": "40"
+      },
+      "records": { "path": "collections" },
+      "schema": "schemas/featured_collections.json"
+    },
+    {
+      "name": "my_collections",
+      "path": "/v1/collections",
+      "query": {
+        "page": "1",
+        "per_page": "40"
+      },
+      "records": { "path": "collections" },
+      "schema": "schemas/my_collections.json"
+    },
+    {
+      "name": "collection_media",
+      "path": "/v1/collections/{{ fanout.id }}",
+      "query": {
+        "page": "1",
+        "per_page": "40",
+        "type": { "template": "{{ config.collection_media_type }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.collection_media_sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "media" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/collections", "records_path": "collections", "id_field": "id" }
+        },
+        "into": { "path_var": "collection_id" },
+        "stamp_field": "collection_id"
+      },
+      "schema": "schemas/collection_media.json",
+      "projection": "passthrough"
     }
   ]
 }

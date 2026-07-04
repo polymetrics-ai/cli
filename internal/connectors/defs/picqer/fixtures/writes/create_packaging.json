@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Packaging", "barcode": "8710000000001", "length": 30, "width": 20, "height": 10 },
+  "expect": {
+    "method": "POST",
+    "path": "/packagings",
+    "body": { "name": "Fixture Packaging", "barcode": "8710000000001", "length": 30, "width": 20, "height": 10 }
+  },
+  "response": { "status": 200, "body": { "id": 1701, "name": "Fixture Packaging" } }
+}

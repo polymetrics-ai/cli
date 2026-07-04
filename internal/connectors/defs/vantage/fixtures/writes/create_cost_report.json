@@ -1,0 +1,10 @@
+{
+  "record": {
+    "title": "Fixture Cost Report",
+    "filter": "costs.provider = 'aws'"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/cost_reports"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "record": { "id": "scheduled_txn_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/budgets/synthetic-conformance-value/scheduled_transactions/scheduled_txn_fixture_1"
+  },
+  "response": { "status": 200, "body": { "data": { "scheduled_transaction": { "id": "scheduled_txn_fixture_1", "deleted": true } } } }
+}

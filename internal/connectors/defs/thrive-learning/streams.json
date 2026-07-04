@@ -48,6 +48,245 @@
       "records": { "path": "items" },
       "schema": "schemas/completions.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "activities",
+      "path": "https://public.api.learn.link/rest/v1/activities",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/activities.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "this stream's real endpoint lives on the current Thrive Public API (https://public.api.learn.link/rest/v1/activities per docs.thrivelearning.com), a different host than the bundle's base.url (which points at the legacy connector's own simplified api.thrivelearning.com endpoint); the engine resolves an http(s)-prefixed stream.path as an ALREADY-ABSOLUTE request target (connsdk.Requester.resolveURL) and never substitutes the conformance replay server's origin for it, so a declarative fixture replay would dial the real internet instead of the test double (the same shape as squarespace's contacts stream / defillama's stablecoins stream). Read correctness is proven by this stream's own fixtures/streams/activities/{page_1,page_2}.json shape (matches the published OpenAPI PaginatedActivities envelope) and by the same schema-projection path every other stream uses; only the dynamic (live-replay) checks are skipped, not the static schema/fixture-shape checks."
+      }
+    },
+    {
+      "name": "contents_v1",
+      "path": "https://public.api.learn.link/rest/v1/contents",
+      "query": {
+        "updatedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/contents_v1.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation (same connsdk.Requester.resolveURL limitation). Read correctness is proven by fixtures/streams/contents_v1/{page_1,page_2}.json (matches the published OpenAPI PaginatedResponse/Content envelope)."
+      }
+    },
+    {
+      "name": "learning_completions",
+      "path": "https://public.api.learn.link/rest/v1/learning/completions",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "." },
+      "schema": "schemas/learning_completions.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. This endpoint's own documented response is a BARE array (no results/pagination envelope, unlike most other v1 endpoints) so records.path is '.'; read correctness is proven by fixtures/streams/learning_completions/{page_1,page_2}.json (matches the published OpenAPI Completion[] shape)."
+      }
+    },
+    {
+      "name": "assignments",
+      "path": "https://public.api.learn.link/rest/v1/assignments",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "." },
+      "schema": "schemas/assignments.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. This endpoint's own documented response is a BARE array (no results/pagination envelope); read correctness is proven by fixtures/streams/assignments/{page_1,page_2}.json (matches the published OpenAPI Assignment[] shape)."
+      }
+    },
+    {
+      "name": "assignment_enrolments",
+      "path": "https://public.api.learn.link/rest/v1/assignments/{{ fanout.id }}/enrolments",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "https://public.api.learn.link/rest/v1/assignments",
+            "records_path": ".",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "assignmentId" },
+        "stamp_field": "assignment_id"
+      },
+      "schema": "schemas/assignment_enrolments.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url (see the activities stream's conformance.reason); additionally a fan_out stream whose id-listing preliminary GET is itself an absolute-URL request the replay harness cannot intercept. Read correctness of the fan_out shape itself is covered by the engine's own fan_out unit tests (internal/connectors/engine/read_test.go); this stream's own record shape is proven by fixtures/streams/assignment_enrolments/page_1.json (matches the published OpenAPI Enrolment[] shape) and records_match_schema."
+      }
+    },
+    {
+      "name": "audiences",
+      "path": "https://public.api.learn.link/rest/v1/audiences",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/audiences.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. Read correctness is proven by fixtures/streams/audiences/{page_1,page_2}.json (matches the published OpenAPI AudienceStub/Pagination envelope)."
+      }
+    },
+    {
+      "name": "audience_members",
+      "path": "https://public.api.learn.link/rest/v1/audiences/{{ fanout.id }}/members",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "results" },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "https://public.api.learn.link/rest/v1/audiences",
+            "records_path": "results",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "audienceId" },
+        "stamp_field": "audience_id"
+      },
+      "schema": "schemas/audience_members.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API fan_out stream on a different host than base.url; see the assignment_enrolments stream's conformance.reason for the full explanation. This resource has no per-record globally-unique id field (AudienceMember's own userId is only unique within one audience's listing); [audience_id, userId] is the genuine composite key, matching this migration's ip2whois [domain, role] composite-key precedent (conventions.md ledger item 11)."
+      }
+    },
+    {
+      "name": "audience_managers",
+      "path": "https://public.api.learn.link/rest/v1/audiences/{{ fanout.id }}/managers",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "https://public.api.learn.link/rest/v1/audiences",
+            "records_path": "results",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "audienceId" },
+        "stamp_field": "audience_id"
+      },
+      "schema": "schemas/audience_managers.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API fan_out stream on a different host than base.url; see the assignment_enrolments stream's conformance.reason for the full explanation. This resource has no per-record globally-unique id field either (same composite-key reasoning as audience_members); the endpoint's own documented response is an unpaginated bare array."
+      }
+    },
+    {
+      "name": "tags",
+      "path": "https://public.api.learn.link/rest/v1/tags",
+      "pagination": { "type": "none" },
+      "records": { "path": "results" },
+      "schema": "schemas/tags.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. The documented /tags list endpoint takes no page/pagination parameters at all (unlike every other v1 list endpoint) so pagination.type is none; read correctness is proven by fixtures/streams/tags/page_1.json (matches the published OpenAPI Tag[]/results envelope)."
+      }
+    },
+    {
+      "name": "cpd_categories",
+      "path": "https://public.api.learn.link/rest/v1/cpdCategories",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/cpd_categories.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. Read correctness is proven by fixtures/streams/cpd_categories/{page_1,page_2}.json (matches the published OpenAPI PaginatedCPDCategories envelope). Primary key is categoryId, not id -- this resource's own documented identifier field name, unlike every other v1 resource."
+      }
+    },
+    {
+      "name": "cpd_entries",
+      "path": "https://public.api.learn.link/rest/v1/cpdEntries",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/cpd_entries.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. Read correctness is proven by fixtures/streams/cpd_entries/{page_1,page_2}.json (matches the published OpenAPI PaginatedCPDEntries envelope). Primary key is logEntryId, this resource's own documented identifier field name."
+      }
+    },
+    {
+      "name": "cpd_requirements",
+      "path": "https://public.api.learn.link/rest/v1/cpdRequirementSummaries",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "perPage",
+        "start_page": 1,
+        "page_size": 1000
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/cpd_requirements.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. Read correctness is proven by fixtures/streams/cpd_requirements/{page_1,page_2}.json (matches the published OpenAPI PaginatedCPDRequirements envelope). Primary key is audienceRequirementId, this resource's own documented identifier field name."
+      }
+    },
+    {
+      "name": "skill_levels",
+      "path": "https://public.api.learn.link/rest/v1/skills/levels",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "schema": "schemas/skill_levels.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "absolute-URL real-API stream on a different host than base.url; see the activities stream's conformance.reason for the full explanation. This is a small, fixed, unpaginated configuration list (the documented response is a bare array of {name, isEnabled, value} with no page/pagination parameters at all); read correctness is proven by fixtures/streams/skill_levels/page_1.json (matches the published OpenAPI response shape)."
+      }
     }
   ]
 }

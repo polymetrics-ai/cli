@@ -1,0 +1,22 @@
+{
+  "record": {
+    "externalId": "ext-user-fixture-1",
+    "accountIds": ["acct_fixture_1"],
+    "name": "Fixture User",
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/resources/users",
+    "body": {
+      "externalId": "ext-user-fixture-1",
+      "accountIds": ["acct_fixture_1"],
+      "name": "Fixture User",
+      "email": "fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "user_fixture_1", "externalId": "ext-user-fixture-1" }
+  }
+}

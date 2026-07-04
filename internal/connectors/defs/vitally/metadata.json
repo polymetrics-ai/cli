@@ -1,20 +1,21 @@
 {
   "name": "vitally",
   "display_name": "Vitally",
-  "description": "Reads Vitally customer-success accounts from the Vitally REST API. Read-only.",
+  "description": "Reads and writes Vitally customer-success accounts, users, notes, conversations, tasks, and NPS responses via the Vitally REST API.",
   "integration_type": "api",
-  "docs_url": "https://docs.vitally.io/pushing-data-to-vitally/rest-api",
+  "docs_url": "https://docs.vitally.io/en/articles/9880649-rest-api-overview",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external Vitally API read of customer-success account data",
-    "approval": "none; read-only account API"
+    "read": "external Vitally API read of customer-success account/user/note/conversation/task/NPS-response data",
+    "write": "external mutation of Vitally customer-success records (create/update accounts, users, notes, tasks, conversations, NPS responses; delete notes and conversations); approval required",
+    "approval": "read: none, read-only sync surface. write: required for all mutating actions (create/update/delete of customer-success records visible to the vendor's CS team)."
   }
 }

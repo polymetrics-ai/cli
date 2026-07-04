@@ -1,0 +1,7 @@
+{
+  "record": { "project": "fixture-org_fixture-repo", "tags": "fixture,conformance" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/project_tags/set"
+  }
+}

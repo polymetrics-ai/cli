@@ -1,20 +1,21 @@
 {
   "name": "smartengage",
   "display_name": "SmartEngage",
-  "description": "Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers.",
+  "description": "Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; creates/updates subscribers, tags, custom fields, and sequence enrollments.",
   "integration_type": "api",
-  "docs_url": "https://smartengage.com/docs/api/",
+  "docs_url": "https://smartengage.com/docs/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
     "read": "read-only avatar/tag/custom-field/sequence/subscriber data from a connected SmartEngage account",
-    "approval": "none; read-only"
+    "write": "creates/updates subscribers and custom-field values, creates tags and attaches/detaches them from subscribers, and enrolls/unenrolls subscribers in automation sequences (which triggers or stops scheduled outbound messages)",
+    "approval": "required for all 9 write actions; read is unapproved"
   }
 }

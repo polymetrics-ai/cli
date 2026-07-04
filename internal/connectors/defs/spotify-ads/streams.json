@@ -60,6 +60,37 @@
       },
       "records": { "path": "ads" },
       "schema": "schemas/ads.json"
+    },
+    {
+      "name": "businesses",
+      "path": "/businesses",
+      "pagination": { "type": "none" },
+      "records": { "path": "businesses" },
+      "schema": "schemas/businesses.json"
+    },
+    {
+      "name": "business_ad_accounts",
+      "path": "/businesses/{{ fanout.id }}/ad_accounts",
+      "pagination": { "type": "none" },
+      "records": { "path": "ad_accounts" },
+      "schema": "schemas/business_ad_accounts.json",
+      "fan_out": {
+        "ids_from": { "request": { "path": "/businesses", "records_path": "businesses", "id_field": "id" } },
+        "into": { "path_var": "business_id" },
+        "stamp_field": "business_id"
+      }
+    },
+    {
+      "name": "assets",
+      "path": "/ad_accounts/{{ config.ad_account_id }}/assets",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/assets.json"
     }
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "star_value": "0",
+    "lead_score": "10",
+    "tags": ["fixture"],
+    "properties": [
+      { "type": "SYSTEM", "name": "first_name", "value": "Fixture" },
+      { "type": "SYSTEM", "name": "last_name", "value": "Contact" },
+      { "type": "SYSTEM", "name": "email", "subtype": "work", "value": "fixture-contact@example.com" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts"
+  }
+}

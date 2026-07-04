@@ -1,0 +1,9 @@
+{
+  "record": { "idbackorders": [1101, 1102] },
+  "expect": {
+    "method": "POST",
+    "path": "/backorders/process",
+    "body": { "idbackorders": [1101, 1102] }
+  },
+  "response": { "status": 200, "body": {} }
+}

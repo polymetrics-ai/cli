@@ -1,0 +1,9 @@
+{
+  "record": { "project_id": 1, "name": "Fixture Plan", "description": "Fixture plan description" },
+  "expect": {
+    "method": "POST",
+    "path": "/index.php",
+    "body": { "name": "Fixture Plan", "description": "Fixture plan description" }
+  },
+  "response": { "status": 200, "body": { "id": 2, "project_id": 1, "name": "Fixture Plan" } }
+}

@@ -1,0 +1,88 @@
+{
+  "actions": [
+    {
+      "name": "set_record",
+      "kind": "create",
+      "method": "PATCH",
+      "path": "/api/records",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["action", "data"],
+        "properties": {
+          "action": { "type": "string", "enum": ["set_value_if"] },
+          "data": {
+            "type": "object",
+            "required": ["key", "value"],
+            "properties": {
+              "key": { "type": "string" },
+              "value": { "type": "string" },
+              "only_if_value": { "type": ["string", "null"] }
+            }
+          }
+        }
+      },
+      "risk": "creates or overwrites a single key/value pair in the caller's Zapier Storage bucket (optionally only when the existing value matches only_if_value); external mutation, no approval required"
+    },
+    {
+      "name": "increment_record",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/records",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["action", "data"],
+        "properties": {
+          "action": { "type": "string", "enum": ["increment_by"] },
+          "data": {
+            "type": "object",
+            "required": ["key", "amount"],
+            "properties": {
+              "key": { "type": "string" },
+              "amount": { "type": "number" }
+            }
+          }
+        }
+      },
+      "risk": "atomically increments a numeric-valued key by amount (creating it at amount if absent); external mutation, no approval required"
+    },
+    {
+      "name": "delete_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/records?key={{ record.key }}",
+      "path_fields": ["key"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key"],
+        "properties": {
+          "key": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a single key from the caller's Zapier Storage bucket"
+    },
+    {
+      "name": "delete_all_records",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/records",
+      "body_type": "none",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "risk": "irreversibly deletes EVERY key in the caller's Zapier Storage bucket (whole-bucket wipe); destructive, requires explicit confirmation"
+    }
+  ]
+}

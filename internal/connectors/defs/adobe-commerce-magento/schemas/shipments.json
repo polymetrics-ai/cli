@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adobe Commerce (Magento) Shipment",
+  "type": "object",
+  "x-primary-key": ["entity_id"],
+  "x-cursor-field": "created_at",
+  "properties": {
+    "entity_id": { "type": "integer" },
+    "increment_id": { "type": "string" },
+    "order_id": { "type": "integer" },
+    "shipment_status": { "type": "integer" },
+    "total_qty": { "type": "number" },
+    "store_id": { "type": "integer" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

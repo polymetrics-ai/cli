@@ -1,14 +1,14 @@
 {
   "name": "savvycal",
   "display_name": "SavvyCal",
-  "description": "Reads SavvyCal events, links, and contacts through the SavvyCal API. Read-only.",
+  "description": "Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and workflows, and writes scheduling-link and webhook lifecycle mutations, through the SavvyCal API.",
   "integration_type": "api",
-  "docs_url": "https://savvycal.com/api",
+  "docs_url": "https://developers.savvycal.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external SavvyCal API read of event, scheduling link, and contact data",
-    "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+    "read": "external SavvyCal API read of event, scheduling link, contact, time zone, webhook, and workflow data",
+    "write": "external SavvyCal mutations: scheduling link create/update/delete/duplicate/toggle, event cancellation, webhook subscription create/delete",
+    "approval": "required for all write actions except duplicate_link (low-risk copy operation); delete_link/delete_webhook/cancel_event are destructive and irreversible"
   }
 }

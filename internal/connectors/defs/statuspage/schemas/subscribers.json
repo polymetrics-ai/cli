@@ -6,8 +6,16 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
-    "name": { "type": ["string", "null"] },
-    "status": { "type": ["string", "null"] },
+    "mode": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "endpoint": { "type": ["string", "null"] },
+    "phone_number": { "type": ["string", "null"] },
+    "phone_country": { "type": ["string", "null"] },
+    "display_phone_number": { "type": ["string", "null"] },
+    "skip_confirmation_notification": { "type": ["boolean", "null"] },
+    "quarantined_at": { "type": ["string", "null"] },
+    "purge_at": { "type": ["string", "null"] },
+    "page_access_user_id": { "type": ["string", "null"] },
     "created_at": { "type": ["string", "null"], "format": "date-time" }
   }
 }

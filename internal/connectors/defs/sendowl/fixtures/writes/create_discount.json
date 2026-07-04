@@ -1,0 +1,16 @@
+{
+  "record": {
+    "code": "FIXTURENEW",
+    "discount_percentage": "15",
+    "max_uses": "50",
+    "end_at": "2026-12-31T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1_2/discounts"
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": 999, "code": "FIXTURENEW" }
+  }
+}

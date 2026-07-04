@@ -1,14 +1,37 @@
 {
-  "api": "SavvyCal API v1 (https://api.savvycal.com)",
-  "docs": "https://savvycal.com/api",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2-fan-out migration: the 3 legacy-parity read streams only (events, links, contacts); SavvyCal's write endpoints (link/event creation, availability) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "api": "SavvyCal API v1 (https://api.savvycal.com; documented at https://developers.savvycal.com/, fetched 2026-07-03)",
+  "docs": "https://developers.savvycal.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion against the complete documented SavvyCal REST API (developers.savvycal.com's Events/Scheduling Links/Current User/Time Zones/Webhooks/Workflows categories). 7 read streams: the 3 legacy-parity streams (events, links, contacts — contacts is legacy-only, see docs.md) plus time_zones, webhooks, workflows, and workflow_rules (fan_out over workflows). 9 write actions: link create (personal-scope), link create (team/individual scope), link update, link delete, link duplicate, link toggle (active/disabled), event cancel, webhook create, webhook delete. Excluded: event creation (a booking-flow-shaped multi-party payload with no plain flat record schema suited to a reverse-ETL write), the link-slots availability lookup (requires an undocumented real start/end date-range query window a synthetic fixture cannot honestly exercise), single-event/single-link/single-webhook/single-time-zone detail GETs that duplicate an already-covered list stream's record shape, and the current-user introspection endpoint.",
   "endpoints": [
     { "method": "GET", "path": "/v1/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/v1/events/{event_id}", "excluded": { "category": "duplicate_of", "reason": "single-event detail; identical record shape to the events list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/links/{link_id}/events", "excluded": { "category": "out_of_scope", "reason": "creates an event by booking a specific scheduling link's availability (attendee + time-slot-selection booking flow), not a plain CRM-style record create; no documented flat request schema suited to a reverse-ETL write action" } },
+    { "method": "POST", "path": "/v1/events/{event_id}/cancel", "covered_by": { "write": "cancel_event" } },
+
     { "method": "GET", "path": "/v1/links", "covered_by": { "stream": "links" } },
+    { "method": "GET", "path": "/v1/links/{link_id}", "excluded": { "category": "duplicate_of", "reason": "single-link detail; identical record shape to the links list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/links", "covered_by": { "write": "create_personal_link" } },
+    { "method": "POST", "path": "/v1/scopes/{scope_slug}/links", "covered_by": { "write": "create_scope_link" } },
+    { "method": "PATCH", "path": "/v1/links/{link_id}", "covered_by": { "write": "update_link" } },
+    { "method": "DELETE", "path": "/v1/links/{link_id}", "covered_by": { "write": "delete_link" } },
+    { "method": "POST", "path": "/v1/links/{link_id}/duplicate", "covered_by": { "write": "duplicate_link" } },
+    { "method": "POST", "path": "/v1/links/{link_id}/toggle", "covered_by": { "write": "toggle_link" } },
+    { "method": "GET", "path": "/v1/links/{link_id}/slots", "excluded": { "category": "out_of_scope", "reason": "requires a real start/end availability-window query (undocumented exact parameter names on the server-rendered schema panel this pass could not scrape); a fan_out stream built on a guessed query shape risks silently returning empty/wrong results rather than an honest, verified read" } },
+
     { "method": "GET", "path": "/v1/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "POST", "path": "/v1/links", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented link creation; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/links/{id}/availability", "excluded": { "category": "out_of_scope", "reason": "availability lookup not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } }
+
+    { "method": "GET", "path": "/v1/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } },
+
+    { "method": "GET", "path": "/v1/time_zones", "covered_by": { "stream": "time_zones" } },
+    { "method": "GET", "path": "/v1/time_zones/{name}", "excluded": { "category": "duplicate_of", "reason": "single-time-zone detail; identical record shape to the time_zones list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/v1/webhooks", "covered_by": { "stream": "webhooks" } },
+    { "method": "GET", "path": "/v1/webhooks/{webhook_id}", "excluded": { "category": "duplicate_of", "reason": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/webhooks", "covered_by": { "write": "create_webhook" } },
+    { "method": "DELETE", "path": "/v1/webhooks/{webhook_id}", "covered_by": { "write": "delete_webhook" } },
+
+    { "method": "GET", "path": "/v1/workflows", "covered_by": { "stream": "workflows" } },
+    { "method": "GET", "path": "/v1/workflows/{workflow_id}/rules", "covered_by": { "stream": "workflow_rules" } }
   ]
 }

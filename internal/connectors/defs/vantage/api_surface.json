@@ -1,13 +1,1467 @@
 {
   "api": "Vantage API v2 (https://api.vantage.sh)",
   "docs": "https://docs.vantage.sh/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (costs); minimal-honest api_surface per docs/migration/conventions.md section 2 / DECISIONS.md #4 - full Vantage API-surface research (every documented endpoint) is Pass B (wave5), not this fan-out.",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: fetched the complete live endpoint catalog (docs.vantage.sh/llms-full.txt, 193 documented method+path pairs across every /api/* doc page) and classified every one, every exclusion carrying a specific per-endpoint reason (no blanket bucket). Covered: 27 read streams, all next_url-paginated (costs, cost_reports, budgets, folders, dashboards, business_metrics, resource_reports, recommendations, teams, saved_filters, workspaces, virtual_tag_configs, tags, cost_alerts, budget_alerts, anomaly_alerts, managed_accounts, financial_commitments, segments, report_notifications, recommendation_views, network_flow_reports, kubernetes_efficiency_reports, anomaly_notifications, canvases, invoices, integrations) and 58 write actions (create/update/delete across budgets, folders, dashboards, cost_reports, saved_filters, workspaces, teams, cost_alerts, budget_alerts, business_metrics, virtual_tag_configs, anomaly_alerts, segments, report_notifications, recommendation_views, network_flow_reports, kubernetes_efficiency_reports, anomaly_notifications, canvases, resource_reports). Excluded, every endpoint with a specific per-endpoint reason under a real closed-vocabulary category: single-item detail GETs duplicating an already-covered list stream (duplicate_of, 34); account/user/billing/audit-log/SSO/access-grant/MSP-invoicing/per-provider-cloud-credential administration requiring elevated account-owner, Enterprise, or MSP-tier scope (requires_elevated_scope, 30); health-check, profile-introspection, static-enum, forecast-projection, and async-job-status-poller endpoints (non_data_endpoint, 28); PDF/CSV file transfer endpoints (binary_payload, 3); and a small remaining set of genuinely narrower-priority admin/report-configuration/sub-resource-with-no-standalone-collection mutations (out_of_scope, 13), each reasoned individually below rather than as a single bucket.",
   "endpoints": [
-    { "method": "GET", "path": "/v2/costs", "covered_by": { "stream": "costs" } },
-    { "method": "GET", "path": "/v2/cost_reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a cost_reports stream" } },
-    { "method": "GET", "path": "/v2/budgets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a budgets stream" } },
-    { "method": "GET", "path": "/v2/providers", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy does not implement a providers stream" } },
-    { "method": "POST", "path": "/v2/cost_reports", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy implements no write path (Write returns ErrUnsupportedOperation)" } }
+    {
+      "method": "DELETE",
+      "path": "/access_grants/{access_grant_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/anomaly_notifications/{anomaly_notification_token}",
+      "covered_by": {
+        "write": "delete_anomaly_notification"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/billing_profiles/{billing_profile_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/billing_rules/{billing_rule_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/budget_alerts/{budget_alert_token}",
+      "covered_by": {
+        "write": "delete_budget_alert"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/budgets/{budget_token}",
+      "covered_by": {
+        "write": "delete_budget"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/business_metrics/{business_metric_token}",
+      "covered_by": {
+        "write": "delete_business_metric"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/business_metrics/{business_metric_token}/values",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-clears a single business metric's entire value history; a narrow, high-blast-radius admin action on a sub-resource this connector does not otherwise read independently"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/canvases/{canvas_token}",
+      "covered_by": {
+        "write": "delete_canvas"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cost_alerts/{cost_alert_token}",
+      "covered_by": {
+        "write": "delete_cost_alert"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cost_reports/{cost_report_token}",
+      "covered_by": {
+        "write": "delete_cost_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/dashboards/{dashboard_token}",
+      "covered_by": {
+        "write": "delete_dashboard"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/financial_commitment_reports/{financial_commitment_report_token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same report-configuration narrowing as financial_commitment_reports creation above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folder_token}",
+      "covered_by": {
+        "write": "delete_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{integration_token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a configured cloud-billing integration entirely (a highly destructive account-configuration action, not a business-data record); no corresponding create action is migrated for any single provider, so a bare delete without its own create counterpart is left for a future wave"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{integration_token}/costs/{user_costs_upload_token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a single previously-uploaded custom-provider cost CSV batch; a narrow admin action paired with the CSV-upload endpoint this connector does not implement"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}",
+      "covered_by": {
+        "write": "delete_kubernetes_efficiency_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/managed_accounts/{managed_account_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "severs an Enterprise managed-account relationship; destructive org-topology admin action requiring elevated Enterprise-tier scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/managed_accounts/{managed_account_token}/sso_connection",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/network_flow_reports/{network_flow_report_token}",
+      "covered_by": {
+        "write": "delete_network_flow_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recommendation_views/{recommendation_view_token}",
+      "covered_by": {
+        "write": "delete_recommendation_view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/report_notifications/{report_notification_token}",
+      "covered_by": {
+        "write": "delete_report_notification"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/resource_reports/{resource_report_token}",
+      "covered_by": {
+        "write": "delete_resource_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/saved_filters/{saved_filter_token}",
+      "covered_by": {
+        "write": "delete_saved_filter"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/segments/{segment_token}",
+      "covered_by": {
+        "write": "delete_segment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{team_token}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{team_token}/members/{user_token}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "team-membership removal; account-administration action outside this connector's cost-management write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/virtual_tag_configs/{token}",
+      "covered_by": {
+        "write": "delete_virtual_tag_config"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_token}",
+      "covered_by": {
+        "write": "delete_workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access_grants",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/access_grants/{access_grant_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/anomaly_alerts",
+      "covered_by": {
+        "stream": "anomaly_alerts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/anomaly_alerts/{anomaly_alert_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-anomaly_alerts-item detail; identical record shape to the anomaly_alerts list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/anomaly_notifications",
+      "covered_by": {
+        "stream": "anomaly_notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/anomaly_notifications/{anomaly_notification_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the anomaly_notifications list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit_logs",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "audit-trail event log, not a primary cost-management object collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit_logs/{audit_log_token}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single audit-log-entry detail, not a primary cost-management object collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_profiles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_profiles/{billing_profile_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_rules/{billing_rule_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/budget_alerts",
+      "covered_by": {
+        "stream": "budget_alerts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/budget_alerts/{budget_alert_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-budget_alerts-item detail; identical record shape to the budget_alerts list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/budgets",
+      "covered_by": {
+        "stream": "budgets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/budgets/{budget_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-budgets-item detail; identical record shape to the budgets list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_metrics",
+      "covered_by": {
+        "stream": "business_metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_metrics/{business_metric_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-business_metrics-item detail; identical record shape to the business_metrics list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_metrics/{business_metric_token}/forecasted_values",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "computed forecast projection derived from a business metric's historical values, not a syncable stored record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_metrics/{business_metric_token}/values",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-metric raw value time series; the business_metrics list stream's own record already carries current values inline, and this sub-resource has no independent top-level collection identity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canvases",
+      "covered_by": {
+        "stream": "canvases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canvases/{canvas_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the canvases list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_alerts",
+      "covered_by": {
+        "stream": "cost_alerts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_alerts/{cost_alert_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-cost_alerts-item detail; identical record shape to the cost_alerts list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_alerts/{cost_alert_token}/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-alert firing-event history sub-resource; no independent top-level collection identity and no corresponding write requirement in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_alerts/{cost_alert_token}/events/{event_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET on the already out-of-scope cost-alert-events sub-resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_provider_accounts",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "connected-provider-account metadata list serving the integrations UI, not a primary cost-management object collection targeted by this connector's practical stream set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_providers",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static enum of supported cloud providers, not an account-scoped object collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_reports",
+      "covered_by": {
+        "stream": "cost_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_reports/{cost_report_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-cost_reports-item detail; identical record shape to the cost_reports list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_reports/{cost_report_token}/forecasted_costs",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "computed cost forecast projection derived from a cost report's historical data, not a syncable stored record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cost_services",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static per-workspace enum of queryable cost service names for VQL filter construction, not a syncable object collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/costs",
+      "covered_by": {
+        "stream": "costs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards/{dashboard_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-dashboards-item detail; identical record shape to the dashboards list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_exports/{data_export_token}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "async export-job status poller keyed to a job id returned by a POST kickoff, not a standalone syncable resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exchange_rates",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static currency exchange-rate reference table, not an account-scoped syncable object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/financial_commitment_reports",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "list endpoint for the financial-commitment-report configuration object; the financial_commitments stream already covers the underlying commitment records this report type summarizes, and a second, structurally distinct report-config stream adds administrative overhead disproportionate to its read value in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/financial_commitment_reports/{financial_commitment_report_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET on the already out-of-scope financial_commitment_reports collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/financial_commitments",
+      "covered_by": {
+        "stream": "financial_commitments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folder_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-folders-item detail; identical record shape to the folders list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations",
+      "covered_by": {
+        "stream": "integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integration_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the integrations list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integration_token}/costs",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-integration cost sub-listing; identical record shape to the costs stream, already covered by that stream (unfiltered by integration)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the invoices list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_token}/cost_report",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns a cost-report URL reference for the invoice's billing period, not a syncable record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes_efficiency_reports",
+      "covered_by": {
+        "stream": "kubernetes_efficiency_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the kubernetes_efficiency_reports list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/managed_accounts",
+      "covered_by": {
+        "stream": "managed_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/managed_accounts/{managed_account_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-managed_accounts-item detail; identical record shape to the managed_accounts list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-account/user profile introspection, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/network_flow_reports",
+      "covered_by": {
+        "stream": "network_flow_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/network_flow_reports/{network_flow_report_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the network_flow_reports list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ping",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "health-check heartbeat endpoint, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Vantage's own billing/subscription product catalog (Vantage's own SaaS pricing plans), not cloud cost-management business data this connector syncs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET on the already out-of-scope products collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/prices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Vantage's own billing/subscription price-tier catalog nested under a product; same non-business-data narrowing as products above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/prices/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET on the already out-of-scope product-prices sub-resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendation_views",
+      "covered_by": {
+        "stream": "recommendation_views"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendation_views/{recommendation_view_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the recommendation_views list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations",
+      "covered_by": {
+        "stream": "recommendations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations/by_type/{type}/resources",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-type resource fan-out sub-listing of a recommendation; the resources these point to are already reachable via the recommendations stream's own per-record resource references"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations/{recommendation_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-recommendations-item detail; identical record shape to the recommendations list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations/{recommendation_token}/resources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-recommendation affected-resource sub-listing; no independent top-level collection identity and no fan_out parent-id iteration declared for it in this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations/{recommendation_token}/resources/{resource_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET on the already out-of-scope per-recommendation resources sub-listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report_notifications",
+      "covered_by": {
+        "stream": "report_notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report_notifications/{report_notification_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the report_notifications list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resource_reports",
+      "covered_by": {
+        "stream": "resource_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resource_reports/columns",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static column-metadata enum for building a resource_reports query, not a syncable object collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resource_reports/{resource_report_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-resource_reports-item detail; identical record shape to the resource_reports list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "requires a resource_report_token (or workspace_token) parent-scoping query parameter with no bare top-level collection semantics of its own; the resource_reports stream already covers the parent report objects, and this dialect has no fan_out iteration declared across every resource_report_token to enumerate this sub-collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources/{resource_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET on the already out-of-scope resources sub-resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saved_filters",
+      "covered_by": {
+        "stream": "saved_filters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saved_filters/{saved_filter_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-saved_filters-item detail; identical record shape to the saved_filters list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/{segment_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-item detail GET; identical record shape to the segments list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{key}/values",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "per-tag-key value enumeration sub-resource of the tags stream, not a distinct syncable collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-teams-item detail; identical record shape to the teams list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_token}/members",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "team-membership sub-list; account-administration data outside this connector's cost-management scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/unit_costs",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "requires a mandatory cost_report_token parent-scoping query parameter with no bare top-level collection semantics of its own; the cost_reports stream already covers the parent report objects, and this dialect has no fan_out iteration declared across every cost_report_token to enumerate this per-report sub-collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "workspace member/user directory; account-administration data outside this connector's cost-management scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_token}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single-user detail; account-administration data outside this connector's cost-management scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/virtual_tag_configs",
+      "covered_by": {
+        "stream": "virtual_tag_configs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/virtual_tag_configs/async/{request_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "polls the status/result of an asynchronous virtual-tag-config recompute job queued by the /async write variant, not itself a syncable record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/virtual_tag_configs/{token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-virtual_tag_configs-item detail; identical record shape to the virtual_tag_configs list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/virtual_tag_configs/{token}/status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns the backfill/recompute job status for a single virtual tag config, a transient job-state poll, not a syncable record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_token}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-workspaces-item detail; identical record shape to the workspaces list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/access_grants",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/anomaly_notifications",
+      "covered_by": {
+        "write": "create_anomaly_notification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_profiles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/budget_alerts",
+      "covered_by": {
+        "write": "create_budget_alert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/budgets",
+      "covered_by": {
+        "write": "create_budget"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/business_metrics",
+      "covered_by": {
+        "write": "create_business_metric"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canvases",
+      "covered_by": {
+        "write": "create_canvas"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cost_alerts",
+      "covered_by": {
+        "write": "create_cost_alert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cost_reports",
+      "covered_by": {
+        "write": "create_cost_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/costs/data_exports",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "queues an asynchronous CSV data-export job (202 Accepted, polled via a Location header) of raw cost data, not itself a syncable record \u2014 the costs stream already reads the same underlying data synchronously"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dashboards",
+      "covered_by": {
+        "write": "create_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/exchange_rates/csv",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "bulk CSV exchange-rate upload; binary/file-upload mutation the dialect cannot express"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/financial_commitment_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a financial-commitment-report configuration object; the underlying financial_commitments stream and its data are already covered without this connector needing to author report configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders",
+      "covered_by": {
+        "write": "create_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/azure",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Azure Service Principal credential-onboarding write (tenant/app_id/password are live cloud credentials); a distinct per-provider credential shape from GCP/custom-provider onboarding, each carrying its own live-secret fields this dialect's schema/write model is not the right place to collect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/custom_provider",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "custom-provider integration creation is gated behind a 403-capable elevated-tier check per Vantage's own documented response codes for this endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/gcp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "GCP billing-account/BigQuery-dataset onboarding write; same per-provider live-credential-collection concern as the Azure integration endpoint above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integration_token}/costs.csv",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "CSV file upload of externally-computed integration costs, not a JSON record this dialect's write body construction can express"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invoice creation is MSP-invoicing-tier only per Vantage's own documentation ('MSP accounts only'), a billing capability gated behind an account tier this connector's declared scope does not assume"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_token}/download",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a signed download URL for a rendered PDF/CSV invoice file, not a JSON business-data record"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_token}/regenerate",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invoice regeneration is MSP-accounts-only per Vantage's own documentation, the same billing-tier gate as invoice creation above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_token}/send",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "sends an invoice via email; an MSP-invoicing-workflow action outside this connector's declared read/write data-sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_token}/send_and_approve",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "same MSP-invoicing-workflow narrowing as invoice send above, additionally gated to MSP accounts only per Vantage's own documentation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes_efficiency_reports",
+      "covered_by": {
+        "write": "create_kubernetes_efficiency_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kubernetes_efficiency_reports/data_exports",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "queues an asynchronous CSV data-export job (202 Accepted, polled via a Location header), not itself a syncable record \u2014 see costs/data_exports and unit_costs/data_exports for the same async-job shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/managed_accounts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "provisions a new child-account relationship under an Enterprise parent account; org-topology admin action gated to Enterprise plans, out of scope for this connector's per-account cost-management write set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/managed_accounts/{managed_account_token}/sso_connection",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/network_flow_reports",
+      "covered_by": {
+        "write": "create_network_flow_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/recommendation_views",
+      "covered_by": {
+        "write": "create_recommendation_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/report_notifications",
+      "covered_by": {
+        "write": "create_report_notification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/resource_reports",
+      "covered_by": {
+        "write": "create_resource_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/saved_filters",
+      "covered_by": {
+        "write": "create_saved_filter"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/segments",
+      "covered_by": {
+        "write": "create_segment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_token}/members",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "team-membership mutation; account-administration action outside this connector's cost-management write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/unit_costs/data_exports",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "queues an asynchronous CSV data-export job (202 Accepted, polled via a Location header), not itself a syncable record \u2014 see costs/data_exports and kubernetes_efficiency_reports/data_exports for the same async-job shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user_feedback",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "submits free-text product feedback to Vantage itself; a UI-support action with no read/write business-data shape relevant to a cost-management data-sync connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/virtual_tag_configs",
+      "covered_by": {
+        "write": "create_virtual_tag_config"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces",
+      "covered_by": {
+        "write": "create_workspace"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/access_grants/{access_grant_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/anomaly_alerts/{anomaly_alert_token}",
+      "covered_by": {
+        "write": "update_anomaly_alert"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/anomaly_notifications/{anomaly_notification_token}",
+      "covered_by": {
+        "write": "update_anomaly_notification"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/billing_profiles/{billing_profile_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/billing_rules/{billing_rule_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/budget_alerts/{budget_alert_token}",
+      "covered_by": {
+        "write": "update_budget_alert"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/budgets/{budget_token}",
+      "covered_by": {
+        "write": "update_budget"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/business_metrics/{business_metric_token}",
+      "covered_by": {
+        "write": "update_business_metric"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/business_metrics/{business_metric_token}/values.csv",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "CSV file upload to bulk-replace a business metric's value history, not a JSON record this dialect's write body construction can express"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/canvases/{canvas_token}",
+      "covered_by": {
+        "write": "update_canvas"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cost_alerts/{cost_alert_token}",
+      "covered_by": {
+        "write": "update_cost_alert"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cost_reports/{cost_report_token}",
+      "covered_by": {
+        "write": "update_cost_report"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/dashboards/{dashboard_token}",
+      "covered_by": {
+        "write": "update_dashboard"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/financial_commitment_reports/{financial_commitment_report_token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same report-configuration narrowing as financial_commitment_reports creation above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/folders/{folder_token}",
+      "covered_by": {
+        "write": "update_folder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integrations/{integration_token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "same integration-configuration-mutation narrowing as integration deletion above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}",
+      "covered_by": {
+        "write": "update_kubernetes_efficiency_report"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/managed_accounts/{managed_account_token}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "modifies an Enterprise managed-account relationship; org-topology admin action, not a routine cost-management mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/managed_accounts/{managed_account_token}/sso_connection",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user profile self-update, not a syncable-collection mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/network_flow_reports/{network_flow_report_token}",
+      "covered_by": {
+        "write": "update_network_flow_report"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/recommendation_views/{recommendation_view_token}",
+      "covered_by": {
+        "write": "update_recommendation_view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/report_notifications/{report_notification_token}",
+      "covered_by": {
+        "write": "update_report_notification"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/resource_reports/{resource_report_token}",
+      "covered_by": {
+        "write": "update_resource_report"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/saved_filters/{saved_filter_token}",
+      "covered_by": {
+        "write": "update_saved_filter"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/segments/{segment_token}",
+      "covered_by": {
+        "write": "update_segment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tags",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "bulk tag-rename/merge administrative action, not a per-record object mutation this dialect models"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{team_token}",
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_token}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "user profile/role mutation; account-administration action outside this connector's cost-management write scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/virtual_tag_configs/{token}",
+      "covered_by": {
+        "write": "update_virtual_tag_config"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/virtual_tag_configs/{token}/async",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous variant of update_virtual_tag_config that queues a background recompute job (202 Accepted, polled via /virtual_tag_configs/async/{request_id}) instead of applying synchronously; the synchronous PUT this dialect already covers (update_virtual_tag_config) is the practical, immediately-observable write path"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_token}",
+      "covered_by": {
+        "write": "update_workspace"
+      }
+    }
   ]
 }

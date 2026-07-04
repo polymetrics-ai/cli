@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/entries.json",
+    "query": {
+      "pageStart": "100",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Entries": [
+        {
+          "EntryId": "entry_fixture_101",
+          "DateCreated": "2026-01-17 00:00:00",
+          "DateUpdated": "2026-01-17 00:00:00"
+        },
+        {
+          "EntryId": "entry_fixture_102",
+          "DateCreated": "2026-01-18 00:00:00",
+          "DateUpdated": "2026-01-18 00:00:00"
+        }
+      ]
+    }
+  }
+}

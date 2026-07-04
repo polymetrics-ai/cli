@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/tms/check", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "checks": [
+        {
+          "id": 200001,
+          "name": "Fixture Transaction Check",
+          "type": "script",
+          "status": "successful",
+          "active": true,
+          "region": "us-west",
+          "interval": 10,
+          "created_at": 1767225600,
+          "modified_at": 1767225600,
+          "last_downtime_start": null,
+          "last_downtime_end": null,
+          "tags": ["fixture"]
+        }
+      ]
+    }
+  }
+}

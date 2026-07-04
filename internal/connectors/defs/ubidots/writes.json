@@ -1,0 +1,153 @@
+{
+  "actions": [
+    {
+      "name": "create_device",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v2.0/devices/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["label"],
+        "properties": {
+          "label": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "organization": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "properties": { "type": "object" }
+        }
+      },
+      "risk": "creates a new Ubidots device; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_device",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "api/v2.0/devices/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "properties": { "type": "object" }
+        }
+      },
+      "risk": "updates the fields of an existing Ubidots device; external mutation, no approval required"
+    },
+    {
+      "name": "delete_device",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "api/v2.0/devices/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a device and all of its variables/values; destructive and irreversible; approval required"
+    },
+    {
+      "name": "create_variable",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v2.0/variables/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["label", "device"],
+        "properties": {
+          "label": { "type": "string" },
+          "name": { "type": "string" },
+          "device": { "type": "string" },
+          "description": { "type": "string" },
+          "unit": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new variable under an existing device; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_variable",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "api/v2.0/variables/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "unit": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "updates the fields of an existing variable; external mutation, no approval required"
+    },
+    {
+      "name": "delete_variable",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "api/v2.0/variables/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a variable and all of its stored values; destructive and irreversible; approval required"
+    },
+    {
+      "name": "create_variable_value",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v1.6/variables/{{ record.variable_id }}/values/",
+      "path_fields": ["variable_id"],
+      "body_type": "json",
+      "body_fields": ["value", "timestamp", "context"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["variable_id", "value"],
+        "properties": {
+          "variable_id": { "type": "string" },
+          "value": { "type": "number" },
+          "timestamp": { "type": "integer" },
+          "context": { "type": "object" }
+        }
+      },
+      "risk": "injects a new data point (dot) into an existing variable; low-risk external mutation, no approval required"
+    }
+  ]
+}

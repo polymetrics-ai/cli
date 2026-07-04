@@ -1,0 +1,257 @@
+{
+  "actions": [
+    {
+      "name": "create_affiliate",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v2/affiliates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "password": { "type": "string" },
+          "program_id": { "type": "integer" },
+          "status": { "type": "string" },
+          "send_email": { "type": "boolean" },
+          "company": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "risk": "creates a new affiliate account; low-risk, no approval required (UpPromote caps this at 150 affiliates/day per its own API)"
+    },
+    {
+      "name": "approve_deny_affiliate",
+      "kind": "update",
+      "method": "POST",
+      "path": "api/v2/affiliate/active",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["affiliate_email", "status"],
+        "properties": {
+          "affiliate_email": { "type": "string" },
+          "status": { "type": "string", "enum": ["approved", "denied"] }
+        }
+      },
+      "risk": "approves or denies a pending affiliate application; low-risk, no approval required"
+    },
+    {
+      "name": "set_upline_affiliate",
+      "kind": "update",
+      "method": "POST",
+      "path": "api/v2/affiliate/set-upline",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["affiliate_email", "upline_affiliate_email"],
+        "properties": {
+          "affiliate_email": { "type": "string" },
+          "upline_affiliate_email": { "type": "string" }
+        }
+      },
+      "risk": "sets the referring (upline) affiliate for a downline affiliate, affecting multi-tier commission attribution; no approval required"
+    },
+    {
+      "name": "move_affiliate_to_program",
+      "kind": "update",
+      "method": "POST",
+      "path": "api/v2/affiliate/move-affiliate-to-program",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["affiliate_email", "program_id"],
+        "properties": {
+          "affiliate_email": { "type": "string" },
+          "program_id": { "type": "integer" }
+        }
+      },
+      "risk": "reassigns an affiliate to a different commission program, changing future commission rules; no approval required"
+    },
+    {
+      "name": "connect_customer_to_affiliate",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v2/affiliate/create-connect-customer",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["affiliate_email", "customer_email"],
+        "properties": {
+          "affiliate_email": { "type": "string" },
+          "customer_email": { "type": "string" }
+        }
+      },
+      "risk": "links a Shopify customer email to an affiliate for future referral attribution; low-risk, no approval required"
+    },
+    {
+      "name": "assign_coupon_to_affiliate",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v2/coupons/assign",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["affiliate_email"],
+        "properties": {
+          "affiliate_email": { "type": "string" },
+          "coupon": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "assigns a discount coupon code to an affiliate for referral tracking; low-risk, no approval required"
+    },
+    {
+      "name": "create_referral",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v2/referrals",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type", "affiliate_email"],
+        "properties": {
+          "type": { "type": "string", "enum": ["use_order_id", "fixed_amount"] },
+          "affiliate_email": { "type": "string" },
+          "order_id": { "type": "integer" },
+          "comment": { "type": "string" },
+          "commission": { "type": "integer" },
+          "total_sale": { "type": "integer" },
+          "is_replace": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a manual commission-bearing referral for an affiliate, either tied to a Shopify order or as a fixed amount; affects payout totals, no approval required"
+    },
+    {
+      "name": "approve_deny_referral",
+      "kind": "update",
+      "method": "POST",
+      "path": "api/v2/referral/{{ record.id }}/status",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["status"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["approved", "denied"] }
+        }
+      },
+      "risk": "approves or denies a pending referral, affecting affiliate payout eligibility; no approval required"
+    },
+    {
+      "name": "add_referral_adjustment",
+      "kind": "update",
+      "method": "POST",
+      "path": "api/v2/referral/{{ record.id }}/adjustment",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["adjustment"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "adjustment"],
+        "properties": {
+          "id": { "type": "string" },
+          "adjustment": { "type": "number" }
+        }
+      },
+      "risk": "adds a positive or negative commission adjustment to an existing referral, directly changing affiliate payout amounts; no approval required"
+    },
+    {
+      "name": "mark_as_paid_manual_payment",
+      "kind": "update",
+      "method": "POST",
+      "path": "api/v2/payments/mark-as-paid",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["affiliate_email"],
+        "properties": {
+          "affiliate_email": { "type": "string" },
+          "referral_ids": { "type": "string" },
+          "note": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      },
+      "risk": "marks approved referrals as manually paid outside UpPromote's own payout processing; affects financial records, no approval required"
+    },
+    {
+      "name": "subscribe_webhook_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/v2/webhook-subscriptions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["target_url", "event"],
+        "properties": {
+          "target_url": { "type": "string" },
+          "event": {
+            "type": "string",
+            "enum": ["referral.new", "referral.approved", "referral.denied", "referral.status-changed", "affiliate.new", "affiliate.approved", "affiliate.inactive", "affiliate.status-changed", "payment.paid"]
+          }
+        }
+      },
+      "risk": "registers a new outbound webhook subscription that will deliver event payloads to an external URL; low-risk, no approval required"
+    },
+    {
+      "name": "update_webhook_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "api/v2/webhook-subscriptions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["target_url", "event"],
+        "properties": {
+          "target_url": { "type": "string" },
+          "event": {
+            "type": "string",
+            "enum": ["referral.new", "referral.approved", "referral.denied", "referral.status-changed", "affiliate.new", "affiliate.approved", "affiliate.inactive", "affiliate.status-changed", "payment.paid"]
+          }
+        }
+      },
+      "risk": "updates an existing webhook subscription's target URL; low-risk, no approval required"
+    },
+    {
+      "name": "delete_webhook_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "api/v2/webhook-subscriptions",
+      "body_type": "json",
+      "body_fields": ["event"],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event"],
+        "properties": {
+          "event": { "type": "string" }
+        }
+      },
+      "risk": "removes a webhook subscription; the external endpoint stops receiving that event type, no approval required"
+    }
+  ]
+}

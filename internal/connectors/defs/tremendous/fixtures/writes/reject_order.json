@@ -1,0 +1,7 @@
+{
+  "record": { "id": "ord_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/order_approvals/ord_fixture_1/reject"
+  }
+}

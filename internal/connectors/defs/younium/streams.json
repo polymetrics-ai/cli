@@ -54,6 +54,54 @@
         "updated_at": "{{ record.updated }}"
       },
       "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "products",
+      "path": "/Products",
+      "pagination": { "type": "offset_limit", "limit_param": "Take", "offset_param": "Skip", "page_size": 100 },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.modified }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "payment_terms",
+      "path": "/PaymentTerms",
+      "pagination": { "type": "offset_limit", "limit_param": "Take", "offset_param": "Skip", "page_size": 100 },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/payment_terms.json"
+    },
+    {
+      "name": "currencies",
+      "path": "/Currency",
+      "pagination": { "type": "offset_limit", "limit_param": "Take", "offset_param": "Skip", "page_size": 100 },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.code }}"
+      },
+      "schema": "schemas/currencies.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/Webhooks",
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.url }}"
+      },
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

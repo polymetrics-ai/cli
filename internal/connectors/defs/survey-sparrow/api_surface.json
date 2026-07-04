@@ -1,14 +1,857 @@
 {
   "api": "SurveySparrow API v3 (https://api.surveysparrow.com/v3)",
-  "docs": "https://developers.surveysparrow.com/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (surveys, contacts, responses, questions); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "docs": "https://developers.surveysparrow.com/rest-apis/ (Docusaurus + docusaurus-openapi-docs, server-rendered per-endpoint pages)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: full documented SurveySparrow API v3 surface (113 method+path endpoints crawled directly from developers.surveysparrow.com/rest-apis/<category> pages and their 113 individual per-endpoint reference pages) reviewed; 22 GET list resources implemented as streams (4 legacy-parity plus 18 new), 33 CRUD mutations across 27 named write actions implemented, remainder excluded with per-endpoint closed-vocabulary categories (see docs.md Known limits for the exclusion-family summary)",
   "endpoints": [
-    { "method": "GET", "path": "/v3/surveys", "covered_by": { "stream": "surveys" } },
-    { "method": "GET", "path": "/v3/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/v3/responses", "covered_by": { "stream": "responses" } },
-    { "method": "GET", "path": "/v3/surveys/{survey_id}/questions", "covered_by": { "stream": "questions" } },
-    { "method": "POST", "path": "/v3/surveys", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v3/webhooks", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "DELETE",
+      "path": "/v3/audit_logs/events/:id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/channels/:id",
+      "covered_by": {
+        "write": "delete_channel"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact_lists/:id",
+      "covered_by": {
+        "write": "delete_contact_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact_properties/:id",
+      "covered_by": {
+        "write": "delete_contact_property"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contacts/:id",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/questions/:question_id",
+      "covered_by": {
+        "write": "delete_question"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/reminders/:id",
+      "covered_by": {
+        "write": "delete_reminder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/responses/:id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sections/:section_id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a survey SECTION is a sub-resource of a single survey's structure (grouping of questions), created/updated/deleted only in the context of one survey's question layout; no standalone list-all-sections endpoint exists to back a catalog stream, and section CRUD is bundled into survey-authoring workflows the create_survey/update_survey actions do not attempt to model in full"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/survey_folders/:id",
+      "covered_by": {
+        "write": "delete_survey_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/tickets/:id",
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/translation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/users/:id",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/variables/:variable_id",
+      "covered_by": {
+        "write": "delete_variable"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/webhooks/:id",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/audit_logs/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/audit_logs/:id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/audit_logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/channels/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the channels list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/channels",
+      "covered_by": {
+        "stream": "channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the contact_lists list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists",
+      "covered_by": {
+        "stream": "contact_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_properties",
+      "covered_by": {
+        "stream": "contact_properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the contacts list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/status/:token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous batch-contact-creation job submission and its status-polling companion endpoint -- a bulk-import workflow (submit many contacts, poll a job token) distinct from the single-record create_contact this bundle models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email_themes",
+      "covered_by": {
+        "stream": "email_themes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/expressions",
+      "covered_by": {
+        "stream": "expressions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/languages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real GET /languages response schema page renders no field list at all (confirmed empty on inspection) -- an unconfirmed shape, not implemented rather than guessed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/metrics/responses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "NPS/CX metrics aggregation and metric-filtered response listing -- an analytics read model derived from the already-covered responses stream, not distinct catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "NPS/CX metrics aggregation and metric-filtered response listing -- an analytics read model derived from the already-covered responses stream, not distinct catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/questions",
+      "covered_by": {
+        "stream": "questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reminders/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the reminders list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reminders",
+      "covered_by": {
+        "stream": "reminders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "generates a public shareable report link (a side-effecting action producing a URL), not catalog/config data or a plain record mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reputation/app_platforms/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the reputation_app_platforms list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reputation/app_platforms",
+      "covered_by": {
+        "stream": "reputation_app_platforms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reputation/platforms/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the reputation_platforms list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reputation/platforms",
+      "covered_by": {
+        "stream": "reputation_platforms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reputation/reviews/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the reputation_reviews list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reputation/reviews",
+      "covered_by": {
+        "stream": "reputation_reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/responses/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the responses list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/responses/status/:token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous batch-response-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from single-record response mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/responses",
+      "covered_by": {
+        "stream": "responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/roles",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey/approvers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_folders/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the survey_folders list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_folders",
+      "covered_by": {
+        "stream": "survey_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey/subject/evaluators",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey/subject/report",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey/subjects",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the surveys list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys",
+      "covered_by": {
+        "stream": "surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/targets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the response schema nests a plain string[] of target labels at data.targets (confirmed from the real response schema), not structured per-record catalog data suited to a stream declaration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/templates",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ticket_fields/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the ticket_fields list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ticket_fields",
+      "covered_by": {
+        "stream": "ticket_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/tickets/batch/status/:token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous batch-ticket-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from the single-record create_ticket this bundle models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/tickets/:id/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ticket comment sub-resource (a nested thread on a single ticket), a distinct sub-collection this pass does not model as its own stream/write pair; the tickets stream/writes cover the ticket record itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/tickets/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the tickets list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/tickets",
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/translation/export",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/:id",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the users list stream already reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/variables",
+      "covered_by": {
+        "stream": "variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contact_lists/:id",
+      "covered_by": {
+        "write": "update_contact_list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contact_properties/:id",
+      "covered_by": {
+        "write": "update_contact_property"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/survey_folders/:id",
+      "covered_by": {
+        "write": "update_survey_folder"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/:id",
+      "covered_by": {
+        "write": "update_survey"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/users/:id",
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/audit_logs/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real GET /audit_logs response schema documents its records array (list/data) as a bare string[] rather than a structured object type in developers.surveysparrow.com's own OpenAPI reference (a documentation gap on SurveySparrow's side, confirmed by inspecting both the list and single-record GET pages) -- fabricating a structured schema for genuinely unconfirmed fields risks a SCHEMA_AMBIGUOUS-shaped defect; audit log event subscription management is likewise unconfirmed-shape and excluded alongside it"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/channels/create_unique_links",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "channel-analytics retrieval (a POST-verbed read, not a mutation) or a clone/bulk-link-creation compound action beyond plain single-record channel CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/channels/:id/clone",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "clones an existing channel (a compound duplicate-and-create action), a workflow convenience beyond plain single-record create/update/delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/channels/:id/summary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "channel-analytics retrieval (a POST-verbed read, not a mutation) or a clone/bulk-link-creation compound action beyond plain single-record channel CRUD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/channels",
+      "covered_by": {
+        "write": "create_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact_lists",
+      "covered_by": {
+        "write": "create_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact_properties",
+      "covered_by": {
+        "write": "create_contact_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous batch-contact-creation job submission and its status-polling companion endpoint -- a bulk-import workflow (submit many contacts, poll a job token) distinct from the single-record create_contact this bundle models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/language",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/questions",
+      "covered_by": {
+        "write": "create_question"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reminders",
+      "covered_by": {
+        "write": "create_reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/responses/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous batch-response-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from single-record response mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/responses/new",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a survey SECTION is a sub-resource of a single survey's structure (grouping of questions), created/updated/deleted only in the context of one survey's question layout; no standalone list-all-sections endpoint exists to back a catalog stream, and section CRUD is bundled into survey-authoring workflows the create_survey/update_survey actions do not attempt to model in full"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/survey_folders",
+      "covered_by": {
+        "write": "create_survey_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/survey/invite",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys/:id/clone",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "clones an entire survey (structure + questions + settings) as a compound multi-resource copy action, beyond the plain single-record create_survey/update_survey CRUD this bundle models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/surveys",
+      "covered_by": {
+        "write": "create_survey"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tickets/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "asynchronous batch-ticket-creation job submission and its status-polling companion endpoint -- a bulk-import workflow distinct from the single-record create_ticket this bundle models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tickets/:id/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ticket comment sub-resource (a nested thread on a single ticket), a distinct sub-collection this pass does not model as its own stream/write pair; the tickets stream/writes cover the ticket record itself"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tickets",
+      "covered_by": {
+        "write": "create_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/translation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/variables",
+      "covered_by": {
+        "write": "create_variable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/:id",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/questions/:question_id",
+      "covered_by": {
+        "write": "update_question"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/responses/:id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/responses/:response_id/complete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/responses/:response_id/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a multi-step stateful response-building workflow (start a partial response, add answers one at a time via question_id/answer pairs, then mark complete) rather than a single-record CRUD shape -- modeling this correctly needs a compound multi-request WriteHook (Tier-2), which this connector does not have and this pass may not add a new hook package for; excluded rather than mis-modeled as plain single-record create/update"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sections/:section_id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "a survey SECTION is a sub-resource of a single survey's structure (grouping of questions), created/updated/deleted only in the context of one survey's question layout; no standalone list-all-sections endpoint exists to back a catalog stream, and section CRUD is bundled into survey-authoring workflows the create_survey/update_survey actions do not attempt to model in full"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/survey/subject/updateinvite",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Employee 360 (360-degree performance review) feature-specific approver/subject/evaluator/invite management, a specialized survey-type workflow distinct from the general survey/contact/response/question catalog this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/tickets/:id",
+      "covered_by": {
+        "write": "update_ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/translation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-survey/per-language translation content CRUD (import/export/update translated survey text), a specialized localization workflow with its own large body-shape (translation key/value maps) distinct from the general catalog resources this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/webhooks/:id",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/response_properties",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists the available response-property metadata fields (schema/config describing what property keys a response MAY carry), a metadata-about-metadata endpoint rather than catalog record data itself; the responses stream already reads the actual per-response data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/responses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a NEW response record directly by survey_id (distinct from the /responses/new + /update + /complete multi-step flow), but its documented body (survey_id, contact_id, channel_id, variables, trigger_workflow, tags) creates only a response SHELL with no answers attached -- a real response is only meaningfully created by following up with per-question answers via the multi-step flow this bundle excludes as out_of_scope above; modeling create_response alone without the required follow-up answers would produce empty, not-genuinely-complete response records, an accepted-input behavior gap worse than not modeling it"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/variables/batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk multi-record variable creation in one request (an array-of-variables body), a batch-import shape distinct from the single-record create_variable this bundle models"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/channels/:id",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "associates/re-associates a channel with a different survey_id (its only documented body field) -- a re-parenting action with broad blast-radius on already-collected response data's channel attribution, not modeled as update_channel this pass"
+      }
+    }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "saved_filter_token": "svf_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/saved_filters/svf_fixture_1"
+  }
+}

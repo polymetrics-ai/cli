@@ -1,0 +1,22 @@
+{
+  "record": {
+    "endpointUrl": "https://example.com/fixture/webhook",
+    "topics": ["order.create", "order.update"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook_subscriptions",
+    "body": {
+      "endpointUrl": "https://example.com/fixture/webhook",
+      "topics": ["order.create", "order.update"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "webhook_fixture_1",
+      "endpointUrl": "https://example.com/fixture/webhook",
+      "topics": ["order.create", "order.update"]
+    }
+  }
+}

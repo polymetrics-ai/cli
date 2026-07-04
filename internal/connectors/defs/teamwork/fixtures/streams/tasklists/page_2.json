@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/1/tasklists.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "todo-lists": [
+        { "id": "1", "name": "Fixture Tasklist 1", "description": "Fixture tasklist", "milestone-id": "0", "complete": false }
+      ]
+    }
+  }
+}

@@ -43,6 +43,38 @@
       "records": { "path": "." },
       "projection": "passthrough",
       "schema": "schemas/events.json"
+    },
+    {
+      "name": "hours",
+      "path": "/{{ config.account_id }}/hours",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "project_id": "{{ record.project.id }}",
+        "user_id": "{{ record.user.id }}"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/hours.json"
+    },
+    {
+      "name": "labels",
+      "path": "/{{ config.account_id }}/labels",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/labels.json"
+    },
+    {
+      "name": "teams",
+      "path": "/{{ config.account_id }}/teams",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/teams.json"
     }
   ]
 }

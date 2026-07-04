@@ -1,17 +1,2241 @@
 {
-  "api": "Toggl Track API v9 (https://developers.track.toggl.com/docs/)",
+  "api": "Toggl Track API v9 (https://engineering.toggl.com/docs/track/), published OpenAPI 2.0 spec at https://engineering.toggl.com/assets/files/api-b2b7afb49ca646faff07d1e19b7b2afd.json (fetched 2026-07-03)",
   "docs": "https://developers.track.toggl.com/docs/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (time_entries, projects, clients, workspace_users, organization_users). Toggl's write endpoints (create/update/delete time entry, project, client) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "scope": "Pass B full-surface expansion against Toggl Track's complete published OpenAPI spec (282 real operations across every documented tag). Covered: the 5 legacy-parity read streams (time_entries, projects, clients, workspace_users, organization_users) plus 2 new Pass B streams (tags, tasks \u2014 both workspace-scoped list endpoints matching the existing bundle shape), and 16 new write actions covering every dialect-expressible create/update/delete/stop mutation on time_entries, projects, clients, tags, and tasks. Excluded: billing/subscription/invoicing (organization-owner scope), SSO/SAML/desktop auth, organization/workspace administration (roles, rates, statistics, ownership transfer), the separate Reports/Saved-Reports API product, UI-personalization surfaces (favorites, dashboards, preferences, goals), binary-payload endpoints (avatars, workspace logo, zip exports), bulk/batch convenience actions duplicating the per-record streams/writes already covered, and a handful of internal/undocumented-shape endpoints (sync-server goals, smail webhook receiver) \u2014 every exclusion below carries a specific closed-vocabulary category and reason, no blanket bucket remains.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v9/me/time_entries", "covered_by": { "stream": "time_entries" } },
-    { "method": "GET", "path": "/api/v9/workspaces/{workspace_id}/projects", "covered_by": { "stream": "projects" } },
-    { "method": "GET", "path": "/api/v9/workspaces/{workspace_id}/clients", "covered_by": { "stream": "clients" } },
-    { "method": "GET", "path": "/api/v9/workspaces/{workspace_id}/users", "covered_by": { "stream": "workspace_users" } },
-    { "method": "GET", "path": "/api/v9/organizations/{organization_id}/users", "covered_by": { "stream": "organization_users" } },
-    { "method": "GET", "path": "/api/v9/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, used only by check, not a syncable object stream" } },
-    { "method": "POST", "path": "/api/v9/workspaces/{workspace_id}/time_entries", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented time entry creation; Pass B capability expansion" } },
-    { "method": "PUT", "path": "/api/v9/workspaces/{workspace_id}/time_entries/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented time entry mutation; Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/api/v9/workspaces/{workspace_id}/time_entries/{id}", "excluded": { "category": "destructive_admin", "reason": "destructive delete not modeled by legacy; Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/audit_logs/{organization_id}/{from}/{to}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization security audit-log export; organization-owner security/compliance scope beyond this connector's workspace/organization-id config surface"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/saml2/login",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/saml2/login/{workspace_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/avatars",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "avatar image upload/removal; a binary multipart payload with no declarative dialect representation and no syncable record shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/avatars",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "avatar image upload/removal; a binary multipart payload with no declarative dialect representation and no syncable record shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/avatars/use_gravatar",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "avatar image upload/removal; a binary multipart payload with no declarative dialect representation and no syncable record shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/countries",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static reference lookup (countries/subdivisions) with no workspace/account scoping; not an object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/countries/{country_id}/subdivisions",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static reference lookup (countries/subdivisions) with no workspace/account scoping; not an object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/currencies",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/desktop_login",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/desktop_login_tokens",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/feedback",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "in-app user feedback submission form; not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ical/workspace_user/{token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "iCal feed token issuance for external calendar subscription; a delivery mechanism, not object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/calendars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/calendars/selected",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/calendar/events/details-suggestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/calendar/events/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/events/{event_id}/details-suggestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/setup",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/calendar/{integration_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integrations/calendar/{integration_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/{integration_id}/calendars",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/calendar/{integration_id}/calendars/update",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/integrations/calendar/{integration_id}/calendars/{calendar_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/{integration_id}/calendars/{calendar_id}/events/{event_id}/attendees",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/calendar/{integration_id}/calendars/{id_calendar}/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party calendar-integration setup and calendar-event sync (Google/Outlook calendar linking); a distinct integrations surface unrelated to Toggl's own time-tracking/workspace object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invitations/{invitation_code}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization member invitation lifecycle (create/resend/accept/reject); organization-admin user-management action, not time-tracking data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/keys",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "API token rotation/reset for the caller's own account; rotating the credential mid-sync would invalidate the very token this connector authenticates with"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user profile introspection, used only by check, not a syncable object stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/me",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/accept_tos",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/clients",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cross-workspace client listing for the authenticated user; the workspace-scoped clients stream already covers this data per configured workspace_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/close_account",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/disable_product_emails/{disable_code}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/disable_weekly_report/{weekly_report_code}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/enable_sso",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/export",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "async report/data export job that produces a downloadable .zip archive; no declarative streaming representation of a zip payload"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/export",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "async report/data export job that produces a downloadable .zip archive; no declarative streaming representation of a zip payload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/export/data/{uuid}.zip",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "async report/data export job that produces a downloadable .zip archive; no declarative streaming representation of a zip payload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/me/favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/favorites/suggestions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/me/favorites/{favorite_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/features",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/flags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/flags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/location",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/logged",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/organizations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "list of organizations the authenticated user belongs to; organization_users stream already covers organization-scoped data for the configured organization_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace/user UI preference settings (locale, date format, timers); presentation configuration, not time-tracking or billing object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace/user UI preference settings (locale, date format, timers); presentation configuration, not time-tracking or billing object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/preferences/{client}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace/user UI preference settings (locale, date format, timers); presentation configuration, not time-tracking or billing object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/preferences/{client}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace/user UI preference settings (locale, date format, timers); presentation configuration, not time-tracking or billing object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/projects",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cross-workspace project listing for the authenticated user; the workspace-scoped projects stream already covers this data per configured workspace_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/projects/paginated",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cross-workspace project listing for the authenticated user; the workspace-scoped projects stream already covers this data per configured workspace_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/me/push_services",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/push_services",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/push_services",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/quota",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/reset_token",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/tags",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cross-workspace tag listing for the authenticated user; the workspace-scoped tags stream already covers this data per configured workspace_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/tasks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cross-workspace task listing for the authenticated user; the workspace-scoped tasks stream already covers this data per configured workspace_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/time_entries",
+      "covered_by": {
+        "stream": "time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/time_entries/checklist",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user time-entry-gap 'checklist' UI nudge feature; not primary time-entry object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/time_entries/current",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "returns the single currently-running time entry, a subset of the data the time_entries stream (GET /me/time_entries) already returns on every full-refresh read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/time_entries/{time_entry_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single time-entry detail lookup by id; the time_entries stream already covers this record's full field set via its list read"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/me/time_entries_shared_with",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists which other users a set of time entries has been shared with; a sharing-metadata side-query, not primary time-entry object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/timesheets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/track_reminders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/web-timer",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "authenticated-user account preferences/notifications/session metadata (TOS acceptance, weekly-report opt-out, push-notification device registration, quota/feature flags); user-account settings, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/workspaces",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/invitations/{invitation_code}/accept",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/invitations/{invitation_code}/reject",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization member invitation lifecycle (create/resend/accept/reject); organization-admin user-management action, not time-tracking data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organization_id}/groups/{group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organization_id}/groups/{group_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}/groups/{group_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/integrations/slack/request",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Slack integration request handshake; a one-off admin action with no associated syncable data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/invitations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization member invitation lifecycle (create/resend/accept/reject); organization-admin user-management action, not time-tracking data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}/invitations/{invitation_id}/resend",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization member invitation lifecycle (create/resend/accept/reject); organization-admin user-management action, not time-tracking data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/invoices/{invoice_uid}.pdf",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/owner",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/owner/transfer",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-ownership transfer workflow; an irreversible organization-owner-only administrative action far outside this connector's read/write object-data scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/owner/transfer",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "initiates an irreversible organization-ownership transfer; never a reverse-ETL action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/owner/transfer/{transfer_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-ownership transfer workflow detail; organization-owner-only administrative action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/owner/transfer/{transfer_id}/{action}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "accepts/rejects/cancels an irreversible organization-ownership transfer; never a reverse-ETL action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/payment_records",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/plans",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/plans/{plan_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/premium-upgrade-discount-email",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/segmentation",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}/segmentation",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organization_id}/subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}/subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/cancellation_feedback",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/subscription/customer",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/customer",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}/subscription/customer",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/discount_request",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/feature_upsell_multi",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/subscription/invoice_summary",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/subscription/payment_failed",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization billing/payment-failure status; organization-owner billing scope, not time-tracking data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organization_id}/subscription/promocode",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/promocode",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/subscription/purchase_orders/{purchase_order_uid}.pdf",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/setup_intent",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organization_id}/subscription/trial",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/trial",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/subscription/trial/opt-in",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/trial/opt-in",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/upgrade_request/{feature_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organization_id}/subscription/usage_based_discount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscription/usage_based_discount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/subscriptions/item/discount",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/users",
+      "covered_by": {
+        "stream": "organization_users"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organization_id}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/users/detailed",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organization_id}/users/leave",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "removes the calling user's own organization membership; a self-service account-termination action, never a reverse-ETL write"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{organization_id}/users/{organization_user_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organization_id}/workspaces",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/workspaces/statistics",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level administration (create/update organization, roles, segmentation data, owner transfer, workspace creation); organization-owner scope this connector's spec.json (workspace/organization id only, no owner-level admin token distinction) has no narrower surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/workspaces/{workspace_id}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/workspaces/{workspace_id}/workspace_users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/organizations/{organization_id}/workspaces/{workspace_id}/workspace_users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/smail/contact",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "internal transactional-email delivery-status webhook receiver; not caller-invokable syncable data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/smail/demo",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "internal transactional-email delivery-status webhook receiver; not caller-invokable syncable data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/smail/meet",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "internal transactional-email delivery-status webhook receiver; not caller-invokable syncable data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "API health/status heartbeat; not an object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/plans",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sync-server/me/goals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "undocumented internal sync-server endpoint (distinct host/path shape from the rest of the public API surface); superseded by the documented workspace goals tag this connector already excludes as out_of_scope UI-construct data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/timeline",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "desktop-app idle-time/activity timeline recording; a desktop-client telemetry feature with no server-side syncable object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeline",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "desktop-app idle-time/activity timeline recording; a desktop-client telemetry feature with no server-side syncable object model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeline",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "desktop-app idle-time/activity timeline recording; a desktop-client telemetry feature with no server-side syncable object model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timezones",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static reference lookup of supported timezone identifiers; not an object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timezones/offsets",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static reference lookup of supported timezone identifiers; not an object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/plans",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace budget/threshold alert configuration; an admin notification-rule construct, not time-tracking object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace budget/threshold alert configuration; an admin notification-rule construct, not time-tracking object data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/alerts/{alert_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace budget/threshold alert configuration; an admin notification-rule construct, not time-tracking object data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/alerts/{alert_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace budget/threshold alert configuration; an admin notification-rule construct, not time-tracking object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/clients",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/clients",
+      "covered_by": {
+        "write": "create_client"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/clients/archive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk/batch client archive, restore, and lookup-by-id-list convenience actions; the per-record create_client/update_client/delete_client writes and the clients stream already cover the same data one record at a time"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/clients/data",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk/batch client archive, restore, and lookup-by-id-list convenience actions; the per-record create_client/update_client/delete_client writes and the clients stream already cover the same data one record at a time"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/clients/delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk/batch client archive, restore, and lookup-by-id-list convenience actions; the per-record create_client/update_client/delete_client writes and the clients stream already cover the same data one record at a time"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/clients/{client_id}",
+      "covered_by": {
+        "write": "delete_client"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/clients/{client_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk/batch client archive, restore, and lookup-by-id-list convenience actions; the per-record create_client/update_client/delete_client writes and the clients stream already cover the same data one record at a time"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/clients/{client_id}",
+      "covered_by": {
+        "write": "update_client"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/clients/{client_id}/archive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk/batch client archive, restore, and lookup-by-id-list convenience actions; the per-record create_client/update_client/delete_client writes and the clients stream already cover the same data one record at a time"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/clients/{client_id}/restore",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk/batch client archive, restore, and lookup-by-id-list convenience actions; the per-record create_client/update_client/delete_client writes and the clients stream already cover the same data one record at a time"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/currencies",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/dashboard/all_activity",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pre-aggregated activity/leaderboard dashboard views derived from time_entries; not primary object data, and duplicative of the time_entries stream this bundle already covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/dashboard/most_active",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pre-aggregated activity/leaderboard dashboard views derived from time_entries; not primary object data, and duplicative of the time_entries stream this bundle already covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/dashboard/top_activity",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pre-aggregated activity/leaderboard dashboard views derived from time_entries; not primary object data, and duplicative of the time_entries stream this bundle already covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/expenses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal work-scheduling endpoints undocumented beyond their summary; no stable public contract to build a stream against"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/expenses/upload",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal work-scheduling endpoints undocumented beyond their summary; no stable public contract to build a stream against"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/exports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "async report/data export job that produces a downloadable .zip archive; no declarative streaming representation of a zip payload"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/exports",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "async report/data export job that produces a downloadable .zip archive; no declarative streaming representation of a zip payload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/exports/data/{uuid}.zip",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "async report/data export job that produces a downloadable .zip archive; no declarative streaming representation of a zip payload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/favorites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/favorites/suggestions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/favorites/{favorite_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user UI favorites/pins (which projects/reports a user starred in the Toggl web app); a UI-personalization preference, not time-tracking or workspace object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/goals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace productivity goal tracking (a premium-feature UI construct); not part of legacy's migrated object model and not core time-tracking data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/goals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace productivity goal tracking (a premium-feature UI construct); not part of legacy's migrated object model and not core time-tracking data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/goals/{goal_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace productivity goal tracking (a premium-feature UI construct); not part of legacy's migrated object model and not core time-tracking data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/goals/{goal_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace productivity goal tracking (a premium-feature UI construct); not part of legacy's migrated object model and not core time-tracking data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/goals/{goal_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace productivity goal tracking (a premium-feature UI construct); not part of legacy's migrated object model and not core time-tracking data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/groups/{group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/groups/{group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/ical/reset",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "iCal feed token issuance for external calendar subscription; a delivery mechanism, not object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/ical/toggle",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "iCal feed token issuance for external calendar subscription; a delivery mechanism, not object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/import-preview-counts",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/invoices",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/invoices",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/invoices/{invoice_id}.pdf",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/invoices/{user_invoice_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/linked_sso_profiles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/linked_sso_profiles/{sso_profile_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/linked_sso_profiles/{sso_profile_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "SSO/SAML identity-provider configuration and desktop-app auth-token exchange; organization-admin security configuration, not syncable time-tracking data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "workspace logo image removal; binary-payload resource with no declarative dialect representation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "workspace logo image retrieval; binary image payload with no declarative dialect representation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "workspace logo image upload; a binary multipart payload with no declarative dialect representation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/payment_receipts/{payment_id}.pdf",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace/user UI preference settings (locale, date format, timers); presentation configuration, not time-tracking or billing object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace/user UI preference settings (locale, date format, timers); presentation configuration, not time-tracking or billing object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/project_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/project_groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/project_groups/{project_group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user-group membership management (Toggl's role-based access-control grouping construct); an access-control concept, not time-tracking or billing object data, and not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/project_users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/project_users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/project_users/paginated",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/project_users/{project_user_ids}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/project_users/{project_user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/project_users/{project_user_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/projects/billable-amounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project aggregate/statistics/template sub-resource; derived reporting data or project-template scaffolding, not the primary project record already covered by the projects stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/projects/task_count",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project aggregate/statistics/template sub-resource; derived reporting data or project-template scaffolding, not the primary project record already covered by the projects stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/projects/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project aggregate/statistics/template sub-resource; derived reporting data or project-template scaffolding, not the primary project record already covered by the projects stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/projects/user_count",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project aggregate/statistics/template sub-resource; derived reporting data or project-template scaffolding, not the primary project record already covered by the projects stream"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/projects/{project_ids}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace project_users assignment management (who is staffed on which project); a distinct many-to-many assignment resource legacy never modeled"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/periods",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project aggregate/statistics/template sub-resource; derived reporting data or project-template scaffolding, not the primary project record already covered by the projects stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/pin",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project aggregate/statistics/template sub-resource; derived reporting data or project-template scaffolding, not the primary project record already covered by the projects stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/statistics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-project aggregate/statistics/template sub-resource; derived reporting data or project-template scaffolding, not the primary project record already covered by the projects stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/tasks",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project-scoped or batch task sub-resource; the workspace-scoped tasks stream (GET /workspaces/{workspace_id}/tasks) already covers the equivalent list data with a simpler, non-fan-out request shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/tasks",
+      "covered_by": {
+        "write": "create_task"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/tasks/{task_ids}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project-scoped or batch task sub-resource; the workspace-scoped tasks stream (GET /workspaces/{workspace_id}/tasks) already covers the equivalent list data with a simpler, non-fan-out request shape"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/tasks/{task_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project-scoped or batch task sub-resource; the workspace-scoped tasks stream (GET /workspaces/{workspace_id}/tasks) already covers the equivalent list data with a simpler, non-fan-out request shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/projects/{project_id}/tasks/{task_id}",
+      "covered_by": {
+        "write": "update_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/rates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/rates/{level}/{level_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/reports/shared",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/reports/shared",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/reports/shared",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/reports/shared/bulk_delete",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/reports/shared/{report_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/reports/shared/{report_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/reports/shared/{report_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/scheduled_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/scheduled_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/scheduled_reports/{report_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the separate Toggl Reports API surface (detailed/summary/saved report generation); a distinct reporting product from a different API host, out of scope for this Track-core-API connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/statistics",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/subscription/purchase_orders/{purchase_order_id}.pdf",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "billing/subscription/invoicing administration for the Toggl ORGANIZATION account (payment methods, plan changes, invoices); not time-tracking data, and requires organization-owner billing scope this connector's spec.json (api_token only) has no natural config surface for"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/tags",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "bulk tag-delete convenience action; the per-tag delete_tag write action already covers tag removal one record at a time, matching this bundle's per-record write-execution model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/tasks/basic",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project-scoped or batch task sub-resource; the workspace-scoped tasks stream (GET /workspaces/{workspace_id}/tasks) already covers the equivalent list data with a simpler, non-fan-out request shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/tasks/data",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "project-scoped or batch task sub-resource; the workspace-scoped tasks stream (GET /workspaces/{workspace_id}/tasks) already covers the equivalent list data with a simpler, non-fan-out request shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/time_entries",
+      "covered_by": {
+        "write": "create_time_entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/time_entries/{time_entry_ids}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "bulk multi-id time-entry edit; the per-record update_time_entry write already covers the same mutation one record at a time, matching this bundle's per-record write-execution model"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/time_entries/{time_entry_id}",
+      "covered_by": {
+        "write": "delete_time_entry"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/time_entries/{time_entry_id}",
+      "covered_by": {
+        "write": "update_time_entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/time_entries/{time_entry_id}/stop",
+      "covered_by": {
+        "write": "stop_time_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/time_entry_constraints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "workspace-level policy configuration (which time_entry fields are mandatory); admin policy, not time-tracking object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/time_entry_constraints",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level policy configuration (which time_entry fields are mandatory); workspace-admin policy administration, not time-tracking object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/time_entry_invitations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pending time-entry-sharing invitation list; sharing-workflow metadata, not primary time-entry object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/time_entry_invitations/{time_entry_invitation_id}/{action}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "accept/decline a time-entry-sharing invitation; sharing-workflow action, not a reverse-ETL object mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/timesheet_setups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/timesheet_setups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/timesheet_setups/{setup_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/timesheet_setups/{setup_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/timesheets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/timesheets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/timesheets/hours",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/timesheets/{setup_id}/{start_date}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/timesheets/{setup_id}/{start_date}/history",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/timesheets/{setup_id}/{start_date}/time_entries",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "timesheet-approval workflow administration (setups, batch approvals); workspace-admin approvals-feature configuration layered on top of time_entries, not primary object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/track_reminders",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/track_reminders",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/track_reminders/{reminder_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/track_reminders/{reminder_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-level administration (rates, statistics, reminders, workspace-user membership changes, import previews); workspace-admin configuration surface beyond the read/write object data already covered"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/users",
+      "covered_by": {
+        "stream": "workspace_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/users/data",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-user/workspace_user detail and data-batch lookups already surfaced by the workspace_users stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/users/{user_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-user/workspace_user detail and data-batch lookups already surfaced by the workspace_users stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/workspace_users",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-user/workspace_user detail and data-batch lookups already surfaced by the workspace_users stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/workspace_users/{workspace_user_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-user/workspace_user detail and data-batch lookups already surfaced by the workspace_users stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/workspace_users/{workspace_user_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "workspace-user/workspace_user detail and data-batch lookups already surfaced by the workspace_users stream"
+      }
+    }
   ]
 }

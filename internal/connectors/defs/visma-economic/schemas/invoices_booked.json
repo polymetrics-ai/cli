@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices_booked",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "x-cursor-field": "lastUpdated",
+  "properties": {
+    "id": { "type": "integer" },
+    "date": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "netAmount": { "type": ["number", "null"] },
+    "grossAmount": { "type": ["number", "null"] },
+    "vatAmount": { "type": ["number", "null"] },
+    "dueDate": { "type": ["string", "null"] },
+    "paymentTerms": { "type": ["object", "null"] },
+    "lastUpdated": { "type": ["string", "null"] }
+  }
+}

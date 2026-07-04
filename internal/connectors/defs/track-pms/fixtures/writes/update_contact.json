@@ -1,0 +1,7 @@
+{
+  "record": { "id": 1, "primaryEmail": "updated-fixture@example.com" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/crm/contacts/1"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/account" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": {
+        "customer_id": 102938,
+        "company_name": "Fixture Inc",
+        "country_code": "US",
+        "status": "active",
+        "created": "2026-01-01T00:00:00.000Z",
+        "updated": "2026-01-01T00:00:00.000Z"
+      }
+    }
+  }
+}

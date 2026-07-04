@@ -3,10 +3,21 @@
   "title": "datasets",
   "type": "object",
   "x-primary-key": ["id"],
+  "x-cursor-field": "modifiedOn",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
     "title": { "type": ["string", "null"] },
-    "version": { "type": ["string", "null"] }
+    "discriminator": { "type": ["string", "null"] },
+    "groupId": { "type": ["integer", "null"] },
+    "allowOfflineUpdates": { "type": ["boolean", "null"] },
+    "uniqueRecordField": { "type": ["string", "null"] },
+    "fieldNames": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "version": { "type": ["integer", "null"] },
+    "totalRecords": { "type": ["integer", "null"] },
+    "createdOn": { "type": ["string", "null"] },
+    "modifiedOn": { "type": ["string", "null"] },
+    "lastIncomingDataDate": { "type": ["string", "null"] }
   }
 }

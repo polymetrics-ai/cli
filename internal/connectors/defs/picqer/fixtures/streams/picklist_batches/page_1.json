@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/picklists/batches", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idpicklist_batch": 1,
+        "idwarehouse": 501,
+        "picklist_batchid": 1,
+        "title": null,
+        "display_title": "01/01/2026",
+        "type": "singles",
+        "status": "open",
+        "assigned_to": null,
+        "completed_by": null,
+        "total_products": 5,
+        "total_picklists": 3,
+        "completed_at": null,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

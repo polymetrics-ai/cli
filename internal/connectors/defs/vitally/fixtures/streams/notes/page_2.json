@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/notes",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "from": "fixture_cursor_notes_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "note_fixture_3",
+          "createdAt": "2026-01-03T00:00:00Z",
+          "updatedAt": "2026-01-03T00:00:00Z",
+          "externalId": null,
+          "accountId": "acct_fixture_3",
+          "organizationId": null,
+          "categoryId": null,
+          "authorId": null,
+          "subject": null,
+          "note": "<p>Archived note.</p>",
+          "noteDate": "2026-01-03T00:00:00Z",
+          "tags": [],
+          "traits": {},
+          "source": null,
+          "archivedAt": "2026-01-04T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

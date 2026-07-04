@@ -1,15 +1,28 @@
 {
-  "api": "Web Scraper Cloud API v1 (https://webscraper.io/documentation/api)",
-  "docs": "https://webscraper.io/documentation/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (sitemaps, jobs); Web Scraper Cloud's write endpoints (sitemap create/update, job create/delete) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "api": "Web Scraper Cloud API v1 (https://webscraper.io/documentation/web-scraper-cloud/api)",
+  "docs": "https://webscraper.io/documentation/web-scraper-cloud/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every practical GET list/detail endpoint (verified against the official webscraper.io API documentation and the webscraperio/api-client-php reference client, which mirrors the real wire paths/response shapes exactly) is now covered_by a stream, and every real create/update/delete mutation is covered_by a writes.json action. Legacy's original 2 streams (`sitemaps`/`jobs`, singular /sitemap and /scraping-job paths with no id) are kept byte-for-byte as-is for parity even though the real documented listing endpoints are the plural /sitemaps and /scraping-jobs paths — see docs.md Known limits for the discrepancy this surfaced.",
   "endpoints": [
     { "method": "GET", "path": "/sitemap", "covered_by": { "stream": "sitemaps" } },
     { "method": "GET", "path": "/scraping-job", "covered_by": { "stream": "jobs" } },
-    { "method": "GET", "path": "/sitemap/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented single-sitemap lookup; Pass B capability expansion" } },
-    { "method": "GET", "path": "/scraping-job/{id}/json", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented per-job scraped-data download; Pass B capability expansion" } },
-    { "method": "POST", "path": "/sitemap", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented sitemap creation; Pass B capability expansion" } },
-    { "method": "POST", "path": "/scraping-job", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented scraping-job creation; Pass B capability expansion" } },
-    { "method": "DELETE", "path": "/scraping-job/{id}", "excluded": { "category": "destructive_admin", "reason": "job deletion not modeled by legacy; Pass B capability expansion" } }
+    { "method": "GET", "path": "/sitemaps", "covered_by": { "stream": "sitemaps_list" } },
+    { "method": "GET", "path": "/scraping-jobs", "covered_by": { "stream": "scraping_jobs_list" } },
+    { "method": "GET", "path": "/account", "covered_by": { "stream": "account" } },
+    { "method": "GET", "path": "/scraping-job/{id}/problematic-urls", "covered_by": { "stream": "problematic_urls" } },
+    { "method": "POST", "path": "/sitemap", "covered_by": { "write": "create_sitemap" } },
+    { "method": "PUT", "path": "/sitemap/{id}", "covered_by": { "write": "update_sitemap" } },
+    { "method": "DELETE", "path": "/sitemap/{id}", "covered_by": { "write": "delete_sitemap" } },
+    { "method": "POST", "path": "/scraping-job", "covered_by": { "write": "create_scraping_job" } },
+    { "method": "DELETE", "path": "/scraping-job/{id}", "covered_by": { "write": "delete_scraping_job" } },
+    { "method": "GET", "path": "/sitemap/{id}", "excluded": { "category": "duplicate_of", "reason": "single-sitemap detail lookup returns the same {id, name, sitemap} shape already reachable via the sitemaps/sitemaps_list list streams' individual records; no incremental value as a separate stream without a fan_out id-list config surface duplicating sitemaps_list's own output" } },
+    { "method": "GET", "path": "/scraping-job/{id}", "excluded": { "category": "duplicate_of", "reason": "single-scraping-job detail lookup returns the same object shape already reachable via the jobs/scraping_jobs_list list streams' individual records" } },
+    { "method": "GET", "path": "/scraping-job/{id}/json", "excluded": { "category": "binary_payload", "reason": "returns a newline-delimited-JSON bulk data export file (one scraped record per line, arbitrary caller-defined selector schema), not a single structured object this dialect's records.path/schema projection can describe" } },
+    { "method": "GET", "path": "/scraping-job/{id}/csv", "excluded": { "category": "binary_payload", "reason": "returns a raw CSV export file (arbitrary caller-defined selector-driven columns), not JSON" } },
+    { "method": "GET", "path": "/scraping-job/{id}/xlsx", "excluded": { "category": "binary_payload", "reason": "returns a raw XLSX binary export file, not JSON" } },
+    { "method": "GET", "path": "/scraping-job/{id}/data-quality", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (only exposed via the community PHP SDK's getScrapingJobDataQuality helper with no published response schema); no authoritative field-level source to build a schema from" } },
+    { "method": "GET", "path": "/sitemap/{id}/scheduler", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (only exposed via the community PHP SDK's scheduler helpers with no published response schema); no authoritative field-level source to build a schema from" } },
+    { "method": "POST", "path": "/sitemap/{id}/enable-scheduler", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)" } },
+    { "method": "POST", "path": "/sitemap/{id}/disable-scheduler", "excluded": { "category": "out_of_scope", "reason": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)" } }
   ]
 }

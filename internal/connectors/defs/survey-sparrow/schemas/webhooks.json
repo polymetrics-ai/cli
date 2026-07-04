@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "eventType": { "type": ["string", "null"] },
+    "objectType": { "type": ["string", "null"] },
+    "httpMethod": { "type": ["string", "null"] }
+  }
+}

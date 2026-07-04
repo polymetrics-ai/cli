@@ -1,0 +1,17 @@
+{
+  "record": {
+    "campaign_id": "campaign_fixture_1",
+    "lead_id": "lead_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/campaigns/campaign_fixture_1/leads",
+    "body": {
+      "lead_id": "lead_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "errors": null }
+  }
+}

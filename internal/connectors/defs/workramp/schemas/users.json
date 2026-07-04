@@ -3,11 +3,16 @@
   "title": "users",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
+  "x-cursor-field": "updatedAt",
   "required": ["id"],
   "properties": {
-    "id": { "type": "string" },
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
     "email": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "isAdmin": { "type": ["boolean", "null"] },
+    "isDeleted": { "type": ["boolean", "null"] },
+    "isPermanentlyDeleted": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["number", "null"] },
+    "updatedAt": { "type": ["number", "null"] }
   }
 }

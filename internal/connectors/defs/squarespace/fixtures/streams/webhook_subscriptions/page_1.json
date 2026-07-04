@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/webhook_subscriptions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhookSubscriptions": [
+        {
+          "id": "webhook_fixture_1",
+          "websiteId": "website_fixture_1",
+          "clientId": "client_fixture_1",
+          "endpointUrl": "https://example.com/fixture/webhook",
+          "topics": ["order.create", "order.update"],
+          "createdOn": "2026-01-01T00:00:00Z",
+          "updatedOn": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "record": { "name": "fixture_holdout", "description": "fixture record" },
+  "expect": { "method": "POST", "path": "/holdouts" }
+}

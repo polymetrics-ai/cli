@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/operational-webhook/endpoint", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ep_fixture_ops_1",
+          "uid": null,
+          "url": "https://example.com/ops-webhook",
+          "description": "Fixture Ops Endpoint",
+          "disabled": false,
+          "filterTypes": null,
+          "metadata": {},
+          "rateLimit": null,
+          "throttleRate": null,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "iterator": "",
+      "done": true
+    }
+  }
+}

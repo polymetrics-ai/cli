@@ -1,0 +1,18 @@
+{
+  "record": {
+    "autoresponder_id": 1,
+    "to": ["fixture1@example.com"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/message/send.php",
+    "body": {
+      "autoresponder_id": 1,
+      "to": ["fixture1@example.com"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "code": 101, "message": "OK" }
+  }
+}

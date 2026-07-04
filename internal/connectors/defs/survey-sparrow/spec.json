@@ -17,7 +17,7 @@
     },
     "survey_id": {
       "type": "string",
-      "description": "SurveySparrow survey ID that the 'questions' stream is scoped to (required for that stream; substituted into the survey-scoped path). Not required for the other 3 streams."
+      "description": "SurveySparrow survey ID that the 'questions' stream is scoped to (required for that stream; sent as the required survey_id query parameter on GET /v3/questions per the real documented API -- NOT a path segment). Not required for any other stream."
     }
   }
 }

@@ -7,9 +7,14 @@
         {
           "id": "object_fixture_1",
           "type": "asset",
-          "attributes": { "name": "Fixture Asset" }
+          "external_id": "1",
+          "type_version": 1,
+          "attributes": { "name": "Fixture Asset" },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
         }
-      ]
+      ],
+      "links": { "next": null, "previous": null }
     }
   }
 }

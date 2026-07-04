@@ -47,6 +47,20 @@
       "records": { "path": "" },
       "schema": "schemas/automations.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "organization_users",
+      "path": "api/organizations/users.php",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 0,
+        "page_size": 2
+      },
+      "records": { "path": "" },
+      "schema": "schemas/organization_users.json",
+      "projection": "passthrough"
     }
   ]
 }

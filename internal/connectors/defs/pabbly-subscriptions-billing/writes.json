@@ -1,0 +1,508 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customer",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["first_name", "last_name", "email_id"],
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email_id": { "type": "string" },
+          "company_name": { "type": "string" },
+          "website": { "type": "string" },
+          "phone": { "type": "string" },
+          "billing_address": {
+            "type": "object",
+            "properties": {
+              "attention": { "type": "string" },
+              "street1": { "type": "string" },
+              "street2": { "type": "string" },
+              "city": { "type": "string" },
+              "state": { "type": "string" },
+              "zip_code": { "type": "string" },
+              "country": { "type": "string" }
+            }
+          },
+          "shipping_address": {
+            "type": "object",
+            "properties": {
+              "attention": { "type": "string" },
+              "street1": { "type": "string" },
+              "street2": { "type": "string" },
+              "city": { "type": "string" },
+              "state": { "type": "string" },
+              "zip_code": { "type": "string" },
+              "country": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a billing customer record in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customer/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "company_name": { "type": "string" },
+          "website": { "type": "string" },
+          "phone": { "type": "string" },
+          "billing_address": {
+            "type": "object",
+            "properties": {
+              "attention": { "type": "string" },
+              "street1": { "type": "string" },
+              "street2": { "type": "string" },
+              "city": { "type": "string" },
+              "state": { "type": "string" },
+              "zip_code": { "type": "string" },
+              "country": { "type": "string" }
+            }
+          },
+          "shipping_address": {
+            "type": "object",
+            "properties": {
+              "attention": { "type": "string" },
+              "street1": { "type": "string" },
+              "street2": { "type": "string" },
+              "city": { "type": "string" },
+              "state": { "type": "string" },
+              "zip_code": { "type": "string" },
+              "country": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates a billing customer record in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscription/{{ record.customer_id }}",
+      "path_fields": ["customer_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "plan_id", "gateway_type", "gateway_id", "method_id"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "plan_id": { "type": "string" },
+          "gateway_type": { "type": "string", "enum": ["Stripe", "Test"] },
+          "gateway_id": { "type": "string" },
+          "method_id": { "type": "string" },
+          "redirect_to": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live billing subscription for an existing customer and starts recurring charges; approval required"
+    },
+    {
+      "name": "update_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscription/{{ record.id }}/update",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "plan_id", "customer_id"],
+        "properties": {
+          "id": { "type": "string" },
+          "plan_id": { "type": "string" },
+          "customer_id": { "type": "string" },
+          "payment_term": { "type": "string" },
+          "activated_at_val": { "type": "string", "enum": ["immediately", "next_renewal"] }
+        }
+      },
+      "risk": "external mutation; changes an existing subscription's plan/payment terms, altering future customer billing; approval required"
+    },
+    {
+      "name": "create_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/coupon/{{ record.product_id }}",
+      "path_fields": ["product_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["coupon_name", "coupon_code", "discount", "discount_type", "redemption_type"],
+        "properties": {
+          "product_id": { "type": "string" },
+          "coupon_name": { "type": "string" },
+          "coupon_code": { "type": "string" },
+          "discount": { "type": "number" },
+          "discount_type": { "type": "string", "enum": ["flat", "percent"] },
+          "redemption_type": { "type": "string", "enum": ["onetime", "forever", "number_time"] },
+          "redemption_cycle": { "type": "integer" },
+          "associate_plans": { "type": "string", "enum": ["all_plans", "selected_plans"] },
+          "plans_array": { "type": "array", "items": { "type": "string" } },
+          "valid_upto": { "type": "string" },
+          "apply_to": { "type": "boolean" },
+          "maximum_redemption": { "type": "integer" },
+          "status": { "type": "string", "enum": ["active", "inactive"] }
+        }
+      },
+      "risk": "external mutation; creates a discount coupon that lowers future billing amounts for any customer who redeems it; approval required"
+    },
+    {
+      "name": "create_payment_method",
+      "kind": "create",
+      "method": "POST",
+      "path": "/paymentmethod/{{ record.customer_id }}",
+      "path_fields": ["customer_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "gateway_type", "first_name", "last_name", "email", "card_number", "month", "year", "cvv"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "gateway_type": { "type": "string", "enum": ["stripe"] },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "card_number": { "type": "string" },
+          "month": { "type": "string" },
+          "year": { "type": "string" },
+          "cvv": { "type": "string" },
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip_code": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; stores a new payment card on file for an existing customer via the connected payment gateway; approval required"
+    },
+    {
+      "name": "update_payment_method",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/paymentmethod/{{ record.customer_id }}",
+      "path_fields": ["customer_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "card_number", "month", "year", "cvv", "mid"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "card_number": { "type": "string" },
+          "month": { "type": "string" },
+          "year": { "type": "string" },
+          "cvv": { "type": "string" },
+          "mid": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; replaces the card an existing customer's future recurring billing charges against; approval required"
+    },
+    {
+      "name": "create_addon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/addon/{{ record.product_id }}",
+      "path_fields": ["product_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_id", "name", "code", "price", "billing_cycle", "billing_period"],
+        "properties": {
+          "product_id": { "type": "string" },
+          "name": { "type": "string" },
+          "code": { "type": "string" },
+          "price": { "type": "number" },
+          "billing_cycle": { "type": "string", "enum": ["onetime", "lifetime", "specific"] },
+          "billing_period": { "type": "string", "enum": ["m", "y", "w"] },
+          "billing_period_num": { "type": "integer" },
+          "status": { "type": "string", "enum": ["true", "false"] },
+          "associate_plans": { "type": "string", "enum": ["all_plans", "selected_plans"] },
+          "plans_array": { "type": "array", "items": { "type": "string" } },
+          "category_array": { "type": "array", "items": { "type": "string" } },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a sellable add-on that customers can attach to a plan, adding to their bill; approval required"
+    },
+    {
+      "name": "update_addon",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/addon/{{ record.addon_id }}",
+      "path_fields": ["addon_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["addon_id", "product_id"],
+        "properties": {
+          "addon_id": { "type": "string" },
+          "product_id": { "type": "string" },
+          "name": { "type": "string" },
+          "code": { "type": "string" },
+          "price": { "type": "number" },
+          "billing_cycle": { "type": "string", "enum": ["onetime", "lifetime", "specific"] },
+          "billing_period": { "type": "string", "enum": ["m", "y", "w"] },
+          "billing_period_num": { "type": "integer" },
+          "status": { "type": "boolean" },
+          "associate_plans": { "type": "string", "enum": ["all_plans", "selected_plans"] },
+          "plans_array": { "type": "array", "items": { "type": "string" } },
+          "category_array": { "type": "array", "items": { "type": "string" } },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an existing sellable add-on's price/billing terms, changing future charges for customers who have it attached; approval required"
+    },
+    {
+      "name": "delete_addon",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/addon/{{ record.addon_id }}",
+      "path_fields": ["addon_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["addon_id"],
+        "properties": {
+          "addon_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; permanently deletes a sellable add-on; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_addon_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/addoncategory",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category_name", "product_id"],
+        "properties": {
+          "category_name": { "type": "string" },
+          "product_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates an add-on category used to organize sellable add-ons in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "update_addon_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/addoncategory/{{ record.category_id }}",
+      "path_fields": ["category_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category_id", "category_name"],
+        "properties": {
+          "category_id": { "type": "string" },
+          "category_name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; renames an existing add-on category; approval required"
+    },
+    {
+      "name": "delete_addon_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/addoncategory/{{ record.category_id }}",
+      "path_fields": ["category_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category_id"],
+        "properties": {
+          "category_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; permanently deletes an add-on category; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_license",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products/{{ record.product_id }}/licenses",
+      "path_fields": ["product_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_id", "name", "plan_id", "method", "license_codes", "status"],
+        "properties": {
+          "product_id": { "type": "string" },
+          "name": { "type": "string" },
+          "plan_id": { "type": "string" },
+          "method": { "type": "string", "enum": ["list", "auto"] },
+          "license_codes": { "type": "string" },
+          "status": { "type": "string", "enum": ["active", "inactive"] }
+        }
+      },
+      "risk": "external mutation; creates a license-key pool for a product's plan in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "update_license",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.product_id }}/licenses/{{ record.license_id }}",
+      "path_fields": ["product_id", "license_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_id", "license_id"],
+        "properties": {
+          "product_id": { "type": "string" },
+          "license_id": { "type": "string" },
+          "name": { "type": "string" },
+          "plan_id": { "type": "string" },
+          "method": { "type": "string", "enum": ["list", "auto"] },
+          "license_codes": { "type": "string" },
+          "status": { "type": "string", "enum": ["active", "inactive"] }
+        }
+      },
+      "risk": "external mutation; updates an existing license-key pool (may add/replace codes) in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/subscription/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "cancel_at_end"],
+        "properties": {
+          "id": { "type": "string" },
+          "cancel_at_end": { "type": "string", "enum": ["true", "false"] }
+        }
+      },
+      "risk": "external mutation; cancels a live billing subscription (immediately or at term end) and stops future customer billing; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/product/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_name"],
+        "properties": {
+          "product_name": { "type": "string" },
+          "description": { "type": "string" },
+          "redirect_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a sellable product in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/product/update/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "product_name": { "type": "string" },
+          "description": { "type": "string" },
+          "redirect_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a sellable product in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "create_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/plan/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_id", "plan_name", "plan_code", "billing_cycle", "price", "billing_period", "billing_period_num", "plan_active"],
+        "properties": {
+          "product_id": { "type": "string" },
+          "plan_name": { "type": "string" },
+          "plan_code": { "type": "string" },
+          "billing_cycle": { "type": "string", "enum": ["onetime", "lifetime", "specific"] },
+          "setup_fee": { "type": "number" },
+          "billing_cycle_num": { "type": "string" },
+          "price": { "type": "number" },
+          "billing_period": { "type": "string", "enum": ["m", "y", "w"] },
+          "billing_period_num": { "type": "string" },
+          "plan_active": { "type": "string", "enum": ["true", "false"] },
+          "plan_description": { "type": "string" },
+          "trial_period": { "type": "integer" },
+          "redirect_url": { "type": "string" },
+          "currency_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a billing plan under a product in Pabbly Subscriptions; approval required"
+    },
+    {
+      "name": "update_plan",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/plan/update/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "product_id", "currency_code"],
+        "properties": {
+          "id": { "type": "string" },
+          "product_id": { "type": "string" },
+          "currency_code": { "type": "string" },
+          "redirect_url": { "type": "string" },
+          "plan_name": { "type": "string" },
+          "plan_code": { "type": "string" },
+          "billing_cycle": { "type": "string", "enum": ["onetime", "lifetime", "specific"] },
+          "setup_fee": { "type": "number" },
+          "billing_cycle_num": { "type": "string" },
+          "price": { "type": "number" },
+          "billing_period": { "type": "string", "enum": ["m", "y", "w"] },
+          "billing_period_num": { "type": "string" },
+          "plan_active": { "type": "string", "enum": ["true", "false"] },
+          "plan_description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a billing plan in Pabbly Subscriptions; approval required"
+    }
+  ]
+}

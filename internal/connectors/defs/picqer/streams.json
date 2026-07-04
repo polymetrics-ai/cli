@@ -65,6 +65,206 @@
       "projection": "passthrough",
       "computed_fields": { "id": "{{ record.idsupplier }}" },
       "schema": "schemas/suppliers.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idtag }}" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "purchaseorders",
+      "path": "/purchaseorders",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idpurchaseorder }}" },
+      "schema": "schemas/purchaseorders.json"
+    },
+    {
+      "name": "receipts",
+      "path": "/receipts",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idreceipt }}" },
+      "schema": "schemas/receipts.json"
+    },
+    {
+      "name": "returns",
+      "path": "/returns",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idreturn }}" },
+      "schema": "schemas/returns.json"
+    },
+    {
+      "name": "return_statuses",
+      "path": "/return_statuses",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idreturn_status }}" },
+      "schema": "schemas/return_statuses.json"
+    },
+    {
+      "name": "return_reasons",
+      "path": "/return_reasons",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idreturn_reason }}" },
+      "schema": "schemas/return_reasons.json"
+    },
+    {
+      "name": "backorders",
+      "path": "/backorders",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idbackorder }}" },
+      "schema": "schemas/backorders.json"
+    },
+    {
+      "name": "comments",
+      "path": "/comments",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idcomment }}" },
+      "schema": "schemas/comments.json"
+    },
+    {
+      "name": "stockhistory",
+      "path": "/stockhistory",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idproduct_stock_history }}" },
+      "schema": "schemas/stockhistory.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.iduser }}" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "product_fields",
+      "path": "/productfields",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idproductfield }}" },
+      "schema": "schemas/product_fields.json"
+    },
+    {
+      "name": "customer_fields",
+      "path": "/customerfields",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idcustomerfield }}" },
+      "schema": "schemas/customer_fields.json"
+    },
+    {
+      "name": "order_fields",
+      "path": "/orderfields",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idorderfield }}" },
+      "schema": "schemas/order_fields.json"
+    },
+    {
+      "name": "pricelists",
+      "path": "/pricelists",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idpricelist }}" },
+      "schema": "schemas/pricelists.json"
+    },
+    {
+      "name": "shippingproviders",
+      "path": "/shippingproviders",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idshippingprovider }}" },
+      "schema": "schemas/shippingproviders.json"
+    },
+    {
+      "name": "vatgroups",
+      "path": "/vatgroups",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idvatgroup }}" },
+      "schema": "schemas/vatgroups.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idlocation }}" },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "location_types",
+      "path": "/location_types",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idlocation_type }}" },
+      "schema": "schemas/location_types.json"
+    },
+    {
+      "name": "picking_containers",
+      "path": "/picking-containers",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idpicking_container }}" },
+      "schema": "schemas/picking_containers.json"
+    },
+    {
+      "name": "picklist_batches",
+      "path": "/picklists/batches",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idpicklist_batch }}" },
+      "schema": "schemas/picklist_batches.json"
+    },
+    {
+      "name": "shipments",
+      "path": "/shipments",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idshipment }}" },
+      "schema": "schemas/shipments.json"
+    },
+    {
+      "name": "packagings",
+      "path": "/packagings",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idpackaging }}" },
+      "schema": "schemas/packagings.json"
+    },
+    {
+      "name": "packingstations",
+      "path": "/packingstations",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idpacking_station }}" },
+      "schema": "schemas/packingstations.json"
+    },
+    {
+      "name": "webshoporders",
+      "path": "/webshoporders",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idcompany_webshop_order }}" },
+      "schema": "schemas/webshoporders.json"
+    },
+    {
+      "name": "hooks",
+      "path": "/hooks",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "computed_fields": { "id": "{{ record.idhook }}" },
+      "schema": "schemas/hooks.json"
     }
   ]
 }

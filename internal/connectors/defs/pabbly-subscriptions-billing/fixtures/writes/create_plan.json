@@ -1,0 +1,16 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "plan_name": "Fixture Plan",
+    "plan_code": "fixture-plan",
+    "billing_cycle": "lifetime",
+    "price": 10,
+    "billing_period": "m",
+    "billing_period_num": "1",
+    "plan_active": "true"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/plan/create"
+  }
+}

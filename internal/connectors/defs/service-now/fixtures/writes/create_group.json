@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Group",
+    "description": "Created by fixture write test",
+    "active": "true"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/now/table/sys_user_group",
+    "body": {
+      "name": "Fixture Group",
+      "description": "Created by fixture write test",
+      "active": "true"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "result": { "sys_id": "group_fixture_1", "name": "Fixture Group" } }
+  }
+}

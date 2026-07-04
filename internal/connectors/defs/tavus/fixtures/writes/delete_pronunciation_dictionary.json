@@ -1,0 +1,8 @@
+{
+  "record": { "id": "pd_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/pronunciation-dictionaries/pd_fixture_1"
+  },
+  "response": { "status": 200, "body": {} }
+}

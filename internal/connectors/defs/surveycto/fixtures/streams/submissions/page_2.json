@@ -2,15 +2,23 @@
   "request": {
     "method": "GET",
     "path": "/forms/synthetic-conformance-value/submissions",
-    "query": {
-      "limit": "100",
-      "offset": "100"
-    }
+    "query": { "limit": "1000", "cursor": "uuid:sub-fixture-1" }
   },
   "response": {
     "status": 200,
     "body": {
-      "submissions": []
+      "total": 2,
+      "limit": 1000,
+      "data": [
+        {
+          "submissionId": "uuid:sub-fixture-2",
+          "reviewStatus": "approved",
+          "formDefinitionVersion": 1,
+          "submissionDate": "2026-01-02T00:00:00Z",
+          "completionDate": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "nextCursor": null
     }
   }
 }

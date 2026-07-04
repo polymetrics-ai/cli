@@ -1,14 +1,14 @@
 {
   "name": "spotify-ads",
   "display_name": "Spotify Ads",
-  "description": "Reads Spotify Ads ad accounts, campaigns, ad sets, and ads through the Spotify Ads API.",
+  "description": "Reads Spotify Ads ad accounts, campaigns, ad sets, ads, businesses, business-scoped ad accounts, and assets, and writes campaign mutations through the Spotify Ads API.",
   "integration_type": "api",
-  "docs_url": "https://ads.spotify.com/en-US/api/",
+  "docs_url": "https://developer.spotify.com/documentation/ads-api",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Spotify Ads API read of ad account, campaign, ad set, and ad data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Spotify Ads API read of ad account, campaign, ad set, ad, business, and asset data",
+    "write": "external Spotify Ads API mutation of a campaign's name, purchase order reference, or status (active/paused/archived)",
+    "approval": "reverse ETL plan approval required before writes; update_campaign can pause or archive live ad spend"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "survey_id": 201,
+    "language": "en",
+    "created": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/responses/create-or-update",
+    "body": {
+      "survey_id": 201,
+      "language": "en",
+      "created": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 501, "survey_id": 201 }
+  }
+}

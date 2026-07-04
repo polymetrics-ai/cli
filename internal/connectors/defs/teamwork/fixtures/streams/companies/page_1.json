@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "companies": [
+        { "id": "1", "name": "Fixture Company", "address_one": "1 Fixture Way", "phone": "+15550100", "website": "https://fixture.example.com" }
+      ]
+    }
+  }
+}

@@ -1,14 +1,14 @@
 {
   "name": "pipedrive",
   "display_name": "Pipedrive",
-  "description": "Reads Pipedrive deals, persons, organizations, activities, products, and users through REST API v1.",
+  "description": "Reads Pipedrive deals, persons, organizations, activities, products, users, notes, leads, saved filters, activity types, roles, webhooks, and field/reference metadata, and writes lead/note/filter/activity-type/lead-label/webhook mutations through REST API v1.",
   "integration_type": "api",
   "docs_url": "https://developers.pipedrive.com/docs/api/v1",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Pipedrive API read of CRM deal, contact, and organization data"
+    "read": "external Pipedrive API read of CRM deal, contact, organization, lead, note, and configuration data",
+    "write": "creates/updates/deletes leads, notes, saved filters, custom activity types, lead labels, and webhook subscriptions",
+    "approval": "required for update_lead/update_note/update_filter/update_activity_type/update_lead_label/delete_lead/delete_note/delete_filter/delete_activity_type/delete_lead_label/delete_webhook; create_lead/create_note/create_filter/create_activity_type/create_lead_label/create_webhook require no approval (low-risk, non-destructive)"
   }
 }

@@ -1,0 +1,5 @@
+{
+  "record": { "id": 800010 },
+  "expect": { "method": "DELETE", "path": "/alerting/teams/800010" },
+  "response": { "status": 200, "body": { "message": "Deletion of team 800010 was successful." } }
+}

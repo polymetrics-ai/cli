@@ -1,0 +1,478 @@
+{
+  "actions": [
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/account",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "company_name": { "type": "string" },
+          "tfa_required": { "type": "boolean" },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; changes account-wide settings (company name, two-factor requirement, default tracking/transactional options) affecting every sender on the account; approval required"
+    },
+    {
+      "name": "create_transmission",
+      "kind": "create",
+      "method": "POST",
+      "path": "/transmissions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["recipients", "content"],
+        "properties": {
+          "recipients": {},
+          "content": { "type": "object" },
+          "campaign_id": { "type": "string" },
+          "description": { "type": "string" },
+          "metadata": { "type": "object" },
+          "substitution_data": { "type": "object" },
+          "options": { "type": "object" },
+          "return_path": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; sends real email to every listed recipient through the connected SparkPost account; approval required"
+    },
+    {
+      "name": "create_recipient_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recipient-lists",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["recipients"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "attributes": { "type": "object" },
+          "recipients": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a stored recipient list; approval required"
+    },
+    {
+      "name": "create_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/templates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "content": { "type": "object" },
+          "options": { "type": "object" },
+          "shared_with_subaccounts": { "type": "boolean" },
+          "published": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a message template (as a draft unless published); approval required"
+    },
+    {
+      "name": "update_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/templates/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "content": { "type": "object" },
+          "options": { "type": "object" },
+          "published": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; updates an existing message template's draft/published content; approval required"
+    },
+    {
+      "name": "delete_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/templates/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "external mutation; permanently deletes a message template; approval required"
+    },
+    {
+      "name": "create_sending_domain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sending-domains",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domain"],
+        "properties": {
+          "domain": { "type": "string" },
+          "tracking_domain": { "type": "string" },
+          "dkim": { "type": "object" },
+          "generate_dkim": { "type": "boolean" },
+          "dkim_key_length": { "type": "integer" },
+          "shared_with_subaccounts": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; registers a new sending domain pending DNS verification; approval required"
+    },
+    {
+      "name": "update_sending_domain",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sending-domains/{{ record.domain }}",
+      "path_fields": ["domain"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domain"],
+        "properties": {
+          "domain": { "type": "string" },
+          "tracking_domain": { "type": "string" },
+          "dkim": { "type": "object" },
+          "shared_with_subaccounts": { "type": "boolean" },
+          "is_default_bounce_domain": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; changes an existing sending domain's DKIM/tracking/bounce configuration; approval required"
+    },
+    {
+      "name": "delete_sending_domain",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sending-domains/{{ record.domain }}",
+      "path_fields": ["domain"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domain"],
+        "properties": { "domain": { "type": "string" } }
+      },
+      "risk": "external mutation; permanently removes a sending domain; approval required"
+    },
+    {
+      "name": "create_or_update_suppression",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/suppression-list/{{ record.recipient }}",
+      "path_fields": ["recipient"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["recipient", "type"],
+        "properties": {
+          "recipient": { "type": "string" },
+          "type": { "type": "string", "enum": ["transactional", "non_transactional"] },
+          "description": { "type": "string" },
+          "list_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; adds or updates a recipient's suppression (opt-out) entry, affecting future deliverability to that address; approval required"
+    },
+    {
+      "name": "delete_suppression",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/suppression-list/{{ record.recipient }}",
+      "path_fields": ["recipient"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["recipient"],
+        "properties": { "recipient": { "type": "string" } }
+      },
+      "risk": "external mutation; removes a recipient's suppression entry, re-enabling delivery to that address; approval required"
+    },
+    {
+      "name": "create_ip_pool",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ip-pools",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "signing_domain": { "type": "string" },
+          "fbl_signing_domain": { "type": "string" },
+          "auto_warmup_overflow_pool": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a dedicated IP pool; approval required"
+    },
+    {
+      "name": "update_ip_pool",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ip-pools/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "signing_domain": { "type": "string" },
+          "fbl_signing_domain": { "type": "string" },
+          "auto_warmup_overflow_pool": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; changes an IP pool's DKIM signing domain / auto-warmup overflow configuration; approval required"
+    },
+    {
+      "name": "delete_ip_pool",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ip-pools/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "external mutation; permanently deletes an IP pool; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "target", "events"],
+        "properties": {
+          "name": { "type": "string" },
+          "target": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": "boolean" },
+          "custom_headers": { "type": "object" },
+          "auth_type": { "type": "string", "enum": ["none", "basic", "oauth2"] },
+          "auth_request_details": { "type": "object" },
+          "auth_credentials": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; creates a webhook that will POST live event batches to an externally-supplied URL; a test POST is sent to target immediately; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "target": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": "boolean" },
+          "custom_headers": { "type": "object" },
+          "auth_type": { "type": "string", "enum": ["none", "basic", "oauth2"] }
+        }
+      },
+      "risk": "external mutation; changes an existing webhook's target/events/auth; a test POST is sent to a new target immediately; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "external mutation; permanently deletes a webhook; approval required"
+    },
+    {
+      "name": "create_subaccount",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subaccounts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "ip_pool": { "type": "string" },
+          "setup_api_key": { "type": "boolean" },
+          "key_label": { "type": "string" },
+          "key_grants": { "type": "array", "items": { "type": "string" } },
+          "key_valid_ips": { "type": "array" },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; provisions a new subaccount, optionally with a live API key; approval required"
+    },
+    {
+      "name": "update_subaccount",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subaccounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["active", "suspended", "terminated"] },
+          "ip_pool": { "type": "string" },
+          "options": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; changes a subaccount's name/status/ip_pool -- status transitions (e.g. to suspended/terminated) directly affect that subaccount's ability to send mail; approval required"
+    },
+    {
+      "name": "create_tracking_domain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tracking-domains",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domain"],
+        "properties": {
+          "domain": { "type": "string" },
+          "secure": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; registers a new tracking domain pending DNS verification; approval required"
+    },
+    {
+      "name": "delete_tracking_domain",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tracking-domains/{{ record.domain }}",
+      "path_fields": ["domain"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domain"],
+        "properties": { "domain": { "type": "string" } }
+      },
+      "risk": "external mutation; permanently removes a tracking domain; approval required"
+    },
+    {
+      "name": "create_inbound_domain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inbound-domains",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domain"],
+        "properties": {
+          "domain": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; registers a new inbound (receiving) domain; approval required"
+    },
+    {
+      "name": "delete_inbound_domain",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/inbound-domains/{{ record.domain }}",
+      "path_fields": ["domain"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domain"],
+        "properties": { "domain": { "type": "string" } }
+      },
+      "risk": "external mutation; permanently removes an inbound domain, stopping inbound relay of mail addressed to it; approval required"
+    },
+    {
+      "name": "create_relay_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/relay-webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["target", "match"],
+        "properties": {
+          "name": { "type": "string" },
+          "target": { "type": "string" },
+          "auth_type": { "type": "string", "enum": ["none", "oauth2"] },
+          "auth_request_details": { "type": "object" },
+          "auth_token": { "type": "string" },
+          "match": { "type": "object" },
+          "custom_headers": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; creates a relay webhook that will POST live inbound-mail batches to an externally-supplied URL; approval required"
+    },
+    {
+      "name": "update_relay_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/relay-webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "target": { "type": "string" },
+          "auth_type": { "type": "string", "enum": ["none", "oauth2"] },
+          "match": { "type": "object" },
+          "custom_headers": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; changes an existing relay webhook's target/match/auth; approval required"
+    },
+    {
+      "name": "delete_relay_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/relay-webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "external mutation; permanently deletes a relay webhook; approval required"
+    }
+  ]
+}

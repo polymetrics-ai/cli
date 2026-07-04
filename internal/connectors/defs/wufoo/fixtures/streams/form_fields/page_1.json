@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/fields.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Fields": [
+        {
+          "ID": "Field1",
+          "Title": "Name",
+          "Instructions": "",
+          "IsRequired": "1",
+          "ClassNames": "",
+          "Type": "text"
+        },
+        {
+          "ID": "Field2",
+          "Title": "Email",
+          "Instructions": "",
+          "IsRequired": "0",
+          "ClassNames": "",
+          "Type": "email"
+        }
+      ]
+    }
+  }
+}

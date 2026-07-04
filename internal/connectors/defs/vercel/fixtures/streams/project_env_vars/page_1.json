@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v10/projects"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        {
+          "id": "prj_fixture_1",
+          "name": "fixture-app"
+        }
+      ]
+    }
+  }
+}

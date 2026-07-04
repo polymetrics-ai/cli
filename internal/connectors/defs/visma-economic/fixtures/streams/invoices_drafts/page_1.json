@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices/drafts",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "draftInvoiceNumber": 6001,
+          "date": "2026-01-06",
+          "currency": "DKK",
+          "netAmount": 500.0,
+          "grossAmount": 625.0,
+          "vatAmount": 125.0,
+          "dueDate": "2026-02-06",
+          "lastUpdated": "2026-01-06T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

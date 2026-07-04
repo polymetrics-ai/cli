@@ -1,0 +1,9 @@
+{
+  "record": {
+    "emails": "YmxvY2tlZEBleGFtcGxlLmNvbQ=="
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/blacklist"
+  }
+}

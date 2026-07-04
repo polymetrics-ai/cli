@@ -1,0 +1,7 @@
+{
+  "record": { "id": "inv_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/Invoices/inv_fixture_1/cancel"
+  }
+}

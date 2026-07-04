@@ -1,0 +1,15 @@
+{
+  "record": {
+    "project_id": "prj_fixture_1",
+    "key": "API_URL",
+    "value": "https://api.example.com",
+    "type": "plain",
+    "target": [
+      "production"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v10/projects/prj_fixture_1/env"
+  }
+}

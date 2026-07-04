@@ -77,6 +77,13 @@
       "records": { "path": "." },
       "schema": "schemas/user_info.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "settings",
+      "path": "/v4/settings",
+      "records": { "path": "." },
+      "schema": "schemas/settings.json",
+      "projection": "passthrough"
     }
   ]
 }

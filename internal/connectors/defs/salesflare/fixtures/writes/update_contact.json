@@ -1,0 +1,5 @@
+{
+  "record": { "id": 21, "name": "Fixture Contact Updated" },
+  "expect": { "method": "PUT", "path": "/contacts/21" },
+  "response": { "status": 200, "body": { "id": 21 } }
+}

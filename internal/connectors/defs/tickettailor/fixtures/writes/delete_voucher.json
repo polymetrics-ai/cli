@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "vo_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/vouchers/vo_fixture_1"
+  }
+}

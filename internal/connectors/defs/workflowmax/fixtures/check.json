@@ -1,7 +1,15 @@
 {
-  "request": { "method": "GET", "path": "/jobs", "query": { "page_size": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/v2/jobs",
+    "query": {
+      "pageSize": "1"
+    }
+  },
   "response": {
     "status": 200,
-    "body": { "data": [] }
+    "body": {
+      "data": []
+    }
   }
 }

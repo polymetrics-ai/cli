@@ -9,7 +9,13 @@
           "projectId": "proj_fixture_1",
           "title": "Fixture Task 1",
           "content": "Fixture task content one",
-          "status": "0",
+          "isAllDay": "false",
+          "priority": 3,
+          "sortOrder": 12345,
+          "status": 0,
+          "startDate": "2026-01-01T09:00:00+0000",
+          "dueDate": "2026-01-01T10:00:00+0000",
+          "timeZone": "America/Los_Angeles",
           "modifiedTime": "2026-01-01T00:00:00.000+0000"
         },
         {
@@ -17,7 +23,11 @@
           "projectId": "proj_fixture_1",
           "title": "Fixture Task 2",
           "content": "Fixture task content two",
-          "status": "2",
+          "isAllDay": "false",
+          "priority": 0,
+          "sortOrder": 12346,
+          "status": 2,
+          "completedTime": "2026-01-02T00:00:00.000+0000",
           "modifiedTime": "2026-01-02T00:00:00.000+0000"
         }
       ]

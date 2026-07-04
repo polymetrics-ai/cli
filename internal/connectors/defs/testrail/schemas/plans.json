@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "plans",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "project_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Stamped by the fan_out dialect from the enclosing project id discovered via the projects listing; always a string regardless of TestRail's own numeric project_id wire type."
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "milestone_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "assignedto_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "is_completed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "completed_on": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created_by": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created_on": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "passed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "untested_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

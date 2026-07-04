@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture Contact List" },
+  "expect": { "method": "POST", "path": "/contact_lists" }
+}

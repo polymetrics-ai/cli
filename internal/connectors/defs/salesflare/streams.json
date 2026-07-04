@@ -52,6 +52,94 @@
       "records": { "path": "data" },
       "schema": "schemas/opportunities.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "pagination": { "type": "offset_limit", "limit_param": "limit", "offset_param": "offset", "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "pagination": { "type": "offset_limit", "limit_param": "limit", "offset_param": "offset", "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/tags.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "pagination": { "type": "offset_limit", "limit_param": "limit", "offset_param": "offset", "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/tasks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workflows",
+      "path": "/workflows",
+      "pagination": { "type": "offset_limit", "limit_param": "limit", "offset_param": "offset", "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/workflows.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "stages",
+      "path": "/stages",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/stages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipelines",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/pipelines.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "persons",
+      "path": "/persons",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/persons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "currencies",
+      "path": "/currencies",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/currencies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "custom_field_types",
+      "path": "/customfields/types",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/custom_field_types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "email_data_sources",
+      "path": "/datasources/email",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "schema": "schemas/email_data_sources.json",
+      "projection": "passthrough"
     }
   ]
 }

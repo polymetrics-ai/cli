@@ -1,0 +1,19 @@
+{
+  "record": {
+    "variable_id": "var_fixture_1",
+    "value": 21.5,
+    "timestamp": 1767225600000
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1.6/variables/var_fixture_1/values/",
+    "body": {
+      "value": 21.5,
+      "timestamp": 1767225600000
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "value": 21.5, "timestamp": 1767225600000 }
+  }
+}

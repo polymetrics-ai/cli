@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/inbound-domains" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "domain": "inbound.fixture.example.com" }
+      ]
+    }
+  }
+}

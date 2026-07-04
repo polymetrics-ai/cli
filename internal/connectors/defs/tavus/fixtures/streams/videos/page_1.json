@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/videos",
+    "query": { "page": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "video_id": "video_fixture_1", "video_name": "Fixture Video 1", "status": "ready", "hosted_url": "https://tavus.video/video_fixture_1", "download_url": "", "stream_url": "", "error_details": "" }
+      ]
+    }
+  }
+}

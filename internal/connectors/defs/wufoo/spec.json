@@ -17,7 +17,11 @@
     },
     "form_hash": {
       "type": "string",
-      "description": "Wufoo form hash to read entries for; required only for the entries stream, substituted into /forms/<form_hash>/entries.json."
+      "description": "Wufoo form hash to read/write against; required for the form_fields, entries, form_comments streams and the submit_entry/add_webhook/delete_webhook writes, substituted into /forms/<form_hash>/... paths."
+    },
+    "report_hash": {
+      "type": "string",
+      "description": "Wufoo report hash to read against; required for the report_fields, report_entries, report_widgets streams, substituted into /reports/<report_hash>/... paths."
     },
     "page_size": {
       "type": "string",

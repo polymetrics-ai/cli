@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/templates" },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "next_cursor": "fixture-templates-cursor-2" },
+      "data": [
+        { "id": "tpl_fixture_1", "name": "Fixture Template One", "description": "First fixture template", "status": "active", "created_at": "2026-01-01T00:00:00Z", "workspace_id": "ws_fixture_1" }
+      ]
+    }
+  }
+}

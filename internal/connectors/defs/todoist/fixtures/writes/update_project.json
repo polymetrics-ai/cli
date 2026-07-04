@@ -1,0 +1,12 @@
+{
+  "record": { "id": "prj_fixture_1", "name": "Renamed Fixture Project" },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/prj_fixture_1",
+    "body": { "name": "Renamed Fixture Project" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "prj_fixture_1", "name": "Renamed Fixture Project" }
+  }
+}

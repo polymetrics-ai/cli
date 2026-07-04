@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/topics/all", "query": { "page": "1", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "numResults": 1,
+      "data": [
+        { "name": "Politics", "labels": { "category": "Politics", "subcategory": "Elections" } }
+      ]
+    }
+  }
+}

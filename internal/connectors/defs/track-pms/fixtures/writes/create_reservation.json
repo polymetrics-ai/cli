@@ -1,0 +1,11 @@
+{
+  "record": {
+    "unitId": 1,
+    "arrivalDate": "2026-02-01",
+    "departureDate": "2026-02-05"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pms/reservations"
+  }
+}

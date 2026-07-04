@@ -1,13 +1,25 @@
 {
   "api": "Smaily API (https://smaily.com/help/api/)",
   "docs": "https://smaily.com/help/api/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (campaigns, segments, subscribers, templates, automations); legacy is read-only, so there are no write endpoints in or out of scope",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion: the 5 legacy-parity read streams are unchanged (campaigns, segments, subscribers, templates, automations), plus a new organization_users read stream and 5 new write actions covering subscriber/segment upsert, campaign-recipient unsubscribe, individual message send, and automation-workflow triggering — the full documented mutation surface for Smaily's PHP API. Bulk contact-import/opt-in/forget/action-log/campaign-launch/campaign-statistics endpoints are excluded as out_of_scope (breadth-vs-cost triage: statistics/logs are not syncable object streams, and launch/import/opt-in/forget are lower-priority mutations than the 5 covered here) or requires_elevated_scope where documented as organization-admin-only.",
   "endpoints": [
     { "method": "GET", "path": "api/campaign.php", "covered_by": { "stream": "campaigns" } },
     { "method": "GET", "path": "api/segment.php", "covered_by": { "stream": "segments" } },
     { "method": "GET", "path": "api/contact.php", "covered_by": { "stream": "subscribers" } },
     { "method": "GET", "path": "api/template.php", "covered_by": { "stream": "templates" } },
-    { "method": "GET", "path": "api/autoresponder.php", "covered_by": { "stream": "automations" } }
+    { "method": "GET", "path": "api/autoresponder.php", "covered_by": { "stream": "automations" } },
+    { "method": "GET", "path": "api/organizations/users.php", "covered_by": { "stream": "organization_users" } },
+    { "method": "POST", "path": "api/contact.php", "covered_by": { "write": "create_or_update_subscriber" } },
+    { "method": "POST", "path": "api/list.php", "covered_by": { "write": "create_or_update_segment" } },
+    { "method": "POST", "path": "api/unsubscribe.php", "covered_by": { "write": "unsubscribe_recipient" } },
+    { "method": "POST", "path": "api/message/send.php", "covered_by": { "write": "send_message" } },
+    { "method": "POST", "path": "api/autoresponder.php", "covered_by": { "write": "trigger_automation_workflow" } },
+    { "method": "POST", "path": "api/campaign.php", "excluded": { "category": "out_of_scope", "reason": "campaign create-and-launch is a full compound send-a-real-campaign action (recipient list selection, content, scheduling) beyond a single-record declarative write; Pass B breadth-vs-cost triage for this pass" } },
+    { "method": "POST", "path": "api/subscribers/opt-in.php", "excluded": { "category": "out_of_scope", "reason": "bulk opt-in confirmation action, narrower value than the already-covered create/update-subscriber write; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "api/subscribers/forget.php", "excluded": { "category": "destructive_admin", "reason": "irreversibly erases a subscriber's personal data account-wide (GDPR right-to-be-forgotten action), a materially higher-risk operation than this pass's covered mutations" } },
+    { "method": "GET", "path": "api/message/action/log.php", "excluded": { "category": "out_of_scope", "reason": "message engagement-action log (sends/opens/clicks/opt-outs) explicitly time-windowed to the last 30 days by the API itself; an analytics/audit log, not a stable syncable object stream" } },
+    { "method": "GET", "path": "api/subscribers/action/log.php", "excluded": { "category": "out_of_scope", "reason": "subscriber engagement-action log, same shape/rationale as the message action log above" } },
+    { "method": "GET", "path": "api/campaign.php?id=...", "excluded": { "category": "duplicate_of", "reason": "single-campaign statistics detail keyed by id; overlaps the campaigns list stream's own per-item shape for the object-identity fields, and the campaign-statistics-specific fields are an analytics rollup outside this pass's scope" } }
   ]
 }

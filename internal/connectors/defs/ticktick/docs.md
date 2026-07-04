@@ -1,10 +1,14 @@
 # Overview
 
-TickTick is a wave2 fan-out declarative-HTTP migration. It reads TickTick projects and
-project-scoped tasks through the TickTick Open API (`GET https://api.ticktick.com/open/v1/...`).
-This bundle is capability-parity migrated from `internal/connectors/ticktick` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry
-flip.
+TickTick reads TickTick projects and project-scoped tasks, and writes task create/complete/delete
+actions, through the TickTick Open API (`https://api.ticktick.com/open/v1/...`). This bundle
+originated as a capability-parity migration from `internal/connectors/ticktick` (the hand-written
+connector it migrates; the legacy package stays registered and unchanged until wave6's registry
+flip) and was then expanded to TickTick's full documented Open API v1 surface (Pass B). TickTick's
+own published OpenAPI 3.0 document for this exact product (servers: `https://ticktick.com`, base
+path `/open/v1` — matching this bundle's `base_url` exactly) declares exactly 6 operations across
+4 paths; every one is accounted for by a stream, a write action, or a documented `duplicate_of`
+exclusion in `api_surface.json`.
 
 ## Auth setup
 
@@ -30,33 +34,57 @@ legacy's own hard requirement (`ticktick.go:125-129`: "ticktick tasks stream req
 project_id") — the engine's path-interpolation hard-errors identically when `project_id` is
 unset, with no special-casing needed. Both streams declare primary key `["id"]`.
 
-Both streams declare `"projection": "passthrough"` (conventions.md §8 rule 1). Legacy's `Read`
-extracts records via `connsdk.RecordsAt(resp.Body, spec.recordsPath)` and does
-`emit(connectors.Record(rec))` on each one with no field-building step at all
-(`ticktick.go:85-93`); `streamSpecs[...].fields` (e.g. `id`/`name`/`color`/`sortOrder` for
-`projects`, `id`/`projectId`/`title`/`content`/`status`/`modifiedTime` for `tasks`) is
-Catalog-only decoration (`ticktick.go:116-141`, consumed solely by `Catalog()`'s
-`connectors.Stream` construction), never applied to the emitted record itself. Default `"schema"`
-projection mode would silently drop every real TickTick field not named in each stream's declared
-schema properties (the Open API returns considerably more per-object detail than legacy's catalog
-list names, e.g. `projects`' `groupId`/`viewMode`/`kind`/`closed`, `tasks`' real
-`dueDate`/`priority`/`items`/`tags`/`reminders`), an undocumented silent data-shape change
-relative to legacy's raw passthrough. Each schema still declares the fields legacy's own catalog
-names (for `x-primary-key` typing and `records_match_schema` coverage), but passthrough mode means
-any other real field TickTick returns still survives unfiltered, matching legacy exactly.
+Both streams declare `"projection": "passthrough"` (conventions.md §8 rule 1): legacy's `Read`
+emitted records verbatim with no field-building step, and the schemas below now declare the full
+documented field set of TickTick's own `Project`/`Task` OpenAPI schemas (not just legacy's
+narrower catalog list) — `projects` adds `closed`/`groupId`/`viewMode`/`permission`/`kind`;
+`tasks` adds `isAllDay`/`completedTime`/`desc`/`dueDate`/`priority`/`reminders`/`repeatFlag`/
+`sortOrder`/`startDate`/`timeZone`. Passthrough mode means any other real field TickTick returns
+(beyond even this fuller declared set) still survives unfiltered. Two documented boolean-shaped
+fields (`projects.closed`, `tasks.isAllDay`) are typed `string` (not `boolean`) because TickTick's
+own OpenAPI document declares them as string-valued `"true"`/`"false"`, not JSON booleans — this is
+the real documented wire shape, not a widening workaround. `tasks.priority`/`sortOrder`/`status`
+and `projects.sortOrder` are typed `integer`, matching the OpenAPI document's `int32`/`int64`
+fields exactly (no string-ification).
+
+The single-project detail endpoint (`GET /project/{projectId}`) is not modeled as its own stream:
+its response is a strict subset of the same `Project` schema returned by the `projects` list
+stream, so it would duplicate already-covered data (`api_surface.json`, `duplicate_of`).
 
 ## Write actions & risks
 
-None. TickTick is read-only (`capabilities.write: false`, no `writes.json`), matching legacy's
-`Write` returning `connectors.ErrUnsupportedOperation`.
+- **`create_task`** (`POST /task`) creates a new task in the caller's TickTick account — in the
+  given `projectId`, or the default Inbox if omitted. Low-risk external mutation; no approval
+  required.
+- **`complete_task`** (`POST /project/{projectId}/task/{id}/complete`) marks an existing task
+  completed. A completed task is removed from active task lists/reminders for every collaborator
+  on the project.
+- **`delete_task`** (`DELETE /project/{projectId}/task/{id}`) permanently removes a task;
+  irreversible via the API (idempotent: a 404 on an already-deleted task counts as written, not
+  failed).
+
+No project-mutation write (create/update/delete project) or task-update write is implemented:
+TickTick's own published Open API document declares no such operations at all (see
+`api_surface.json`'s scope note) — only unofficial, uncorroborated community references describe
+them, and this migration does not fabricate a write shape against a real user's TickTick account
+without a corroborated source.
 
 ## Known limits
 
-- **`tasks` has no incremental/cursor support**, matching legacy exactly — legacy's
+- **`tasks` has no incremental/cursor support**, matching legacy exactly — TickTick's
   `project/{id}/data` endpoint returns the full project snapshot (tasks + columns) on every call
   with no server-side filter parameter; this bundle declares no `incremental` block for either
-  stream, an honest 1:1 match of legacy's own behavior, not a scope narrowing.
-- **Only one `project_id` can be read per sync.** This matches legacy's own single-project-per-call
-  design (`ticktick.go:124-130`) — TickTick's Open API has no "all tasks across all projects"
-  endpoint; a caller wanting every project's tasks must run one sync per `project_id`, exactly as
-  legacy required.
+  stream, an honest 1:1 match of the API's own behavior, not a scope narrowing.
+- **Only one `project_id` can be read per sync.** TickTick's Open API has no "all tasks across all
+  projects" endpoint; a caller wanting every project's tasks must run one sync per `project_id`.
+- **No task-update write.** TickTick's official Open API document exposes create/complete/delete
+  for tasks but no update-in-place operation; a caller wanting to change an existing task's fields
+  must currently do so outside this connector (e.g. in the TickTick app/website).
+- **No project-mutation writes** (create/update/delete). See `api_surface.json`'s `out_of_scope`
+  exclusions — these operations are absent from TickTick's own published Open API document.
+- **Kanban `columns` are not a standalone stream.** Column data for a project is already returned
+  inline on the `tasks` stream's `/project/{id}/data` response (`ProjectData.columns`); the Open
+  API exposes no endpoint to list columns independently of a project.
+- **Tags, habits, and focus/pomodoro stats are out of scope.** These are exposed only by TickTick's
+  unofficial internal web API (V2), never by the public Open API (V1) this bundle authenticates
+  against (`api_surface.json`, `requires_elevated_scope`).

@@ -72,6 +72,86 @@
       "records": { "path": "measures" },
       "projection": "passthrough",
       "schema": "schemas/measures.json"
+    },
+    {
+      "name": "projects",
+      "path": "/api/projects/search",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "organization": { "template": "{{ config.organization }}", "omit_when_absent": true },
+        "q": { "template": "{{ config.component_keys }}", "omit_when_absent": true }
+      },
+      "records": { "path": "components" },
+      "projection": "passthrough",
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "hotspots",
+      "path": "/api/hotspots/search",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "projectKey": { "template": "{{ config.component_keys }}", "omit_when_absent": true }
+      },
+      "records": { "path": "hotspots" },
+      "projection": "passthrough",
+      "schema": "schemas/hotspots.json"
+    },
+    {
+      "name": "languages",
+      "path": "/api/languages/list",
+      "records": { "path": "languages" },
+      "projection": "passthrough",
+      "schema": "schemas/languages.json"
+    },
+    {
+      "name": "metrics",
+      "path": "/api/metrics/search",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "metrics" },
+      "projection": "passthrough",
+      "schema": "schemas/metrics.json"
+    },
+    {
+      "name": "rules",
+      "path": "/api/rules/search",
+      "query": {
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "organization": { "template": "{{ config.organization }}", "omit_when_absent": true }
+      },
+      "records": { "path": "rules" },
+      "projection": "passthrough",
+      "schema": "schemas/rules.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/api/webhooks/list",
+      "query": {
+        "organization": { "template": "{{ config.organization }}", "omit_when_absent": true },
+        "project": { "template": "{{ config.component_keys }}", "omit_when_absent": true }
+      },
+      "records": { "path": "webhooks" },
+      "projection": "passthrough",
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "project_analyses",
+      "path": "/api/project_analyses/search",
+      "query": {
+        "project": { "template": "{{ config.component_keys }}" },
+        "p": "1",
+        "ps": { "template": "{{ config.page_size }}", "default": "100" },
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "analyses" },
+      "projection": "passthrough",
+      "schema": "schemas/project_analyses.json"
     }
   ]
 }

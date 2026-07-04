@@ -1,0 +1,213 @@
+{
+  "actions": [
+    {
+      "name": "add_or_update_prospects",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "prospects?team_id={{ config.team_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "email": { "type": "string" },
+          "owner_id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "linkedin_url": { "type": "string" },
+          "city": { "type": "string" },
+          "company": { "type": "string" },
+          "state": { "type": "string" },
+          "country": { "type": "string" },
+          "list": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "timezone": { "type": "string" },
+          "custom_fields": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; creates or updates a prospect (deduped by email/phone/linkedin_url/company+name per SmartReach's unique_identifier_columns rule) on the connected SmartReach account; approval required"
+    },
+    {
+      "name": "add_prospects_to_campaign",
+      "kind": "custom",
+      "method": "POST",
+      "path": "campaigns/{{ record.campaign_id }}/prospects?team_id={{ config.team_id }}",
+      "path_fields": ["campaign_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id", "prospect_ids"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "prospect_ids": { "type": "array", "items": { "type": "string" } },
+          "ignore_prospects_in_other_campaigns": {
+            "type": "string",
+            "enum": ["ignore_prospects_active_in_other_campaigns", "ignore_prospects_added_in_other_campaigns", "do_not_ignore"]
+          }
+        }
+      },
+      "risk": "external mutation; enrolls prospects into an outbound campaign, triggering scheduled sequence messages to real recipients; approval required"
+    },
+    {
+      "name": "unassign_prospects_from_campaign",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "campaigns/{{ record.campaign_id }}/prospects?team_id={{ config.team_id }}",
+      "path_fields": ["campaign_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id", "prospect_ids"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "prospect_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; removes prospects from an outbound campaign, stopping any further scheduled sequence messages to them; approval required"
+    },
+    {
+      "name": "update_prospect_campaign_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "prospects/prospect_status_change?team_id={{ config.team_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["prospect_ids", "prospect_status", "campaign_ids"],
+        "properties": {
+          "prospect_ids": { "type": "array", "items": { "type": "string" } },
+          "campaign_ids": { "type": "array", "items": { "type": "string" } },
+          "prospect_status": { "type": "string", "enum": ["replied", "pause", "unpause", "resume_later"] },
+          "will_resume_at": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; changes a prospect's engagement status for a campaign (e.g. pausing/resuming/marking replied), affecting whether further outreach messages are sent; approval required"
+    },
+    {
+      "name": "update_campaign_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "campaigns/{{ record.campaign_id }}/status?team_id={{ config.team_id }}",
+      "path_fields": ["campaign_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id", "status"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["running", "scheduled", "stopped"] },
+          "schedule_start_at": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; starts, schedules, or stops an entire outbound campaign, directly controlling whether real outreach messages are sent to prospects; approval required"
+    },
+    {
+      "name": "remove_from_do_not_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "do-not-contact?team_id={{ config.team_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["dnc_ids"],
+        "properties": {
+          "dnc_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; removes entries from the do-not-contact suppression list, which re-enables outreach to those emails/domains; approval required"
+    },
+    {
+      "name": "add_emails_to_do_not_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "do-not-contact/email?team_id={{ config.team_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["emails"],
+        "properties": {
+          "emails": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; blacklists emails from all future outreach on the connected SmartReach account; approval required"
+    },
+    {
+      "name": "add_domains_to_do_not_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "do-not-contact/domain?team_id={{ config.team_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["domains"],
+        "properties": {
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["domain", "excluded_emails"],
+              "properties": {
+                "domain": { "type": "string" },
+                "excluded_emails": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; blacklists entire domains from all future outreach on the connected SmartReach account; approval required"
+    },
+    {
+      "name": "create_or_update_account",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "accounts?team_id={{ config.team_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "custom_id": { "type": "string" },
+          "description": { "type": "string" },
+          "website": { "type": "string" },
+          "industry": { "type": "string" },
+          "linkedin_url": { "type": "string" },
+          "custom_fields": { "type": "object" },
+          "update_account": { "type": "string", "enum": ["force_update", "ignore_null_or_empty_values"] }
+        }
+      },
+      "risk": "external mutation; creates or updates a CRM-style account (company) record on the connected SmartReach account; approval required"
+    },
+    {
+      "name": "update_task_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "tasks/{{ record.task_id }}/status",
+      "path_fields": ["task_id"],
+      "body_type": "json",
+      "body_fields": ["status_type", "due_at", "snoozed_till"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["task_id", "status_type"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "status_type": { "type": "string", "enum": ["due", "snoozed", "done", "skipped"] },
+          "due_at": { "type": "number" },
+          "snoozed_till": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; changes a sales task's status (due/snoozed/done/skipped) on the connected SmartReach account; approval required"
+    }
+  ]
+}

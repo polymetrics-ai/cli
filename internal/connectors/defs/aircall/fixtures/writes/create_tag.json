@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "fixture-tag",
+    "color": "#00FF00"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags",
+    "body": {
+      "name": "fixture-tag",
+      "color": "#00FF00"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "tag": { "id": 4001, "name": "fixture-tag", "color": "#00FF00" } }
+  }
+}

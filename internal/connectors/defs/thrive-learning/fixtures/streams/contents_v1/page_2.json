@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/contents",
+    "query": {
+      "page": "2",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "totalResults": 1001,
+        "totalPages": 2,
+        "page": 2,
+        "perPage": 1000
+      },
+      "results": [
+        {
+          "id": "5c8936159ec2d00010c1001",
+          "title": "Fixture Content 1001",
+          "description": "A fixture content item",
+          "tags": [
+            "fixture"
+          ],
+          "type": "video",
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z",
+          "isOfficial": true,
+          "duration": 300
+        }
+      ]
+    }
+  }
+}

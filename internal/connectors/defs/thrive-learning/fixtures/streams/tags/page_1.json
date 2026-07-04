@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/tags",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "totalResults": 2,
+        "totalPages": 1,
+        "page": 1,
+        "perPage": 10
+      },
+      "results": [
+        {
+          "id": "63f57d805d8ecbf46f5b0001",
+          "tag": "fixture-tag-1",
+          "contents": [
+            "63f57d805d8ecbf46f5b5271"
+          ],
+          "campaigns": []
+        },
+        {
+          "id": "63f57d805d8ecbf46f5b0002",
+          "tag": "fixture-tag-2",
+          "contents": [
+            "63f57d805d8ecbf46f5b5272"
+          ],
+          "campaigns": []
+        }
+      ]
+    }
+  }
+}

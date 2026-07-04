@@ -1,0 +1,14 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "coupon_name": "Fixture Coupon",
+    "coupon_code": "fixture25",
+    "discount": 25,
+    "discount_type": "flat",
+    "redemption_type": "onetime"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/coupon/product_fixture_1"
+  }
+}

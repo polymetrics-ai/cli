@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 3001,
+    "information": "Updated via fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/3001",
+    "body": {
+      "information": "Updated via fixture"
+    }
+  }
+}

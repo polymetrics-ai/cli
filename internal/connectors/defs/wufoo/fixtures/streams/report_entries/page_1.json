@@ -1,0 +1,517 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/entries.json",
+    "query": {
+      "pageStart": "0",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Entries": [
+        {
+          "EntryId": "rentry_fixture_1",
+          "DateCreated": "2026-01-01 00:00:00",
+          "DateUpdated": "2026-01-01 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_2",
+          "DateCreated": "2026-01-02 00:00:00",
+          "DateUpdated": "2026-01-02 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_3",
+          "DateCreated": "2026-01-03 00:00:00",
+          "DateUpdated": "2026-01-03 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_4",
+          "DateCreated": "2026-01-04 00:00:00",
+          "DateUpdated": "2026-01-04 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_5",
+          "DateCreated": "2026-01-05 00:00:00",
+          "DateUpdated": "2026-01-05 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_6",
+          "DateCreated": "2026-01-06 00:00:00",
+          "DateUpdated": "2026-01-06 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_7",
+          "DateCreated": "2026-01-07 00:00:00",
+          "DateUpdated": "2026-01-07 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_8",
+          "DateCreated": "2026-01-08 00:00:00",
+          "DateUpdated": "2026-01-08 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_9",
+          "DateCreated": "2026-01-09 00:00:00",
+          "DateUpdated": "2026-01-09 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_10",
+          "DateCreated": "2026-01-10 00:00:00",
+          "DateUpdated": "2026-01-10 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_11",
+          "DateCreated": "2026-01-11 00:00:00",
+          "DateUpdated": "2026-01-11 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_12",
+          "DateCreated": "2026-01-12 00:00:00",
+          "DateUpdated": "2026-01-12 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_13",
+          "DateCreated": "2026-01-13 00:00:00",
+          "DateUpdated": "2026-01-13 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_14",
+          "DateCreated": "2026-01-14 00:00:00",
+          "DateUpdated": "2026-01-14 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_15",
+          "DateCreated": "2026-01-15 00:00:00",
+          "DateUpdated": "2026-01-15 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_16",
+          "DateCreated": "2026-01-16 00:00:00",
+          "DateUpdated": "2026-01-16 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_17",
+          "DateCreated": "2026-01-17 00:00:00",
+          "DateUpdated": "2026-01-17 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_18",
+          "DateCreated": "2026-01-18 00:00:00",
+          "DateUpdated": "2026-01-18 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_19",
+          "DateCreated": "2026-01-19 00:00:00",
+          "DateUpdated": "2026-01-19 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_20",
+          "DateCreated": "2026-01-20 00:00:00",
+          "DateUpdated": "2026-01-20 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_21",
+          "DateCreated": "2026-01-21 00:00:00",
+          "DateUpdated": "2026-01-21 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_22",
+          "DateCreated": "2026-01-22 00:00:00",
+          "DateUpdated": "2026-01-22 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_23",
+          "DateCreated": "2026-01-23 00:00:00",
+          "DateUpdated": "2026-01-23 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_24",
+          "DateCreated": "2026-01-24 00:00:00",
+          "DateUpdated": "2026-01-24 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_25",
+          "DateCreated": "2026-01-25 00:00:00",
+          "DateUpdated": "2026-01-25 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_26",
+          "DateCreated": "2026-01-26 00:00:00",
+          "DateUpdated": "2026-01-26 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_27",
+          "DateCreated": "2026-01-27 00:00:00",
+          "DateUpdated": "2026-01-27 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_28",
+          "DateCreated": "2026-01-28 00:00:00",
+          "DateUpdated": "2026-01-28 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_29",
+          "DateCreated": "2026-01-01 00:00:00",
+          "DateUpdated": "2026-01-01 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_30",
+          "DateCreated": "2026-01-02 00:00:00",
+          "DateUpdated": "2026-01-02 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_31",
+          "DateCreated": "2026-01-03 00:00:00",
+          "DateUpdated": "2026-01-03 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_32",
+          "DateCreated": "2026-01-04 00:00:00",
+          "DateUpdated": "2026-01-04 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_33",
+          "DateCreated": "2026-01-05 00:00:00",
+          "DateUpdated": "2026-01-05 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_34",
+          "DateCreated": "2026-01-06 00:00:00",
+          "DateUpdated": "2026-01-06 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_35",
+          "DateCreated": "2026-01-07 00:00:00",
+          "DateUpdated": "2026-01-07 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_36",
+          "DateCreated": "2026-01-08 00:00:00",
+          "DateUpdated": "2026-01-08 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_37",
+          "DateCreated": "2026-01-09 00:00:00",
+          "DateUpdated": "2026-01-09 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_38",
+          "DateCreated": "2026-01-10 00:00:00",
+          "DateUpdated": "2026-01-10 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_39",
+          "DateCreated": "2026-01-11 00:00:00",
+          "DateUpdated": "2026-01-11 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_40",
+          "DateCreated": "2026-01-12 00:00:00",
+          "DateUpdated": "2026-01-12 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_41",
+          "DateCreated": "2026-01-13 00:00:00",
+          "DateUpdated": "2026-01-13 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_42",
+          "DateCreated": "2026-01-14 00:00:00",
+          "DateUpdated": "2026-01-14 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_43",
+          "DateCreated": "2026-01-15 00:00:00",
+          "DateUpdated": "2026-01-15 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_44",
+          "DateCreated": "2026-01-16 00:00:00",
+          "DateUpdated": "2026-01-16 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_45",
+          "DateCreated": "2026-01-17 00:00:00",
+          "DateUpdated": "2026-01-17 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_46",
+          "DateCreated": "2026-01-18 00:00:00",
+          "DateUpdated": "2026-01-18 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_47",
+          "DateCreated": "2026-01-19 00:00:00",
+          "DateUpdated": "2026-01-19 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_48",
+          "DateCreated": "2026-01-20 00:00:00",
+          "DateUpdated": "2026-01-20 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_49",
+          "DateCreated": "2026-01-21 00:00:00",
+          "DateUpdated": "2026-01-21 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_50",
+          "DateCreated": "2026-01-22 00:00:00",
+          "DateUpdated": "2026-01-22 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_51",
+          "DateCreated": "2026-01-23 00:00:00",
+          "DateUpdated": "2026-01-23 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_52",
+          "DateCreated": "2026-01-24 00:00:00",
+          "DateUpdated": "2026-01-24 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_53",
+          "DateCreated": "2026-01-25 00:00:00",
+          "DateUpdated": "2026-01-25 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_54",
+          "DateCreated": "2026-01-26 00:00:00",
+          "DateUpdated": "2026-01-26 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_55",
+          "DateCreated": "2026-01-27 00:00:00",
+          "DateUpdated": "2026-01-27 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_56",
+          "DateCreated": "2026-01-28 00:00:00",
+          "DateUpdated": "2026-01-28 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_57",
+          "DateCreated": "2026-01-01 00:00:00",
+          "DateUpdated": "2026-01-01 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_58",
+          "DateCreated": "2026-01-02 00:00:00",
+          "DateUpdated": "2026-01-02 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_59",
+          "DateCreated": "2026-01-03 00:00:00",
+          "DateUpdated": "2026-01-03 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_60",
+          "DateCreated": "2026-01-04 00:00:00",
+          "DateUpdated": "2026-01-04 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_61",
+          "DateCreated": "2026-01-05 00:00:00",
+          "DateUpdated": "2026-01-05 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_62",
+          "DateCreated": "2026-01-06 00:00:00",
+          "DateUpdated": "2026-01-06 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_63",
+          "DateCreated": "2026-01-07 00:00:00",
+          "DateUpdated": "2026-01-07 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_64",
+          "DateCreated": "2026-01-08 00:00:00",
+          "DateUpdated": "2026-01-08 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_65",
+          "DateCreated": "2026-01-09 00:00:00",
+          "DateUpdated": "2026-01-09 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_66",
+          "DateCreated": "2026-01-10 00:00:00",
+          "DateUpdated": "2026-01-10 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_67",
+          "DateCreated": "2026-01-11 00:00:00",
+          "DateUpdated": "2026-01-11 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_68",
+          "DateCreated": "2026-01-12 00:00:00",
+          "DateUpdated": "2026-01-12 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_69",
+          "DateCreated": "2026-01-13 00:00:00",
+          "DateUpdated": "2026-01-13 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_70",
+          "DateCreated": "2026-01-14 00:00:00",
+          "DateUpdated": "2026-01-14 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_71",
+          "DateCreated": "2026-01-15 00:00:00",
+          "DateUpdated": "2026-01-15 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_72",
+          "DateCreated": "2026-01-16 00:00:00",
+          "DateUpdated": "2026-01-16 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_73",
+          "DateCreated": "2026-01-17 00:00:00",
+          "DateUpdated": "2026-01-17 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_74",
+          "DateCreated": "2026-01-18 00:00:00",
+          "DateUpdated": "2026-01-18 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_75",
+          "DateCreated": "2026-01-19 00:00:00",
+          "DateUpdated": "2026-01-19 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_76",
+          "DateCreated": "2026-01-20 00:00:00",
+          "DateUpdated": "2026-01-20 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_77",
+          "DateCreated": "2026-01-21 00:00:00",
+          "DateUpdated": "2026-01-21 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_78",
+          "DateCreated": "2026-01-22 00:00:00",
+          "DateUpdated": "2026-01-22 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_79",
+          "DateCreated": "2026-01-23 00:00:00",
+          "DateUpdated": "2026-01-23 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_80",
+          "DateCreated": "2026-01-24 00:00:00",
+          "DateUpdated": "2026-01-24 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_81",
+          "DateCreated": "2026-01-25 00:00:00",
+          "DateUpdated": "2026-01-25 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_82",
+          "DateCreated": "2026-01-26 00:00:00",
+          "DateUpdated": "2026-01-26 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_83",
+          "DateCreated": "2026-01-27 00:00:00",
+          "DateUpdated": "2026-01-27 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_84",
+          "DateCreated": "2026-01-28 00:00:00",
+          "DateUpdated": "2026-01-28 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_85",
+          "DateCreated": "2026-01-01 00:00:00",
+          "DateUpdated": "2026-01-01 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_86",
+          "DateCreated": "2026-01-02 00:00:00",
+          "DateUpdated": "2026-01-02 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_87",
+          "DateCreated": "2026-01-03 00:00:00",
+          "DateUpdated": "2026-01-03 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_88",
+          "DateCreated": "2026-01-04 00:00:00",
+          "DateUpdated": "2026-01-04 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_89",
+          "DateCreated": "2026-01-05 00:00:00",
+          "DateUpdated": "2026-01-05 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_90",
+          "DateCreated": "2026-01-06 00:00:00",
+          "DateUpdated": "2026-01-06 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_91",
+          "DateCreated": "2026-01-07 00:00:00",
+          "DateUpdated": "2026-01-07 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_92",
+          "DateCreated": "2026-01-08 00:00:00",
+          "DateUpdated": "2026-01-08 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_93",
+          "DateCreated": "2026-01-09 00:00:00",
+          "DateUpdated": "2026-01-09 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_94",
+          "DateCreated": "2026-01-10 00:00:00",
+          "DateUpdated": "2026-01-10 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_95",
+          "DateCreated": "2026-01-11 00:00:00",
+          "DateUpdated": "2026-01-11 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_96",
+          "DateCreated": "2026-01-12 00:00:00",
+          "DateUpdated": "2026-01-12 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_97",
+          "DateCreated": "2026-01-13 00:00:00",
+          "DateUpdated": "2026-01-13 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_98",
+          "DateCreated": "2026-01-14 00:00:00",
+          "DateUpdated": "2026-01-14 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_99",
+          "DateCreated": "2026-01-15 00:00:00",
+          "DateUpdated": "2026-01-15 00:00:00"
+        },
+        {
+          "EntryId": "rentry_fixture_100",
+          "DateCreated": "2026-01-16 00:00:00",
+          "DateUpdated": "2026-01-16 00:00:00"
+        }
+      ]
+    }
+  }
+}

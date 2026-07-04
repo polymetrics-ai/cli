@@ -1,13 +1,66 @@
 {
-  "api": "Ubidots API v2.0 (https://industrial.api.ubidots.com/api/v2.0)",
+  "api": "Ubidots API v2.0 + v1.6 values (https://industrial.api.ubidots.com/api/v2.0, https://industrial.api.ubidots.com/api/v1.6)",
   "docs": "https://docs.ubidots.com/reference/welcome",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Ubidots API (variable values, device write, plots, notifications, users) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every practical GET list/detail resource and dialect-expressible mutation on devices, variables, variable values (dots), device groups, device types, dashboards, and events. Excluded: organizations (multi-org/reseller-tier admin, requires an elevated org-scoped token most single-account callers never hold), users/tokens (account/auth introspection, not syncable domain data), UbiFunctions and Pages (serverless code/app deployment, not a data resource), plugins, synthetic variables, dashboard widget CRUD (UI layout, not data), and any bulk/range delete of variable values (destructive, irreversible mass-data-loss operation with no single-record-shaped equivalent this dialect can express safely).",
   "endpoints": [
     { "method": "GET", "path": "/api/v2.0/devices/", "covered_by": { "stream": "devices" } },
+    { "method": "POST", "path": "/api/v2.0/devices/", "covered_by": { "write": "create_device" } },
+    { "method": "GET", "path": "/api/v2.0/devices/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-device detail; identical record shape to the devices list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/api/v2.0/devices/{id}/", "covered_by": { "write": "update_device" } },
+    { "method": "PUT", "path": "/api/v2.0/devices/{id}/", "excluded": { "category": "duplicate_of", "reason": "whole-object replace variant of the same device-update mutation; update_device's PATCH already covers the field-update shape this dialect can express" } },
+    { "method": "DELETE", "path": "/api/v2.0/devices/{id}/", "covered_by": { "write": "delete_device" } },
+    { "method": "POST", "path": "/api/v2.0/devices/{id}/values/", "excluded": { "category": "duplicate_of", "reason": "device-scoped multi-variable value write shortcut; create_variable_value already covers single-variable value injection, the per-record shape this dialect expresses" } },
+    { "method": "POST", "path": "/api/v2.0/devices/bulk-delete/", "excluded": { "category": "destructive_admin", "reason": "bulk multi-device delete by filter; far higher blast radius than the already-covered single-record delete_device and has no single-record request shape to express safely" } },
+
     { "method": "GET", "path": "/api/v2.0/variables/", "covered_by": { "stream": "variables" } },
+    { "method": "POST", "path": "/api/v2.0/variables/", "covered_by": { "write": "create_variable" } },
+    { "method": "GET", "path": "/api/v2.0/variables/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-variable detail; identical record shape to the variables list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/api/v2.0/variables/{id}/", "covered_by": { "write": "update_variable" } },
+    { "method": "DELETE", "path": "/api/v2.0/variables/{id}/", "covered_by": { "write": "delete_variable" } },
+
+    { "method": "GET", "path": "/api/v1.6/variables/{id}/values/", "covered_by": { "stream": "variable_values" } },
+    { "method": "POST", "path": "/api/v1.6/variables/{id}/values/", "covered_by": { "write": "create_variable_value" } },
+    { "method": "GET", "path": "/api/v1.6/variables/{id}/values/{value_id}/", "excluded": { "category": "duplicate_of", "reason": "single-dot detail; identical record shape to the variable_values stream's per-item object, already covered by that stream" } },
+    { "method": "DELETE", "path": "/api/v1.6/variables/{id}/values/{value_id}/", "excluded": { "category": "destructive_admin", "reason": "permanently deletes a single stored data point; historical time-series data loss with no undo, excluded pending an explicit product decision to expose destructive per-dot deletes" } },
+    { "method": "DELETE", "path": "/api/v1.6/variables/{id}/values/", "excluded": { "category": "destructive_admin", "reason": "bulk delete of an entire variable's value history (optionally range-scoped); irreversible mass time-series data loss, far higher blast radius than any covered write" } },
+
+    { "method": "GET", "path": "/api/v2.0/device_groups/", "covered_by": { "stream": "device_groups" } },
+    { "method": "POST", "path": "/api/v2.0/device_groups/", "excluded": { "category": "out_of_scope", "reason": "device-group creation/membership-rule authoring is a UI/organizational-taxonomy operation, not a syncable data-record mutation; breadth-vs-cost triage for this pass" } },
+    { "method": "GET", "path": "/api/v2.0/device_groups/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-device-group detail; identical record shape to the device_groups list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/api/v2.0/device_groups/{id}/", "excluded": { "category": "out_of_scope", "reason": "device-group membership-rule editing is a UI/organizational-taxonomy operation, not a syncable data-record mutation; breadth-vs-cost triage for this pass" } },
+    { "method": "PUT", "path": "/api/v2.0/device_groups/{id}/", "excluded": { "category": "duplicate_of", "reason": "whole-object replace variant of the same excluded device-group-update operation" } },
+    { "method": "DELETE", "path": "/api/v2.0/device_groups/{id}/", "excluded": { "category": "destructive_admin", "reason": "deletes an organizational device grouping; low read value, out of scope for this pass's write surface" } },
+    { "method": "GET", "path": "/api/v2.0/device_groups/{id}/devices/", "excluded": { "category": "duplicate_of", "reason": "same device records the devices stream already returns, filtered to one group; not a distinct resource shape" } },
+
+    { "method": "GET", "path": "/api/v2.0/device_types/", "covered_by": { "stream": "device_types" } },
+    { "method": "POST", "path": "/api/v2.0/device_types/", "excluded": { "category": "out_of_scope", "reason": "device-type template authoring (icons/colors/default variables) is a UI-configuration operation, not a syncable data-record mutation; breadth-vs-cost triage for this pass" } },
+    { "method": "GET", "path": "/api/v2.0/device_types/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-device-type detail; identical record shape to the device_types list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/api/v2.0/device_types/{id}/", "excluded": { "category": "out_of_scope", "reason": "device-type template editing is a UI-configuration operation, not a syncable data-record mutation; breadth-vs-cost triage for this pass" } },
+    { "method": "DELETE", "path": "/api/v2.0/device_types/{id}/", "excluded": { "category": "destructive_admin", "reason": "deletes a device-type template; low read value, out of scope for this pass's write surface" } },
+
     { "method": "GET", "path": "/api/v2.0/dashboards/", "covered_by": { "stream": "dashboards" } },
+    { "method": "GET", "path": "/api/v2.0/dashboards/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-dashboard detail; identical record shape to the dashboards list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v2.0/dashboards/", "excluded": { "category": "out_of_scope", "reason": "dashboard creation configures a UI layout container, not a syncable data record; breadth-vs-cost triage for this pass" } },
+    { "method": "PATCH", "path": "/api/v2.0/dashboards/{id}/", "excluded": { "category": "out_of_scope", "reason": "dashboard rename/layout editing is a UI-configuration operation, not a syncable data-record mutation; breadth-vs-cost triage for this pass" } },
+    { "method": "DELETE", "path": "/api/v2.0/dashboards/{id}/", "excluded": { "category": "destructive_admin", "reason": "deletes a dashboard and its widget layout; low read value, out of scope for this pass's write surface" } },
+    { "method": "GET", "path": "/api/v2.0/dashboards/{id}/widgets/", "excluded": { "category": "out_of_scope", "reason": "widget layout/visualization configuration, not underlying time-series data; the variable_values stream already covers the actual data those widgets render" } },
+
     { "method": "GET", "path": "/api/v2.0/events/", "covered_by": { "stream": "events" } },
-    { "method": "POST", "path": "/api/v2.0/variables/{id}/values/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion; legacy is read-only, no write support" } }
+    { "method": "GET", "path": "/api/v2.0/events/{id}/", "excluded": { "category": "duplicate_of", "reason": "single-event detail; identical record shape to the events list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v2.0/events/", "excluded": { "category": "out_of_scope", "reason": "event/alert-rule authoring (trigger conditions, notification actions) is complex nested UI configuration, not a plain data-record mutation; breadth-vs-cost triage for this pass" } },
+    { "method": "PATCH", "path": "/api/v2.0/events/{id}/", "excluded": { "category": "out_of_scope", "reason": "event/alert-rule editing is complex nested UI configuration, not a plain data-record mutation; breadth-vs-cost triage for this pass" } },
+    { "method": "DELETE", "path": "/api/v2.0/events/{id}/", "excluded": { "category": "destructive_admin", "reason": "deletes an alert/event rule; low read value, out of scope for this pass's write surface" } },
+
+    { "method": "GET", "path": "/api/v2.0/organizations/", "excluded": { "category": "requires_elevated_scope", "reason": "multi-organization/reseller-tier listing gated behind an org-scoped account plan most single-account API tokens never hold; not modeled by legacy and out of scope for this pass" } },
+    { "method": "GET", "path": "/api/v2.0/organizations/{id}/", "excluded": { "category": "requires_elevated_scope", "reason": "same org-tier elevated-scope gating as the organizations list endpoint" } },
+
+    { "method": "GET", "path": "/api/v2.0/users/", "excluded": { "category": "non_data_endpoint", "reason": "account-user/membership introspection, not a syncable object stream" } },
+    { "method": "GET", "path": "/api/v2.0/users/me/", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-account profile introspection, not a syncable object stream" } },
+    { "method": "GET", "path": "/api/v2.0/tokens/", "excluded": { "category": "non_data_endpoint", "reason": "API-token management/introspection, not application data; also a credential-adjacent surface out of scope regardless" } },
+
+    { "method": "GET", "path": "/api/v2.0/functions/", "excluded": { "category": "out_of_scope", "reason": "UbiFunctions (serverless code deployment) is application/code management, not a data resource; breadth-vs-cost triage for this pass" } },
+    { "method": "GET", "path": "/apps/pages/", "excluded": { "category": "out_of_scope", "reason": "custom dashboard Pages (app code/asset bundles) are a deployment artifact, not a syncable data resource; breadth-vs-cost triage for this pass" } },
+    { "method": "GET", "path": "/api/v2.0/synthetic_variables/", "excluded": { "category": "duplicate_of", "reason": "synthetic variables are returned by the same variables list endpoint (a variable type flag), already covered by the variables stream; not a distinct resource" } }
   ]
 }

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "transaction": {
+      "account_id": "account_fixture_1",
+      "date": "2026-01-15",
+      "amount": -10000,
+      "payee_name": "Fixture New Payee",
+      "memo": "fixture create"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/budgets/synthetic-conformance-value/transactions",
+    "body": {
+      "transaction": {
+        "account_id": "account_fixture_1",
+        "date": "2026-01-15",
+        "amount": -10000,
+        "payee_name": "Fixture New Payee",
+        "memo": "fixture create"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "transaction_ids": ["txn_new_fixture"] } } }
+}

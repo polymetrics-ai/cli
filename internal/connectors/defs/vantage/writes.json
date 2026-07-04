@@ -1,0 +1,1067 @@
+{
+  "actions": [
+    {
+      "name": "create_budget",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/budgets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "period_amount"],
+        "properties": {
+          "name": { "type": "string" },
+          "period_amount": { "type": "string" },
+          "period_duration": { "type": "string" },
+          "workspace_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_budget",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/budgets/{{ record.budget_token }}",
+      "path_fields": ["budget_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["budget_token"],
+        "properties": {
+          "budget_token": { "type": "string" },
+          "name": { "type": "string" },
+          "period_amount": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_budget",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/budgets/{{ record.budget_token }}",
+      "path_fields": ["budget_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["budget_token"],
+        "properties": { "budget_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/folders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "workspace_token": { "type": "string" },
+          "parent_folder_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_folder",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/folders/{{ record.folder_token }}",
+      "path_fields": ["folder_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["folder_token"],
+        "properties": {
+          "folder_token": { "type": "string" },
+          "title": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/folders/{{ record.folder_token }}",
+      "path_fields": ["folder_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["folder_token"],
+        "properties": { "folder_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_dashboard",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/dashboards",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "workspace_token": { "type": "string" },
+          "date_interval": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_dashboard",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/dashboards/{{ record.dashboard_token }}",
+      "path_fields": ["dashboard_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["dashboard_token"],
+        "properties": {
+          "dashboard_token": { "type": "string" },
+          "title": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_dashboard",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/dashboards/{{ record.dashboard_token }}",
+      "path_fields": ["dashboard_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["dashboard_token"],
+        "properties": { "dashboard_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_cost_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/cost_reports",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "filter": { "type": "string" },
+          "workspace_token": { "type": "string" },
+          "folder_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_cost_report",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/cost_reports/{{ record.cost_report_token }}",
+      "path_fields": ["cost_report_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["cost_report_token"],
+        "properties": {
+          "cost_report_token": { "type": "string" },
+          "title": { "type": "string" },
+          "filter": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_cost_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/cost_reports/{{ record.cost_report_token }}",
+      "path_fields": ["cost_report_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["cost_report_token"],
+        "properties": { "cost_report_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_saved_filter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/saved_filters",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "filter"],
+        "properties": {
+          "title": { "type": "string" },
+          "filter": { "type": "string" },
+          "workspace_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_saved_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/saved_filters/{{ record.saved_filter_token }}",
+      "path_fields": ["saved_filter_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["saved_filter_token"],
+        "properties": { "saved_filter_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/workspaces",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_workspace",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/workspaces/{{ record.workspace_token }}",
+      "path_fields": ["workspace_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_token"],
+        "properties": { "workspace_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/teams/{{ record.team_token }}",
+      "path_fields": ["team_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["team_token"],
+        "properties": { "team_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_cost_alert",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/cost_alerts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "filter": { "type": "string" },
+          "threshold": { "type": "string" },
+          "workspace_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_cost_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/cost_alerts/{{ record.cost_alert_token }}",
+      "path_fields": ["cost_alert_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["cost_alert_token"],
+        "properties": {
+          "cost_alert_token": { "type": "string" },
+          "title": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_cost_alert",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/cost_alerts/{{ record.cost_alert_token }}",
+      "path_fields": ["cost_alert_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["cost_alert_token"],
+        "properties": { "cost_alert_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_budget_alert",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/budget_alerts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["budget_token", "user_token", "threshold"],
+        "properties": {
+          "budget_token": { "type": "string" },
+          "user_token": { "type": "string" },
+          "threshold": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_budget_alert",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/budget_alerts/{{ record.budget_alert_token }}",
+      "path_fields": ["budget_alert_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["budget_alert_token"],
+        "properties": { "budget_alert_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_business_metric",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/business_metrics",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "workspace_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_business_metric",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/business_metrics/{{ record.business_metric_token }}",
+      "path_fields": ["business_metric_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["business_metric_token"],
+        "properties": {
+          "business_metric_token": { "type": "string" },
+          "title": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_business_metric",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/business_metrics/{{ record.business_metric_token }}",
+      "path_fields": ["business_metric_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["business_metric_token"],
+        "properties": { "business_metric_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_virtual_tag_config",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/virtual_tag_configs/{{ record.token }}",
+      "path_fields": ["token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["token"],
+        "properties": { "token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_saved_filter",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/saved_filters/{{ record.saved_filter_token }}",
+      "path_fields": ["saved_filter_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["saved_filter_token"],
+        "properties": {
+          "saved_filter_token": { "type": "string" },
+          "title": { "type": "string" },
+          "filter": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/teams/{{ record.team_token }}",
+      "path_fields": ["team_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["team_token"],
+        "properties": {
+          "team_token": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_workspace",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/workspaces/{{ record.workspace_token }}",
+      "path_fields": ["workspace_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_token"],
+        "properties": {
+          "workspace_token": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_anomaly_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/anomaly_alerts/{{ record.anomaly_alert_token }}",
+      "path_fields": ["anomaly_alert_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["anomaly_alert_token"],
+        "properties": {
+          "anomaly_alert_token": { "type": "string" },
+          "title": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_budget_alert",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/budget_alerts/{{ record.budget_alert_token }}",
+      "path_fields": ["budget_alert_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["budget_alert_token"],
+        "properties": {
+          "budget_alert_token": { "type": "string" },
+          "threshold": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_virtual_tag_config",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/virtual_tag_configs/{{ record.token }}",
+      "path_fields": ["token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string" },
+          "backfill_until": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/segments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "integer" },
+          "track_unallocated": { "type": "boolean" },
+          "workspace_token": { "type": "string" },
+          "filter": { "type": "string" },
+          "parent_segment_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_segment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/segments/{{ record.segment_token }}",
+      "path_fields": ["segment_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["segment_token"],
+        "properties": {
+          "segment_token": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "integer" },
+          "filter": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/segments/{{ record.segment_token }}",
+      "path_fields": ["segment_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["segment_token"],
+        "properties": { "segment_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_report_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/report_notifications",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "cost_report_token", "frequency", "change"],
+        "properties": {
+          "title": { "type": "string" },
+          "cost_report_token": { "type": "string" },
+          "workspace_token": { "type": "string" },
+          "user_tokens": { "type": "array" },
+          "recipient_channels": { "type": "array" },
+          "frequency": { "type": "string" },
+          "change": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_report_notification",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/report_notifications/{{ record.report_notification_token }}",
+      "path_fields": ["report_notification_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["report_notification_token"],
+        "properties": {
+          "report_notification_token": { "type": "string" },
+          "title": { "type": "string" },
+          "frequency": { "type": "string" },
+          "change": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_report_notification",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/report_notifications/{{ record.report_notification_token }}",
+      "path_fields": ["report_notification_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["report_notification_token"],
+        "properties": { "report_notification_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_recommendation_view",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/recommendation_views",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "workspace_token"],
+        "properties": {
+          "title": { "type": "string" },
+          "workspace_token": { "type": "string" },
+          "provider_ids": { "type": "array" },
+          "regions": { "type": "array" },
+          "types": { "type": "array" },
+          "min_savings": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_recommendation_view",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/recommendation_views/{{ record.recommendation_view_token }}",
+      "path_fields": ["recommendation_view_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["recommendation_view_token"],
+        "properties": {
+          "recommendation_view_token": { "type": "string" },
+          "title": { "type": "string" },
+          "min_savings": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_recommendation_view",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/recommendation_views/{{ record.recommendation_view_token }}",
+      "path_fields": ["recommendation_view_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["recommendation_view_token"],
+        "properties": { "recommendation_view_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_network_flow_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/network_flow_reports",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_token", "title"],
+        "properties": {
+          "workspace_token": { "type": "string" },
+          "title": { "type": "string" },
+          "filter": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" },
+          "date_interval": { "type": "string" },
+          "groupings": { "type": "array" },
+          "flow_direction": { "type": "string" },
+          "flow_weight": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_network_flow_report",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/network_flow_reports/{{ record.network_flow_report_token }}",
+      "path_fields": ["network_flow_report_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["network_flow_report_token"],
+        "properties": {
+          "network_flow_report_token": { "type": "string" },
+          "title": { "type": "string" },
+          "date_interval": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_network_flow_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/network_flow_reports/{{ record.network_flow_report_token }}",
+      "path_fields": ["network_flow_report_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["network_flow_report_token"],
+        "properties": { "network_flow_report_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_kubernetes_efficiency_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/kubernetes_efficiency_reports",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_token", "title"],
+        "properties": {
+          "workspace_token": { "type": "string" },
+          "title": { "type": "string" },
+          "filter": { "type": "string" },
+          "date_interval": { "type": "string" },
+          "aggregated_by": { "type": "string" },
+          "date_bucket": { "type": "string" },
+          "groupings": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_kubernetes_efficiency_report",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/kubernetes_efficiency_reports/{{ record.kubernetes_efficiency_report_token }}",
+      "path_fields": ["kubernetes_efficiency_report_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["kubernetes_efficiency_report_token"],
+        "properties": {
+          "kubernetes_efficiency_report_token": { "type": "string" },
+          "title": { "type": "string" },
+          "date_bucket": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_kubernetes_efficiency_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/kubernetes_efficiency_reports/{{ record.kubernetes_efficiency_report_token }}",
+      "path_fields": ["kubernetes_efficiency_report_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["kubernetes_efficiency_report_token"],
+        "properties": { "kubernetes_efficiency_report_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_anomaly_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/anomaly_notifications",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["cost_report_token"],
+        "properties": {
+          "cost_report_token": { "type": "string" },
+          "threshold": { "type": "integer" },
+          "user_tokens": { "type": "array" },
+          "recipient_channels": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_anomaly_notification",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/anomaly_notifications/{{ record.anomaly_notification_token }}",
+      "path_fields": ["anomaly_notification_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["anomaly_notification_token"],
+        "properties": {
+          "anomaly_notification_token": { "type": "string" },
+          "threshold": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_anomaly_notification",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/anomaly_notifications/{{ record.anomaly_notification_token }}",
+      "path_fields": ["anomaly_notification_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["anomaly_notification_token"],
+        "properties": { "anomaly_notification_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_canvas",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/canvases",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "prompt"],
+        "properties": {
+          "title": { "type": "string" },
+          "prompt": { "type": "string" },
+          "workspace_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_canvas",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/canvases/{{ record.canvas_token }}",
+      "path_fields": ["canvas_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["canvas_token"],
+        "properties": {
+          "canvas_token": { "type": "string" },
+          "title": { "type": "string" },
+          "prompt": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_canvas",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/canvases/{{ record.canvas_token }}",
+      "path_fields": ["canvas_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["canvas_token"],
+        "properties": { "canvas_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_resource_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/resource_reports",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_token"],
+        "properties": {
+          "workspace_token": { "type": "string" },
+          "title": { "type": "string" },
+          "filter": { "type": "string" },
+          "columns": { "type": "array" },
+          "folder_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_resource_report",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/resource_reports/{{ record.resource_report_token }}",
+      "path_fields": ["resource_report_token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["resource_report_token"],
+        "properties": {
+          "resource_report_token": { "type": "string" },
+          "title": { "type": "string" },
+          "filter": { "type": "string" },
+          "columns": { "type": "array" },
+          "folder_token": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_resource_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/resource_reports/{{ record.resource_report_token }}",
+      "path_fields": ["resource_report_token"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["resource_report_token"],
+        "properties": { "resource_report_token": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_virtual_tag_config",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/virtual_tag_configs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key", "overridable", "values"],
+        "properties": {
+          "key": { "type": "string" },
+          "overridable": { "type": "boolean" },
+          "backfill_until": { "type": "string" },
+          "values": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    }
+  ]
+}

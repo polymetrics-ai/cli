@@ -1,0 +1,10 @@
+{
+  "record": {
+    "token": "vtc_fixture_1",
+    "backfill_until": "2026-01-01"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/virtual_tag_configs/vtc_fixture_1"
+  }
+}

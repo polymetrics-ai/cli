@@ -1,0 +1,8 @@
+{
+  "record": { "name": "Fixture Account", "currency": "SEK" },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts",
+    "body": { "name": "Fixture Account", "currency": "SEK" }
+  }
+}

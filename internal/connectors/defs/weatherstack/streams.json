@@ -16,7 +16,9 @@
       "name": "current",
       "path": "/current",
       "query": {
-        "query": "{{ config.query }}"
+        "query": "{{ config.query }}",
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
       "computed_fields": {
@@ -30,7 +32,9 @@
       "path": "/historical",
       "query": {
         "query": "{{ config.query }}",
-        "historical_date": { "template": "{{ config.historical_date }}", "omit_when_absent": true }
+        "historical_date": { "template": "{{ config.historical_date }}", "omit_when_absent": true },
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
       "computed_fields": {
@@ -44,13 +48,41 @@
       "path": "/forecast",
       "query": {
         "query": "{{ config.query }}",
-        "forecast_days": { "template": "{{ config.forecast_days }}", "omit_when_absent": true }
+        "forecast_days": { "template": "{{ config.forecast_days }}", "omit_when_absent": true },
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
       },
       "records": { "path": "." },
       "computed_fields": {
         "id": "forecast:{{ config.query }}"
       },
       "schema": "schemas/forecast.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "marine",
+      "path": "/marine",
+      "query": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}",
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "marine:{{ config.latitude }},{{ config.longitude }}"
+      },
+      "schema": "schemas/marine.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "autocomplete",
+      "path": "/autocomplete",
+      "query": {
+        "query": "{{ config.autocomplete_query }}"
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/autocomplete.json",
       "projection": "passthrough"
     }
   ]

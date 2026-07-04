@@ -1,15 +1,2392 @@
 {
-  "api": "Statsig Console API v1 (https://statsigapi.net/console/v1)",
-  "docs": "https://docs.statsig.com/console-api",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (feature_gates, dynamic_configs, experiments, segments); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "api": "Statsig Console API v1 (https://statsigapi.net/console/v1), API version 20240601",
+  "docs": "https://docs.statsig.com/console-api ; OpenAPI spec: https://api.statsig.com/openapi/20240601.json",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion: full documented Console API v1 surface (302 method+path endpoints across gates, dynamic configs, experiments, segments, target apps, tags, keys, holdouts, layers, users, audit logs, environments, and 20+ specialized subsystems) reviewed against the real OpenAPI 20240601 spec; 12 GET list/detail resources implemented as streams, 17 CRUD mutations implemented as writes.json actions, remainder excluded with per-endpoint closed-vocabulary categories (see docs.md Known limits for the exclusion-family summary)",
   "endpoints": [
-    { "method": "GET", "path": "/console/v1/gates", "covered_by": { "stream": "feature_gates" } },
-    { "method": "GET", "path": "/console/v1/dynamic_configs", "covered_by": { "stream": "dynamic_configs" } },
-    { "method": "GET", "path": "/console/v1/experiments", "covered_by": { "stream": "experiments" } },
-    { "method": "GET", "path": "/console/v1/segments", "covered_by": { "stream": "segments" } },
-    { "method": "POST", "path": "/console/v1/gates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/console/v1/metrics", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/console/v1/target_apps", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/console/v1/alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/alerts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/alerts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/alerts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/alerts/{id}/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/alerts/{id}/events/{eventId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/audit_logs",
+      "covered_by": {
+        "stream": "audit_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/autotunes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ML-driven autotune (automated rollout optimization) configuration and control, a specialized experimentation feature with no CRUD parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/autotunes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ML-driven autotune (automated rollout optimization) configuration and control, a specialized experimentation feature with no CRUD parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/autotunes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ML-driven autotune (automated rollout optimization) configuration and control, a specialized experimentation feature with no CRUD parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/autotunes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ML-driven autotune (automated rollout optimization) configuration and control, a specialized experimentation feature with no CRUD parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/autotunes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ML-driven autotune (automated rollout optimization) configuration and control, a specialized experimentation feature with no CRUD parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/autotunes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ML-driven autotune (automated rollout optimization) configuration and control, a specialized experimentation feature with no CRUD parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/autotunes/{id}/make_decision",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/autotunes/{id}/reset",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/autotunes/{id}/start",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/change_validation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pre-flight change-validation/dry-run endpoint for CI/CD guardrails, not a catalog read or a durable mutation of Statsig state"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/change_validation/message",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pre-flight change-validation/dry-run endpoint for CI/CD guardrails, not a catalog read or a durable mutation of Statsig state"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/company",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "account/project metadata and usage-billing report, not connector catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dashboards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dashboard/report authoring and results retrieval, a BI-layer feature built on top of metrics/experiments, not a top-level catalog resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/dashboards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dashboard/report authoring and results retrieval, a BI-layer feature built on top of metrics/experiments, not a top-level catalog resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dashboards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dashboard/report authoring and results retrieval, a BI-layer feature built on top of metrics/experiments, not a top-level catalog resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/dashboards/{id}/widgets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dashboard/report authoring and results retrieval, a BI-layer feature built on top of metrics/experiments, not a top-level catalog resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dashboards/{id}/widgets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dashboard/report authoring and results retrieval, a BI-layer feature built on top of metrics/experiments, not a top-level catalog resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dashboards/{id}/widgets/{widgetId}/results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dashboard/report authoring and results retrieval, a BI-layer feature built on top of metrics/experiments, not a top-level catalog resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dynamic_configs",
+      "covered_by": {
+        "stream": "dynamic_configs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/dynamic_configs",
+      "covered_by": {
+        "write": "create_dynamic_config"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dynamic_configs/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/dynamic_configs/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/dynamic_configs/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "full-replace (PUT-shaped POST) update duplicating update_dynamic_config's PATCH partial-update coverage; the API documents both a full-replace and partial-update variant for the same resource, only one update verb is modeled per \u00a71 to avoid two competing write actions with overlapping effect"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/dynamic_configs/{id}",
+      "covered_by": {
+        "write": "update_dynamic_config"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/dynamic_configs/{id}",
+      "covered_by": {
+        "write": "delete_dynamic_config"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/archive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/disable",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/enable",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dynamic_configs/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/dynamic_configs/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dynamic_configs/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/dynamic_configs/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/reviews/{reviewID}/approve",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/reviews/{reviewID}/commit",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/reviews/{reviewID}/reject",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dynamic_configs/{id}/rule/{ruleId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/dynamic_configs/{id}/rule/{ruleId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "individual targeting-rule create/update/delete within a gate/dynamic-config's rule list; the parent gate/dynamic_config write actions replace the full record (including its rules array) rather than modeling rule-level sub-CRUD, avoiding two competing ways to mutate the same nested list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/dynamic_configs/{id}/rule/{ruleId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "individual targeting-rule create/update/delete within a gate/dynamic-config's rule list; the parent gate/dynamic_config write actions replace the full record (including its rules array) rather than modeling rule-level sub-CRUD, avoiding two competing ways to mutate the same nested list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dynamic_configs/{id}/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/dynamic_configs/{id}/unarchive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/dynamic_configs/{id}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/environments",
+      "covered_by": {
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/environments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "renames/reconfigures project-wide environment tiers (dev/staging/production), an organization-project-settings action requiring elevated console permissions well beyond per-record catalog CRUD; environments is a read-only stream in this connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/events/{eventName}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/events/{eventName}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments",
+      "covered_by": {
+        "stream": "experiments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment creation requires a full experimental-design payload (groups, allocation, primary/secondary metrics, targeting gate) that is a product-workflow authoring form, not a plain catalog record; no create_experiment write is modeled this pass, listed here as a scope boundary rather than silently covering it"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/assignment_source/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/experiments/assignment_source/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/assignment_source/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/assignment_sources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/assignment_sources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/entity_properties",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/entity_properties",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/entity_property/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/entity_property/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/experiments/entity_property/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/entity_property/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/qualifying_events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/qualifying_events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/qualifying_events/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/qualifying_events/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/qualifying_events/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimentation-platform advanced-configuration sub-resource (custom assignment sources, entity properties, qualifying events) for specialized experiment analysis setups, not general catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/experiments/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "full-replace update to an experiment's design (same authoring-form shape as create); out of scope alongside experiment creation, see the create-experiment exclusion above"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/experiments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "partial update to an experiment's design/targeting; out of scope alongside experiment creation, see the create-experiment exclusion above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment deletion is gated behind the same design-workflow lifecycle (must be stopped/decided first per Statsig's own UI rules) that create/update are excluded for; no delete_experiment write is modeled this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/abandon",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/alerts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/alerts/{metricId}/resolve",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/archive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/code_cleanup",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/context",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/cumulative_exposures",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/defer_decision",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/diagnostics_checks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/dimensional_exposures",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/disable_groups",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/enable_groups",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/load_pulse",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/make_decision",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/experiments/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/{id}/overrides/conditional/{type}/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/{id}/overrides/userID/{userID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/pulse_load_history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/pulse_load_history/{dagID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/pulse_load_history/{dagID}/cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/pulse_metric_result",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/pulse_results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/reset",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/restart_as_new",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/experiments/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/reviews/{reviewID}/approve",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/reviews/{reviewID}/commit",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/reviews/{reviewID}/reject",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/experiments/{id}/schedule_start",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/start",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/summary_charts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/experiments/{id}/unarchive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/experiments/{id}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/exposure_count",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates",
+      "covered_by": {
+        "stream": "feature_gates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates",
+      "covered_by": {
+        "write": "create_gate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/gates/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "full-replace (PUT-shaped POST) update duplicating update_gate's PATCH partial-update coverage; only one update verb is modeled per \u00a71"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/gates/{id}",
+      "covered_by": {
+        "write": "update_gate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/gates/{id}",
+      "covered_by": {
+        "write": "delete_gate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates/{id}/alerts/{metricId}/resolve",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "metric-alert configuration and alert-event history; monitoring/alerting subsystem out of scope for this connector Pass B expansion, no parity precedent in the legacy connector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/archive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/checks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates/{id}/code_cleanup",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/disable",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/dynamic_config_references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "cross-reference/reviewer-eligibility lookup for a single record, not a catalog resource or CRUD mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/eligible_reviewers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/enable",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/experiment_references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "cross-reference/reviewer-eligibility lookup for a single record, not a catalog resource or CRUD mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/gate_references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "cross-reference/reviewer-eligibility lookup for a single record, not a catalog resource or CRUD mutation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/launch",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates/{id}/load_pulse",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/gates/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/gates/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates/{id}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/gates/{id}/reviews/{reviewID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "change-review/approval-workflow sub-resource (propose/approve/reject/commit a pending change) layered on top of an already-covered parent stream; a review-workflow record, not the resource's own catalog data, and not a plain single-record mutation this dialect models"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/reviews/{reviewID}/approve",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/reviews/{reviewID}/commit",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/reviews/{reviewID}/reject",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/gates/{id}/rule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "individual targeting-rule create/update/delete within a gate/dynamic-config's rule list; the parent gate/dynamic_config write actions replace the full record (including its rules array) rather than modeling rule-level sub-CRUD, avoiding two competing ways to mutate the same nested list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/gates/{id}/rules/{ruleID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "individual targeting-rule create/update/delete within a gate/dynamic-config's rule list; the parent gate/dynamic_config write actions replace the full record (including its rules array) rather than modeling rule-level sub-CRUD, avoiding two competing ways to mutate the same nested list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/gates/{id}/rules/{ruleID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "individual targeting-rule create/update/delete within a gate/dynamic-config's rule list; the parent gate/dynamic_config write actions replace the full record (including its rules array) rather than modeling rule-level sub-CRUD, avoiding two competing ways to mutate the same nested list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/rules/{ruleID}/pulse_load_history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/rules/{ruleID}/pulse_results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/gates/{id}/unarchive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/gates/{id}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/holdouts",
+      "covered_by": {
+        "stream": "holdouts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/holdouts",
+      "covered_by": {
+        "write": "create_holdout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/holdouts/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/holdouts/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/holdouts/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "full-replace (PUT-shaped POST) update; no update_holdout write is modeled this pass (holdout creation/deletion only), listed as a scope boundary"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/holdouts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "partial update to a holdout's pass-percentage/attached-gate-and-experiment-ID lists is a live-experiment-traffic-shaping control (changes what fraction of users are held out of active experiments), too high-blast-radius for a plain declarative update this pass; create/delete are modeled, update is not"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/holdouts/{id}",
+      "covered_by": {
+        "write": "delete_holdout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/holdouts/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/holdouts/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/holdouts/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/holdouts/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/holdouts/{id}/pulse_results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experiment analytics/results computation endpoint (pulse metrics, exposures, diagnostics) -- analytical read model, not catalog/config data; no dialect-expressible write action needed since these are read-only analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/ingestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/ingestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/ingestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/ingestion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/ingestion/backfill",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/ingestion/connection/databricks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/ingestion/events/count",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/ingestion/events/delta",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/ingestion/runs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/ingestion/runs/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/ingestion/schedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/ingestion/schedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/ingestion/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/keys",
+      "covered_by": {
+        "stream": "keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/keys",
+      "covered_by": {
+        "write": "create_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/keys/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/keys/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/keys/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "partial update of an existing live API key's scopes/environments/target-app bindings can silently widen or narrow production credential permissions; grouped with the key lifecycle actions (deactivate/rotate) as requiring human credential-management review rather than a plain declarative update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/keys/{id}",
+      "covered_by": {
+        "write": "delete_key"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/keys/{id}/deactivate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "API-key lifecycle action (deactivate/rotate a live credential) that invalidates or replaces production credentials in-place; too high-blast-radius for a plain declarative mutation, needs human-driven credential-rotation runbook context"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/keys/{id}/rotate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "API-key lifecycle action (deactivate/rotate a live credential) that invalidates or replaces production credentials in-place; too high-blast-radius for a plain declarative mutation, needs human-driven credential-rotation runbook context"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/layers",
+      "covered_by": {
+        "stream": "layers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/layers",
+      "covered_by": {
+        "write": "create_layer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/layers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/layers/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/layers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "full-replace (PUT-shaped POST) update; no update_layer write is modeled this pass (layer creation/deletion only), listed as a scope boundary"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/layers/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "partial update to a layer's parameter set / target-app bindings reshapes live experiment-parameter allocation across every experiment in the layer; too high-blast-radius for a plain declarative update this pass, create/delete are modeled, update is not"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/layers/{id}",
+      "covered_by": {
+        "write": "delete_layer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/layers/{id}/experiments",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists experiments already reachable via the /experiments list stream filtered by layerID; a cross-reference convenience endpoint, not distinct catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/layers/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/layers/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/layers/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/layers/{id}/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/layers/{id}/overrides/conditional/{type}/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/layers/{id}/overrides/userID/{userID}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user/per-condition override management (targeted test overrides) is a QA/debugging affordance layered on top of gates/experiments/layers/holdouts, not warehouse-syncable catalog data or a general-purpose mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raw application/SDK log retrieval, not Statsig catalog/config data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/list",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/metrics/list); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/metrics/metric_source",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/metric_source/list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/metric_source/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/metrics/metric_source/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/metrics/metric_source/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/metric_source/{name}/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/values",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/metrics/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/metrics/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/metrics/{id}/cancel_archive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/{id}/experiments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/metrics/{id}/reload",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/metrics/{id}/schedule_archive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/{id}/sql",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/metrics/{id}/unarchive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/metrics/{name}/{type}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-metric/event authoring and metric-value/SQL retrieval, an analytics-configuration surface distinct from the catalog resources (gates/configs/experiments/segments) this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/overrides",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/param_stores",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "parameter-store (shared config value store for SDKs) management; a distinct low-level SDK-config primitive with no legacy-connector parity and no catalog-read precedent in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/param_stores",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "parameter-store (shared config value store for SDKs) management; a distinct low-level SDK-config primitive with no legacy-connector parity and no catalog-read precedent in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/param_stores/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "parameter-store (shared config value store for SDKs) management; a distinct low-level SDK-config primitive with no legacy-connector parity and no catalog-read precedent in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/param_stores/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "parameter-store (shared config value store for SDKs) management; a distinct low-level SDK-config primitive with no legacy-connector parity and no catalog-read precedent in this bundle"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/param_stores/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "parameter-store (shared config value store for SDKs) management; a distinct low-level SDK-config primitive with no legacy-connector parity and no catalog-read precedent in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/project",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "account/project metadata and usage-billing report, not connector catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/project/usage_billing/report",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "account/project metadata and usage-billing report, not connector catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/prompts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "LLM prompt-management and evaluation feature, unrelated to feature-gate/experiment catalog data this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/prompts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "LLM prompt-management and evaluation feature, unrelated to feature-gate/experiment catalog data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/prompts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "LLM prompt-management and evaluation feature, unrelated to feature-gate/experiment catalog data this connector targets"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/prompts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "LLM prompt-management and evaluation feature, unrelated to feature-gate/experiment catalog data this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/prompts/{id}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "LLM prompt-management and evaluation feature, unrelated to feature-gate/experiment catalog data this connector targets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/prompts/{id}/versions/{versionId}/start_evals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "LLM prompt-management and evaluation feature, unrelated to feature-gate/experiment catalog data this connector targets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/release_pipeline_triggers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "release-pipeline (staged rollout orchestration) configuration and trigger control, a deployment-orchestration feature layered on top of gates/configs, not itself catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/release_pipeline_triggers/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "release-pipeline (staged rollout orchestration) configuration and trigger control, a deployment-orchestration feature layered on top of gates/configs, not itself catalog data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/release_pipeline_triggers/{id}/abort",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/release_pipeline_triggers/{id}/approve",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/release_pipeline_triggers/{id}/pause",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/release_pipeline_triggers/{id}/rollout",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/release_pipeline_triggers/{id}/skip",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/release_pipeline_triggers/{id}/unpause",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/release_pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "release-pipeline (staged rollout orchestration) configuration and trigger control, a deployment-orchestration feature layered on top of gates/configs, not itself catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/release_pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "release-pipeline (staged rollout orchestration) configuration and trigger control, a deployment-orchestration feature layered on top of gates/configs, not itself catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/release_pipelines/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "release-pipeline (staged rollout orchestration) configuration and trigger control, a deployment-orchestration feature layered on top of gates/configs, not itself catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/release_pipelines/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "release-pipeline (staged rollout orchestration) configuration and trigger control, a deployment-orchestration feature layered on top of gates/configs, not itself catalog data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/release_pipelines/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "release-pipeline (staged rollout orchestration) configuration and trigger control, a deployment-orchestration feature layered on top of gates/configs, not itself catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "dashboard/report authoring and results retrieval, a BI-layer feature built on top of metrics/experiments, not a top-level catalog resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "RBAC role management requires an organization-admin-scoped API key; out of scope for a per-project data connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "RBAC role management requires an organization-admin-scoped API key; out of scope for a per-project data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/roles/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "RBAC role management requires an organization-admin-scoped API key; out of scope for a per-project data connector"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/roles/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "RBAC role management requires an organization-admin-scoped API key; out of scope for a per-project data connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/roles/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "RBAC role management requires an organization-admin-scoped API key; out of scope for a per-project data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/segments",
+      "covered_by": {
+        "write": "create_segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/segments/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/segments/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/segments/{id}",
+      "covered_by": {
+        "write": "delete_segment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/segments/{id}/add_ids",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "ID-list segment membership endpoints accept/return large newline-delimited ID-list payloads (a bulk membership file), not JSON catalog records the declarative write/record dialect models"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/segments/{id}/archive",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/segments/{id}/conditional",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "ID-list segment membership endpoints accept/return large newline-delimited ID-list payloads (a bulk membership file), not JSON catalog records the declarative write/record dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/segments/{id}/id_list",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "ID-list segment membership endpoints accept/return large newline-delimited ID-list payloads (a bulk membership file), not JSON catalog records the declarative write/record dialect models"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/segments/{id}/id_list",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "ID-list segment membership endpoints accept/return large newline-delimited ID-list payloads (a bulk membership file), not JSON catalog records the declarative write/record dialect models"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/segments/{id}/id_list",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "ID-list segment membership endpoints accept/return large newline-delimited ID-list payloads (a bulk membership file), not JSON catalog records the declarative write/record dialect models"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/segments/{id}/id_list/reset",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/segments/{id}/idlist_metadata",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "ID-list segment membership endpoints accept/return large newline-delimited ID-list payloads (a bulk membership file), not JSON catalog records the declarative write/record dialect models"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/segments/{id}/remove_ids",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "ID-list segment membership endpoints accept/return large newline-delimited ID-list payloads (a bulk membership file), not JSON catalog records the declarative write/record dialect models"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/console/v1/segments/{id}/reviews/{reviewID}/commit",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "workflow state-transition action (archive/launch/enable/disable/decision/approval/rollout pipeline control) that mutates experiment/gate lifecycle state outside plain CRUD; requires product-workflow context (review approvals, rollout pipelines) the declarative create/update/delete action set does not model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/settings/project",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-wide settings (review policy, roles, teams) requiring admin/owner-scoped API keys well beyond the read/mutate scopes this connector documents; changing org policy is out of the connector's per-record CRUD contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/settings/project",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-wide settings (review policy, roles, teams) requiring admin/owner-scoped API keys well beyond the read/mutate scopes this connector documents; changing org policy is out of the connector's per-record CRUD contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/settings/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested rule/version/review/override history sub-resource of an already-covered parent stream; the parent list stream (gates/dynamic_configs/experiments/segments/holdouts/layers) carries the current rule/override state inline, this is historical/administrative drill-down not needed for warehouse sync"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/settings/reviews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-wide settings (review policy, roles, teams) requiring admin/owner-scoped API keys well beyond the read/mutate scopes this connector documents; changing org policy is out of the connector's per-record CRUD contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/settings/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-wide settings (review policy, roles, teams) requiring admin/owner-scoped API keys well beyond the read/mutate scopes this connector documents; changing org policy is out of the connector's per-record CRUD contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/settings/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-wide settings (review policy, roles, teams) requiring admin/owner-scoped API keys well beyond the read/mutate scopes this connector documents; changing org policy is out of the connector's per-record CRUD contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/settings/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-wide settings (review policy, roles, teams) requiring admin/owner-scoped API keys well beyond the read/mutate scopes this connector documents; changing org policy is out of the connector's per-record CRUD contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/settings/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-wide settings (review policy, roles, teams) requiring admin/owner-scoped API keys well beyond the read/mutate scopes this connector documents; changing org policy is out of the connector's per-record CRUD contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/tags/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/tags/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/tags/{id}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/tags/{id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/target_app",
+      "covered_by": {
+        "stream": "target_apps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/target_app",
+      "covered_by": {
+        "write": "create_target_app"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/target_app",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-assign target-apps-to-resources action operating over an arbitrary resource-ID list, a compound batch operation beyond the single-record create/update/delete write shape this dialect models"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/target_app/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/target_app/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/target_app/{id}",
+      "covered_by": {
+        "write": "update_target_app"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/target_app/{id}",
+      "covered_by": {
+        "write": "delete_target_app"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/unit_id_types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unit-ID-type (custom identifier type) schema management, a project-configuration primitive with no read/write parity precedent; low-value one-time setup data rather than recurring catalog data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/unit_id_types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unit-ID-type (custom identifier type) schema management, a project-configuration primitive with no read/write parity precedent; low-value one-time setup data rather than recurring catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/unit_id_types/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unit-ID-type (custom identifier type) schema management, a project-configuration primitive with no read/write parity precedent; low-value one-time setup data rather than recurring catalog data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/unit_id_types/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unit-ID-type (custom identifier type) schema management, a project-configuration primitive with no read/write parity precedent; low-value one-time setup data rather than recurring catalog data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/unit_id_types/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unit-ID-type (custom identifier type) schema management, a project-configuration primitive with no read/write parity precedent; low-value one-time setup data rather than recurring catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/users/id/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-record GET returning the same fields the list stream already reads (/console/v1/users/id/{id}); avoids fetching per-record detail when the list endpoint is a superset"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/users/invite",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "sends a real organization invite email and grants console access to a new team member; an irreversible-in-effect identity/access-management action outside this connector's data-catalog CRUD scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/users/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "team membership management requires organization-admin-scoped API key permissions beyond this connector's documented read/mutate scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/users/teams",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "team membership management requires organization-admin-scoped API key permissions beyond this connector's documented read/mutate scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/users/teams/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "team membership management requires organization-admin-scoped API key permissions beyond this connector's documented read/mutate scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/users/teams/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "team membership management requires organization-admin-scoped API key permissions beyond this connector's documented read/mutate scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/console/v1/users/teams/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "team membership management requires organization-admin-scoped API key permissions beyond this connector's documented read/mutate scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/console/v1/users/{email}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user GET/POST-upsert by email duplicates the /users list stream's per-record fields; POST additionally performs a user-record upsert mutation out of scope for this Pass B pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/console/v1/users/{email}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user GET/POST-upsert by email duplicates the /users list stream's per-record fields; POST additionally performs a user-record upsert mutation out of scope for this Pass B pass"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/console/v1/wh_connections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Statsig Warehouse Native data-ingestion pipeline management (connections/schedules/backfills), a separate ingestion-orchestration subsystem, not catalog/config data this connector reads or writes"
+      }
+    }
   ]
 }

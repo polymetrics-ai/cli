@@ -1,0 +1,10 @@
+{
+  "record": {
+    "cost_report_token": "cr_fixture_1",
+    "threshold": 500
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/anomaly_notifications"
+  }
+}

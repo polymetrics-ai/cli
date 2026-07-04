@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/onboarding/categories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "title": "Fixture General", "id": 1 },
+        { "title": "Fixture Platform", "id": 2 }
+      ]
+    }
+  }
+}

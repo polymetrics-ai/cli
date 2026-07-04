@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "person_details",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "full_name": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "tmdb_id": { "type": ["integer", "null"] },
+    "imdb_id": { "type": ["string", "null"] },
+    "main_profession": { "type": ["string", "null"] },
+    "date_of_birth": { "type": ["string", "null"] },
+    "date_of_death": { "type": ["string", "null"] },
+    "place_of_birth": { "type": ["string", "null"] },
+    "gender": { "type": ["string", "null"] },
+    "known_for": { "type": ["array", "null"] },
+    "relevance_percentile": { "type": ["number", "null"] },
+    "watchmode_person_id": { "type": ["string", "null"], "description": "Stamped by fan_out with the person_ids config entry that produced this record." }
+  }
+}

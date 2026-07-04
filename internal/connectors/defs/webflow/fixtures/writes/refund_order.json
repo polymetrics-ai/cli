@@ -1,0 +1,17 @@
+{
+  "record": {
+    "orderId": "order_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/sites/synthetic-conformance-value/orders/order_fixture_1/refund"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "orderId": "order_fixture_1",
+      "status": "refunded",
+      "refundedOn": "2026-01-03T00:00:00.000Z"
+    }
+  }
+}

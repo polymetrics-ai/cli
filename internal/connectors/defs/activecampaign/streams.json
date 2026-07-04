@@ -42,6 +42,49 @@
       "path": "/campaigns",
       "records": { "path": "campaigns" },
       "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "automations",
+      "path": "/automations",
+      "records": { "path": "automations" },
+      "schema": "schemas/automations.json"
+    },
+    {
+      "name": "fields",
+      "path": "/fields",
+      "records": { "path": "fields" },
+      "schema": "schemas/fields.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": { "path": "accounts" },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "users" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "deal_stages",
+      "path": "/dealStages",
+      "records": { "path": "dealStages" },
+      "schema": "schemas/deal_stages.json"
+    },
+    {
+      "name": "deal_tasks",
+      "path": "/dealTasks",
+      "records": { "path": "dealTasks" },
+      "schema": "schemas/deal_tasks.json"
     }
   ]
 }

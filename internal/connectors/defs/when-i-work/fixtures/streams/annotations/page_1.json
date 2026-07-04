@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/2/annotations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "annotations": [
+        { "id": 1, "title": "Fixture Holiday", "message": "Fixture closure notice", "start_date": "2026-01-01T00:00:00Z", "end_date": "2026-01-01T23:59:59Z" }
+      ]
+    }
+  }
+}

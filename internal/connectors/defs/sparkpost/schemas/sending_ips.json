@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sending_ips",
+  "type": "object",
+  "x-primary-key": ["external_ip"],
+  "required": ["external_ip"],
+  "properties": {
+    "external_ip": { "type": "string" },
+    "hostname": { "type": ["string", "null"] },
+    "ip_pool": { "type": ["string", "null"] },
+    "customer_provided": { "type": ["boolean", "null"] },
+    "auto_warmup_enabled": { "type": ["boolean", "null"] },
+    "auto_warmup_stage": { "type": ["integer", "null"] }
+  }
+}

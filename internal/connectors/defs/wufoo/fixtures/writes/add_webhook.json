@@ -1,0 +1,12 @@
+{
+  "record": {
+    "url": "https://example.com/wufoo-webhook",
+    "handshakeKey": "fixture_handshake_key",
+    "metadata": "true"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/forms/synthetic-conformance-value/webhooks.json"
+  },
+  "response": { "status": 200, "body": { "Success": 1, "WebHookPutResult": { "Hash": "webhook_fixture_1" } } }
+}

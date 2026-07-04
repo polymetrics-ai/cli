@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/packages", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 401,
+        "name": "Fixture Bundle 1",
+        "price": "49.99",
+        "currency_code": "USD",
+        "created_at": "2026-01-01T00:00:00Z",
+        "self_hosted": false
+      }
+    ]
+  }
+}

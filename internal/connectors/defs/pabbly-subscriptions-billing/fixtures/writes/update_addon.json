@@ -1,0 +1,11 @@
+{
+  "record": {
+    "addon_id": "addon_fixture_1",
+    "product_id": "product_fixture_1",
+    "price": 20
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/addon/addon_fixture_1"
+  }
+}

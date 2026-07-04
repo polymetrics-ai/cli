@@ -19,6 +19,11 @@
       "type": "string",
       "x-secret": true,
       "description": "e-conomic agreement grant token, sent as the X-AgreementGrantToken header on every request."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 lower-bound value used to seed the initial incremental filter (lastUpdated$gte:<date>) on streams that support it, when no persisted cursor state exists yet."
     }
   }
 }

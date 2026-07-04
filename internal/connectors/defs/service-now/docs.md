@@ -1,8 +1,11 @@
 # Overview
 
-ServiceNow is an IT service management platform. This bundle reads ServiceNow incident, user, and
-group table rows through the ServiceNow Table API. It is read-only, matching legacy
-`internal/connectors/service-now` exactly (`Capabilities{Write: false}`).
+ServiceNow is an IT service management platform. This bundle reads and writes ServiceNow incident,
+user, and group table rows through the ServiceNow Table API
+(`https://<instance>.service-now.com/api/now/table/<table>`). Read behavior is capability-parity
+migrated from `internal/connectors/service-now` (`Capabilities{Write: false}` there); this Pass B
+expansion adds create/update write actions the legacy connector never implemented, going beyond
+strict read-only parity per the Pass B full-surface-expansion charter (see Write actions & risks).
 
 ## Auth setup
 
@@ -43,24 +46,48 @@ config-surface consequence.
 
 ## Write actions & risks
 
-None. ServiceNow is exposed read-only, matching legacy's `Capabilities{Write: false}` and its
-`Write` method, which always returns `connectors.ErrUnsupportedOperation`.
+Pass B adds 6 write actions covering the create+update surface of the Table API's uniform
+CRUD verbs, applied to the 3 legacy-parity tables (`incident`/`sys_user`/`sys_user_group`):
+
+- `create_incident` / `create_user` / `create_group` (`kind: create`, `POST
+  /api/now/table/<table>`) — creates a new row. Low-risk for incident/group (ticketing/CRM-style
+  data); `create_user` is called out separately since a new ServiceNow user account inherits
+  whatever role/ACL defaults the instance applies.
+- `update_incident` / `update_user` / `update_group` (`kind: update`, `PATCH
+  /api/now/table/<table>/{{ record.sys_id }}`) — ServiceNow's Table API documents `PUT` and `PATCH`
+  as functionally identical on this resource (both modify only the fields present in the request
+  body; neither nulls out omitted fields the way standard-REST `PUT` would) — `PATCH` was chosen as
+  the single modeled verb and `PUT` is excluded from `api_surface.json` as `duplicate_of` rather
+  than declaring two write actions that would send byte-identical requests for any accepted input.
+  `update_user` is called out separately since it can flip `active` and revoke a user's instance
+  access.
+- **`DELETE /api/now/table/<table>/{sys_id}` is deliberately NOT implemented** for any of the 3
+  tables — excluded in `api_surface.json` as `destructive_admin`. It is a hard, unrecoverable
+  delete gated by ServiceNow's own delete ACL (not a soft/reversible archive), and for `sys_user`/
+  `sys_user_group` specifically it can cascade-orphan every record that references the deleted row
+  (assigned incidents, group membership, approvals). Legacy exposed zero mutation capability at
+  all; this expansion's write additions are scoped to the reversible/low-risk create+update
+  surface, never a destructive delete.
+
+Every write body is JSON (`body_type: "json"`); the update actions' body is the record minus
+`sys_id` (the path already carries it), so only fields actually present in the submitted record are
+sent — matching the Table API's own submitted-fields-only PATCH/PUT semantics exactly.
 
 ## Known limits
 
-- Full ServiceNow Table API surface (arbitrary custom tables, attachments, `sys_user_grmember`
-  membership rows, single-record GET by `sys_id`, the Aggregate API, import sets, etc.) is out of
-  scope for this wave; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B
-  capability expansion"}` entries. Only the 3 legacy-parity read streams are implemented.
-- **`docs_url` is `"manual intervention needed"`.** This wave's connector manifest supplied no
-  reachable ServiceNow API documentation URL for this connector. This did not block migration:
-  legacy's own Go source (`internal/connectors/service-now/service_now.go`, read-only ground truth
-  per `docs/migration/conventions.md`) is a complete, sufficient behavioral spec for a 3-table
-  read-only Table API connector, and this bundle is derived directly from it rather than from
-  ServiceNow's own docs. A reachable `docs_url` should be sourced and back-filled in a follow-up
-  pass (ServiceNow's public Table API reference is normally at
-  `https://docs.servicenow.com/bundle/.../table-api`, but no specific reachable link was verified
-  for this migration).
+- Full ServiceNow Table API surface beyond the 3 legacy-parity tables (arbitrary custom tables,
+  the `sys_user_grmember` group-membership join table, the separate Aggregate API, Import Set API,
+  and the binary-payload Attachment API) is out of scope; see `api_surface.json`'s `excluded`
+  entries for the specific category+reason per endpoint. Every documented Table API verb IS
+  implemented (as a stream or write action) for the 3 tables this connector covers.
+- **`docs_url` now points to ServiceNow's public Table API reference**
+  (`https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html`).
+  A prior wave's connector manifest supplied no reachable URL (`"manual intervention needed"`);
+  this Pass B pass sourced and back-filled a real, reachable one during full-surface research.
+  Legacy's own Go source (`internal/connectors/service-now/service_now.go`) remains the ground
+  truth for the read-path parity behavior documented below; the write actions above are new
+  capability, sourced from ServiceNow's public Table API docs directly (there is no legacy Go
+  behavior to port for them).
 - **`max_pages` is not a runtime config override.** Legacy accepts a `max_pages` config value
   (default `1`, meaning legacy itself only fetches a single page unless explicitly overridden) and
   threads it through to `connsdk.Harvest`'s page-count cap. The engine's declarative pagination has

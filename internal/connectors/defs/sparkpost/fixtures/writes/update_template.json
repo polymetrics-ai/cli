@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "fixture_template",
+    "name": "Updated Fixture Template"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/templates/fixture_template"
+  }
+}

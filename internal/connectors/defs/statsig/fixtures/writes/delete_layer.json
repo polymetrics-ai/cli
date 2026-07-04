@@ -1,0 +1,4 @@
+{
+  "record": { "id": "layer_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/layers/layer_fixture_1" }
+}

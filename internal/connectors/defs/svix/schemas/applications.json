@@ -3,10 +3,16 @@
   "title": "applications",
   "type": "object",
   "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
+    "uid": { "type": ["string", "null"] },
     "name": { "type": "string" },
-    "created_at": { "type": "string" }
+    "metadata": { "type": ["object", "null"] },
+    "rateLimit": { "type": ["integer", "null"] },
+    "throttleRate": { "type": ["integer", "null"] },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
   }
 }

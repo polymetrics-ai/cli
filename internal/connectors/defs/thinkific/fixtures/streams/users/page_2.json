@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/users",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "first_name": "Fixture101",
+          "last_name": "User",
+          "full_name": "Fixture101 User",
+          "company": null,
+          "email": "fixture101@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

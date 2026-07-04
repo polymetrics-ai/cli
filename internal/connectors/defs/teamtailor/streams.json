@@ -32,6 +32,96 @@
         "created_at": "{{ record.attributes.created-at }}"
       },
       "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "candidates",
+      "path": "/candidates",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "first_name": "{{ record.attributes.first-name }}",
+        "last_name": "{{ record.attributes.last-name }}",
+        "email": "{{ record.attributes.email }}",
+        "created_at": "{{ record.attributes.created-at }}"
+      },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "job_applications",
+      "path": "/job-applications",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "created_at": "{{ record.attributes.created-at }}",
+        "candidate_id": "{{ record.relationships.candidate.data.id }}",
+        "job_id": "{{ record.relationships.job.data.id }}"
+      },
+      "schema": "schemas/job_applications.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "city": "{{ record.attributes.city }}",
+        "country": "{{ record.attributes.country }}"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "stages",
+      "path": "/stages",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/stages.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "email": "{{ record.attributes.email }}",
+        "created_at": "{{ record.attributes.created-at }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "regions",
+      "path": "/regions",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/regions.json"
     }
   ]
 }

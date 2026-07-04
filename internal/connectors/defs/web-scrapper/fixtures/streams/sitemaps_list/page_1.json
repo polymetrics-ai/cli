@@ -1,0 +1,421 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sitemaps",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 1,
+          "name": "Fixture Sitemap 1"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Sitemap 2"
+        },
+        {
+          "id": 3,
+          "name": "Fixture Sitemap 3"
+        },
+        {
+          "id": 4,
+          "name": "Fixture Sitemap 4"
+        },
+        {
+          "id": 5,
+          "name": "Fixture Sitemap 5"
+        },
+        {
+          "id": 6,
+          "name": "Fixture Sitemap 6"
+        },
+        {
+          "id": 7,
+          "name": "Fixture Sitemap 7"
+        },
+        {
+          "id": 8,
+          "name": "Fixture Sitemap 8"
+        },
+        {
+          "id": 9,
+          "name": "Fixture Sitemap 9"
+        },
+        {
+          "id": 10,
+          "name": "Fixture Sitemap 10"
+        },
+        {
+          "id": 11,
+          "name": "Fixture Sitemap 11"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Sitemap 12"
+        },
+        {
+          "id": 13,
+          "name": "Fixture Sitemap 13"
+        },
+        {
+          "id": 14,
+          "name": "Fixture Sitemap 14"
+        },
+        {
+          "id": 15,
+          "name": "Fixture Sitemap 15"
+        },
+        {
+          "id": 16,
+          "name": "Fixture Sitemap 16"
+        },
+        {
+          "id": 17,
+          "name": "Fixture Sitemap 17"
+        },
+        {
+          "id": 18,
+          "name": "Fixture Sitemap 18"
+        },
+        {
+          "id": 19,
+          "name": "Fixture Sitemap 19"
+        },
+        {
+          "id": 20,
+          "name": "Fixture Sitemap 20"
+        },
+        {
+          "id": 21,
+          "name": "Fixture Sitemap 21"
+        },
+        {
+          "id": 22,
+          "name": "Fixture Sitemap 22"
+        },
+        {
+          "id": 23,
+          "name": "Fixture Sitemap 23"
+        },
+        {
+          "id": 24,
+          "name": "Fixture Sitemap 24"
+        },
+        {
+          "id": 25,
+          "name": "Fixture Sitemap 25"
+        },
+        {
+          "id": 26,
+          "name": "Fixture Sitemap 26"
+        },
+        {
+          "id": 27,
+          "name": "Fixture Sitemap 27"
+        },
+        {
+          "id": 28,
+          "name": "Fixture Sitemap 28"
+        },
+        {
+          "id": 29,
+          "name": "Fixture Sitemap 29"
+        },
+        {
+          "id": 30,
+          "name": "Fixture Sitemap 30"
+        },
+        {
+          "id": 31,
+          "name": "Fixture Sitemap 31"
+        },
+        {
+          "id": 32,
+          "name": "Fixture Sitemap 32"
+        },
+        {
+          "id": 33,
+          "name": "Fixture Sitemap 33"
+        },
+        {
+          "id": 34,
+          "name": "Fixture Sitemap 34"
+        },
+        {
+          "id": 35,
+          "name": "Fixture Sitemap 35"
+        },
+        {
+          "id": 36,
+          "name": "Fixture Sitemap 36"
+        },
+        {
+          "id": 37,
+          "name": "Fixture Sitemap 37"
+        },
+        {
+          "id": 38,
+          "name": "Fixture Sitemap 38"
+        },
+        {
+          "id": 39,
+          "name": "Fixture Sitemap 39"
+        },
+        {
+          "id": 40,
+          "name": "Fixture Sitemap 40"
+        },
+        {
+          "id": 41,
+          "name": "Fixture Sitemap 41"
+        },
+        {
+          "id": 42,
+          "name": "Fixture Sitemap 42"
+        },
+        {
+          "id": 43,
+          "name": "Fixture Sitemap 43"
+        },
+        {
+          "id": 44,
+          "name": "Fixture Sitemap 44"
+        },
+        {
+          "id": 45,
+          "name": "Fixture Sitemap 45"
+        },
+        {
+          "id": 46,
+          "name": "Fixture Sitemap 46"
+        },
+        {
+          "id": 47,
+          "name": "Fixture Sitemap 47"
+        },
+        {
+          "id": 48,
+          "name": "Fixture Sitemap 48"
+        },
+        {
+          "id": 49,
+          "name": "Fixture Sitemap 49"
+        },
+        {
+          "id": 50,
+          "name": "Fixture Sitemap 50"
+        },
+        {
+          "id": 51,
+          "name": "Fixture Sitemap 51"
+        },
+        {
+          "id": 52,
+          "name": "Fixture Sitemap 52"
+        },
+        {
+          "id": 53,
+          "name": "Fixture Sitemap 53"
+        },
+        {
+          "id": 54,
+          "name": "Fixture Sitemap 54"
+        },
+        {
+          "id": 55,
+          "name": "Fixture Sitemap 55"
+        },
+        {
+          "id": 56,
+          "name": "Fixture Sitemap 56"
+        },
+        {
+          "id": 57,
+          "name": "Fixture Sitemap 57"
+        },
+        {
+          "id": 58,
+          "name": "Fixture Sitemap 58"
+        },
+        {
+          "id": 59,
+          "name": "Fixture Sitemap 59"
+        },
+        {
+          "id": 60,
+          "name": "Fixture Sitemap 60"
+        },
+        {
+          "id": 61,
+          "name": "Fixture Sitemap 61"
+        },
+        {
+          "id": 62,
+          "name": "Fixture Sitemap 62"
+        },
+        {
+          "id": 63,
+          "name": "Fixture Sitemap 63"
+        },
+        {
+          "id": 64,
+          "name": "Fixture Sitemap 64"
+        },
+        {
+          "id": 65,
+          "name": "Fixture Sitemap 65"
+        },
+        {
+          "id": 66,
+          "name": "Fixture Sitemap 66"
+        },
+        {
+          "id": 67,
+          "name": "Fixture Sitemap 67"
+        },
+        {
+          "id": 68,
+          "name": "Fixture Sitemap 68"
+        },
+        {
+          "id": 69,
+          "name": "Fixture Sitemap 69"
+        },
+        {
+          "id": 70,
+          "name": "Fixture Sitemap 70"
+        },
+        {
+          "id": 71,
+          "name": "Fixture Sitemap 71"
+        },
+        {
+          "id": 72,
+          "name": "Fixture Sitemap 72"
+        },
+        {
+          "id": 73,
+          "name": "Fixture Sitemap 73"
+        },
+        {
+          "id": 74,
+          "name": "Fixture Sitemap 74"
+        },
+        {
+          "id": 75,
+          "name": "Fixture Sitemap 75"
+        },
+        {
+          "id": 76,
+          "name": "Fixture Sitemap 76"
+        },
+        {
+          "id": 77,
+          "name": "Fixture Sitemap 77"
+        },
+        {
+          "id": 78,
+          "name": "Fixture Sitemap 78"
+        },
+        {
+          "id": 79,
+          "name": "Fixture Sitemap 79"
+        },
+        {
+          "id": 80,
+          "name": "Fixture Sitemap 80"
+        },
+        {
+          "id": 81,
+          "name": "Fixture Sitemap 81"
+        },
+        {
+          "id": 82,
+          "name": "Fixture Sitemap 82"
+        },
+        {
+          "id": 83,
+          "name": "Fixture Sitemap 83"
+        },
+        {
+          "id": 84,
+          "name": "Fixture Sitemap 84"
+        },
+        {
+          "id": 85,
+          "name": "Fixture Sitemap 85"
+        },
+        {
+          "id": 86,
+          "name": "Fixture Sitemap 86"
+        },
+        {
+          "id": 87,
+          "name": "Fixture Sitemap 87"
+        },
+        {
+          "id": 88,
+          "name": "Fixture Sitemap 88"
+        },
+        {
+          "id": 89,
+          "name": "Fixture Sitemap 89"
+        },
+        {
+          "id": 90,
+          "name": "Fixture Sitemap 90"
+        },
+        {
+          "id": 91,
+          "name": "Fixture Sitemap 91"
+        },
+        {
+          "id": 92,
+          "name": "Fixture Sitemap 92"
+        },
+        {
+          "id": 93,
+          "name": "Fixture Sitemap 93"
+        },
+        {
+          "id": 94,
+          "name": "Fixture Sitemap 94"
+        },
+        {
+          "id": 95,
+          "name": "Fixture Sitemap 95"
+        },
+        {
+          "id": 96,
+          "name": "Fixture Sitemap 96"
+        },
+        {
+          "id": 97,
+          "name": "Fixture Sitemap 97"
+        },
+        {
+          "id": 98,
+          "name": "Fixture Sitemap 98"
+        },
+        {
+          "id": 99,
+          "name": "Fixture Sitemap 99"
+        },
+        {
+          "id": 100,
+          "name": "Fixture Sitemap 100"
+        }
+      ],
+      "current_page": 1,
+      "last_page": 2,
+      "total": 101,
+      "per_page": 100
+    }
+  }
+}

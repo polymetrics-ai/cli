@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/v1/releases/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "releases": [
+        {
+          "id": 3173903,
+          "title": "Fixture Release One",
+          "type": "movie",
+          "tmdb_id": null,
+          "tmdb_type": null,
+          "imdb_id": null,
+          "season_number": null,
+          "poster_url": null,
+          "source_release_date": "2026-01-01",
+          "source_id": 203,
+          "source_name": "Netflix",
+          "is_original": 0
+        },
+        {
+          "id": 3173904,
+          "title": "Fixture Release Two",
+          "type": "tv_series",
+          "tmdb_id": null,
+          "tmdb_type": null,
+          "imdb_id": null,
+          "season_number": 1,
+          "poster_url": null,
+          "source_release_date": "2026-01-02",
+          "source_id": 157,
+          "source_name": "Hulu",
+          "is_original": 1
+        }
+      ]
+    }
+  }
+}

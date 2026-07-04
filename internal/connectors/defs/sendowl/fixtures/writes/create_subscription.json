@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Subscription Created",
+    "price": "19.99",
+    "currency_code": "USD",
+    "period": "monthly"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/subscriptions"
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": 999, "name": "Fixture Subscription Created" }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issued_memberships",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "im_fixture_1",
+          "code": "MEMBER1",
+          "email": "fixture1@example.com",
+          "first_name": "Fixture",
+          "last_name": "One",
+          "full_name": "Fixture One",
+          "is_valid": true,
+          "membership_type_id": "mt_fixture_1",
+          "membership_type_name": "Fixture Membership"
+        },
+        {
+          "id": "im_fixture_2",
+          "code": "MEMBER2",
+          "email": "fixture2@example.com",
+          "first_name": "Fixture",
+          "last_name": "Two",
+          "full_name": "Fixture Two",
+          "is_valid": true,
+          "membership_type_id": "mt_fixture_1",
+          "membership_type_name": "Fixture Membership"
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

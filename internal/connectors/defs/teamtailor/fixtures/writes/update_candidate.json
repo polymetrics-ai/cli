@@ -1,0 +1,21 @@
+{
+  "record": {
+    "data": {
+      "id": "candidate_fixture_1",
+      "type": "candidates",
+      "attributes": { "first-name": "Fixture-Updated" }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/candidates/candidate_fixture_1",
+    "body": {
+      "data": {
+        "id": "candidate_fixture_1",
+        "type": "candidates",
+        "attributes": { "first-name": "Fixture-Updated" }
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "data": { "id": "candidate_fixture_1", "type": "candidates" } } }
+}

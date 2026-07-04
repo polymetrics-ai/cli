@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Activity Type", "icon_key": "call" },
+  "expect": {
+    "method": "POST",
+    "path": "/activityTypes",
+    "body": { "name": "Fixture Activity Type", "icon_key": "call" }
+  },
+  "response": { "status": 201, "body": { "success": true, "data": { "id": 1, "name": "Fixture Activity Type" } } }
+}

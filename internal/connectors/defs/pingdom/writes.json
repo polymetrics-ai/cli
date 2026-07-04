@@ -1,0 +1,212 @@
+{
+  "actions": [
+    {
+      "name": "create_check",
+      "kind": "create",
+      "method": "POST",
+      "path": "/checks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "host", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "host": { "type": "string" },
+          "type": { "type": "string", "enum": ["http", "httpcustom", "tcp", "ping", "dns", "udp", "smtp", "pop3", "imap"] },
+          "paused": { "type": "boolean" },
+          "resolution": { "type": "integer", "enum": [1, 5, 15, 30, 60] },
+          "sendnotificationwhendown": { "type": "integer" },
+          "notifyagainevery": { "type": "integer" },
+          "notifywhenbackup": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "ipv6": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new Pingdom uptime check (this action models the common HTTP-type check shape; Pingdom's other 8 check types share the same name/host/type/paused/resolution/notification fields plus type-specific attributes not modeled here, see docs.md Known limits); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_check",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/checks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "host": { "type": "string" },
+          "paused": { "type": "boolean" },
+          "resolution": { "type": "integer", "enum": [1, 5, 15, 30, 60] },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "updates an existing check's settings (name/host/paused/resolution/tags); external mutation, approval required"
+    },
+    {
+      "name": "delete_check",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/checks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes an uptime check and its historical results; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/alerting/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "notification_targets"],
+        "properties": {
+          "name": { "type": "string" },
+          "paused": { "type": "boolean" },
+          "notification_targets": { "type": "object" }
+        }
+      },
+      "risk": "creates a new alerting contact with email/SMS notification targets; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/alerting/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "paused", "notification_targets"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "paused": { "type": "boolean" },
+          "notification_targets": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing alerting contact's name/paused state/notification targets (Pingdom's PUT is a full replacement, requiring name/paused/notification_targets together); external mutation, approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/alerting/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes an alerting contact and its notification targets; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/alerting/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "member_ids"],
+        "properties": {
+          "name": { "type": "string" },
+          "member_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "creates a new alerting team from a list of contact ids; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/alerting/teams/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "member_ids"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "member_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "updates an existing alerting team's name/member list; external mutation, approval required"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/alerting/teams/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes an alerting team; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_maintenance",
+      "kind": "create",
+      "method": "POST",
+      "path": "/maintenance",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["description", "from", "to"],
+        "properties": {
+          "description": { "type": "string" },
+          "from": { "type": "integer" },
+          "to": { "type": "integer" },
+          "recurrencetype": { "type": "string", "enum": ["none", "day", "week", "month"] },
+          "repeatevery": { "type": "integer" },
+          "effectiveto": { "type": "integer" },
+          "uptimeids": { "type": "array", "items": { "type": "integer" } },
+          "tmsids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "creates a new maintenance window that suppresses alerting for the assigned checks during the scheduled period; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_maintenance",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/maintenance/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a maintenance window, immediately resuming alerting for its assigned checks; destructive external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

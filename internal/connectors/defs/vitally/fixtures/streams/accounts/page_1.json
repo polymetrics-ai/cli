@@ -1,20 +1,77 @@
 {
-  "request": { "method": "GET", "path": "/resources/accounts" },
+  "request": {
+    "method": "GET",
+    "path": "/resources/accounts",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "results": [
         {
           "id": "acct_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "externalId": "ext-acct-1",
           "name": "Fixture Account One",
-          "traits": { "plan": "pro", "mrr": 1200 }
+          "traits": {
+            "plan": "pro",
+            "mrr": 1200
+          },
+          "organizationId": null,
+          "accountOwnerId": null,
+          "csmId": null,
+          "accountExecutiveId": null,
+          "healthScore": 8,
+          "npsScore": 42,
+          "npsDetractorCount": 1,
+          "npsPassiveCount": 2,
+          "npsPromoterCount": 5,
+          "usersCount": 8,
+          "firstSeenTimestamp": "2025-06-01T00:00:00Z",
+          "lastSeenTimestamp": "2026-01-01T00:00:00Z",
+          "lastInboundMessageTimestamp": null,
+          "lastOutboundMessageTimestamp": null,
+          "trialEndDate": null,
+          "nextRenewalDate": "2027-01-01T00:00:00Z",
+          "churnedAt": null,
+          "keyRoles": [],
+          "segments": []
         },
         {
           "id": "acct_fixture_2",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "externalId": "ext-acct-2",
           "name": "Fixture Account Two",
-          "traits": { "plan": "free", "mrr": 0 }
+          "traits": {
+            "plan": "free",
+            "mrr": 0
+          },
+          "organizationId": null,
+          "accountOwnerId": null,
+          "csmId": null,
+          "accountExecutiveId": null,
+          "healthScore": 5,
+          "npsScore": 0,
+          "npsDetractorCount": 0,
+          "npsPassiveCount": 0,
+          "npsPromoterCount": 0,
+          "usersCount": 1,
+          "firstSeenTimestamp": "2025-12-01T00:00:00Z",
+          "lastSeenTimestamp": "2026-01-02T00:00:00Z",
+          "lastInboundMessageTimestamp": null,
+          "lastOutboundMessageTimestamp": null,
+          "trialEndDate": "2026-02-01T00:00:00Z",
+          "nextRenewalDate": null,
+          "churnedAt": null,
+          "keyRoles": [],
+          "segments": []
         }
-      ]
+      ],
+      "next": "fixture_cursor_accounts_1"
     }
   }
 }

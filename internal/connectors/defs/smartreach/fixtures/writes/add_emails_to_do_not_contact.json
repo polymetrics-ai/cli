@@ -1,0 +1,16 @@
+{
+  "record": {
+    "emails": ["blocked-fixture@example.com"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/do-not-contact/email",
+    "body": {
+      "emails": ["blocked-fixture@example.com"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "added_count": 1 }
+  }
+}

@@ -102,6 +102,30 @@
       "records": { "path": "." },
       "schema": "schemas/tags.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "taxonomies",
+      "path": "/wp-json/wp/v2/taxonomies",
+      "records": { "path": ".", "keyed_object": true, "key_field": "slug" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/taxonomies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "types",
+      "path": "/wp-json/wp/v2/types",
+      "records": { "path": ".", "keyed_object": true, "key_field": "slug" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "statuses",
+      "path": "/wp-json/wp/v2/statuses",
+      "records": { "path": ".", "keyed_object": true, "key_field": "slug" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/statuses.json",
+      "projection": "passthrough"
     }
   ]
 }

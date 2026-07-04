@@ -1,14 +1,14 @@
 {
   "name": "solarwinds-service-desk",
   "display_name": "SolarWinds Service Desk",
-  "description": "Reads SolarWinds Service Desk incidents, users, departments, categories, problems, and changes. Read-only.",
+  "description": "Reads SolarWinds Service Desk incidents, problems, changes, change catalogs, releases, solutions, catalog items, configuration items, users, sites, departments, roles, groups, categories, hardware/mobile/other/software assets, printers, contracts, purchase orders, vendors, audits, and risks; writes delete actions for every resource with a documented delete-by-id endpoint.",
   "integration_type": "api",
-  "docs_url": "https://documentation.solarwinds.com/en/success_center/swsd/content/api/swsd-api.htm",
+  "docs_url": "https://apidoc.samanage.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external SolarWinds Service Desk API read of incident, user, department, category, problem, and change data",
-    "approval": "none; read-only, no reverse-ETL writes"
+    "read": "external SolarWinds Service Desk API read of incident, problem, change, asset, and organizational (user/site/department/role/group) data",
+    "write": "external SolarWinds Service Desk API delete mutations against incidents, problems, changes, assets, and organizational records",
+    "approval": "required for all write actions; every write action is an irreversible external delete"
   }
 }

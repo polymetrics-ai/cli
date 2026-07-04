@@ -1,0 +1,15 @@
+{
+  "record": {
+    "uuid": "job_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/jobs/job_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "deleted"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "transaction_id": "100001",
+    "description": "fixture partial refund reason",
+    "refund_amount": 4.99
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/merchants/synthetic-conformance-value/reports/transactions/100001/partial_refund",
+    "body": {
+      "description": "fixture partial refund reason",
+      "refund_amount": 4.99
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

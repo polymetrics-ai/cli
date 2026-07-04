@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/addressbooks/1/emails", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "email": "subscriber1@example.com", "status": 0 }
+    ]
+  }
+}

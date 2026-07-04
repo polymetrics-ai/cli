@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "checkout_form_elements",
+  "type": "object",
+  "x-primary-key": ["id", "checkout_form_id"],
+  "required": ["id", "checkout_form_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "question": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "required": { "type": ["boolean", "null"] },
+    "per_ticket": { "type": ["boolean", "null"] },
+    "checkout_form_id": { "type": "string" }
+  }
+}

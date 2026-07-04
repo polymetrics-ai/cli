@@ -1,0 +1,82 @@
+{
+  "actions": [
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.sku }}",
+      "path_fields": ["sku"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sku"],
+        "properties": {
+          "sku": { "type": "string" },
+          "name": { "type": "string" },
+          "price": { "type": "number" },
+          "status": { "type": "integer" },
+          "visibility": { "type": "integer" },
+          "weight": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; overwrites live Magento catalog product fields; approval required"
+    },
+    {
+      "name": "create_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/categories",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "parent_id"],
+        "properties": {
+          "name": { "type": "string" },
+          "parent_id": { "type": "integer" },
+          "is_active": { "type": "boolean" },
+          "position": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a live Magento catalog category; approval required"
+    },
+    {
+      "name": "update_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/categories/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "is_active": { "type": "boolean" },
+          "position": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; overwrites live Magento catalog category fields; approval required"
+    },
+    {
+      "name": "cancel_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.entity_id }}/cancel",
+      "path_fields": ["entity_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["entity_id"],
+        "properties": {
+          "entity_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; irreversibly cancels a live Magento sales order; approval required"
+    }
+  ]
+}

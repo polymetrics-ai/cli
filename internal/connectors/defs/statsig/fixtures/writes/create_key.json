@@ -1,0 +1,4 @@
+{
+  "record": { "description": "fixture record", "type": "SERVER" },
+  "expect": { "method": "POST", "path": "/keys" }
+}

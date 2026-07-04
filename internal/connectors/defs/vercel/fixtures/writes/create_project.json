@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "fixture-project"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v11/projects"
+  }
+}

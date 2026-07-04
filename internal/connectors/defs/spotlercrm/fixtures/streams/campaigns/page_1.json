@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": { "page": "1", "limit": "10" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "metadata": { "url": "/campaigns", "object_type": "list", "total_count": 1, "has_more": false },
+      "list": [
+        {
+          "metadata": { "url": "/campaigns/95920002", "list_url": "/campaigns", "parent": "/", "object_type": "record", "record_type": "campaign" },
+          "record": {
+            "id": 95920002,
+            "name": "Fixture Campaign One",
+            "ownerid": 90505,
+            "createddate": "2026-01-01 00:00:00",
+            "modifieddate": "2026-01-01 00:00:00"
+          }
+        }
+      ]
+    }
+  }
+}

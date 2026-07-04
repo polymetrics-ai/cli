@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/templates/" },
+  "request": { "method": "GET", "path": "/templates/", "query": { "page": "1" } },
   "response": {
     "status": 200,
     "body": {
@@ -7,7 +7,22 @@
         {
           "token": "template_fixture_1",
           "name": "Fixture NDA Template",
-          "created_at": "2026-01-01T00:00:00Z"
+          "template_type": "docx",
+          "active": true,
+          "folder_path": "/",
+          "lang": "en",
+          "created_at": "2026-01-01T00:00:00Z",
+          "last_update_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "token": "template_fixture_2",
+          "name": "Fixture Services Template",
+          "template_type": "docx",
+          "active": true,
+          "folder_path": "/templates/",
+          "lang": "pt-br",
+          "created_at": "2026-01-02T00:00:00Z",
+          "last_update_at": "2026-01-02T00:00:00Z"
         }
       ]
     }

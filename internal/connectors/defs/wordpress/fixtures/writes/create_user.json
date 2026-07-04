@@ -1,0 +1,11 @@
+{
+  "record": {
+    "username": "fixtureuser",
+    "email": "fixture1@example.com",
+    "password": "fixture_pw_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/users"
+  }
+}

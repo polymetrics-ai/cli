@@ -84,6 +84,204 @@
       "records": { "path": "" },
       "projection": "passthrough",
       "schema": "schemas/changes.json"
+    },
+    {
+      "name": "change_catalogs",
+      "path": "/change_catalogs.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/change_catalogs.json"
+    },
+    {
+      "name": "releases",
+      "path": "/releases.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/releases.json"
+    },
+    {
+      "name": "solutions",
+      "path": "/solutions.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/solutions.json"
+    },
+    {
+      "name": "catalog_items",
+      "path": "/catalog_items.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/catalog_items.json"
+    },
+    {
+      "name": "configuration_items",
+      "path": "/configuration_items.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/configuration_items.json"
+    },
+    {
+      "name": "sites",
+      "path": "/sites.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/sites.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "hardwares",
+      "path": "/hardwares.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/hardwares.json"
+    },
+    {
+      "name": "mobiles",
+      "path": "/mobiles.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/mobiles.json"
+    },
+    {
+      "name": "other_assets",
+      "path": "/other_assets.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/other_assets.json"
+    },
+    {
+      "name": "softwares",
+      "path": "/softwares.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/softwares.json"
+    },
+    {
+      "name": "printers",
+      "path": "/printers.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/printers.json"
+    },
+    {
+      "name": "contracts",
+      "path": "/contracts.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/contracts.json"
+    },
+    {
+      "name": "purchase_orders",
+      "path": "/purchase_orders.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/purchase_orders.json"
+    },
+    {
+      "name": "vendors",
+      "path": "/vendors.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/vendors.json"
+    },
+    {
+      "name": "audits",
+      "path": "/audits.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/audits.json"
+    },
+    {
+      "name": "risks",
+      "path": "/risks.json",
+      "query": {
+        "page": { "template": "{{ config.page }}", "omit_when_absent": true },
+        "per_page": { "template": "{{ config.per_page }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "projection": "passthrough",
+      "schema": "schemas/risks.json"
     }
   ]
 }

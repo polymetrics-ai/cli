@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "report_widgets",
+  "type": "object",
+  "x-primary-key": ["Hash"],
+  "required": ["Hash"],
+  "properties": {
+    "Hash": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "Size": { "type": ["string", "null"] },
+    "Type": { "type": ["string", "null"] },
+    "TypeDesc": { "type": ["string", "null"] }
+  }
+}

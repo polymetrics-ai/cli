@@ -1,15 +1,15 @@
 {
   "api": "Perigon News API v1 (https://api.perigon.io)",
   "docs": "https://docs.goperigon.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (articles, stories); the full Perigon surface (journalists, sources, companies, people, topics entity endpoints) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: all 7 documented Perigon v1 search/list endpoints (articles, stories, journalists, sources, companies, people, topics) are now covered as read streams. Perigon is a read-only public news-intelligence API; it publishes no write/mutation endpoints of any kind.",
   "endpoints": [
     { "method": "GET", "path": "/v1/articles/all", "covered_by": { "stream": "articles" } },
     { "method": "GET", "path": "/v1/stories/all", "covered_by": { "stream": "stories" } },
-    { "method": "GET", "path": "/v1/journalists/all", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/sources/all", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/companies/all", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/people/all", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/topics/all", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/v1/journalists/all", "covered_by": { "stream": "journalists" } },
+    { "method": "GET", "path": "/v1/sources/all", "covered_by": { "stream": "sources" } },
+    { "method": "GET", "path": "/v1/companies/all", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/v1/people/all", "covered_by": { "stream": "people" } },
+    { "method": "GET", "path": "/v1/topics/all", "covered_by": { "stream": "topics" } }
   ]
 }

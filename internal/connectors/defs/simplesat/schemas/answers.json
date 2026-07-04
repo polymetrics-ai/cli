@@ -6,8 +6,18 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "integer" },
-    "created_at": { "type": ["string", "null"] },
-    "name": { "type": ["string", "null"] },
-    "rating": { "type": ["integer", "null"] }
+    "choice": { "type": ["string", "null"] },
+    "choice_label": { "type": ["string", "null"] },
+    "choices": { "type": ["array", "null"], "items": { "type": "string" } },
+    "comment": { "type": ["string", "null"] },
+    "sentiment": { "type": ["string", "null"] },
+    "follow_up_answer": { "type": ["string", "null"] },
+    "follow_up_answer_choice": { "type": ["string", "null"] },
+    "follow_up_answer_choices": { "type": ["array", "null"], "items": { "type": "string" } },
+    "published_as_testimonial": { "type": ["boolean", "null"] },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] },
+    "question": { "type": ["object", "null"] },
+    "survey": { "type": ["object", "null"] }
   }
 }

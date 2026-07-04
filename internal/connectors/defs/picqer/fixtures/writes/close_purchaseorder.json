@@ -1,0 +1,5 @@
+{
+  "record": { "idpurchaseorder": 701 },
+  "expect": { "method": "POST", "path": "/purchaseorders/701/close" },
+  "response": { "status": 200, "body": {} }
+}

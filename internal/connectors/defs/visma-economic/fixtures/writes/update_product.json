@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "P-2001",
+    "name": "Fixture Updated Product",
+    "salesPrice": 34.99,
+    "productGroup": {
+      "productGroupNumber": 1
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/P-2001"
+  }
+}

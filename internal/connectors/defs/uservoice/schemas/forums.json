@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forums",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "is_public": { "type": ["boolean", "null"] },
+    "is_private": { "type": ["boolean", "null"] },
+    "is_open": { "type": ["boolean", "null"] },
+    "is_default": { "type": ["boolean", "null"] },
+    "moderation_enabled": { "type": ["boolean", "null"] },
+    "categories_count": { "type": ["integer", "null"] },
+    "suggestions_count": { "type": ["integer", "null"] },
+    "open_suggestions_count": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

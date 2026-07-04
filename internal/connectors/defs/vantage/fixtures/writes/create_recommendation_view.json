@@ -1,0 +1,10 @@
+{
+  "record": {
+    "title": "Fixture View",
+    "workspace_token": "wrkspc_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/recommendation_views"
+  }
+}

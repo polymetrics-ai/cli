@@ -40,6 +40,14 @@
       "type": "string",
       "default": "40",
       "description": "Records per page (1-80)."
+    },
+    "collection_media_type": {
+      "type": "string",
+      "description": "Optional filter for the 'collection_media' stream: 'photos' or 'videos' (omitted = both)."
+    },
+    "collection_media_sort": {
+      "type": "string",
+      "description": "Optional sort order for the 'collection_media' stream: 'asc' or 'desc'."
     }
   }
 }

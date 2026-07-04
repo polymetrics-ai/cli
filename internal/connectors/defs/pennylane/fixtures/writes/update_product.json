@@ -1,0 +1,7 @@
+{
+  "record": { "id": 4, "label": "Updated Fixture Product", "price_before_tax": 42.5 },
+  "expect": {
+    "method": "PUT",
+    "path": "/products/4"
+  }
+}

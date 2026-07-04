@@ -1,7 +1,7 @@
 {
   "name": "weatherstack",
   "display_name": "Weatherstack",
-  "description": "Reads current, historical, and forecast weather data from Weatherstack. Read-only.",
+  "description": "Reads current, historical, forecast, marine, and location-autocomplete weather data from Weatherstack. Read-only.",
   "integration_type": "api",
   "docs_url": "https://weatherstack.com/documentation",
   "release_stage": "ga",

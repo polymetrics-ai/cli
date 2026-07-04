@@ -1,0 +1,387 @@
+{
+  "actions": [
+    {
+      "name": "create_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/posts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "excerpt": { "type": "string" },
+          "status": { "type": "string" },
+          "slug": { "type": "string" },
+          "author": { "type": "integer" },
+          "categories": { "type": "array", "items": { "type": "integer" } },
+          "tags": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "external mutation; publishes/creates public site content; approval required"
+    },
+    {
+      "name": "update_post",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/posts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; edits public site content; approval required"
+    },
+    {
+      "name": "delete_post",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/wp-json/wp/v2/posts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "external deletion of public site content (moves to trash unless force=true is embedded in the path); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/pages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "status": { "type": "string" },
+          "slug": { "type": "string" },
+          "parent": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; publishes/creates public site content; approval required"
+    },
+    {
+      "name": "update_page",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/pages/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "content": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; edits public site content; approval required"
+    },
+    {
+      "name": "delete_page",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/wp-json/wp/v2/pages/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "external deletion of public site content (moves to trash unless force=true is embedded in the path); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/comments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["post", "content"],
+        "properties": {
+          "post": { "type": "integer" },
+          "content": { "type": "string" },
+          "author_name": { "type": "string" },
+          "author_email": { "type": "string" },
+          "parent": { "type": "integer" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; publishes a public-facing comment; approval required"
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/comments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "content": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; edits/moderates a public-facing comment; approval required"
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/wp-json/wp/v2/comments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "external deletion of a comment (moves to trash unless force=true is embedded in the path); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_media",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/media/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "alt_text": { "type": "string" },
+          "caption": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; edits media-item metadata (title/alt text/caption/description); approval required"
+    },
+    {
+      "name": "delete_media",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/wp-json/wp/v2/media/{{ record.id }}?force=true",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a media/attachment item (WordPress core requires force=true; attachments do not support trashing); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["username", "email", "password"],
+        "properties": {
+          "username": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "name": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "roles": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; creates a new site user account with a password; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "roles": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; edits a site user account, including role/permission assignment; approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/wp-json/wp/v2/users/{{ record.id }}?force=true&reassign={{ record.reassign }}",
+      "path_fields": ["id", "reassign"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "reassign"],
+        "properties": {
+          "id": { "type": "integer" },
+          "reassign": { "type": "integer", "description": "User ID to reassign the deleted user's posts/links to; required by WordPress core (users do not support trashing)." }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a site user account (WordPress core requires force=true and a reassign target; users do not support trashing); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/categories",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "slug": { "type": "string" },
+          "parent": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_category",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/categories/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/wp-json/wp/v2/categories/{{ record.id }}?force=true",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a category (WordPress core requires force=true; terms do not support trashing); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "slug": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wp-json/wp/v2/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/wp-json/wp/v2/tags/{{ record.id }}?force=true",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a tag (WordPress core requires force=true; terms do not support trashing); approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

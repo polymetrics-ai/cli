@@ -1,0 +1,4 @@
+{
+  "record": { "channel_id": 1, "survey_id": 1, "frequency": "once", "type": "email", "interval": 1, "embed_first_question": false, "custom_footer": false },
+  "expect": { "method": "POST", "path": "/reminders" }
+}

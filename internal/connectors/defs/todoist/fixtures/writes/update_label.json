@@ -1,0 +1,12 @@
+{
+  "record": { "id": "label_fixture_1", "name": "Drinks" },
+  "expect": {
+    "method": "POST",
+    "path": "/labels/label_fixture_1",
+    "body": { "name": "Drinks" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "label_fixture_1", "name": "Drinks" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/leave-management/policies" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Vacation", "color": "#49B284", "do_not_accrue": false, "unit": "days", "default_allowance": "26", "max_carryover": "100.0", "accrue_type": "yearly" },
+        { "id": 2, "name": "Sickday", "color": "#DB263F", "do_not_accrue": true, "unit": "days", "default_allowance": "0.0", "max_carryover": "0.0", "accrue_type": "no_tracking" }
+      ]
+    }
+  }
+}

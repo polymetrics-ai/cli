@@ -1,0 +1,31 @@
+{
+  "request": { "method": "POST", "path": "/wa-api/queue/list", "query": { "restid": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "OK",
+      "queue": [
+        {
+          "queue_id": "q_fixture_1",
+          "cust_id": "cust_fixture_1",
+          "amount": "2",
+          "added_date": "2026-01-01T10:00:00Z",
+          "firstname": "Fixture",
+          "lastname": "Guest One",
+          "mobile": "+15550100",
+          "comment": "fixture queue comment"
+        },
+        {
+          "queue_id": "q_fixture_2",
+          "cust_id": "cust_fixture_2",
+          "amount": "3",
+          "added_date": "2026-01-01T10:15:00Z",
+          "firstname": "Fixture",
+          "lastname": "Guest Two",
+          "mobile": "",
+          "comment": ""
+        }
+      ]
+    }
+  }
+}

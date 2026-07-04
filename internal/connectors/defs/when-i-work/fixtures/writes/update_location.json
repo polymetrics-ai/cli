@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Location Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/2/locations/1"
+  }
+}

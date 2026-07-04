@@ -1,0 +1,15 @@
+{
+  "record": {
+    "token": "signer_fixture_1",
+    "name": "Fixture Signer Updated",
+    "email": "fixture1-updated@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/signers/signer_fixture_1/",
+    "body": {
+      "name": "Fixture Signer Updated",
+      "email": "fixture1-updated@example.com"
+    }
+  }
+}

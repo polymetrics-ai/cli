@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/dashboards"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "dashboards": [
+        {
+          "token": "dbrd_fixture_1",
+          "title": "Fixture Dashboard",
+          "workspace_token": "wrkspc_fixture_1",
+          "date_interval": "last_30_days",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "self": "https://api.vantage.sh/v2/dashboards?page=1"
+      }
+    }
+  }
+}

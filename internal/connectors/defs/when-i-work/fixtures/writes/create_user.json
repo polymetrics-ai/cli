@@ -1,0 +1,11 @@
+{
+  "record": {
+    "first_name": "Fixture",
+    "last_name": "User",
+    "email": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/2/users"
+  }
+}

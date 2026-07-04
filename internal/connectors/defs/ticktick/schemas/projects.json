@@ -8,6 +8,11 @@
     "id": { "type": "string" },
     "name": { "type": ["string", "null"] },
     "color": { "type": ["string", "null"] },
-    "sortOrder": { "type": ["string", "null"] }
+    "sortOrder": { "type": ["integer", "null"] },
+    "closed": { "type": ["string", "null"] },
+    "groupId": { "type": ["string", "null"] },
+    "viewMode": { "type": ["string", "null"] },
+    "permission": { "type": ["string", "null"] },
+    "kind": { "type": ["string", "null"] }
   }
 }

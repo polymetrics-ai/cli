@@ -1,0 +1,26 @@
+{
+  "record": {
+    "sitemap_id": 123,
+    "driver": "fast",
+    "page_load_delay": 2000,
+    "request_interval": 2000,
+    "proxy": 0,
+    "custom_id": "fixture-scraping-job"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/scraping-job",
+    "body": {
+      "sitemap_id": 123,
+      "driver": "fast",
+      "page_load_delay": 2000,
+      "request_interval": 2000,
+      "proxy": 0,
+      "custom_id": "fixture-scraping-job"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true, "data": { "id": 500, "custom_id": "fixture-scraping-job" } }
+  }
+}

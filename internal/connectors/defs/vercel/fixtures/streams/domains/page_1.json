@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v5/domains"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "domains": [
+        {
+          "id": "dom_fixture_1",
+          "name": "fixture.example.com",
+          "verified": true,
+          "createdAt": 1767225600000,
+          "teamId": "team_fixture_1"
+        }
+      ],
+      "pagination": {
+        "count": 1,
+        "next": null,
+        "prev": null
+      }
+    }
+  }
+}

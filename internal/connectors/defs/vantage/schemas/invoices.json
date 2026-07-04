@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["token"],
+  "required": ["token"],
+  "properties": {
+    "token": { "type": "string" },
+    "billing_period_start": { "type": ["string", "null"] },
+    "billing_period_end": { "type": ["string", "null"] },
+    "account_token": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "total": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

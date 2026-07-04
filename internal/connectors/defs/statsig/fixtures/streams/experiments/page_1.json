@@ -1,10 +1,23 @@
 {
-  "request": { "method": "GET", "path": "/experiments", "query": { "limit": "100", "offset": "0" } },
+  "request": {
+    "method": "GET",
+    "path": "/experiments",
+    "query": {
+      "limit": "100",
+      "page": "1"
+    }
+  },
   "response": {
     "status": 200,
     "body": {
       "data": [
-        { "id": "experiment_fixture_1", "name": "Fixture Experiment One", "description": "fixture record", "status": "active", "isEnabled": true }
+        {
+          "id": "experiment_fixture_1",
+          "name": "Fixture Experiment One",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        }
       ]
     }
   }

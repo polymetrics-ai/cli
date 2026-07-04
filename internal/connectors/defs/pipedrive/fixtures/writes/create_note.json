@@ -1,0 +1,9 @@
+{
+  "record": { "content": "Fixture note content", "deal_id": 1 },
+  "expect": {
+    "method": "POST",
+    "path": "/notes",
+    "body": { "content": "Fixture note content", "deal_id": 1 }
+  },
+  "response": { "status": 201, "body": { "success": true, "data": { "id": 501, "content": "Fixture note content" } } }
+}

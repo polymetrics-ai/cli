@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets/synthetic-conformance-value/payees"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "payees": [
+          {
+            "id": "payee_fixture_1",
+            "name": "Fixture Grocery Store",
+            "transfer_account_id": null,
+            "deleted": false
+          },
+          {
+            "id": "payee_fixture_2",
+            "name": "Fixture Transfer : Savings",
+            "transfer_account_id": "account_fixture_2",
+            "deleted": false
+          }
+        ],
+        "server_knowledge": 42
+      }
+    }
+  }
+}

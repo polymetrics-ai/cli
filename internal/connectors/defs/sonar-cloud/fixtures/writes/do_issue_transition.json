@@ -1,0 +1,7 @@
+{
+  "record": { "issue": "AZfixture000000000000001", "transition": "resolve" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/issues/do_transition"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture Workspace"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/workspaces"
+  }
+}

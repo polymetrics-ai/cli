@@ -7,8 +7,21 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
+    "page_id": { "type": ["string", "null"] },
     "name": { "type": "string" },
     "status": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"], "format": "date-time" }
+    "impact": { "type": ["string", "null"] },
+    "impact_override": { "type": ["string", "null"] },
+    "shortlink": { "type": ["string", "null"] },
+    "monitoring_at": { "type": ["string", "null"] },
+    "resolved_at": { "type": ["string", "null"] },
+    "scheduled_for": { "type": ["string", "null"] },
+    "scheduled_until": { "type": ["string", "null"] },
+    "scheduled_auto_completed": { "type": ["boolean", "null"] },
+    "scheduled_auto_in_progress": { "type": ["boolean", "null"] },
+    "postmortem_body": { "type": ["string", "null"] },
+    "postmortem_published_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
   }
 }

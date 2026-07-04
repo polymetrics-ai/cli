@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/skills"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "skill_id": "fixture_internet_search", "display_name": "Fixture Internet Search", "description": "Lets the PAL answer questions with up-to-date web information." }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "record": { "id": 5 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/workspaces/synthetic-conformance-value/tags/5"
+  }
+}

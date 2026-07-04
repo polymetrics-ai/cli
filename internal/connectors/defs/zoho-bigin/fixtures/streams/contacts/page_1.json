@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/Contacts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "contact_fixture_1", "First_Name": "Fixture", "Last_Name": "One", "Email": "fixture1@example.com", "Phone": "+15550100", "display_value": "Fixture One" },
+        { "id": "contact_fixture_2", "First_Name": "Fixture", "Last_Name": "Two", "Email": "fixture2@example.com", "Phone": "+15550101", "display_value": "Fixture Two" }
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
+    }
+  }
+}

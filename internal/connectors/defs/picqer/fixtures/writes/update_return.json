@@ -1,0 +1,9 @@
+{
+  "record": { "idreturn": 801, "idreturn_status": 2 },
+  "expect": {
+    "method": "PUT",
+    "path": "/returns/801",
+    "body": { "idreturn_status": 2 }
+  },
+  "response": { "status": 200, "body": { "idreturn": 801, "idreturn_status": 2 } }
+}

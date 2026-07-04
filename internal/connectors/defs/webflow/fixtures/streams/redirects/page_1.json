@@ -1,0 +1,522 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/redirects",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "redirects": [
+        {
+          "id": "redirect_fixture_1",
+          "fromUrl": "/old-path-1",
+          "toUrl": "/new-path-1"
+        },
+        {
+          "id": "redirect_fixture_2",
+          "fromUrl": "/old-path-2",
+          "toUrl": "/new-path-2"
+        },
+        {
+          "id": "redirect_fixture_3",
+          "fromUrl": "/old-path-3",
+          "toUrl": "/new-path-3"
+        },
+        {
+          "id": "redirect_fixture_4",
+          "fromUrl": "/old-path-4",
+          "toUrl": "/new-path-4"
+        },
+        {
+          "id": "redirect_fixture_5",
+          "fromUrl": "/old-path-5",
+          "toUrl": "/new-path-5"
+        },
+        {
+          "id": "redirect_fixture_6",
+          "fromUrl": "/old-path-6",
+          "toUrl": "/new-path-6"
+        },
+        {
+          "id": "redirect_fixture_7",
+          "fromUrl": "/old-path-7",
+          "toUrl": "/new-path-7"
+        },
+        {
+          "id": "redirect_fixture_8",
+          "fromUrl": "/old-path-8",
+          "toUrl": "/new-path-8"
+        },
+        {
+          "id": "redirect_fixture_9",
+          "fromUrl": "/old-path-9",
+          "toUrl": "/new-path-9"
+        },
+        {
+          "id": "redirect_fixture_10",
+          "fromUrl": "/old-path-10",
+          "toUrl": "/new-path-10"
+        },
+        {
+          "id": "redirect_fixture_11",
+          "fromUrl": "/old-path-11",
+          "toUrl": "/new-path-11"
+        },
+        {
+          "id": "redirect_fixture_12",
+          "fromUrl": "/old-path-12",
+          "toUrl": "/new-path-12"
+        },
+        {
+          "id": "redirect_fixture_13",
+          "fromUrl": "/old-path-13",
+          "toUrl": "/new-path-13"
+        },
+        {
+          "id": "redirect_fixture_14",
+          "fromUrl": "/old-path-14",
+          "toUrl": "/new-path-14"
+        },
+        {
+          "id": "redirect_fixture_15",
+          "fromUrl": "/old-path-15",
+          "toUrl": "/new-path-15"
+        },
+        {
+          "id": "redirect_fixture_16",
+          "fromUrl": "/old-path-16",
+          "toUrl": "/new-path-16"
+        },
+        {
+          "id": "redirect_fixture_17",
+          "fromUrl": "/old-path-17",
+          "toUrl": "/new-path-17"
+        },
+        {
+          "id": "redirect_fixture_18",
+          "fromUrl": "/old-path-18",
+          "toUrl": "/new-path-18"
+        },
+        {
+          "id": "redirect_fixture_19",
+          "fromUrl": "/old-path-19",
+          "toUrl": "/new-path-19"
+        },
+        {
+          "id": "redirect_fixture_20",
+          "fromUrl": "/old-path-20",
+          "toUrl": "/new-path-20"
+        },
+        {
+          "id": "redirect_fixture_21",
+          "fromUrl": "/old-path-21",
+          "toUrl": "/new-path-21"
+        },
+        {
+          "id": "redirect_fixture_22",
+          "fromUrl": "/old-path-22",
+          "toUrl": "/new-path-22"
+        },
+        {
+          "id": "redirect_fixture_23",
+          "fromUrl": "/old-path-23",
+          "toUrl": "/new-path-23"
+        },
+        {
+          "id": "redirect_fixture_24",
+          "fromUrl": "/old-path-24",
+          "toUrl": "/new-path-24"
+        },
+        {
+          "id": "redirect_fixture_25",
+          "fromUrl": "/old-path-25",
+          "toUrl": "/new-path-25"
+        },
+        {
+          "id": "redirect_fixture_26",
+          "fromUrl": "/old-path-26",
+          "toUrl": "/new-path-26"
+        },
+        {
+          "id": "redirect_fixture_27",
+          "fromUrl": "/old-path-27",
+          "toUrl": "/new-path-27"
+        },
+        {
+          "id": "redirect_fixture_28",
+          "fromUrl": "/old-path-28",
+          "toUrl": "/new-path-28"
+        },
+        {
+          "id": "redirect_fixture_29",
+          "fromUrl": "/old-path-29",
+          "toUrl": "/new-path-29"
+        },
+        {
+          "id": "redirect_fixture_30",
+          "fromUrl": "/old-path-30",
+          "toUrl": "/new-path-30"
+        },
+        {
+          "id": "redirect_fixture_31",
+          "fromUrl": "/old-path-31",
+          "toUrl": "/new-path-31"
+        },
+        {
+          "id": "redirect_fixture_32",
+          "fromUrl": "/old-path-32",
+          "toUrl": "/new-path-32"
+        },
+        {
+          "id": "redirect_fixture_33",
+          "fromUrl": "/old-path-33",
+          "toUrl": "/new-path-33"
+        },
+        {
+          "id": "redirect_fixture_34",
+          "fromUrl": "/old-path-34",
+          "toUrl": "/new-path-34"
+        },
+        {
+          "id": "redirect_fixture_35",
+          "fromUrl": "/old-path-35",
+          "toUrl": "/new-path-35"
+        },
+        {
+          "id": "redirect_fixture_36",
+          "fromUrl": "/old-path-36",
+          "toUrl": "/new-path-36"
+        },
+        {
+          "id": "redirect_fixture_37",
+          "fromUrl": "/old-path-37",
+          "toUrl": "/new-path-37"
+        },
+        {
+          "id": "redirect_fixture_38",
+          "fromUrl": "/old-path-38",
+          "toUrl": "/new-path-38"
+        },
+        {
+          "id": "redirect_fixture_39",
+          "fromUrl": "/old-path-39",
+          "toUrl": "/new-path-39"
+        },
+        {
+          "id": "redirect_fixture_40",
+          "fromUrl": "/old-path-40",
+          "toUrl": "/new-path-40"
+        },
+        {
+          "id": "redirect_fixture_41",
+          "fromUrl": "/old-path-41",
+          "toUrl": "/new-path-41"
+        },
+        {
+          "id": "redirect_fixture_42",
+          "fromUrl": "/old-path-42",
+          "toUrl": "/new-path-42"
+        },
+        {
+          "id": "redirect_fixture_43",
+          "fromUrl": "/old-path-43",
+          "toUrl": "/new-path-43"
+        },
+        {
+          "id": "redirect_fixture_44",
+          "fromUrl": "/old-path-44",
+          "toUrl": "/new-path-44"
+        },
+        {
+          "id": "redirect_fixture_45",
+          "fromUrl": "/old-path-45",
+          "toUrl": "/new-path-45"
+        },
+        {
+          "id": "redirect_fixture_46",
+          "fromUrl": "/old-path-46",
+          "toUrl": "/new-path-46"
+        },
+        {
+          "id": "redirect_fixture_47",
+          "fromUrl": "/old-path-47",
+          "toUrl": "/new-path-47"
+        },
+        {
+          "id": "redirect_fixture_48",
+          "fromUrl": "/old-path-48",
+          "toUrl": "/new-path-48"
+        },
+        {
+          "id": "redirect_fixture_49",
+          "fromUrl": "/old-path-49",
+          "toUrl": "/new-path-49"
+        },
+        {
+          "id": "redirect_fixture_50",
+          "fromUrl": "/old-path-50",
+          "toUrl": "/new-path-50"
+        },
+        {
+          "id": "redirect_fixture_51",
+          "fromUrl": "/old-path-51",
+          "toUrl": "/new-path-51"
+        },
+        {
+          "id": "redirect_fixture_52",
+          "fromUrl": "/old-path-52",
+          "toUrl": "/new-path-52"
+        },
+        {
+          "id": "redirect_fixture_53",
+          "fromUrl": "/old-path-53",
+          "toUrl": "/new-path-53"
+        },
+        {
+          "id": "redirect_fixture_54",
+          "fromUrl": "/old-path-54",
+          "toUrl": "/new-path-54"
+        },
+        {
+          "id": "redirect_fixture_55",
+          "fromUrl": "/old-path-55",
+          "toUrl": "/new-path-55"
+        },
+        {
+          "id": "redirect_fixture_56",
+          "fromUrl": "/old-path-56",
+          "toUrl": "/new-path-56"
+        },
+        {
+          "id": "redirect_fixture_57",
+          "fromUrl": "/old-path-57",
+          "toUrl": "/new-path-57"
+        },
+        {
+          "id": "redirect_fixture_58",
+          "fromUrl": "/old-path-58",
+          "toUrl": "/new-path-58"
+        },
+        {
+          "id": "redirect_fixture_59",
+          "fromUrl": "/old-path-59",
+          "toUrl": "/new-path-59"
+        },
+        {
+          "id": "redirect_fixture_60",
+          "fromUrl": "/old-path-60",
+          "toUrl": "/new-path-60"
+        },
+        {
+          "id": "redirect_fixture_61",
+          "fromUrl": "/old-path-61",
+          "toUrl": "/new-path-61"
+        },
+        {
+          "id": "redirect_fixture_62",
+          "fromUrl": "/old-path-62",
+          "toUrl": "/new-path-62"
+        },
+        {
+          "id": "redirect_fixture_63",
+          "fromUrl": "/old-path-63",
+          "toUrl": "/new-path-63"
+        },
+        {
+          "id": "redirect_fixture_64",
+          "fromUrl": "/old-path-64",
+          "toUrl": "/new-path-64"
+        },
+        {
+          "id": "redirect_fixture_65",
+          "fromUrl": "/old-path-65",
+          "toUrl": "/new-path-65"
+        },
+        {
+          "id": "redirect_fixture_66",
+          "fromUrl": "/old-path-66",
+          "toUrl": "/new-path-66"
+        },
+        {
+          "id": "redirect_fixture_67",
+          "fromUrl": "/old-path-67",
+          "toUrl": "/new-path-67"
+        },
+        {
+          "id": "redirect_fixture_68",
+          "fromUrl": "/old-path-68",
+          "toUrl": "/new-path-68"
+        },
+        {
+          "id": "redirect_fixture_69",
+          "fromUrl": "/old-path-69",
+          "toUrl": "/new-path-69"
+        },
+        {
+          "id": "redirect_fixture_70",
+          "fromUrl": "/old-path-70",
+          "toUrl": "/new-path-70"
+        },
+        {
+          "id": "redirect_fixture_71",
+          "fromUrl": "/old-path-71",
+          "toUrl": "/new-path-71"
+        },
+        {
+          "id": "redirect_fixture_72",
+          "fromUrl": "/old-path-72",
+          "toUrl": "/new-path-72"
+        },
+        {
+          "id": "redirect_fixture_73",
+          "fromUrl": "/old-path-73",
+          "toUrl": "/new-path-73"
+        },
+        {
+          "id": "redirect_fixture_74",
+          "fromUrl": "/old-path-74",
+          "toUrl": "/new-path-74"
+        },
+        {
+          "id": "redirect_fixture_75",
+          "fromUrl": "/old-path-75",
+          "toUrl": "/new-path-75"
+        },
+        {
+          "id": "redirect_fixture_76",
+          "fromUrl": "/old-path-76",
+          "toUrl": "/new-path-76"
+        },
+        {
+          "id": "redirect_fixture_77",
+          "fromUrl": "/old-path-77",
+          "toUrl": "/new-path-77"
+        },
+        {
+          "id": "redirect_fixture_78",
+          "fromUrl": "/old-path-78",
+          "toUrl": "/new-path-78"
+        },
+        {
+          "id": "redirect_fixture_79",
+          "fromUrl": "/old-path-79",
+          "toUrl": "/new-path-79"
+        },
+        {
+          "id": "redirect_fixture_80",
+          "fromUrl": "/old-path-80",
+          "toUrl": "/new-path-80"
+        },
+        {
+          "id": "redirect_fixture_81",
+          "fromUrl": "/old-path-81",
+          "toUrl": "/new-path-81"
+        },
+        {
+          "id": "redirect_fixture_82",
+          "fromUrl": "/old-path-82",
+          "toUrl": "/new-path-82"
+        },
+        {
+          "id": "redirect_fixture_83",
+          "fromUrl": "/old-path-83",
+          "toUrl": "/new-path-83"
+        },
+        {
+          "id": "redirect_fixture_84",
+          "fromUrl": "/old-path-84",
+          "toUrl": "/new-path-84"
+        },
+        {
+          "id": "redirect_fixture_85",
+          "fromUrl": "/old-path-85",
+          "toUrl": "/new-path-85"
+        },
+        {
+          "id": "redirect_fixture_86",
+          "fromUrl": "/old-path-86",
+          "toUrl": "/new-path-86"
+        },
+        {
+          "id": "redirect_fixture_87",
+          "fromUrl": "/old-path-87",
+          "toUrl": "/new-path-87"
+        },
+        {
+          "id": "redirect_fixture_88",
+          "fromUrl": "/old-path-88",
+          "toUrl": "/new-path-88"
+        },
+        {
+          "id": "redirect_fixture_89",
+          "fromUrl": "/old-path-89",
+          "toUrl": "/new-path-89"
+        },
+        {
+          "id": "redirect_fixture_90",
+          "fromUrl": "/old-path-90",
+          "toUrl": "/new-path-90"
+        },
+        {
+          "id": "redirect_fixture_91",
+          "fromUrl": "/old-path-91",
+          "toUrl": "/new-path-91"
+        },
+        {
+          "id": "redirect_fixture_92",
+          "fromUrl": "/old-path-92",
+          "toUrl": "/new-path-92"
+        },
+        {
+          "id": "redirect_fixture_93",
+          "fromUrl": "/old-path-93",
+          "toUrl": "/new-path-93"
+        },
+        {
+          "id": "redirect_fixture_94",
+          "fromUrl": "/old-path-94",
+          "toUrl": "/new-path-94"
+        },
+        {
+          "id": "redirect_fixture_95",
+          "fromUrl": "/old-path-95",
+          "toUrl": "/new-path-95"
+        },
+        {
+          "id": "redirect_fixture_96",
+          "fromUrl": "/old-path-96",
+          "toUrl": "/new-path-96"
+        },
+        {
+          "id": "redirect_fixture_97",
+          "fromUrl": "/old-path-97",
+          "toUrl": "/new-path-97"
+        },
+        {
+          "id": "redirect_fixture_98",
+          "fromUrl": "/old-path-98",
+          "toUrl": "/new-path-98"
+        },
+        {
+          "id": "redirect_fixture_99",
+          "fromUrl": "/old-path-99",
+          "toUrl": "/new-path-99"
+        },
+        {
+          "id": "redirect_fixture_100",
+          "fromUrl": "/old-path-100",
+          "toUrl": "/new-path-100"
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "total": 101
+      }
+    }
+  }
+}

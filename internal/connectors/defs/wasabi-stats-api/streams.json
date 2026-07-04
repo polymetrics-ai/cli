@@ -14,9 +14,9 @@
     },
     "check": {
       "method": "GET",
-      "path": "v1/stats",
+      "path": "v1/standalone/utilizations",
       "query": {
-        "start_date": { "template": "{{ config.start_date }}", "default": "" }
+        "from": { "template": "{{ config.start_date }}", "default": "" }
       }
     },
     "error_map": [
@@ -34,23 +34,86 @@
   "streams": [
     {
       "name": "bucket_stats",
-      "path": "v1/stats",
+      "path": "v1/standalone/utilizations/bucket",
       "query": {
-        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "pageSize": "100",
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": {
-        "path": "data"
+        "path": ""
+      },
+      "computed_fields": {
+        "id": "{{ record.BucketUtilizationNum | last_path_segment }}",
+        "bucket_utilization_num": "{{ record.BucketUtilizationNum }}",
+        "acct_num": "{{ record.AcctNum }}",
+        "acct_plan_num": "{{ record.AcctPlanNum }}",
+        "bucket_num": "{{ record.BucketNum }}",
+        "bucket": "{{ record.Bucket }}",
+        "region": "{{ record.Region }}",
+        "date": "{{ record.StartTime }}",
+        "start_time": "{{ record.StartTime }}",
+        "end_time": "{{ record.EndTime }}",
+        "create_time": "{{ record.CreateTime }}",
+        "num_billable_objects": "{{ record.NumBillableObjects }}",
+        "num_billable_deleted_objects": "{{ record.NumBillableDeletedObjects }}",
+        "raw_storage_size_bytes": "{{ record.RawStorageSizeBytes }}",
+        "storage_bytes": "{{ record.PaddedStorageSizeBytes }}",
+        "metadata_storage_size_bytes": "{{ record.MetadataStorageSizeBytes }}",
+        "deleted_storage_size_bytes": "{{ record.DeletedStorageSizeBytes }}",
+        "orphaned_storage_size_bytes": "{{ record.OrphanedStorageSizeBytes }}",
+        "num_api_calls": "{{ record.NumAPICalls }}",
+        "upload_bytes": "{{ record.UploadBytes }}",
+        "download_bytes": "{{ record.DownloadBytes }}",
+        "storage_wrote_bytes": "{{ record.StorageWroteBytes }}",
+        "storage_read_bytes": "{{ record.StorageReadBytes }}",
+        "num_get_calls": "{{ record.NumGETCalls }}",
+        "num_put_calls": "{{ record.NumPUTCalls }}",
+        "num_delete_calls": "{{ record.NumDELETECalls }}",
+        "num_list_calls": "{{ record.NumLISTCalls }}",
+        "num_head_calls": "{{ record.NumHEADCalls }}",
+        "delete_bytes": "{{ record.DeleteBytes }}"
       },
       "schema": "schemas/bucket_stats.json"
     },
     {
       "name": "account_stats",
-      "path": "v1/accounts",
+      "path": "v1/standalone/utilizations",
       "query": {
-        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "pageSize": "100",
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true }
       },
       "records": {
-        "path": "data"
+        "path": "Records"
+      },
+      "computed_fields": {
+        "id": "{{ record.UtilizationNum | last_path_segment }}",
+        "utilization_num": "{{ record.UtilizationNum }}",
+        "acct_num": "{{ record.AcctNum }}",
+        "acct_plan_num": "{{ record.AcctPlanNum }}",
+        "date": "{{ record.StartTime }}",
+        "start_time": "{{ record.StartTime }}",
+        "end_time": "{{ record.EndTime }}",
+        "create_time": "{{ record.CreateTime }}",
+        "num_billable_objects": "{{ record.NumBillableObjects }}",
+        "num_billable_deleted_objects": "{{ record.NumBillableDeletedObjects }}",
+        "raw_storage_size_bytes": "{{ record.RawStorageSizeBytes }}",
+        "storage_bytes": "{{ record.PaddedStorageSizeBytes }}",
+        "object_count": "{{ record.NumBillableObjects }}",
+        "metadata_storage_size_bytes": "{{ record.MetadataStorageSizeBytes }}",
+        "deleted_storage_size_bytes": "{{ record.DeletedStorageSizeBytes }}",
+        "orphaned_storage_size_bytes": "{{ record.OrphanedStorageSizeBytes }}",
+        "min_storage_charge_bytes": "{{ record.MinStorageChargeBytes }}",
+        "num_api_calls": "{{ record.NumAPICalls }}",
+        "upload_bytes": "{{ record.UploadBytes }}",
+        "download_bytes": "{{ record.DownloadBytes }}",
+        "storage_wrote_bytes": "{{ record.StorageWroteBytes }}",
+        "storage_read_bytes": "{{ record.StorageReadBytes }}",
+        "num_get_calls": "{{ record.NumGETCalls }}",
+        "num_put_calls": "{{ record.NumPUTCalls }}",
+        "num_delete_calls": "{{ record.NumDELETECalls }}",
+        "num_list_calls": "{{ record.NumLISTCalls }}",
+        "num_head_calls": "{{ record.NumHEADCalls }}",
+        "delete_bytes": "{{ record.DeleteBytes }}"
       },
       "schema": "schemas/account_stats.json"
     }

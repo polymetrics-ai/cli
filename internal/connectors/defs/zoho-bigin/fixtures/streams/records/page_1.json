@@ -6,7 +6,8 @@
       "data": [
         { "id": "record_fixture_1", "name": "Fixture Deal One", "Deal_Name": "Fixture Deal One", "display_value": "Fixture Deal One" },
         { "id": "record_fixture_2", "name": "Fixture Deal Two", "Deal_Name": "Fixture Deal Two", "display_value": "Fixture Deal Two" }
-      ]
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
     }
   }
 }

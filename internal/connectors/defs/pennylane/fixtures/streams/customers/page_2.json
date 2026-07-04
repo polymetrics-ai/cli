@@ -2,15 +2,24 @@
   "request": {
     "method": "GET",
     "path": "/customers",
-    "query": { "limit": "synthetic-conformance-value", "cursor": "fixture_cursor_2" }
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "cursor": "fixture_cursor_2"
+    }
   },
   "response": {
     "status": 200,
     "body": {
       "items": [
-        { "id": 3, "name": "Fixture Customer 3", "created_at": "2026-01-03T00:00:00Z", "updated_at": "2026-01-03T00:00:00Z" }
+        {
+          "id": 3,
+          "name": "Fixture Customer 3",
+          "created_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
       ],
-      "next_cursor": null
+      "next_cursor": null,
+      "has_more": false
     }
   }
 }

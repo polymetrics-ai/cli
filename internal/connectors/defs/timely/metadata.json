@@ -1,7 +1,7 @@
 {
   "name": "timely",
   "display_name": "Timely",
-  "description": "Reads users, projects, clients, and events from the Timely API.",
+  "description": "Reads users, projects, clients, calendar/time events, time entries (hours), tags (labels), and teams from the Timely API. Read-only: every Timely mutation endpoint requires a nested single-key JSON body envelope (e.g. {\"client\": {...}}) the engine's declarative write dialect cannot express.",
   "integration_type": "api",
   "docs_url": "https://dev.timelyapp.com/",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Timely API read of user, project, client, and calendar/time event data",
+    "read": "external Timely API read of user, project, client, time event/entry, tag, and team data",
     "approval": "none; read-only, no reverse-ETL writes"
   }
 }

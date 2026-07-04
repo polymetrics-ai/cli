@@ -1,7 +1,7 @@
 {
-  "request": { "method": "GET", "path": "/campaigns" },
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/campaigns" },
   "response": {
     "status": 200,
-    "body": { "campaigns": [] }
+    "body": { "_data": [] }
   }
 }

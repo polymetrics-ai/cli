@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/guides",
+    "query": {
+      "page": "2",
+      "per_page": "20"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 2,
+      "per_page": 20,
+      "has_more": false,
+      "item_count": 1,
+      "url": "/api/v1/guides",
+      "data": {
+        "guides": [
+          {
+            "id": "guide-fixture-21",
+            "title": "Fixture Guide 21",
+            "num_total_tasks": 2,
+            "num_total_test_questions": 1,
+            "created_at": 1700000000021,
+            "updated_at": 1700000000021,
+            "tags": []
+          }
+        ]
+      }
+    }
+  }
+}

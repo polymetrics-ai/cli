@@ -1,0 +1,23 @@
+{
+  "record": {
+    "survey_token": "fixture-token-1",
+    "customer": {
+      "email": "fixture@example.com",
+      "name": "Fixture Customer"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/surveys/fixture-token-1/email",
+    "body": {
+      "customer": {
+        "email": "fixture@example.com",
+        "name": "Fixture Customer"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "sent": true }
+  }
+}

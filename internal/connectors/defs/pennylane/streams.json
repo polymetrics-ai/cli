@@ -8,7 +8,8 @@
     "pagination": {
       "type": "cursor",
       "cursor_param": "cursor",
-      "token_path": "next_cursor"
+      "token_path": "next_cursor",
+      "stop_path": "has_more"
     },
     "check": { "method": "GET", "path": "/customers" },
     "error_map": [
@@ -75,6 +76,42 @@
       },
       "records": { "path": "items" },
       "schema": "schemas/categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "supplier_invoices",
+      "path": "/supplier_invoices",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/supplier_invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transactions",
+      "path": "/transactions",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_accounts",
+      "path": "/bank_accounts",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "50" },
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/bank_accounts.json",
       "projection": "passthrough"
     }
   ]

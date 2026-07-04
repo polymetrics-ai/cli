@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture User", "email": "fixture@example.com", "role_id": 1 },
+  "expect": { "method": "POST", "path": "/users" }
+}

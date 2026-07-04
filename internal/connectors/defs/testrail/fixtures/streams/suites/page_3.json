@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_suites/2": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 2, "project_id": 2, "name": "Master", "description": "Fixture master suite", "is_master": true, "is_completed": false, "url": "https://example.testrail.io/index.php?/suites/view/2" }
+    ]
+  }
+}

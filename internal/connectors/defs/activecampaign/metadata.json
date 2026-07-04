@@ -1,7 +1,7 @@
 {
   "name": "activecampaign",
   "display_name": "ActiveCampaign",
-  "description": "Reads ActiveCampaign contacts, lists, deals, and campaigns through the ActiveCampaign v3 REST API.",
+  "description": "Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks through the ActiveCampaign v3 REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.activecampaign.com/reference/overview",
   "release_stage": "ga",
@@ -17,6 +17,6 @@
     "read_page_size": 20
   },
   "risk": {
-    "read": "external ActiveCampaign API read of contacts, lists, deals, and campaigns"
+    "read": "external ActiveCampaign API read of contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks"
   }
 }

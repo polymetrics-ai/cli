@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/orders",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "orders": [
+        {
+          "orderId": "order_fixture_101",
+          "status": "unfulfilled",
+          "comment": null,
+          "orderComment": null,
+          "acceptedOn": "2026-01-01T00:00:00.000Z",
+          "fulfilledOn": null,
+          "refundedOn": null,
+          "customerInfo": {
+            "email": "fixture101@example.test",
+            "fullName": "Fixture Customer 101"
+          },
+          "customerPaymentDetails": {},
+          "shippingAddress": {},
+          "purchasedItems": []
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 100,
+        "total": 101
+      }
+    }
+  }
+}

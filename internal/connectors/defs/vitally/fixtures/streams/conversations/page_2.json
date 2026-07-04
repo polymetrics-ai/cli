@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/conversations",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "from": "fixture_cursor_conversations_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "conv_fixture_3",
+          "createdAt": "2026-01-03T00:00:00Z",
+          "updatedAt": "2026-01-03T00:00:00Z",
+          "externalId": null,
+          "subject": null,
+          "traits": {},
+          "status": "Open",
+          "rating": null,
+          "source": null,
+          "accounts": [],
+          "users": [],
+          "admins": []
+        }
+      ],
+      "next": null
+    }
+  }
+}

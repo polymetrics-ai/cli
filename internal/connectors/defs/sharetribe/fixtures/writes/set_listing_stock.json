@@ -1,0 +1,20 @@
+{
+  "record": {
+    "listingId": "listing_fixture_1",
+    "oldTotal": 8,
+    "newTotal": 10
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/stock/compare_and_set",
+    "body": {
+      "listingId": "listing_fixture_1",
+      "oldTotal": 8,
+      "newTotal": 10
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "stock_fixture_1", "type": "stock" } }
+  }
+}

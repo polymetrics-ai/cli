@@ -1,0 +1,7 @@
+{
+  "record": { "url": "https://example.com/fixture-webhook" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/webhooks"
+  }
+}

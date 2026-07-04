@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_milestones/1": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "project_id": 1, "name": "Fixture Release 1.0", "description": "Fixture milestone", "due_on": 1767225600, "start_on": null, "started_on": null, "completed_on": null, "is_completed": false, "is_started": true, "parent_id": null, "url": "https://example.testrail.io/index.php?/milestones/view/1" }
+    ]
+  }
+}

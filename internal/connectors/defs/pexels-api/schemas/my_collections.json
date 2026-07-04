@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "my_collections",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "private": { "type": ["boolean", "null"] },
+    "media_count": { "type": ["integer", "null"] },
+    "photos_count": { "type": ["integer", "null"] },
+    "videos_count": { "type": ["integer", "null"] }
+  }
+}

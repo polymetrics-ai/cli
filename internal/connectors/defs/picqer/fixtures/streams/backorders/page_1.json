@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/backorders", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idbackorder": 901,
+        "idorder_product": 951,
+        "idorder": 301,
+        "idreturn": null,
+        "idproduct": 101,
+        "idcustomer": 401,
+        "idwarehouse": 501,
+        "amount": 1,
+        "amountavailable": 0,
+        "priority": 2,
+        "has_parts": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_projects": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Core", "announcement": "Fixture announcement", "is_completed": false },
+      { "id": 2, "name": "Mobile", "announcement": null, "is_completed": true }
+    ]
+  }
+}

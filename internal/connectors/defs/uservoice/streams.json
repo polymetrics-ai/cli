@@ -27,6 +27,69 @@
         "created_at": "{{ record.created_at }}"
       },
       "schema": "schemas/suggestions.json"
+    },
+    {
+      "name": "forums",
+      "path": "/api/v2/admin/forums",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "forums" },
+      "schema": "schemas/forums.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v2/admin/users",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "categories",
+      "path": "/api/v2/admin/categories",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "categories" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "statuses",
+      "path": "/api/v2/admin/statuses",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "statuses" },
+      "schema": "schemas/statuses.json"
+    },
+    {
+      "name": "labels",
+      "path": "/api/v2/admin/labels",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "labels" },
+      "schema": "schemas/labels.json"
+    },
+    {
+      "name": "comments",
+      "path": "/api/v2/admin/comments",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "comments" },
+      "schema": "schemas/comments.json"
+    },
+    {
+      "name": "notes",
+      "path": "/api/v2/admin/notes",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "notes" },
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "teams",
+      "path": "/api/v2/admin/teams",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json"
     }
   ]
 }

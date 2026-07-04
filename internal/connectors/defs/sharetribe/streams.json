@@ -47,6 +47,28 @@
       "records": { "path": "data" },
       "schema": "schemas/events.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "marketplace",
+      "path": "/integration_api/marketplace/show",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/marketplace.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "files",
+      "path": "/integration_api/files/query",
+      "records": { "path": "data" },
+      "schema": "schemas/files.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "file_attachments",
+      "path": "/integration_api/file_attachments/query",
+      "records": { "path": "data" },
+      "schema": "schemas/file_attachments.json",
+      "projection": "passthrough"
     }
   ]
 }

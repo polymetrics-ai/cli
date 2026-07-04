@@ -1,14 +1,14 @@
 {
   "name": "wufoo",
   "display_name": "Wufoo",
-  "description": "Reads Wufoo forms, entries, and reports through the Wufoo API. Read-only.",
+  "description": "Reads Wufoo forms, fields, entries, comments, reports, and widgets, and writes entry submissions and webhook registrations through the Wufoo API.",
   "integration_type": "api",
   "docs_url": "https://wufoo.github.io/docs/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Wufoo API read of form, entry, and report data",
-    "approval": "none; read-only"
+    "read": "external Wufoo API read of form, field, entry, comment, report, and widget data",
+    "write": "external mutation: submits live form entries and registers/removes webhook callback URLs",
+    "approval": "required for all write actions (submit_entry, add_webhook, delete_webhook); reads require none"
   }
 }

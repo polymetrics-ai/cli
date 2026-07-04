@@ -12,18 +12,51 @@
   },
   "streams": [
     {
-      "name": "auctions",
+      "name": "auctions_data",
       "path": "/api/auctions_data/",
       "records": { "path": "." },
       "projection": "passthrough",
-      "schema": "schemas/auctions.json"
+      "schema": "schemas/auctions_data.json"
     },
     {
-      "name": "distilleries",
+      "name": "auctions_info",
+      "path": "/api/auctions_info",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/auctions_info.json"
+    },
+    {
+      "name": "distilleries_info",
       "path": "/api/distilleries_info/",
       "records": { "path": "." },
       "projection": "passthrough",
-      "schema": "schemas/distilleries.json"
+      "schema": "schemas/distilleries_info.json"
+    },
+    {
+      "name": "auction_data",
+      "path": "/api/auction_data/{{ fanout.id }}/",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/auctions_info", "records_path": ".", "id_field": "slug" }
+        },
+        "into": { "path_var": "id" }
+      },
+      "schema": "schemas/auction_data.json"
+    },
+    {
+      "name": "distillery_data",
+      "path": "/api/distillery_data/{{ fanout.id }}/",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/distilleries_info/", "records_path": ".", "id_field": "slug" }
+        },
+        "into": { "path_var": "id" }
+      },
+      "schema": "schemas/distillery_data.json"
     }
   ]
 }

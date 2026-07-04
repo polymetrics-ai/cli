@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adobe Commerce (Magento) Customer Group",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "code": { "type": "string" },
+    "tax_class_id": { "type": "integer" },
+    "tax_class_name": { "type": "string" }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture Survey", "survey_type": "ClassicForm" },
+  "expect": { "method": "POST", "path": "/surveys" }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "settings",
+  "type": "object",
+  "x-primary-key": ["type"],
+  "required": ["type"],
+  "properties": {
+    "type": { "type": "string" },
+    "settings": {
+      "type": ["object", "null"],
+      "properties": {
+        "console": {
+          "type": ["object", "null"],
+          "properties": {
+            "staticExpiration": { "type": ["string", "null"] },
+            "rollingExpiration": { "type": ["string", "null"] }
+          }
+        }
+      }
+    }
+  }
+}

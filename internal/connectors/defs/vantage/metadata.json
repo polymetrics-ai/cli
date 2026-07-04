@@ -1,20 +1,21 @@
 {
   "name": "vantage",
   "display_name": "Vantage",
-  "description": "Reads costs from the Vantage API. Read-only.",
+  "description": "Reads cost, budget, resource-management, segment, notification, and integration data from the Vantage API and writes budgets, folders, dashboards, cost reports, resource reports, saved filters, workspaces, teams, cost alerts, budget alerts, anomaly alerts, business metrics, virtual tag configs, segments, report notifications, recommendation views, network flow reports, Kubernetes efficiency reports, anomaly notifications, and canvases.",
   "integration_type": "api",
   "docs_url": "https://docs.vantage.sh/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "risk": {
-    "read": "external Vantage API read of cloud cost data",
-    "approval": "none; read-only costs API"
+    "read": "external Vantage API read of cloud cost, budget, resource-management, segment, notification, and integration data",
+    "write": "external mutation of Vantage cost-management configuration (budgets, folders, dashboards, cost reports, resource reports, saved filters, workspaces, teams, alerts, business metrics, virtual tag configs, segments, report notifications, recommendation views, network flow reports, Kubernetes efficiency reports, anomaly notifications, canvases); approval required",
+    "approval": "read: none; write: required for every action"
   }
 }

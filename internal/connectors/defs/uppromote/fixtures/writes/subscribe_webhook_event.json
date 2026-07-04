@@ -1,0 +1,18 @@
+{
+  "record": {
+    "target_url": "https://example.com/webhooks/uppromote",
+    "event": "referral.new"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/webhook-subscriptions",
+    "body": {
+      "target_url": "https://example.com/webhooks/uppromote",
+      "event": "referral.new"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "target_url": "https://example.com/webhooks/uppromote", "event": "referral.new" } }
+  }
+}

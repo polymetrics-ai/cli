@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "nps_responses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "external_id": { "type": ["string", "null"] },
+    "user_id": { "type": ["string", "null"] },
+    "score": { "type": ["integer", "null"], "description": "0-10 NPS score." },
+    "feedback": { "type": ["string", "null"] },
+    "responded_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

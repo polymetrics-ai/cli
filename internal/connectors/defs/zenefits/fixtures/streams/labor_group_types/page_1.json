@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/core/labor_group_types" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "labor_group_type_fixture_1",
+            "name": "Position",
+            "labor_groups": { "object": "/meta/ref/list", "ref_object": "/core/labor_groups", "url": "https://api.zenefits.com/core/labor_group_types/labor_group_type_fixture_1/labor_groups" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/core/labor_group_types"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

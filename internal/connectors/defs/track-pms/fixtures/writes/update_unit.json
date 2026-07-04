@@ -1,0 +1,7 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture Unit" },
+  "expect": {
+    "method": "PUT",
+    "path": "/pms/units/1"
+  }
+}

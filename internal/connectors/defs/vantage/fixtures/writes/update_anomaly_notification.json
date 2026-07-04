@@ -1,0 +1,10 @@
+{
+  "record": {
+    "anomaly_notification_token": "anml_fixture_1",
+    "threshold": 750
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/anomaly_notifications/anml_fixture_1"
+  }
+}

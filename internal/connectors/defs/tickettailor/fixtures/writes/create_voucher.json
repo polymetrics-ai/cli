@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Voucher",
+    "value": 1000
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/vouchers"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "alerting_contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "paused": { "type": ["boolean", "null"] },
+    "type": { "type": ["string", "null"] },
+    "owner": { "type": ["boolean", "null"] },
+    "notification_targets": { "type": ["object", "null"] },
+    "teams": { "type": ["array", "null"] }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "label": "fixture-new-variable",
+    "name": "Fixture New Variable",
+    "device": "dev_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2.0/variables/",
+    "body": {
+      "label": "fixture-new-variable",
+      "name": "Fixture New Variable",
+      "device": "dev_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "var_fixture_new", "label": "fixture-new-variable", "name": "Fixture New Variable" }
+  }
+}

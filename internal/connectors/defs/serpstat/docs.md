@@ -51,30 +51,47 @@ shape the declarative `page_number` paginator cannot express).
 - `page_size` (`config.page_size`, legacy's `positiveInt(..., 1, 1000, ...)`): both the `size`
   JSON-RPC param and the short-page stop threshold.
 
-Neither stream is incremental: legacy's `Read` never consults `req.State`/a cursor at all (grep
-confirms no state read anywhere in `serpstat.go`) — every read is a full re-fetch of the configured
-page range, matching this bundle's schemas declaring no `x-cursor-field` and `streams.json`
-declaring no `incremental` block on either stream.
+Neither `domain_keywords` nor `domain_competitors` is incremental: legacy's `Read` never consults
+`req.State`/a cursor at all (grep confirms no state read anywhere in `serpstat.go`) — every read is
+a full re-fetch of the configured page range, matching this bundle's schemas declaring no
+`x-cursor-field` and `streams.json` declaring no `incremental` block on either stream.
+
+**`domain_urls`** (`SerpstatDomainProcedure.getDomainUrls`) is a Pass B full-surface-expansion
+addition, NOT a legacy-ported stream: it returns the list of URLs within the analyzed domain and
+each URL's ranking-keyword count. It was chosen as the ONE additional Serpstat JSON-RPC method to
+add because it shares the EXACT SAME `{domain, se, page, size}` params shape and in-body
+page-number pagination that `hooks/serpstat/hooks.go`'s existing loop already implements —
+extending `jsonRPCMethod`'s stream-name-to-procedure map by one entry and adding one schema was the
+entire change needed; every other candidate Serpstat method surveyed (`getDomainsInfo`,
+`getKeywordsInfo`, `getTopUrls`, etc. — see `api_surface.json`'s per-endpoint exclusion reasons)
+takes a materially different params shape (a caller-supplied array, a keyword-driven query, a
+different resource model entirely) that would require a SECOND request-builder shape inside the
+hook, judged out of proportion to a Pass B pass (see Known limits). `domain_urls` also declares no
+`incremental`/`x-cursor-field`, matching the other two streams' full-refresh-only shape (Serpstat's
+real API has no updated-since filter for any of these 3 JSON-RPC methods).
 
 ### Declarative path (`streams.json`) vs. the live StreamHook path
 
-`streams.json` still declares complete stream/schema metadata for both streams (identity, PK,
+`streams.json` still declares complete stream/schema metadata for all 3 streams (identity, PK,
 field types) — this is what backs the catalog/manifest surface regardless of which path a read
 actually takes. Because `hooks/serpstat/hooks.go`'s `StreamHook.ReadStream` recognizes and handles
-both stream names unconditionally (`handled=true`), the declarative fallback in `streams.json` is
+all 3 stream names unconditionally (`handled=true`), the declarative fallback in `streams.json` is
 **never exercised by production traffic** — `engine.Read` only falls through to it when the
 `StreamHook` returns `handled=false` (an unrecognized stream name) or no hooks are registered at
-all. Both streams carry an explicit `"conformance": {"skip_dynamic": true, "reason": "..."}` marker
+all. All 3 streams carry an explicit `"conformance": {"skip_dynamic": true, "reason": "..."}` marker
 (conventions.md SS4/SS6): `internal/connectors/conformance/dynamic.go` honors this by Skipping every
 dynamic fixture-replay check for these streams, since a declarative GET-shaped replay can never
-faithfully exercise a JSON-RPC POST + in-body-pagination `StreamHook`. The authoritative substitute
-these markers name is `internal/connectors/paritytest/serpstat/parity_test.go` (drives the real,
-hook-dispatched connector via `engine.HooksFor("serpstat")`) and
-`hooks/serpstat/hooks_test.go` — both assert serpstat's real JSON-RPC wire format (request body
-shape, in-body pagination, `result.data` record extraction) byte-for-byte against legacy.
+faithfully exercise a JSON-RPC POST + in-body-pagination `StreamHook`. For `domain_keywords`/
+`domain_competitors`, the authoritative substitute the marker names is
+`internal/connectors/paritytest/serpstat/parity_test.go` (drives the real, hook-dispatched
+connector via `engine.HooksFor("serpstat")` against a live `httptest.Server`, asserting byte-for-
+byte parity against legacy) and `hooks/serpstat/hooks_test.go`. For `domain_urls` (no legacy
+equivalent to compare against — see Known limits), the marker instead names
+`hooks/serpstat/hooks_test.go`'s `TestReadStream_DomainUrlsUsesGetDomainUrlsProcedure` as the sole
+authoritative proof of its JSON-RPC request shape and record extraction.
 `fixtures/streams/<stream>/page_1.json` is retained purely as documentation of the real record
 shape each stream emits (and to satisfy `fixtures_present`'s static "first stream ships a fixture"
-requirement), not as a load-bearing replay contract.
+requirement), not as a load-bearing replay contract, for all 3 streams.
 
 ## Write actions & risks
 
@@ -91,11 +108,31 @@ matching legacy's `Write` returning `connectors.ErrUnsupportedOperation` uncondi
   already-built HTTP client/auth/base-URL plumbing, including the `token` query param) exactly as
   the declarative path itself would.
 - **The declarative `streams.json` path is never live-dispatched** (see "Declarative path" above)
-  — both streams carry a `conformance.skip_dynamic` marker naming
-  `paritytest/serpstat`/`hooks/serpstat/hooks_test.go` as the authoritative substitute.
-- **No incremental filtering, matching legacy exactly.** Neither stream declares
-  `x-cursor-field`/`incremental` — legacy never filters or advances reads by any cursor; every read
-  is a full page-range re-fetch.
+  — all 3 streams carry a `conformance.skip_dynamic` marker naming their respective authoritative
+  substitute (`paritytest/serpstat` for the 2 legacy streams, `hooks/serpstat/hooks_test.go` alone
+  for `domain_urls`).
+- **`domain_urls` has no legacy `internal/connectors/serpstat` equivalent, so it has no
+  `paritytest/serpstat` coverage.** It is genuinely new Pass B capability, not a ported behavior;
+  its correctness is proven only by `hooks/serpstat/hooks_test.go`'s
+  `TestReadStream_DomainUrlsUsesGetDomainUrlsProcedure` (JSON-RPC method/params/pagination shape)
+  and by `connectorgen validate`'s static checks (schema validity, PK, docs, fixtures presence).
+- **Only ONE additional Serpstat JSON-RPC method (`getDomainUrls`) was added this pass**, not the
+  full documented Serpstat surface. `hooks/serpstat/hooks.go`'s `StreamHook` implements exactly one
+  request-BUILDER shape (`{domain, se, page, size}` params, in-body page-number pagination,
+  `result.data` extraction); every other candidate method surveyed during this review
+  (`getDomainsInfo`/`getKeywordsInfo`'s array params, `getTopUrls`'s keyword-driven query,
+  `getCategoryTopDomains`'s category-id config, the entire backlinks/rank-tracker/site-audit
+  product surfaces' own distinct resource models) needs a materially different params shape or an
+  entirely different config surface (category id, project id, audit job id) — adding any of them
+  would mean a 2nd (or 3rd, 4th...) request-builder shape inside this hook, which is exactly the
+  "needing a 3rd hook interface OR unbounded shape growth" signal that should escalate scope rather
+  than silently bloat a single Tier-2 hook past what a single migration pass should cover. See
+  `api_surface.json`'s per-endpoint `excluded` reasons for the specific incompatibility of each
+  surveyed method.
+- **No incremental filtering, matching legacy exactly, and extended identically to `domain_urls`.**
+  No stream declares `x-cursor-field`/`incremental` — legacy never filters or advances reads by any
+  cursor for its 2 streams, and Serpstat's real `getDomainUrls` response has no updated-since
+  filter either; every read is a full page-range re-fetch.
 - **`updated_at` on `domain_keywords` is a legacy fixture-mode-only artifact, not a real API
   field.** Legacy's live (non-fixture) read path emits the raw JSON-RPC record verbatim with no
   `updated_at` key — only `mode: fixture`'s `readFixture` stamps a static `fixtureUpdatedAt`

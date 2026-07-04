@@ -1,0 +1,9 @@
+{
+  "record": {
+    "budget_alert_token": "ba_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/budget_alerts/ba_fixture_1"
+  }
+}

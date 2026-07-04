@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/automations", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "automations": [
+        {
+          "id": "1",
+          "name": "Fixture Automation",
+          "status": "1",
+          "entered": "0",
+          "exited": "0",
+          "hidden": "0",
+          "userid": "1",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "mdate": "2026-01-01T00:00:00-05:00"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/v2/sites/synthetic-conformance-value/webhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "webhook_fixture_1",
+          "triggerType": "form_submission",
+          "siteId": "synthetic-conformance-value",
+          "workspaceId": "workspace_fixture_1",
+          "url": "https://example.test/webhook-one",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "lastTriggered": "2026-01-02T00:00:00.000Z",
+          "filter": null
+        },
+        {
+          "id": "webhook_fixture_2",
+          "triggerType": "collection_item_created",
+          "siteId": "synthetic-conformance-value",
+          "workspaceId": "workspace_fixture_1",
+          "url": "https://example.test/webhook-two",
+          "createdOn": "2026-01-03T00:00:00.000Z",
+          "lastTriggered": null,
+          "filter": null
+        }
+      ]
+    }
+  }
+}

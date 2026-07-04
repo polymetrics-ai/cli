@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "project_analyses",
+  "type": "object",
+  "x-primary-key": ["key"],
+  "required": ["key"],
+  "properties": {
+    "key": { "type": "string" },
+    "date": { "type": ["string", "null"] },
+    "projectVersion": { "type": ["string", "null"] },
+    "buildString": { "type": ["string", "null"] },
+    "revision": { "type": ["string", "null"] },
+    "events": { "type": ["array", "null"] }
+  }
+}

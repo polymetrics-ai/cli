@@ -1,7 +1,7 @@
 {
   "name": "pexels-api",
   "display_name": "Pexels API",
-  "description": "Reads Pexels photo and video search results through the Pexels REST API.",
+  "description": "Reads Pexels photo/video search and curated/popular results plus featured and personal collections and their media through the Pexels REST API.",
   "integration_type": "api",
   "docs_url": "https://www.pexels.com/api/documentation/",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 40
   },
   "risk": {
-    "read": "external Pexels API read of photo and video search results",
-    "approval": "none; read-only, no writes"
+    "read": "external Pexels API read of photo/video search, curated/popular results, and collection metadata/media; all publicly-licensed stock media, no PII",
+    "approval": "none; read-only, no writes (the Pexels API has no create/update/delete endpoint anywhere in its documented surface, per its own docs: \"Collections cannot be created or modified using the Pexels API\")"
   }
 }

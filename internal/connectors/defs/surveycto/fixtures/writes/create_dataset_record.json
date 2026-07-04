@@ -1,0 +1,7 @@
+{
+  "record": { "dataset_id": "fixture_dataset", "id": "rec_fixture_1", "label": "Fixture Record" },
+  "expect": {
+    "method": "POST",
+    "path": "/datasets/fixture_dataset/records"
+  }
+}

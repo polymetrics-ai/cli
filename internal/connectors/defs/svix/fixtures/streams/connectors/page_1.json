@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/connector", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "trtmpl_fixture_1",
+          "uid": null,
+          "orgId": "org_fixture_1",
+          "name": "Fixture Connector",
+          "description": "Example connector description",
+          "kind": "Custom",
+          "productType": null,
+          "instructions": "",
+          "logo": null,
+          "transformation": "function handler(webhook) { return webhook; }",
+          "allowedEventTypes": null,
+          "featureFlags": null,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "iterator": "",
+      "done": true
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/orders", "query": { "per_page": "100" } },
+  "request": { "method": "GET", "path": "/api/v1/orders", "query": { "per_page": "100" } },
   "response": {
     "status": 200,
     "body": [

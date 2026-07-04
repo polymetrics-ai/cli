@@ -1,0 +1,9 @@
+{
+  "record": { "idlocation": 1201, "name": "Fixture Location Updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/locations/1201",
+    "body": { "name": "Fixture Location Updated" }
+  },
+  "response": { "status": 200, "body": { "idlocation": 1201, "name": "Fixture Location Updated" } }
+}

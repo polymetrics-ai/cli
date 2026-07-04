@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "acc_fixture_1",
+    "data": { "income": { "monitoring_type": "EXTENSIVE" } }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/accounts/acc_fixture_1",
+    "body": { "data": { "income": { "monitoring_type": "EXTENSIVE" } } }
+  },
+  "response": { "status": 200, "body": { "id": "acc_fixture_1" } }
+}

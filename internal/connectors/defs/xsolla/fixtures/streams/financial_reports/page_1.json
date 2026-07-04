@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/reports"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "report_id": 57613,
+        "agreement_document_id": "Fixture Org Inc_USD",
+        "currency": "USD",
+        "is_direct_payout": false,
+        "is_draft_by_agreement": true,
+        "month": "January",
+        "year": 2026
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_case_fields": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "type_id": 6, "name": "preconds", "system_name": "custom_preconds", "label": "Preconditions", "is_active": true },
+      { "id": 2, "type_id": 12, "name": "steps", "system_name": "custom_steps", "label": "Steps", "is_active": true }
+    ]
+  }
+}

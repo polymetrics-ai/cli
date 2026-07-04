@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture New Label",
+    "can_recommend": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/admin/labels",
+    "body": {
+      "name": "Fixture New Label",
+      "can_recommend": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "labels": [{ "id": 5002, "name": "Fixture New Label" }] }
+  }
+}

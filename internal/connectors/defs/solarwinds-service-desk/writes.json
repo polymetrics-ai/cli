@@ -1,0 +1,524 @@
+{
+  "actions": [
+    {
+      "name": "delete_incident",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk incident record; approval required"
+    },
+    {
+      "name": "delete_problem",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/problems/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk problem record; approval required"
+    },
+    {
+      "name": "delete_change",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk change record; approval required"
+    },
+    {
+      "name": "delete_change_catalog",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/change_catalogs/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk change catalog record; approval required"
+    },
+    {
+      "name": "delete_release",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/releases/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk release record; approval required"
+    },
+    {
+      "name": "delete_solution",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk solution record; approval required"
+    },
+    {
+      "name": "delete_catalog_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/catalog_items/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk catalog item record; approval required"
+    },
+    {
+      "name": "delete_configuration_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/configuration_items/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk configuration item record; approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk user record; approval required"
+    },
+    {
+      "name": "delete_site",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sites/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk site record; approval required"
+    },
+    {
+      "name": "delete_department",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/departments/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk department record; approval required"
+    },
+    {
+      "name": "delete_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/roles/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk role record; approval required"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk group record; approval required"
+    },
+    {
+      "name": "delete_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/categories/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk category record; approval required"
+    },
+    {
+      "name": "delete_hardware",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/hardwares/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk hardware record; approval required"
+    },
+    {
+      "name": "delete_mobile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/mobiles/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk mobile record; approval required"
+    },
+    {
+      "name": "delete_other_asset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/other_assets/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk other asset record; approval required"
+    },
+    {
+      "name": "delete_contract",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contracts/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk contract record; approval required"
+    },
+    {
+      "name": "delete_purchase_order",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/purchase_orders/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk purchase order record; approval required"
+    },
+    {
+      "name": "delete_vendor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/vendors/{{ record.id }}.json",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk vendor record; approval required"
+    }
+  ]
+}

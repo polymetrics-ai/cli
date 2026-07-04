@@ -1,0 +1,141 @@
+{
+  "actions": [
+    {
+      "name": "update_lead",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/leads/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string" },
+          "status_id": { "type": "string" },
+          "owner_id": { "type": "string" },
+          "bounced": { "type": "boolean" },
+          "optedout": { "type": "boolean" },
+          "data": { "type": "object" }
+        }
+      },
+      "risk": "external mutation of an existing PersistIQ lead's fields; changing status/status_id/owner_id can move a lead into or out of active outbound-sequence automation depending on the target account's own campaign rules; approval required"
+    },
+    {
+      "name": "create_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/campaigns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_name", "owner_id"],
+        "properties": {
+          "campaign_name": { "type": "string" },
+          "owner_id": { "type": "string" }
+        }
+      },
+      "risk": "creates a new outbound-email campaign in the target PersistIQ account; approval required"
+    },
+    {
+      "name": "duplicate_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/campaigns/duplicate",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id", "owner_id"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "owner_id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "duplicates an existing campaign (including its steps/sequence) into a new campaign in the target account; approval required"
+    },
+    {
+      "name": "add_lead_to_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/campaigns/{{ record.campaign_id }}/leads",
+      "path_fields": ["campaign_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "lead_id": { "type": "string" },
+          "mailbox_id": { "type": "string" },
+          "skip_if_exists": { "type": "boolean" },
+          "override_lead_limit": { "type": "boolean" },
+          "leads": { "type": "array" }
+        }
+      },
+      "risk": "enrolls a lead into a live outbound-email campaign; the lead may start receiving automated outreach immediately depending on campaign schedule/state; approval required"
+    },
+    {
+      "name": "remove_lead_from_campaign",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/campaigns/{{ record.campaign_id }}/leads/{{ record.id }}",
+      "path_fields": ["campaign_id", "id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id", "id"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "removes a lead from a live outbound-email campaign, stopping any further scheduled automated outreach to it in that sequence; approval required"
+    },
+    {
+      "name": "reply_to_campaign_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/campaigns/{{ record.campaign_id }}/replies",
+      "path_fields": ["campaign_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["campaign_id", "inbox_message_id", "body"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "inbox_message_id": { "type": "string" },
+          "body": { "type": "string" }
+        }
+      },
+      "risk": "sends a real outbound email reply on behalf of the campaign's mailbox owner; irreversible once delivered; approval required"
+    },
+    {
+      "name": "add_dnc_domain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/dnc_domains",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "adds a domain to the account's Do-Not-Contact list; blocks future outreach to that domain account-wide; approval required"
+    }
+  ]
+}

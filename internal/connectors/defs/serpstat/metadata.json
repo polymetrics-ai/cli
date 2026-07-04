@@ -1,7 +1,7 @@
 {
   "name": "serpstat",
   "display_name": "Serpstat",
-  "description": "Reads Serpstat SEO domain keyword and competitor data through the Serpstat JSON-RPC-over-HTTP API. Read-only.",
+  "description": "Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serpstat JSON-RPC-over-HTTP API. Read-only.",
   "integration_type": "api",
   "docs_url": "https://api.serpstat.com/api-docs",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 10
   },
   "risk": {
-    "read": "external Serpstat API read of domain keyword/competitor SEO metrics",
+    "read": "external Serpstat API read of domain keyword/competitor/top-URL SEO metrics",
     "approval": "none; read-only source connector"
   }
 }

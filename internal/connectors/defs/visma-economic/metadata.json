@@ -1,14 +1,14 @@
 {
   "name": "visma-economic",
   "display_name": "Visma e-conomic",
-  "description": "Reads Visma e-conomic customers via the e-conomic REST API.",
+  "description": "Reads customers, suppliers, products, invoices, orders, quotes, departments, payment terms, units, and accounts from the Visma e-conomic REST API, and writes customers, suppliers, products, units, and payment terms.",
   "integration_type": "api",
   "docs_url": "https://restdocs.e-conomic.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Visma e-conomic API read of customer data",
-    "approval": "none; read-only customer directory sync"
+    "read": "external Visma e-conomic API read of customer, supplier, product, and accounting data",
+    "write": "external mutation of Visma e-conomic customers, suppliers, products, units, and payment terms; approval required",
+    "approval": "read: none; write: required for every action"
   }
 }

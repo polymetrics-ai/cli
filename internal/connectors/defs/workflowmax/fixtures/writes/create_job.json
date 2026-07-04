@@ -1,0 +1,29 @@
+{
+  "record": {
+    "clientUUID": "client_fixture_1",
+    "jobName": "Fixture New Job",
+    "statusUUID": "status_fixture_1",
+    "startDate": "2026-02-01",
+    "dueDate": "2026-03-01",
+    "priority": "Normal"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/jobs",
+    "body": {
+      "clientUUID": "client_fixture_1",
+      "jobName": "Fixture New Job",
+      "statusUUID": "status_fixture_1",
+      "startDate": "2026-02-01",
+      "dueDate": "2026-03-01",
+      "priority": "Normal"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "job_fixture_new",
+      "name": "Fixture New Job"
+    }
+  }
+}

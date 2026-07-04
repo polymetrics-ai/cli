@@ -1,0 +1,9 @@
+{
+  "record": {
+    "domain": "inbound.fixture.example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/inbound-domains"
+  }
+}

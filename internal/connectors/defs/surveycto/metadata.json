@@ -1,14 +1,14 @@
 {
   "name": "surveycto",
   "display_name": "SurveyCTO",
-  "description": "Reads SurveyCTO forms, submissions, datasets, and cases through the SurveyCTO API.",
+  "description": "Reads SurveyCTO form IDs, submissions, datasets (including case-management datasets), dataset records, groups, roles, teams, and users, and writes dataset lifecycle mutations, dataset record creation, and user lifecycle mutations, through the SurveyCTO Server API v2.",
   "integration_type": "api",
-  "docs_url": "https://docs.surveycto.com/",
+  "docs_url": "https://developer.surveycto.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external SurveyCTO API read of form, submission, dataset, and case data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external SurveyCTO API read of form, submission, dataset, group, role, team, and user data",
+    "write": "external SurveyCTO API mutation (dataset lifecycle, dataset record creation, user lifecycle including password-setting)",
+    "approval": "reverse ETL plan approval required before writes"
   }
 }

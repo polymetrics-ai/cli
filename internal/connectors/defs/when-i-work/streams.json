@@ -39,6 +39,76 @@
       "records": { "path": "shifts" },
       "schema": "schemas/shifts.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "sites",
+      "path": "/2/sites",
+      "records": { "path": "sites" },
+      "schema": "schemas/sites.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "blocks",
+      "path": "/2/blocks",
+      "records": { "path": "blocks" },
+      "schema": "schemas/blocks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "annotations",
+      "path": "/2/annotations",
+      "records": { "path": "annotations" },
+      "schema": "schemas/annotations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "availabilityevents",
+      "path": "/2/availabilityevents",
+      "records": { "path": "availabilityevents" },
+      "schema": "schemas/availabilityevents.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "requesttypes",
+      "path": "/2/requesttypes",
+      "records": { "path": "request-types" },
+      "schema": "schemas/requesttypes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "times",
+      "path": "/2/times",
+      "records": { "path": "times" },
+      "schema": "schemas/times.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "timezones",
+      "path": "/2/timezones",
+      "records": { "path": "timezone" },
+      "schema": "schemas/timezones.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "payrolls",
+      "path": "/2/payrolls",
+      "records": { "path": "payrolls" },
+      "schema": "schemas/payrolls.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "openshiftapprovalrequests",
+      "path": "/2/openshiftapprovalrequests",
+      "records": { "path": "openshiftapprovalrequests" },
+      "schema": "schemas/openshiftapprovalrequests.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "swaps",
+      "path": "/2/swaps",
+      "records": { "path": "swaps" },
+      "schema": "schemas/swaps.json",
+      "projection": "passthrough"
     }
   ]
 }

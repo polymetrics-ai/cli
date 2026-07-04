@@ -1,14 +1,79 @@
 {
-  "api": "Phyllo API (https://docs.getphyllo.com/)",
+  "api": "Phyllo API v1 (https://api.getphyllo.com/v1)",
   "docs": "https://docs.getphyllo.com/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (users, accounts, profiles, social_contents); legacy conservatively reads only stable list endpoints (Phyllo's public docs are JS-backed) and ships no writes.",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion. Source of truth: the official Phyllo Postman collection (getphyllo/phyllo-postman, 'Phyllo APIs.postman_collection.json', fetched 2026-07-03), which enumerates the complete documented Phyllo v1 REST surface (51 requests) since Phyllo's own Stoplight-hosted docs.getphyllo.com reference is a JS-rendered SPA with no static HTML/OpenAPI export reachable outside a browser (matching the prior bundle's own note that Phyllo's public docs are JS-backed). Every endpoint below is covered_by a stream/write action XOR excluded with a real category and reason: 13 GET list/detail endpoints are implemented as streams (the original 4 legacy-parity streams plus 9 new resources: work_platforms, audience, social_comments, social_content_groups, social_income_transactions, social_income_payouts, commerce_income_transactions, commerce_income_payouts, commerce_income_balances, webhooks), and 6 mutations as write actions (create_user, update_account, disconnect_account, create_webhook, update_webhook, delete_webhook). Excluded: single-object detail GETs whose record shape is already covered by the identically-shaped list stream (duplicate_of); async refresh/fetch-historic/bulk-search trigger endpoints, which kick off an out-of-band re-sync or webhook-delivered result rather than returning a syncable record set synchronously (out_of_scope); the SDK-token-issuance and mock-webhook-send endpoints, which are non-data auth/testing artifacts (non_data_endpoint).",
   "endpoints": [
+    { "method": "GET", "path": "/v1/work-platforms", "covered_by": { "stream": "work_platforms" } },
+    { "method": "GET", "path": "/v1/work-platforms/{id}", "excluded": { "category": "duplicate_of", "reason": "single-work-platform detail; identical record shape to the work_platforms list stream's per-item object, already covered by that stream" } },
+
     { "method": "GET", "path": "/v1/users", "covered_by": { "stream": "users" } },
+    { "method": "POST", "path": "/v1/users", "covered_by": { "write": "create_user" } },
+    { "method": "GET", "path": "/v1/users/{id}", "excluded": { "category": "duplicate_of", "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/v1/users/external_id/{external_id}", "excluded": { "category": "duplicate_of", "reason": "single-user lookup keyed by caller-assigned external_id instead of the Phyllo id; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+
+    { "method": "POST", "path": "/v1/sdk-tokens", "excluded": { "category": "non_data_endpoint", "reason": "issues a short-lived Connect SDK session token for the frontend widget; an auth/session artifact, not a syncable business record" } },
+
     { "method": "GET", "path": "/v1/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/v1/accounts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/v1/accounts/{id}", "covered_by": { "write": "update_account" } },
+    { "method": "POST", "path": "/v1/accounts/{id}/disconnect", "covered_by": { "write": "disconnect_account" } },
+
     { "method": "GET", "path": "/v1/profiles", "covered_by": { "stream": "profiles" } },
+    { "method": "GET", "path": "/v1/profiles/{id}", "excluded": { "category": "duplicate_of", "reason": "single-profile detail; identical record shape to the profiles list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/profiles/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band profile re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v1/audience", "covered_by": { "stream": "audience" } },
+
     { "method": "GET", "path": "/v1/social/contents", "covered_by": { "stream": "social_contents" } },
-    { "method": "POST", "path": "/v1/users", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented user creation; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/social/comments", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    { "method": "GET", "path": "/v1/social/contents/{id}", "excluded": { "category": "duplicate_of", "reason": "single-content-item detail; identical record shape to the social_contents list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/social/contents/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band content re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/contents/fetch-historic", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous historic-backfill job delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/contents/search", "excluded": { "category": "out_of_scope", "reason": "bulk content-item lookup by an explicit id list, a request-body-driven batch fetch rather than a paginated list stream; the same records are already reachable via the social_contents stream" } },
+
+    { "method": "GET", "path": "/v1/social/content-groups", "covered_by": { "stream": "social_content_groups" } },
+    { "method": "GET", "path": "/v1/social/content-groups/{id}", "excluded": { "category": "duplicate_of", "reason": "single-content-group detail; identical record shape to the social_content_groups list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/social/content-groups/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band content-group re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/content-groups/fetch-historic", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous historic-backfill job delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/content-groups/search", "excluded": { "category": "out_of_scope", "reason": "bulk content-group lookup by an explicit id list, a request-body-driven batch fetch rather than a paginated list stream; the same records are already reachable via the social_content_groups stream" } },
+
+    { "method": "GET", "path": "/v1/social/comments", "covered_by": { "stream": "social_comments" } },
+
+    { "method": "GET", "path": "/v1/social/income/transactions", "covered_by": { "stream": "social_income_transactions" } },
+    { "method": "GET", "path": "/v1/social/income/transactions/{id}", "excluded": { "category": "duplicate_of", "reason": "single-transaction detail; identical record shape to the social_income_transactions list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/social/income/transactions/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band transaction re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/income/transactions/fetch-historic", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous historic-backfill job delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/income/transactions/search", "excluded": { "category": "out_of_scope", "reason": "bulk transaction lookup by an explicit id list, a request-body-driven batch fetch rather than a paginated list stream; the same records are already reachable via the social_income_transactions stream" } },
+
+    { "method": "GET", "path": "/v1/social/income/payouts", "covered_by": { "stream": "social_income_payouts" } },
+    { "method": "GET", "path": "/v1/social/income/payouts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-payout detail; identical record shape to the social_income_payouts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/social/income/payouts/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band payout re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/income/payouts/fetch-historic", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous historic-backfill job delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/social/income/payouts/search", "excluded": { "category": "out_of_scope", "reason": "bulk payout lookup by an explicit id list, a request-body-driven batch fetch rather than a paginated list stream; the same records are already reachable via the social_income_payouts stream" } },
+
+    { "method": "GET", "path": "/v1/commerce/income/transactions", "covered_by": { "stream": "commerce_income_transactions" } },
+    { "method": "GET", "path": "/v1/commerce/income/transactions/{id}", "excluded": { "category": "duplicate_of", "reason": "single-transaction detail; identical record shape to the commerce_income_transactions list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/commerce/income/transactions/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band transaction re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/commerce/income/transactions/fetch-historic", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous historic-backfill job delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/commerce/income/transactions/search", "excluded": { "category": "out_of_scope", "reason": "bulk transaction lookup by an explicit id list, a request-body-driven batch fetch rather than a paginated list stream; the same records are already reachable via the commerce_income_transactions stream" } },
+
+    { "method": "GET", "path": "/v1/commerce/income/payouts", "covered_by": { "stream": "commerce_income_payouts" } },
+    { "method": "GET", "path": "/v1/commerce/income/payouts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-payout detail; identical record shape to the commerce_income_payouts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/commerce/income/payouts/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band payout re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/commerce/income/payouts/fetch-historic", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous historic-backfill job delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/commerce/income/payouts/search", "excluded": { "category": "out_of_scope", "reason": "bulk payout lookup by an explicit id list, a request-body-driven batch fetch rather than a paginated list stream; the same records are already reachable via the commerce_income_payouts stream" } },
+
+    { "method": "GET", "path": "/v1/commerce/income/balances", "covered_by": { "stream": "commerce_income_balances" } },
+    { "method": "GET", "path": "/v1/commerce/income/balances/{id}", "excluded": { "category": "duplicate_of", "reason": "single-balance detail; identical record shape to the commerce_income_balances list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/commerce/income/balances/refresh", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous out-of-band balance re-sync delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/commerce/income/balances/fetch-historic", "excluded": { "category": "out_of_scope", "reason": "triggers an asynchronous historic-backfill job delivered later via webhook, not a synchronous syncable record read; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v1/commerce/income/balances/search", "excluded": { "category": "out_of_scope", "reason": "bulk balance lookup by an explicit id list, a request-body-driven batch fetch rather than a paginated list stream; the same records are already reachable via the commerce_income_balances stream" } },
+
+    { "method": "GET", "path": "/v1/webhooks", "covered_by": { "stream": "webhooks" } },
+    { "method": "POST", "path": "/v1/webhooks", "covered_by": { "write": "create_webhook" } },
+    { "method": "GET", "path": "/v1/webhooks/{id}", "excluded": { "category": "duplicate_of", "reason": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/v1/webhooks/{id}", "covered_by": { "write": "update_webhook" } },
+    { "method": "DELETE", "path": "/v1/webhooks/{id}", "covered_by": { "write": "delete_webhook" } },
+    { "method": "POST", "path": "/v1/webhooks/send", "excluded": { "category": "non_data_endpoint", "reason": "sends a mock/test webhook delivery to verify the receiving endpoint; a diagnostic action, not a business-data mutation" } }
   ]
 }

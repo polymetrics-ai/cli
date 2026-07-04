@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "resource_reports",
+  "type": "object",
+  "x-primary-key": ["token"],
+  "required": ["token"],
+  "properties": {
+    "token": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "workspace_token": { "type": ["string", "null"] },
+    "filter": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

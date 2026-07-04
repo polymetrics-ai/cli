@@ -30,6 +30,18 @@
       "default": "0",
       "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
     },
+    "phyllo_account_id": {
+      "type": "string",
+      "description": "Optional Phyllo account id filter. When set, scopes the profiles/social_contents/audience/social_content_groups/social_comments/social_income_transactions/social_income_payouts/commerce_income_transactions/commerce_income_payouts/commerce_income_balances streams to that account; omitted from the request entirely when unset."
+    },
+    "phyllo_user_id": {
+      "type": "string",
+      "description": "Optional Phyllo user id filter, scoping the accounts and profiles streams to that user; omitted from the request entirely when unset."
+    },
+    "phyllo_work_platform_id": {
+      "type": "string",
+      "description": "Optional Phyllo work-platform id filter, scoping the accounts and profiles streams to that platform (e.g. YouTube, Instagram); omitted from the request entirely when unset."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

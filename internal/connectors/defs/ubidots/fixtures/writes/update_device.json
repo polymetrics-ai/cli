@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "dev_fixture_1",
+    "name": "Fixture Device Renamed"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2.0/devices/dev_fixture_1/",
+    "body": {
+      "name": "Fixture Device Renamed"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "dev_fixture_1", "name": "Fixture Device Renamed" }
+  }
+}

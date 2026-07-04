@@ -1,0 +1,11 @@
+{
+  "record": {
+    "Field1": "Wufoo",
+    "Field2": "Test"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/forms/synthetic-conformance-value/entries.json"
+  },
+  "response": { "status": 200, "body": { "Success": 1, "EntryId": 1 } }
+}

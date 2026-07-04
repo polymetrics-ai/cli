@@ -1,0 +1,4 @@
+{
+  "record": { "name": "fixture_tag", "description": "fixture record" },
+  "expect": { "method": "POST", "path": "/tags" }
+}

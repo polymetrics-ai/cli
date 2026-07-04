@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": 1,
+    "first_name": "Fixture",
+    "last_name": "Instructor",
+    "slug": "fixture-instructor",
+    "bio": "Updated bio"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/public/v1/instructors/1",
+    "body": {
+      "first_name": "Fixture",
+      "last_name": "Instructor",
+      "slug": "fixture-instructor",
+      "bio": "Updated bio"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cpd_categories",
+  "type": "object",
+  "x-primary-key": ["categoryId"],
+  "required": ["categoryId", "name"],
+  "properties": {
+    "categoryId": { "type": "string" },
+    "name": { "type": ["string", "null"] }
+  }
+}

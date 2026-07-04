@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/referrals", "query": { "page": "1", "per_page": "10" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "message": "success",
+      "data": [
+        { "id": 17567131, "order_id": 6358937632968, "order_number": 1042, "customer_id": "cust_fixture_1", "quantity": 2, "total_sales": "245.00", "commission_adjustment": "0", "status": "approved", "commission": "24.00", "tracking_type": "Tracked by coupon" }
+      ]
+    }
+  }
+}

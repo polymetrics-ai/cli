@@ -1,0 +1,20 @@
+{
+  "record": {
+    "action": "increment_by",
+    "data": {
+      "key": "fixture_counter",
+      "amount": 3
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/records",
+    "body": {
+      "action": "increment_by",
+      "data": {
+        "key": "fixture_counter",
+        "amount": 3
+      }
+    }
+  }
+}

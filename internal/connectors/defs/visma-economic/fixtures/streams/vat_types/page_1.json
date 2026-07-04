@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vat-types",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "vatTypeNumber": 1,
+          "name": "Standard VAT",
+          "vatPercentage": 25.0,
+          "accountingApplication": "sales"
+        }
+      ]
+    }
+  }
+}

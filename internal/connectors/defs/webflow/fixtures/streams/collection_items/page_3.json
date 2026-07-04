@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/collections/collection_fixture_1/items",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "item_fixture_101",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 101",
+            "slug": "fixture-item-101"
+          }
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 100,
+        "total": 101
+      }
+    }
+  }
+}

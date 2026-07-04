@@ -1,0 +1,7 @@
+{
+  "record": { "addon_id": "addon_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/addon/addon_fixture_1"
+  }
+}

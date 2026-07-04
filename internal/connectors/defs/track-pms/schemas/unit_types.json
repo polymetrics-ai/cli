@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "unit_types",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "short_name": { "type": ["string", "null"] },
+    "type_code": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "max_occupancy": { "type": ["integer", "null"] },
+    "bedrooms": { "type": ["integer", "null"] },
+    "node_id": { "type": ["integer", "null"] },
+    "lodging_type_id": { "type": ["integer", "null"] },
+    "is_bookable": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

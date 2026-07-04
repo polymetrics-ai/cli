@@ -1,11 +1,10 @@
 {
   "api": "Senseforce Public API",
   "docs": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only; Senseforce's broader dataset/metadata management surface is out of scope until Pass B",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B review (already_full): Senseforce's entire documented public API surface is a single element-by-id request family (per manual.senseforce.io/manual/sf-platform/public-api -- 'you need the ID of the element you want to request', and 'get the results of predefined datasets') plus a separate script-execution endpoint for a DIFFERENT element type (published Senseforce scripts, not datasets). The 1 legacy-parity read stream (dataset records for ONE configured dataset_id) is the entirety of the dataset-element surface; no dataset-listing/discovery endpoint, no dataset-metadata/column-schema endpoint, and no write/mutation endpoint of any kind are documented anywhere in the public API manual -- Senseforce's public API is read-only BY DESIGN (it exists to let external tools pull already-built dataset/script results out of the platform, not to manage platform configuration).",
   "endpoints": [
     { "method": "GET", "path": "/api/v1/datasets/{dataset_id}/records", "covered_by": { "stream": "records" } },
-    { "method": "GET", "path": "/api/v1/datasets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/api/v1/datasets/{dataset_id}/records", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "POST", "path": "/api/v1/scripts/{script_id}/results", "excluded": { "category": "out_of_scope", "reason": "executes a published Senseforce SCRIPT (a distinct element type from datasets, addressed by its own script_id, accepting a ScriptFilters body) and returns its computed result set; a fundamentally different resource model from the single configured dataset this bundle reads, requiring its own script_id config surface to model as a second stream" } }
   ]
 }

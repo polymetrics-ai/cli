@@ -1,7 +1,7 @@
 {
   "name": "spacex-api",
   "display_name": "SpaceX API",
-  "description": "Reads public SpaceX launch, rocket, capsule, crew, payload, and Starlink data.",
+  "description": "Reads public SpaceX launch, rocket, core, capsule, crew, Dragon, history, payload, and Starlink data.",
   "integration_type": "api",
   "docs_url": "https://github.com/r-spacex/SpaceX-API/tree/master/docs",
   "release_stage": "ga",

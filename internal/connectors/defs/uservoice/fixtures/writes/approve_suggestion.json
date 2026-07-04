@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "101"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/admin/suggestions/101/approve"
+  },
+  "response": {
+    "status": 200,
+    "body": { "suggestions": [{ "id": 101, "state": "approved" }] }
+  }
+}

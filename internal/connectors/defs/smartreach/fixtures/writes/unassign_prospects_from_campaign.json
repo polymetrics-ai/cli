@@ -1,0 +1,17 @@
+{
+  "record": {
+    "campaign_id": "cmp_fixture_1",
+    "prospect_ids": ["prs_fixture_1"]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/campaigns/cmp_fixture_1/prospects",
+    "body": {
+      "prospect_ids": ["prs_fixture_1"]
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

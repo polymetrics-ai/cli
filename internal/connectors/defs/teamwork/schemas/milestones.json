@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "milestones",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "project_id": {
+      "type": ["string", "null"],
+      "description": "Stamped by the fan_out dialect from the enclosing project id discovered via the projects listing."
+    },
+    "deadline": { "type": ["string", "null"] },
+    "completed": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "boxes"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/units"
+  }
+}

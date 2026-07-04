@@ -1,0 +1,1022 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/products",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "product_id": "product_fixture_1",
+          "product": {
+            "id": "product_fixture_1",
+            "fieldData": {
+              "name": "Fixture Product 1"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_2",
+          "product": {
+            "id": "product_fixture_2",
+            "fieldData": {
+              "name": "Fixture Product 2"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_3",
+          "product": {
+            "id": "product_fixture_3",
+            "fieldData": {
+              "name": "Fixture Product 3"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_4",
+          "product": {
+            "id": "product_fixture_4",
+            "fieldData": {
+              "name": "Fixture Product 4"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_5",
+          "product": {
+            "id": "product_fixture_5",
+            "fieldData": {
+              "name": "Fixture Product 5"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_6",
+          "product": {
+            "id": "product_fixture_6",
+            "fieldData": {
+              "name": "Fixture Product 6"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_7",
+          "product": {
+            "id": "product_fixture_7",
+            "fieldData": {
+              "name": "Fixture Product 7"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_8",
+          "product": {
+            "id": "product_fixture_8",
+            "fieldData": {
+              "name": "Fixture Product 8"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_9",
+          "product": {
+            "id": "product_fixture_9",
+            "fieldData": {
+              "name": "Fixture Product 9"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_10",
+          "product": {
+            "id": "product_fixture_10",
+            "fieldData": {
+              "name": "Fixture Product 10"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_11",
+          "product": {
+            "id": "product_fixture_11",
+            "fieldData": {
+              "name": "Fixture Product 11"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_12",
+          "product": {
+            "id": "product_fixture_12",
+            "fieldData": {
+              "name": "Fixture Product 12"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_13",
+          "product": {
+            "id": "product_fixture_13",
+            "fieldData": {
+              "name": "Fixture Product 13"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_14",
+          "product": {
+            "id": "product_fixture_14",
+            "fieldData": {
+              "name": "Fixture Product 14"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_15",
+          "product": {
+            "id": "product_fixture_15",
+            "fieldData": {
+              "name": "Fixture Product 15"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_16",
+          "product": {
+            "id": "product_fixture_16",
+            "fieldData": {
+              "name": "Fixture Product 16"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_17",
+          "product": {
+            "id": "product_fixture_17",
+            "fieldData": {
+              "name": "Fixture Product 17"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_18",
+          "product": {
+            "id": "product_fixture_18",
+            "fieldData": {
+              "name": "Fixture Product 18"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_19",
+          "product": {
+            "id": "product_fixture_19",
+            "fieldData": {
+              "name": "Fixture Product 19"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_20",
+          "product": {
+            "id": "product_fixture_20",
+            "fieldData": {
+              "name": "Fixture Product 20"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_21",
+          "product": {
+            "id": "product_fixture_21",
+            "fieldData": {
+              "name": "Fixture Product 21"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_22",
+          "product": {
+            "id": "product_fixture_22",
+            "fieldData": {
+              "name": "Fixture Product 22"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_23",
+          "product": {
+            "id": "product_fixture_23",
+            "fieldData": {
+              "name": "Fixture Product 23"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_24",
+          "product": {
+            "id": "product_fixture_24",
+            "fieldData": {
+              "name": "Fixture Product 24"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_25",
+          "product": {
+            "id": "product_fixture_25",
+            "fieldData": {
+              "name": "Fixture Product 25"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_26",
+          "product": {
+            "id": "product_fixture_26",
+            "fieldData": {
+              "name": "Fixture Product 26"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_27",
+          "product": {
+            "id": "product_fixture_27",
+            "fieldData": {
+              "name": "Fixture Product 27"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_28",
+          "product": {
+            "id": "product_fixture_28",
+            "fieldData": {
+              "name": "Fixture Product 28"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_29",
+          "product": {
+            "id": "product_fixture_29",
+            "fieldData": {
+              "name": "Fixture Product 29"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_30",
+          "product": {
+            "id": "product_fixture_30",
+            "fieldData": {
+              "name": "Fixture Product 30"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_31",
+          "product": {
+            "id": "product_fixture_31",
+            "fieldData": {
+              "name": "Fixture Product 31"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_32",
+          "product": {
+            "id": "product_fixture_32",
+            "fieldData": {
+              "name": "Fixture Product 32"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_33",
+          "product": {
+            "id": "product_fixture_33",
+            "fieldData": {
+              "name": "Fixture Product 33"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_34",
+          "product": {
+            "id": "product_fixture_34",
+            "fieldData": {
+              "name": "Fixture Product 34"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_35",
+          "product": {
+            "id": "product_fixture_35",
+            "fieldData": {
+              "name": "Fixture Product 35"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_36",
+          "product": {
+            "id": "product_fixture_36",
+            "fieldData": {
+              "name": "Fixture Product 36"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_37",
+          "product": {
+            "id": "product_fixture_37",
+            "fieldData": {
+              "name": "Fixture Product 37"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_38",
+          "product": {
+            "id": "product_fixture_38",
+            "fieldData": {
+              "name": "Fixture Product 38"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_39",
+          "product": {
+            "id": "product_fixture_39",
+            "fieldData": {
+              "name": "Fixture Product 39"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_40",
+          "product": {
+            "id": "product_fixture_40",
+            "fieldData": {
+              "name": "Fixture Product 40"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_41",
+          "product": {
+            "id": "product_fixture_41",
+            "fieldData": {
+              "name": "Fixture Product 41"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_42",
+          "product": {
+            "id": "product_fixture_42",
+            "fieldData": {
+              "name": "Fixture Product 42"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_43",
+          "product": {
+            "id": "product_fixture_43",
+            "fieldData": {
+              "name": "Fixture Product 43"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_44",
+          "product": {
+            "id": "product_fixture_44",
+            "fieldData": {
+              "name": "Fixture Product 44"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_45",
+          "product": {
+            "id": "product_fixture_45",
+            "fieldData": {
+              "name": "Fixture Product 45"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_46",
+          "product": {
+            "id": "product_fixture_46",
+            "fieldData": {
+              "name": "Fixture Product 46"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_47",
+          "product": {
+            "id": "product_fixture_47",
+            "fieldData": {
+              "name": "Fixture Product 47"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_48",
+          "product": {
+            "id": "product_fixture_48",
+            "fieldData": {
+              "name": "Fixture Product 48"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_49",
+          "product": {
+            "id": "product_fixture_49",
+            "fieldData": {
+              "name": "Fixture Product 49"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_50",
+          "product": {
+            "id": "product_fixture_50",
+            "fieldData": {
+              "name": "Fixture Product 50"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_51",
+          "product": {
+            "id": "product_fixture_51",
+            "fieldData": {
+              "name": "Fixture Product 51"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_52",
+          "product": {
+            "id": "product_fixture_52",
+            "fieldData": {
+              "name": "Fixture Product 52"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_53",
+          "product": {
+            "id": "product_fixture_53",
+            "fieldData": {
+              "name": "Fixture Product 53"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_54",
+          "product": {
+            "id": "product_fixture_54",
+            "fieldData": {
+              "name": "Fixture Product 54"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_55",
+          "product": {
+            "id": "product_fixture_55",
+            "fieldData": {
+              "name": "Fixture Product 55"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_56",
+          "product": {
+            "id": "product_fixture_56",
+            "fieldData": {
+              "name": "Fixture Product 56"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_57",
+          "product": {
+            "id": "product_fixture_57",
+            "fieldData": {
+              "name": "Fixture Product 57"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_58",
+          "product": {
+            "id": "product_fixture_58",
+            "fieldData": {
+              "name": "Fixture Product 58"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_59",
+          "product": {
+            "id": "product_fixture_59",
+            "fieldData": {
+              "name": "Fixture Product 59"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_60",
+          "product": {
+            "id": "product_fixture_60",
+            "fieldData": {
+              "name": "Fixture Product 60"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_61",
+          "product": {
+            "id": "product_fixture_61",
+            "fieldData": {
+              "name": "Fixture Product 61"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_62",
+          "product": {
+            "id": "product_fixture_62",
+            "fieldData": {
+              "name": "Fixture Product 62"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_63",
+          "product": {
+            "id": "product_fixture_63",
+            "fieldData": {
+              "name": "Fixture Product 63"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_64",
+          "product": {
+            "id": "product_fixture_64",
+            "fieldData": {
+              "name": "Fixture Product 64"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_65",
+          "product": {
+            "id": "product_fixture_65",
+            "fieldData": {
+              "name": "Fixture Product 65"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_66",
+          "product": {
+            "id": "product_fixture_66",
+            "fieldData": {
+              "name": "Fixture Product 66"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_67",
+          "product": {
+            "id": "product_fixture_67",
+            "fieldData": {
+              "name": "Fixture Product 67"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_68",
+          "product": {
+            "id": "product_fixture_68",
+            "fieldData": {
+              "name": "Fixture Product 68"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_69",
+          "product": {
+            "id": "product_fixture_69",
+            "fieldData": {
+              "name": "Fixture Product 69"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_70",
+          "product": {
+            "id": "product_fixture_70",
+            "fieldData": {
+              "name": "Fixture Product 70"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_71",
+          "product": {
+            "id": "product_fixture_71",
+            "fieldData": {
+              "name": "Fixture Product 71"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_72",
+          "product": {
+            "id": "product_fixture_72",
+            "fieldData": {
+              "name": "Fixture Product 72"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_73",
+          "product": {
+            "id": "product_fixture_73",
+            "fieldData": {
+              "name": "Fixture Product 73"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_74",
+          "product": {
+            "id": "product_fixture_74",
+            "fieldData": {
+              "name": "Fixture Product 74"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_75",
+          "product": {
+            "id": "product_fixture_75",
+            "fieldData": {
+              "name": "Fixture Product 75"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_76",
+          "product": {
+            "id": "product_fixture_76",
+            "fieldData": {
+              "name": "Fixture Product 76"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_77",
+          "product": {
+            "id": "product_fixture_77",
+            "fieldData": {
+              "name": "Fixture Product 77"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_78",
+          "product": {
+            "id": "product_fixture_78",
+            "fieldData": {
+              "name": "Fixture Product 78"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_79",
+          "product": {
+            "id": "product_fixture_79",
+            "fieldData": {
+              "name": "Fixture Product 79"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_80",
+          "product": {
+            "id": "product_fixture_80",
+            "fieldData": {
+              "name": "Fixture Product 80"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_81",
+          "product": {
+            "id": "product_fixture_81",
+            "fieldData": {
+              "name": "Fixture Product 81"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_82",
+          "product": {
+            "id": "product_fixture_82",
+            "fieldData": {
+              "name": "Fixture Product 82"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_83",
+          "product": {
+            "id": "product_fixture_83",
+            "fieldData": {
+              "name": "Fixture Product 83"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_84",
+          "product": {
+            "id": "product_fixture_84",
+            "fieldData": {
+              "name": "Fixture Product 84"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_85",
+          "product": {
+            "id": "product_fixture_85",
+            "fieldData": {
+              "name": "Fixture Product 85"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_86",
+          "product": {
+            "id": "product_fixture_86",
+            "fieldData": {
+              "name": "Fixture Product 86"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_87",
+          "product": {
+            "id": "product_fixture_87",
+            "fieldData": {
+              "name": "Fixture Product 87"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_88",
+          "product": {
+            "id": "product_fixture_88",
+            "fieldData": {
+              "name": "Fixture Product 88"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_89",
+          "product": {
+            "id": "product_fixture_89",
+            "fieldData": {
+              "name": "Fixture Product 89"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_90",
+          "product": {
+            "id": "product_fixture_90",
+            "fieldData": {
+              "name": "Fixture Product 90"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_91",
+          "product": {
+            "id": "product_fixture_91",
+            "fieldData": {
+              "name": "Fixture Product 91"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_92",
+          "product": {
+            "id": "product_fixture_92",
+            "fieldData": {
+              "name": "Fixture Product 92"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_93",
+          "product": {
+            "id": "product_fixture_93",
+            "fieldData": {
+              "name": "Fixture Product 93"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_94",
+          "product": {
+            "id": "product_fixture_94",
+            "fieldData": {
+              "name": "Fixture Product 94"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_95",
+          "product": {
+            "id": "product_fixture_95",
+            "fieldData": {
+              "name": "Fixture Product 95"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_96",
+          "product": {
+            "id": "product_fixture_96",
+            "fieldData": {
+              "name": "Fixture Product 96"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_97",
+          "product": {
+            "id": "product_fixture_97",
+            "fieldData": {
+              "name": "Fixture Product 97"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_98",
+          "product": {
+            "id": "product_fixture_98",
+            "fieldData": {
+              "name": "Fixture Product 98"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_99",
+          "product": {
+            "id": "product_fixture_99",
+            "fieldData": {
+              "name": "Fixture Product 99"
+            }
+          },
+          "skus": []
+        },
+        {
+          "product_id": "product_fixture_100",
+          "product": {
+            "id": "product_fixture_100",
+            "fieldData": {
+              "name": "Fixture Product 100"
+            }
+          },
+          "skus": []
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "total": 101
+      }
+    }
+  }
+}

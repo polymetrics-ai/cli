@@ -15,6 +15,7 @@
     "check": { "method": "GET", "path": "/contacts" },
     "error_map": [
       { "status": 401, "hint": "systeme api_key is missing or invalid; re-run pm credentials add systeme" },
+      { "status": 404, "hint": "systeme resource not found; the id in the request may not exist" },
       { "status": 429, "class": "rate_limited", "hint": "systeme rate limit exceeded; the connector will retry with backoff" }
     ]
   },
@@ -27,6 +28,41 @@
         "created_at": "{{ record.createdAt }}"
       },
       "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "items" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "contact_fields",
+      "path": "/contact_fields",
+      "records": { "path": "items" },
+      "schema": "schemas/contact_fields.json"
+    },
+    {
+      "name": "funnels",
+      "path": "/funnels",
+      "records": { "path": "items" },
+      "schema": "schemas/funnels.json"
+    },
+    {
+      "name": "funnel_steps",
+      "path": "/funnels/{{ fanout.id }}/steps",
+      "records": { "path": "items" },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/funnels", "records_path": "items", "id_field": "id" } },
+        "into": { "path_var": "funnel_id" },
+        "stamp_field": "funnel_id"
+      },
+      "schema": "schemas/funnel_steps.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "items" },
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

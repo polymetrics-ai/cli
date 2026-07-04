@@ -1,0 +1,24 @@
+{
+  "record": {
+    "userId": "user_fixture_1",
+    "externalId": "nps-fixture-1",
+    "score": 9,
+    "feedback": "I think the product is great!",
+    "respondedAt": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/resources/npsResponses",
+    "body": {
+      "userId": "user_fixture_1",
+      "externalId": "nps-fixture-1",
+      "score": 9,
+      "feedback": "I think the product is great!",
+      "respondedAt": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "nps_fixture_1", "externalId": "nps-fixture-1" }
+  }
+}

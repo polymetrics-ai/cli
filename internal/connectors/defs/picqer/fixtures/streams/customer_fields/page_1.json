@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/customerfields", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "idcustomerfield": 1, "title": "Delivery options", "type": "text", "values": [], "required": true }
+    ]
+  }
+}

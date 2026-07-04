@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture User One", "email": "user1@example.com", "enabled": true },
+        { "id": 2, "name": "Fixture User Two", "email": "user2@example.com", "enabled": true }
+      ]
+    }
+  }
+}

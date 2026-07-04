@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/checkout_forms",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cf_fixture_1",
+          "event_series_id": "es_fixture_1",
+          "created_at": 1767225600
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Segment",
+    "filter_type": "ALL",
+    "filter_data": [["gender", ["Equal", "women"]]]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/list.php",
+    "body": {
+      "name": "Fixture Segment",
+      "filter_type": "ALL",
+      "filter_data": [["gender", ["Equal", "women"]]]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 1, "name": "Fixture Segment" }
+  }
+}

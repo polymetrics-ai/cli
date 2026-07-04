@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/orders",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "user_id": 101,
+          "user_email": "fixture101@example.com",
+          "user_name": "Fixture101 User",
+          "product_id": 101,
+          "product_name": "Fixture Product 101",
+          "amount_dollars": 99.0,
+          "amount_cents": 9900,
+          "subscription": false,
+          "coupon_code": null,
+          "status": "complete"
+        }
+      ]
+    }
+  }
+}

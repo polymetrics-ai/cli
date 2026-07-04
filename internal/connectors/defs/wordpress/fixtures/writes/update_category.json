@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Category Updated"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/categories/1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "room_id": "room_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/room-codes/room/room_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": [{ "code": "abc-defg-hij", "room_id": "room_fixture_1", "role": "host", "enabled": true }] }
+  }
+}

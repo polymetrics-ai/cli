@@ -1,0 +1,355 @@
+{
+  "actions": [
+    {
+      "name": "create_time_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace_id }}/time_entries",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start", "duration", "created_with"],
+        "properties": {
+          "start": { "type": "string", "description": "Start time in UTC, RFC3339, e.g. 2026-01-02T15:04:05Z." },
+          "stop": { "type": "string", "description": "Stop time in UTC; omit for a still-running entry." },
+          "duration": { "type": "integer", "description": "Duration in seconds; negative (preferably -1) for a running entry." },
+          "description": { "type": "string" },
+          "project_id": { "type": "integer" },
+          "task_id": { "type": "integer" },
+          "tag_ids": { "type": "array", "items": { "type": "integer" } },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "billable": { "type": "boolean" },
+          "created_with": { "type": "string", "description": "Required by the Toggl API; identifies the calling application, e.g. \"polymetrics-go-cli\"." }
+        }
+      },
+      "risk": "creates a new time entry on the caller's account; external mutation, no approval required"
+    },
+    {
+      "name": "update_time_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["description", "start", "stop", "duration", "project_id", "task_id", "tag_ids", "tags", "tag_action", "billable", "created_with"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "description": { "type": "string" },
+          "start": { "type": "string" },
+          "stop": { "type": "string" },
+          "duration": { "type": "integer" },
+          "project_id": { "type": "integer" },
+          "task_id": { "type": "integer" },
+          "tag_ids": { "type": "array", "items": { "type": "integer" } },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "tag_action": { "type": "string", "description": "\"add\" or \"delete\"; how tag_ids/tags are applied to the existing entry." },
+          "billable": { "type": "boolean" },
+          "created_with": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing time entry's timing, project/task association, tags, or billable flag"
+    },
+    {
+      "name": "stop_time_entry",
+      "kind": "custom",
+      "method": "PATCH",
+      "path": "/workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}/stop",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "stops a currently-running time entry by setting its stop time to now; no effect on an already-stopped entry beyond the API's own idempotency"
+    },
+    {
+      "name": "delete_time_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a time entry; irreversible"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace_id }}/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "client_id": { "type": "integer" },
+          "is_private": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "color": { "type": "string" },
+          "billable": { "type": "boolean" },
+          "rate": { "type": "number" },
+          "currency": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" }
+        }
+      },
+      "risk": "creates a new project in the target workspace; external mutation, no approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "client_id", "is_private", "active", "color", "billable", "rate", "currency", "start_date", "end_date"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "client_id": { "type": "integer" },
+          "is_private": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "color": { "type": "string" },
+          "billable": { "type": "boolean" },
+          "rate": { "type": "number" },
+          "currency": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing project's name, client association, active/private state, or billing settings"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a project; also removes its association from any time entries that referenced it"
+    },
+    {
+      "name": "create_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace_id }}/clients",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "notes": { "type": "string" },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "creates a new client in the target workspace; external mutation, no approval required"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name", "notes", "external_reference"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "notes": { "type": "string" },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing client's name or notes"
+    },
+    {
+      "name": "delete_client",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a client; projects previously associated with it lose that association"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace_id }}/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new tag in the target workspace; external mutation, no approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing tag; the new name applies retroactively everywhere the tag is shown"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a tag; it is removed from every time entry that referenced it"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "body_fields": ["name", "active", "estimated_seconds", "user_id", "external_reference"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "active": { "type": "boolean" },
+          "estimated_seconds": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "creates a new task under the given project; external mutation, no approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks/{{ record.id }}",
+      "path_fields": ["project_id", "id"],
+      "body_type": "json",
+      "body_fields": ["name", "active", "estimated_seconds", "user_id", "external_reference"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "id"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "active": { "type": "boolean" },
+          "estimated_seconds": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing task's name, active/done state, estimate, or assignee; setting active:false marks the task done"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks/{{ record.id }}",
+      "path_fields": ["project_id", "id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "id"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a task; time entries previously linked to it lose that association"
+    }
+  ]
+}

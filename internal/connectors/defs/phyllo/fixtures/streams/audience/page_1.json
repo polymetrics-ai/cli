@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v1/audience", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "account_id": "acc_fixture_1", "platform_username": "fixture_creator", "follower_count": 12000, "gender": [{ "name": "FEMALE", "value": 55.2 }], "age_group": [{ "name": "25-34", "value": 40.1 }], "countries": [{ "name": "US", "value": 60.0 }], "cities": [{ "name": "New York", "value": 12.0 }], "languages": [{ "name": "en", "value": 90.0 }] }
+      ]
+    }
+  }
+}

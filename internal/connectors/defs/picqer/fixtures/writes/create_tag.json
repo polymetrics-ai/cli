@@ -1,0 +1,9 @@
+{
+  "record": { "title": "Fixture Tag", "color": "#ff0000", "inherit": false },
+  "expect": {
+    "method": "POST",
+    "path": "/tags",
+    "body": { "title": "Fixture Tag", "color": "#ff0000", "inherit": false }
+  },
+  "response": { "status": 200, "body": { "idtag": 601, "title": "Fixture Tag", "color": "#ff0000", "inherit": false } }
+}

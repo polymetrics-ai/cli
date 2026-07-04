@@ -1,16 +1,32 @@
 {
-  "api": "PersistIQ API v1 (https://persistiq.com/api-docs/index.html)",
-  "docs": "https://persistiq.com/api-docs/index.html",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (leads, users, campaigns, mailboxes, activities, accounts); legacy ships no writes.",
+  "api": "PersistIQ API v1 (https://api.persistiq.com)",
+  "docs": "https://persistiq.com/api-docs/index.html (live Swagger UI loading https://persistiq.com/api-docs/v1/swagger.json, a machine-readable OpenAPI 3.0.1 spec confirmed reachable and current during this review)",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion: contrary to this bundle's own prior review note (an earlier pass recorded persistiq.com/api-docs as dead/parked), a direct fetch of https://persistiq.com/api-docs/v1/swagger.json during THIS review returned a live, current, 14-path OpenAPI 3.0.1 spec -- the docs are reachable and this bundle is now grounded in that live spec rather than a secondary source. The spec confirms auth is an 'x-api-key' header (matching legacy's own 'X-API-KEY', an HTTP header name match being case-insensitive) against base_url https://api.persistiq.com. This bundle covers all 6 legacy-parity read streams (leads, users, campaigns, mailboxes, activities, accounts) UNCHANGED for parity, plus every additional real endpoint the live spec documents: 6 new read streams (dnc_domains, events, lead_fields, lead_statuses, tags, webhook_plugin) and 2 new fan-out sub-resource streams (campaign_leads, campaign_replies, both driven off the campaigns list). 7 write actions are added: update_lead is CORRECTED from this bundle's prior (guessed) PUT-with-title-field shape to the live spec's real PATCH /v1/leads/{id} with its real flat field set (status/status_id/owner_id/bounced/optedout/data); create_campaign, duplicate_campaign, add_lead_to_campaign, remove_lead_from_campaign, reply_to_campaign_message, and add_dnc_domain are new, each confirmed dialect-expressible (a flat top-level JSON body, or no body) directly from the live requestBody schema. create_lead (POST /v1/leads) remains excluded: its live schema requires a top-level 'lead' wrapper object ({\"lead\": {...}, \"creator_id\":..., \"dup\":...}), an envelope the WriteAction dialect cannot express -- this ENGINE_GAP is unchanged from the prior review, now confirmed directly against the live spec rather than a secondary source. IMPORTANT CAVEAT (documented in docs.md): /v1/mailboxes, /v1/activities, and /v1/accounts -- 3 of the 6 legacy-parity streams -- do NOT appear anywhere in this live 14-path spec; they may be undocumented-but-still-live endpoints, deprecated, or a legacy implementation detail that was never independently verified against a real spec. Per this migration's own ground rule ('legacy is ground truth over any doc' when the two conflict), these 3 streams are kept EXACTLY as legacy implements them (parity-preserving), not removed -- this is an honest limitation of this review's source material, not a silent behavior change.",
   "endpoints": [
     { "method": "GET", "path": "/v1/leads", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/v1/leads/{id}", "excluded": { "category": "duplicate_of", "reason": "single-lead detail; identical record shape to the leads list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/leads", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-a-lead's live OpenAPI requestBody schema requires a top-level 'lead' wrapper object ({\"lead\": {...fields...}, \"creator_id\", \"dup\"}), confirmed directly from https://persistiq.com/api-docs/v1/swagger.json; the engine's declarative WriteAction dialect always sends the record's own fields directly (or a body_fields allow-list of top-level keys), with no envelope/wrapper mechanism, so this mutation is not currently dialect-expressible without silently diverging from the real request shape" } },
+    { "method": "PATCH", "path": "/v1/leads/{id}", "covered_by": { "write": "update_lead" } },
     { "method": "GET", "path": "/v1/users", "covered_by": { "stream": "users" } },
     { "method": "GET", "path": "/v1/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "POST", "path": "/v1/campaigns", "covered_by": { "write": "create_campaign" } },
+    { "method": "POST", "path": "/v1/campaigns/duplicate", "covered_by": { "write": "duplicate_campaign" } },
+    { "method": "GET", "path": "/v1/campaigns/{campaign_id}/leads", "covered_by": { "stream": "campaign_leads" } },
+    { "method": "POST", "path": "/v1/campaigns/{campaign_id}/leads", "covered_by": { "write": "add_lead_to_campaign" } },
+    { "method": "DELETE", "path": "/v1/campaigns/{campaign_id}/leads/{id}", "covered_by": { "write": "remove_lead_from_campaign" } },
+    { "method": "GET", "path": "/v1/campaigns/{campaign_id}/replies", "covered_by": { "stream": "campaign_replies" } },
+    { "method": "POST", "path": "/v1/campaigns/{campaign_id}/replies", "covered_by": { "write": "reply_to_campaign_message" } },
     { "method": "GET", "path": "/v1/mailboxes", "covered_by": { "stream": "mailboxes" } },
     { "method": "GET", "path": "/v1/activities", "covered_by": { "stream": "activities" } },
     { "method": "GET", "path": "/v1/accounts", "covered_by": { "stream": "accounts" } },
-    { "method": "POST", "path": "/v1/leads", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented lead creation; Pass B capability expansion" } },
-    { "method": "POST", "path": "/v1/campaigns/{id}/add_leads", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    { "method": "GET", "path": "/v1/dnc_domains", "covered_by": { "stream": "dnc_domains" } },
+    { "method": "POST", "path": "/v1/dnc_domains", "covered_by": { "write": "add_dnc_domain" } },
+    { "method": "GET", "path": "/v1/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/v1/lead_fields", "covered_by": { "stream": "lead_fields" } },
+    { "method": "GET", "path": "/v1/lead_statuses", "covered_by": { "stream": "lead_statuses" } },
+    { "method": "GET", "path": "/v1/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/v1/webhook_plugin", "covered_by": { "stream": "webhook_plugin" } },
+    { "method": "PUT", "path": "/v1/webhook_plugin", "excluded": { "category": "out_of_scope", "reason": "repoints the account's outbound webhook-notification URLs (post_new_prospect_url, post_updated_prospect_url, raw_events_url, post_email_reply_url, post_email_opened_url) of the caller's choosing; deferred pending its own dedicated security review, consistent with this dialect's general caution around webhook-URL mutations elsewhere in this migration (persona, bitly, perk)" } }
   ]
 }

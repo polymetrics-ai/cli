@@ -1,0 +1,9 @@
+{
+  "record": {
+    "canvas_token": "cnvs_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/canvases/cnvs_fixture_1"
+  }
+}

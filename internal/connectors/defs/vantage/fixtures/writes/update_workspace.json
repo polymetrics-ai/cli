@@ -1,0 +1,10 @@
+{
+  "record": {
+    "workspace_token": "wrkspc_fixture_1",
+    "name": "Updated Workspace"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/workspaces/wrkspc_fixture_1"
+  }
+}

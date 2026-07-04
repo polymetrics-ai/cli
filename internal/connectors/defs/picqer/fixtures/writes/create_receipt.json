@@ -1,0 +1,9 @@
+{
+  "record": { "idpurchaseorder": 701, "version": 2 },
+  "expect": {
+    "method": "POST",
+    "path": "/receipts",
+    "body": { "idpurchaseorder": 701, "version": 2 }
+  },
+  "response": { "status": 201, "body": { "idreceipt": 901, "status": "processing" } }
+}

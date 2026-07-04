@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/members" },
+  "response": {
+    "status": 200,
+    "body": {
+      "members": [
+        {
+          "id": "mem_fixture_1",
+          "email": "fixture1@example.com",
+          "name": "Fixture Member One",
+          "active": true,
+          "role": "ADMIN",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "mem_fixture_2",
+          "email": "fixture2@example.com",
+          "name": "Fixture Member Two",
+          "active": true,
+          "role": "MEMBER",
+          "status": "INVITED"
+        }
+      ]
+    }
+  }
+}

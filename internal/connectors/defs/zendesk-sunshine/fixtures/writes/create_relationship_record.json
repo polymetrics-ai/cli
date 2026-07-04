@@ -1,0 +1,24 @@
+{
+  "record": {
+    "data": {
+      "relationship_type": "owns",
+      "source": "object_fixture_1",
+      "target": "object_fixture_2"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/relationships/records",
+    "body": {
+      "data": {
+        "relationship_type": "owns",
+        "source": "object_fixture_1",
+        "target": "object_fixture_2"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "data": { "id": "relationship_fixture_created_1", "type": "owns" } }
+  }
+}

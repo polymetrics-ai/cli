@@ -7,8 +7,27 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
-    "guest_name": { "type": ["string", "null"] },
-    "date": { "type": ["string", "null"] },
-    "status": { "type": ["string", "null"] }
+    "amount": { "type": ["string", "null"], "description": "Number of persons for this booking (real API wire type is a numeric string)." },
+    "children_amount": { "type": ["string", "null"] },
+    "start": { "type": ["string", "null"], "description": "Booking start time, Unix seconds as a string (real API wire shape)." },
+    "end": { "type": ["string", "null"], "description": "Booking end time, Unix seconds as a string." },
+    "length": { "type": ["string", "null"], "description": "Booking length in minutes, as a string." },
+    "status": { "type": ["string", "null"], "description": "Numeric status code as a string (see setBookingStatus write action for the named status vocabulary)." },
+    "arrived": { "type": ["string", "null"] },
+    "placed": { "type": ["string", "null"] },
+    "all_seated": { "type": ["string", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "waitinbar": { "type": ["string", "null"] },
+    "waitinlist": { "type": ["string", "null"] },
+    "meal": { "type": ["string", "null"], "description": "Meal/service name (e.g. Lunch, Middag)." },
+    "tables": { "type": ["string", "null"], "description": "Comma-separated human-readable table numbers." },
+    "table_ids": { "type": ["array", "null"], "items": { "type": "string" } },
+    "date": { "type": ["string", "null"], "description": "YYYY-MM-DD booking date." },
+    "time": { "type": ["string", "null"], "description": "HH:MM booking time." },
+    "guest_name": { "type": ["string", "null"], "description": "Computed from the nested guest.name field." },
+    "guest_id": { "type": ["string", "null"], "description": "Computed from the nested guest.id field." },
+    "guest_email": { "type": ["string", "null"], "description": "Computed from the nested guest.email field." },
+    "guest_mobile": { "type": ["string", "null"], "description": "Computed from the nested guest.mobile field." },
+    "guest": { "type": ["object", "null"], "description": "Full raw guest sub-object, passed through unchanged alongside the flattened guest_* computed fields." }
   }
 }

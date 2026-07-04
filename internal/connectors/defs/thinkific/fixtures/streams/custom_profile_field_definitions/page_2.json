@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/custom_profile_field_definitions",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "label": "Fixture Field 101",
+          "field_type": "text",
+          "required": false
+        }
+      ]
+    }
+  }
+}

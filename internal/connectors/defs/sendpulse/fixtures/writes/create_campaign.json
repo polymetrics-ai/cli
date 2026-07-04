@@ -1,0 +1,18 @@
+{
+  "record": {
+    "sender_name": "Fixture Sender",
+    "sender_email": "sender@example.com",
+    "subject": "Fixture Subject",
+    "body": "<p>Fixture body</p>",
+    "list_id": "1",
+    "name": "Fixture Campaign"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns"
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 999 }
+  }
+}

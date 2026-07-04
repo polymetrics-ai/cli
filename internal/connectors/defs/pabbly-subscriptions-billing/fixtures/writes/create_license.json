@@ -1,0 +1,14 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "name": "Fixture License Pool",
+    "plan_id": "plan_fixture_1",
+    "method": "list",
+    "license_codes": "FIXTURECODE1\nFIXTURECODE2",
+    "status": "active"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/product_fixture_1/licenses"
+  }
+}

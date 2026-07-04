@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "responses",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "x-cursor-field": "collected_at",
+  "required": ["uuid", "survey_id"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "survey_id": { "type": "string" },
+    "respondent_uuid": { "type": ["string", "null"] },
+    "collected_at": { "type": ["string", "null"], "format": "date-time" },
+    "url": { "type": ["string", "null"] },
+    "device_type": { "type": ["string", "null"] },
+    "operating_system": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "questions": { "type": ["array", "null"] },
+    "attributes": { "type": ["array", "null"] }
+  }
+}

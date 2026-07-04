@@ -1,0 +1,10 @@
+{
+  "record": {
+    "title": "Fixture Segment",
+    "workspace_token": "wrkspc_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/segments"
+  }
+}

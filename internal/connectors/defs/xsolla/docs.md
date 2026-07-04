@@ -1,54 +1,92 @@
 # Overview
 
-Xsolla is a read-only declarative bundle migrated from `internal/connectors/xsolla` (the
-hand-written legacy connector, which stays registered and unchanged until wave6's registry flip).
-It reads Xsolla merchant projects, and per-project orders and transactions, through the Xsolla
-Merchant API v2.
+Xsolla is a declarative bundle migrated from `internal/connectors/xsolla` (the hand-written legacy
+connector, which stays registered and unchanged until wave6's registry flip). Pass B full-surface
+expansion discovered the pre-Pass-B bundle's 3 streams (`projects`/`orders`/`transactions` at
+`/projects` and `/projects/{project_id}/{orders,transactions}`) do not correspond to any real Xsolla
+endpoint — Xsolla's actual Merchant/Pay Station API v2 has no such paths at all; the legacy
+connector's implementation was itself already speaking to a nonexistent API surface. This bundle
+now reads the ACTUAL documented Xsolla Pay Station reporting surface (transaction search,
+transaction registry, payouts, payout currency breakdown, financial reports) and writes full/partial
+transaction refunds.
 
 ## Auth setup
 
-Provide the Xsolla merchant ID and merchant API key as the `merchant_id`/`api_key` secrets. Both
-are sent as HTTP Basic auth (`merchant_id` as username, `api_key` as password), matching legacy's
-`connsdk.Basic(merchantID, apiKey)`. Neither is ever logged.
+Provide the Xsolla merchant ID and merchant API key as the `merchant_id`/`api_key` config/secret.
+Both are sent as HTTP Basic auth (`merchant_id` as username, `api_key` as password) on every
+request, matching Xsolla's own documented Basic-auth convention for merchant-scoped Pay Station
+API calls. `api_key` is never logged.
 
 ## Streams notes
 
-`projects` (`GET /projects`) has no path parameters. `orders` (`GET
-/projects/{project_id}/orders`) and `transactions` (`GET /projects/{project_id}/transactions`) are
-scoped to the `project_id` config value, substituted into the path (urlencoded by default per
-`InterpolatePath`); `project_id` is required for those two streams (an unset value is a runtime
-interpolation error, matching legacy's own "project_id is required for this stream" check). All
-three streams share the identical shape: `GET`, records at `items`, primary key `["id"]`, cursor
-field `updated_at`. Pagination is `page_number` (`page`/`limit` query params, `page_size: 100`,
-1-based), matching legacy's `connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "limit",
-StartPage: 1, PageSize: pageSize}` with legacy's default `pageSize` of 100.
+All 5 streams are scoped under `/merchants/{merchant_id}/...` (urlencoded by default per
+`InterpolatePath`); `merchant_id` is required.
 
-All 3 streams declare `"projection": "passthrough"`: legacy's `Read` hands `connsdk.Harvest` a
-callback that does `emit(connectors.Record(rec))` verbatim for `projects`/`orders`/`transactions`
-alike — no field-built `connectors.Record{...}` mapping anywhere in `xsolla.go` — so schema-mode
-projection would silently drop any Xsolla field beyond the three currently declared per stream;
-passthrough reproduces legacy's actual raw-emission behavior exactly, and the schema remains a
-documentation surface of the known shape.
+- `transactions_search` (`GET .../reports/transactions/search.json`): the general transaction
+  search/list endpoint. Paginated (`offset_limit`, `offset`/`limit` params, `page_size: 100`) —
+  the only stream of the 5 that documents pagination at all. Optional `datetime_from`/
+  `datetime_to` (config, `YYYY-MM-DD`) are sent via the opt-in optional-query dialect
+  (`omit_when_absent: true`). Records are objects with `transaction`/`user`/`payment_details`/
+  `purchase`/`payment_system` nested sub-objects (Xsolla's own documented response shape); a
+  `computed_fields` pair flattens `transaction.id`→`transaction_id` and
+  `transaction.create_date`→`transaction_create_date` as the schema's primary key / cursor field,
+  since neither is a top-level response field on its own.
+- `transactions_registry` (`GET .../reports/transactions/registry.json`): a richer per-transaction
+  registry view (adds `user_balance`, drops `payment_details`/`payment_system`), always sent with
+  the literal `in_transfer_currency=0` query param (Xsolla requires the source-currency, not
+  transfer-currency, amounts for this bundle's purposes). Not documented as paginated by Xsolla;
+  `pagination: none`. Same `transaction.id`/`transaction.transfer_date` flattening pattern as
+  `transactions_search`.
+- `payouts` (`GET .../reports/transfers`): payout batch records (`payout`/`transfer` nested
+  sub-objects, `rate`, `canceled`). `payout.id`/`payout.date` flattened to `payout_id`/
+  `payout_date` for the primary key/cursor.
+- `payout_currency_breakdown` (`GET .../reports/transactions/summary/transfer`): per-ISO-currency
+  payout aggregate rows (`IsoCurrency` is already a flat top-level field — Xsolla's own PascalCase
+  naming for this endpoint's response, reproduced verbatim per `passthrough` projection; no
+  computed_fields renaming since it would silently diverge from the API's real wire field name).
+  No natural cursor field (an aggregate summary row, not a timestamped event) — no
+  `x-cursor-field` declared.
+- `financial_reports` (`GET .../reports`): per-month/currency financial report metadata
+  (`report_id`, `month`, `year`, `currency`, `agreement_document_id`) — already flat, no
+  computed_fields needed. No natural cursor field (an already-closed monthly report, not an
+  incrementally-updated stream).
+
+All 5 streams declare `"projection": "passthrough"`: Xsolla's documented response objects are
+deeply nested and vary in shape across the 5 endpoints, and this bundle's schemas model only the
+primary/cursor-key-bearing fields plus each response's well-known top-level nested objects as a
+documentation surface — passthrough guarantees every real API field survives to the emitted
+record regardless of schema completeness (matching this bundle's pre-existing passthrough
+precedent for the old 3-stream shape, and the general rule that an externally-owned, deeply-nested
+JSON API response should never be schema-narrowed without a field-for-field verified mapping).
 
 ## Write actions & risks
 
-None — this connector is read-only (`capabilities.write: false`), matching legacy's
-`Write` returning `connectors.ErrUnsupportedOperation` unconditionally.
+2 write actions, both requiring approval (`capabilities.write: true`):
+
+- `request_refund` (`PUT .../reports/transactions/{transaction_id}/refund`): issues a full refund
+  to the user for the given transaction. Irreversible.
+- `request_partial_refund` (`PUT .../reports/transactions/{transaction_id}/partial_refund`): issues
+  a partial refund for a specific `refund_amount`. Irreversible.
+
+Both require `description` (Xsolla's own required refund-reason field); `request_refund` also
+accepts an optional `email` override, `request_partial_refund` requires `refund_amount`.
 
 ## Known limits
 
-- Legacy's runtime-configurable `page_size` (bounded 1-500, default 100) and `max_pages` config
-  keys are **not modeled** in this bundle's `spec.json`: `engine.PaginationSpec.PageSize`/`MaxPages`
-  are plain (non-templated) JSON integers set once in `streams.json`, with no mechanism to bind a
-  runtime `config.*` value into them (F6, `docs/migration/conventions.md` — a declared-but-unwireable
-  spec property is worse than an absent one). `page_size` is fixed at the bundle level to legacy's
-  own default (100), so behavior for any caller that never overrode legacy's default is unchanged;
-  a caller that previously set a non-default `page_size`/`max_pages` loses that override. This
-  mirrors the accepted `float`/`stripe` goldens' identical page_size-is-static precedent.
-  `max_pages` is likewise not enforced (unbounded reads; `PaginationSpec.MaxPages` is left unset).
-- Full Xsolla merchant API surface (promotions, pricing, webhooks, agent-order stats) is out of
-  scope for wave2; see `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
-- `fixtures/streams/projects/{page_1,page_2}.json` is the required 2-page pagination fixture
-  (page 1 returns 100 records to trigger a next page per `page_number`'s short-page stop rule;
-  page 2 returns 1 record and stops). `orders`/`transactions` ship single-page fixtures scoped to
-  conformance's synthetic `project_id` value (`synthetic-conformance-value`).
+- `financial_reports` requires its `datetime_from`/`datetime_to` window to be 92 days or less per
+  Xsolla's documented constraint on the reports endpoint; not enforced client-side (a request
+  outside that window is rejected by the live API itself, surfaced as an ordinary HTTP error
+  through `error_map`).
+- `transactions_search`'s real API also supports a `simple_search` fast-lookup variant scoped to a
+  single known `transaction_id`/`external_id`, and a `/{transaction_id}/details` single-transaction
+  detail endpoint — both excluded as `duplicate_of` (`api_surface.json`): the same transaction
+  record shape is already reachable via this stream's list output, and `transaction_id` is already
+  a field on every emitted record.
+- Token/tokenization endpoints (payment-UI session generation, session expiry, saved
+  payment-account listing/charge/delete) are excluded as `out_of_scope`/`requires_elevated_scope`:
+  they operate on live checkout sessions and per-user saved payment methods, not syncable business
+  records or dialect-expressible data mutations — see `api_surface.json`.
+- The sandbox-only chargeback-simulation endpoint is excluded as `destructive_admin`: test-only,
+  requires an elevated Publisher Account role, not a production data mutation.
+- No `max_pages` config is modeled on `transactions_search`; pagination runs to exhaustion (the
+  short-page stop signal) with a fixed `page_size: 100`.

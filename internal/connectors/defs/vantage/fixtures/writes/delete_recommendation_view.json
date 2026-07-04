@@ -1,0 +1,9 @@
+{
+  "record": {
+    "recommendation_view_token": "rv_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/recommendation_views/rv_fixture_1"
+  }
+}

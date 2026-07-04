@@ -1,11 +1,17 @@
 {
-  "api": "Survicate Data API v1 (https://data-api.survicate.com/v1)",
-  "docs": "https://developers.survicate.com/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 1 legacy-parity read stream only (surveys); legacy ships no writes (capabilities.write is false), so there are no write endpoints in or out of scope",
+  "api": "Survicate Data Export API v2 (https://data-api.survicate.com/v2)",
+  "docs": "https://developers.survicate.com/data-export/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion: the Data Export API is a fixed, small, read-oriented surface (surveys, survey questions, responses, respondent attributes, GDPR personal-data) documented in full at developers.survicate.com/data-export/{survey,response,respondent,personal-data}. 3 read streams cover every list-shaped endpoint that has its own discovery path (surveys; survey_questions and responses fan out over every survey id). Respondent-scoped endpoints and the personal-data endpoints require a respondent_uuid/email obtained from an external source (there is no 'list all respondents' or 'list all emails' endpoint to fan out over), so they are excluded as requires_elevated_scope rather than modeled as streams. No write endpoints exist beyond the GDPR personal-data DELETE, which is excluded as destructive_admin.",
   "endpoints": [
-    { "method": "GET", "path": "/v1/surveys", "covered_by": { "stream": "surveys" } },
-    { "method": "GET", "path": "/v1/responses", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/respondents", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/v2/surveys", "covered_by": { "stream": "surveys" } },
+    { "method": "GET", "path": "/v2/surveys/{survey_id}", "excluded": { "category": "duplicate_of", "reason": "single-survey detail; every field this endpoint returns (id, type, name, created_at, enabled, responses, launch, plus author/folder/first_response_at/last_response_at) is a superset of the surveys list stream's per-item object already covered by that stream, keyed by the same id" } },
+    { "method": "GET", "path": "/v2/surveys/{survey_id}/questions", "covered_by": { "stream": "survey_questions" } },
+    { "method": "GET", "path": "/v2/surveys/{survey_id}/responses", "covered_by": { "stream": "responses" } },
+    { "method": "GET", "path": "/v2/surveys/{survey_id}/responses/{response_uuid}", "excluded": { "category": "duplicate_of", "reason": "single-response detail; identical record shape to the responses stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/v2/respondents/{respondent_uuid}/attributes", "excluded": { "category": "requires_elevated_scope", "reason": "no endpoint exists to enumerate respondent_uuid values across a workspace; a lone attributes-by-id GET with no discovery path is not a syncable stream without a respondent_uuid already in hand from an external source (e.g. one embedded in a responses-stream record)" } },
+    { "method": "GET", "path": "/v2/respondents/{respondent_uuid}/responses", "excluded": { "category": "requires_elevated_scope", "reason": "same respondent_uuid discovery gap as the attributes endpoint above; also a duplicate record shape of the survey-scoped responses stream, which already yields every response for every discoverable survey" } },
+    { "method": "GET", "path": "/v2/personal-data", "excluded": { "category": "requires_elevated_scope", "reason": "GDPR personal-data counters lookup keyed by a single email address supplied by the caller; not a list-shaped/discoverable resource and has no natural incremental or full-refresh catalog semantics" } },
+    { "method": "DELETE", "path": "/v2/personal-data", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes all survey responses, respondent records, and connected-service (Insights Hub) data for the given email address; a GDPR-erasure action, never a reverse-ETL-safe mutation" } }
   ]
 }

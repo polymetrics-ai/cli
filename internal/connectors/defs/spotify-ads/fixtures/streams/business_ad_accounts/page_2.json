@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/businesses/business_fixture_1/ad_accounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "ad_accounts": [
+        {
+          "id": "adaccount_fixture_1",
+          "business_id": "business_fixture_1",
+          "name": "Fixture Ad Account One",
+          "status": "ACTIVE",
+          "country_code": "US",
+          "currency_code": "USD",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

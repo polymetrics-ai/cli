@@ -1,0 +1,11 @@
+{
+  "record": { "id": "label_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/labels/label_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

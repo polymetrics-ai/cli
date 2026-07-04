@@ -1,0 +1,12 @@
+{
+  "record": { "task_id": "task_fixture_1", "content": "Need one bottle of milk" },
+  "expect": {
+    "method": "POST",
+    "path": "/comments",
+    "body": { "task_id": "task_fixture_1", "content": "Need one bottle of milk" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "cmt_fixture_created", "task_id": "task_fixture_1", "content": "Need one bottle of milk" }
+  }
+}

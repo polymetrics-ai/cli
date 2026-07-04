@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v10/projects"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        {
+          "id": "prj_fixture_1",
+          "name": "fixture-app",
+          "accountId": "team_fixture_1",
+          "framework": "nextjs",
+          "createdAt": 1767225600000,
+          "updatedAt": 1767225600000
+        }
+      ],
+      "pagination": {
+        "count": 1,
+        "next": 1767139200000,
+        "prev": null
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/tags", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "tag_fixture_1", "name": "Fixture Tag One", "description": "fixture record", "isCore": false }
+      ]
+    }
+  }
+}

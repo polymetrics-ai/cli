@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 1,
+    "code": "FIXTURE20"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/public/v1/coupons/1",
+    "body": {
+      "code": "FIXTURE20"
+    }
+  }
+}

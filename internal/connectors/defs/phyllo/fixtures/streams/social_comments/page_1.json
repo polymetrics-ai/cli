@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v1/social/comments", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "comment_fixture_1", "account_id": "acc_fixture_1", "content_id": "content_fixture_1", "platform": "youtube", "text": "Great video!", "like_count": 3, "reply_count": 0, "commenter_username": "fixture_fan", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

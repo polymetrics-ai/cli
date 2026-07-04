@@ -1,0 +1,10 @@
+{
+  "record": {
+    "kubernetes_efficiency_report_token": "ker_fixture_1",
+    "title": "Updated KER"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/kubernetes_efficiency_reports/ker_fixture_1"
+  }
+}

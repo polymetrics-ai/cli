@@ -1,0 +1,5 @@
+{
+  "record": { "id": 31, "closed": true },
+  "expect": { "method": "PUT", "path": "/opportunities/31" },
+  "response": { "status": 200, "body": { "id": 31 } }
+}

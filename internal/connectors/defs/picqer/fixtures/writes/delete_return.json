@@ -1,0 +1,5 @@
+{
+  "record": { "idreturn": 801 },
+  "expect": { "method": "DELETE", "path": "/returns/801" },
+  "response": { "status": 200, "body": {} }
+}

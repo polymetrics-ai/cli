@@ -17,6 +17,132 @@
       "path": "index.php?/api/v2/get_projects",
       "records": { "path": "." },
       "schema": "schemas/projects.json"
+    },
+    {
+      "name": "users",
+      "path": "index.php?/api/v2/get_users",
+      "records": { "path": "." },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "case_types",
+      "path": "index.php?/api/v2/get_case_types",
+      "records": { "path": "." },
+      "schema": "schemas/case_types.json"
+    },
+    {
+      "name": "case_fields",
+      "path": "index.php?/api/v2/get_case_fields",
+      "records": { "path": "." },
+      "schema": "schemas/case_fields.json"
+    },
+    {
+      "name": "priorities",
+      "path": "index.php?/api/v2/get_priorities",
+      "records": { "path": "." },
+      "schema": "schemas/priorities.json"
+    },
+    {
+      "name": "statuses",
+      "path": "index.php?/api/v2/get_statuses",
+      "records": { "path": "." },
+      "schema": "schemas/statuses.json"
+    },
+    {
+      "name": "result_fields",
+      "path": "index.php?/api/v2/get_result_fields",
+      "records": { "path": "." },
+      "schema": "schemas/result_fields.json"
+    },
+    {
+      "name": "templates",
+      "path": "index.php?/api/v2/get_templates/{{ fanout.id }}",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "index.php?/api/v2/get_projects", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "suites",
+      "path": "index.php?/api/v2/get_suites/{{ fanout.id }}",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "index.php?/api/v2/get_projects", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/suites.json"
+    },
+    {
+      "name": "milestones",
+      "path": "index.php?/api/v2/get_milestones/{{ fanout.id }}",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "index.php?/api/v2/get_projects", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/milestones.json"
+    },
+    {
+      "name": "cases",
+      "path": "index.php?/api/v2/get_cases/{{ fanout.id }}",
+      "records": { "path": "cases" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "_links.next"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "index.php?/api/v2/get_projects", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/cases.json"
+    },
+    {
+      "name": "plans",
+      "path": "index.php?/api/v2/get_plans/{{ fanout.id }}",
+      "records": { "path": "plans" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "_links.next"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "index.php?/api/v2/get_projects", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/plans.json"
+    },
+    {
+      "name": "runs",
+      "path": "index.php?/api/v2/get_runs/{{ fanout.id }}",
+      "records": { "path": "runs" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "_links.next"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "index.php?/api/v2/get_projects", "records_path": ".", "id_field": "id" }
+        },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "schema": "schemas/runs.json"
     }
   ]
 }

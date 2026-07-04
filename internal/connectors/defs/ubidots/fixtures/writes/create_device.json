@@ -1,0 +1,20 @@
+{
+  "record": {
+    "label": "fixture-new-device",
+    "name": "Fixture New Device",
+    "description": "created by conformance fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2.0/devices/",
+    "body": {
+      "label": "fixture-new-device",
+      "name": "Fixture New Device",
+      "description": "created by conformance fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "dev_fixture_new", "label": "fixture-new-device", "name": "Fixture New Device" }
+  }
+}

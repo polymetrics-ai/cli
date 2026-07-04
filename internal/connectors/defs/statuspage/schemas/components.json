@@ -6,8 +6,17 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
+    "page_id": { "type": ["string", "null"] },
+    "group_id": { "type": ["string", "null"] },
     "name": { "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "position": { "type": ["integer", "null"] },
     "status": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"], "format": "date-time" }
+    "showcase": { "type": ["boolean", "null"] },
+    "only_show_if_degraded": { "type": ["boolean", "null"] },
+    "automation_email": { "type": ["string", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
   }
 }

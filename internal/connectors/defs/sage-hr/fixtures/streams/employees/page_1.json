@@ -1,10 +1,13 @@
 {
-  "request": { "method": "GET", "path": "/employees" },
+  "request": { "method": "GET", "path": "/employees", "query": { "page": "1" } },
   "response": {
     "status": 200,
-    "body": [
-      { "id": 1, "first_name": "Fixture", "last_name": "One" },
-      { "id": 2, "first_name": "Fixture", "last_name": "Two" }
-    ]
+    "body": {
+      "data": [
+        { "id": 1, "email": "fixture1@example.com", "first_name": "Fixture", "last_name": "One", "employee_number": "A01", "employment_status": "Full-time", "team": "Fixture Team", "team_id": 1, "position": "Manager", "position_id": 11 },
+        { "id": 2, "email": "fixture2@example.com", "first_name": "Fixture", "last_name": "Two", "employee_number": "A02", "employment_status": "Full-time", "team": "Fixture Team", "team_id": 1, "position": "Engineer", "position_id": 10 }
+      ],
+      "meta": { "current_page": 1, "next_page": 2, "previous_page": null, "total_pages": 2, "per_page": 2, "total_entries": 3 }
+    }
   }
 }

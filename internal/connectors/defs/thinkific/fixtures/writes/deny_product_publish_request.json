@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 1,
+    "user_id": 5
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/product_publish_requests/1/deny",
+    "body": {
+      "user_id": 5
+    }
+  }
+}

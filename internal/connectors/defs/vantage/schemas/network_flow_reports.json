@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "network_flow_reports",
+  "type": "object",
+  "x-primary-key": ["token"],
+  "required": ["token"],
+  "properties": {
+    "token": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "workspace_token": { "type": ["string", "null"] },
+    "filter": { "type": ["string", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "end_date": { "type": ["string", "null"] },
+    "date_interval": { "type": ["string", "null"] },
+    "groupings": { "type": ["array", "null"] },
+    "flow_direction": { "type": ["string", "null"] },
+    "flow_weight": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

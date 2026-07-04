@@ -1,0 +1,10 @@
+{
+  "record": {
+    "post": 1,
+    "content": "Fixture comment body."
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/comments"
+  }
+}

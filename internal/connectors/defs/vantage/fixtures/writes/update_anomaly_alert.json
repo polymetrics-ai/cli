@@ -1,0 +1,10 @@
+{
+  "record": {
+    "anomaly_alert_token": "anml_fixture_1",
+    "title": "Updated Alert"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/anomaly_alerts/anml_fixture_1"
+  }
+}

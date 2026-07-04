@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/funnels/funnel_fixture_1/steps", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "step_fixture_1", "name": "Fixture Opt-in Step" }
+      ]
+    }
+  }
+}

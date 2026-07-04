@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/integration_api/marketplace/show" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "fixture-marketplace-1",
+        "type": "marketplace",
+        "attributes": { "name": "Fixture Marketplace" }
+      }
+    }
+  }
+}

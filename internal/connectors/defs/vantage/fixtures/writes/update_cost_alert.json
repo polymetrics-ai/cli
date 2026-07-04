@@ -1,0 +1,10 @@
+{
+  "record": {
+    "cost_alert_token": "ca_fixture_1",
+    "title": "Updated Alert"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/cost_alerts/ca_fixture_1"
+  }
+}

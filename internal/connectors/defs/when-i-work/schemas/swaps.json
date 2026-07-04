@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "swaps",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "shift_id": { "type": ["integer", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "status": { "type": ["integer", "null"] },
+    "type": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/learning/completions",
+    "query": {
+      "page": "2",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "646767c6b808667ea1001",
+        "userId": "646767d825352012231001",
+        "contentId": "646767ee9b667f9b87d1001",
+        "contentVersion": 1,
+        "skills": [
+          "leadership"
+        ],
+        "completionType": "default",
+        "hadDueDate": false,
+        "isRPL": false,
+        "completedAt": "2026-01-02T00:00:00.000Z",
+        "activeUntil": null
+      }
+    ]
+  }
+}

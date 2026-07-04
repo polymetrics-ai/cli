@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "dpl_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v13/deployments/dpl_fixture_1"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/api/distillery_data/fixture-distillery-one/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "dt": "2026-01-01", "slug": "fixture-distillery-one", "name": "Fixture Distillery One", "winning_bid_max": 10123.8, "winning_bid_min": 4.2, "winning_bid_mean": 326.76, "trading_volume": 415964.3, "lots_count": 1273 },
+      { "dt": "2025-12-01", "slug": "fixture-distillery-one", "name": "Fixture Distillery One", "winning_bid_max": 11320.6, "winning_bid_min": 4.3, "winning_bid_mean": 274.68, "trading_volume": 327415.23, "lots_count": 1192 }
+    ]
+  }
+}

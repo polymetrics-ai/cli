@@ -2,12 +2,13 @@
   "api": "Guardian Open Platform Content API (https://open-platform.theguardian.com/documentation/)",
   "docs": "https://open-platform.theguardian.com/documentation/",
   "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the single legacy-parity read stream (search) only; the full Guardian Content API surface (single-item retrieval, tags, sections, editions) is out of scope until Pass B",
+  "scope": "Pass B full-surface expansion, re-confirmed against the live documentation markdown sources (https://open-platform.theguardian.com/documentation/md/{content_search,tag,section,edition,item}.md, fetched 2026-07-03): the Guardian Open Platform Content API publishes exactly 5 documented endpoint shapes (content search, tags, sections, editions, single item), all read-only, all covered by streams below. There is no write/mutation capability of any kind (the Open Platform is a public read-only content syndication API; write access is not offered to any API tier) and no other documented resource beyond these 5 shapes.",
   "endpoints": [
     { "method": "GET", "path": "/search", "covered_by": { "stream": "search" } },
-    { "method": "GET", "path": "/{content-id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented single-item retrieval; Pass B capability expansion" } },
-    { "method": "GET", "path": "/tags", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/sections", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/editions", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/sections", "covered_by": { "stream": "sections" } },
+    { "method": "GET", "path": "/editions", "covered_by": { "stream": "editions" } },
+    { "method": "GET", "path": "/{content-id}", "covered_by": { "stream": "content" } },
+    { "method": "GET", "path": "/content/{content-id}/next", "excluded": { "category": "duplicate_of", "reason": "deep-pagination continuation endpoint for the same /search record shape, addressed by a preceding item's id rather than page/page-size; the search stream's ordinary page_number pagination already covers the documented result set within the API's supported page-size range, and this endpoint returns the identical record shape search already emits" } }
   ]
 }

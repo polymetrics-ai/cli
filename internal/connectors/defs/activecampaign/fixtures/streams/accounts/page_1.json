@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "id": "1",
+          "name": "Fixture Account",
+          "accountUrl": "https://example.com",
+          "contactCount": "2",
+          "dealCount": "1",
+          "createdTimestamp": "2026-01-01T00:00:00-05:00",
+          "updatedTimestamp": "2026-01-01T00:00:00-05:00"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

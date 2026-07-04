@@ -1,0 +1,18 @@
+{
+  "record": {
+    "email": "fixture1@example.com",
+    "campaign_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/unsubscribe.php",
+    "body": {
+      "email": "fixture1@example.com",
+      "campaign_id": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "code": 101, "message": "OK" }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "location_id": 1,
+    "name": "Fixture Site"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/2/sites"
+  }
+}

@@ -1,14 +1,30 @@
 {
   "api": "ZapSign REST API (https://docs.zapsign.com.br/)",
-  "docs": "https://docs.zapsign.com.br/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (documents, signers, templates); write endpoints (create document, add signer, send reminder, etc.) are out of scope for this pass",
+  "docs": "https://docs.zapsign.com.br/english",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every practical GET list/detail resource is a stream and every dialect-expressible mutation (json/none body, no multipart upload) is a writes.json action; the endpoints that require a multipart file upload are excluded as binary_payload.",
   "endpoints": [
     { "method": "GET", "path": "/docs/", "covered_by": { "stream": "documents" } },
+    { "method": "GET", "path": "/docs/{token}/", "excluded": { "category": "duplicate_of", "reason": "detail-by-token view of a record already fully emitted by the documents list stream; no additional field the list endpoint omits per ZapSign's documented response shape" } },
+    { "method": "POST", "path": "/docs/", "excluded": { "category": "binary_payload", "reason": "create-document-via-upload requires a multipart/form-data file body (the source PDF/DOCX); the dialect's write actions support json/form/none bodies only, no multipart" } },
+    { "method": "POST", "path": "/models/create-doc/", "covered_by": { "write": "create_document_from_template" } },
+    { "method": "POST", "path": "/docs/oneclick/create/", "excluded": { "category": "duplicate_of", "reason": "OneClick document creation is a variant of create-document-via-upload gated on a pre-approved template; still requires the same multipart file body as POST /docs/, excluded for the identical binary_payload reason" } },
+    { "method": "POST", "path": "/docs/{token}/cancel/", "covered_by": { "write": "cancel_document" } },
+    { "method": "DELETE", "path": "/docs/{token}/delete/", "covered_by": { "write": "delete_document" } },
+    { "method": "GET", "path": "/docs/{token}/download/", "excluded": { "category": "binary_payload", "reason": "returns a signed-document PDF binary/redirect, not a JSON record the schema-projection dialect can model" } },
     { "method": "GET", "path": "/signers/", "covered_by": { "stream": "signers" } },
+    { "method": "GET", "path": "/signers/{signer_token}", "excluded": { "category": "duplicate_of", "reason": "detail-by-token view of a record already fully emitted by the signers list stream" } },
+    { "method": "POST", "path": "/docs/{token}/add-signer/", "covered_by": { "write": "add_signer" } },
+    { "method": "POST", "path": "/signers/{signer_token}/", "covered_by": { "write": "update_signer" } },
+    { "method": "DELETE", "path": "/signer/{signer_token}/remove/", "covered_by": { "write": "remove_signer" } },
     { "method": "GET", "path": "/templates/", "covered_by": { "stream": "templates" } },
-    { "method": "POST", "path": "/docs/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "POST", "path": "/docs/{token}/signer/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/docs/{token}/", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/templates/{template_id}/", "excluded": { "category": "duplicate_of", "reason": "detail-by-id view of a record already fully emitted by the templates list stream" } },
+    { "method": "POST", "path": "/templates/create-docx/", "excluded": { "category": "binary_payload", "reason": "create-template-from-DOCX requires a multipart/form-data file body (the source DOCX); no dialect-expressible JSON/form/none equivalent" } },
+    { "method": "PUT", "path": "/templates/{template_id}/", "excluded": { "category": "binary_payload", "reason": "update-template accepts the same multipart DOCX-replacement body as template creation" } },
+    { "method": "GET", "path": "/webhooks/", "covered_by": { "stream": "webhooks" } },
+    { "method": "POST", "path": "/webhooks/", "covered_by": { "write": "create_webhook" } },
+    { "method": "DELETE", "path": "/webhooks/{id}/", "covered_by": { "write": "delete_webhook" } },
+    { "method": "POST", "path": "/partners/create-account/", "excluded": { "category": "requires_elevated_scope", "reason": "reseller/partner-tier account-provisioning endpoint, gated behind a separate ZapSign Partners API credential this bundle's spec.json does not model" } },
+    { "method": "POST", "path": "/partners/update-payment-status/", "excluded": { "category": "requires_elevated_scope", "reason": "reseller/partner-tier billing endpoint, gated behind the same separate Partners API credential" } }
   ]
 }

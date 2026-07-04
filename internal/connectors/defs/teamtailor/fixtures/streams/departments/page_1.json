@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/departments",
+    "query": { "page[number]": "1", "page[size]": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "department_fixture_1", "type": "departments", "attributes": { "name": "Fixture Engineering" } }
+      ]
+    }
+  }
+}

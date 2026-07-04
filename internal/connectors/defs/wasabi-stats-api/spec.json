@@ -17,8 +17,8 @@
     },
     "start_date": {
       "type": "string",
-      "format": "date-time",
-      "description": "RFC3339 lower bound sent verbatim as the 'start_date' query parameter on Check and every stream read. Not a true incremental cursor: legacy sends this as a fixed filter on every request, never advancing it from a persisted state cursor."
+      "format": "date",
+      "description": "Bare YYYY-MM-DD lower bound sent verbatim as the real Wasabi Stats API's 'from' query parameter on Check and every stream read (the real /v1/standalone/utilizations[/bucket] endpoints' own 'from' parameter is a plain date, not RFC3339 -- Wasabi's docs default it to the start of last month when unset). Not a true incremental cursor: this connector sends it as a fixed filter on every request, never advancing it from a persisted state cursor, matching legacy's identical start_date passthrough behavior."
     }
   }
 }

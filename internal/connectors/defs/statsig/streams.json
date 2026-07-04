@@ -6,9 +6,10 @@
       { "mode": "api_key_header", "header": "STATSIG-API-KEY", "value": "{{ secrets.api_key }}" }
     ],
     "pagination": {
-      "type": "offset_limit",
-      "limit_param": "limit",
-      "offset_param": "offset",
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
       "page_size": 100
     },
     "check": { "method": "GET", "path": "/gates", "query": { "limit": "1" } },
@@ -41,6 +42,55 @@
       "path": "/segments",
       "records": { "path": "data" },
       "schema": "schemas/segments.json"
+    },
+    {
+      "name": "target_apps",
+      "path": "/target_app",
+      "records": { "path": "data" },
+      "schema": "schemas/target_apps.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "data" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "keys",
+      "path": "/keys",
+      "records": { "path": "data" },
+      "schema": "schemas/keys.json"
+    },
+    {
+      "name": "holdouts",
+      "path": "/holdouts",
+      "records": { "path": "data" },
+      "schema": "schemas/holdouts.json"
+    },
+    {
+      "name": "layers",
+      "path": "/layers",
+      "records": { "path": "data" },
+      "schema": "schemas/layers.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "audit_logs",
+      "path": "/audit_logs",
+      "records": { "path": "data" },
+      "schema": "schemas/audit_logs.json"
+    },
+    {
+      "name": "environments",
+      "path": "/environments",
+      "records": { "path": "data.environments" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/environments.json"
     }
   ]
 }

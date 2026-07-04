@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "recommendation_views",
+  "type": "object",
+  "x-primary-key": ["token"],
+  "required": ["token"],
+  "properties": {
+    "token": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "workspace_token": { "type": ["string", "null"] },
+    "provider_ids": { "type": ["array", "null"] },
+    "billing_account_ids": { "type": ["array", "null"] },
+    "account_ids": { "type": ["array", "null"] },
+    "regions": { "type": ["array", "null"] },
+    "types": { "type": ["array", "null"] },
+    "tag_key": { "type": ["string", "null"] },
+    "tag_value": { "type": ["string", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "end_date": { "type": ["string", "null"] },
+    "min_savings": { "type": ["number", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

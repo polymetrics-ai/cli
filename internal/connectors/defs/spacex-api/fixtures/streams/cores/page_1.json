@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/cores" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "core_fixture_1",
+        "serial": "B1051",
+        "status": "active",
+        "block": 5,
+        "reuse_count": 3,
+        "rtls_attempts": 1,
+        "rtls_landings": 1,
+        "asds_attempts": 3,
+        "asds_landings": 3,
+        "last_update": "Fixture core record for conformance testing.",
+        "launches": ["launch_fixture_1"]
+      },
+      {
+        "id": "core_fixture_2",
+        "serial": "B1052",
+        "status": "expended",
+        "block": 5,
+        "reuse_count": 0,
+        "rtls_attempts": 0,
+        "rtls_landings": 0,
+        "asds_attempts": 0,
+        "asds_landings": 0,
+        "last_update": "Fixture core record for conformance testing.",
+        "launches": ["launch_fixture_2"]
+      }
+    ]
+  }
+}

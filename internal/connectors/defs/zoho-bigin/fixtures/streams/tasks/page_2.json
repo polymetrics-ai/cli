@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/Tasks", "query": { "page": "2", "per_page": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "task_fixture_3", "Subject": "Fixture Task Three", "Status": "In Progress", "Priority": "Medium", "Due_Date": "2026-01-03" }
+      ],
+      "info": { "page": 2, "per_page": 200, "count": 1, "more_records": false }
+    }
+  }
+}

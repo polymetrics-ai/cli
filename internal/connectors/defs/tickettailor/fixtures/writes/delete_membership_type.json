@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "mt_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/membership_types/mt_fixture_1"
+  }
+}

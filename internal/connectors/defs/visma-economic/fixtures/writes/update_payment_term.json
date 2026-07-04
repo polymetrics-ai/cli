@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": 2,
+    "name": "Net 21",
+    "paymentTermsType": "netCash",
+    "duration": 21
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/payment-terms/2"
+  }
+}

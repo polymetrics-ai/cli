@@ -1,14 +1,14 @@
 {
   "name": "thinkific",
   "display_name": "Thinkific",
-  "description": "Reads Thinkific courses through the Thinkific public API.",
+  "description": "Reads and writes Thinkific courses, users, enrollments, products, orders, and site administration resources through the Thinkific Admin API.",
   "integration_type": "api",
   "docs_url": "https://developers.thinkific.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Thinkific API read of course data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Thinkific Admin API read of course, user, enrollment, order, and site-administration data",
+    "write": "external Thinkific Admin API mutations covering user/enrollment/coupon/promotion/group/instructor/collection/course-review lifecycle and site-script injection; site_scripts writes inject arbitrary HTML/JS site-wide and are marked destructive/confirm-gated, delete_user is destructive/confirm-gated",
+    "approval": "required for site_scripts create/update and delete_user (confirm: destructive); other writes are low-risk additive/idempotent mutations, no approval required"
   }
 }

@@ -1,8 +1,10 @@
 # Overview
 
-Smartwaiver is a wave2 fan-out declarative-HTTP migration. It reads Smartwaiver waivers,
-checkins, templates, published keys, and user info through the Smartwaiver v4 API
-(`GET https://api.smartwaiver.com/v4/...`). This bundle migrates
+Smartwaiver is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full
+documented v4 API surface. It reads Smartwaiver waivers, checkins, templates, published keys,
+user info, and account settings, and sends webhook-configuration, webhook-resend, SMS, and
+waiver-prefill mutations through the Smartwaiver v4 API (`https://api.smartwaiver.com/v4/...`,
+documented at `https://api.smartwaiver.com/docs/v4/`). This bundle migrates
 `internal/connectors/smartwaiver` (the hand-written connector); the legacy package stays
 registered and unchanged until wave6's registry flip.
 
@@ -15,12 +17,15 @@ for tests/proxies, matching legacy's own `validatedBaseURL` default.
 
 ## Streams notes
 
-All five streams hit their own `GET` endpoint: `waivers` (`/v4/waivers`, records at
+Six streams hit their own `GET` endpoint: `waivers` (`/v4/waivers`, records at
 `waivers.waivers`), `checkins` (`/v4/checkins`, records at `checkins.checkins`), `templates`
 (`/v4/templates`, records at `templates.templates`), `published_keys` (`/v4/keys/published`,
-records at `published_keys.keys`), and `user_info` (`/v4/info`, a single JSON object with no
-records-array wrapper — `records.path: "."` returns the whole body as one record), matching
-legacy's `streamEndpoints` map's nested/flat `recordsPath` shapes exactly. Every stream declares
+records at `published_keys.keys`), `user_info` (`/v4/info`, a single JSON object with no
+records-array wrapper — `records.path: "."` returns the whole body as one record), and the
+Pass-B-added `settings` (`/v4/settings`, also a single whole-object record via `records.path:
+"."`, exposing the account's console `staticExpiration`/`rollingExpiration` waiver-expiry
+policy) — matching legacy's `streamEndpoints` map's nested/flat `recordsPath` shapes exactly for
+the original five, plus the same flat-object shape for the new one. Every stream declares
 `projection: "passthrough"`: legacy's `readRecords` emits each decoded record verbatim
 (`emit(connectors.Record(rec))`, `smartwaiver.go:122`, no field-building or `mapRecord` step), so
 this bundle emits every raw field the API returns rather than narrowing to whatever subset
@@ -39,9 +44,36 @@ endpoint), matching legacy's `Check` (`smartwaiver.go:47`) exactly.
 
 ## Write actions & risks
 
-None. Smartwaiver's legacy connector is read-only (`Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+Legacy's own connector is read-only, but Pass B full-surface expansion adds every
+dialect-expressible mutation the real Smartwaiver v4 API documents (`api_surface.json`), each
+requiring approval:
+
+- **`set_webhook_config`** (`PUT /v4/webhooks/configure`, `update`): sets the account's webhook
+  delivery endpoint and email-validation-required policy (optionally targeting a specific
+  `webhookNumber` or creating a new one with `create: true`, up to 3 webhooks per account). Risk:
+  changes where the account's near-real-time waiver-signed notifications are delivered — an
+  operator-facing integration change, not a data mutation, but still capable of silently
+  redirecting/losing webhook traffic if misconfigured.
+- **`resend_webhook`** (`PUT /v4/webhooks/resend/{{ record.waiver_id }}`, `custom`, no body):
+  re-triggers the new-waiver webhook for a given waiver ID. Smartwaiver documents this as a
+  testing aid only and heavily rate-limits it (2 requests/minute, independent of the account's
+  normal 100 rpm budget).
+- **`send_sms`** (`POST /v4/sms`, `create`): sends a real outbound SMS containing a
+  waiver-signing link to `number` for `templateId`. Smartwaiver rate-limits this per day for
+  anti-spam/abuse prevention. Risk: an external, billable, real-world side effect (an actual text
+  message to a phone number) — never dry-run this against a real number without approval.
+  `number` is typed `string` in `record_schema` (not `integer`) since a phone number is not
+  numeric data (leading `+`/formatting would be lost); Smartwaiver's own docs example happens to
+  show a bare `0` placeholder, not a real shape constraint.
+- **`prefill_template`** (`POST /v4/templates/{{ record.template_id }}/prefill`, `create`):
+  generates a prefilled waiver-signing link (`participants[]`, `guardian`, address fields,
+  `customWaiverFields`) — every top-level field in Smartwaiver's documented request body maps
+  directly to a body field via the default JSON body-construction rule (§3), including the
+  nested `participants` array and `guardian`/`customFields`/`customWaiverFields` objects, since
+  `body_type: json` passes a record's non-path field values through as-is (arrays/objects
+  survive; the dialect's body builder is not restricted to scalar fields). Risk: the request body
+  and the returned prefilled-waiver URL both carry real participant PII (name, DOB, address,
+  phone, custom-field answers) — treat both the write payload and its response as sensitive.
 
 ## Known limits
 

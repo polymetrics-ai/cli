@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "list_fixture_1",
+    "description": "Updated by fixture write test"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/sites/fixture-site/lists/list_fixture_1",
+    "body": {
+      "description": "Updated by fixture write test"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "list_fixture_1", "description": "Updated by fixture write test" }
+  }
+}

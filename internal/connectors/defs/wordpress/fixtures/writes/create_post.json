@@ -1,0 +1,11 @@
+{
+  "record": {
+    "title": "Fixture Post",
+    "content": "Fixture post body.",
+    "status": "draft"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/posts"
+  }
+}

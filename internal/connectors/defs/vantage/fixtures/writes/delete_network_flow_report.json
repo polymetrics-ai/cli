@@ -1,0 +1,9 @@
+{
+  "record": {
+    "network_flow_report_token": "nfr_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/network_flow_reports/nfr_fixture_1"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/skills/levels",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "Beginner",
+        "isEnabled": true,
+        "value": 1024
+      },
+      {
+        "name": "Intermediate",
+        "isEnabled": true,
+        "value": 2048
+      },
+      {
+        "name": "Advanced",
+        "isEnabled": true,
+        "value": 4096
+      }
+    ]
+  }
+}

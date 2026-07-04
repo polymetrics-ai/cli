@@ -24,6 +24,26 @@
       "type": "string",
       "description": "Optional start_date query parameter forwarded to the search stream when set."
     },
+    "regions": {
+      "type": "string",
+      "description": "Optional comma-separated region codes (e.g. US,CA) forwarded to the titles, sources, releases, and title_sources streams when set."
+    },
+    "types": {
+      "type": "string",
+      "description": "Optional comma-separated title types (e.g. movie,tv_series) forwarded to the titles and changes new_titles streams when set."
+    },
+    "title_ids": {
+      "type": "string",
+      "description": "Comma-, whitespace-, or semicolon-separated Watchmode title IDs to fan out over for the title_details/title_sources/title_seasons/title_episodes/title_cast_crew streams (one request per id). Required for those 5 streams only; other streams do not reference it."
+    },
+    "person_ids": {
+      "type": "string",
+      "description": "Comma-, whitespace-, or semicolon-separated Watchmode person IDs to fan out over for the person_details stream (one request per id). Required for that stream only."
+    },
+    "page_size": {
+      "type": "string",
+      "description": "Optional limit query parameter forwarded to the titles and changes-feed streams (list-titles/changes endpoints' page size). Watchmode defaults these to 250 server-side when unset."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

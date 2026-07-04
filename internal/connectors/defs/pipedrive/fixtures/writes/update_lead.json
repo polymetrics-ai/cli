@@ -1,0 +1,9 @@
+{
+  "record": { "id": "adf21880-e0e0-11ea-9e0c-a5b6f0d7d9f0", "title": "Fixture Lead Updated" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/leads/adf21880-e0e0-11ea-9e0c-a5b6f0d7d9f0",
+    "body": { "title": "Fixture Lead Updated" }
+  },
+  "response": { "status": 200, "body": { "success": true, "data": { "id": "adf21880-e0e0-11ea-9e0c-a5b6f0d7d9f0", "title": "Fixture Lead Updated" } } }
+}

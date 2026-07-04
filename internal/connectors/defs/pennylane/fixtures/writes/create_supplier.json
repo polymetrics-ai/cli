@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture Supplier" },
+  "expect": {
+    "method": "POST",
+    "path": "/suppliers"
+  }
+}

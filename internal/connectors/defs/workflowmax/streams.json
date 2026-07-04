@@ -5,17 +5,20 @@
     "auth": [
       { "mode": "bearer", "token": "{{ secrets.access_token }}" }
     ],
+    "headers": {
+      "account-id": "{{ config.account_id }}"
+    },
     "pagination": {
       "type": "page_number",
       "page_param": "page",
-      "size_param": "page_size",
+      "size_param": "pageSize",
       "start_page": 1,
       "page_size": 100
     },
     "check": {
       "method": "GET",
-      "path": "/jobs",
-      "query": { "page_size": "1" }
+      "path": "/v2/jobs",
+      "query": { "pageSize": "1" }
     },
     "error_map": [
       { "status": 401, "hint": "workflowmax access_token is missing or invalid; re-run pm credentials add workflowmax" },
@@ -26,24 +29,23 @@
   "streams": [
     {
       "name": "jobs",
-      "path": "/jobs",
+      "path": "/v2/jobs",
+      "query": {
+        "updatedSince": { "template": "{{ config.updated_since }}", "omit_when_absent": true }
+      },
       "records": { "path": "data" },
       "projection": "passthrough",
       "schema": "schemas/jobs.json"
     },
     {
       "name": "clients",
-      "path": "/clients",
+      "path": "/v2/clients",
+      "query": {
+        "updatedSince": { "template": "{{ config.updated_since }}", "omit_when_absent": true }
+      },
       "records": { "path": "data" },
       "projection": "passthrough",
       "schema": "schemas/clients.json"
-    },
-    {
-      "name": "contacts",
-      "path": "/contacts",
-      "records": { "path": "data" },
-      "projection": "passthrough",
-      "schema": "schemas/contacts.json"
     }
   ]
 }

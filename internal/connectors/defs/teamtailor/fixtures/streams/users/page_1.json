@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": { "page[number]": "1", "page[size]": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "user_fixture_1", "type": "users", "attributes": { "name": "Fixture User", "email": "fixture-user@example.com", "created-at": "2026-01-02T00:00:00Z" } }
+      ]
+    }
+  }
+}

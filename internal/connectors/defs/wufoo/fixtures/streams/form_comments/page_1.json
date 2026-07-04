@@ -1,0 +1,192 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/comments.json",
+    "query": {
+      "pageStart": "0",
+      "pageSize": "25"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Comments": [
+        {
+          "CommentId": "comment_fixture_1",
+          "CommentedBy": "user1",
+          "DateCreated": "2026-01-01 00:00:00",
+          "EntryId": "entry_fixture_1",
+          "Text": "Fixture comment 1"
+        },
+        {
+          "CommentId": "comment_fixture_2",
+          "CommentedBy": "user2",
+          "DateCreated": "2026-01-02 00:00:00",
+          "EntryId": "entry_fixture_2",
+          "Text": "Fixture comment 2"
+        },
+        {
+          "CommentId": "comment_fixture_3",
+          "CommentedBy": "user3",
+          "DateCreated": "2026-01-03 00:00:00",
+          "EntryId": "entry_fixture_3",
+          "Text": "Fixture comment 3"
+        },
+        {
+          "CommentId": "comment_fixture_4",
+          "CommentedBy": "user4",
+          "DateCreated": "2026-01-04 00:00:00",
+          "EntryId": "entry_fixture_4",
+          "Text": "Fixture comment 4"
+        },
+        {
+          "CommentId": "comment_fixture_5",
+          "CommentedBy": "user5",
+          "DateCreated": "2026-01-05 00:00:00",
+          "EntryId": "entry_fixture_5",
+          "Text": "Fixture comment 5"
+        },
+        {
+          "CommentId": "comment_fixture_6",
+          "CommentedBy": "user6",
+          "DateCreated": "2026-01-06 00:00:00",
+          "EntryId": "entry_fixture_6",
+          "Text": "Fixture comment 6"
+        },
+        {
+          "CommentId": "comment_fixture_7",
+          "CommentedBy": "user7",
+          "DateCreated": "2026-01-07 00:00:00",
+          "EntryId": "entry_fixture_7",
+          "Text": "Fixture comment 7"
+        },
+        {
+          "CommentId": "comment_fixture_8",
+          "CommentedBy": "user8",
+          "DateCreated": "2026-01-08 00:00:00",
+          "EntryId": "entry_fixture_8",
+          "Text": "Fixture comment 8"
+        },
+        {
+          "CommentId": "comment_fixture_9",
+          "CommentedBy": "user9",
+          "DateCreated": "2026-01-09 00:00:00",
+          "EntryId": "entry_fixture_9",
+          "Text": "Fixture comment 9"
+        },
+        {
+          "CommentId": "comment_fixture_10",
+          "CommentedBy": "user10",
+          "DateCreated": "2026-01-10 00:00:00",
+          "EntryId": "entry_fixture_10",
+          "Text": "Fixture comment 10"
+        },
+        {
+          "CommentId": "comment_fixture_11",
+          "CommentedBy": "user11",
+          "DateCreated": "2026-01-11 00:00:00",
+          "EntryId": "entry_fixture_11",
+          "Text": "Fixture comment 11"
+        },
+        {
+          "CommentId": "comment_fixture_12",
+          "CommentedBy": "user12",
+          "DateCreated": "2026-01-12 00:00:00",
+          "EntryId": "entry_fixture_12",
+          "Text": "Fixture comment 12"
+        },
+        {
+          "CommentId": "comment_fixture_13",
+          "CommentedBy": "user13",
+          "DateCreated": "2026-01-13 00:00:00",
+          "EntryId": "entry_fixture_13",
+          "Text": "Fixture comment 13"
+        },
+        {
+          "CommentId": "comment_fixture_14",
+          "CommentedBy": "user14",
+          "DateCreated": "2026-01-14 00:00:00",
+          "EntryId": "entry_fixture_14",
+          "Text": "Fixture comment 14"
+        },
+        {
+          "CommentId": "comment_fixture_15",
+          "CommentedBy": "user15",
+          "DateCreated": "2026-01-15 00:00:00",
+          "EntryId": "entry_fixture_15",
+          "Text": "Fixture comment 15"
+        },
+        {
+          "CommentId": "comment_fixture_16",
+          "CommentedBy": "user16",
+          "DateCreated": "2026-01-16 00:00:00",
+          "EntryId": "entry_fixture_16",
+          "Text": "Fixture comment 16"
+        },
+        {
+          "CommentId": "comment_fixture_17",
+          "CommentedBy": "user17",
+          "DateCreated": "2026-01-17 00:00:00",
+          "EntryId": "entry_fixture_17",
+          "Text": "Fixture comment 17"
+        },
+        {
+          "CommentId": "comment_fixture_18",
+          "CommentedBy": "user18",
+          "DateCreated": "2026-01-18 00:00:00",
+          "EntryId": "entry_fixture_18",
+          "Text": "Fixture comment 18"
+        },
+        {
+          "CommentId": "comment_fixture_19",
+          "CommentedBy": "user19",
+          "DateCreated": "2026-01-19 00:00:00",
+          "EntryId": "entry_fixture_19",
+          "Text": "Fixture comment 19"
+        },
+        {
+          "CommentId": "comment_fixture_20",
+          "CommentedBy": "user20",
+          "DateCreated": "2026-01-20 00:00:00",
+          "EntryId": "entry_fixture_20",
+          "Text": "Fixture comment 20"
+        },
+        {
+          "CommentId": "comment_fixture_21",
+          "CommentedBy": "user21",
+          "DateCreated": "2026-01-21 00:00:00",
+          "EntryId": "entry_fixture_21",
+          "Text": "Fixture comment 21"
+        },
+        {
+          "CommentId": "comment_fixture_22",
+          "CommentedBy": "user22",
+          "DateCreated": "2026-01-22 00:00:00",
+          "EntryId": "entry_fixture_22",
+          "Text": "Fixture comment 22"
+        },
+        {
+          "CommentId": "comment_fixture_23",
+          "CommentedBy": "user23",
+          "DateCreated": "2026-01-23 00:00:00",
+          "EntryId": "entry_fixture_23",
+          "Text": "Fixture comment 23"
+        },
+        {
+          "CommentId": "comment_fixture_24",
+          "CommentedBy": "user24",
+          "DateCreated": "2026-01-24 00:00:00",
+          "EntryId": "entry_fixture_24",
+          "Text": "Fixture comment 24"
+        },
+        {
+          "CommentId": "comment_fixture_25",
+          "CommentedBy": "user25",
+          "DateCreated": "2026-01-25 00:00:00",
+          "EntryId": "entry_fixture_25",
+          "Text": "Fixture comment 25"
+        }
+      ]
+    }
+  }
+}

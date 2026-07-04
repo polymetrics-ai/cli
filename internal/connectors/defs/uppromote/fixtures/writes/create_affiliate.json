@@ -1,0 +1,22 @@
+{
+  "record": {
+    "email": "fixture-new-affiliate@example.com",
+    "first_name": "Fixture",
+    "last_name": "Affiliate",
+    "program_id": 46
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/affiliates",
+    "body": {
+      "email": "fixture-new-affiliate@example.com",
+      "first_name": "Fixture",
+      "last_name": "Affiliate",
+      "program_id": 46
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "id": 1970999, "email": "fixture-new-affiliate@example.com" } }
+  }
+}

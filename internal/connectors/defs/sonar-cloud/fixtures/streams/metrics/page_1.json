@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/metrics/search",
+    "query": {
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "p": 1,
+      "ps": 100,
+      "metrics": [
+        {
+          "id": "1",
+          "key": "bugs",
+          "name": "Bugs",
+          "description": "Number of bugs",
+          "domain": "Reliability",
+          "type": "INT",
+          "direction": -1,
+          "qualitative": true,
+          "hidden": false,
+          "custom": false
+        }
+      ]
+    }
+  }
+}

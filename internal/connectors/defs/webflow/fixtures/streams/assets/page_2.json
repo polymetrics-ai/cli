@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/assets",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "assets": [
+        {
+          "id": "asset_fixture_101",
+          "originalFileName": "fixture-101.png",
+          "displayName": "fixture-101.png",
+          "contentType": "image/png",
+          "size": 1024,
+          "siteId": "synthetic-conformance-value",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "hostedUrl": "https://example.test/assets/fixture-101.png",
+          "altText": null
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 100,
+        "total": 101
+      }
+    }
+  }
+}

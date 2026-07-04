@@ -1,14 +1,14 @@
 {
   "name": "sharetribe",
   "display_name": "Sharetribe",
-  "description": "Reads Sharetribe listings, users, transactions, and events through the Sharetribe Integration API. Read-only.",
+  "description": "Reads and writes Sharetribe listings, users, transactions, availability, stock, and marketplace data through the Sharetribe Integration API.",
   "integration_type": "api",
-  "docs_url": "https://www.sharetribe.com/api-reference/",
+  "docs_url": "https://www.sharetribe.com/api-reference/integration.html",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Sharetribe Integration API read of listing, user, transaction, and event data",
-    "approval": "none; read-only, no reverse-ETL writes"
+    "read": "external Sharetribe Integration API read of listing, user, transaction, event, marketplace, file, and file-attachment data",
+    "write": "creates/updates/closes/opens/approves listings, approves/updates users and their permissions, transitions transactions (including real payment/payout process actions), manages availability exceptions and listing stock",
+    "approval": "none for listing/user-profile/stock/availability-exception mutations (reversible, low-risk marketplace-operator actions); review transition_transaction and update_user_permissions before enabling in a caller with untrusted input, since transitions can trigger real payment capture/payout and permission changes affect account access"
   }
 }

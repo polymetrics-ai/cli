@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/datasets/cases/records",
+    "query": { "limit": "1000" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "limit": 1000,
+      "data": [
+        {
+          "recordId": "ENUM_00173",
+          "values": { "id": "ENUM_00173", "label": "Fixture Case", "formids": "my_survey" },
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

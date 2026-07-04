@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "name": "update_campaign",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ad_accounts/{{ record.ad_account_id }}/campaigns/{{ record.id }}",
+      "path_fields": ["ad_account_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ad_account_id", "id"],
+        "minProperties": 3,
+        "properties": {
+          "ad_account_id": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "purchase_order": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["UNSET", "ACTIVE", "PAUSED", "ARCHIVED", "AGENT_CONTROLLED", "ACTIVE_RESTRICTED", "PENDING_ADVERTISER_REVIEW", "UNRECOGNIZED"]
+          }
+        }
+      },
+      "risk": "mutates a live campaign's name, purchase-order reference, or status; setting status to PAUSED/ARCHIVED stops that campaign's ad delivery and spend, approval required"
+    }
+  ]
+}

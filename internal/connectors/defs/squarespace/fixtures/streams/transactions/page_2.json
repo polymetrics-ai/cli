@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/commerce/transactions", "query": { "cursor": "fixture-txn-cursor-2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "documents": [
+        {
+          "id": "txn_fixture_2",
+          "salesOrderId": "order_fixture_2",
+          "customerEmail": "fixture2@example.com",
+          "createdOn": "2026-01-01T00:00:01Z",
+          "modifiedOn": "2026-01-01T00:00:01Z",
+          "voided": false
+        }
+      ],
+      "pagination": { "nextPageCursor": null, "hasNextPage": false }
+    }
+  }
+}

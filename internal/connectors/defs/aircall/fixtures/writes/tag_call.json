@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 6001,
+    "tag_ids": [4001]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/calls/6001/tags",
+    "body": {
+      "tag_ids": [4001]
+    }
+  }
+}

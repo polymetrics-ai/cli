@@ -48,6 +48,17 @@
         "skip_dynamic": true,
         "reason": "StreamHook-handled (the real response is a top-level array-of-arrays -- header row of caller-driven field names, then data rows -- with no fixed records/schema shape to declaratively project); hook-covered, proven live by internal/connectors/hooks/us-census/hooks_test.go. This stream's declarative path/records/schema fields are an inert shadow only exercised when Hooks is nil (never in production dispatch, which always routes through the StreamHook)."
       }
+    },
+    {
+      "name": "datasets",
+      "path": "data.json",
+      "records": {
+        "path": "dataset"
+      },
+      "computed_fields": {
+        "dataset_path": "{{ record.c_dataset | join:/ }}"
+      },
+      "schema": "schemas/datasets.json"
     }
   ]
 }

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "idsupplier": 501,
+    "idwarehouse": 501,
+    "remarks": "Fixture purchase order",
+    "products": [{ "idproduct": 101, "price": 9.99, "amount": 10 }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchaseorders",
+    "body": {
+      "idsupplier": 501,
+      "idwarehouse": 501,
+      "remarks": "Fixture purchase order",
+      "products": [{ "idproduct": 101, "price": 9.99, "amount": 10 }]
+    }
+  },
+  "response": { "status": 200, "body": { "idpurchaseorder": 701, "status": "concept" } }
+}

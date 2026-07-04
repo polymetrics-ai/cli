@@ -1,14 +1,14 @@
 {
   "name": "tavus",
   "display_name": "Tavus",
-  "description": "Reads Tavus replicas through the Tavus API. Read-only.",
+  "description": "Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objectives, documents, pronunciation dictionaries, voices, and skills, and writes approved video/conversation/PAL/guardrail/objective/document/pronunciation-dictionary create-delete mutations through the Tavus API.",
   "integration_type": "api",
   "docs_url": "https://docs.tavus.io/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Tavus API read of replica data",
-    "approval": "none; read-only"
+    "read": "external Tavus API read of face, video, conversation, PAL, guardrail, objective, document, pronunciation-dictionary, voice, and skill data",
+    "write": "external Tavus API mutation (create/delete videos, conversations, PALs, guardrails, objectives, documents, pronunciation dictionaries; end conversations); create_video/create_conversation consume billed generation/conversational minutes",
+    "approval": "reverse ETL plan approval required before writes"
   }
 }

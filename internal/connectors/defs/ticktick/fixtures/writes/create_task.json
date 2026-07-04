@@ -1,0 +1,29 @@
+{
+  "record": {
+    "title": "Fixture task title",
+    "projectId": "proj_fixture_1",
+    "content": "Fixture task content",
+    "priority": 3
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/task",
+    "body": {
+      "title": "Fixture task title",
+      "projectId": "proj_fixture_1",
+      "content": "Fixture task content",
+      "priority": 3
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "task_fixture_created",
+      "projectId": "proj_fixture_1",
+      "title": "Fixture task title",
+      "content": "Fixture task content",
+      "priority": 3,
+      "status": 0
+    }
+  }
+}

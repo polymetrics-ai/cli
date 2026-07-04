@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/time_zones"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "America/New_York",
+          "display_name": "Eastern Time",
+          "abbreviation": "EST",
+          "utc_offset": -18000,
+          "dst": false
+        },
+        {
+          "name": "America/Los_Angeles",
+          "display_name": "Pacific Time",
+          "abbreviation": "PST",
+          "utc_offset": -28800,
+          "dst": false
+        }
+      ]
+    }
+  }
+}

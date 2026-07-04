@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "1",
+    "properties": [
+      { "type": "SYSTEM", "name": "first_name", "value": "Fixture Renamed" }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/edit-properties"
+  }
+}

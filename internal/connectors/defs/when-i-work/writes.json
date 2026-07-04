@@ -1,0 +1,514 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "role": { "type": "integer" },
+          "employee_code": { "type": "string" },
+          "hourly_rate": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; creates a workforce-scheduling user account; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "hourly_rate": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a workforce-scheduling user account; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/locations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "is_default": { "type": "boolean" },
+          "max_hours": { "type": "number" },
+          "radius": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_location",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/locations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "max_hours": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_location",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/locations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a schedule location; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_position",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/positions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "sort": { "type": "integer" },
+          "tips_tracking": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_position",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/positions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "sort": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_position",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/positions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a position; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/sites",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["location_id", "name"],
+        "properties": {
+          "location_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "description": { "type": "string" },
+          "address": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_site",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/sites/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "address": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_site",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/sites/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a site; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_block",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/blocks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start_time", "end_time", "location_id"],
+        "properties": {
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "location_id": { "type": "integer" },
+          "position_id": { "type": "integer" },
+          "color": { "type": "string" },
+          "notes": { "type": "string" },
+          "break_time": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_block",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/blocks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_block",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/blocks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a shift template; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_annotation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/annotations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start_date", "end_date", "title"],
+        "properties": {
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" },
+          "title": { "type": "string" },
+          "message": { "type": "string" },
+          "all_locations": { "type": "boolean" },
+          "announcement": { "type": "boolean" },
+          "business_closed": { "type": "boolean" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_annotation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/annotations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "message": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_annotation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/annotations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a schedule annotation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_availability_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/availabilityevents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start_time", "type"],
+        "properties": {
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "type": { "type": "integer", "enum": [1, 2] },
+          "user_id": { "type": "integer" },
+          "all_day": { "type": "boolean" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; writes a user's availability/unavailability preference; approval required"
+    },
+    {
+      "name": "update_availability_event",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/availabilityevents/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_availability_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/availabilityevents/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a user availability event; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_time",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/times",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id", "start_time", "end_time"],
+        "properties": {
+          "user_id": { "type": "integer" },
+          "position_id": { "type": "integer" },
+          "location_id": { "type": "integer" },
+          "site_id": { "type": "integer" },
+          "shift_id": { "type": "integer" },
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a worked-time entry feeding payroll; approval required"
+    },
+    {
+      "name": "update_time",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/2/times/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "notes": { "type": "string" },
+          "is_approved": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; edits a worked-time entry feeding payroll; approval required"
+    },
+    {
+      "name": "delete_time",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/times/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a worked-time entry feeding payroll; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_shift",
+      "kind": "create",
+      "method": "POST",
+      "path": "/2/shifts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start_time", "end_time", "location_id"],
+        "properties": {
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "location_id": { "type": "integer" },
+          "position_id": { "type": "integer" },
+          "site_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "notes": { "type": "string" },
+          "published": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a scheduled shift; approval required"
+    },
+    {
+      "name": "delete_shift",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/2/shifts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a scheduled shift; approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

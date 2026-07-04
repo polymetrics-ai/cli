@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/cost_reports"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "cost_reports": [
+        {
+          "token": "cr_fixture_1",
+          "title": "Fixture Cost Report",
+          "filter": "costs.provider = 'aws'",
+          "workspace_token": "wrkspc_fixture_1",
+          "folder_token": null,
+          "date_interval": "last_7_days",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "self": "https://api.vantage.sh/v2/cost_reports?page=1"
+      }
+    }
+  }
+}

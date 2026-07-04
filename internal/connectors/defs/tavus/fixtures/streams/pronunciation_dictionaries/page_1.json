@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pronunciation-dictionaries",
+    "query": { "page": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "pronunciation_dictionary_id": "pd_fixture_1", "name": "Fixture Brand Terms", "rules_count": 2 }
+      ]
+    }
+  }
+}

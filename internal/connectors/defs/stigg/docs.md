@@ -120,3 +120,52 @@ matching legacy's `Write` returning `connectors.ErrUnsupportedOperation` uncondi
   `baseURL()` helper** (`stigg.go:120-136`): must parse as a URL with an `http`/`https` scheme and a
   non-empty host; both legacy and `hooks/stigg/hooks.go` fail closed identically on a malformed
   override.
+
+### Pass B full-surface research findings (2026-07-03)
+
+Full-surface expansion research was attempted against Stigg's real, live GraphQL schema (not just
+the legacy Go connector's assumed shape). Findings, and why no new streams/writes were added this
+pass:
+
+- **`docs.stigg.io`'s GraphQL API reference and the "exporting data / schema" page are
+  client-side-rendered SPAs** with no crawlable static content (both fetched empty or
+  near-empty via `curl`) — `DOCS_UNREACHABLE`-flavored for automated research, though the site is
+  reachable to a human browser/JS-executing client.
+- **Live GraphQL introspection against `https://api.stigg.io/graphql` requires an authenticated API
+  key** (`{"errors":[{"message":"GraphQL introspection not authorized: use api key for
+  authentication", ...}]}`) — no credential was available to this research pass, and minting one
+  is out of scope for a non-interactive migration agent.
+- **npm registry access was unavailable in this environment** (network-restricted sandbox), so the
+  published `@stigg/js-client-sdk`/server-SDK packages' generated TypeScript types (which would
+  otherwise be an authoritative secondary source for exact field/argument names) could not be
+  inspected either.
+- **Web-search-derived secondary evidence suggests `coupons` (and plausibly `customers`,
+  `products`, `plans`, `subscriptions` too) are real Relay-style paginated GraphQL connections**
+  (`query { coupons(filter: ..., sorting: ..., paging: ...) { edges { node { ...CouponFragment } }
+  } }`), NOT the bare unpaginated array shape
+  (`query { products { id refId displayName status } }`) `hooks/stigg/hooks.go` currently sends and
+  `stigg.go` (legacy) has always sent. This is corroborating evidence for a real, un-filed
+  `ENGINE_GAP`/parity risk in the EXISTING 4 streams (legacy may have always been reading a
+  possibly-paginated/filtered response shape as if it were a flat array — if `products`/`plans`/
+  `customers`/`subscriptions` are actually connections, `data.products` would be an `edges`-wrapped
+  object, not an array, and `connsdk.RecordsAt(resp.Body, "data.products")` would silently return
+  zero records against the live API today). **This was NOT changed or "fixed" this pass**: the
+  evidence is secondary (web-search summaries, not primary schema/introspection access), and
+  guessing at a corrected query shape without authoritative confirmation risks introducing a
+  DIFFERENT, unverified bug in place of a possibly-already-broken-but-parity-locked one. Flagging
+  for a follow-up pass with real Stigg API credentials (to run introspection) or access to the
+  `@stigg/*` npm package's generated types, rather than silently guessing.
+- **No new streams were added** for `coupons`, `addOns`/`addons`, `entitlements`,
+  `promotionalEntitlements`, or any other Stigg resource beyond the original 4, for the same
+  reason: without confirmed exact root-field names, argument shapes, and response-connection
+  structure, a fabricated GraphQL query string is a hard runtime error against the live API, not a
+  soft degradation — worse than declaring the gap and leaving the surface honestly incomplete.
+  `api_surface.json`'s exclusion entries for these resources are `DOCS_UNREACHABLE`-reasoned
+  (`out_of_scope` category, `docs.stigg.io` unreachable to automated research + no introspection
+  credential), not `out_of_scope` in the "we chose not to" sense.
+- **No write actions were added.** Stigg's GraphQL API almost certainly exposes mutations
+  (`provisionCustomer`, `reportUsage`, coupon/subscription mutations per the legacy `api_surface.json`
+  placeholder note), but with the same lack of confirmed exact mutation names/argument shapes, and
+  because `hooks/stigg/hooks.go` would need a `WriteHook` addition (a 2nd hook interface on an
+  existing hook package — permitted within caps per conventions.md §1's Tier-2 table, but only with
+  confirmed real mutation shapes, which this pass could not obtain) — deferred, not implemented.

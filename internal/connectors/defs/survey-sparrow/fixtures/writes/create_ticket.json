@@ -1,0 +1,4 @@
+{
+  "record": { "subject": "Fixture Ticket", "priority": 1, "status": 1 },
+  "expect": { "method": "POST", "path": "/tickets" }
+}

@@ -3,12 +3,14 @@
   "title": "surveys",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
     "name": { "type": ["string", "null"] },
     "created_at": { "type": ["string", "null"], "format": "date-time" },
-    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+    "enabled": { "type": ["boolean", "null"] },
+    "responses": { "type": ["integer", "null"] },
+    "launch": { "type": ["object", "null"] }
   }
 }

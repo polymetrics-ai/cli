@@ -1,0 +1,10 @@
+{
+  "record": {
+    "category_id": "category_fixture_1",
+    "category_name": "Renamed Fixture Category"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/addoncategory/category_fixture_1"
+  }
+}

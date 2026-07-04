@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workflow_rules",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "workflow_id": { "type": ["string", "null"], "description": "Stamped by this stream's fan_out (the workflow this rule belongs to), not a raw API field." },
+    "type": { "type": ["string", "null"] },
+    "position": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "record": { "username": "fixture_user_1", "roleId": "role_fixture_1" },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/fixture_user_1"
+  }
+}

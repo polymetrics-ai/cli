@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/2/sites" },
+  "response": {
+    "status": 200,
+    "body": {
+      "sites": [
+        { "id": 1, "location_id": 1, "name": "Fixture Site One", "address": "420 N 5th St, Fixture City", "is_deleted": false }
+      ]
+    }
+  }
+}

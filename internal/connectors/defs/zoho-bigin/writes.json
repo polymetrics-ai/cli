@@ -1,0 +1,152 @@
+{
+  "actions": [
+    {
+      "name": "create_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.module_name }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "type": "object" },
+            "description": "1-100 raw Zoho Bigin field-API-name-keyed record objects to insert into config.module_name (e.g. [{\"Deal_Name\": \"New Deal\"}] for the default Deals module; Zoho Bigin itself enforces the 100-record-per-call cap and each module's own mandatory-field set server-side, e.g. Deal_Name for Deals/Pipelines, Last_Name for Contacts -- the engine's draft-07 subset has no minItems/maxItems keyword to enforce cardinality here, see docs.md Known limits)."
+          },
+          "trigger": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional workflow trigger allow-list; an empty array suppresses all workflow execution for this insert."
+          }
+        }
+      },
+      "risk": "creates one or more new records in config.module_name; external mutation, approval required"
+    },
+    {
+      "name": "update_record",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/{{ config.module_name }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id"]
+            },
+            "description": "1-100 raw record objects to update in config.module_name, each carrying its existing \"id\" plus any fields to change; fields omitted from a record are left unmodified server-side."
+          },
+          "trigger": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "risk": "overwrites the named fields of one or more existing records in config.module_name; external mutation, approval required"
+    },
+    {
+      "name": "upsert_record",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/{{ config.module_name }}/upsert",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "type": "object" },
+            "description": "1-100 raw record objects to upsert into config.module_name."
+          },
+          "duplicate_check_fields": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Field API names used to detect an existing record; when omitted, Zoho Bigin checks its own system/user-defined unique fields for config.module_name."
+          },
+          "trigger": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "risk": "inserts a new record in config.module_name if no match is found on duplicate_check_fields, otherwise overwrites the matched existing record's submitted fields; external mutation, approval required"
+    },
+    {
+      "name": "delete_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.module_name }}/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "permanently deletes a single record from config.module_name; external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.module_name }}/{{ record.parent_id }}/Notes",
+      "path_fields": ["parent_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["parent_id", "data"],
+        "properties": {
+          "parent_id": { "type": "string", "description": "ID of the config.module_name record this note attaches to." },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Note_Title": { "type": "string" },
+                "Note_Content": { "type": "string" }
+              }
+            },
+            "description": "1-100 note objects to create against parent_id."
+          }
+        }
+      },
+      "risk": "attaches one or more notes to an existing record in config.module_name; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.module_name }}/{{ record.parent_id }}/Notes/{{ record.id }}",
+      "path_fields": ["parent_id", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["parent_id", "id"],
+        "properties": {
+          "parent_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "permanently deletes a single note from a record in config.module_name; external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

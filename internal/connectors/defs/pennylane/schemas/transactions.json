@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "label": { "type": ["string", "null"] },
+    "attachment_required": { "type": ["boolean", "null"] },
+    "date": { "type": ["string", "null"], "format": "date" },
+    "outstanding_balance": { "type": ["string", "null"] }
+  }
+}

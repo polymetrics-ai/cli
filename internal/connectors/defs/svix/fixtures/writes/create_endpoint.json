@@ -1,0 +1,7 @@
+{
+  "record": { "app_id": "app_fixture_1", "url": "https://example.com/webhook" },
+  "expect": {
+    "method": "POST",
+    "path": "/app/app_fixture_1/endpoint"
+  }
+}

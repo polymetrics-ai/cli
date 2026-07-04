@@ -1,0 +1,7 @@
+{
+  "record": { "id": 200, "name": "Updated Fixture Client" },
+  "expect": {
+    "method": "PUT",
+    "path": "/workspaces/synthetic-conformance-value/clients/200"
+  }
+}

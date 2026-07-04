@@ -1,0 +1,7 @@
+{
+  "record": { "id": "1", "name": "Fixture Book Renamed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/addressbooks/1"
+  }
+}

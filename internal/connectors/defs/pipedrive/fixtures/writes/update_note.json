@@ -1,0 +1,9 @@
+{
+  "record": { "id": 501, "content": "Fixture note content updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/notes/501",
+    "body": { "content": "Fixture note content updated" }
+  },
+  "response": { "status": 200, "body": { "success": true, "data": { "id": 501, "content": "Fixture note content updated" } } }
+}

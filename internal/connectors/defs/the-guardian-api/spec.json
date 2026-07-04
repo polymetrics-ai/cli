@@ -18,6 +18,10 @@
     "query": {
       "type": "string",
       "description": "Optional free-text search query (Guardian's q parameter); when unset, the search stream returns Guardian's default (unfiltered) content listing."
+    },
+    "content_id": {
+      "type": "string",
+      "description": "Guardian content item path (e.g. 'world/2024/jan/01/example-article') used by the content stream's single-item lookup; required only when the content stream is selected."
     }
   }
 }

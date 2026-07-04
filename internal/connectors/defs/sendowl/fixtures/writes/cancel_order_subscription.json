@@ -1,0 +1,7 @@
+{
+  "record": { "id": "1" },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/orders/1/cancel_subscription"
+  }
+}

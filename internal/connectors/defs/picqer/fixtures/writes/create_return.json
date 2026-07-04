@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Customer", "emailaddress": "fixture@example.com", "reference": "RET-FIX-1" },
+  "expect": {
+    "method": "POST",
+    "path": "/returns",
+    "body": { "name": "Fixture Customer", "emailaddress": "fixture@example.com", "reference": "RET-FIX-1" }
+  },
+  "response": { "status": 200, "body": { "idreturn": 801, "name": "Fixture Customer" } }
+}

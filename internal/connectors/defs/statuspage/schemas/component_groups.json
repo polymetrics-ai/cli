@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "component_groups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "page_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "position": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

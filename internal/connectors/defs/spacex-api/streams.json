@@ -33,11 +33,32 @@
       "schema": "schemas/capsules.json"
     },
     {
+      "name": "cores",
+      "path": "/cores",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/cores.json"
+    },
+    {
       "name": "crew",
       "path": "/crew",
       "records": { "path": "." },
       "projection": "passthrough",
       "schema": "schemas/crew.json"
+    },
+    {
+      "name": "dragons",
+      "path": "/dragons",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/dragons.json"
+    },
+    {
+      "name": "history",
+      "path": "/history",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/history.json"
     },
     {
       "name": "payloads",

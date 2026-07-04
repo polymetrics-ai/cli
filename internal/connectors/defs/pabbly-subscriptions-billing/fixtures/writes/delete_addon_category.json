@@ -1,0 +1,7 @@
+{
+  "record": { "category_id": "category_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/addoncategory/category_fixture_1"
+  }
+}

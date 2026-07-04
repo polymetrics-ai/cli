@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tracking_domains",
+  "type": "object",
+  "x-primary-key": ["domain"],
+  "required": ["domain"],
+  "properties": {
+    "domain": { "type": "string" },
+    "port": { "type": ["integer", "null"] },
+    "secure": { "type": ["boolean", "null"] },
+    "default": { "type": ["boolean", "null"] },
+    "status": { "type": ["object", "null"] },
+    "subaccount_id": { "type": ["integer", "null"] }
+  }
+}

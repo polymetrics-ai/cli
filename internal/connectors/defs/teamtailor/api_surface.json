@@ -1,13 +1,162 @@
 {
   "api": "Teamtailor API v1 (https://api.teamtailor.com/v1)",
   "docs": "https://docs.teamtailor.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the single legacy-parity read stream (jobs) only; the full Teamtailor JSON:API surface (candidates, applications, departments, roles, stages) is out of scope until Pass B",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: 10 read streams (the wave2 legacy-parity jobs stream plus candidates, job_applications, departments, locations, roles, stages, teams, users, regions) and 9 write actions covering job/candidate/job-application/department/location/team/todo/note create-update mutations. Excluded: the ~90-endpoint remaining JSON:API catalog (activities/answers/audit-events/custom-fields/custom-field-values-options-selects/divisions/forms-form-questions-form-answers/interviews/job-offers/movements/notification-settings/nps-responses/onboardings/partner-results/picked-questions/questions/referrals/reject-reasons/requisitions/requisition-step-verdicts/scorecard-criteria-picks-scores/stage-types/team-memberships/triggers/uploads/company) as out-of-scope breadth-vs-cost triage; every write body is Teamtailor's JSON:API envelope {\"data\": {\"type\", \"attributes\", \"relationships\"}}, modeled by declaring the record itself as that envelope shape (the engine's body_type:json construction sends record fields verbatim, so a record whose one top-level key IS \"data\" produces the exact JSON:API body the live API requires - no engine change needed, same pattern as bitly's nested destination object).",
   "endpoints": [
     { "method": "GET", "path": "/v1/jobs", "covered_by": { "stream": "jobs" } },
-    { "method": "POST", "path": "/v1/jobs", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented writes; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/candidates", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/job-applications", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/departments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+    { "method": "GET", "path": "/v1/jobs/{id}", "excluded": { "category": "duplicate_of", "reason": "single-job detail; identical record shape to the jobs list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/jobs", "covered_by": { "write": "create_job" } },
+    { "method": "PATCH", "path": "/v1/jobs/{id}", "excluded": { "category": "out_of_scope", "reason": "job field update; Pass B breadth-vs-cost triage, create_job already covers job-creation parity" } },
+
+    { "method": "GET", "path": "/v1/candidates", "covered_by": { "stream": "candidates" } },
+    { "method": "GET", "path": "/v1/candidates/{id}", "excluded": { "category": "duplicate_of", "reason": "single-candidate detail; identical record shape to the candidates list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/candidates", "covered_by": { "write": "create_candidate" } },
+    { "method": "PATCH", "path": "/v1/candidates/{id}", "covered_by": { "write": "update_candidate" } },
+
+    { "method": "GET", "path": "/v1/job-applications", "covered_by": { "stream": "job_applications" } },
+    { "method": "GET", "path": "/v1/job-applications/{id}", "excluded": { "category": "duplicate_of", "reason": "single-job-application detail; identical record shape to the job_applications list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/job-applications", "covered_by": { "write": "create_job_application" } },
+    { "method": "PATCH", "path": "/v1/job-applications/{id}", "covered_by": { "write": "update_job_application" } },
+
+    { "method": "GET", "path": "/v1/departments", "covered_by": { "stream": "departments" } },
+    { "method": "GET", "path": "/v1/departments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-department detail; identical record shape to the departments list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/departments", "covered_by": { "write": "create_department" } },
+    { "method": "PATCH", "path": "/v1/departments/{id}", "excluded": { "category": "out_of_scope", "reason": "department field update; Pass B breadth-vs-cost triage, create_department already covers department-creation parity" } },
+    { "method": "DELETE", "path": "/v1/departments/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes a department and unassigns every job/candidate/user associated with it" } },
+
+    { "method": "GET", "path": "/v1/locations", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/v1/locations/{id}", "excluded": { "category": "duplicate_of", "reason": "single-location detail; identical record shape to the locations list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/locations", "covered_by": { "write": "create_location" } },
+    { "method": "PATCH", "path": "/v1/locations/{id}", "excluded": { "category": "out_of_scope", "reason": "location field update; Pass B breadth-vs-cost triage, create_location already covers location-creation parity" } },
+    { "method": "DELETE", "path": "/v1/locations/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes an office/location and unassigns every job associated with it" } },
+
+    { "method": "GET", "path": "/v1/roles", "covered_by": { "stream": "roles" } },
+    { "method": "GET", "path": "/v1/roles/{id}", "excluded": { "category": "duplicate_of", "reason": "single-role detail; identical record shape to the roles list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/roles", "excluded": { "category": "requires_elevated_scope", "reason": "creates a permission-role definition; access-control administration requiring elevated scope beyond ordinary recruiting read/write access" } },
+    { "method": "DELETE", "path": "/v1/roles/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes a permission role and its assignments" } },
+
+    { "method": "GET", "path": "/v1/stages", "covered_by": { "stream": "stages" } },
+    { "method": "GET", "path": "/v1/stages/{id}", "excluded": { "category": "duplicate_of", "reason": "single-stage detail; identical record shape to the stages list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/stages", "excluded": { "category": "out_of_scope", "reason": "creates a new pipeline stage on a job's recruitment process; a job-configuration action rather than a plain object create most operators perform in the Teamtailor UI, Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/stage-types", "excluded": { "category": "out_of_scope", "reason": "static stage-type reference vocabulary (the fixed set of stage categories a stage's own type can be), a reference/vocabulary list rather than primary recruiting data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/stage-types/{id}", "excluded": { "category": "duplicate_of", "reason": "same stage-type reference vocabulary excluded above" } },
+    { "method": "GET", "path": "/v1/triggers", "excluded": { "category": "out_of_scope", "reason": "stage-transition automation-trigger configuration, a job-configuration resource rather than primary recruiting data; Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v1/teams", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/v1/teams/{id}", "excluded": { "category": "duplicate_of", "reason": "single-team detail; identical record shape to the teams list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/teams", "covered_by": { "write": "create_team" } },
+    { "method": "PATCH", "path": "/v1/teams/{id}", "excluded": { "category": "out_of_scope", "reason": "team field update; Pass B breadth-vs-cost triage, create_team already covers team-creation parity" } },
+    { "method": "DELETE", "path": "/v1/teams/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes a hiring team and its membership" } },
+    { "method": "GET", "path": "/v1/team-memberships", "excluded": { "category": "out_of_scope", "reason": "team-to-user join-table sub-resource, not a primary recruiting object; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/team-memberships/{id}", "excluded": { "category": "duplicate_of", "reason": "same team-membership feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/team-memberships", "excluded": { "category": "out_of_scope", "reason": "same team-membership feature surface excluded above" } },
+    { "method": "DELETE", "path": "/v1/team-memberships/{id}", "excluded": { "category": "destructive_admin", "reason": "removes a user's team membership; an access/organization mutation, not primary recruiting data" } },
+
+    { "method": "GET", "path": "/v1/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v1/users/{id}", "excluded": { "category": "duplicate_of", "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/users", "excluded": { "category": "requires_elevated_scope", "reason": "provisions a new user account/seat on the Teamtailor account; account-administration action requiring elevated scope" } },
+    { "method": "PATCH", "path": "/v1/users/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "mutates another user's account profile; account-administration action requiring elevated scope" } },
+    { "method": "DELETE", "path": "/v1/users/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deactivates/removes a user account and seat" } },
+
+    { "method": "GET", "path": "/v1/regions", "covered_by": { "stream": "regions" } },
+    { "method": "GET", "path": "/v1/regions/{id}", "excluded": { "category": "duplicate_of", "reason": "single-region detail; identical record shape to the regions list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v1/regions", "excluded": { "category": "out_of_scope", "reason": "region creation; Pass B breadth-vs-cost triage - regions are a coarse-grained geographic grouping typically configured once via the Teamtailor UI rather than via ongoing API writes" } },
+
+    { "method": "GET", "path": "/v1/todos", "excluded": { "category": "out_of_scope", "reason": "per-user to-do/reminder feed, a personal task-tracking resource rather than primary recruiting data; Pass B breadth-vs-cost triage (the corresponding create_todo WRITE is still covered - creating a reminder is a common recruiter action even though listing the personal feed is not modeled as a stream)" } },
+    { "method": "GET", "path": "/v1/todos/{id}", "excluded": { "category": "duplicate_of", "reason": "same personal to-do feed excluded above" } },
+    { "method": "POST", "path": "/v1/todos", "covered_by": { "write": "create_todo" } },
+    { "method": "PATCH", "path": "/v1/todos/{id}", "excluded": { "category": "out_of_scope", "reason": "to-do field/completion update; Pass B breadth-vs-cost triage, create_todo already covers to-do-creation parity" } },
+    { "method": "DELETE", "path": "/v1/todos/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes a to-do reminder" } },
+
+    { "method": "GET", "path": "/v1/notes", "excluded": { "category": "out_of_scope", "reason": "candidate-comment/review feed; the corresponding create_note WRITE is still covered (adding a recruiter note is a common action) but listing the full note history is deferred, Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/notes/{id}", "excluded": { "category": "duplicate_of", "reason": "same note feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/notes", "covered_by": { "write": "create_note" } },
+    { "method": "PATCH", "path": "/v1/notes/{id}", "excluded": { "category": "out_of_scope", "reason": "note field update; Pass B breadth-vs-cost triage, create_note already covers note-creation parity" } },
+    { "method": "DELETE", "path": "/v1/notes/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes a candidate note/review; may remove recruiter due-diligence records" } },
+
+    { "method": "GET", "path": "/v1/activities/{id}", "excluded": { "category": "non_data_endpoint", "reason": "single-activity audit-log entry, part of an append-only activity feed rather than a primary syncable object; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/audit-events", "excluded": { "category": "non_data_endpoint", "reason": "account audit-log feed, a compliance/security record rather than recruiting business data" } },
+    { "method": "GET", "path": "/v1/audit-events/{id}", "excluded": { "category": "duplicate_of", "reason": "same audit-log feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/answers", "excluded": { "category": "out_of_scope", "reason": "candidate video-question answer metadata (question/answer sub-application), a niche feature-specific object domain; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/answers/{id}", "excluded": { "category": "duplicate_of", "reason": "same answers feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/answers", "excluded": { "category": "out_of_scope", "reason": "same answers feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/answers/{id}/authenticated-video-url", "excluded": { "category": "binary_payload", "reason": "returns a signed video-file URL, not a JSON record stream" } },
+    { "method": "GET", "path": "/v1/questions", "excluded": { "category": "out_of_scope", "reason": "same video-question feature surface as answers, excluded above" } },
+    { "method": "GET", "path": "/v1/picked-questions", "excluded": { "category": "out_of_scope", "reason": "same video-question feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/forms", "excluded": { "category": "out_of_scope", "reason": "application-form builder sub-application, a niche feature-specific object domain; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/forms/{id}", "excluded": { "category": "duplicate_of", "reason": "same forms feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/form-questions", "excluded": { "category": "out_of_scope", "reason": "same forms feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/form-questions/{id}", "excluded": { "category": "duplicate_of", "reason": "same forms feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/form-answers", "excluded": { "category": "out_of_scope", "reason": "same forms feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/form-answers/{id}", "excluded": { "category": "duplicate_of", "reason": "same forms feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/custom-fields", "excluded": { "category": "out_of_scope", "reason": "custom-field DEFINITION metadata (schema of an account's custom fields), a meta-configuration resource rather than recruiting business data itself; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/custom-fields/{id}", "excluded": { "category": "duplicate_of", "reason": "same custom-field-definition feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/custom-fields", "excluded": { "category": "requires_elevated_scope", "reason": "defines a new custom field on the account schema; account-configuration administration requiring elevated scope" } },
+    { "method": "PATCH", "path": "/v1/custom-fields/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "same account-configuration administration excluded above" } },
+    { "method": "GET", "path": "/v1/custom-field-values", "excluded": { "category": "out_of_scope", "reason": "per-record custom-field value assignments; same custom-field feature surface, deferred alongside the field-definition metadata" } },
+    { "method": "GET", "path": "/v1/custom-field-values/{id}", "excluded": { "category": "duplicate_of", "reason": "same custom-field-value feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/custom-field-values", "excluded": { "category": "out_of_scope", "reason": "same custom-field-value feature surface excluded above" } },
+    { "method": "PATCH", "path": "/v1/custom-field-values/{id}", "excluded": { "category": "out_of_scope", "reason": "same custom-field-value feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/custom-field-options", "excluded": { "category": "out_of_scope", "reason": "select-type custom-field option list; same custom-field feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/custom-field-options", "excluded": { "category": "requires_elevated_scope", "reason": "same account-configuration administration excluded above" } },
+    { "method": "PATCH", "path": "/v1/custom-field-options/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "same account-configuration administration excluded above" } },
+    { "method": "POST", "path": "/v1/custom-field-selects", "excluded": { "category": "requires_elevated_scope", "reason": "same account-configuration administration excluded above" } },
+    { "method": "PATCH", "path": "/v1/custom-field-selects/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "same account-configuration administration excluded above" } },
+
+    { "method": "GET", "path": "/v1/divisions", "excluded": { "category": "out_of_scope", "reason": "coarse-grained organizational grouping above departments, a niche account-structure feature not every account uses; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/divisions/{id}", "excluded": { "category": "duplicate_of", "reason": "same divisions feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/interviews", "excluded": { "category": "out_of_scope", "reason": "scheduled-interview calendar sub-resource, a scheduling-integration feature distinct from core recruiting-pipeline data; Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v1/job-offers", "excluded": { "category": "out_of_scope", "reason": "offer-management sub-application (compensation/terms documents), a sensitive financial-document domain; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/job-offers/{id}", "excluded": { "category": "duplicate_of", "reason": "same job-offers feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/movements", "excluded": { "category": "out_of_scope", "reason": "candidate stage-movement history feed (audit trail of pipeline transitions), a derived event log rather than primary object data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/movements/{id}", "excluded": { "category": "duplicate_of", "reason": "same movements feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/notification-settings", "excluded": { "category": "out_of_scope", "reason": "per-user notification-preference configuration, not shared recruiting data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/notification-settings/{id}", "excluded": { "category": "duplicate_of", "reason": "same notification-preference feature surface excluded above" } },
+    { "method": "PATCH", "path": "/v1/notification-settings/{id}", "excluded": { "category": "out_of_scope", "reason": "same notification-preference feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/nps-responses", "excluded": { "category": "out_of_scope", "reason": "candidate Net Promoter Score survey responses, a niche feedback-survey feature; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/nps-response/{id}", "excluded": { "category": "duplicate_of", "reason": "same NPS-survey feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/onboardings", "excluded": { "category": "out_of_scope", "reason": "post-hire onboarding-checklist sub-application, a separate object domain from core recruiting-pipeline data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/onboardings/{id}", "excluded": { "category": "duplicate_of", "reason": "same onboarding feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/partner-results", "excluded": { "category": "out_of_scope", "reason": "third-party sourcing-partner integration result feed, a niche integration-specific object domain; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/partner-results/{id}", "excluded": { "category": "duplicate_of", "reason": "same partner-results feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/referrals", "excluded": { "category": "out_of_scope", "reason": "employee-referral tracking sub-resource, a niche feature-specific object domain; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/referrals/{id}", "excluded": { "category": "duplicate_of", "reason": "same referrals feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/reject-reasons", "excluded": { "category": "out_of_scope", "reason": "static rejection-reason reference vocabulary, a configuration/reference list rather than primary recruiting data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/reject-reasons/{id}", "excluded": { "category": "duplicate_of", "reason": "same reject-reasons feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/reject-reasons", "excluded": { "category": "requires_elevated_scope", "reason": "defines a new account-wide rejection-reason vocabulary entry; account-configuration administration requiring elevated scope" } },
+    { "method": "PATCH", "path": "/v1/reject-reasons/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "same account-configuration administration excluded above" } },
+
+    { "method": "GET", "path": "/v1/requisitions", "excluded": { "category": "out_of_scope", "reason": "headcount-requisition/approval-workflow sub-application, a PMO/finance-adjacent object domain distinct from core recruiting-pipeline data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/requisitions/{id}", "excluded": { "category": "duplicate_of", "reason": "same requisitions feature surface excluded above" } },
+    { "method": "POST", "path": "/v1/requisitions", "excluded": { "category": "out_of_scope", "reason": "same requisitions feature surface excluded above" } },
+    { "method": "PATCH", "path": "/v1/requisitions/{id}", "excluded": { "category": "out_of_scope", "reason": "same requisitions feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/requisition-step-verdicts/{id}", "excluded": { "category": "out_of_scope", "reason": "requisition-approval-step verdict sub-resource; same requisitions feature surface excluded above" } },
+    { "method": "PATCH", "path": "/v1/requisitions/{id}/verdict", "excluded": { "category": "out_of_scope", "reason": "same requisitions feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/scorecard-criteria", "excluded": { "category": "out_of_scope", "reason": "interview-scorecard rubric definitions, a job-configuration feature distinct from core recruiting-pipeline data; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/scorecard-criteria/{id}", "excluded": { "category": "duplicate_of", "reason": "same scorecard feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/scorecard-picks", "excluded": { "category": "out_of_scope", "reason": "same scorecard feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/scorecard-picks/{id}", "excluded": { "category": "duplicate_of", "reason": "same scorecard feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/scorecard-scores", "excluded": { "category": "out_of_scope", "reason": "same scorecard feature surface excluded above" } },
+    { "method": "GET", "path": "/v1/scorecard-scores/{id}", "excluded": { "category": "duplicate_of", "reason": "same scorecard feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/uploads", "excluded": { "category": "binary_payload", "reason": "file-upload metadata whose payload is a binary resume/document, not a syncable JSON record stream" } },
+    { "method": "POST", "path": "/v1/uploads", "excluded": { "category": "binary_payload", "reason": "multipart binary file upload; this dialect's body_type dialect has no multipart shape" } },
+    { "method": "POST", "path": "/v1/files", "excluded": { "category": "binary_payload", "reason": "same binary-upload feature surface excluded above" } },
+
+    { "method": "GET", "path": "/v1/company", "excluded": { "category": "non_data_endpoint", "reason": "the single account-wide company-profile record (career-site branding settings), not a syncable object collection" } },
+    { "method": "PATCH", "path": "/v1/company", "excluded": { "category": "requires_elevated_scope", "reason": "mutates account-wide career-site branding settings; account-configuration administration requiring elevated scope" } }
   ]
 }

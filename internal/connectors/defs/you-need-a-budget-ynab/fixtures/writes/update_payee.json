@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "payee_fixture_1",
+    "payee": {
+      "name": "Fixture Renamed Payee"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/budgets/synthetic-conformance-value/payees/payee_fixture_1",
+    "body": {
+      "payee": {
+        "name": "Fixture Renamed Payee"
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "data": { "payee": { "id": "payee_fixture_1" } } } }
+}

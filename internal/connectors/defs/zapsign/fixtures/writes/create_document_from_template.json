@@ -1,0 +1,22 @@
+{
+  "record": {
+    "template_id": "template_fixture_1",
+    "signers": [{ "name": "Fixture Signer", "email": "fixture1@example.com" }],
+    "folder_path": "/contracts/",
+    "send_automatic_email": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/models/create-doc/",
+    "body": {
+      "template_id": "template_fixture_1",
+      "signers": [{ "name": "Fixture Signer", "email": "fixture1@example.com" }],
+      "folder_path": "/contracts/",
+      "send_automatic_email": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "token": "doc_fixture_created_1", "status": "pending" }
+  }
+}

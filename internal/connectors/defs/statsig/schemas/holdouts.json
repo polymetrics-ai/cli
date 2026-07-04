@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "holdouts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "idType": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "isEnabled": { "type": ["boolean", "null"] },
+    "passPercentage": { "type": ["number", "null"] },
+    "gateIDs": { "type": ["array", "null"], "items": { "type": "string" } },
+    "experimentIDs": { "type": ["array", "null"], "items": { "type": "string" } },
+    "layerIDs": { "type": ["array", "null"], "items": { "type": "string" } },
+    "isGlobal": { "type": ["boolean", "null"] },
+    "team": { "type": ["string", "null"] },
+    "teamID": { "type": ["string", "null"] },
+    "creatorID": { "type": ["string", "null"] },
+    "creatorName": { "type": ["string", "null"] },
+    "creatorEmail": { "type": ["string", "null"] },
+    "createdTime": { "type": ["number", "null"] },
+    "lastModifierID": { "type": ["string", "null"] },
+    "lastModifiedTime": { "type": ["number", "null"] }
+  }
+}

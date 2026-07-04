@@ -15,6 +15,14 @@
       "default": "https://api.webscraper.io/api/v1",
       "description": "Web Scraper Cloud API base URL override for tests or proxies."
     },
+    "sitemap_id_filter": {
+      "type": "string",
+      "description": "Optional sitemap_id query parameter forwarded to the scraping_jobs_list stream, narrowing results to scraping jobs created from a single sitemap. Omitted entirely when unset (all scraping jobs are listed)."
+    },
+    "scraping_job_ids": {
+      "type": "string",
+      "description": "Comma-, whitespace-, or semicolon-separated Web Scraper Cloud scraping job IDs to fan out over for the problematic_urls stream (one request per id). Required for that stream only."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

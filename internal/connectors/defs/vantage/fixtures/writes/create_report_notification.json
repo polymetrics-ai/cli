@@ -1,0 +1,12 @@
+{
+  "record": {
+    "title": "Fixture Notification",
+    "cost_report_token": "cr_fixture_1",
+    "frequency": "weekly",
+    "change": "percentage"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/report_notifications"
+  }
+}

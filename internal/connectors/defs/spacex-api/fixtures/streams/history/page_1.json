@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/history" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "history_fixture_1",
+        "title": "Fixture historical event 1",
+        "event_date_utc": "2026-01-01T00:00:00Z",
+        "event_date_unix": 1767225600,
+        "details": "Fixture SpaceX history event for conformance testing.",
+        "links": { "article": null }
+      },
+      {
+        "id": "history_fixture_2",
+        "title": "Fixture historical event 2",
+        "event_date_utc": "2026-01-02T00:00:00Z",
+        "event_date_unix": 1767312000,
+        "details": "Fixture SpaceX history event for conformance testing.",
+        "links": { "article": null }
+      }
+    ]
+  }
+}

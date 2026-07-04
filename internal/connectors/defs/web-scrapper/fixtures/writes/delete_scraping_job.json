@@ -1,0 +1,11 @@
+{
+  "record": { "id": 500 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/scraping-job/500"
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true, "data": "ok" }
+  }
+}

@@ -7,8 +7,9 @@
     ],
     "check": { "method": "GET", "path": "/v6/deployments" },
     "error_map": [
-      { "status": 401, "hint": "vercel access_token is missing or invalid; re-run pm credentials add vercel" },
+      { "status": 401, "class": "auth_failed", "hint": "vercel access_token is missing or invalid; re-run pm credentials add vercel" },
       { "status": 403, "hint": "vercel account lacks access for this request" },
+      { "status": 422, "class": "invalid_request", "hint": "vercel rejected the request body; check required fields" },
       { "status": 429, "class": "rate_limited", "hint": "vercel rate limit exceeded; the connector will retry with backoff" }
     ]
   },
@@ -17,7 +18,8 @@
       "name": "deployments",
       "path": "/v6/deployments",
       "query": {
-        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "teamId": { "template": "{{ config.team_id }}", "omit_when_absent": true }
       },
       "records": { "path": "deployments" },
       "computed_fields": {
@@ -27,6 +29,44 @@
         "created": "{{ record.created }}"
       },
       "schema": "schemas/deployments.json"
+    },
+    {
+      "name": "projects",
+      "path": "/v10/projects",
+      "pagination": { "type": "cursor", "cursor_param": "until", "token_path": "pagination.next" },
+      "query": {
+        "teamId": { "template": "{{ config.team_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "projects" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "teams",
+      "path": "/v2/teams",
+      "pagination": { "type": "cursor", "cursor_param": "until", "token_path": "pagination.next" },
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "domains",
+      "path": "/v5/domains",
+      "pagination": { "type": "cursor", "cursor_param": "until", "token_path": "pagination.next" },
+      "query": {
+        "teamId": { "template": "{{ config.team_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "domains" },
+      "schema": "schemas/domains.json"
+    },
+    {
+      "name": "project_env_vars",
+      "path": "/v10/projects/{{ fanout.id }}/env",
+      "fan_out": {
+        "ids_from": { "request": { "path": "/v10/projects", "records_path": "projects", "id_field": "id" } },
+        "into": { "path_var": "project_id" },
+        "stamp_field": "project_id"
+      },
+      "records": { "path": "envs" },
+      "schema": "schemas/project_env_vars.json"
     }
   ]
 }

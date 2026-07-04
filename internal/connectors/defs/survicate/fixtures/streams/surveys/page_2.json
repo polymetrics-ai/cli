@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/surveys", "query": { "page": "2", "per_page": "100" } },
-  "response": {
-    "status": 200,
-    "body": { "data": [] }
-  }
-}

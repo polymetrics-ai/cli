@@ -1,0 +1,16 @@
+{
+  "record": {
+    "event": "referral.new"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v2/webhook-subscriptions",
+    "body": {
+      "event": "referral.new"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": {} }
+  }
+}

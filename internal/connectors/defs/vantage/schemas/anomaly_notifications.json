@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "anomaly_notifications",
+  "type": "object",
+  "x-primary-key": ["token"],
+  "required": ["token"],
+  "properties": {
+    "token": { "type": "string" },
+    "cost_report_token": { "type": ["string", "null"] },
+    "threshold": { "type": ["integer", "null"] },
+    "user_tokens": { "type": ["array", "null"] },
+    "recipient_channels": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

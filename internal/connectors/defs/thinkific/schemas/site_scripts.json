@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "site_scripts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "content": { "type": ["string", "null"] },
+    "src": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "location": { "type": ["string", "null"] },
+    "load_method": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

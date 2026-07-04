@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "voucher_codes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id", "voucher_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "code": { "type": ["string", "null"] },
+    "used": { "type": ["boolean", "null"] },
+    "value": { "type": ["integer", "null"] },
+    "expiry": { "type": ["integer", "null"] },
+    "voucher_id": { "type": "string" }
+  }
+}

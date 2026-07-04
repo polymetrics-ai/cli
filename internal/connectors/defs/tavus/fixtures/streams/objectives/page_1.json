@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/objectives",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "objectives_id": "objective_fixture_1", "objective_name": "fixture_ask_new_patient", "objective_prompt": "Ask the patient if they are new.", "confirmation_mode": "auto", "output_variables": ["patient_status"], "modality": "verbal" }
+      ]
+    }
+  }
+}

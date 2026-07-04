@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/collections"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collections": [
+        {
+          "id": "collection_fixture_1",
+          "displayName": "Fixture Collection 1",
+          "slug": "fixture-collection-1"
+        }
+      ]
+    }
+  }
+}

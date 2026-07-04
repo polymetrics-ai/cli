@@ -1,0 +1,16 @@
+{
+  "record": {
+    "transaction_id": "100001",
+    "description": "fixture refund reason",
+    "email": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/merchants/synthetic-conformance-value/reports/transactions/100001/refund",
+    "body": {
+      "description": "fixture refund reason",
+      "email": "fixture1@example.com"
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

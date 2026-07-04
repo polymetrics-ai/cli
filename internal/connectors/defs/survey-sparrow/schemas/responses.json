@@ -8,6 +8,13 @@
   "properties": {
     "id": { "type": "integer" },
     "completed_time": { "type": ["string", "null"], "format": "date-time" },
-    "survey_id": { "type": ["integer", "null"] }
+    "survey_id": { "type": ["integer", "null"] },
+    "contact_id": { "type": ["integer", "null"] },
+    "completed": { "type": ["string", "null"] },
+    "channel_id": { "type": ["integer", "null"] },
+    "language": { "type": ["string", "null"] },
+    "question": { "type": ["string", "null"] },
+    "question_tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "question_id": { "type": ["integer", "null"] }
   }
 }

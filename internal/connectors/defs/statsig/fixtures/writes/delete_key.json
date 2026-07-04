@@ -1,0 +1,4 @@
+{
+  "record": { "key": "fixture_key_placeholder_1" },
+  "expect": { "method": "DELETE", "path": "/keys/fixture_key_placeholder_1" }
+}

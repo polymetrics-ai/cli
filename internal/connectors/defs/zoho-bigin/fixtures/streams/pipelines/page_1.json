@@ -6,7 +6,8 @@
       "data": [
         { "id": "pipeline_fixture_1", "name": "Sales Pipeline", "display_value": "Sales Pipeline" },
         { "id": "pipeline_fixture_2", "name": "Partner Pipeline", "display_value": "Partner Pipeline" }
-      ]
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
     }
   }
 }

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ecommerce_settings",
+  "type": "object",
+  "x-primary-key": ["siteId"],
+  "required": ["siteId"],
+  "properties": {
+    "siteId": { "type": "string" },
+    "createdOn": { "type": ["string", "null"], "format": "date-time" },
+    "defaultCurrency": { "type": ["string", "null"] }
+  }
+}

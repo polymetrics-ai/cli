@@ -1,0 +1,7 @@
+{
+  "record": { "app_id": "app_fixture_1", "eventType": "user.signup", "payload": { "email": "fixture1@example.com" } },
+  "expect": {
+    "method": "POST",
+    "path": "/app/app_fixture_1/msg"
+  }
+}

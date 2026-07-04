@@ -1,15 +1,69 @@
 {
   "request": {
     "method": "GET",
-    "path": "/v1/stats"
+    "path": "/v1/standalone/utilizations/bucket"
   },
   "response": {
     "status": 200,
-    "body": {
-      "data": [
-        { "id": "bucket-fixture-1", "bucket": "fixture-bucket-1", "date": "2026-01-01T00:00:00Z", "storage_bytes": 1024 },
-        { "id": "bucket-fixture-2", "bucket": "fixture-bucket-2", "date": "2026-01-02T00:00:00Z", "storage_bytes": 2048 }
-      ]
-    }
+    "body": [
+      {
+        "BucketUtilizationNum": 6947980,
+        "AcctNum": 101430,
+        "AcctPlanNum": 0,
+        "BucketNum": 1011082,
+        "StartTime": "2026-01-01T00:00:00Z",
+        "EndTime": "2026-01-02T00:00:00Z",
+        "CreateTime": "2026-01-02T00:05:00Z",
+        "NumBillableObjects": 1,
+        "NumBillableDeletedObjects": 0,
+        "RawStorageSizeBytes": 1073741824,
+        "PaddedStorageSizeBytes": 1073741824,
+        "MetadataStorageSizeBytes": 48,
+        "DeletedStorageSizeBytes": 0,
+        "OrphanedStorageSizeBytes": 0,
+        "NumAPICalls": 132,
+        "UploadBytes": 1077661331,
+        "DownloadBytes": 106958,
+        "StorageWroteBytes": 1073741824,
+        "StorageReadBytes": 0,
+        "NumGETCalls": 0,
+        "NumPUTCalls": 0,
+        "NumDELETECalls": 0,
+        "NumLISTCalls": 0,
+        "NumHEADCalls": 0,
+        "DeleteBytes": 0,
+        "Bucket": "fixture-bucket-1",
+        "Region": "us-east-1"
+      },
+      {
+        "BucketUtilizationNum": 6947981,
+        "AcctNum": 101430,
+        "AcctPlanNum": 0,
+        "BucketNum": 1011096,
+        "StartTime": "2026-01-02T00:00:00Z",
+        "EndTime": "2026-01-03T00:00:00Z",
+        "CreateTime": "2026-01-03T00:05:00Z",
+        "NumBillableObjects": 2,
+        "NumBillableDeletedObjects": 0,
+        "RawStorageSizeBytes": 2147483648,
+        "PaddedStorageSizeBytes": 2147483648,
+        "MetadataStorageSizeBytes": 96,
+        "DeletedStorageSizeBytes": 0,
+        "OrphanedStorageSizeBytes": 0,
+        "NumAPICalls": 88,
+        "UploadBytes": 716963101,
+        "DownloadBytes": 76027,
+        "StorageWroteBytes": 714354119,
+        "StorageReadBytes": 0,
+        "NumGETCalls": 0,
+        "NumPUTCalls": 0,
+        "NumDELETECalls": 0,
+        "NumLISTCalls": 0,
+        "NumHEADCalls": 0,
+        "DeleteBytes": 0,
+        "Bucket": "fixture-bucket-2",
+        "Region": "us-west-1"
+      }
+    ]
   }
 }

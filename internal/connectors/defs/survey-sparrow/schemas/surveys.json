@@ -7,6 +7,11 @@
   "properties": {
     "id": { "type": "integer" },
     "name": { "type": ["string", "null"] },
-    "survey_type": { "type": ["string", "null"] }
+    "survey_type": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "survey_folder_id": { "type": ["integer", "null"] },
+    "survey_folder_name": { "type": ["string", "null"] }
   }
 }

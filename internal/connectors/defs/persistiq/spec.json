@@ -15,6 +15,11 @@
       "default": "https://api.persistiq.com",
       "description": "PersistIQ API base URL override for tests or proxies."
     },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for the 'leads' stream's incremental sync, forwarded as updated_after (a real, live-documented PersistIQ query parameter); has no effect on any other stream, which are all full-refresh only."
+    },
     "page_size": {
       "type": "string",
       "default": "100",

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "title": "Fixture new suggestion",
+    "links": { "forum": 2001 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/admin/suggestions",
+    "body": {
+      "title": "Fixture new suggestion",
+      "links": { "forum": 2001 }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "suggestions": [{ "id": 109 }] }
+  }
+}

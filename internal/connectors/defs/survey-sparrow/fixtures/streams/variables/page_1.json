@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/variables", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "label": "Fixture Variable One", "name": "fixture_var", "type": "text" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "domain": "click.fixture.example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tracking-domains"
+  }
+}

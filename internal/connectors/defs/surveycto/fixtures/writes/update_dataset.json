@@ -1,0 +1,7 @@
+{
+  "record": { "id": "fixture_dataset", "title": "Renamed Fixture Dataset", "discriminator": "DATA" },
+  "expect": {
+    "method": "PUT",
+    "path": "/datasets/fixture_dataset"
+  }
+}

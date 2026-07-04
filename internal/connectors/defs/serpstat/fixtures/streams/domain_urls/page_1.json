@@ -1,0 +1,13 @@
+{
+  "request": { "method": "POST", "path": "" },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "data": [
+          { "url": "https://example.com/", "keywords": 42 }
+        ]
+      }
+    }
+  }
+}

@@ -45,6 +45,14 @@
       "query": { "per_page": { "template": "{{ config.page_size }}", "default": "100" } },
       "records": { "path": "data" },
       "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/products.json"
     }
   ]
 }

@@ -94,6 +94,59 @@
         "start_config_key": "start_date"
       },
       "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "shipments",
+      "path": "/shipments",
+      "query": {
+        "searchCriteria[filter_groups][0][filters][0][field]": { "template": "{{ incremental.lower_bound | const:created_at }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][value]": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][condition_type]": { "template": "{{ incremental.lower_bound | const:gt }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/shipments.json"
+    },
+    {
+      "name": "creditmemos",
+      "path": "/creditmemos",
+      "query": {
+        "searchCriteria[filter_groups][0][filters][0][field]": { "template": "{{ incremental.lower_bound | const:created_at }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][value]": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "searchCriteria[filter_groups][0][filters][0][condition_type]": { "template": "{{ incremental.lower_bound | const:gt }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/creditmemos.json"
+    },
+    {
+      "name": "customer_groups",
+      "path": "/customerGroups/search",
+      "query": {
+        "searchCriteria[pageSize]": "100"
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/customer_groups.json"
+    },
+    {
+      "name": "store_websites",
+      "path": "/store/websites",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/store_websites.json"
+    },
+    {
+      "name": "store_views",
+      "path": "/store/storeViews",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/store_views.json"
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/products/101/licenses", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 501,
+        "key": "FIXTURE-LICENSE-KEY-1",
+        "status": "unused",
+        "created_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

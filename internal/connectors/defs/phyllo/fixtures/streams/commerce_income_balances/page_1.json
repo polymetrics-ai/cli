@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v1/commerce/income/balances", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "commerce_balance_fixture_1", "account_id": "acc_fixture_1", "platform": "shopify", "amount": 320.0, "currency_code": "USD", "balance_date": "2026-01-01T00:00:00Z", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

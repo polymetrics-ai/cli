@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/positions", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 101, "title": "Fixture CFO", "description": "Finance leadership", "code": "X1" },
+        { "id": 102, "title": "Fixture CEO", "description": null, "code": null }
+      ],
+      "meta": { "current_page": 1, "next_page": 2, "previous_page": null, "total_pages": 2, "per_page": 2, "total_entries": 3 }
+    }
+  }
+}

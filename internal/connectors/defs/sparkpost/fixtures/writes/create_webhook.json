@@ -1,0 +1,13 @@
+{
+  "record": {
+    "name": "Fixture webhook",
+    "target": "https://example.com/fixture-webhook",
+    "events": [
+      "delivery"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks"
+  }
+}

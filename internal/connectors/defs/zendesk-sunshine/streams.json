@@ -17,21 +17,39 @@
       "name": "object_types",
       "path": "/objects/types",
       "records": { "path": "data" },
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
       "computed_fields": {
         "id": "{{ record.key }}"
       },
       "schema": "schemas/object_types.json"
     },
     {
+      "name": "relationship_types",
+      "path": "/relationships/types",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.key }}"
+      },
+      "schema": "schemas/relationship_types.json"
+    },
+    {
       "name": "objects",
       "path": "/objects/records",
       "records": { "path": "data" },
+      "query": {
+        "type": { "template": "{{ config.object_type }}", "omit_when_absent": true }
+      },
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
       "schema": "schemas/objects.json"
     },
     {
       "name": "relationships",
       "path": "/relationships/records",
       "records": { "path": "data" },
+      "query": {
+        "type": { "template": "{{ config.relationship_type }}", "omit_when_absent": true }
+      },
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
       "schema": "schemas/relationships.json"
     }
   ]

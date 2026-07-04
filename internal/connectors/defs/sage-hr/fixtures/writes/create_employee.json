@@ -1,0 +1,5 @@
+{
+  "record": { "email": "fixture@example.com", "first_name": "Fixture", "last_name": "Employee", "work_start_date": "2026-01-01" },
+  "expect": { "method": "POST", "path": "/employees" },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

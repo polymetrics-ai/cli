@@ -1,0 +1,100 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "managers": { "type": "array", "items": { "type": "integer" } },
+          "groups": { "type": "array", "items": { "type": "integer" } },
+          "isAdmin": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a WorkRamp user account; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "isAdmin": { "type": "boolean" },
+          "isDeleted": { "type": "boolean" },
+          "managerEmails": { "type": "array", "items": { "type": "string" } },
+          "overwriteManagerEmails": { "type": "boolean" }
+        }
+      },
+      "risk": "updates a WorkRamp user account's attributes; approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a WorkRamp user account; approval required"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/groups",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a WorkRamp group; approval required"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/groups/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "updates a WorkRamp group's attributes; approval required"
+    }
+  ]
+}

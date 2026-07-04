@@ -1,0 +1,4 @@
+{
+  "record": { "name": "fixture_target_app", "description": "fixture record" },
+  "expect": { "method": "POST", "path": "/target_app" }
+}

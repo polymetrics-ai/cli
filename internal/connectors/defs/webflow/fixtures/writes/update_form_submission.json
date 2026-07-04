@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "form_submission_fixture_1",
+    "formSubmissionData": { "internal_status": "reviewed" }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/sites/synthetic-conformance-value/form_submissions/form_submission_fixture_1",
+    "body": {
+      "formSubmissionData": { "internal_status": "reviewed" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "form_submission_fixture_1",
+      "formSubmissionData": { "internal_status": "reviewed" }
+    }
+  }
+}

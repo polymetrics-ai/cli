@@ -53,6 +53,45 @@
       "records": { "path": ".", "single_object": true },
       "schema": "schemas/reference.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "alerting_contacts",
+      "path": "/alerting/contacts",
+      "records": { "path": "contacts" },
+      "schema": "schemas/alerting_contacts.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "alerting_teams",
+      "path": "/alerting/teams",
+      "records": { "path": "teams" },
+      "schema": "schemas/alerting_teams.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "maintenance_occurrences",
+      "path": "/maintenance.occurrences",
+      "records": { "path": "occurrences" },
+      "schema": "schemas/maintenance_occurrences.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "credits",
+      "path": "/credits",
+      "records": { "path": "credits", "single_object": true },
+      "schema": "schemas/credits.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "tms_checks",
+      "path": "/tms/check",
+      "records": { "path": "checks" },
+      "schema": "schemas/tms_checks.json",
+      "projection": "passthrough"
     }
   ]
 }

@@ -1,14 +1,14 @@
 {
   "name": "split-io",
   "display_name": "Split.io",
-  "description": "Reads Split.io workspaces, environments, feature flags, and segments through the Split Admin API.",
+  "description": "Reads Split.io workspaces, environments, feature flags, segments, groups, traffic types, and users, and writes feature-flag kill/restore/archive/unarchive and segment-key mutations through the Split Admin API.",
   "integration_type": "api",
   "docs_url": "https://docs.split.io/reference/api-overview",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Split.io API read of workspace, environment, feature-flag, and segment data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Split.io API read of workspace, environment, feature-flag, segment, group, traffic-type, and user data",
+    "write": "external Split.io API mutation that reshapes live feature-flag targeting/rollout state or segment membership for every SDK evaluating it",
+    "approval": "reverse ETL plan approval required before all writes; every write action in this bundle changes production feature-flag or segment-targeting behavior"
   }
 }

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/statuses" },
+  "response": {
+    "status": 200,
+    "body": {
+      "publish": {
+        "name": "Published",
+        "slug": "publish",
+        "public": true,
+        "queryable": true,
+        "date_floating": false
+      },
+      "draft": {
+        "name": "Draft",
+        "slug": "draft",
+        "public": false,
+        "queryable": false,
+        "date_floating": true
+      }
+    }
+  }
+}

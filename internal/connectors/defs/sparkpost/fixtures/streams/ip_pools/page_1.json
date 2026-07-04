@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/ip-pools" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "fixture_ip_pool",
+          "name": "Fixture IP Pool",
+          "signing_domain": "example.com",
+          "fbl_signing_domain": "example.com",
+          "auto_warmup_overflow_pool": null,
+          "ips": []
+        }
+      ]
+    }
+  }
+}

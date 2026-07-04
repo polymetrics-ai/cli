@@ -1,0 +1,63 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/users",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "user_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "externalId": "ext-user-1",
+          "name": "Fixture User One",
+          "email": "fixture1@example.com",
+          "avatar": null,
+          "traits": {},
+          "firstKnown": "2025-06-01T00:00:00Z",
+          "lastSeenTimestamp": "2026-01-01T00:00:00Z",
+          "lastInboundMessageTimestamp": null,
+          "lastOutboundMessageTimestamp": null,
+          "npsLastScore": 9,
+          "npsLastFeedback": "Great product!",
+          "npsLastRespondedAt": "2025-12-01T00:00:00Z",
+          "unsubscribedFromConversations": false,
+          "unsubscribedFromConversationsAt": null,
+          "deactivatedAt": null,
+          "segments": [],
+          "accounts": [],
+          "organizations": []
+        },
+        {
+          "id": "user_fixture_2",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "externalId": "ext-user-2",
+          "name": "Fixture User Two",
+          "email": "fixture2@example.com",
+          "avatar": null,
+          "traits": {},
+          "firstKnown": null,
+          "lastSeenTimestamp": null,
+          "lastInboundMessageTimestamp": null,
+          "lastOutboundMessageTimestamp": null,
+          "npsLastScore": null,
+          "npsLastFeedback": null,
+          "npsLastRespondedAt": null,
+          "unsubscribedFromConversations": true,
+          "unsubscribedFromConversationsAt": "2026-01-02T00:00:00Z",
+          "deactivatedAt": null,
+          "segments": [],
+          "accounts": [],
+          "organizations": []
+        }
+      ],
+      "next": "fixture_cursor_users_1"
+    }
+  }
+}

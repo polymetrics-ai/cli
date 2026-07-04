@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "roles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "parent_role_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "active_flag": { "type": ["boolean", "null"] },
+    "assignment_count": { "type": ["string", "null"] },
+    "sub_role_count": { "type": ["string", "null"] },
+    "level": { "type": ["integer", "null"] }
+  }
+}

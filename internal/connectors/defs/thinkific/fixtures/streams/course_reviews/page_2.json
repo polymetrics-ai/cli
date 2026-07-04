@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/course_reviews",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "rating": 5,
+          "title": "Fixture Review 101",
+          "review_text": "Great course!",
+          "user_id": 101,
+          "course_id": 101,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

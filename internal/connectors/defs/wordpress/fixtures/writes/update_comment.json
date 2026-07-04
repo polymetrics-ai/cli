@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "status": "approved"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/comments/1"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "rating": 5,
+    "title": "Great",
+    "review_text": "Loved it",
+    "user_id": 1,
+    "approved": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/course_reviews",
+    "body": {
+      "rating": 5,
+      "title": "Great",
+      "review_text": "Loved it",
+      "user_id": 1,
+      "approved": true
+    }
+  }
+}

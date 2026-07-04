@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets/synthetic-conformance-value/months"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "months": [
+          {
+            "month": "2026-01-01",
+            "note": null,
+            "income": 500000,
+            "budgeted": 480000,
+            "activity": -300000,
+            "to_be_budgeted": 20000,
+            "age_of_money": 30,
+            "deleted": false
+          },
+          {
+            "month": "2026-02-01",
+            "note": "fixture note",
+            "income": 500000,
+            "budgeted": 490000,
+            "activity": -310000,
+            "to_be_budgeted": 10000,
+            "age_of_money": 31,
+            "deleted": false
+          }
+        ],
+        "server_knowledge": 42
+      }
+    }
+  }
+}

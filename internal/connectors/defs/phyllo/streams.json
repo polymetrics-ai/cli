@@ -28,6 +28,10 @@
     {
       "name": "accounts",
       "path": "/v1/accounts",
+      "query": {
+        "user_id": { "template": "{{ config.phyllo_user_id }}", "omit_when_absent": true },
+        "work_platform_id": { "template": "{{ config.phyllo_work_platform_id }}", "omit_when_absent": true }
+      },
       "records": { "path": "data" },
       "schema": "schemas/accounts.json",
       "projection": "passthrough"
@@ -35,6 +39,11 @@
     {
       "name": "profiles",
       "path": "/v1/profiles",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true },
+        "user_id": { "template": "{{ config.phyllo_user_id }}", "omit_when_absent": true },
+        "work_platform_id": { "template": "{{ config.phyllo_work_platform_id }}", "omit_when_absent": true }
+      },
       "records": { "path": "data" },
       "schema": "schemas/profiles.json",
       "projection": "passthrough"
@@ -42,8 +51,105 @@
     {
       "name": "social_contents",
       "path": "/v1/social/contents",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
       "records": { "path": "data" },
       "schema": "schemas/social_contents.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "work_platforms",
+      "path": "/v1/work-platforms",
+      "records": { "path": "data" },
+      "schema": "schemas/work_platforms.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "audience",
+      "path": "/v1/audience",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/audience.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "social_content_groups",
+      "path": "/v1/social/content-groups",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/social_content_groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "social_comments",
+      "path": "/v1/social/comments",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/social_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "social_income_transactions",
+      "path": "/v1/social/income/transactions",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/social_income_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "social_income_payouts",
+      "path": "/v1/social/income/payouts",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/social_income_payouts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "commerce_income_transactions",
+      "path": "/v1/commerce/income/transactions",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/commerce_income_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "commerce_income_payouts",
+      "path": "/v1/commerce/income/payouts",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/commerce_income_payouts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "commerce_income_balances",
+      "path": "/v1/commerce/income/balances",
+      "query": {
+        "account_id": { "template": "{{ config.phyllo_account_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/commerce_income_balances.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/webhooks",
+      "records": { "path": "data" },
+      "schema": "schemas/webhooks.json",
       "projection": "passthrough"
     }
   ]

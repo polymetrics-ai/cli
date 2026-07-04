@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "pr_fixture_1",
+          "name": "Fixture Product 1",
+          "description": "A fixture product",
+          "price": 1500,
+          "currency": "gbp",
+          "created_at": 1767225600
+        },
+        {
+          "id": "pr_fixture_2",
+          "name": "Fixture Product 2",
+          "description": "A fixture product",
+          "price": 2500,
+          "currency": "gbp",
+          "created_at": 1767225600
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

@@ -17,6 +17,7 @@
       "name": "documents",
       "path": "/docs/",
       "records": { "path": "results" },
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
       "computed_fields": {
         "id": "{{ record.token }}"
       },
@@ -35,10 +36,17 @@
       "name": "templates",
       "path": "/templates/",
       "records": { "path": "results" },
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
       "computed_fields": {
         "id": "{{ record.token }}"
       },
       "schema": "schemas/templates.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks/",
+      "records": { "path": "results" },
+      "schema": "schemas/webhooks.json"
     }
   ]
 }

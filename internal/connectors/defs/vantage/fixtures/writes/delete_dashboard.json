@@ -1,0 +1,9 @@
+{
+  "record": {
+    "dashboard_token": "dbrd_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/dashboards/dbrd_fixture_1"
+  }
+}

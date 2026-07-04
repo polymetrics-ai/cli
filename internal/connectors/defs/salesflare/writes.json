@@ -1,0 +1,415 @@
+{
+  "actions": [
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "domain": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "creates a new CRM account; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "domain": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "external mutation updating a CRM account; approval required"
+    },
+    {
+      "name": "delete_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a CRM account; approval required"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "account_id": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new CRM contact; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "account_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation updating a CRM contact; approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a CRM contact; approval required"
+    },
+    {
+      "name": "create_opportunity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/opportunities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "number" },
+          "currency": { "type": "string" },
+          "account_id": { "type": "integer" },
+          "stage_id": { "type": "integer" },
+          "pipeline_id": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new CRM opportunity/deal; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_opportunity",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/opportunities/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "value": { "type": "number" },
+          "currency": { "type": "string" },
+          "stage_id": { "type": "integer" },
+          "closed": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation updating a CRM opportunity/deal (may change stage/close state); approval required"
+    },
+    {
+      "name": "delete_opportunity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunities/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a CRM opportunity/deal; approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": { "name": { "type": "string" } }
+      },
+      "risk": "creates a new CRM tag; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation renaming a CRM tag; approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a CRM tag from every record it's applied to; approval required"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "due_date": { "type": "string" },
+          "account_id": { "type": "integer" },
+          "assignee_id": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new CRM task; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "due_date": { "type": "string" },
+          "completed": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation updating a CRM task (may mark complete); approval required"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a CRM task; approval required"
+    },
+    {
+      "name": "create_meeting",
+      "kind": "create",
+      "method": "POST",
+      "path": "/meetings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "start_date", "end_date"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" },
+          "account_id": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new CRM meeting/calendar entry; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_meeting",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/meetings/{{ record.meeting_id }}",
+      "path_fields": ["meeting_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["meeting_id"],
+        "properties": {
+          "meeting_id": { "type": "string" },
+          "title": { "type": "string" },
+          "start_date": { "type": "string" },
+          "end_date": { "type": "string" }
+        }
+      },
+      "risk": "external mutation updating a CRM meeting/calendar entry; approval required"
+    },
+    {
+      "name": "delete_meeting",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/meetings/{{ record.meeting_id }}",
+      "path_fields": ["meeting_id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["meeting_id"],
+        "properties": { "meeting_id": { "type": "string" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a CRM meeting/calendar entry; approval required"
+    },
+    {
+      "name": "create_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calls",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["account_id"],
+        "properties": {
+          "account_id": { "type": "integer" },
+          "notes": { "type": "string" },
+          "date": { "type": "string" }
+        }
+      },
+      "risk": "logs a new call activity against a CRM account; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_internal_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": { "type": "string" },
+          "account_id": { "type": "integer" },
+          "contact_id": { "type": "integer" },
+          "opportunity_id": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new internal note on a CRM record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_internal_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/messages/{{ record.message_id }}",
+      "path_fields": ["message_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["message_id"],
+        "properties": {
+          "message_id": { "type": "string" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "external mutation editing a CRM internal note; approval required"
+    },
+    {
+      "name": "delete_internal_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/messages/{{ record.message_id }}",
+      "path_fields": ["message_id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["message_id"],
+        "properties": { "message_id": { "type": "string" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a CRM internal note; approval required"
+    }
+  ]
+}

@@ -13,7 +13,7 @@
       "page_size": 100,
       "max_pages": 1
     },
-    "check": { "method": "GET", "path": "/orders" },
+    "check": { "method": "GET", "path": "/api/v1/orders" },
     "error_map": [
       { "status": 401, "hint": "sendowl username/password is missing or invalid; re-run pm credentials add sendowl" },
       { "status": 403, "hint": "sendowl account lacks access for this request" },
@@ -23,24 +23,50 @@
   "streams": [
     {
       "name": "orders",
-      "path": "/orders",
+      "path": "/api/v1/orders",
       "records": { "path": "." },
       "schema": "schemas/orders.json",
       "projection": "passthrough"
     },
     {
       "name": "products",
-      "path": "/products",
+      "path": "/api/v1/products",
       "records": { "path": "." },
       "schema": "schemas/products.json",
       "projection": "passthrough"
     },
     {
       "name": "subscriptions",
-      "path": "/subscriptions",
+      "path": "/api/v1/subscriptions",
       "records": { "path": "." },
       "schema": "schemas/subscriptions.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "discounts",
+      "path": "/api/v1_2/discounts",
+      "records": { "path": "." },
+      "schema": "schemas/discounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bundles",
+      "path": "/api/v1/packages",
+      "records": { "path": "." },
+      "schema": "schemas/bundles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "licenses",
+      "path": "/api/v1/products/{{ fanout.id }}/licenses",
+      "records": { "path": "." },
+      "schema": "schemas/licenses.json",
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": { "request": { "path": "/api/v1/products", "records_path": ".", "id_field": "id" } },
+        "into": { "path_var": "parent_id" },
+        "stamp_field": "product_id"
+      }
     }
   ]
 }

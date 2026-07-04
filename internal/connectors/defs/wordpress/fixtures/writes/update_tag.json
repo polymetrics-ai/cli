@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Tag Updated"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/tags/1"
+  }
+}

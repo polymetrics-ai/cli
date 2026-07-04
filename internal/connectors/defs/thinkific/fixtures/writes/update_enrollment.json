@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 1,
+    "activated_at": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/public/v1/enrollments/1",
+    "body": {
+      "activated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

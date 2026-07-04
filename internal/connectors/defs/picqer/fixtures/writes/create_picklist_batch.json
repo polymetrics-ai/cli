@@ -1,0 +1,9 @@
+{
+  "record": { "idwarehouse": 501, "title": "Fixture Batch", "type": "picking" },
+  "expect": {
+    "method": "POST",
+    "path": "/picklists/batches",
+    "body": { "idwarehouse": 501, "title": "Fixture Batch", "type": "picking" }
+  },
+  "response": { "status": 200, "body": { "idpicklist_batch": 1501, "title": "Fixture Batch" } }
+}

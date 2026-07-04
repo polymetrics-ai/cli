@@ -1,0 +1,24 @@
+{
+  "record": {
+    "avatar_id": "av_fixture_1",
+    "subscriber_id": "sub_fixture_1",
+    "field": "cf_fixture_1",
+    "value": "fixture value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customfields/update"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "sub_fixture_1",
+      "custom_fields": [
+        {
+          "custom_field_id": "cf_fixture_1",
+          "custom_value": "fixture value"
+        }
+      ]
+    }
+  }
+}

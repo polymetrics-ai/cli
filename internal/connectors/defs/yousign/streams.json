@@ -48,6 +48,51 @@
         "updated_at": "{{ record.created_at }}"
       },
       "schema": "schemas/documents.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "" },
+      "computed_fields": {
+        "name": "{{ record.description }}"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "meta.next_cursor"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "meta.next_cursor"
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.first_name }} {{ record.last_name }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "workflow_sessions",
+      "path": "/workflow_sessions",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "meta.next_cursor"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/workflow_sessions.json"
     }
   ]
 }

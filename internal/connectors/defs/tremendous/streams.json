@@ -43,6 +43,32 @@
       "path": "/api/v2/funding_sources",
       "records": { "path": "funding_sources" },
       "schema": "schemas/funding_sources.json"
+    },
+    {
+      "name": "products",
+      "path": "/api/v2/products",
+      "pagination": { "type": "none" },
+      "records": { "path": "products" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/api/v2/invoices",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "invoices" },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "members",
+      "path": "/api/v2/members",
+      "pagination": { "type": "none" },
+      "records": { "path": "members" },
+      "schema": "schemas/members.json"
     }
   ]
 }

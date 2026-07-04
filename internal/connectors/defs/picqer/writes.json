@@ -1,0 +1,666 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "contactname": { "type": "string" },
+          "emailaddress": { "type": "string" },
+          "telephone": { "type": "string" },
+          "vatnumber": { "type": "string" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "creates a new WMS customer record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.idcustomer }}",
+      "path_fields": ["idcustomer"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idcustomer"],
+        "properties": {
+          "idcustomer": { "type": "integer" },
+          "name": { "type": "string" },
+          "contactname": { "type": "string" },
+          "emailaddress": { "type": "string" },
+          "telephone": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing customer's contact details; external mutation, approval required"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.idcustomer }}",
+      "path_fields": ["idcustomer"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idcustomer"],
+        "properties": { "idcustomer": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "permanently deletes a customer record; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_supplier",
+      "kind": "create",
+      "method": "POST",
+      "path": "/suppliers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "zipcode": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "creates a new supplier record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_supplier",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/suppliers/{{ record.idsupplier }}",
+      "path_fields": ["idsupplier"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idsupplier"],
+        "properties": {
+          "idsupplier": { "type": "integer" },
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing supplier's contact details; external mutation, approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "color", "inherit"],
+        "properties": {
+          "title": { "type": "string" },
+          "color": { "type": "string" },
+          "inherit": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new tag; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.idtag }}",
+      "path_fields": ["idtag"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idtag"],
+        "properties": {
+          "idtag": { "type": "integer" },
+          "title": { "type": "string" },
+          "color": { "type": "string" },
+          "inherit": { "type": "boolean" }
+        }
+      },
+      "risk": "updates an existing tag's title/color/inherit setting; external mutation, approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.idtag }}",
+      "path_fields": ["idtag"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idtag"],
+        "properties": { "idtag": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "permanently deletes a tag and removes it from every linked order/customer/product; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.idproduct }}",
+      "path_fields": ["idproduct"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idproduct"],
+        "properties": {
+          "idproduct": { "type": "integer" },
+          "name": { "type": "string" },
+          "price": { "type": "number" },
+          "productcode": { "type": "string" },
+          "active": { "type": "boolean" }
+        }
+      },
+      "risk": "updates an existing product's catalog fields (name/price/active status); external mutation, approval required"
+    },
+    {
+      "name": "pause_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.idorder }}/pause",
+      "path_fields": ["idorder"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idorder"],
+        "properties": { "idorder": { "type": "integer" } }
+      },
+      "risk": "pauses picking/fulfillment of an order; external mutation, approval required"
+    },
+    {
+      "name": "resume_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.idorder }}/resume",
+      "path_fields": ["idorder"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idorder"],
+        "properties": { "idorder": { "type": "integer" } }
+      },
+      "risk": "resumes picking/fulfillment of a paused order; external mutation, approval required"
+    },
+    {
+      "name": "reopen_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.idorder }}/reopen",
+      "path_fields": ["idorder"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idorder"],
+        "properties": { "idorder": { "type": "integer" } }
+      },
+      "risk": "reopens a completed/closed order for further processing; external mutation, approval required"
+    },
+    {
+      "name": "cancel_order",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orders/{{ record.idorder }}",
+      "path_fields": ["idorder"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idorder"],
+        "properties": { "idorder": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "cancels an order (Picqer's DELETE-shaped cancel, reversible via undo-cancellation, but stops all further fulfillment immediately); destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_purchaseorder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchaseorders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idsupplier", "idwarehouse"],
+        "properties": {
+          "idsupplier": { "type": "integer" },
+          "idwarehouse": { "type": "integer" },
+          "remarks": { "type": "string" },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "idproduct": { "type": "integer" },
+                "price": { "type": "number" },
+                "amount": { "type": "integer" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new purchase order (concept status) with an optional initial product line list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "mark_purchaseorder_as_purchased",
+      "kind": "update",
+      "method": "POST",
+      "path": "/purchaseorders/{{ record.idpurchaseorder }}/mark-as-purchased",
+      "path_fields": ["idpurchaseorder"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idpurchaseorder"],
+        "properties": { "idpurchaseorder": { "type": "integer" } }
+      },
+      "risk": "transitions a concept purchase order to purchased status, signalling it has been placed with the supplier; external mutation, approval required"
+    },
+    {
+      "name": "close_purchaseorder",
+      "kind": "update",
+      "method": "POST",
+      "path": "/purchaseorders/{{ record.idpurchaseorder }}/close",
+      "path_fields": ["idpurchaseorder"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idpurchaseorder"],
+        "properties": { "idpurchaseorder": { "type": "integer" } }
+      },
+      "risk": "closes a purchase order, marking it as finished even if not all products were received; external mutation, approval required"
+    },
+    {
+      "name": "cancel_purchaseorder",
+      "kind": "update",
+      "method": "POST",
+      "path": "/purchaseorders/{{ record.idpurchaseorder }}/cancel",
+      "path_fields": ["idpurchaseorder"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idpurchaseorder"],
+        "properties": { "idpurchaseorder": { "type": "integer" } }
+      },
+      "risk": "cancels a purchase order; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_receipt",
+      "kind": "create",
+      "method": "POST",
+      "path": "/receipts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idpurchaseorder"],
+        "properties": {
+          "idpurchaseorder": { "type": "integer" },
+          "version": { "type": "integer" }
+        }
+      },
+      "risk": "starts a new goods-receiving session against a purchase order (Picqer's v2 receipts API also accepts idsupplier in place of idpurchaseorder for supplier-only receiving; this action only models the idpurchaseorder-required shape, see docs.md Known limits); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "complete_receipt",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/receipts/{{ record.idreceipt }}",
+      "path_fields": ["idreceipt"],
+      "body_type": "json",
+      "body_fields": ["status"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idreceipt", "status"],
+        "properties": {
+          "idreceipt": { "type": "integer" },
+          "status": { "type": "string", "enum": ["completed"] }
+        }
+      },
+      "risk": "marks a goods-receiving session as complete (Picqer's documented PUT /receipts/{idreceipt} {\"status\": \"completed\"} shape), finalizing received stock quantities in the background; external mutation, approval required"
+    },
+    {
+      "name": "create_return",
+      "kind": "create",
+      "method": "POST",
+      "path": "/returns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "idreturn_status": { "type": "integer" },
+          "idtemplate": { "type": "integer" },
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "zipcode": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" },
+          "emailaddress": { "type": "string" },
+          "reference": { "type": "string" }
+        }
+      },
+      "risk": "creates a new customer return record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_return",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/returns/{{ record.idreturn }}",
+      "path_fields": ["idreturn"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idreturn"],
+        "properties": {
+          "idreturn": { "type": "integer" },
+          "idreturn_status": { "type": "integer" },
+          "name": { "type": "string" },
+          "address": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing return's status/contact details; external mutation, approval required"
+    },
+    {
+      "name": "delete_return",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/returns/{{ record.idreturn }}",
+      "path_fields": ["idreturn"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idreturn"],
+        "properties": { "idreturn": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "permanently deletes a return record; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "process_backorders",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/backorders/process",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "idbackorders": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "processes one or more backorders for fulfillment now that stock is available; external mutation, approval required"
+    },
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/locations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "idwarehouse"],
+        "properties": {
+          "name": { "type": "string" },
+          "idwarehouse": { "type": "integer" },
+          "parent_idlocation": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new warehouse storage location; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_location",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/locations/{{ record.idlocation }}",
+      "path_fields": ["idlocation"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idlocation"],
+        "properties": {
+          "idlocation": { "type": "integer" },
+          "name": { "type": "string" },
+          "remarks": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing warehouse location's name/remarks; external mutation, approval required"
+    },
+    {
+      "name": "delete_location",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/locations/{{ record.idlocation }}",
+      "path_fields": ["idlocation"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idlocation"],
+        "properties": { "idlocation": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "permanently deletes a warehouse storage location; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_location_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/location_types",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "color"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "creates a new location type; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_location_type",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/location_types/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing location type's name/color; external mutation, approval required"
+    },
+    {
+      "name": "create_picking_container",
+      "kind": "create",
+      "method": "POST",
+      "path": "/picking-containers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new picking container; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_picking_container",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/picking-containers/{{ record.idpicking_container }}",
+      "path_fields": ["idpicking_container"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idpicking_container"],
+        "properties": {
+          "idpicking_container": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing picking container's name; external mutation, approval required"
+    },
+    {
+      "name": "create_picklist_batch",
+      "kind": "create",
+      "method": "POST",
+      "path": "/picklists/batches",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idwarehouse"],
+        "properties": {
+          "idwarehouse": { "type": "integer" },
+          "title": { "type": "string" },
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "creates a new picklist batch for warehouse picking; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_shipment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/picklists/{{ record.idpicklist }}/shipments",
+      "path_fields": ["idpicklist"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idpicklist", "idshippingprovider_profile"],
+        "properties": {
+          "idpicklist": { "type": "integer" },
+          "idshippingprovider_profile": { "type": "integer" },
+          "idpackaging": { "type": "integer" },
+          "weight": { "type": "integer" }
+        }
+      },
+      "risk": "creates a shipment for a picklist, booking it with the configured shipping provider and generating a shipping label; external mutation, approval required"
+    },
+    {
+      "name": "create_packaging",
+      "kind": "create",
+      "method": "POST",
+      "path": "/packagings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "barcode": { "type": "string" },
+          "length": { "type": "integer" },
+          "width": { "type": "integer" },
+          "height": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new packaging type; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_packaging",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/packagings/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "active": { "type": "boolean" }
+        }
+      },
+      "risk": "updates an existing packaging type's dimensions/active status; external mutation, approval required"
+    },
+    {
+      "name": "create_hook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/hooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "event", "address"],
+        "properties": {
+          "name": { "type": "string" },
+          "event": { "type": "string" },
+          "address": { "type": "string" },
+          "secret": { "type": "string" }
+        }
+      },
+      "risk": "registers a new webhook subscription that will receive event notifications; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_hook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/hooks/{{ record.idhook }}",
+      "path_fields": ["idhook"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["idhook"],
+        "properties": { "idhook": { "type": "integer" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "deactivates a webhook subscription (Picqer's DELETE call deactivates rather than hard-deletes the record); destructive external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

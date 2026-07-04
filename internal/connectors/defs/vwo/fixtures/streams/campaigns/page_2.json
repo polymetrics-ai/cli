@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/campaigns",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_data": [
+        {
+          "id": 601,
+          "name": "Fixture Campaign Final",
+          "type": "ab",
+          "platform": "website",
+          "status": "NOT_STARTED",
+          "createdOn": 1767312000,
+          "isDeleted": false,
+          "primaryUrl": "https://example.com/final",
+          "urls": [
+            {
+              "type": "url",
+              "value": "https://example.com/final"
+            }
+          ],
+          "labels": [],
+          "createdBy": {
+            "id": 1,
+            "name": "Fixture Admin",
+            "imageUrl": null
+          },
+          "goals": {
+            "partialCollection": [],
+            "offset": 0,
+            "totalCount": 0
+          },
+          "primaryGoal": null,
+          "variations": {
+            "partialCollection": [],
+            "totalCount": 1
+          }
+        }
+      ]
+    }
+  }
+}

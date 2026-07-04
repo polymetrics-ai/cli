@@ -54,6 +54,48 @@
         "updated_at": "{{ record.date }}"
       },
       "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "categories",
+      "path": "/budgets/{{ config.budget_id }}/categories",
+      "records": { "path": "data.category_groups" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "updated_at": "{{ record.name }}"
+      },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "payees",
+      "path": "/budgets/{{ config.budget_id }}/payees",
+      "records": { "path": "data.payees" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "updated_at": "{{ record.name }}"
+      },
+      "schema": "schemas/payees.json"
+    },
+    {
+      "name": "months",
+      "path": "/budgets/{{ config.budget_id }}/months",
+      "records": { "path": "data.months" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.month }}",
+        "updated_at": "{{ record.month }}"
+      },
+      "schema": "schemas/months.json"
+    },
+    {
+      "name": "scheduled_transactions",
+      "path": "/budgets/{{ config.budget_id }}/scheduled_transactions",
+      "records": { "path": "data.scheduled_transactions" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "name": "{{ record.payee_name }}",
+        "updated_at": "{{ record.date_next }}"
+      },
+      "schema": "schemas/scheduled_transactions.json"
     }
   ]
 }

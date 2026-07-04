@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "assets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "originalFileName": { "type": ["string", "null"] },
+    "displayName": { "type": ["string", "null"] },
+    "contentType": { "type": ["string", "null"] },
+    "size": { "type": ["integer", "null"] },
+    "siteId": { "type": ["string", "null"] },
+    "createdOn": { "type": ["string", "null"], "format": "date-time" },
+    "lastUpdated": { "type": ["string", "null"], "format": "date-time" },
+    "hostedUrl": { "type": ["string", "null"] },
+    "altText": { "type": ["string", "null"] }
+  }
+}

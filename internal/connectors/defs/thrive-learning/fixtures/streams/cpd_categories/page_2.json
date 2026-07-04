@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/cpdCategories",
+    "query": {
+      "page": "2",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "totalResults": 1001,
+        "totalPages": 2,
+        "page": 2,
+        "perPage": 1000
+      },
+      "results": [
+        {
+          "categoryId": "5c8936159ec2d00010cd1001",
+          "name": "Fixture CPD Category 1001"
+        }
+      ]
+    }
+  }
+}

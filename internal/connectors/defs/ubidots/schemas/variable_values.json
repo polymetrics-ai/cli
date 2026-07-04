@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "variable_values",
+  "type": "object",
+  "x-primary-key": ["variable_id", "timestamp"],
+  "x-cursor-field": "timestamp",
+  "required": ["variable_id", "timestamp"],
+  "properties": {
+    "value": { "type": ["number", "null"] },
+    "timestamp": { "type": "integer" },
+    "context": { "type": ["object", "null"] },
+    "variable_id": { "type": "string" }
+  }
+}

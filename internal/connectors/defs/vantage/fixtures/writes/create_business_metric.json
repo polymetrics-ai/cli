@@ -1,0 +1,9 @@
+{
+  "record": {
+    "title": "Fixture Metric"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/business_metrics"
+  }
+}

@@ -61,5 +61,18 @@ unconditionally; `capabilities.write` is `false` and this bundle ships no `write
   (F6, conventions.md), not a genuine override. This never changes which records are emitted for
   any caller that (like most operators) never overrides Senseforce's own defaults; a caller that
   legitimately needs a non-default `page_size`/`max_pages` is out of scope for this wave.
-- The full Senseforce Public API surface (dataset listing/metadata, record writes) is out of scope
-  for this wave; see `api_surface.json`'s `excluded` entries.
+- **Pass B full-surface review result: `already_full`.** Senseforce's ENTIRE documented public API
+  (`manual.senseforce.io/manual/sf-platform/public-api/endpoints`) is a single element-by-id
+  request family: "get the results of predefined datasets" by a dataset id taken from the
+  dashboard URL, with an optional `DatasetFilters` body for column-scoped filtering. There is no
+  documented dataset-listing/discovery endpoint, no dataset-metadata/column-schema endpoint, and no
+  write/mutation endpoint of any kind anywhere in the manual — the public API exists to let
+  external tools pull already-built dataset results out of the platform, not to manage platform
+  configuration, so `capabilities.write: false` is not a scope narrowing but an accurate reflection
+  of the real API's shape. The ONLY other documented element type is a separate script-execution
+  endpoint (`POST /api/v1/scripts/{script_id}/results`, accepting its own `ScriptFilters` body) —
+  a fundamentally different resource (a published Senseforce SCRIPT, not a dataset), excluded via
+  `api_surface.json` as `out_of_scope` rather than modeled as a second stream, since it would need
+  its own `script_id` config surface and has no relationship to the `dataset_id`-scoped `records`
+  stream this bundle already fully covers. See `api_surface.json`'s `excluded` entry for the exact
+  reasoning.

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autocomplete",
+  "type": "object",
+  "x-primary-key": ["name", "region", "country", "lat", "lon"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": ["string", "null"] },
+    "region": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "lat": { "type": ["string", "null"] },
+    "lon": { "type": ["string", "null"] },
+    "timezone_id": { "type": ["string", "null"] },
+    "utc_offset": { "type": ["string", "null"] }
+  }
+}

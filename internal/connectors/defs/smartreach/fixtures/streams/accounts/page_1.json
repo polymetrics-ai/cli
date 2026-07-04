@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/search/accounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "object": "account",
+          "id": "acc_fixture_1",
+          "name": "Fixture Account One",
+          "custom_id": "cust_fixture_1",
+          "website": "https://fixture1.example.com",
+          "industry": "Technology",
+          "created_at": 1735689600000,
+          "updated_at": 1735689600000
+        },
+        {
+          "object": "account",
+          "id": "acc_fixture_2",
+          "name": "Fixture Account Two",
+          "custom_id": "cust_fixture_2",
+          "website": "https://fixture2.example.com",
+          "industry": "Retail",
+          "created_at": 1735776000000,
+          "updated_at": 1735776000000
+        }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

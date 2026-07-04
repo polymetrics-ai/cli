@@ -13,7 +13,7 @@
       "type": "string",
       "format": "uri",
       "default": "https://api.svix.com/api/v1",
-      "description": "Svix API base URL override for tests or proxies."
+      "description": "Svix API base URL. Svix is multi-region (us/eu/ca/au/in); override with the region-specific host (e.g. https://api.eu.svix.com/api/v1) if the account is not on the default/US region, or for tests/proxies."
     }
   }
 }

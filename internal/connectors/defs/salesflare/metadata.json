@@ -1,14 +1,14 @@
 {
   "name": "salesflare",
   "display_name": "Salesflare",
-  "description": "Reads Salesflare accounts, contacts, and opportunities through the Salesflare REST API. Read-only.",
+  "description": "Reads Salesflare accounts, contacts, opportunities, users, tags, tasks, workflows, groups, stages, pipelines, persons, currencies, custom-field types, and email data sources, and writes CRM lifecycle mutations, through the Salesflare REST API.",
   "integration_type": "api",
   "docs_url": "https://api.salesflare.com/docs",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Salesflare API read of CRM account, contact, and opportunity data"
+    "read": "external Salesflare API read of CRM account, contact, opportunity, task, workflow, and reference data",
+    "write": "external Salesflare mutations: account/contact/opportunity/tag/task/meeting/call/internal-note create-update-delete",
+    "approval": "required for update/delete actions; create_* actions on accounts/contacts/opportunities/tags/tasks/meetings/calls/internal notes are low-risk and do not require approval; delete_* actions are destructive and irreversible"
   }
 }

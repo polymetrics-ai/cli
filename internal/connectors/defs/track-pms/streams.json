@@ -43,6 +43,58 @@
       "path": "/owners",
       "records": { "path": "owners" },
       "schema": "schemas/owners.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/crm/contacts",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "size",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "_embedded.contacts" },
+      "computed_fields": {
+        "first_name": "{{ record.firstName }}",
+        "last_name": "{{ record.lastName }}",
+        "primary_email": "{{ record.primaryEmail }}",
+        "secondary_email": "{{ record.secondaryEmail }}",
+        "home_phone": "{{ record.homePhone }}",
+        "cell_phone": "{{ record.cellPhone }}",
+        "work_phone": "{{ record.workPhone }}",
+        "street_address": "{{ record.streetAddress }}",
+        "postal_code": "{{ record.postalCode }}",
+        "is_vip": "{{ record.isVip }}",
+        "is_owner_contact": "{{ record.isOwnerContact }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "unit_types",
+      "path": "/pms/units/types",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "size",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "_embedded.units" },
+      "computed_fields": {
+        "short_name": "{{ record.shortName }}",
+        "type_code": "{{ record.typeCode }}",
+        "is_active": "{{ record.isActive }}",
+        "max_occupancy": "{{ record.maxOccupancy }}",
+        "node_id": "{{ record.nodeId }}",
+        "lodging_type_id": "{{ record.lodgingTypeId }}",
+        "is_bookable": "{{ record.isBookable }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/unit_types.json"
     }
   ]
 }

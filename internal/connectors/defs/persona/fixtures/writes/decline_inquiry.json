@@ -1,0 +1,11 @@
+{
+  "record": { "id": "inq_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/inquiries/inq_fixture_1/decline"
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "inq_fixture_1", "type": "inquiry", "attributes": { "status": "declined" } } }
+  }
+}

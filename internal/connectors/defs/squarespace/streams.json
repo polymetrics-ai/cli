@@ -50,6 +50,36 @@
       "query": { "limit": "100" },
       "records": { "path": "profiles" },
       "schema": "schemas/profiles.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/commerce/transactions",
+      "records": { "path": "documents" },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "store_pages",
+      "path": "/commerce/store_pages",
+      "records": { "path": "storePages" },
+      "schema": "schemas/store_pages.json"
+    },
+    {
+      "name": "webhook_subscriptions",
+      "path": "/webhook_subscriptions",
+      "pagination": { "type": "none" },
+      "records": { "path": "webhookSubscriptions" },
+      "schema": "schemas/webhook_subscriptions.json"
+    },
+    {
+      "name": "contacts",
+      "path": "https://api.squarespace.com/v1/contacts",
+      "query": { "pageSize": "100" },
+      "records": { "path": "contacts" },
+      "schema": "schemas/contacts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "this stream's real endpoint lives on the Contacts API v1 surface (https://api.squarespace.com/v1/contacts), a different version prefix than the bundle's base.url (which bakes in the Commerce API's /1.0 segment); the engine resolves an http(s)-prefixed stream.path as an ALREADY-ABSOLUTE request target (connsdk.Requester.resolveURL) and never substitutes the conformance replay server's origin for it, so a declarative fixture replay would dial the real internet instead of the test double — the same shape as defillama's stablecoins stream. Read correctness for this stream is proven by its own fixtures/streams/contacts/{page_1,page_2}.json shape (matches Squarespace's real documented PaginatedGetContactsResponse envelope) and by the same schema-projection path every other stream uses; only the dynamic (live-replay) checks are skipped, not the static schema/fixture-shape checks."
+      }
     }
   ]
 }

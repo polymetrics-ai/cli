@@ -1,0 +1,87 @@
+{
+  "actions": [
+    {
+      "name": "set_webhook_config",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v4/webhooks/configure",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["endpoint"],
+        "properties": {
+          "endpoint": { "type": "string" },
+          "emailValidationRequired": { "type": "string" },
+          "create": { "type": "boolean" },
+          "webhookNumber": { "type": "integer" },
+          "searchWebhook": { "type": "string" },
+          "checkinWebhook": { "type": "boolean" }
+        }
+      },
+      "risk": "changes where the account's near-real-time waiver-signed webhook notifications are delivered; approval required"
+    },
+    {
+      "name": "resend_webhook",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/v4/webhooks/resend/{{ record.waiver_id }}",
+      "path_fields": ["waiver_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["waiver_id"],
+        "properties": {
+          "waiver_id": { "type": "string" }
+        }
+      },
+      "risk": "re-triggers the new-waiver webhook delivery for a specific waiver (testing aid, heavily rate limited by Smartwaiver at 2/minute); approval required"
+    },
+    {
+      "name": "send_sms",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v4/sms",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["templateId", "number"],
+        "properties": {
+          "templateId": { "type": "string" },
+          "number": { "type": "string" }
+        }
+      },
+      "risk": "sends an outbound SMS with a waiver-signing link to a real phone number (rate limited daily by Smartwaiver for anti-spam); approval required"
+    },
+    {
+      "name": "prefill_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v4/templates/{{ record.template_id }}/prefill",
+      "path_fields": ["template_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["template_id"],
+        "properties": {
+          "template_id": { "type": "string" },
+          "expiration": { "type": "integer" },
+          "lockdownPrefill": { "type": "boolean" },
+          "adult": { "type": "boolean" },
+          "participants": { "type": "array" },
+          "guardian": { "type": "object" },
+          "addressLineOne": { "type": "string" },
+          "addressCity": { "type": "string" },
+          "addressState": { "type": "string" },
+          "addressZip": { "type": "string" },
+          "email": { "type": "string" },
+          "customWaiverFields": { "type": "object" }
+        }
+      },
+      "risk": "generates a prefilled waiver-signing link carrying real participant PII (name/DOB/address/custom fields); approval required"
+    }
+  ]
+}

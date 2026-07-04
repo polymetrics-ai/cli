@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pals",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "pal_id": "pal_fixture_1", "pal_name": "Fixture PAL 1", "system_prompt": "You are a fixture assistant.", "default_face_id": "replica_fixture_1", "conferencing_email": null }
+      ]
+    }
+  }
+}

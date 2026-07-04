@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "object": "user",
+          "id": "usr_fixture_1",
+          "first_name": "Fixture",
+          "last_name": "One",
+          "org_id": "org_fixture_1",
+          "status": "active",
+          "email": "fixture1@example.com",
+          "created_at": 1735689600000,
+          "timezone": "Asia/Kolkata"
+        },
+        {
+          "object": "user",
+          "id": "usr_fixture_2",
+          "first_name": "Fixture",
+          "last_name": "Two",
+          "org_id": "org_fixture_1",
+          "status": "active",
+          "email": "fixture2@example.com",
+          "created_at": 1735776000000,
+          "timezone": "Asia/Kolkata"
+        }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

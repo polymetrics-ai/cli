@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/comments.json",
+    "query": {
+      "pageStart": "25",
+      "pageSize": "25"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Comments": [
+        {
+          "CommentId": "comment_fixture_26",
+          "CommentedBy": "user26",
+          "DateCreated": "2026-01-26 00:00:00",
+          "EntryId": "entry_fixture_26",
+          "Text": "Fixture comment 26"
+        },
+        {
+          "CommentId": "comment_fixture_27",
+          "CommentedBy": "user27",
+          "DateCreated": "2026-01-27 00:00:00",
+          "EntryId": "entry_fixture_27",
+          "Text": "Fixture comment 27"
+        }
+      ]
+    }
+  }
+}

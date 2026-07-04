@@ -1,0 +1,7 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture Company Customer" },
+  "expect": {
+    "method": "PUT",
+    "path": "/company_customers/1"
+  }
+}

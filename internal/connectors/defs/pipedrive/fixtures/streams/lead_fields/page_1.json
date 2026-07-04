@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leadFields",
+    "query": { "start": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 5,
+          "key": "title",
+          "name": "Title",
+          "order_nr": 1,
+          "field_type": "varchar",
+          "add_time": "2026-01-01 00:00:00",
+          "update_time": "2026-01-01 00:00:00",
+          "active_flag": true,
+          "mandatory_flag": true
+        }
+      ]
+    }
+  }
+}

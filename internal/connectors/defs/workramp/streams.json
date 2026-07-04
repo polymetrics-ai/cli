@@ -9,12 +9,12 @@
       "type": "page_number",
       "page_param": "page",
       "size_param": "limit",
-      "start_page": 1,
+      "start_page": 0,
       "page_size": 100
     },
     "check": {
       "method": "GET",
-      "path": "/v1/users",
+      "path": "/api/v1/users",
       "query": { "limit": "1" }
     },
     "error_map": [
@@ -26,24 +26,54 @@
   "streams": [
     {
       "name": "users",
-      "path": "/v1/users",
-      "records": { "path": "data" },
+      "path": "/api/v1/users",
+      "records": { "path": "" },
       "projection": "passthrough",
       "schema": "schemas/users.json"
     },
     {
       "name": "groups",
-      "path": "/v1/groups",
-      "records": { "path": "data" },
+      "path": "/api/v1/groups",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
       "projection": "passthrough",
       "schema": "schemas/groups.json"
     },
     {
       "name": "courses",
-      "path": "/v1/courses",
-      "records": { "path": "data" },
+      "path": "/api/v1/guides",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 20
+      },
+      "records": { "path": "data.guides" },
       "projection": "passthrough",
       "schema": "schemas/courses.json"
+    },
+    {
+      "name": "resources",
+      "path": "/api/v1/resources",
+      "pagination": { "type": "none" },
+      "records": { "path": "resources" },
+      "projection": "passthrough",
+      "schema": "schemas/resources.json"
+    },
+    {
+      "name": "scorm_courses",
+      "path": "/api/v1/scorms",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 20
+      },
+      "records": { "path": "data.scorms" },
+      "projection": "passthrough",
+      "schema": "schemas/scorm_courses.json"
     }
   ]
 }

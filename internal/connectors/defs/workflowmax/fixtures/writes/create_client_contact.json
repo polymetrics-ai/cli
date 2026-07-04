@@ -1,0 +1,24 @@
+{
+  "record": {
+    "firstName": "Fixture",
+    "lastName": "Contact",
+    "email": "fixture-contact@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/clients/contacts",
+    "body": {
+      "firstName": "Fixture",
+      "lastName": "Contact",
+      "email": "fixture-contact@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "contact_fixture_new",
+      "firstName": "Fixture",
+      "lastName": "Contact"
+    }
+  }
+}

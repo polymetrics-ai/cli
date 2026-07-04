@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Group"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/groups",
+    "body": {
+      "name": "Fixture Group"
+    }
+  }
+}

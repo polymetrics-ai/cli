@@ -1,0 +1,20 @@
+{
+  "record": {
+    "external_id": "fixture-ext-1",
+    "email": "fixture@example.com",
+    "name": "Fixture Customer"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": {
+      "external_id": "fixture-ext-1",
+      "email": "fixture@example.com",
+      "name": "Fixture Customer"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 401, "external_id": "fixture-ext-1", "email": "fixture@example.com" }
+  }
+}

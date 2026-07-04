@@ -8,6 +8,10 @@
   "properties": {
     "id": { "type": "string" },
     "title": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "num_total_tasks": { "type": ["integer", "null"] },
+    "num_total_test_questions": { "type": ["integer", "null"] },
+    "created_at": { "type": ["number", "null"] },
+    "updated_at": { "type": ["number", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } }
   }
 }

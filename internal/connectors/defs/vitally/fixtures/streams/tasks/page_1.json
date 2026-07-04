@@ -1,0 +1,59 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/tasks",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "task_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "externalId": "ext-task-1",
+          "organizationId": null,
+          "accountId": "acct_fixture_1",
+          "name": "Gather Feedback",
+          "description": "<p>Follow up on the survey.</p>",
+          "dueDate": "2026-02-01",
+          "completedAt": null,
+          "tags": [],
+          "archivedAt": null,
+          "meetingId": null,
+          "source": null,
+          "categoryId": "cat_fixture_1",
+          "assignedToId": "admin_fixture_1",
+          "completedById": null,
+          "traits": {}
+        },
+        {
+          "id": "task_fixture_2",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "externalId": "ext-task-2",
+          "organizationId": null,
+          "accountId": "acct_fixture_2",
+          "name": "Check in on the account",
+          "description": null,
+          "dueDate": "2026-01-15",
+          "completedAt": "2026-01-10T00:00:00Z",
+          "tags": [
+            "renewal"
+          ],
+          "archivedAt": null,
+          "meetingId": null,
+          "source": "hubspot",
+          "categoryId": null,
+          "assignedToId": null,
+          "completedById": "admin_fixture_1",
+          "traits": {}
+        }
+      ],
+      "next": "fixture_cursor_tasks_1"
+    }
+  }
+}

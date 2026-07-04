@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/surveys"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination_data": { "has_more": false, "next_url": null },
+      "data": [
+        { "id": "survey_fixture_1", "type": "PageSurvey", "name": "Fixture Survey 1", "created_at": "2026-01-01T00:00:00.000000Z", "enabled": true, "responses": 12 }
+      ]
+    }
+  }
+}

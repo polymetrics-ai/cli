@@ -50,6 +50,27 @@
       "records": { "path": "." },
       "projection": "passthrough",
       "schema": "schemas/organization_users.json"
+    },
+    {
+      "name": "tags",
+      "path": "/workspaces/{{ config.workspace_id }}/tags",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/workspaces/{{ config.workspace_id }}/tasks",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/tasks.json"
     }
   ]
 }

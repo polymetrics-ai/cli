@@ -1,0 +1,8 @@
+{
+  "record": { "id": "sub_fixture_1", "cancellationDate": "2026-02-01T00:00:00Z", "cancellationMode": "EndOfTerm" },
+  "expect": {
+    "method": "POST",
+    "path": "/Subscriptions/cancel/sub_fixture_1",
+    "body": { "cancellationDate": "2026-02-01T00:00:00Z", "cancellationMode": "EndOfTerm" }
+  }
+}

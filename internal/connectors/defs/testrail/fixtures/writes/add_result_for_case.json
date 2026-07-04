@@ -1,0 +1,9 @@
+{
+  "record": { "run_id": 1, "case_id": 1, "status_id": 1, "comment": "Fixture result comment" },
+  "expect": {
+    "method": "POST",
+    "path": "/index.php",
+    "body": { "status_id": 1, "comment": "Fixture result comment" }
+  },
+  "response": { "status": 200, "body": { "id": 1, "test_id": 1, "status_id": 1 } }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "fixture_ip_pool",
+    "name": "Updated Fixture Pool"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ip-pools/fixture_ip_pool"
+  }
+}

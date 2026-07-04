@@ -28,6 +28,84 @@
       "path": "/api/public/v1/courses",
       "records": { "path": "items" },
       "schema": "schemas/courses.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/public/v1/users",
+      "records": { "path": "items" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "enrollments",
+      "path": "/api/public/v1/enrollments",
+      "records": { "path": "items" },
+      "schema": "schemas/enrollments.json"
+    },
+    {
+      "name": "collections",
+      "path": "/api/public/v1/collections",
+      "records": { "path": "items" },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "products",
+      "path": "/api/public/v1/products",
+      "records": { "path": "items" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "orders",
+      "path": "/api/public/v1/orders",
+      "records": { "path": "items" },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "coupons",
+      "path": "/api/public/v1/coupons",
+      "records": { "path": "items" },
+      "schema": "schemas/coupons.json"
+    },
+    {
+      "name": "promotions",
+      "path": "/api/public/v1/promotions",
+      "records": { "path": "items" },
+      "schema": "schemas/promotions.json"
+    },
+    {
+      "name": "groups",
+      "path": "/api/public/v1/groups",
+      "records": { "path": "items" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "instructors",
+      "path": "/api/public/v1/instructors",
+      "records": { "path": "items" },
+      "schema": "schemas/instructors.json"
+    },
+    {
+      "name": "course_reviews",
+      "path": "/api/public/v1/course_reviews",
+      "records": { "path": "items" },
+      "schema": "schemas/course_reviews.json"
+    },
+    {
+      "name": "custom_profile_field_definitions",
+      "path": "/api/public/v1/custom_profile_field_definitions",
+      "records": { "path": "items" },
+      "schema": "schemas/custom_profile_field_definitions.json"
+    },
+    {
+      "name": "site_scripts",
+      "path": "/api/public/v1/site_scripts",
+      "records": { "path": "items" },
+      "schema": "schemas/site_scripts.json"
+    },
+    {
+      "name": "product_publish_requests",
+      "path": "/api/public/v1/product_publish_requests",
+      "records": { "path": "items" },
+      "schema": "schemas/product_publish_requests.json"
     }
   ]
 }

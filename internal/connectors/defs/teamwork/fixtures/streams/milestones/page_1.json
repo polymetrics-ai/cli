@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        { "id": "1", "name": "Fixture Project 1", "created-on": "2026-01-02T00:00:00Z" },
+        { "id": "2", "name": "Fixture Project 2", "created-on": "2026-01-03T00:00:00Z" }
+      ]
+    }
+  }
+}

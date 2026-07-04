@@ -1,11 +1,25 @@
 {
-  "request": { "method": "GET", "path": "/v1/users", "query": { "page": "2", "limit": "100" } },
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
   "response": {
     "status": 200,
-    "body": {
-      "data": [
-        { "id": "user_fixture_101", "email": "fixture101@example.test", "updated_at": "2026-01-15T00:00:00Z" }
-      ]
-    }
+    "body": [
+      {
+        "id": 101,
+        "name": "Fixture User 101",
+        "email": "fixture101@example.test",
+        "isAdmin": false,
+        "isDeleted": false,
+        "isPermanentlyDeleted": false,
+        "createdAt": 1700000000101,
+        "updatedAt": 1700000000101
+      }
+    ]
   }
 }

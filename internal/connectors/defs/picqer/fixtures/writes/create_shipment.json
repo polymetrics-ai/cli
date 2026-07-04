@@ -1,0 +1,9 @@
+{
+  "record": { "idpicklist": 401, "idshippingprovider_profile": 1, "idpackaging": 1, "weight": 500 },
+  "expect": {
+    "method": "POST",
+    "path": "/picklists/401/shipments",
+    "body": { "idshippingprovider_profile": 1, "idpackaging": 1, "weight": 500 }
+  },
+  "response": { "status": 200, "body": { "idshipment": 1601, "idpicklist": 401 } }
+}

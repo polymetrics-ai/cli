@@ -1,14 +1,17 @@
 {
   "api": "Pexels API v1 (https://www.pexels.com/api/documentation/)",
   "docs": "https://www.pexels.com/api/documentation/",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (photos, curated_photos, videos, popular_videos); legacy ships no writes.",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion: the Pexels API's entire documented surface is exactly 9 GET endpoints across Photos/Videos/Collections; this bundle now covers all 7 that are discoverable/enumerable without an externally-supplied id (photos, curated_photos, videos, popular_videos, featured_collections, my_collections, collection_media via fan_out over my_collections) and excludes the 2 lone detail-by-id lookups that have no server-side discovery path of their own. Pexels' own docs state plainly that 'Collections cannot be created or modified using the Pexels API' and the API is otherwise entirely read-only (no POST/PUT/PATCH/DELETE endpoint exists anywhere in the documented surface), so capabilities.write stays false and this bundle ships no writes.json.",
   "endpoints": [
     { "method": "GET", "path": "/v1/search", "covered_by": { "stream": "photos" } },
     { "method": "GET", "path": "/v1/curated", "covered_by": { "stream": "curated_photos" } },
+    { "method": "GET", "path": "/v1/photos/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "single-photo detail lookup by id; no list endpoint enumerates arbitrary photo ids independent of a search/curated query already covered by the photos/curated_photos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync" } },
     { "method": "GET", "path": "/v1/videos/search", "covered_by": { "stream": "videos" } },
     { "method": "GET", "path": "/v1/videos/popular", "covered_by": { "stream": "popular_videos" } },
-    { "method": "GET", "path": "/v1/photos/{id}", "excluded": { "category": "out_of_scope", "reason": "single-resource lookup, not modeled by legacy; Pass B capability expansion" } },
-    { "method": "GET", "path": "/v1/collections/featured", "excluded": { "category": "out_of_scope", "reason": "not modeled by legacy; Pass B capability expansion" } }
+    { "method": "GET", "path": "/v1/videos/videos/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "single-video detail lookup by id; no list endpoint enumerates arbitrary video ids independent of a search/popular query already covered by the videos/popular_videos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync" } },
+    { "method": "GET", "path": "/v1/collections/featured", "covered_by": { "stream": "featured_collections" } },
+    { "method": "GET", "path": "/v1/collections", "covered_by": { "stream": "my_collections" } },
+    { "method": "GET", "path": "/v1/collections/{id}", "covered_by": { "stream": "collection_media" } }
   ]
 }

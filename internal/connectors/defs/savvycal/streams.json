@@ -47,6 +47,53 @@
       },
       "schema": "schemas/contacts.json",
       "projection": "passthrough"
+    },
+    {
+      "name": "time_zones",
+      "path": "/v1/time_zones",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/time_zones.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/webhooks",
+      "query": { "page": "1", "per_page": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workflows",
+      "path": "/v1/workflows",
+      "query": { "page": "1", "per_page": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/workflows.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workflow_rules",
+      "path": "/v1/workflows/{{ fanout.id }}/rules",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/workflows", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "workflow_id" },
+        "stamp_field": "workflow_id"
+      },
+      "schema": "schemas/workflow_rules.json",
+      "projection": "passthrough"
     }
   ]
 }

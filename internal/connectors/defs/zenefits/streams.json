@@ -29,6 +29,76 @@
       "path": "/departments",
       "records": { "path": "data" },
       "schema": "schemas/departments.json"
+    },
+    {
+      "name": "locations",
+      "path": "/core/locations",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "employments",
+      "path": "/core/employments",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/employments.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/core/custom_fields",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "custom_field_values",
+      "path": "/core/custom_field_values",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/custom_field_values.json"
+    },
+    {
+      "name": "company_banks",
+      "path": "/core/company_banks",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/company_banks.json"
+    },
+    {
+      "name": "employee_banks",
+      "path": "/core/banks",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/employee_banks.json"
+    },
+    {
+      "name": "labor_group_types",
+      "path": "/core/labor_group_types",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/labor_group_types.json"
+    },
+    {
+      "name": "labor_groups",
+      "path": "/core/labor_groups",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/labor_groups.json"
+    },
+    {
+      "name": "vacation_types",
+      "path": "/time_off/vacation_types",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/vacation_types.json"
+    },
+    {
+      "name": "vacation_requests",
+      "path": "/time_off/vacation_requests",
+      "records": { "path": "data.data" },
+      "pagination": { "type": "next_url", "next_url_path": "data.next_url" },
+      "schema": "schemas/vacation_requests.json"
     }
   ]
 }

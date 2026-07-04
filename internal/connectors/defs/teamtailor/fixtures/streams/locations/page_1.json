@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/locations",
+    "query": { "page[number]": "1", "page[size]": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "location_fixture_1", "type": "locations", "attributes": { "name": "Fixture HQ", "city": "Fixtureville", "country": "Fixtureland" } }
+      ]
+    }
+  }
+}

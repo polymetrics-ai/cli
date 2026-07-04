@@ -1,10 +1,10 @@
 {
   "request": {
     "method": "GET",
-    "path": "/jobs",
+    "path": "/v2/jobs",
     "query": {
       "page": "2",
-      "page_size": "100"
+      "pageSize": "100"
     }
   },
   "response": {
@@ -12,9 +12,13 @@
     "body": {
       "data": [
         {
-          "id": "job_fixture_101",
+          "uuid": "job_fixture_101",
+          "jobNumber": "J0101",
           "name": "Fixture Job 101",
-          "updated_at": "2026-01-15T00:00:00Z"
+          "clientUUID": "client_fixture_1",
+          "startDate": "2026-01-15",
+          "dueDate": "2026-02-15",
+          "priority": "High"
         }
       ]
     }
