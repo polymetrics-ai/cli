@@ -25,9 +25,6 @@
       "path": "/core/v3/stores/{{ config.store_id }}/products",
       "records": { "path": "products" },
       "projection": "passthrough",
-      "computed_fields": {
-        "id": "{{ record.yotpo_id }}"
-      },
       "schema": "schemas/products.json"
     },
     {
@@ -55,10 +52,6 @@
       "path": "/core/v3/stores/{{ config.store_id }}/customers",
       "records": { "path": "customers" },
       "projection": "passthrough",
-      "computed_fields": {
-        "id": "{{ record.external_id }}",
-        "updated_at": "{{ record.account_updated_at }}"
-      },
       "schema": "schemas/customers.json"
     },
     {
@@ -66,10 +59,6 @@
       "path": "/core/v3/stores/{{ config.store_id }}/orders",
       "records": { "path": "orders" },
       "projection": "passthrough",
-      "computed_fields": {
-        "id": "{{ record.yotpo_id }}",
-        "updated_at": "{{ record.order_date }}"
-      },
       "schema": "schemas/orders.json"
     },
     {

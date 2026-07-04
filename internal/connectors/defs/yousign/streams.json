@@ -20,8 +20,9 @@
         "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
       },
       "records": { "path": "data" },
+      "projection": "passthrough",
       "computed_fields": {
-        "updated_at": "{{ record.created_at }}"
+        "updated_at": "{{ coalesce record.updated_at record.created_at }}"
       },
       "schema": "schemas/signature_requests.json"
     },
@@ -32,8 +33,10 @@
         "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
       },
       "records": { "path": "data" },
+      "projection": "passthrough",
       "computed_fields": {
-        "updated_at": "{{ record.created_at }}"
+        "name": "{{ coalesce record.name record.email }}",
+        "updated_at": "{{ coalesce record.updated_at record.created_at }}"
       },
       "schema": "schemas/contacts.json"
     },
@@ -44,8 +47,10 @@
         "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
       },
       "records": { "path": "data" },
+      "projection": "passthrough",
       "computed_fields": {
-        "updated_at": "{{ record.created_at }}"
+        "name": "{{ coalesce record.name record.filename }}",
+        "updated_at": "{{ coalesce record.updated_at record.created_at }}"
       },
       "schema": "schemas/documents.json"
     },

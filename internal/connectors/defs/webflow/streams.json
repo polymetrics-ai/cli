@@ -20,18 +20,21 @@
       "name": "collections",
       "path": "/v2/sites/{{ config.site_id }}/collections",
       "records": { "path": "collections" },
+      "projection": "passthrough",
       "schema": "schemas/collections.json"
     },
     {
       "name": "pages",
       "path": "/v2/sites/{{ config.site_id }}/pages",
       "records": { "path": "pages" },
+      "projection": "passthrough",
       "schema": "schemas/pages.json"
     },
     {
       "name": "forms",
       "path": "/v2/sites/{{ config.site_id }}/forms",
       "records": { "path": "forms" },
+      "projection": "passthrough",
       "schema": "schemas/forms.json"
     },
     {

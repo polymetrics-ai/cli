@@ -30,23 +30,23 @@ product.
 
 - `products` (`GET .../products`, records at `products`): full product-catalog fields
   (`yotpo_id`/`external_id`/`name`/`price`/`sku`/`gtins`/`custom_properties`/etc, per Yotpo's
-  documented response shape). `computed_fields` aliases `id` from the bare `yotpo_id` reference
-  (typed extraction preserves its native integer type) — the primary key every stream in this
-  bundle now uses is the numeric `yotpo_id`, not a synthetic string, correcting the pre-Pass-B
-  bundle's schema (which declared a bare `id: string` field the real API never actually returns).
+  documented response shape). This legacy-backed stream does not synthesize an `id` alias from
+  `yotpo_id`: the hand-written connector emits the record verbatim, so the bundle preserves the
+  raw Yotpo response fields exactly.
 - `product_variants` (`GET .../products/{product_id}/variants`, records at `variants`): one
   product's variant set (color/size/etc option combinations); same `yotpo_id`→`id` aliasing.
 - `collections` (`GET .../collections`, records at `collections`): product-collection groupings.
 - `customers` (`GET .../customers`, records at `customers`): customer profile fields. Unlike every
   other stream, Yotpo customers have **no `yotpo_id` at all** — `external_id` (the caller-supplied
-  identifier) is the customer's only natural key, so `computed_fields` aliases `id` from
-  `external_id` instead, and `updated_at` from the native `account_updated_at` field.
+  identifier) is the customer's only natural key. The bundle preserves `external_id` and
+  `account_updated_at` under their native names rather than synthesizing `id`/`updated_at`, matching
+  legacy's passthrough read behavior.
 - `orders` (`GET .../orders`, records at `orders`): order fields including embedded
   `customer`/`billing_address`/`shipping_address`/`fulfillments[]`/`line_items[]` nested objects
   (passthrough preserves all of them verbatim — order fulfillments are NOT modeled as a separate
-  read stream since they are already present here, per `api_surface.json`). `updated_at` is
-  aliased from `order_date` (orders have no separate last-modified timestamp field in Yotpo's
-  documented response).
+  read stream since they are already present here, per `api_surface.json`). Orders have no separate
+  last-modified timestamp field in Yotpo's documented response, and this bundle preserves
+  `order_date` without inventing an `updated_at` alias.
 - `webhook_targets` / `webhook_filters` / `webhook_subscriptions` (`GET
   .../webhooks/{targets,filters,subscriptions}`, records at the matching plural envelope key):
   Yotpo's 3-part webhook configuration model — a target (callback URL), a filter (subscribed event

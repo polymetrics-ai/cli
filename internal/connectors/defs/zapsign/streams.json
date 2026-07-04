@@ -17,7 +17,6 @@
       "name": "documents",
       "path": "/docs/",
       "records": { "path": "results" },
-      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
       "computed_fields": {
         "id": "{{ record.token }}"
       },
@@ -28,7 +27,7 @@
       "path": "/signers/",
       "records": { "path": "results" },
       "computed_fields": {
-        "id": "{{ record.token }}"
+        "id": "{{ coalesce record.token record.id }}"
       },
       "schema": "schemas/signers.json"
     },
@@ -36,9 +35,8 @@
       "name": "templates",
       "path": "/templates/",
       "records": { "path": "results" },
-      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
       "computed_fields": {
-        "id": "{{ record.token }}"
+        "id": "{{ coalesce record.token record.id }}"
       },
       "schema": "schemas/templates.json"
     },

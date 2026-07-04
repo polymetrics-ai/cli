@@ -7,11 +7,6 @@
   "properties": {
     "id": { "type": "string", "description": "Mapped from the raw API's token field via a computed_fields rename." },
     "name": { "type": ["string", "null"] },
-    "template_type": { "type": ["string", "null"] },
-    "active": { "type": ["boolean", "null"] },
-    "folder_path": { "type": ["string", "null"] },
-    "lang": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "last_update_at": { "type": ["string", "null"] }
+    "created_at": { "type": ["string", "null"] }
   }
 }

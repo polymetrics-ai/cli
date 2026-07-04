@@ -36,6 +36,8 @@ file site configuration, and Workspace Management (site create/update/delete/pla
 - `collections` — `GET /v2/sites/{site_id}/collections`, records at `collections`, no pagination.
 - `pages` — `GET /v2/sites/{site_id}/pages`, records at `pages`, no pagination.
 - `forms` — `GET /v2/sites/{site_id}/forms`, records at `forms`, no pagination.
+  These three legacy-parity streams use `projection: "passthrough"` because the Go connector emitted
+  raw Webflow records verbatim.
 - `components` — `GET /v2/sites/{site_id}/components`, `offset_limit` pagination (`limit`/`offset`,
   page size 100), records at `components`.
 - `assets` — `GET /v2/sites/{site_id}/assets`, `offset_limit` pagination, records at `assets`.

@@ -19,16 +19,6 @@
       "default": "https://api.workflowmax2.com",
       "description": "WorkflowMax API base URL. Defaults to the production v2 endpoint; override for test proxies."
     },
-    "page_size": {
-      "type": "string",
-      "default": "100",
-      "description": "Records per page (1-1000, per api-docs.workflowmax.com's pageSize parameter)."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "1",
-      "description": "Maximum pages to read; matches legacy's default of 1 page when unset."
-    },
     "updated_since": {
       "type": "string",
       "description": "Optional YYYY-MM-DD lower bound for the jobs/clients updatedSince filter. When unset, every read is a full stream read (matching legacy's own always-full-read behavior)."

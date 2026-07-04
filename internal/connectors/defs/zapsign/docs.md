@@ -18,10 +18,9 @@ matching legacy's `connsdk.APIKeyHeader("Authorization", token, "Token ")` exact
 
 ## Streams notes
 
-- **`documents`** (`GET /docs/`) and **`templates`** (`GET /templates/`) are `page_number`
-  paginated (`page` query param, no size override — ZapSign's own default page size, 25 for
-  documents / 20 for templates, is fixed server-side and documented, not caller-controlled), with
-  a short-page stop when a page returns fewer records than the configured `page_size` threshold.
+- **`documents`** (`GET /docs/`) and **`templates`** (`GET /templates/`) reproduce legacy's single
+  unpaginated request per read. The hand-written connector never sent a `page` query parameter or
+  followed additional pages, so these streams intentionally omit pagination for fidelity.
 - **`signers`** (`GET /signers/`) is a legacy-parity carryover: ZapSign's published API reference
   does not document a top-level, account-wide "list all signers" endpoint (only
   `GET /docs/{token}/` embeds a document's own signers, and `GET /signers/{signer_token}` fetches
@@ -32,14 +31,12 @@ matching legacy's `connsdk.APIKeyHeader("Authorization", token, "Token ")` exact
 - **`webhooks`** (`GET /webhooks/`) is new in this pass: lists registered outbound webhook
   subscriptions.
 - Each stream's raw API record carries its identifier under the field name `token` (`documents`/
-  `signers`/`templates`) or `id` (`webhooks`); a `computed_fields` rename
-  (`"id": "{{ record.token }}"`) maps the `token`-shaped streams to the schema's `id` property,
-  matching legacy's `mapDocument`/`mapSigner`/`mapTemplate` output field name exactly. Legacy's
-  `signers`/`templates` mappers additionally fall back to a bare `id` field via a `first(token,
-  id)` helper when `token` is absent from a record; this bundle models only the primary
-  `token`-present case (ZapSign's documented wire shape always includes `token` for every one of
-  these object types), since the declarative dialect has no ordered-fallback-across-two-fields
-  primitive — see Known limits.
+  `signers`/`templates`) or `id` (`webhooks`). `computed_fields` maps the token-shaped legacy
+  streams to the schema's `id` property, matching legacy's `mapDocument`/`mapSigner`/`mapTemplate`
+  output names. `signers` and `templates` use the same `first(token, id)` fallback as legacy via
+  `coalesce`; `documents` matches legacy's stricter `id = token` mapping. Schema projection for
+  `documents` and `templates` is intentionally narrow, preserving only the fields those legacy
+  mappers emitted.
 
 ## Write actions & risks
 
@@ -72,14 +69,6 @@ mutations, and `cancel_document`, which sends no body at all (`body_type: "none"
 
 ## Known limits
 
-- **`signers`/`templates`' `token`-absent id fallback is not modeled.** Legacy's `mapSigner`/
-  `mapTemplate` compute `id` as `first(item["token"], item["id"])` — an ordered fallback that only
-  matters if a record ever omits `token` and instead carries a bare `id` field. ZapSign's documented
-  API always returns `token` as the canonical identifier for signers and templates, so this fallback
-  is defensive/unreachable on the real wire shape; the declarative dialect has no
-  ordered-multi-field-fallback primitive (only a single bare `{{ record.<path> }}` reference or a
-  filter chain), so only the `token`-present case is expressed. Deliberately out-of-scope
-  edge case, not a defect.
 - **`signers` stream has no independently-documented top-level list endpoint.** See Streams notes
   above — this stream is a verbatim legacy-parity carryover (`GET /signers/`), not a capability
   verified against ZapSign's current published API reference. Retained rather than removed to avoid

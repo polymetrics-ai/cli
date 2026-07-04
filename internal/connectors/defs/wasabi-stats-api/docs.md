@@ -1,123 +1,50 @@
 # Overview
 
-Wasabi Stats API is a Tier-2 (AuthHook + RecordHook) migration, quarantined in wave1 under
-`AUTH_COMPLEX` (`docs/migration/quarantine.json`): legacy's `requester()` branches auth mode on the
-**contents** of the `api_key` secret at runtime — `connsdk.APIKeyHeader("Authorization", key,
-"Bearer ")` is used unless `strings.SplitN(key, ":", 2)` yields exactly two parts, in which case it
-switches to `connsdk.Basic(parts[0], parts[1])`. The engine's `when` grammar (equality/membership/
-truthiness over a whole resolved value) has no string-split/substring primitive to branch on the
-*shape* of a secret's value, so this cannot be expressed as a declarative `when`-gated dual-auth
-candidate list (contrast zendesk-support's dual-auth precedent, conventions.md §3, which branches on
-which of two DIFFERENT secrets is set — not on parsing one secret's contents). This bundle resolves
-the blocker via `hooks/wasabi-stats-api/hooks.go`'s `AuthHook`, porting legacy's branch verbatim.
-Read-only: legacy's `Write` always returns `ErrUnsupportedOperation`, and this bundle declares
-`capabilities.write: false` with no `writes.json` to match.
+Wasabi Stats API is a Tier-2 migration using an `AuthHook` for legacy's content-based auth branch
+and a `RecordHook` for legacy's missing-`id` fallback. The legacy Go connector remains the data
+authority for these stream names: it reads `GET v1/stats` for `bucket_stats` and `GET v1/accounts`
+for `account_stats`, extracts records from a top-level `data` array, and emits each raw record
+verbatim after adding an `id` only when the source record lacks one.
 
 ## Auth setup
 
-Provide one secret, `api_key`. `hooks/wasabi-stats-api/hooks.go`'s `AuthHook` inspects its resolved
-value: if it splits into exactly two non-empty-separator parts on `:` (a `"username:password"`-shaped
-value), it authenticates every request with HTTP Basic auth using those two parts; otherwise it sends
-`Authorization: Bearer <api_key>` verbatim — matching legacy `wasabi_stats_api.go:138-141` exactly,
-including legacy's use of `strings.SplitN(key, ":", 2)` (a value with *more* than one `:` still
-splits into exactly 2 parts, the second part retaining any remaining colons; a value with zero `:`
-falls through to the Bearer branch).
-
-`streams.json`'s `base.auth` declares a single `mode: custom` candidate naming the hook, carrying
-`value: "{{ secrets.api_key }}"` — `AuthSpec.Value` is repurposed here as the field that carries the
-raw secret to branch on (API-CONTRACT.md's documented field-mapping convention, matching gmail's
-reuse of `Token` for its refresh token): wasabi's `AuthSpec` has no dedicated field for "a secret
-whose contents determine the auth mode," and `Value` is otherwise unused by the custom mode.
+Provide one secret, `api_key`. The hook inspects the resolved value exactly like legacy: a value
+that splits on the first `:` into two parts uses HTTP Basic auth; any value without `:` is sent as
+`Authorization: Bearer <api_key>`.
 
 ## Streams notes
 
-**Pass B correction**: legacy (and this bundle's prior version) targeted `GET v1/stats` and
-`GET v1/accounts` — neither is a real Wasabi Stats API path. Researching the live docs
-(`docs.wasabi.com/apidocs/wasabi-stats-api` and its per-endpoint sub-pages) turned up the real,
-currently-documented standalone-account surface: exactly 4 GET endpoints under
-`/v1/standalone/utilizations`. This bundle now targets the real paths while keeping the exact same
-2 stream names/schemas/primary-key/cursor-field legacy already exposed, so downstream
-catalog/manifest consumers see no shape change: `bucket_stats` now reads `GET
-v1/standalone/utilizations/bucket` (real API: bare top-level JSON array, `records.path: ""`) and
-`account_stats` now reads `GET v1/standalone/utilizations` (real API: `{"PageInfo":{...},
-"Records":[...]}`, `records.path: "Records"`). Both are un-paginated (`pagination: {"type":
-"none"}` — the real API's own `pageNum`/`pageSize` query params exist, but this bundle sends only
-a fixed `pageSize=100` per request and does not implement multi-page traversal, matching legacy's
-un-paginated behavior exactly for the record volumes this connector was built for).
+Both streams are unpaginated and pass `start_date` only when `config.start_date` is set. `Check`
+matches legacy's separate behavior by targeting `v1/stats` and declaring a `start_date` query
+default.
 
-The real API returns PascalCase field names (`BucketUtilizationNum`, `AcctNum`, `StartTime`,
-`PaddedStorageSizeBytes`, etc.) — every schema property is populated via a `computed_fields` rename
-(bare `{{ record.X }}` references trigger typed extraction, preserving each field's real JSON
-type — integers stay integers, no stringify-workaround). `id` is derived from the real API's own
-unique numeric identifier (`BucketUtilizationNum` / `UtilizationNum`) via `{{ record.X |
-last_path_segment }}` (forces string output for the schema's `"type": "string"` id field, the same
-pattern VWO's `campaigns.id` uses for its own bare-integer wire id). `storage_bytes` aliases the
-real API's `PaddedStorageSizeBytes` (billable storage after Wasabi's minimum-object-size rule) to
-keep this bundle's pre-existing field name; `account_stats`' `object_count` aliases
-`NumBillableObjects` the same way. Both streams also expose the full real record (`bucket_num`,
-`acct_num`, `region`, all the `Num*Calls`/`*Bytes` counters) as additional schema properties beyond
-legacy's original narrower field set — this is Pass B's full-surface-expansion mandate: everything
-the real API actually returns is now modeled, not just the subset legacy's narrower shape captured.
+Both streams use `projection: "passthrough"` because legacy emits the decoded record map directly,
+not a field-built `connectors.Record`. The schemas intentionally list only the legacy catalog fields:
+`bucket_stats` has `id`, `bucket`, `date`, and `storage_bytes`; `account_stats` has `id`, `date`,
+`storage_bytes`, and `object_count`. Runtime passthrough still preserves any additional raw fields
+legacy would have emitted.
 
-Both streams send `from` as a query parameter **only when `config.start_date` is configured**
-(`omit_when_absent: true` — the optional-query dialect, conventions.md §3), mirroring legacy's
-`start_date`-passthrough behavior one-for-one but under the real API's own query parameter name
-(`from`, not `start_date` — Wasabi's docs default this to "the date of the last month from today"
-when omitted). This differs deliberately from `base.check`'s `from` handling (below).
+The `RecordHook` preserves legacy's missing-id behavior: if `id` is absent, it derives one from the
+first non-empty value of `bucket`, then `date`, then the stream name. `x-cursor-field: date` is kept
+because legacy publishes `CursorFields: []string{"date"}`; no `incremental` block is declared because
+legacy's `start_date` is a fixed config filter, not persisted cursor state.
 
-**`hooks/wasabi-stats-api/hooks.go`'s `RecordHook` ports legacy's per-record `id`-fallback
-derivation**, which no `computed_fields` template can express (a computed field is a single
-template evaluated once per output field, not a multi-field conditional with a per-stream literal
-fallback): legacy's Read (`wasabi_stats_api.go:115-117`) fills a record's `id` from the raw API
-response when present; when the raw record has no `id` at all, it derives one as the first
-non-empty value of `bucket`, then `date`, then the literal stream name (`"bucket_stats"` /
-`"account_stats"`) — `account_stats` records have no `bucket` field at all, so in practice this
-falls back to `date`, then the stream-name literal, for that stream. The hook reads `raw["bucket"]`/
-`raw["date"]` (the PRE-projection record MapRecord receives) exactly as legacy reads `item["bucket"]`/
-`item["date"]` before its own id-fallback check, and only sets `projected["id"]` when it is
-genuinely unset — a record whose raw payload already has `id` is left untouched by the hook,
-identical to legacy's `if item["id"] == nil` guard.
+## API surface
 
-**No true incremental sync mode**: `x-cursor-field: date` is declared per legacy's own
-`CursorFields: []string{"date"}` catalog entry (`streams()`, `wasabi_stats_api.go:166`), but no
-stream declares an `incremental` block — legacy's own `start_date` is a fixed, non-advancing
-per-connection filter (see above), never a persisted state cursor read back via `InitialState`, so
-there is nothing for the engine's `incremental.request_param`/`cursor_field` machinery to drive.
+Wasabi's newer documented standalone utilization endpoints under `/v1/standalone/utilizations`
+return different envelopes and PascalCase field names. They are documented in `api_surface.json` as
+not wired into these legacy stream names because substituting them would change emitted records.
 
-## Write actions & risks
-
-None — Wasabi Stats API is read-only. `capabilities.write: false`, no `writes.json` file, matching
-legacy's `ErrUnsupportedOperation` (`wasabi_stats_api.go:125-127`).
-
+<<<<<<< HEAD
+=======
 ## Known limits
 
-- **`AUTH_COMPLEX` resolution, not a new deviation.** The AuthHook's content-based Bearer-vs-Basic
-  branch is the documented resolution of the recorded quarantine blocker
-  (`docs/migration/quarantine.json`), ported verbatim from legacy's `requester()`.
-  `metadata.json`'s `skip_dynamic` marker exists because conformance's synthetic secret value
-  (`"synthetic-conformance-secret"`, which contains no `:`) can only ever exercise the Bearer
-  branch — the Basic branch is proven solely by `hooks/wasabi-stats-api/hooks_test.go`'s
-  `TestAuthenticator_ColonSeparatedKeyUsesBasicAuth`-style cases, mirroring gmail's identical
-  custom-auth-only skip_dynamic precedent (conventions.md's conformance section: "a custom-auth
-  `AuthHook` whose real request needs a config value... conformance's synthetic non-secret config...
-  can never meaningfully populate").
-- **`base.check`'s `from` query param is always present (even as an empty string) when
-  `config.start_date` is unset**, deliberately DIFFERENT from the two streams' `omit_when_absent`
-  behavior: legacy's `Check` (`wasabi_stats_api.go:66`) unconditionally builds
-  `url.Values{"start_date": []string{strings.TrimSpace(cfg.Config["start_date"])}}` — always
-  setting the key, never omitting it, even when the trimmed value is `""` — while legacy's `Read`
-  (`wasabi_stats_api.go:100-102`) omits the param entirely when empty. This bundle reproduces both
-  behaviors faithfully via two different `stream.Query` dialect shapes (`check.query` uses
-  `"default": ""`, always present under the real API's `from` key; the streams use
-  `"omit_when_absent": true`) rather than collapsing them to one shared shape, since collapsing
-  would change accepted-input behavior for whichever side lost its distinct handling.
-- **`api_surface.json`'s excluded endpoints, Pass B**: the real API's two single-bucket detail
-  lookups (`/v1/standalone/utilizations/bucket/{bucketName}` and `.../{bucketNumber}`) are excluded
-  as `duplicate_of` `bucket_stats` — same record shape, and `bucket_stats` already returns every
-  bucket's records in one call, so a per-bucket detail endpoint adds no reachable data. The
-  Control-Account/Sub-Account aggregate endpoint (`/v1/utilizations`) is excluded as
-  `requires_elevated_scope`: it needs a Wasabi Account Control "Primary Partner API Key" (a
-  reseller/control-account credential), a fundamentally different auth scope from the standalone
-  Root/billing-permission access key this bundle's `spec.json` collects — adding it would require a
-  new secret field and is out of scope for this connector's identity as a standalone-account
-  integration.
+The newer standalone utilization endpoints are intentionally not substituted for the legacy
+endpoints in this bundle. They may be useful in a future additive connector version or differently
+named streams, but they are not byte-for-byte compatible with legacy `bucket_stats` and
+`account_stats` records.
+
+>>>>>>> fidfix-2d
+## Write actions & risks
+
+None. Legacy returns `ErrUnsupportedOperation`, and the stats surface is read-only.

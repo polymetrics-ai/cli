@@ -25,8 +25,10 @@ the real v2 host) and may be overridden for test proxies.
 `jobs` (`GET /v2/jobs`) and `clients` (`GET /v2/clients`) share the identical envelope (records at
 the top-level `data` array, matching legacy's `recordsPath: "data"`) and `page_number` pagination
 (`page`/`pageSize` query params — the real v2 parameter name is `pageSize`, not legacy's
-`page_size`). `page_size` config defaults to 100; `max_pages` defaults to 1 (matching legacy's own
-unset-`max_pages` default). Both streams declare an optional `updatedSince` query param
+`page_size`). The bundle sends a static `pageSize=100` and caps reads at one page, matching
+legacy's own default `page_size=100` and unset-`max_pages` behavior. Legacy's optional runtime
+`page_size`/`max_pages` overrides are not declared because the engine pagination block is static.
+Both streams declare an optional `updatedSince` query param
 (`{{ config.updated_since }}`, `omit_when_absent: true`) wired to the real v2 `updatedSince`
 date-range filter documented for both endpoints — this is a genuinely new, real server-side filter
 neither legacy nor the pre-Pass-B bundle modeled; it is deliberately NOT wired as an `incremental`
@@ -35,10 +37,9 @@ filter and adding automatic cursor-driven filtering here would be new sync-mode 
 Pass B's full-surface-coverage scope, not a parity port. Leaving `updated_since` unset (the
 default) reproduces legacy's exact always-full-read behavior.
 
-`jobs` ships a genuine two-page conformance fixture (`fixtures/streams/jobs/{page_1,page_2}.json`)
-at the real `pageSize: 100`: page 1 carries a full 100 records and page 2 carries a single,
-honestly short final record. `clients` ships a single fixture page (2 records, an honestly short
-final page under a 100 page size).
+`jobs` ships a single default-read conformance fixture page at the real `pageSize: 100`; the
+static `max_pages: 1` cap stops there to match legacy's default read. `clients` ships a single
+fixture page (2 records, an honestly short final page under a 100 page size).
 
 `jobs` emits the real v2 field set: `uuid` (primary key), `jobNumber`, `name`, `clientUUID`,
 `clientContactUUID`, `description`, `clientOrderNumber`, `budget`, `jobStatusUUID`,
@@ -46,11 +47,11 @@ final page under a 100 page size).
 (primary key), `name`, `exportCode`, `clientManagerUUID`, `jobManagerUUID`, `referralSource`,
 `prospect`, `archived`, `favorite`. Both streams declare `"projection": "passthrough"` (matching
 legacy's verbatim-emit behavior and the post-wave2 §8 rule 1) so every real v2 field survives, not
-just the ones enumerated in each schema. Neither stream declares `x-cursor-field`/`incremental`:
-the real v2 list responses do not surface a per-item `updatedAt` cursor field in the base (no
-`includes=`) response shape this bundle reads, so there is no schema property to name as a cursor —
-matching this bundle's decision to expose `updatedSince` as a plain optional config filter (above)
-rather than a stateful `incremental` block.
+just the ones enumerated in each schema. Both schemas declare `x-cursor-field: updated_at` for
+legacy catalog parity (`CursorFields: []string{"updated_at"}`), but neither stream declares an
+`incremental` block: the real v2 list responses do not surface a per-item `updatedAt` cursor field
+in the base (no `includes=`) response shape this bundle reads, so `updatedSince` remains a plain
+optional config filter (above) rather than a stateful cursor.
 
 **`contacts` is no longer a stream.** The pre-Pass-B bundle declared a `GET /contacts` stream, but
 WorkflowMax v2 has **no bare list endpoint for client contacts at all** — verified against
@@ -94,9 +95,9 @@ permanent deletes). `delete_client`/`delete_job`/`delete_client_contact` use `bo
   preserving legacy's non-functional paths; this is a genuine bug-fix, not a parity-narrowing
   deviation, since legacy's original paths would 404/401 against the real live API.
 - **`page_size`/`max_pages` config-driven per-request overrides are not modeled.** The engine's
-  `page_number` paginator reads `PaginationSpec.PageSize` from the static `streams.json`
-  `base.pagination` block only; `page_size`/`max_pages` remain declared in `spec.json` as
-  documentation of the accepted config surface.
+  `page_number` paginator reads `page_size`/`max_pages` from the static `streams.json`
+  pagination block only, so the bundle uses legacy's default `pageSize=100` and one-page cap and
+  does not declare ignored runtime config keys for those overrides.
 - **`updated_since` is a plain optional filter, not a stateful `incremental` block** — see Streams
   notes above for the reasoning; a future pass could add a real `incremental` block once a stable
   per-item cursor field is confirmed in the live response shape.

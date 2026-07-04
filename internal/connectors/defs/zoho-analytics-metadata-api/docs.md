@@ -61,16 +61,16 @@ metadata-api.html endpoint researched for this Pass B pass returns its full resu
 response with no page/cursor/next-link field of any kind (confirmed by reading each endpoint's own
 documented sample response).
 
-The original 3 legacy-parity streams are unchanged from the Tier-2 repair:
+The original 3 legacy-parity streams reproduce the hand-written connector's mapper output:
 
-- `workspaces` — `GET /workspaces`, records at `data`. A `computed_fields` entry renames the raw
-  `createdTime` to the schema's `created_time` (a clean single-source rename, matching legacy's
-  `mapWorkspace`'s `"created_time": item["createdTime"]`). Declared `projection: "passthrough"` —
-  see Known limits for why `id`/`name` are not similarly derived.
-- `views` — `GET /views`, records at `data`. Declared `projection: "passthrough"` — see Known
-  limits.
-- `tables` — `GET /tables`, records at `data`. Declared `projection: "passthrough"` for the same
-  reason as `views` (legacy's `mapView` function is shared verbatim by both streams).
+- `workspaces` — `GET /workspaces`, records at `data`. `computed_fields` maps `id` from
+  `workspaceId` falling back to `id`, `name` from `workspaceName` falling back to `name`, and
+  `created_time` from `createdTime`, matching legacy's `mapWorkspace`.
+- `views` — `GET /views`, records at `data`. `computed_fields` maps `id` from the first non-empty
+  value of `viewId`, `tableId`, or `id`, and `name` from `viewName`, `tableName`, or `name`,
+  matching legacy's shared `mapView`.
+- `tables` — `GET /tables`, records at `data`. Uses the same `mapView`-equivalent mapping as
+  `views`, since the legacy Go implementation shared the mapper for both streams.
 
 The 6 new Pass-B streams model the REAL Zoho Analytics Metadata API response envelopes (each
 endpoint's own documented sample response was read individually rather than assumed, since the
@@ -116,25 +116,6 @@ bundle does NOT model that parameter; see Known limits.
 
 ## Known limits
 
-- **`workspaces`/`views`/`tables` streams do not reproduce legacy's multi-field id/name coalesce.**
-  Legacy's `mapWorkspace` derives `id` as `first(item["workspaceId"], item["id"])` and `name` as
-  `first(item["workspaceName"], item["name"])`; `mapView` (shared by both the `views` and `tables`
-  streams) derives `id` as `first(item["viewId"], item["tableId"], item["id"])` and `name` as
-  `first(item["viewName"], item["tableName"], item["name"])` — first non-empty value wins across
-  differently-named raw fields. The engine's `computed_fields` dialect has no coalesce/
-  fallback-across-multiple-source-fields primitive (`docs/migration/conventions.md` §3: every
-  `computed_fields` entry is a single template resolved against one reference or literal, with only
-  "skip if THIS entry's source is absent" tolerance, never "try field A, else field B, else field
-  C"). Declaring only the first-priority field would silently drop records where legacy would have
-  fallen back to a secondary field — an accepted-input emitted-DATA change, not cosmetic. All three
-  streams are instead declared `projection: "passthrough"`: every raw field (`workspaceId`,
-  `workspaceName`, `viewId`, `viewName`, `tableId`, `tableName`, and any other API field) survives
-  verbatim, strictly more permissive than legacy (a downstream consumer can reproduce legacy's exact
-  coalesce priority itself) and never drops data legacy would have emitted for any accepted input.
-  This mirrors the identical, independently-documented deviation in the sibling zoho-bigin
-  migration's docs.md. Classified ACCEPTABLE per `docs/migration/conventions.md` §5 (never
-  drops/changes data for any legacy-accepted input, differs only in also exposing additional raw
-  fields legacy's narrower projection discarded).
 - **`token_url` https-only enforcement is stricter than legacy's `validateURL`** (which accepted
   plain `http` too, `zoho_analytics_metadata_api.go:226-234`): the hook only accepts `https://`
   overrides. Never stricter for any *production* Zoho OAuth endpoint, which is always https;

@@ -20,15 +20,17 @@ Provide `api_key` (secret) for Bearer auth (`Authorization: Bearer <api_key>`), 
 
 The 3 legacy-parity streams (`signature_requests`, `contacts`, `documents`) share the same shape:
 `GET` against the Yousign list endpoint, records at `data`, primary key `["id"]`, cursor field
-`updated_at`. No pagination is declared for these 3 — legacy issues a single unpaginated request
-per stream and emits every record in the response's `data` array, so this bundle's `streams.json`
-omits any `pagination` block (defaulting to `none`) for them, matching legacy exactly.
+`updated_at`, and passthrough projection. No pagination is declared for these 3 — legacy issues a
+single unpaginated request per stream and emits every record in the response's `data` array after
+copying all raw fields, so this bundle's `streams.json` omits any `pagination` block (defaulting to
+`none`) and preserves the raw records, matching legacy exactly.
 
 An optional `limit` config value is sent as the `limit` query parameter on every legacy-parity
 stream's read request when set (`stream.Query`'s `omit_when_absent: true` opt-in dialect), matching
-legacy's `baseQuery` (`yousign.go:176-182`). `updated_at` is a `computed_fields` rename from the raw
-`created_at` field, matching legacy's `cursorKeys: {"created_at","updated_at"}` primary preference
-(`created_at` is tried first).
+legacy's `baseQuery` (`yousign.go:176-182`). `updated_at` uses the same fallback as legacy's
+`mapRecord`: keep a raw `updated_at` when present, otherwise fill it from `created_at`. `contacts`
+and `documents` also preserve legacy's `name` fallbacks (`email` and `filename`, respectively)
+when the raw `name` field is absent.
 
 **Pass B new streams**: `webhooks`, `templates`, `users`, `workflow_sessions` — the top-level list
 resources with a plain GET-list shape and no legacy behavior to match (new coverage, authored fresh
@@ -88,15 +90,6 @@ without a fan_out-scoped nested-resource create or a multipart/binary body.
   inspects the status code / error, never the body. Acceptable per the parity-deviation meta-rule
   (`docs/migration/conventions.md` §5): never changes emitted record data, only Check's own request
   shape.
-- **`name` multi-key fallback is approximated by the primary key only.** Legacy's `contacts` and
-  `documents` streams try `name` first, falling back to `email`/`filename` respectively only when
-  `name` itself is absent from the raw record (`nameKeys: {"name","email"}` /
-  `{"name","filename"}`). The engine's `computed_fields` dialect has no coalesce/fallback filter (a
-  single template resolves a single dotted path only), so this bundle relies on `name`'s direct
-  schema-projection passthrough (the common case) and does not model the `email`/`filename`
-  fallback. A contact/document response that omits `name` entirely would silently emit a null
-  `name` here where legacy would have recovered `email`/`filename`. Documented, not silently worked
-  around.
 - **The legacy-parity `documents` stream targets a deprecated/removed top-level endpoint.** Legacy
   reads `GET /documents` directly, and this bundle's `documents` stream reproduces that exact
   request for parity. Live research against the current Yousign v3 API reference found no

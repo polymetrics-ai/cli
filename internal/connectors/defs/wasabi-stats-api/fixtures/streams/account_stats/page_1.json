@@ -1,39 +1,17 @@
 {
   "request": {
     "method": "GET",
-    "path": "/v1/standalone/utilizations"
+    "path": "/v1/accounts"
   },
   "response": {
     "status": 200,
     "body": {
-      "PageInfo": { "RecordCount": 1, "PageCount": 1, "PageSize": 1, "PageNum": 0 },
-      "Records": [
+      "data": [
         {
-          "UtilizationNum": 133886356,
-          "AcctNum": 1115687,
-          "AcctPlanNum": 1398007,
-          "StartTime": "2026-01-01T00:00:00Z",
-          "EndTime": "2026-01-02T00:00:00Z",
-          "CreateTime": "2026-01-02T00:05:00Z",
-          "NumBillableObjects": 12,
-          "NumBillableDeletedObjects": 0,
-          "RawStorageSizeBytes": 4096,
-          "PaddedStorageSizeBytes": 4096,
-          "MetadataStorageSizeBytes": 48,
-          "DeletedStorageSizeBytes": 0,
-          "OrphanedStorageSizeBytes": 0,
-          "MinStorageChargeBytes": 0,
-          "NumAPICalls": 0,
-          "UploadBytes": 0,
-          "DownloadBytes": 0,
-          "StorageWroteBytes": 0,
-          "StorageReadBytes": 0,
-          "NumGETCalls": 0,
-          "NumPUTCalls": 0,
-          "NumDELETECalls": 0,
-          "NumLISTCalls": 0,
-          "NumHEADCalls": 0,
-          "DeleteBytes": 0
+          "id": "account-1",
+          "date": "2026-01-01T00:00:00Z",
+          "storage_bytes": 4096,
+          "object_count": 12
         }
       ]
     }

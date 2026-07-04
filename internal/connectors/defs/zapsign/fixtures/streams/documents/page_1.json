@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/docs/", "query": { "page": "1" } },
+  "request": { "method": "GET", "path": "/docs/" },
   "response": {
     "status": 200,
     "body": {

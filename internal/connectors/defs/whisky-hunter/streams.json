@@ -12,6 +12,20 @@
   },
   "streams": [
     {
+      "name": "auctions",
+      "path": "/api/auctions_data/",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/auctions.json"
+    },
+    {
+      "name": "distilleries",
+      "path": "/api/distilleries_info/",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/distilleries.json"
+    },
+    {
       "name": "auctions_data",
       "path": "/api/auctions_data/",
       "records": { "path": "." },

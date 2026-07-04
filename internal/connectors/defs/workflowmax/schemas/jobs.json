@@ -3,6 +3,7 @@
   "title": "jobs",
   "type": "object",
   "x-primary-key": ["uuid"],
+  "x-cursor-field": "updated_at",
   "required": ["uuid"],
   "properties": {
     "uuid": { "type": "string" },
@@ -18,6 +19,7 @@
     "priority": { "type": ["string", "null"] },
     "startDate": { "type": ["string", "null"] },
     "dueDate": { "type": ["string", "null"] },
-    "completedDate": { "type": ["string", "null"] }
+    "completedDate": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
   }
 }

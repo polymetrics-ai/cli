@@ -32,24 +32,31 @@
       "path": "/workspaces",
       "records": { "path": "data" },
       "computed_fields": {
+        "id": "{{ coalesce record.workspaceId record.id }}",
+        "name": "{{ coalesce record.workspaceName record.name }}",
         "created_time": "{{ record.createdTime }}"
       },
-      "schema": "schemas/workspaces.json",
-      "projection": "passthrough"
+      "schema": "schemas/workspaces.json"
     },
     {
       "name": "views",
       "path": "/views",
       "records": { "path": "data" },
-      "schema": "schemas/views.json",
-      "projection": "passthrough"
+      "computed_fields": {
+        "id": "{{ coalesce record.viewId record.tableId record.id }}",
+        "name": "{{ coalesce record.viewName record.tableName record.name }}"
+      },
+      "schema": "schemas/views.json"
     },
     {
       "name": "tables",
       "path": "/tables",
       "records": { "path": "data" },
-      "schema": "schemas/tables.json",
-      "projection": "passthrough"
+      "computed_fields": {
+        "id": "{{ coalesce record.viewId record.tableId record.id }}",
+        "name": "{{ coalesce record.viewName record.tableName record.name }}"
+      },
+      "schema": "schemas/tables.json"
     },
     {
       "name": "organizations",

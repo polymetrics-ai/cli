@@ -3,7 +3,6 @@
   "title": "form_submissions",
   "type": "object",
   "x-primary-key": ["id"],
-  "x-cursor-field": "dateSubmitted",
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },

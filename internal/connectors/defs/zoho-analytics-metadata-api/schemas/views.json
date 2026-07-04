@@ -6,10 +6,6 @@
   "required": ["id"],
   "properties": {
     "id": { "type": "string" },
-    "name": { "type": ["string", "null"] },
-    "viewId": { "type": ["string", "null"], "description": "Raw Zoho Analytics view id field. See docs.md Known limits for the id/name coalesce this bundle does not reproduce." },
-    "viewName": { "type": ["string", "null"] },
-    "tableId": { "type": ["string", "null"] },
-    "tableName": { "type": ["string", "null"] }
+    "name": { "type": ["string", "null"] }
   }
 }
