@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFS_ROOT = resolve(__dirname, '../../internal/connectors/defs');
 const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
+const ICON_OVERRIDES = resolve(__dirname, '../data/icon_overrides.json');
 const ICON_SOURCE_ROOT = resolve(__dirname, '../../docs/connectors');
 const ICON_PUBLIC_ROOT = resolve(__dirname, '../public/connectors');
 const OUT = resolve(__dirname, '../data/connectors.generated.json');
@@ -71,13 +72,21 @@ function readSchema(base, schemaPath) {
   return readJSON(target);
 }
 
-const validIconPath = (path) => /^icons\/[A-Za-z0-9._-]+\.svg$/.test(path);
+const validIconPath = (path) => /^icons\/(?:[A-Za-z0-9._-]+\/)?[A-Za-z0-9._-]+\.svg$/.test(path);
 const iconRaw = readJSON(ICON_DATA) ?? [];
+const iconOverrideRaw = readJSON(ICON_OVERRIDES) ?? [];
 const iconByConnector = new Map();
 for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
   if (!icon?.connector) continue;
   iconByConnector.set(icon.connector, icon);
   iconByConnector.set(stripPrefix(icon.connector), icon);
+}
+
+const iconOverrideByConnector = new Map();
+for (const icon of Array.isArray(iconOverrideRaw) ? iconOverrideRaw : []) {
+  if (!icon?.connector) continue;
+  iconOverrideByConnector.set(icon.connector, icon);
+  iconOverrideByConnector.set(stripPrefix(icon.connector), icon);
 }
 
 const copiedIconPaths = new Set();
@@ -126,6 +135,23 @@ function mapIcon(slug, metadata) {
     `source-${slug}`,
     `destination-${slug}`,
   ].filter(Boolean);
+
+  const override = candidates.map((candidate) => iconOverrideByConnector.get(candidate)).find(Boolean);
+  if (override) {
+    const path = trim(override.path);
+    if (!validIconPath(path)) {
+      throw new Error(`Invalid connector icon override path for ${slug}: ${path}`);
+    }
+
+    return {
+      id: trim(override.id),
+      path,
+      publicPath: `/connectors/${path}`,
+      source: trim(override.source),
+      reviewStatus: trim(override.review_status),
+      reviewUrl: trim(override.review_url),
+    };
+  }
 
   const icon = candidates.map((candidate) => iconByConnector.get(candidate)).find(Boolean);
   if (!icon) return null;

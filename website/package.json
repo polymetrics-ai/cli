@@ -7,6 +7,7 @@
     "dev": "next dev --turbopack",
     "gen:bundles": "node scripts/gen-connector-bundles.mjs",
     "gen:connectors": "node scripts/gen-connectors.mjs",
+    "fetch:icons": "node scripts/fetch-simple-icons.mjs",
     "gen:penrose": "node scripts/gen-penrose.mjs",
     "gen:patterns": "node scripts/gen-patterns.mjs",
     "gen:catalog": "node scripts/gen-connector-bundles.mjs && node scripts/gen-connector-catalog.mjs",

@@ -288,11 +288,11 @@ export default async function ConnectorPage({ params }: Props) {
         <section className="min-w-0" aria-labelledby="section-bundle-docs">
           <SectionHeading
             id="section-bundle-docs"
-            description="Connector documentation generated from the bundle docs.md file."
+            description="Human-readable notes parsed from docs.md, with the verbatim source kept for agents."
           >
-            Bundle docs
+            Bundle notes
           </SectionHeading>
-          <BundleMarkdown markdown={c.docsMd} />
+          <BundleMarkdown connector={c} markdown={c.docsMd} />
         </section>
       </div>
     </article>
