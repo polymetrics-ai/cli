@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/companies" },
+  "request": { "method": "GET", "path": "/core/companies" },
   "response": {
     "status": 200,
     "body": {

@@ -51,9 +51,9 @@
         "path": "contacts"
       },
       "computed_fields": {
-        "id": "{{ record.contact_id }}",
-        "name": "{{ record.contact_name }}",
-        "updated_at": "{{ record.last_modified_time }}"
+        "id": "{{ coalesce record.id record.contact_id }}",
+        "name": "{{ coalesce record.name record.contact_name record.customer_name }}",
+        "updated_at": "{{ coalesce record.updated_at record.last_modified_time record.updated_time }}"
       },
       "schema": "schemas/contacts.json",
       "projection": "passthrough"
@@ -71,9 +71,9 @@
         "path": "invoices"
       },
       "computed_fields": {
-        "id": "{{ record.invoice_id }}",
-        "name": "{{ record.invoice_number }}",
-        "updated_at": "{{ record.last_modified_time }}"
+        "id": "{{ coalesce record.id record.invoice_id }}",
+        "name": "{{ coalesce record.name record.invoice_number record.number }}",
+        "updated_at": "{{ coalesce record.updated_at record.last_modified_time record.updated_time }}"
       },
       "schema": "schemas/invoices.json",
       "projection": "passthrough"
@@ -91,9 +91,9 @@
         "path": "items"
       },
       "computed_fields": {
-        "id": "{{ record.item_id }}",
-        "name": "{{ record.name }}",
-        "updated_at": "{{ record.last_modified_time }}"
+        "id": "{{ coalesce record.id record.item_id }}",
+        "name": "{{ coalesce record.name record.item_name }}",
+        "updated_at": "{{ coalesce record.updated_at record.last_modified_time record.updated_time }}"
       },
       "schema": "schemas/items.json",
       "projection": "passthrough"

@@ -14,19 +14,19 @@
   "streams": [
     {
       "name": "people",
-      "path": "/people",
+      "path": "/core/people",
       "records": { "path": "data" },
       "schema": "schemas/people.json"
     },
     {
       "name": "companies",
-      "path": "/companies",
+      "path": "/core/companies",
       "records": { "path": "data" },
       "schema": "schemas/companies.json"
     },
     {
       "name": "departments",
-      "path": "/departments",
+      "path": "/core/departments",
       "records": { "path": "data" },
       "schema": "schemas/departments.json"
     },

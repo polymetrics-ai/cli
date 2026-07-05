@@ -13,17 +13,16 @@ in the reference docs — so this bundle has no `writes.json` and `capabilities.
 ## Auth setup
 
 Requires a single secret, `token`, sent as `Authorization: Bearer <token>` — a `bearer` auth spec,
-matching legacy's `connsdk.Bearer(token)` exactly (`zenefits.go:118`). `base_url` defaults to
-`https://api.zenefits.com/core` (`zenefits.go:17`'s `defaultBaseURL`), materialized via
-`spec.json`'s `"default"` when unset.
+matching legacy's `connsdk.Bearer(token)` exactly (`zenefits.go:118`). `base_url` defaults to the
+API root `https://api.zenefits.com`, with each stream carrying its documented namespace (`/core`
+or `/time_off`) in `streams.json`.
 
 ## Streams notes
 
 Thirteen streams total. The original 3 legacy-parity streams (`people`, `companies`, `departments`)
-are unchanged from wave2: single-page GET reads with no pagination and no incremental support,
+remain single-page GET reads with no pagination and no incremental support, using
 `records.path: "data"` against a simplified flat `{"data": [...]}` fixture shape that mirrors
-legacy's own unconditional single-request behavior exactly — these fixtures/streams are
-byte-identical to the pre-Pass-B bundle and were not touched.
+legacy's own unconditional single-request behavior exactly.
 
 The 10 new Pass-B streams (`locations`, `employments`, `custom_fields`, `custom_field_values`,
 `company_banks`, `employee_banks`, `labor_group_types`, `labor_groups`, `vacation_types`,

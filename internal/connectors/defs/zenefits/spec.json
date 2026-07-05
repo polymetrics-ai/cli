@@ -7,8 +7,8 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Zenefits API base URL.",
-      "default": "https://api.zenefits.com/core"
+      "description": "Zenefits API root URL.",
+      "default": "https://api.zenefits.com"
     },
     "token": {
       "type": "string",
