@@ -42,13 +42,13 @@ export const DOCUMENTATION_NAV: DocumentationNavItem[] = [
     label: 'Connectors',
     href: '/docs/connectors',
     icon: Cable,
-    description: 'Browse catalog metadata and setup fields.',
+    description: 'Browse capabilities, streams, and actions.',
   },
   {
     label: 'ETL',
     href: '/docs/etl',
     icon: GitBranch,
-    description: 'Extract source data into the warehouse.',
+    description: 'Extract connector data into the warehouse.',
   },
   {
     label: 'Query',

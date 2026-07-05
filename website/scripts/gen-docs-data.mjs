@@ -30,7 +30,7 @@ function connectorCatalogPage() {
   return {
     title: 'Connectors',
     description:
-      'Browse every pm source and destination connector, inspect setup fields, and expose machine-readable connector metadata.',
+      'Browse every pm connector bundle by capability, stream, action, and machine-readable metadata.',
     url: '/docs/connectors',
     fileName: '',
     body: '',

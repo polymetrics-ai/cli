@@ -14,7 +14,7 @@ const entries = [
     date: 'today',
     title: `${CONNECTOR_CATALOG_COUNT} connector catalog pages`,
     body:
-      'The website now exposes source and destination connector pages with generated JSON metadata for agents and documentation workflows.',
+      'The website now exposes bundle-generated connector pages with capabilities, streams, write actions, and JSON metadata for agents and documentation workflows.',
     icon: Cable,
     href: '/docs/connectors',
   },

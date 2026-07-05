@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { connectorBySlug } from '@/lib/connectors.catalog.generated';
-import { connectorEnrichment } from '@/lib/connectors.enrichment.generated';
 import { docsPageByUrl } from '@/lib/docs.generated';
 
 /** Build synthetic Markdown for a connector slug. */
@@ -13,133 +12,61 @@ function connectorMarkdown(slug: string): string | null {
 
   lines.push(`# ${c.name} connector`);
   lines.push('');
-  lines.push(
-    `**Type:** ${c.type}  |  **Category:** ${c.category}  |  **Release stage:** ${c.releaseStage}  |  **Status:** ${c.status}`,
-  );
+  lines.push(c.description);
   lines.push('');
-
-  if (c.notes) {
-    lines.push(`> ${c.notes}`);
-    lines.push('');
-  }
+  lines.push(`**Category:** ${c.category}  |  **Release stage:** ${c.releaseStage}`);
+  lines.push('');
 
   // Capabilities
   lines.push('## Capabilities');
   lines.push('');
   const caps = c.capabilities;
   const capList = [
-    ['Metadata', caps.metadata],
     ['Check', caps.check],
-    ['Catalog', caps.catalog],
     ['Read', caps.read],
     ['Write', caps.write],
     ['Query', caps.query],
-    ['ETL', caps.etl],
-    ['Reverse ETL', caps.reverseEtl],
+    ['CDC', caps.cdc],
+    ['Dynamic schema', caps.dynamicSchema],
   ] as [string, boolean][];
   for (const [name, val] of capList) {
     lines.push(`- **${name}:** ${val ? 'Yes' : 'No'}`);
   }
   lines.push('');
 
-  // Config table
-  if (c.config.length > 0) {
-    lines.push('## Configuration');
+  if (c.streams.length > 0) {
+    lines.push('## ETL Streams');
     lines.push('');
-    lines.push('| Field | Type | Required | Secret | Description |');
-    lines.push('|---|---|---|---|---|');
-    for (const f of c.config) {
+    lines.push('| Stream | Primary key | Cursor | Incremental |');
+    lines.push('|---|---|---|---|');
+    for (const stream of c.streams) {
       lines.push(
-        `| \`${f.name}\` | ${f.type} | ${f.required ? 'Yes' : 'No'} | ${f.secret ? 'Yes' : 'No'} | ${f.description.replace(/\|/g, '\\|')} |`,
+        `| \`${stream.name}\` | ${stream.primaryKey.join(', ') || '-'} | ${stream.cursor || '-'} | ${stream.incremental ? 'Yes' : 'No'} |`,
       );
     }
     lines.push('');
   }
 
-  // Sync modes
-  if (c.syncModes.length > 0) {
-    lines.push('## Sync modes');
+  if (c.writeActions.length > 0) {
+    lines.push('## Reverse-ETL Write Actions');
     lines.push('');
-    for (const m of c.syncModes) {
-      lines.push(`- ${m.replace(/_/g, ' ')}`);
+    lines.push('| Action | Method | Kind |');
+    lines.push('|---|---|---|');
+    for (const action of c.writeActions) {
+      lines.push(`| \`${action.name}\` | ${action.method || '-'} | ${action.kind || '-'} |`);
     }
-    lines.push('');
-    lines.push(`**Incremental syncs:** ${c.incremental ? 'Supported' : 'Not supported'}`);
     lines.push('');
   }
 
-  // CLI examples
-  lines.push('## CLI usage');
+  if (c.docUrl) {
+    lines.push('## Service API documentation');
+    lines.push('');
+    lines.push(c.docUrl);
+    lines.push('');
+  }
+
+  lines.push(c.docsMd);
   lines.push('');
-  if (c.status === 'enabled' && c.pmName) {
-    lines.push('```bash');
-    lines.push(`# Inspect connector metadata`);
-    lines.push(`pm connectors inspect ${c.pmName} --json`);
-    lines.push('');
-    lines.push(`# Run ETL through a configured connection`);
-    lines.push(`pm etl run --connection <connection-name> --stream <stream-name> --json`);
-    lines.push('```');
-  } else {
-    lines.push(
-      `_ETL is not yet enabled for this connector. Use \`pm connectors list\` to browse enabled connectors._`,
-    );
-  }
-  lines.push('');
-
-  // Official docs
-  if (c.docs.length > 0 || c.appDocUrl) {
-    lines.push('## Official documentation');
-    lines.push('');
-    if (c.appDocUrl) lines.push(`- [App documentation](${c.appDocUrl})`);
-    for (const d of c.docs) {
-      lines.push(`- [${d.title}](${d.url})`);
-    }
-    lines.push('');
-  }
-
-  // Setup & auth from enrichment
-  const enrich = connectorEnrichment(slug);
-  if (enrich) {
-    lines.push('## Setup & authentication');
-    lines.push('');
-
-    if (enrich.prerequisites.length > 0) {
-      lines.push('### Prerequisites');
-      lines.push('');
-      for (const p of enrich.prerequisites) {
-        lines.push(`- ${p}`);
-      }
-      lines.push('');
-    }
-
-    if (enrich.authMethods.length > 0) {
-      lines.push('### Authentication methods');
-      lines.push('');
-      for (const a of enrich.authMethods) {
-        lines.push(`**${a.name}:** ${a.summary}`);
-        lines.push('');
-      }
-    }
-
-    if (enrich.setupSteps.length > 0) {
-      lines.push('### Setup steps');
-      lines.push('');
-      for (let i = 0; i < enrich.setupSteps.length; i++) {
-        const s = enrich.setupSteps[i];
-        lines.push(`${i + 1}. **${s.title}** — ${s.body}`);
-        lines.push('');
-      }
-    }
-
-    if (enrich.sources.length > 0) {
-      lines.push('### Sources');
-      lines.push('');
-      for (const s of enrich.sources) {
-        lines.push(`- [${s.title}](${s.url})`);
-      }
-      lines.push('');
-    }
-  }
 
   return lines.join('\n');
 }

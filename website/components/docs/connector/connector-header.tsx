@@ -2,9 +2,6 @@ import * as React from 'react';
 import type { ConnectorMeta } from '@/lib/connectors.catalog.generated';
 import {
   Badge,
-  statusVariant,
-  supportVariant,
-  typeVariant,
   releaseVariant,
 } from '@/components/ui/badge';
 import { ConnectorIcon } from '@/components/docs/connector/connector-icon';
@@ -16,19 +13,8 @@ interface ConnectorHeaderProps {
 
 // ── Human-readable label formatters ──────────────────────────────────────
 
-function formatStatus(status: string): string {
-  if (status === 'enabled') return 'Enabled';
-  if (status === 'planned_native_port') return 'Planned';
-  return status;
-}
-
-function formatSupportLevel(level: string): string {
-  if (level === 'certified') return 'Certified';
-  if (level === 'community') return 'Community';
-  return level;
-}
-
 function formatReleaseStage(stage: string): string {
+  if (stage === 'ga') return 'GA';
   if (stage === 'generally_available') return 'GA';
   if (stage === 'beta') return 'Beta';
   if (stage === 'alpha') return 'Alpha';
@@ -36,19 +22,11 @@ function formatReleaseStage(stage: string): string {
   return stage;
 }
 
-function formatCategory(category: string): string {
-  const map: Record<string, string> = {
-    api: 'API',
-    database: 'Database',
-    file: 'File',
-    vectorstore: 'Vector Store',
-    message_queue: 'Message Queue',
-  };
-  return map[category] ?? category;
-}
-
 export function ConnectorHeader({ connector }: ConnectorHeaderProps) {
-  const { name, type, category, releaseStage, supportLevel, status, icon } = connector;
+  const { name, categoryLabel, releaseStage, capabilityLabels, icon } = connector;
+  const highlightedCapabilities = capabilityLabels.filter((capability) =>
+    ['read', 'write', 'query', 'cdc', 'dynamic schema'].includes(capability),
+  );
 
   return (
     <Card className="mb-5 p-5">
@@ -68,19 +46,15 @@ export function ConnectorHeader({ connector }: ConnectorHeaderProps) {
               {name} connector
             </h1>
             <div className="mt-3 flex max-w-full flex-wrap gap-2">
-              <Badge variant={typeVariant(type)}>
-                {type === 'source' ? 'Source' : 'Destination'}
-              </Badge>
-              <Badge variant="category">{formatCategory(category)}</Badge>
+              <Badge variant="category">{categoryLabel}</Badge>
               <Badge variant={releaseVariant(releaseStage)}>
                 {formatReleaseStage(releaseStage)}
               </Badge>
-              <Badge variant={supportVariant(supportLevel)}>
-                {formatSupportLevel(supportLevel)}
-              </Badge>
-              <Badge variant={statusVariant(status)}>
-                {formatStatus(status)}
-              </Badge>
+              {highlightedCapabilities.map((capability) => (
+                <Badge key={capability} variant="capability">
+                  {capability}
+                </Badge>
+              ))}
             </div>
           </div>
         </div>

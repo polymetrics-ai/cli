@@ -18,10 +18,13 @@ export async function GET() {
 
   // Compact connector index
   sections.push('# Connector catalog index\n');
-  const connectorLines = CONNECTOR_CATALOG.map(
-    (c) =>
-      `- **${c.name}** (\`${c.slug}\`) — ${c.category} ${c.type}, ${c.releaseStage}, status: ${c.status}`,
-  );
+  const connectorLines = CONNECTOR_CATALOG.map((c) => {
+    const capabilities = c.capabilityLabels.length > 0 ? c.capabilityLabels.join(', ') : 'metadata';
+    return (
+      `- **${c.name}** (\`${c.slug}\`) — ${c.categoryLabel}, ${c.releaseStage}; ` +
+      `capabilities: ${capabilities}; streams: ${c.streams.length}; write actions: ${c.writeActions.length}`
+    );
+  });
   sections.push(connectorLines.join('\n'));
 
   const text = sections.join('\n\n---\n\n');

@@ -8,7 +8,7 @@ import { Text } from '@/components/ui/text';
 const faqs = [
   {
     q: 'Why not a containerized ETL stack?',
-    a: 'Most self-hosted ETL platforms need Docker and 8 GB+ of services to run locally, and they are ETL-only (no SQL engine, no reverse-ETL, no agent contract). pm runs as a single static binary, has embedded DuckDB, and supports bidirectional sync.',
+    a: 'Most self-hosted ETL platforms need Docker and 8 GB+ of services to run locally, and they are ETL-only (no SQL engine, no reverse-ETL, no agent contract). pm runs as a single static binary, has embedded DuckDB, and supports connector-declared read and write actions.',
   },
   {
     q: 'Why not Fivetran?',

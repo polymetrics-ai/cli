@@ -33,7 +33,7 @@ const toolsRow1: Tool[] = [
   {
     icon: Download,
     title: 'Extract (ETL)',
-    description: `Pull from the ${CONNECTOR_CATALOG_COUNT}-connector catalog: GitHub, Stripe, HubSpot, Postgres, and more. Cursor-incremental and full-refresh sync modes.`,
+    description: `Read from the ${CONNECTOR_CATALOG_COUNT}-connector bundle catalog: GitHub, Stripe, HubSpot, Postgres, and more. Cursor-incremental and full-refresh sync modes.`,
     href: '/docs/connectors',
   },
   {
@@ -45,7 +45,7 @@ const toolsRow1: Tool[] = [
   {
     icon: ArrowLeftRight,
     title: 'Write Back (Reverse-ETL)',
-    description: 'Push query results back to any destination. Create Jira issues, upsert HubSpot contacts, open GitHub PRs from your data.',
+    description: 'Push query results back through approved connector actions. Create Jira issues, upsert HubSpot contacts, open GitHub PRs from your data.',
     href: '/docs/reverse-etl',
   },
 ];
@@ -71,9 +71,9 @@ const toolsRow2: Tool[] = [
   },
   {
     icon: RefreshCw,
-    title: 'Bidirectional',
-    description: 'Sources and destinations are unified. Extract from GitHub, write back to it.',
-    href: '/docs/bidirectional',
+    title: 'Capability-based',
+    description: 'Read and write behavior is declared per connector. Inspect GitHub streams and approved actions from the same bundle.',
+    href: '/docs/connectors',
   },
 ];
 
@@ -235,7 +235,7 @@ export default function HomePage() {
                 <span className="text-text-tertiary font-analog">Repeat.</span>
               </Heading>
               <Text className="text-left">
-                Every data problem is a loop. Pull data from a source, shape it with SQL, push results to a destination, and run again. pm makes this loop a single binary invocation.
+                Every data problem is a loop. Pull data from a connector, shape it with SQL, run approved actions, and repeat. pm makes this loop a single binary invocation.
               </Text>
               <Text size="s" className="text-left">
                 Real-world example: extract open GitHub issues every hour, run a SQL query to find stale ones, create Jira tickets for them. Fully local. Fully auditable. Zero cost.

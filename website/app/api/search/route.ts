@@ -3,11 +3,8 @@ import { NextResponse } from 'next/server';
 import {
   CONNECTOR_CATALOG,
   CONNECTOR_CATALOG_COUNT,
-  CONNECTOR_DESTINATIONS,
-  CONNECTOR_SOURCES,
   type ConnectorMeta,
 } from '@/lib/connectors.catalog.generated';
-import { CONNECTOR_ENRICHMENT } from '@/lib/connectors.enrichment.generated';
 import { DOCS_PAGES } from '@/lib/docs.generated';
 
 export const dynamic = 'force-dynamic';
@@ -67,13 +64,13 @@ function docsRecords(): SearchRecord[] {
 
   records.push({
     title: 'Connector catalog',
-    description: `Browse ${CONNECTOR_CATALOG_COUNT} connectors: ${CONNECTOR_SOURCES} sources and ${CONNECTOR_DESTINATIONS} destinations.`,
+    description: `Browse ${CONNECTOR_CATALOG_COUNT} connector bundles by capability, stream, action, and integration type.`,
     url: '/docs/connectors',
     kind: 'doc',
     section: 'Catalog',
-    keywords: 'connectors catalog source destination integrations browse search metadata',
+    keywords: 'connectors catalog capabilities streams actions integrations browse search metadata',
     content:
-      'Connector catalog source connectors destination connectors setup authentication metadata data.json inspect credentials ETL reverse ETL',
+      'Connector catalog capabilities ETL streams reverse ETL write actions setup authentication metadata data.json inspect credentials',
     priority: 9,
   });
 
@@ -81,43 +78,33 @@ function docsRecords(): SearchRecord[] {
 }
 
 function connectorRecord(c: ConnectorMeta): SearchRecord {
-  const enrichment = CONNECTOR_ENRICHMENT[c.slug];
-  const config = c.config
-    .map((field) => `${field.name} ${field.type} ${field.description} ${field.required ? 'required' : 'optional'}`)
+  const streams = c.streams
+    .map((stream) => `${stream.name} ${stream.primaryKey.join(' ')} ${stream.cursor} ${stream.incremental ? 'incremental' : ''}`)
+    .join(' ');
+  const writeActions = c.writeActions
+    .map((action) => `${action.name} ${action.method} ${action.kind}`)
     .join(' ');
   const docs = c.docs.map((doc) => `${doc.title} ${doc.type} ${doc.url}`).join(' ');
-  const setup = enrichment
-    ? [
-        ...enrichment.prerequisites,
-        ...enrichment.authMethods.map((method) => `${method.name} ${method.summary}`),
-        ...enrichment.setupSteps.map((step) => `${step.title} ${step.body}`),
-        ...enrichment.sources.map((source) => `${source.title} ${source.url}`),
-      ].join(' ')
-    : '';
 
   return {
     title: `${c.name} connector`,
     description:
-      c.notes ||
-      `${c.name} is a ${c.type} connector in the ${c.category} category with catalog metadata and setup fields.`,
+      c.description ||
+      `${c.name} exposes ${c.streams.length} ETL streams and ${c.writeActions.length} write actions.`,
     url: `/docs/connectors/${c.slug}`,
     kind: 'connector',
-    section: c.type === 'source' ? 'Source connector' : 'Destination connector',
+    section: 'Connector',
     keywords: [
       c.name,
       c.slug,
-      c.type,
       c.category,
+      c.categoryLabel,
       c.releaseStage,
-      c.supportLevel,
-      c.language,
-      c.runtimeKind,
-      c.status,
-      c.tags.join(' '),
-      c.secrets.join(' '),
-      c.pmName,
+      c.capabilityLabels.join(' '),
+      streams,
+      writeActions,
     ].join(' '),
-    content: cleanText(`${c.notes} ${config} ${docs} ${setup}`),
+    content: cleanText(`${c.description} ${streams} ${writeActions} ${docs} ${c.docsMd}`),
     priority: c.featured ? 8 : 4,
   };
 }

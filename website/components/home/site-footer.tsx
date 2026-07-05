@@ -23,7 +23,7 @@ const COLUMNS: Col[] = [
       ['Documentation', '/docs'],
       ['Quickstart', '/docs/quickstart'],
       ['Connectors', '/docs/connectors'],
-      ['Bidirectional', '/docs/bidirectional'],
+      ['Capabilities', '/docs/connectors'],
       ['CLI Reference', '/docs'],
     ],
   },

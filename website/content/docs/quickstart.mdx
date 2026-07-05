@@ -59,7 +59,7 @@ pm credentials add outbox \
   --config path=.polymetrics/outbox
 ```
 
-The `sample` credential authenticates against the built-in demo connector. The `warehouse` credential points to a local JSONL warehouse directory. The `outbox` credential gives reverse ETL a safe local destination.
+The `sample` credential authenticates against the built-in demo connector. The `warehouse` credential points to a local JSONL warehouse directory. The `outbox` credential gives reverse ETL a safe local write target.
 
 </Step>
 
@@ -67,7 +67,7 @@ The `sample` credential authenticates against the built-in demo connector. The `
 
 ### Create a connection
 
-A connection wires a source credential to a destination credential, names the stream, and sets the sync mode.
+A connection wires a connector credential to a warehouse credential, names the stream, and sets the sync mode.
 
 ```bash
 pm connections create demo \
@@ -191,5 +191,5 @@ For the full command surface, open [/docs/cli-reference](/docs/cli-reference).
   <Card title="ETL" href="/docs/etl" description="Sync modes, flags, JSON output, and exit codes for pm etl run." />
   <Card title="Query" href="/docs/query" description="DuckDB SQL, flag reference, and joining multiple extracted tables." />
   <Card title="Reverse ETL" href="/docs/reverse-etl" description="The plan-preview-approve-run write gate." />
-  <Card title="Connector catalog" href="/docs/connectors" description="Browse connector pages, setup notes, auth fields, and machine-readable metadata." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse connector capabilities, streams, write actions, and machine-readable metadata." />
 </Cards>

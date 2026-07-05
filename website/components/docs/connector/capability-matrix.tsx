@@ -9,28 +9,24 @@ interface CapabilityMatrixProps {
 
 interface CapabilityRow {
   label: string;
-  key: keyof Omit<ConnectorCapabilities, 'unsupportedReason'>;
+  key: keyof ConnectorCapabilities;
 }
 
 const CAPABILITY_ROWS: CapabilityRow[] = [
-  { label: 'Metadata', key: 'metadata' },
   { label: 'Check', key: 'check' },
-  { label: 'Catalog', key: 'catalog' },
   { label: 'Read', key: 'read' },
   { label: 'Write', key: 'write' },
   { label: 'Query', key: 'query' },
-  { label: 'ETL', key: 'etl' },
-  { label: 'Reverse ETL', key: 'reverseEtl' },
+  { label: 'CDC', key: 'cdc' },
+  { label: 'Dynamic schema', key: 'dynamicSchema' },
 ];
 
 export function CapabilityMatrix({ capabilities }: CapabilityMatrixProps) {
-  const { unsupportedReason, ...caps } = capabilities;
-
   return (
     <div className="space-y-3">
-      <div className="grid min-w-0 grid-cols-1 border-l border-t border-line-structure sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid min-w-0 grid-cols-1 border-l border-t border-line-structure sm:grid-cols-2 lg:grid-cols-3">
         {CAPABILITY_ROWS.map(({ label, key }) => {
-          const supported = caps[key as keyof typeof caps];
+          const supported = capabilities[key];
           return (
             <div
               key={key}
@@ -59,12 +55,6 @@ export function CapabilityMatrix({ capabilities }: CapabilityMatrixProps) {
           );
         })}
       </div>
-      {unsupportedReason ? (
-        <p className="border border-l-[3px] border-line-structure border-l-surface-cta-primary bg-surface-1 px-3 py-2.5 text-[13px] leading-relaxed text-text-tertiary">
-          <span className="font-semibold text-text-secondary">Runtime note: </span>
-          {unsupportedReason}
-        </p>
-      ) : null}
     </div>
   );
 }

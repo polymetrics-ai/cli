@@ -3,7 +3,7 @@ title: Reverse ETL
 description: Write data back to any destination using the plan-preview-approve-run gate that keeps humans and agents in control.
 ---
 
-Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run**. No records are written to a destination until an approval token is explicitly presented at run time. This design makes reverse-ETL safe to delegate to an AI agent without the risk of silent mutations.
+Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run**. No connector action executes until an approval token is explicitly presented at run time. This design makes reverse-ETL safe to delegate to an AI agent without the risk of silent mutations.
 
 ## The four-step gate
 
@@ -31,7 +31,7 @@ pm reverse plan sync \
   --json
 ```
 
-The `plan` subcommand reads from the named source table, maps columns to destination fields, and returns a plan ID and an approval token.
+The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID and an approval token.
 
 JSON output:
 
@@ -129,8 +129,8 @@ This design lets you delegate reverse-ETL to an AI agent with confidence: the ag
 ## Where to go next
 
 <Cards>
-  <Card title="ETL" href="/docs/etl" description="Extract source data before writing it back." />
+  <Card title="ETL" href="/docs/etl" description="Extract connector data before writing approved changes." />
   <Card title="Query" href="/docs/query" description="Shape data with SQL before passing it to pm reverse plan." />
   <Card title="Agent guide" href="/docs/agent-guide" description="Orchestrate the full loop from an AI agent, including approval gates." />
-  <Card title="Connector catalog" href="/docs/connectors" description="Browse destination connectors available for reverse-ETL." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse connectors with reverse-ETL write actions." />
 </Cards>

@@ -4,7 +4,7 @@ import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.catalog.generated';
 
 export const metadata: Metadata = {
   title: 'Connectors',
-  description: `Browse and search all ${CONNECTOR_CATALOG_COUNT} pm connectors — sources and destinations across APIs, databases, files, and more.`,
+  description: `Browse and search all ${CONNECTOR_CATALOG_COUNT} pm connector bundles across APIs, databases, files, and more.`,
 };
 
 export default function ConnectorsIndexPage() {

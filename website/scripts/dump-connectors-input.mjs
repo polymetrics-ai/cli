@@ -1,43 +1,28 @@
-// Builds the per-connector descriptor map the enrichment Workflow grounds on.
-// Reads the authoritative catalog, emits a slug-keyed map with ONLY the fields
-// the research/verify agents need (vendor docs + secret/config field names) —
-// deliberately excludes the upstream (Airbyte) documentation_url so enrichment
-// sources stay vendor-only. Output: <scratchpad>/connectors-input.json + slugs.
+// Builds a slug-keyed descriptor map from the generated connector bundle data.
+// Output: <scratchpad>/connectors-input.json + slugs.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const CATALOG = resolve(__dirname, '../../internal/connectors/catalog_data.json');
+const CONNECTORS = resolve(__dirname, '../data/connectors.generated.json');
 const OUT_DIR = process.argv[2] || resolve(__dirname, '../.enrich');
-const items = JSON.parse(readFileSync(CATALOG, 'utf8'));
-
-const isAirbyteConnector = (e) =>
-  /airbyte/i.test(e.slug || '') || (e.name || '').toLowerCase() === 'airbyte';
+const items = JSON.parse(readFileSync(CONNECTORS, 'utf8'));
 
 const map = {};
 for (const e of items) {
   if (!e?.slug || !e?.name) continue;
-  const keepAirbyte = isAirbyteConnector(e);
-  const appDoc = e.application_documentation_url || '';
   map[e.slug] = {
     slug: e.slug,
     name: e.name,
-    type: e.type,
-    category: e.source_type || 'other',
-    language: e.language || '',
-    secretFields: Array.isArray(e.secret_fields) ? e.secret_fields : [],
-    configFields: (Array.isArray(e.config_fields) ? e.config_fields : []).map((f) => ({
-      name: f.name,
-      required: !!f.required,
-      secret: !!f.secret,
-    })),
-    // vendor docs only (NOT the Airbyte catalog documentation_url); also drop
-    // any airbyte.com vendor links so research never grounds on Airbyte.
-    appDocUrl: keepAirbyte ? appDoc : /airbyte/i.test(appDoc) ? '' : appDoc,
-    officialDocs: (Array.isArray(e.official_application_docs) ? e.official_application_docs : [])
-      .filter((d) => keepAirbyte || !/airbyte/i.test(`${d.title || ''} ${d.url || ''}`))
-      .map((d) => ({ title: d.title, type: d.type || '', url: d.url })),
+    category: e.integration_type || 'api',
+    capabilities: e.capabilities || {},
+    streams: (Array.isArray(e.streams) ? e.streams : []).map((stream) => stream.name),
+    writeActions: (Array.isArray(e.write_actions) ? e.write_actions : []).map((action) => action.name),
+    appDocUrl: e.docs_url || '',
+    officialDocs: e.docs_url
+      ? [{ title: 'Service API documentation', type: 'api_reference', url: e.docs_url }]
+      : [],
   };
 }
 

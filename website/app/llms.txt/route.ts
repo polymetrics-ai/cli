@@ -15,7 +15,7 @@ export function GET() {
   const text = `\
 # pm — local-first data engine for ETL, SQL analytics, and reverse-ETL
 
-> pm is a single Go binary for connector-backed ETL, embedded DuckDB queries, and reverse-ETL. The website exposes ${CONNECTOR_CATALOG_COUNT} connector catalog pages, including enabled connectors and planned native ports, without a vendor cloud, Docker, or Kubernetes. Every command is accessible to both human operators and AI agents via identical CLI interfaces.
+> pm is a single Go binary for connector-backed ETL, embedded DuckDB queries, and reverse-ETL. The website exposes ${CONNECTOR_CATALOG_COUNT} bundle-generated connector pages without a vendor cloud, Docker, or Kubernetes. Every command is accessible to both human operators and AI agents via identical CLI interfaces.
 
 ## Documentation
 
@@ -23,7 +23,7 @@ ${docLines}
 
 ## Connectors
 
-- [Connector catalog](/docs/connectors): Browse all ${CONNECTOR_CATALOG_COUNT} connectors — sources and destinations across APIs, databases, files, and more. Each connector page exposes a machine-readable \`data.json\` endpoint at \`/docs/connectors/<slug>/data.json\`.
+- [Connector catalog](/docs/connectors): Browse all ${CONNECTOR_CATALOG_COUNT} connectors by capability, ETL stream, write action, and integration type. Each connector page exposes a machine-readable \`data.json\` endpoint at \`/docs/connectors/<slug>/data.json\`.
 
 ## Full content
 

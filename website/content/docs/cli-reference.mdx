@@ -85,7 +85,7 @@ pm connections create github_to_warehouse \
 pm connections list --json
 ```
 
-Connections bind a source credential, destination credential, stream, table, sync mode, cursor, and primary key.
+Connections bind credentials, a stream, table, sync mode, cursor, and primary key.
 
 ### `pm catalog`
 
@@ -101,15 +101,15 @@ Catalog commands discover and cache stream metadata. Catalog output includes sch
 ```bash
 pm connectors list --json
 pm connectors list --all --json
-pm connectors catalog --type source --json
+pm connectors catalog --capability read --json
 pm connectors catalog --stage generally_available --json
 pm connectors port-plan --all --json
-pm connectors port-plan source-postgres --json
-pm connectors inspect source-100ms --json
-pm connectors help source-100ms
+pm connectors port-plan postgres --json
+pm connectors inspect 100ms --json
+pm connectors help 100ms
 ```
 
-`pm connectors list` shows runnable built-in connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated 646-connector catalog, including catalog-only connectors that are inspectable but not executable until a native Go port is enabled.
+`pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
 
 ## Extract, query, and write
 

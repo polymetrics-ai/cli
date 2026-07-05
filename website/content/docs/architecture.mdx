@@ -48,11 +48,11 @@ pm init --root ./demo --json
 ```bash
 pm connectors list --json
 pm connectors list --all --json
-pm connectors inspect source-github --json
-pm connectors port-plan source-postgres --json
+pm connectors inspect github --json
+pm connectors inspect postgres --json
 ```
 
-The registry combines built-in runnable connectors with generated catalog metadata. The public catalog has 646 connector pages, but most are catalog-only until their native Go port is enabled. The docs and connector pages deliberately distinguish metadata from runnable ETL.
+The registry is generated from connector definition bundles. The public catalog has one page per bundle and uses capabilities to describe what each connector can do: check, read, write, query, CDC, and dynamic schema.
 
 Connector operations are narrow: check, catalog, read, write, query, ETL, and reverse ETL. Agents get capability metadata and schemas, not generic HTTP, SQL write, or shell execution tools.
 

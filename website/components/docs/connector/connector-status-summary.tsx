@@ -6,12 +6,6 @@ interface ConnectorStatusSummaryProps {
   connector: ConnectorMeta;
 }
 
-function formatStatus(status: string): string {
-  if (status === 'enabled') return 'Enabled';
-  if (status === 'planned_native_port') return 'Catalog only';
-  return status.replace(/_/g, ' ');
-}
-
 function formatValue(value: string): string {
   return value.replace(/_/g, ' ');
 }
@@ -44,14 +38,20 @@ function Stat({
 }
 
 export function ConnectorStatusSummary({ connector }: ConnectorStatusSummaryProps) {
+  const incrementalStreams = connector.streams.filter((stream) => stream.incremental).length;
+
   return (
     <div className="grid min-w-0 grid-cols-1 border-l border-t border-line-structure sm:grid-cols-3">
-      <Stat label="Runtime" value={formatStatus(connector.status)} positive={connector.status === 'enabled'} />
-      <Stat label="Support" value={formatValue(connector.supportLevel)} positive={connector.supportLevel === 'certified'} />
-      <Stat label="Release" value={formatValue(connector.releaseStage)} positive={connector.releaseStage === 'generally_available'} />
-      <Stat label="Type" value={connector.type} />
-      <Stat label="Category" value={formatValue(connector.category)} />
-      <Stat label="Incremental" value={connector.incremental ? 'Supported' : 'Unavailable'} positive={connector.incremental} />
+      <Stat label="Definition" value="Bundle" positive />
+      <Stat
+        label="Release"
+        value={connector.releaseStage === 'ga' ? 'GA' : formatValue(connector.releaseStage)}
+        positive={connector.releaseStage === 'ga'}
+      />
+      <Stat label="Integration" value={connector.categoryLabel} />
+      <Stat label="ETL streams" value={String(connector.streams.length)} positive={connector.streams.length > 0} />
+      <Stat label="Incremental" value={String(incrementalStreams)} positive={incrementalStreams > 0} />
+      <Stat label="Write actions" value={String(connector.writeActions.length)} positive={connector.writeActions.length > 0} />
     </div>
   );
 }

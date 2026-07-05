@@ -1,241 +1,185 @@
-// Generates website/lib/connectors.catalog.generated.ts from the Go connector
-// catalog (internal/connectors/catalog_data.json). This is the data backbone for
-// the per-connector doc pages and the connector browser.
+// Generates website/lib/connectors.catalog.generated.ts from
+// website/data/connectors.generated.json. The JSON data is generated from
+// internal/connectors/defs/<name>/ bundles by gen-connector-bundles.mjs.
 //
 // Run: node scripts/gen-connector-catalog.mjs   (or: npm run gen:catalog)
-//
-// One entry per catalog slug (source-* / destination-*). Excludes the huge raw
-// config_schema; keeps the structured config_fields summary. Output is committed
-// so the website build has no dependency on the Go tree.
 
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, relative, resolve, sep } from 'node:path';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const CATALOG = resolve(__dirname, '../../internal/connectors/catalog_data.json');
-const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
-const ICON_SOURCE_ROOT = resolve(__dirname, '../../docs/connectors');
-const ICON_PUBLIC_ROOT = resolve(__dirname, '../public/connectors');
+const DATA = resolve(__dirname, '../data/connectors.generated.json');
 const OUT = resolve(__dirname, '../lib/connectors.catalog.generated.ts');
 
-// Featured connectors get SearXNG-enriched setup/auth prose later (Phase 5).
-// The 2 enabled + the most recognizable names.
 const FEATURED = new Set([
   'GitHub', 'Stripe', 'Postgres', 'MySQL', 'MongoDB', 'Snowflake', 'BigQuery',
   'Redshift', 'Salesforce', 'HubSpot', 'Slack', 'Notion', 'Shopify', 'Linear',
   'Jira', 'Zendesk', 'Intercom', 'Google Sheets', 'Airtable', 'Mixpanel',
-  'Amplitude', 'Segment', 'Datadog', 'Twilio', 'S3', 'Asana', 'GitLab',
-  'Klaviyo', 'Mailchimp', 'Pipedrive', 'Zoom', 'Google Ads', 'Facebook Marketing',
-  'Amazon Ads', 'Amazon Seller Partner', 'Greenhouse', 'BambooHR', 'NetSuite',
-  'QuickBooks', 'Xero', 'PayPal', 'Square',
+  'Amplitude', 'Datadog', 'Twilio', 'SendGrid', 'S3', 'Asana', 'Monday',
+  'GitLab', 'Bitbucket', 'Confluence', 'PagerDuty', 'Klaviyo', 'Mailchimp',
+  'Pipedrive', 'Close', 'Copper', 'Freshdesk', 'Zoom', 'Google Analytics',
+  'Google Ads', 'Facebook Marketing', 'Amazon Ads', 'Amazon Seller Partner',
+  'BambooHR', 'Xero', 'Chargebee', 'Braintree', 'PayPal', 'Square',
+  'Typeform', 'SurveyMonkey', 'Calendly', 'Drift', 'Customer.io', 'Braze',
+  'Auth0', 'Azure Blob Storage', 'Google Cloud Storage', 'Elasticsearch',
+  'ClickHouse', 'Oracle', 'DynamoDB', 'Redis', 'Kafka',
 ]);
 
-const raw = JSON.parse(readFileSync(CATALOG, 'utf8'));
-const iconRaw = JSON.parse(readFileSync(ICON_DATA, 'utf8'));
-const items = Array.isArray(raw) ? raw : (raw.connectors ?? raw.definitions ?? []);
-const iconByConnector = new Map();
-for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
-  if (!icon?.connector) continue;
-  if (iconByConnector.has(icon.connector)) {
-    throw new Error(`Duplicate connector icon metadata for ${icon.connector}`);
-  }
-  iconByConnector.set(icon.connector, icon);
-}
-const copiedIconPaths = new Set();
+const CATEGORY_LABELS = {
+  api: 'API',
+  database: 'Database',
+  file: 'File',
+  vectorstore: 'Vector store',
+  message_queue: 'Message queue',
+  queue: 'Queue',
+  accounting: 'Accounting',
+  other: 'Other',
+};
 
-const trim = (s) => (typeof s === 'string' ? s.trim() : '');
-const validIconPath = (path) => /^icons\/[A-Za-z0-9._-]+\.svg$/.test(path);
+const trim = (value) => (typeof value === 'string' ? value.trim() : '');
+const titleCase = (value) =>
+  trim(value)
+    .split(/[_\s-]+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+const categoryLabel = (value) => CATEGORY_LABELS[value] ?? titleCase(value) ?? 'API';
 
-function assertInside(root, target, label) {
-  const rel = relative(root, target);
-  if (rel.startsWith('..') || rel === '..' || rel.includes(`..${sep}`) || rel === '') {
-    throw new Error(`${label} escapes expected root: ${target}`);
-  }
-}
+const raw = JSON.parse(readFileSync(DATA, 'utf8'));
+const items = Array.isArray(raw) ? raw : raw.connectors ?? [];
 
-function resolveIconPath(root, iconPath, label) {
-  if (!validIconPath(iconPath)) {
-    throw new Error(`Invalid connector icon path: ${iconPath}`);
-  }
-
-  const target = resolve(root, iconPath);
-  assertInside(root, target, label);
-  return target;
-}
-
-// Strip Airbyte branding from connector-spec prose (descriptions are authored
-// upstream). Applied to all connectors EXCEPT the Airbyte connector itself.
-function sanitizeDesc(s) {
-  let t = trim(s);
-  if (!t) return '';
-  t = t.replace(/<[^>]+>/g, ' '); // strip embedded HTML (often <a href="docs.airbyte.com">)
-  t = t.replace(/https?:\/\/(?:docs\.|reference\.)?airbyte\.com\/\S*/gi, ''); // drop airbyte URLs
-  t = t.replace(/airbytehq\/airbyte/gi, 'owner/repo');
-  t = t.replace(/airbytehq/gi, 'owner');
-  // De-brand technical identifiers / example values the word-boundary rule misses:
-  t = t.replace(/airbyte_internal/gi, 'pm_internal'); // default raw-table schema name
-  t = t.replace(/_airbyte_/gi, '_pm_'); // metadata column prefix (e.g. _airbyte_data)
-  t = t.replace(/airbyteio/gi, 'example'); // example tenant in domain samples
-  t = t.replace(/\bairbyte\b/gi, 'the connector');
-  t = t.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-  t = t.replace(/\s+([.,;:])/g, '$1').replace(/\s{2,}/g, ' ').trim();
-  return t;
-}
-const isAirbyteConnector = (e) =>
-  /airbyte/i.test(e.slug || '') || (e.name || '').toLowerCase() === 'airbyte';
-
-function mapIcon(e) {
-  const icon = iconByConnector.get(e.slug);
-  if (!icon) return null;
-
-  const path = trim(icon.path);
-  if (!validIconPath(path)) {
-    throw new Error(`Invalid connector icon path for ${e.slug}: ${path}`);
-  }
-
-  copiedIconPaths.add(path);
+function mapCapabilities(capabilities = {}) {
   return {
-    id: trim(icon.id),
-    path,
-    publicPath: `/connectors/${path}`,
-    source: trim(icon.source),
-    reviewStatus: trim(icon.review_status),
-    reviewUrl: trim(icon.review_url),
+    check: capabilities.check === true,
+    read: capabilities.read === true,
+    write: capabilities.write === true,
+    query: capabilities.query === true,
+    cdc: capabilities.cdc === true,
+    dynamicSchema: capabilities.dynamic_schema === true,
   };
 }
 
-function syncConnectorIcons(paths) {
-  const outDir = resolve(ICON_PUBLIC_ROOT, 'icons');
-
-  for (const iconPath of [...paths].sort()) {
-    const src = resolveIconPath(ICON_SOURCE_ROOT, iconPath, 'connector icon source');
-    if (!existsSync(src)) {
-      throw new Error(`Missing connector icon asset: ${iconPath}`);
-    }
-  }
-
-  rmSync(outDir, { recursive: true, force: true });
-  mkdirSync(outDir, { recursive: true });
-
-  for (const iconPath of [...paths].sort()) {
-    const src = resolveIconPath(ICON_SOURCE_ROOT, iconPath, 'connector icon source');
-    const out = resolveIconPath(ICON_PUBLIC_ROOT, iconPath, 'connector icon output');
-    mkdirSync(dirname(out), { recursive: true });
-    copyFileSync(src, out);
-  }
+function capabilityLabels(capabilities) {
+  return Object.entries({
+    check: 'check',
+    read: 'read',
+    write: 'write',
+    query: 'query',
+    cdc: 'cdc',
+    dynamicSchema: 'dynamic schema',
+  })
+    .filter(([key]) => capabilities[key])
+    .map(([, label]) => label);
 }
 
-function mapConnector(e) {
-  const keepAirbyte = isAirbyteConnector(e);
-  const desc = (s) => (keepAirbyte ? trim(s) : sanitizeDesc(s));
+function mapConnector(item) {
+  const capabilities = mapCapabilities(item.capabilities);
+  const streams = (Array.isArray(item.streams) ? item.streams : [])
+    .map((stream) => ({
+      name: trim(stream.name),
+      primaryKey: Array.isArray(stream.primary_key)
+        ? stream.primary_key.filter((key) => trim(key)).map((key) => trim(key))
+        : [],
+      cursor: trim(stream.cursor),
+      incremental: stream.incremental === true,
+    }))
+    .filter((stream) => stream.name);
+
+  const writeActions = (Array.isArray(item.write_actions) ? item.write_actions : [])
+    .map((action) => ({
+      name: trim(action.name),
+      method: trim(action.method).toUpperCase(),
+      kind: trim(action.kind),
+    }))
+    .filter((action) => action.name);
+
+  const docsUrl = trim(item.docs_url);
+  const releaseStage = trim(item.release_stage);
+  const category = trim(item.integration_type) || 'api';
+
   return {
-    slug: e.slug,
-    name: e.name,
-    type: e.type, // "source" | "destination"
-    category: e.source_type || 'other', // api | database | file | vectorstore | message_queue
-    releaseStage: e.release_stage || '',
-    supportLevel: e.support_level || '',
-    language: e.language || '',
-    tags: Array.isArray(e.tags) ? e.tags : [],
-    status: e.implementation_status, // enabled | planned_native_port | unsupported_deprecated
-    runtimeKind: e.runtime_kind || '',
-    capabilities: {
-      metadata: !!e.runtime_capabilities?.metadata,
-      check: !!e.runtime_capabilities?.check,
-      catalog: !!e.runtime_capabilities?.catalog,
-      read: !!e.runtime_capabilities?.read,
-      write: !!e.runtime_capabilities?.write,
-      query: !!e.runtime_capabilities?.query,
-      etl: !!e.runtime_capabilities?.etl,
-      reverseEtl: !!e.runtime_capabilities?.reverse_etl,
-      unsupportedReason: trim(e.runtime_capabilities?.unsupported_reason),
-    },
-    syncModes: Array.isArray(e.supported_sync_modes) ? e.supported_sync_modes : [],
-    incremental: !!e.supports_incremental,
-    config: (Array.isArray(e.config_fields) ? e.config_fields : []).map((f) => ({
-      name: f.name,
-      type: f.type || '',
-      description: desc(f.description),
-      required: !!f.required,
-      secret: !!f.secret,
-    })),
-    secrets: Array.isArray(e.secret_fields) ? e.secret_fields : [],
-    // Drop any vendor-doc link that points at (or is titled after) Airbyte,
-    // except on the Airbyte connector itself. A handful of utility connectors
-    // (file, datagen, e2e-test, web-scrapper) only had airbyte.com docs; they
-    // now show "No documentation links" like other doc-less connectors.
-    docs: (Array.isArray(e.official_application_docs) ? e.official_application_docs : [])
-      .filter((d) => keepAirbyte || !/airbyte/i.test(`${d.title || ''} ${d.url || ''}`))
-      .map((d) => ({ title: d.title, type: d.type || '', url: d.url })),
-    // Upstream (Airbyte) catalog doc URL — kept only for the Airbyte connector;
-    // blanked elsewhere so no Airbyte links surface anywhere.
-    docUrl: keepAirbyte ? (e.documentation_url || '') : '',
-    appDocUrl: keepAirbyte
-      ? (e.application_documentation_url || '')
-      : /airbyte/i.test(e.application_documentation_url || '')
-        ? ''
-        : e.application_documentation_url || '',
-    pmName: e.pm_connector_name || '',
-    notes: desc(e.native_support_notes),
-    icon: mapIcon(e),
-    featured: FEATURED.has(e.name),
+    slug: trim(item.slug),
+    name: trim(item.name),
+    description: trim(item.description),
+    category,
+    categoryLabel: categoryLabel(category),
+    releaseStage,
+    status: 'available',
+    capabilities,
+    capabilityLabels: capabilityLabels(capabilities),
+    streams,
+    writeActions,
+    docsMd: trim(item.docs_md),
+    docs: docsUrl ? [{ title: 'Service API documentation', type: 'api_reference', url: docsUrl }] : [],
+    docUrl: docsUrl,
+    appDocUrl: docsUrl,
+    icon: item.icon ?? null,
+    featured: FEATURED.has(trim(item.name)),
   };
 }
 
 const all = items
-  .filter((e) => e && e.slug && e.name)
+  .filter((item) => item && trim(item.slug) && trim(item.name))
   .map(mapConnector)
-  .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }) || a.type.localeCompare(b.type));
+  .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
-syncConnectorIcons(copiedIconPaths);
-
-// ── Derived indexes ─────────────────────────────────────────────────────
 const categoryCounts = {};
-const statusCounts = {};
-let sources = 0;
-let destinations = 0;
+const releaseStageCounts = {};
+const capabilityCounts = {
+  check: 0,
+  read: 0,
+  write: 0,
+  query: 0,
+  cdc: 0,
+  dynamicSchema: 0,
+};
+
 for (const c of all) {
   categoryCounts[c.category] = (categoryCounts[c.category] || 0) + 1;
-  statusCounts[c.status] = (statusCounts[c.status] || 0) + 1;
-  if (c.type === 'source') sources++;
-  else if (c.type === 'destination') destinations++;
+  releaseStageCounts[c.releaseStage || 'unknown'] =
+    (releaseStageCounts[c.releaseStage || 'unknown'] || 0) + 1;
+  for (const key of Object.keys(capabilityCounts)) {
+    if (c.capabilities[key]) capabilityCounts[key]++;
+  }
 }
 
 const banner =
   `// AUTO-GENERATED by scripts/gen-connector-catalog.mjs - DO NOT EDIT.\n` +
-  `// Source: internal/connectors/catalog_data.json\n` +
+  `// Source: website/data/connectors.generated.json\n` +
   `// Run \`npm run gen:catalog\` to regenerate.\n\n`;
 
 const types =
   `export type ConnectorCapabilities = {\n` +
-  `  metadata: boolean; check: boolean; catalog: boolean; read: boolean;\n` +
-  `  write: boolean; query: boolean; etl: boolean; reverseEtl: boolean;\n` +
-  `  unsupportedReason: string;\n};\n\n` +
+  `  check: boolean;\n  read: boolean;\n  write: boolean;\n` +
+  `  query: boolean;\n  cdc: boolean;\n  dynamicSchema: boolean;\n};\n\n` +
   `export type ConnectorConfigField = {\n` +
-  `  name: string; type: string; description: string; required: boolean; secret: boolean;\n};\n\n` +
+  `  name: string;\n  type: string;\n  description: string;\n  required: boolean;\n  secret: boolean;\n};\n\n` +
+  `export type ConnectorStream = {\n` +
+  `  name: string;\n  primaryKey: string[];\n  cursor: string;\n  incremental: boolean;\n};\n\n` +
+  `export type ConnectorWriteAction = {\n` +
+  `  name: string;\n  method: string;\n  kind: string;\n};\n\n` +
   `export type ConnectorDocLink = { title: string; type: string; url: string };\n\n` +
   `export type ConnectorIconMeta = {\n` +
   `  id: string; path: string; publicPath: string; source: string;\n` +
   `  reviewStatus: string; reviewUrl: string;\n` +
   `};\n\n` +
   `export type ConnectorMeta = {\n` +
-  `  slug: string;\n  name: string;\n  type: 'source' | 'destination';\n  category: string;\n` +
-  `  releaseStage: string;\n  supportLevel: string;\n  language: string;\n  tags: string[];\n` +
-  `  status: string;\n  runtimeKind: string;\n  capabilities: ConnectorCapabilities;\n` +
-  `  syncModes: string[];\n  incremental: boolean;\n  config: ConnectorConfigField[];\n` +
-  `  secrets: string[];\n  docs: ConnectorDocLink[];\n  docUrl: string;\n  appDocUrl: string;\n` +
-  `  pmName: string;\n  notes: string;\n  icon: ConnectorIconMeta | null;\n  featured: boolean;\n};\n\n`;
+  `  slug: string;\n  name: string;\n  description: string;\n  category: string;\n` +
+  `  categoryLabel: string;\n  releaseStage: string;\n  status: 'available';\n` +
+  `  capabilities: ConnectorCapabilities;\n  capabilityLabels: string[];\n` +
+  `  streams: ConnectorStream[];\n  writeActions: ConnectorWriteAction[];\n` +
+  `  docsMd: string;\n  docs: ConnectorDocLink[];\n  docUrl: string;\n  appDocUrl: string;\n` +
+  `  icon: ConnectorIconMeta | null;\n  featured: boolean;\n};\n\n`;
 
 const body =
   banner +
   types +
   `export const CONNECTOR_CATALOG: ConnectorMeta[] = ${JSON.stringify(all, null, 0)};\n\n` +
   `export const CONNECTOR_CATALOG_COUNT = ${all.length};\n\n` +
-  `export const CONNECTOR_SOURCES = ${sources};\n` +
-  `export const CONNECTOR_DESTINATIONS = ${destinations};\n\n` +
   `export const CONNECTOR_CATEGORY_COUNTS: Record<string, number> = ${JSON.stringify(categoryCounts)};\n\n` +
-  `export const CONNECTOR_STATUS_COUNTS: Record<string, number> = ${JSON.stringify(statusCounts)};\n\n` +
+  `export const CONNECTOR_RELEASE_STAGE_COUNTS: Record<string, number> = ${JSON.stringify(releaseStageCounts)};\n\n` +
+  `export const CONNECTOR_CAPABILITY_COUNTS: Record<keyof ConnectorCapabilities, number> = ${JSON.stringify(capabilityCounts)};\n\n` +
   `const BY_SLUG: Record<string, ConnectorMeta> = Object.fromEntries(\n` +
   `  CONNECTOR_CATALOG.map((c) => [c.slug, c]),\n);\n\n` +
   `export function connectorBySlug(slug: string): ConnectorMeta | undefined {\n` +
@@ -245,9 +189,9 @@ mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, body, 'utf8');
 
 console.log(
-  `Wrote ${all.length} connectors (${sources} sources, ${destinations} destinations) ` +
-    `to lib/connectors.catalog.generated.ts (${(body.length / 1024).toFixed(0)} KB).\n` +
-    `Categories: ${JSON.stringify(categoryCounts)}\nStatus: ${JSON.stringify(statusCounts)}\n` +
-    `Featured: ${all.filter((c) => c.featured).length}\n` +
-    `Icons: ${copiedIconPaths.size} copied to public/connectors/icons`,
+  `Wrote ${all.length} connectors to lib/connectors.catalog.generated.ts ` +
+    `(${(body.length / 1024).toFixed(0)} KB).\n` +
+    `Categories: ${JSON.stringify(categoryCounts)}\n` +
+    `Capabilities: ${JSON.stringify(capabilityCounts)}\n` +
+    `Featured: ${all.filter((c) => c.featured).length}`,
 );
